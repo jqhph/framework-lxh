@@ -1,0 +1,23 @@
+{
+	"require": {
+		"monolog/monolog": "~1.11",
+		"vlucas/phpdotenv": "~2.2",
+		"symfony/console": "3.2.8",
+		"psr/http-message": "^1.0",
+		"psr/cache": "^1.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"Lxh\\": ["kernel/", "application/"]
+		}
+	},
+	"require-dev": {
+		"phpunit/phpunit": "3.7.*"
+	},
+	"repositories": {
+		"packagist": {
+			"type": "composer",
+			"url": "https://packagist.phpcomposer.com"
+		}
+	}
+}

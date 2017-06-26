@@ -1,0 +1,158 @@
+<?php
+
+namespace Lxh\Exceptions\Handlers;
+
+use Lxh\Contracts\Container\Container;
+use Lxh\Exceptions\Exception;
+use Lxh\Logger\Manager;
+use Lxh\Http\Response;
+use Lxh\Http\Message\Status;
+
+/**
+ * 异常处理
+ */
+class Handler 
+{
+	/**
+	 * @var Manager
+	 */
+	protected $logger;
+
+	/**
+	 * @var Response
+	 */
+	protected $response;
+	
+	protected $exceptionClasses = [
+		'PDOException' => 'db',
+		'RedisException' => 'db',
+		'Lxh\Exceptions\Exception' => 'system'
+	];
+
+	protected $levels = [
+		100 => 'debug', 200 => 'info', 250 => 'notice', 550 => 'alert',
+		400 => 'error', 300 => 'warning', 500 => 'critica', 600 => 'emergency'
+	];
+	
+	public function __construct(Container $container) 
+	{
+		$this->logger = $container->make('logger');
+
+		$this->response = $container->make('http.response');
+
+	}
+	
+	/**
+	 * 数据库相关异常
+	 */
+	public function db($e) 
+	{
+		//获取日志处理配置信息
+		$this->logger
+			->channel('exception')
+			->addError(
+				$e->getMessage() . $this->getTextSuffix($e->getFile(), $e->getLine())
+			);
+
+		$this->responseError($e);
+	}
+
+	protected function getLoggerMethod($level)
+	{
+		$addRecordMethod = 'addError';
+		if (isset($this->levels[$level])) {
+			$addRecordMethod = 'add' . $this->levels[$level];
+		}
+		return $addRecordMethod;
+	}
+	
+	/**
+	 * 普通异常处理
+	 */
+	public function normal($e)
+	{
+		$this->logger
+			->channel('exception')
+			->addError(
+				$e->getMessage() . $this->getTextSuffix($e->getFile(), $e->getLine())
+			);
+		
+		//返回错误提示
+		$this->responseError($e);
+	}
+
+	protected function getTextSuffix($file, $line)
+	{
+		return " [{$_SERVER['REQUEST_METHOD']}, {$_SERVER['REQUEST_URI']}, $file($line)]";
+	}
+
+	
+	/**
+	 * 系统自定义异常处理
+	 * 
+	 */
+	public function system($e, $level = false)
+	{
+		$recordMethod = $this->getLoggerMethod($e->getLevel());
+
+		$this->logger
+			->channel('exception')
+			->$recordMethod(
+				$e->getMessage() . $this->getTextSuffix($e->getFile(), $e->getLine())
+			);
+
+
+		// 返回错误提示
+		$this->responseError($e);
+	}
+	
+	/**
+	 * 异常处理入口方法
+	 * 用户如需自定义异常处理方法, 请监听"exception.handler"事件
+	 * 
+	 * @param Exception $e
+	 * @return void
+	 */
+	public function handle($e)
+	{
+		foreach ($this->exceptionClasses as $class => & $way) {
+			if ($e instanceof $class) {
+				return $this->$way($e);
+			}
+		}
+		return $this->normal($e);
+	}
+	
+	/**
+	 * 返回HTTP状态码及错误信息
+	 */
+	protected function responseError(\Exception $e)
+	{
+		$code = $e->getCode();
+
+		if ($code) {
+            if (Status::vertify($code)) {
+                $this->response->withStatus($code);
+            }
+		}
+
+		// 非生产环境显示错误界面
+		if (! is_prod()) {
+			return $this->response->data = fetch_view(
+					'error',
+					'Debug',
+					[
+						'msg' => $e->getMessage(),
+						'code' => $code,
+						'file' => $e->getFile(),
+						'line' => $e->getLine(),
+						'trace' => $e->getTraceAsString()
+					]
+				);
+		}
+
+		// 生产环境
+		redirect_404('System Failure');
+	}
+
+}

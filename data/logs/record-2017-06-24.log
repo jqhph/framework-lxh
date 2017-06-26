@@ -1,0 +1,6 @@
+[2017-06-24 10:24:03] ERROR:  [GET, /Test/Hi, D:\php-project\gets\app\kernel\Application.php(106)] [] []
+[2017-06-24 13:58:02] ERROR: SQLSTATE[HY000] [1049] Unknown database 'test' [GET, /Test/Hi, D:\php-project\gets\app\kernel\ORM\Connect\PDO.php(83)] [] []
+[2017-06-24 13:59:23] ERROR: SQLSTATE[HY000] [1049] Unknown database 'test' [GET, /Test/Hi, D:\php-project\gets\app\kernel\ORM\Connect\PDO.php(83)] [] []
+[2017-06-24 14:01:53] ERROR: SQLSTATE[HY000] [1049] Unknown database 'test' [GET, /Test/Hi, D:\php-project\gets\app\kernel\ORM\Connect\PDO.php(83)] [] []
+[2017-06-24 14:02:56] ERROR: SQLSTATE[HY000] [1049] Unknown database 'user' [GET, /Test/Hi, D:\php-project\gets\app\kernel\ORM\Connect\PDO.php(83)] [] []
+[2017-06-24 14:03:02] ERROR: SQLSTATE[HY000] [1049] Unknown database 'users' [GET, /Test/Hi, D:\php-project\gets\app\kernel\ORM\Connect\PDO.php(83)] [] []

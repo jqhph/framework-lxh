@@ -1,0 +1,15 @@
+<?php
+/**
+ *
+ * @author {author}
+ * @date   {date}
+ */
+
+namespace Gets\Model;
+
+use Gets\MVC\Model;
+
+class {class} extends Model
+{
+
+}

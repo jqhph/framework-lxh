@@ -1,0 +1,26 @@
+<?php
+/**
+ *
+ * @author {author}
+ * @date   {date}
+ */
+
+namespace {namespace};
+
+use Closure;
+
+class {class}
+{
+    /**
+     * 中间件执行方法
+     *
+     * @param  mixed   $params 上游传递的参数
+     * @param  Closure $next   下级中间件
+     * @return void
+     */
+    public function handle($params, Closure $next)
+    {
+        // TODO
+
+    }
+}

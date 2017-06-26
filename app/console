@@ -1,0 +1,11 @@
+<?php
+/**
+ * 命令台入口
+ *
+ * @author Jqh
+ * @date   2017/6/13 19:52
+ */
+
+require __DIR__ . '/vendor/autoload.php';
+
+(new Gets\Application(__DIR__))->console();

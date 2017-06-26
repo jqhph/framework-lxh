@@ -1,0 +1,26 @@
+<?php
+/**
+ *
+ * @author {author}
+ * @date   {date}
+ */
+
+namespace Gets\Controller;
+
+use Gets\MVC\Controller;
+use Gets\Http\Request;
+use Gets\Http\Response;
+
+class {class} extends Controller
+{
+    public function __construct()
+    {
+    }
+
+    public function action{method}(Request $req, Response $resp, $params)
+    {
+        // TODO
+    }
+
+
+}
