@@ -133,7 +133,7 @@ class Dispatcher implements Router
 
     public function __construct($container = null, array $config = [])
     {
-        $this->container = null;
+        $this->container = $container;
 
         $this->config = $config;
 
@@ -210,10 +210,6 @@ class Dispatcher implements Router
             return false;
         }
 
-        if (! isset($rule['auth'])) {
-            $rule['auth'] = '';
-        }
-
         // 匹配路由模式
         if (! $this->matchingPattern($rule, $uriarr, $ulen)) {
             return false;
@@ -235,14 +231,10 @@ class Dispatcher implements Router
     protected function save(array & $rule, array & $uriarr)
     {
         // 验证配置
-        $auth = & $rule['auth'];
-
         $contr = $action = '';
 
         $params = [];// 参数
 
-        // 设置模块
-        $this->setModule($rule);
 
         foreach (get_value($rule, 'params', []) as $k => & $p) {
             switch ($k) {
@@ -251,6 +243,12 @@ class Dispatcher implements Router
                     break;
                 case 'action':
                     $action = & $p;
+                    break;
+                case 'module':
+                    $this->module = & $p;
+                    break;
+                case 'auth':
+                    $this->auth = & $p;
                     break;
                 default:
                     $params[$k] = & $p;
@@ -298,7 +296,6 @@ class Dispatcher implements Router
         $this->hooks 		  = (array) get_value($rule, 'hooks', []);
         $this->controllerName = & $realContr;
         $this->actionName	  = & $realAction;
-        $this->auth		      = & $auth;
         $this->requestParams  = & $params;
     }
 
@@ -408,33 +405,6 @@ class Dispatcher implements Router
 
         return $uri;
     }
-
-    // 设置模块
-    protected function setModule(array & $rule)
-    {
-        // 优先判断路由配置中的"module"参数
-        $this->module = get_value($rule, 'module');
-        if ($this->module) {
-            return;
-        }
-
-        // 判断是否开启了子域名部署
-        if (config('domain-deploy')) {
-            // 是
-            $module = store('host.module');
-
-            if ($module) {
-                $this->module = & $module;
-                return;
-            }
-        }
-
-        $this->module = (array) config('modules');
-        if ($this->module) {
-            $this->module = $this->module[0];
-        }
-    }
-
 
     // 获取路由解析结果
     public function getDispatchResult()

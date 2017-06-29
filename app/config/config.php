@@ -7,6 +7,15 @@
  */
 $config = [];
 
+// 语言包
+$config['language'] = 'en';
+
+// view version模板版本
+$config['view-version'] = 'v1.0';
+
+// resource version静态资源版本
+$config['resource-version'] = 'v1.0';
+
 // 是否输出控制台调试信息，默认true
 $config['response-console-log'] = true;
 // 是否输出追踪信息到控制台，默认true
@@ -19,6 +28,10 @@ $config['response-trace-log'] = true;
 $config['add-config'] = [
     // 数据库配置文件
     __ENV__ . '/db/config',
+    __ENV__ . '/app',
+    __ENV__ . '/writable',
+    'client',
+    'system'
 
 ];
 
@@ -29,7 +42,7 @@ $config['add-config-name'] = [
 
 // 模块设定, 支持多模块, 多个用数组表示
 // 如果设置了多模块, 且没有开启子域名部署, 配置路由的时候默认指向第一个模块, 如需走第二个模块需要在路由配置中使用"module"参数指定
-$config['modules'] = ['Home', 'Admin', 'Api'];
+$config['modules'] = ['Admin', 'Home', 'Api'];
 
 // 开启子域名部署
 $config['domain-deploy'] = false;

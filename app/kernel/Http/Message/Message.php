@@ -140,13 +140,13 @@ class Message implements MessageInterface
 
         foreach ($_SERVER as $key => & $value) {
             if ('HTTP_' == substr($key, 0, 5)) {
-                $this->headers[strtolower(str_replace('_', '-',  substr($key, 5)))] = explode(',', $value);
+                $this->headers[substr($key, 5)] = explode(',', $value);
             }
             if (strpos($key, 'X_') === 0) {
-                $this->headers[strtolower($key)] = explode(',', $value);
+                $this->headers[$key] = explode(',', $value);
             }
         }
-
+       
         $this->firstTimeReadHeader = false;
     }
 
@@ -161,7 +161,7 @@ class Message implements MessageInterface
         // TODO: Implement hasHeader() method.
         $this->initServerHeader();
 
-        return isset($this->headers[strtolower($name)]);
+        return isset($this->headers[strtoupper($name)]);
     }
 
 
@@ -181,7 +181,7 @@ class Message implements MessageInterface
         // TODO: Implement getHeader() method.
         $this->initServerHeader();
 
-        $name = strtolower($name);
+        $name = strtoupper($name);
         return isset($this->headers[$name]) ? $this->headers[$name] : array();
     }
 
@@ -203,7 +203,7 @@ class Message implements MessageInterface
     {
         // TODO: Implement getHeaderLine() method.
         $this->initServerHeader();
-        $name = strtolower($name);
+        $name = strtoupper($name);
         return isset($this->headers[$name]) ? implode("; ", $this->headers[$name]) : '';
     }
 
@@ -226,7 +226,7 @@ class Message implements MessageInterface
         // TODO: Implement withHeader() method.
         $this->backupsOriginServer();
 
-        $name = strtolower($name);
+        $name = strtoupper($name);
 
         $this->headers[$name] = (array) $value;
         return $this;
@@ -251,7 +251,7 @@ class Message implements MessageInterface
         // TODO: Implement withAddedHeader() method.
         $this->backupsOriginServer();
 
-        $name = strtolower($name);
+        $name = strtoupper($name);
 
         if (isset($this->headers[$name])) {
             $this->headers[$name] = array_merge($this->headers[$name], (array) $value);
@@ -277,7 +277,7 @@ class Message implements MessageInterface
         // TODO: Implement withoutHeader() method.
         $this->backupsOriginServer();
 
-        $name = strtolower($name);
+        $name = strtoupper($name);
 
         unset($this->headers[$name]);
 

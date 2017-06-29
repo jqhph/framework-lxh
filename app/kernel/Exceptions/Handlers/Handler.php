@@ -5,6 +5,7 @@ namespace Lxh\Exceptions\Handlers;
 use Lxh\Contracts\Container\Container;
 use Lxh\Exceptions\Exception;
 use Lxh\Logger\Manager;
+use Lxh\Http\Request;
 use Lxh\Http\Response;
 use Lxh\Http\Message\Status;
 
@@ -22,6 +23,11 @@ class Handler
 	 * @var Response
 	 */
 	protected $response;
+
+	/**
+	 * @var Request
+	 */
+	protected $request;
 	
 	protected $exceptionClasses = [
 		'PDOException' => 'db',
@@ -37,6 +43,8 @@ class Handler
 	public function __construct(Container $container) 
 	{
 		$this->logger = $container->make('logger');
+
+		$this->request = $container->make('http.request');
 
 		$this->response = $container->make('http.response');
 
@@ -136,8 +144,10 @@ class Handler
             }
 		}
 
-		// 非生产环境显示错误界面
-		if (! is_prod()) {
+		$isAjax = $this->request->isAjax();
+
+		// 非生产环境以及非ajax请求显示错误界面
+		if (! is_prod() && ! $isAjax) {
 			return $this->response->data = fetch_view(
 					'error',
 					'Debug',
@@ -149,6 +159,10 @@ class Handler
 						'trace' => $e->getTraceAsString()
 					]
 				);
+		}
+
+		if ($isAjax) {
+			return $this->response->data = $e->getMessage();
 		}
 
 		// 生产环境

@@ -114,7 +114,7 @@ class Loader
             ],
             'validator' => [
                 'shared' => true,
-                'class' => 'Lxh\Helpers\Valitron\Validator'
+                'class' => 'Lxh\Helper\Valitron\Validator'
             ],
             'page' => [
                 'shared' => true,
@@ -137,6 +137,11 @@ class Loader
             'track' => [
                 'shared' => true,
                 'class' => 'Lxh\Debug\Track',
+                'dependencies' => 'container'
+            ],
+            'language.manager' => [
+                'shared' => true,
+                'class' => 'Lxh\Language\Manager',
                 'dependencies' => 'container'
             ],
         ];

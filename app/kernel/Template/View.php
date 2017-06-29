@@ -17,11 +17,17 @@ class View
      */
     protected $vars = [];
 
+    protected $module;
+
+    // 模板版本
+    protected $version;
+
     protected $root = __ROOT__;
 
     public function __construct()
     {
-
+        $this->version = config('view-version', 'v1.0');
+        $this->module = container('controller.manager')->moduleName();
     }
 
     /**
@@ -71,7 +77,7 @@ class View
      */
     public function getTemplatePath($viewName)
     {
-        return "{$this->root}application/" . __MODULE__ . "/View/$viewName.php";
+        return "{$this->root}application/" . $this->module . "/View/{$this->version}/$viewName.php";
     }
 
     /**

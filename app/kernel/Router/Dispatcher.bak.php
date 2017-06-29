@@ -10,7 +10,7 @@ namespace Lxh\Router;
 
 use Lxh\Contracts\Router;
 
-class Dispatcher implements Router
+class DispatcherBak implements Router
 {
     protected $container;
 

@@ -62,7 +62,13 @@ class ControllerManager extends Factory
      */
     protected $middlewares = [];
 
-    protected $authParams;// 登录验证相关信息
+    /**
+     * 用户登录验证类，默认开启验证
+     * false表示不验证
+     *
+     * @var string | bool
+     */
+    protected $authParams = 'User';// 登录验证相关信息
 
     protected $requestParams;// 请求参数
 
@@ -86,8 +92,6 @@ class ControllerManager extends Factory
      * @var array
      */
     protected $contrs;
-
-    protected $defaultAuthParams = [];
 
     public function __construct(Container $container)
     {
@@ -154,7 +158,7 @@ class ControllerManager extends Factory
         return $this->pipeline
                 ->send(['req' => $this->request, 'resp' => $this->response, 'params' => & $params])
                 ->through($middleware)
-                ->then(function ($container) use ($contr, $action, $params) {
+                ->then(function () use ($contr, $action, $params) {
 
                     if ($this->first) {
                         $this->events->fire('route.auth.success', [$this->request, $this->response, $this->requestParams]);
@@ -185,6 +189,10 @@ class ControllerManager extends Factory
      */
     protected function addMiddleware(array & $middleware)
     {
+        if ($this->authParams) {
+            $middleware[] = $this->getAuth();
+        }
+
         foreach ((array) config('middleware') as $module => & $mid) {
             if ($module == '*' || $module == $this->module) {
                 $middleware = array_merge($middleware, (array) $mid);
@@ -228,7 +236,7 @@ class ControllerManager extends Factory
             return $instance;
         }
 
-        throw new NotFound("Controller '$name' not exists.", false);
+        throw new NotFound("Controller '$className' not exists.", false);
     }
 
     /**
@@ -274,13 +282,10 @@ class ControllerManager extends Factory
     public function getAuth()
     {
         if (! $this->auth) {
-            if (empty($this->authParams['class'])) {
-                $this->authParams['class'] = 'Auth';
-            }
-            $class = & $this->authParams['class'];
+            $class = & $this->authParams;
             $className = '\\Lxh\\' . $this->module . '\\Auth\\' . $class;
 
-            $this->auth = new $className($this->container);
+            $this->auth = new $className($this->container, $this->request, $this->response);
 
             $this->container->instance('auth', $this->auth);
         }
@@ -290,34 +295,27 @@ class ControllerManager extends Factory
     /**
      * 获取接口验证相关配置参数
      */
-    protected function setAuthParams($params)
+    protected function setAuthParams(& $params)
     {
-        $this->authParams = & $params;
-        if ($this->authParams) {
-            if (! isset($this->authParams['enable'])) {
-                $this->authParams['enable'] = & $this->defaultAuthParams['enable'];
-            }
-            if (! isset($this->authParams['class']) || empty($this->authParams['class'])) {
-                $this->authParams['class'] = & $this->defaultAuthParams['class'];
-            }
-        } else {
-            $this->authParams = & $this->defaultAuthParams;
+//        var_dump($params);die;
+        if ($params === false || $params) {
+            $this->authParams = $params;
         }
     }
 
-    public function getControllerName()
+    public function controllerName()
     {
-        return $this->controllerName;
+        return $this->controllerName ?: $this->defaultController;
     }
 
-    public function getActionName()
+    public function actionName()
     {
         return $this->actionName;
     }
 
-    public function getModuleName()
+    public function moduleName()
     {
-        return $this->module;
+        return $this->module ?: $this->getDefaultModule();
     }
 
     public function getRequestParams()
@@ -349,6 +347,8 @@ class ControllerManager extends Factory
     protected function setControllerName($name)
     {
         $this->controllerName = $name ? ucfirst($name) : $this->defaultController;
+
+        language()->scope($this->controllerName);
 
         if (! defined('__CONTROLLER__')) {
             define('__CONTROLLER__', $this->controllerName);

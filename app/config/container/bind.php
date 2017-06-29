@@ -9,11 +9,12 @@
 use Lxh\Config\Config;
 use Lxh\Contracts\Container\Container;
 use Lxh\Helper\Arr;
+use Lxh\Router\Dispatcher;
 
 $container = container();
 
 $container->singleton('router', function (Container $container) {
-    $router = new Lxh\Router\Dispatcher();
+    $router = new Dispatcher();
 
     $request = $container->make('http.request');
 

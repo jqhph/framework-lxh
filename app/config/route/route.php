@@ -12,10 +12,34 @@ $config[] = [
     'pattern' => '/',
     'method' => '*',
     'params' => [
+//        'module' => 'Home',
         'controller' => 'Index',
         'action' => 'Index'
     ]
 ];
+
+$config[] = [
+    'pattern' => '/api/User/action/Login',
+    'method' => 'POST',
+    'params' => [
+        'auth' => false,
+        'module' => 'Admin',
+        'controller' => 'User',
+        'action' => 'Login'
+    ]
+];
+
+$config[] = [
+    'pattern' => '/Lxh/Login',
+    'method' => 'GET',
+    'params' => [
+        'auth' => false,
+        'module' => 'Admin',
+        'controller' => 'Login',
+        'action' => 'Index'
+    ]
+];
+
 
 $config[] = [
     'pattern' => '/:controller/:action',

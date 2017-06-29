@@ -9,8 +9,10 @@
 use Lxh\Container\Container;
 use Lxh\ORM\Connect\PDO;
 use Lxh\Helper\Console;
+use Lxh\Language\Manager;
 
 $GLOBALS['__container__'] = Container::getInstance();
+$GLOBALS['__language__'] = $GLOBALS['__container__']->make('language.manager');
 
 /**
  * 服务容器代理函数
@@ -23,9 +25,37 @@ function container($abstract = null)
     return $abstract ? $GLOBALS['__container__']->make($abstract) : $GLOBALS['__container__'];
 }
 
-function get_db()
-{
 
+$GLOBALS['resource-server']  = config('resource-server');
+$GLOBALS['js-version']       = config('js-version');
+$GLOBALS['css-version']      = config('css-version');
+$GLOBALS['resource-version'] = config('resource-version');
+// 加载js
+function load_js($name, $dir = 'js')
+{
+    echo "<script src=\"{$GLOBALS['resource-server']}/static/{$GLOBALS['resource-version']}/$dir/$name.js?v={$GLOBALS['js-version']}\"></script>";
+}
+
+// 加载css
+function load_css($name, $dir = 'css')
+{
+    echo "<link href=\"{$GLOBALS['resource-server']}/static/{$GLOBALS['resource-version']}/$dir/$name.css?v={$GLOBALS['css-version']}\" rel=\"stylesheet\" type=\"text/css\" />";
+}
+
+// 加载图片
+function load_img($name, $dir = 'images')
+{
+    echo "{$GLOBALS['resource-server']}/static/{$GLOBALS['resource-version']}/$dir/$name";
+}
+
+/**
+ * 获取语言包管理对象
+ *
+ * @return Manager
+ */
+function language()
+{
+    return $GLOBALS['__language__'];
 }
 
 // 获取用户信息管理对象

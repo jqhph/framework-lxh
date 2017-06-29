@@ -122,8 +122,10 @@ class Track
     protected function response(Request $request)
     {
         $db = $this->getRecordStore('db');
+        $controllerManager = $this->container->make('controller.manager');
 
-        $requestInfo = ' [Module: ' . __MODULE__ . ', Controller: ' . __CONTROLLER__ . ', Action: ' . __ACTION__ . '] '
+        $requestInfo = ' [Module: ' . $controllerManager->moduleName() . ', Controller: ' . $controllerManager->controllerName()
+                        . ', Action: ' . $controllerManager->actionName() . '] '
                         . $request->date() . ' ' . $request->protocol(). ' ' . $request->getMethod() . ': '
                         . $request->getUri()->getPath() . ' ' . $request->getUri()->getQuery();
 
