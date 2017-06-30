@@ -16,6 +16,9 @@ class Login extends Controller
 {
     public function actionIndex(Request $request, Response $response, $params)
     {
+        console_info($params, 213213, 12321321,4354356345, 234234234234234);
+        
+//        assign('test', $a);
         return fetch_view();
     }
 }

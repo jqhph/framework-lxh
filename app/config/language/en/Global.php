@@ -12,7 +12,8 @@ $config['labels'] = [
     'web-title' => 'LXH framework',
     'web-description' => 'LXH framework, PHP',
     'sign in' => 'Sign In',
-    'sign up' => 'Sign Up',
+    'project-desc' => 'High performance code generator',
+    'loading' => 'Loading...',
 ];
 
 return $config;

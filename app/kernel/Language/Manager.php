@@ -170,46 +170,53 @@ class Manager
      * @param  mixed $default
      * @return string | array
      */
-    public function translate($label, $category = 'labels', $default = null)
+    public function translate($label, $category = 'labels')
     {
-        $default = $default ?: $label;
-
         if (! isset($this->packages[$this->language])) {
-            return $default;
+            return $label;
         }
 
         if (is_array($label)) {
             $translated = array();
 
             foreach ($label as & $subLabel) {
-                $translated[$subLabel] = $this->translate($subLabel, $category, $default);
+                $translated[$subLabel] = $this->translate($subLabel, $category);
             }
 
             return $translated;
         }
         //console_error("{$this->scopeName}.{$category}.$label");
-        $translated = $this->packages[$this->language]->get("{$this->scopeName}.{$category}.$label", $default);
+        $translated = $this->packages[$this->language]->get("{$this->scopeName}.{$category}.$label");
 
-        if (!isset($translated)) {
-            $translated = $this->packages[$this->language]->get("Global.{$category}.$label", $default);
+        if (empty($translated)) {
+            $translated = $this->packages[$this->language]->get("Global.{$category}.$label");
         }
 
-        return $translated;
+        return $translated ?: $label;
     }
 
     /**
      * 使用全局语言包翻译
+     *
+     * @param  string $label 需要翻译的名称
+     * @param  string $category 翻译的类型  
+     * @return void
      */
-    public function translateWithGolobal($label, $category = 'labels', $default = null)
+    public function translateWithGolobal($label, $category = 'labels')
     {
-        $default = $default ?: $label;
-
         if (! isset($this->packages[$this->language])) {
-            return $default;
+            return $label;
         }
-        return $this->packages[$this->language]->get("Global.{$category}.$label", $default);
+        return $this->packages[$this->language]->get("Global.{$category}.$label", $label);
     }
 
+    /**
+     * 选项翻译
+     *
+     * @param  string|int $value 选项值
+     * @param  string     $value 选项名称
+     * @return string|int
+     */
     public function translateOption($value, $label)
     {
         if (! isset($this->packages[$this->language])) {

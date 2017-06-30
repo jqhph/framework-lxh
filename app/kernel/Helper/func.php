@@ -12,6 +12,9 @@ use Lxh\Helper\Console;
 use Lxh\Language\Manager;
 
 $GLOBALS['__container__'] = Container::getInstance();
+/**
+ * @var Manager
+ */
 $GLOBALS['__language__'] = $GLOBALS['__container__']->make('language.manager');
 
 /**
@@ -56,6 +59,43 @@ function load_img($name, $dir = 'images')
 function language()
 {
     return $GLOBALS['__language__'];
+}
+
+/**
+ * Translate label/labels
+ *
+ * @param  string $label name of label
+ * @param  string $category
+ * @param  mixed $default
+ * @return string | array
+ */
+function trans($label, $category = 'labels')
+{
+    return $GLOBALS['__language__']->translate($label, $category);
+}
+
+/**
+ * 使用全局语言包翻译
+ *
+ * @param  string $label 需要翻译的名称
+ * @param  string $category 翻译的类型
+ * @return void
+ */
+function trans_with_global($label, $category = 'labels')
+{
+    return $GLOBALS['__language__']->translateWithGolobal($label, $category);
+}
+
+/**
+ * 选项翻译
+ *
+ * @param  string|int $value 选项值
+ * @param  string     $value 选项名称
+ * @return string|int
+ */
+function trans_option($value, $label)
+{
+    return $GLOBALS['__language__']->translateOption($value, $label);
 }
 
 // 获取用户信息管理对象

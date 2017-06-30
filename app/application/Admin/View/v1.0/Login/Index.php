@@ -17,14 +17,14 @@
     <title><?php echo $language->translateWithGolobal('web-title');?></title>
 
     <?php
-    load_css('toastr.min', 'plugins/toastr');
+//    load_css('toastr.min', 'plugins/toastr');
         // <!-- App CSS -->
-        load_css('bootstrap.min');
-        load_css('core');
-        load_css('components');
-        load_css('icons');
+//        load_css('bootstrap.min');
+//        load_css('core');
+//        load_css('components');
+//        load_css('icons');
 //        load_css('responsive');
-        load_css('pages');
+//        load_css('pages');
 //        load_css('menu');
 
 //        load_js('modernizr.min');
@@ -45,11 +45,11 @@
 <div class="wrapper-page">
     <div class="text-center">
         <a href="/" class="logo"><span><?php echo $language->translate('title');?></span></span></a>
-        <h5 class="text-muted m-t-0 font-600">Responsive Admin Dashboard</h5>
+        <h5 class="text-muted m-t-0 font-600"><?php echo $language->translateWithGolobal('project-desc')?></h5>
     </div>
     <div class="m-t-40 card-box portlet">
         <div class="text-center">
-            <h4 class="text-uppercase font-bold m-b-0">Sign In</h4>
+            <h4 class="text-uppercase font-bold m-b-0"><?php echo $language->translate('sign in')?></h4>
         </div>
         <div class="panel-body">
             <form class="form-horizontal m-t-20 User-form" onsubmit="return false">
@@ -71,7 +71,8 @@
                         <div class="checkbox checkbox-custom">
                             <input id="checkbox-signup" name="remember" type="checkbox">
                             <label for="checkbox-signup">
-                                Remember me
+                                <?php echo $language->translate('remember'); ?>
+
                             </label>
                         </div>
 
@@ -81,14 +82,14 @@
                 <div class="form-group text-center m-t-30">
                     <div class="col-xs-12">
                         <button class=" submit btn btn-custom btn-bordred btn-block waves-effect waves-light" type="submit">
-                            Log In
+                            <?php echo $language->translate('log in');?>
                         </button>
                     </div>
                 </div>
 
                 <div class="form-group m-t-30 m-b-0">
                     <div class="col-sm-12">
-                        <a href="page-recoverpw.html" class="text-muted"><i class="fa fa-lock m-r-5"></i> Forgot your password?</a>
+                        <a href="page-recoverpw.html" class="text-muted"><i class="fa fa-lock m-r-5"></i> <?php echo $language->translate('forgot')?></a>
                     </div>
                 </div>
             </form>
@@ -99,7 +100,8 @@
 
     <div class="row">
         <div class="col-sm-12 text-center">
-            <p class="text-muted">Don't have an account? <a href="page-register.html" class="text-primary m-l-5"><b>Sign Up</b></a></p>
+            <p class="text-muted"><?php echo $language->translate('unaccount')?> <a href="page-register.html" class="text-primary m-l-5"><b>
+                        <?php echo $language->translateWithGolobal('sign up');?></b></a></p>
         </div>
     </div>
 
@@ -108,18 +110,44 @@
 
 <?php
 load_js('jquery.min');
-load_js('parsley.min', 'plugins/parsleyjs/dist');
-load_js('container');
-load_js('toastr.min', 'plugins/toastr');
-load_js('bootstrap.min');
-load_js('jquery.core');
+load_js('sea');
+
+//load_js('parsley.min', 'plugins/parsleyjs/dist');
+//load_js('container');
+//load_js('toastr.min', 'plugins/toastr');
+////load_js('bootstrap.min');
+//load_js('jquery.core');
 ?>
 
 <script>
-    var resizefunc = []
+    seajs.config({
+        // 设置路径，方便跨目录调用
+        paths: {
+            's': '/static/v1.0',
+        },
+        // 设置别名，方便调用
+        alias: {
+            'jquery': 's/js/jquery.min',
+            'parsley': 's/plugins/parsleyjs/dist/parsley.min',
+            'container': 's/js/container',
+            'toastr': 's/plugins/toastr/toastr.min',
+            'core': 's/js/jquery.core',
+        }
 
-    Lxh.addAction(function () {
+    });
+    seajs.use(['s/plugins/toastr/toastr.min.css',
+        's/css/bootstrap.min.css',
+        's/css/core.css',
+        's/css/components.css',
+        's/css/icons.css',
+        's/css/responsive.css',
+        's/css/pages.css',])
+    
+    var options = ['parsley', 'toastr', 'container', 'core']
+    seajs.use(options, function (parsley, toastr) {
         var $parsley = $('form').parsley({});
+
+        Lxh.createModel('Test').request('/test/Global.json', 'GET')
 
         $('.submit').click(function (e) {
             if (!$parsley.isValid()) {
@@ -127,23 +155,23 @@ load_js('jquery.core');
             }
             var notify = Lxh.ui.notify()
             notify.remove()
-            notify.info('登录中...')
+            notify.info('loading')
 
             var model = Lxh.createModel('User')
             // 设置成功回调函数
-            model.on(function (data) {
+            model.on('success', function (data) {
                 // success
                 notify.remove()
                 notify.success('登录成功，即将跳转到首页！')
 
                 console.log('success: ', data)
-            }, function () {
-
             })
             // 发起登录请求
             model.touchAction('Login', 'POST')
+
         })
-    }).call()
+
+    })
 
 </script>
 

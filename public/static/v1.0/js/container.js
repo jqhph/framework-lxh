@@ -124,8 +124,23 @@ window.Lxh = (function () {
             method: 'POST',
             formHandler: null,
             data: null,
-            success: function () {},
-            error: function () {},
+            call: {
+                success: function (data) {
+
+                },
+                failed: function (data) {
+                    Lxh.ui.notify().error(data.msg)
+                },
+                // ajax 错误回调函数
+                error: function (req, msg, e) {
+                    Lxh.ui.notify().remove()
+                    Lxh.ui.notify().error(req.status + ' ' + req.statusText + ' ' + req.responseText)
+                    store.error(req, msg, e)
+                },
+                any: function () {
+
+                }
+            }
         }
         store.formHandler = Lxh.form()
         store.name = name
@@ -170,9 +185,9 @@ window.Lxh = (function () {
         }
 
         // 设置事件
-        this.on = function (success, error) {
-            store.success = success || store.success
-            store.error = error || store.error
+        this.on = function (name, call) {
+            if (typeof call != 'function') throw new Error('Invalid arguments.')
+            store.call[name] = call || store.call[name]
             return this
         }
 
@@ -188,14 +203,20 @@ window.Lxh = (function () {
                 data: util.getData(),
                 timeout: store.timeout,
                 success: function(data) {
+                    if (typeof data != 'object' && data.indexOf('{') == 0) data = JSON.parse(data)
                     store.responseContent[store.method + store.api] = data
-                    store.success(data)
+                    if (data.status) {
+                        if (data.status == Lxh.statusCode.success) {
+                            store.call.success(data)
+                        } else {
+                            store.call.failed(data)
+                        }
+                    } else {
+                        store.call.success(data)
+                    }
+                    store.call.any(data)
                 },
-                error: function (req, msg, e) {
-                    Lxh.ui.notify().remove()
-                    Lxh.ui.notify().error(req.status + ' ' + req.statusText + ' ' + req.responseText)
-                    store.error(req, msg, e)
-                }
+                error: store.call.error
             });
         }
 
@@ -280,7 +301,8 @@ window.Lxh = (function () {
         // 获取指定form中的所有的<input>对象
         function getElements(selector) {
             var form = document.querySelector(selector);
-            var elements = new Array(), tagElements
+            if (! form) return []
+            var elements = [], tagElements
             for (var i in formEles) {
                 tagElements = form.getElementsByTagName(formEles[i]);
                 for (var j = 0; j < tagElements.length; j++) {
