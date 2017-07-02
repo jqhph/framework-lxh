@@ -84,8 +84,8 @@ class Config extends Entity
             $this->attrs += include "{$pre}{$filename}.php";
         }
 
-        foreach ((array) $this->get('add-config-name') as & $filename) {
-            $this->attrs[$filename] = include "{$pre}{$filename}.php";
+        foreach ((array) $this->get('add-config-name') as $k => & $filename) {
+            $this->attrs[basename($filename)] = include "{$pre}{$filename}.php";
         }
     }
 

@@ -79,11 +79,13 @@ class Handler
 	 */
 	public function normal($e)
 	{
-		$this->logger
-			->channel('exception')
-			->addError(
-				$e->getMessage() . $this->getTextSuffix($e->getFile(), $e->getLine())
-			);
+        if ($e->getMessage()) {
+            $this->logger
+                ->channel('exception')
+                ->addError(
+                    $e->getMessage() . $this->getTextSuffix($e->getFile(), $e->getLine())
+                );
+        }
 		
 		//返回错误提示
 		$this->responseError($e);
@@ -103,12 +105,13 @@ class Handler
 	{
 		$recordMethod = $this->getLoggerMethod($e->getLevel());
 
-		$this->logger
-			->channel('exception')
-			->$recordMethod(
-				$e->getMessage() . $this->getTextSuffix($e->getFile(), $e->getLine())
-			);
-
+		if ($e->getMessage()) {
+            $this->logger
+                ->channel('exception')
+                ->$recordMethod(
+                    $e->getMessage() . $this->getTextSuffix($e->getFile(), $e->getLine())
+                );
+        }
 
 		// 返回错误提示
 		$this->responseError($e);

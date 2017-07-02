@@ -28,7 +28,6 @@ function container($abstract = null)
     return $abstract ? $GLOBALS['__container__']->make($abstract) : $GLOBALS['__container__'];
 }
 
-
 $GLOBALS['resource-server']  = config('resource-server');
 $GLOBALS['js-version']       = config('js-version');
 $GLOBALS['css-version']      = config('css-version');
@@ -96,6 +95,21 @@ function trans_with_global($label, $category = 'labels')
 function trans_option($value, $label)
 {
     return $GLOBALS['__language__']->translateOption($value, $label);
+}
+
+function ucfirst_trans($label, $category = 'labels')
+{
+    return ucfirst($GLOBALS['__language__']->translate($label, $category));
+}
+
+function ucfirst_trans_with_global($label, $category = 'labels')
+{
+    return ucfirst($GLOBALS['__language__']->translateWithGolobal($label, $category));
+}
+
+function ucfirst_trans_option($value, $label)
+{
+    return ucfirst($GLOBALS['__language__']->translateOption($value, $label));
 }
 
 // 获取用户信息管理对象
@@ -194,8 +208,7 @@ function is_prod()
 /**
  * 获取配置文件参数代理函数
  *
- * @param
- * @return void
+ * @return mixed | \Lxh\Config\Config
  */
 function config($key = null, $default = null)
 {

@@ -17,17 +17,7 @@
     <title><?php echo $language->translateWithGolobal('web-title');?></title>
 
     <?php
-//    load_css('toastr.min', 'plugins/toastr');
-        // <!-- App CSS -->
-//        load_css('bootstrap.min');
-//        load_css('core');
-//        load_css('components');
-//        load_css('icons');
-//        load_css('responsive');
-//        load_css('pages');
-//        load_css('menu');
-
-//        load_js('modernizr.min');
+        echo fetch_view('app-js', 'Public');
     ?>
 
     <!-- HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -109,8 +99,7 @@
 <!-- end wrapper page -->
 
 <?php
-load_js('jquery.min');
-load_js('sea');
+
 
 //load_js('parsley.min', 'plugins/parsleyjs/dist');
 //load_js('container');
@@ -119,61 +108,7 @@ load_js('sea');
 //load_js('jquery.core');
 ?>
 
-<script>
-    seajs.config({
-        // 设置路径，方便跨目录调用
-        paths: {
-            's': '/static/v1.0',
-        },
-        // 设置别名，方便调用
-        alias: {
-            'jquery': 's/js/jquery.min',
-            'parsley': 's/plugins/parsleyjs/dist/parsley.min',
-            'container': 's/js/container',
-            'toastr': 's/plugins/toastr/toastr.min',
-            'core': 's/js/jquery.core',
-        }
 
-    });
-    seajs.use(['s/plugins/toastr/toastr.min.css',
-        's/css/bootstrap.min.css',
-        's/css/core.css',
-        's/css/components.css',
-        's/css/icons.css',
-        's/css/responsive.css',
-        's/css/pages.css',])
-    
-    var options = ['parsley', 'toastr', 'container', 'core']
-    seajs.use(options, function (parsley, toastr) {
-        var $parsley = $('form').parsley({});
-
-        Lxh.createModel('Test').request('/test/Global.json', 'GET')
-
-        $('.submit').click(function (e) {
-            if (!$parsley.isValid()) {
-                return
-            }
-            var notify = Lxh.ui.notify()
-            notify.remove()
-            notify.info('loading')
-
-            var model = Lxh.createModel('User')
-            // 设置成功回调函数
-            model.on('success', function (data) {
-                // success
-                notify.remove()
-                notify.success('登录成功，即将跳转到首页！')
-
-                console.log('success: ', data)
-            })
-            // 发起登录请求
-            model.touchAction('Login', 'POST')
-
-        })
-
-    })
-
-</script>
 
 </body>
 </html>

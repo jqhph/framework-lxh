@@ -1,20 +1,30 @@
 /**
  * Created by Jqh on 2017/6/28.
  */
-window.Lxh = (function () {
+window.Lxh = function (options) {
     function Container(options) {
         var actions = []
-        this.addAction = function (call) {
-            actions.push(call)
-            return this
+        this.controllerName = function () {
+            return options.controller
         }
-        this.call = function () {
-            for (var i in actions) {
-                actions[i](this)
-            }
+        this.moduleName = function () {
+            return options.module
         }
+        this.actionName = function () {
+            return options.action
+        }
+        // 配置文件管理
+        this.config = new Store(options.config || {})
+        // 缓存管理
         this.cache = new Cache()
+        // 存储仓库
         this.store = new Store()
+        // 登陆用户信息管理
+        this.user = new Store(options.user || {})
+        // 语言包管理
+        this.language = new Language(this, this.cache, this.config)
+        // 视图管理
+        this.view = new View(this, options.tpls || {})
     }
 
     Container.prototype = {
@@ -31,7 +41,7 @@ window.Lxh = (function () {
             return this.store.get(name, $def)
         },
         createModel: function (name, module) {
-            return new Model(name, module)
+            return new Model(name, module, this)
         },
         createStore: function (data) {
             return new Store(data)
@@ -54,9 +64,6 @@ window.Lxh = (function () {
                 return this.val == 'test'
             }
         },
-        user: function () {
-
-        },
         // ui 组件
         ui: {
             // loading
@@ -66,16 +73,17 @@ window.Lxh = (function () {
                     return close(selector)
                 }
                 return show(selector, timeout)
-                function show (selector, timeout) {
+                function show(selector, timeout) {
                     var $portlet = $(selector).closest(selector);
                     // This is just a simulation, nothing is going to be reloaded
                     $portlet.append('<div class="panel-disabled"><div class="loader-1"></div></div>')
-                    if (! timeout) return
+                    if (!timeout) return
                     setTimeout(function () {
                         close(selector)
                     }, timeout)
                 }
-                function close (selector) {
+
+                function close(selector) {
                     var $pd = $(selector).closest(selector).find('.panel-disabled');
                     $pd.fadeOut('fast', $pd.remove);
                 }
@@ -104,10 +112,116 @@ window.Lxh = (function () {
         }
     }
 
+    // 视图管理
+    function View(container, tpls)
+    {
+        var data = new Store()
+        data.set('tpls', tpls)
+
+        this.getTpl = function (name) {
+            return data.get('tpls.' + name)
+        }
+    }
+
+    // 语言包管理
+    function Language(container, cache, config)
+    {
+        var store = {}, cache = cache, lang = config.get('language'), defaultScope = container.controllerName()
+        var cacheKey = 'language_' + lang, useCache = config.get('use-cache'), expireTime = config.get('lang-package-expire')
+
+        store[lang] = new Store()
+
+        /**
+         * 获取语言包数据
+         *
+         * @param array scopes 语言包模块数组
+         * @param function call 获取成功后回调函数
+         * @returns void
+         */
+        this.fetch = function (scopes, call) {
+            scopes = typeof scopes == 'string' ? [scopes] : scopes
+            if (useCache) {
+                var packages = {}
+                packages[lang] = cache.get(cacheKey)
+                fill(packages)
+            }
+
+            // 取出缓存中没有的语言包模块
+            var missingScopes = []
+            for (var i in scopes) {
+                if (! store[lang].get(scopes[i])) {
+                    missingScopes.push(scopes[i])
+                }
+            }
+
+            if (missingScopes.length < 1) {
+                // 缓存中有需要的语言包
+                return call()
+            }
+
+            // 缓存中没有需要的语言包
+            var model = container.createModel('Language')
+
+            model.data({lang: lang, scopes: missingScopes.join(',')})
+
+            model.on('success', function (data) {
+                fill(data.list)
+
+                if (useCache) {
+                    cache.set(cacheKey, store[lang].all())
+                    cache.expire(cacheKey, expireTime)
+                }
+
+                call()
+            })
+            model.touchAction('Get', 'POST')
+
+        }
+
+        function fill(packages) {
+            if (! packages) return
+            for (var language in packages) {
+                if (! store[language]) {
+                    store[language] = new Store()
+                }
+                for (var scope in packages[language]) {
+                    store[language].set(scope, packages[language][scope])
+                }
+            }
+        }
+
+        // 翻译
+        this.trans = function (label, category, scope) {
+            category = category || 'labels', scope = scope || defaultScope
+            var res = store[lang].get(scope + '.' + category + '.' + label)
+            return res || store[lang].get('Global.' + category + '.' + label, label)
+        }
+
+        // 翻译字段选项
+        this.transOption = function (value, label, scope) {
+            scope = scope || defaultScope
+            var res = store[lang].get(scope + '.options.' + label + '.' + value)
+            return res || store[lang].get('Global.options.' + label + '.' + value, value)
+        }
+
+        // 设置预言包类型
+        this.type = function (type) {
+            lang = type
+            store[lang] || (store[lang] = new Store())
+        }
+
+        // 获取所有语言包数据
+        this.all = function (language) {
+            return store[language || lang].all()
+        }
+
+    }
+
     /**
      * Created by Jqh on 2017/6/27.
      */
-    function Model(name, module) {
+    function Model(name, module, container) {
+        var language = container.language
         var store = {
             attrs: {},
             module: 'Admin',
@@ -129,12 +243,12 @@ window.Lxh = (function () {
 
                 },
                 failed: function (data) {
-                    Lxh.ui.notify().error(data.msg)
+                    container.ui.notify().error(data.msg)
                 },
                 // ajax 错误回调函数
                 error: function (req, msg, e) {
-                    Lxh.ui.notify().remove()
-                    Lxh.ui.notify().error(req.status + ' ' + req.statusText + ' ' + req.responseText)
+                    container.ui.notify().remove()
+                    container.ui.notify().error(req.status + ' ' + language.trans(req.statusText) + ' ' + language.trans(req.responseText))
                     store.error(req, msg, e)
                 },
                 any: function () {
@@ -142,7 +256,8 @@ window.Lxh = (function () {
                 }
             }
         }
-        store.formHandler = Lxh.form()
+
+        store.formHandler = container.form()
         store.name = name
 
         this.set = function (k, v) {
@@ -206,7 +321,7 @@ window.Lxh = (function () {
                     if (typeof data != 'object' && data.indexOf('{') == 0) data = JSON.parse(data)
                     store.responseContent[store.method + store.api] = data
                     if (data.status) {
-                        if (data.status == Lxh.statusCode.success) {
+                        if (data.status == container.statusCode.success) {
                             store.call.success(data)
                         } else {
                             store.call.failed(data)
@@ -222,32 +337,32 @@ window.Lxh = (function () {
 
         // 执行动作
         this.touchAction = function (action, method) {
-            return this.request(util.getApi('action', {action: action}), method)
+            return this.request(util.parseApi('action', {action: action}), method)
         }
 
         // 添加
         this.add = function () {
-            return this.request(util.getApi('add'), 'POST')
+            return this.request(util.parseApi('add'), 'POST')
         }
 
         // 修改
         this.edit = function () {
-            return this.request(util.getApi('edit'), 'PUT')
+            return this.request(util.parseApi('edit'), 'PUT')
         }
 
         // 删除一行或多行数据
         this.delete = function (data) {
-            return this.request(util.getApi('delete'), 'DELETE')
+            return this.request(util.parseApi('delete'), 'DELETE')
         }
 
         // 获取列表
         this.fetchList = function () {
-            return this.request(util.getApi('list'), 'GET')
+            return this.request(util.parseApi('list'), 'GET')
         }
 
         // 获取单行数据
         this.fetchRow = function () {
-            return this.request(util.getApi('detail'), 'GET')
+            return this.request(util.parseApi('detail'), 'GET')
         }
 
         var self = this
@@ -268,7 +383,7 @@ window.Lxh = (function () {
                 self.set(data)
                 return data
             },
-            getApi: function (type, options) {
+            parseApi: function (type, options) {
                 switch (type) {
                     case 'add':
                         return store.apiPrefix + store.name
@@ -285,7 +400,7 @@ window.Lxh = (function () {
                     case 'detail':
                         return store.apiPrefix + store.name + '/view/' + self.get('id')
                     case 'action':
-                        return store.apiPrefix + store.name + '/action/' + options.action
+                        return store.apiPrefix + store.name + '/' + options.action
                 }
             },
             // 获取表单选择器
@@ -351,6 +466,9 @@ window.Lxh = (function () {
     function Store(data)
     {
         data = data || {}
+        this.all = function () {
+            return data
+        }
         this.get = function ($key, $default) {
             if (! $key) {
                 return data
@@ -367,7 +485,11 @@ window.Lxh = (function () {
             return $lastItem;
         }
         this.set = function (key, val) {
-            data[key] = val
+            if (typeof key == 'object') {
+                data = key
+            } else {
+                data[key] = val
+            }
         }
         this.add = function (key, name, val) {
             data[key] = data[key] || {}
@@ -396,14 +518,11 @@ window.Lxh = (function () {
         }
 
         // 设置缓存，timeout为秒
-        this.set = function (key, val, timeout) {
+        this.set = function (key, val) {
             if (val instanceof Object) {
                 val = JSON.stringify(val)
             }
             this.storage.setItem(this.prefix.general + key, val)
-            if (timeout) {
-                this.expire(key, timeout)
-            }
         }
         // 获取缓存
         this.get = function (key, def) {
@@ -456,6 +575,6 @@ window.Lxh = (function () {
         this.clearPastDueKey()
     }
     
-    return new Container()
-})()
+    return new Container(options)
+}
 

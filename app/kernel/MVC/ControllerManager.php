@@ -348,6 +348,7 @@ class ControllerManager extends Factory
     {
         $this->controllerName = $name ? ucfirst($name) : $this->defaultController;
 
+        language()->loadPackage('Global');
         language()->scope($this->controllerName);
 
         if (! defined('__CONTROLLER__')) {

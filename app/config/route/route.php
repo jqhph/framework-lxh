@@ -19,13 +19,35 @@ $config[] = [
 ];
 
 $config[] = [
-    'pattern' => '/api/User/action/Login',
+    'pattern' => '/Register',
+    'method' => 'GET',
+    'params' => [
+        'auth' => false,
+        'module' => 'Admin',
+        'controller' => 'Login',
+        'action' => 'Register'
+    ]
+];
+
+$config[] = [
+    'pattern' => '/api/User/Login',
     'method' => 'POST',
     'params' => [
         'auth' => false,
         'module' => 'Admin',
         'controller' => 'User',
         'action' => 'Login'
+    ]
+];
+
+$config[] = [
+    'pattern' => '/api/:controller/:action',
+    'method' => '*',
+    'params' => [
+        'auth' => false,
+        'module' => 'Admin',
+        'controller' => ':controller',
+        'action' => ':action',
     ]
 ];
 

@@ -84,9 +84,6 @@ class Manager
 
         $this->moduleName = $c->moduleName();
 
-        // 载入默认语言包
-        $this->loadPackage('Global');
-//        $this->loadPackage($this->scopeName);
     }
 
     /**
@@ -102,6 +99,20 @@ class Manager
         $this->loadPackage($name);
 
         return $this;
+    }
+
+    /**
+     * 获取所有已加载的语言包数据
+     *
+     * @return array
+     */
+    public function all()
+    {
+        $data = [];
+        foreach ($this->packages as $lang => & $entity) {
+            $data[$lang] = $entity->all();
+        }
+        return $data;
     }
 
     /**
@@ -122,29 +133,30 @@ class Manager
      * @param  bool   $reload 是否重新载入
      * @return mixed
      */
-    protected function loadPackage($scope, $reload = false)
+    public function loadPackage($scope, $lang = null, $reload = false)
     {
-        if (! $reload && isset($this->loadedScopes[$this->language][$scope])) {
+        $lang = $lang ?: $this->language;
+        if (! $reload && isset($this->loadedScopes[$lang][$scope])) {
             return false;
         }
         // 获取语言包路径
-        $file = $this->getPackagePath($scope);
+        $file = $this->getPackagePath($scope, $lang);
 
         $result = false;
 
         if (is_file($file)) {
-            if (! isset($this->packages[$this->language])) {
+            if (! isset($this->packages[$lang])) {
                 // 初始化语言包
-                $this->packages[$this->language] = new Entity();
+                $this->packages[$lang] = new Entity();
             }
 
             $result = true;
             // 保存
-            $this->packages[$this->language]->$scope = (array) include $file;
+            $this->packages[$lang]->$scope = (array) include $file;
         }
 
         // 记录语言包载入结果
-        $this->loadedScopes[$this->language][$scope] = $result;
+        $this->loadedScopes[$lang][$scope] = $result;
     }
 
     /**
@@ -153,12 +165,13 @@ class Manager
      * @param  string $scope
      * @return string
      */
-    public function getPackagePath($scope)
+    public function getPackagePath($scope, $lang = null)
     {
+        $lang = $lang ?: $this->language;
         if ($scope == 'Global') {
-            return "{$this->root}{$this->dir}/{$this->language}/$scope.php";
+            return "{$this->root}{$this->dir}/{$lang}/$scope.php";
         }
-        return "{$this->root}{$this->dir}/{$this->language}/{$this->moduleName}/$scope.php";
+        return "{$this->root}{$this->dir}/{$lang}/{$this->moduleName}/$scope.php";
     }
 
 

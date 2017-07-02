@@ -8,4 +8,6 @@
 
 $config = [];
 
+$config['labels'] = [];
+
 return $config;
