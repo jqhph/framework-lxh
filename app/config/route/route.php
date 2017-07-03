@@ -41,6 +41,18 @@ $config[] = [
 ];
 
 $config[] = [
+    'pattern' => '/api/Js/:type',
+    'method' => 'GET',
+    'params' => [
+        'auth' => false,
+        'module' => 'Admin',
+        'controller' => 'Js',
+        'action' => 'Entrance',
+        'type' => ':type'
+    ]
+];
+
+$config[] = [
     'pattern' => '/api/:controller/:action',
     'method' => '*',
     'params' => [

@@ -24,7 +24,7 @@ class DaysFileHandler extends \Monolog\Handler\StreamHandler
 	
 	public function __construct($stream, $level = Logger::DEBUG, $bubble = true, $filePermission = null, $useLocking = false) 
 	{
-		$this->fileManager = container('file.manager');
+		$this->fileManager = make('file.manager');
 		
 		$this->filename = $this->rootPre . $stream;
 		

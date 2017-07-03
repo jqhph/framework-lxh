@@ -13,9 +13,6 @@ $config['language'] = 'en';
 // view version模板版本
 $config['view-version'] = 'v1.0';
 
-// resource version静态资源版本
-$config['resource-version'] = 'v1.0';
-
 // 是否输出控制台调试信息，默认true
 $config['response-console-log'] = true;
 // 是否输出追踪信息到控制台，默认true

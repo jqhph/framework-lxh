@@ -21,7 +21,7 @@ class User extends Controller
 
         $v->rule('lengthBetween', 'username', 4, 20);
 
-        $v->rule('lengthBetween', 'password', 5, 30);
+        $v->rule('lengthBetween', 'password', 4, 30);
 
         if (! $v->validate()) {
             // Errors

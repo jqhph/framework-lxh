@@ -258,6 +258,6 @@ class Request extends Message\ServerRequest
 
 	public function client()
 	{
-		return container('http.client');
+		return make('http.client');
 	}
 }

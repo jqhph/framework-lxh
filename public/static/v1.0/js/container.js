@@ -16,7 +16,7 @@ window.Lxh = function (options) {
         // 配置文件管理
         this.config = new Store(options.config || {})
         // 缓存管理
-        this.cache = new Cache()
+        this.cache = options.cache
         // 存储仓库
         this.store = new Store()
         // 登陆用户信息管理
@@ -126,10 +126,47 @@ window.Lxh = function (options) {
     // 语言包管理
     function Language(container, cache, config)
     {
-        var store = {}, cache = cache, lang = config.get('language'), defaultScope = container.controllerName()
+        var store = {}, cache = cache, lang = config.get('language'), defaultScope = container.controllerName(), self = this
         var cacheKey = 'language_' + lang, useCache = config.get('use-cache'), expireTime = config.get('lang-package-expire')
 
         store[lang] = new Store()
+
+        var fill = this.fill = function (packages, save) {
+            if (! packages) {
+                // 如果没有数据，则从缓存中获取并注入
+                packages = {}
+                packages[lang] = cache.get(cacheKey)
+                save = false
+            }
+            for (var language in packages) {
+                if (! store[language]) {
+                    store[language] = new Store()
+                }
+                for (var scope in packages[language]) {
+                    store[language].set(scope, packages[language][scope])
+                }
+            }
+            if (save) {
+                this.save(packages)
+            }
+        }
+
+        // 缓存语言包
+        this.save = function (packages) {
+            if (! useCache) {
+                return
+            }
+            var cachePackage = {}, i
+            for (var lang in packages) {
+                cachePackage = cache.get(cacheKey)
+                for (i in packages[lang]) {
+                    cachePackage[i] = packages[lang][i]
+                }
+                cache.set(cacheKey, cachePackage)
+                cache.expire(cacheKey, expireTime)
+            }
+        }
+
 
         /**
          * 获取语言包数据
@@ -165,12 +202,8 @@ window.Lxh = function (options) {
             model.data({lang: lang, scopes: missingScopes.join(',')})
 
             model.on('success', function (data) {
-                fill(data.list)
-
-                if (useCache) {
-                    cache.set(cacheKey, store[lang].all())
-                    cache.expire(cacheKey, expireTime)
-                }
+                // 注入并缓存
+                fill(data.list, true)
 
                 call()
             })
@@ -178,27 +211,15 @@ window.Lxh = function (options) {
 
         }
 
-        function fill(packages) {
-            if (! packages) return
-            for (var language in packages) {
-                if (! store[language]) {
-                    store[language] = new Store()
-                }
-                for (var scope in packages[language]) {
-                    store[language].set(scope, packages[language][scope])
-                }
-            }
-        }
-
         // 翻译
-        this.trans = function (label, category, scope) {
+        window.trans = this.trans = function (label, category, scope) {
             category = category || 'labels', scope = scope || defaultScope
             var res = store[lang].get(scope + '.' + category + '.' + label)
             return res || store[lang].get('Global.' + category + '.' + label, label)
         }
 
         // 翻译字段选项
-        this.transOption = function (value, label, scope) {
+        window.trans_option = this.transOption = function (value, label, scope) {
             scope = scope || defaultScope
             var res = store[lang].get(scope + '.options.' + label + '.' + value)
             return res || store[lang].get('Global.options.' + label + '.' + value, value)
@@ -221,8 +242,8 @@ window.Lxh = function (options) {
      * Created by Jqh on 2017/6/27.
      */
     function Model(name, module, container) {
-        var language = container.language
         var store = {
+            isRequsting: false,
             attrs: {},
             module: 'Admin',
             name: '',
@@ -248,7 +269,7 @@ window.Lxh = function (options) {
                 // ajax 错误回调函数
                 error: function (req, msg, e) {
                     container.ui.notify().remove()
-                    container.ui.notify().error(req.status + ' ' + language.trans(req.statusText) + ' ' + language.trans(req.responseText))
+                    container.ui.notify().error(req.status + ' ' + trans(req.statusText) + ' ' + trans(req.responseText))
                     store.error(req, msg, e)
                 },
                 any: function () {
@@ -306,9 +327,16 @@ window.Lxh = function (options) {
             return this
         }
 
+        // 请求是否已结束，是返回true，否则返回false
+        this.requestEnded = function () {
+            return (! store.isRequsting)
+        }
+
         this.request = function (api, method) {
             store.method = method || store.method
             store.api = api || store.api
+            // 标记请求开始
+            store.isRequsting = true
             $.ajax({
                 url: store.api,
                 ifModified: false,
@@ -318,6 +346,8 @@ window.Lxh = function (options) {
                 data: util.getData(),
                 timeout: store.timeout,
                 success: function(data) {
+                    // 标记请求结束
+                    store.isRequsting = false
                     if (typeof data != 'object' && data.indexOf('{') == 0) data = JSON.parse(data)
                     store.responseContent[store.method + store.api] = data
                     if (data.status) {
@@ -331,7 +361,11 @@ window.Lxh = function (options) {
                     }
                     store.call.any(data)
                 },
-                error: store.call.error
+                error: function (req, msg, e) {
+                    // 标记请求结束
+                    store.isRequsting = false
+                    store.call.error(req, msg, e)
+                }
             });
         }
 
@@ -377,11 +411,11 @@ window.Lxh = function (options) {
 
                 data = store.formHandler.get(this.getFormSelector())
 
-                for (var i in store.attrs) {
-                    data[i] = store.attrs
+                for (var i in data) {
+                    self.set(i, data[i])
                 }
-                self.set(data)
-                return data
+
+                return self.all()
             },
             parseApi: function (type, options) {
                 switch (type) {
@@ -508,71 +542,6 @@ window.Lxh = function (options) {
 
             data[key][name].push(val)
         }
-    }
-
-    function Cache() {
-        this.storage = window.localStorage || {}
-        this.prefix = {
-            general: "$lxh_",
-            timeout: "@lxh_"
-        }
-
-        // 设置缓存，timeout为秒
-        this.set = function (key, val) {
-            if (val instanceof Object) {
-                val = JSON.stringify(val)
-            }
-            this.storage.setItem(this.prefix.general + key, val)
-        }
-        // 获取缓存
-        this.get = function (key, def) {
-            //检测是否过期
-            if (this.clearTimeout(key)) return null
-            var val = this.storage.getItem(this.prefix.general + key)
-
-            if (val) {
-                if (val.indexOf("{") === 0 || val.indexOf("[") === 0) {
-                    return JSON.parse(val)
-                }
-                return val
-            }
-            return (def || null)
-        }
-
-        // 清除所有过期的key
-        this.clearPastDueKey = function () {
-            for (var key in this.storage) {
-                if (key.indexOf(this.prefix.timeout) == -1) {
-                    continue
-                }
-                this.clearTimeout(key.replace(this.prefix.timeout, ""))
-            }
-        }
-
-        this.clearTimeout = function (key) {
-            var d, timeoutKey = this.prefix.timeout + key, timeout = this.storage.getItem(timeoutKey)
-            if (timeout) {
-                d = new Date().getTime()
-                if (timeout < d) {//已过期
-                    delete this.storage[this.prefix.general + key]
-                    delete this.storage[timeoutKey]
-                    return true
-                }
-            }
-            return false
-        }
-
-        //设置缓存时间，tiemeout毫秒后过期
-        this.expire = function (key, timeout) {
-            var d = new Date().getTime() + (parseInt(timeout))
-            this.storage.setItem(this.prefix.timeout + key, d)
-        }
-        // 具体某一时间点过期
-        this.expireAt = function (key, timeout) {
-            this.storage.setItem(this.prefix.timeout + key, timeout)
-        }
-
-        this.clearPastDueKey()
     }
     
     return new Container(options)

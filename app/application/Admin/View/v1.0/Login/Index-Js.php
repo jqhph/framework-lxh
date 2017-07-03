@@ -1,26 +1,35 @@
 <script>
-
-function LxhAction(plugIns) {
-    console.log(345435, plugIns)
+//function add_public_js()
+//{
+//    return ['test111']
+//}
+//function add_lang_scopes() {
+//    return ['User']
+//}
+function lxh_action(plugIns) {
     var $parsley = $('form').parsley({});
 
 //    Lxh.createModel('Test').request('/test/Global.json', 'GET')
-    var language = $lxh.language
+
+    var model = $lxh.createModel('User')
+    var notify = $lxh.ui.notify()
 
     $('.submit').click(function (e) {
         if (!$parsley.isValid()) {
             return
         }
-        var notify = $lxh.ui.notify()
-        notify.remove()
-        notify.info(language.trans('loading'))
+        if (! model.requestEnded()) {
+            return notify.warning(trans('Logging in, please wait a moment'))
+        }
 
-        var model = $lxh.createModel('User')
+        notify.remove()
+        notify.info(trans('loading'))
+
         // 设置成功回调函数
         model.on('success', function (data) {
             // success
             notify.remove()
-            notify.success(language.trans('login success'))
+            notify.success(trans('login success'))
 
             console.log('success: ', data)
         })

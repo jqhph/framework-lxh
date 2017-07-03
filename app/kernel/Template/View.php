@@ -30,7 +30,7 @@ class View
     {
         $this->vars = new Entity();
         $this->version = config('view-version', 'v1.0');
-        $this->module = container('controller.manager')->moduleName();
+        $this->module = make('controller.manager')->moduleName();
     }
 
     /**

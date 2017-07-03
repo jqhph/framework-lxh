@@ -11,27 +11,37 @@ use Lxh\ORM\Connect\PDO;
 use Lxh\Helper\Console;
 use Lxh\Language\Manager;
 
+// 常用的变量先注册到全局变量中
 $GLOBALS['__container__'] = Container::getInstance();
-/**
- * @var Manager
- */
-$GLOBALS['__language__'] = $GLOBALS['__container__']->make('language.manager');
+$GLOBALS['__config__']    = $GLOBALS['__container__']->make('config');
+$GLOBALS['__language__']  = $GLOBALS['__container__']->make('language.manager');
+
+$GLOBALS['resource-server']  = $GLOBALS['__config__']->get('client-config.resource-server');
+$GLOBALS['js-version']       = $GLOBALS['__config__']->get('js-version');
+$GLOBALS['css-version']      = $GLOBALS['__config__']->get('css-version');
+$GLOBALS['resource-version'] = $GLOBALS['__config__']->get('client-config.resource-version');
 
 /**
- * 服务容器代理函数
+ * 获取容器对象
  *
- * @param  string $abstract 服务名称
- * @return instance | Container
+ * @return Container
  */
-function container($abstract = null)
+function container()
 {
-    return $abstract ? $GLOBALS['__container__']->make($abstract) : $GLOBALS['__container__'];
+    return $GLOBALS['__container__'];
 }
 
-$GLOBALS['resource-server']  = config('resource-server');
-$GLOBALS['js-version']       = config('js-version');
-$GLOBALS['css-version']      = config('css-version');
-$GLOBALS['resource-version'] = config('resource-version');
+/**
+ * 获取一个服务
+ *
+ * @param  string $abstract 服务名称
+ * @return instance
+ */
+function make($abstract)
+{
+    return $GLOBALS['__container__']->make($abstract);
+}
+
 // 加载js
 function load_js($name, $dir = 'js')
 {
@@ -185,11 +195,6 @@ function fetch_complete_view($action = __ACTION__, $controller = __CONTROLLER__,
     return $view->fetch('Public/header') . $view->fetch("$controller/$action") . $view->fetch('Public/footer');
 }
 
-function Q()
-{
-    return $GLOBALS['__container__']->make('query');
-}
-
 function is_dev()
 {
     return __ENV__ == ENV_DEV;
@@ -212,7 +217,7 @@ function is_prod()
  */
 function config($key = null, $default = null)
 {
-    return $key ? $GLOBALS['__container__']->make('config')->get($key, $default) : $GLOBALS['__container__']->make('config');
+    return $GLOBALS['__config__']->get($key, $default);
 }
 
 /**

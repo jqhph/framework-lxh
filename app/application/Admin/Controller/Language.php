@@ -33,7 +33,12 @@ class Language extends Controller
                 $l->loadPackage($s, $lang);
             }
         }
+        $data = $l->all();
 
-        return $this->success('SUCCESS', ['list' => $l->all()]);
+        if (! in_array('Global', $scopes)) {
+            unset($data[$lang]['Global']);
+        }
+
+        return $this->success('SUCCESS', ['list' => & $data]);
     }
 }

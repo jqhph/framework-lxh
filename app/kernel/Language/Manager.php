@@ -115,6 +115,11 @@ class Manager
         return $data;
     }
 
+    public function toJson()
+    {
+        return json_encode($this->all());
+    }
+
     /**
      * 设置语言类型
      *
