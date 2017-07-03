@@ -158,7 +158,7 @@ window.Lxh = function (options) {
             }
             var cachePackage = {}, i
             for (var lang in packages) {
-                cachePackage = cache.get(cacheKey)
+                cachePackage = cache.get(cacheKey, {})
                 for (i in packages[lang]) {
                     cachePackage[i] = packages[lang][i]
                 }

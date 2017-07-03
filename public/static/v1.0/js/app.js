@@ -8,6 +8,9 @@ function LxhApp() {
 
     var $cache = new Cache()
 
+    // 设置缓存token
+    $cache.setToken(config.options.config['cache-token'])
+
     config.options.cache = $cache
     // 处理需要加载的js数组
     config.publicJs = get_public_js(config.publicJs)
@@ -95,9 +98,19 @@ function LxhApp() {
     // 缓存管理类
     function Cache() {
         this.storage = window.localStorage || {}
+        this.token = null
         this.prefix = {
             general: "$lxh_",
             timeout: "@lxh_"
+        }
+
+        // 设置token
+        this.setToken = function (token) {
+            this.token = token
+        }
+        // 保存token
+        this.saveToken = function (token) {
+            this.set('$$token', token || this.token)
         }
 
         // 设置缓存，timeout为秒
@@ -109,6 +122,9 @@ function LxhApp() {
         }
         // 获取缓存
         this.get = function (key, def) {
+            if (! this.checkTokenValid(key)) {
+                return def || null
+            }
             //检测是否过期
             if (this.clearTimeout(key)) return null
             var val = this.storage.getItem(this.prefix.general + key)
@@ -120,6 +136,19 @@ function LxhApp() {
                 return val
             }
             return (def || null)
+        }
+
+        // 检查是否应该更新缓存，是则返回false，否则返回true
+        this.checkTokenValid = function (key) {
+            if (key == '$$token') {
+                return true
+            }
+            if (this.token != this.get('$$token')) {
+                this.clearAll()
+                this.saveToken()
+                return false
+            }
+            return true
         }
 
         // 清除所有过期的key
@@ -134,6 +163,7 @@ function LxhApp() {
 
         this.clearTimeout = function (key) {
             var d, timeoutKey = this.prefix.timeout + key, timeout = this.storage.getItem(timeoutKey)
+
             if (timeout) {
                 d = new Date().getTime()
                 if (timeout < d) {//已过期
@@ -153,6 +183,13 @@ function LxhApp() {
         // 具体某一时间点过期
         this.expireAt = function (key, timeout) {
             this.storage.setItem(this.prefix.timeout + key, timeout)
+        }
+
+        // 清除所有数据
+        this.clearAll = function () {
+            for (var i in this.storage) {
+                delete this.storage[i]
+            }
         }
 
         this.clearPastDueKey()

@@ -9,7 +9,9 @@
 function lxh_action(plugIns) {
     var $parsley = $('form').parsley({});
 
-//    Lxh.createModel('Test').request('/test/Global.json', 'GET')
+    console.log(111, $lxh.cache.get('$$token'), $lxh.cache.storage)
+//    $lxh.cache.clearAll()
+//    console.log(222, $lxh.cache.storage)
 
     var model = $lxh.createModel('User')
     var notify = $lxh.ui.notify()
