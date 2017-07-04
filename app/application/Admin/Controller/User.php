@@ -25,9 +25,27 @@ class User extends Controller
 
         if (! $v->validate()) {
             // Errors
-            return $v->errors();
+            return $this->error($v->errors());
         }
 
+        return $this->success();
+    }
+    
+    public function actionRegister(Request $req, Response $resp)
+    {
+        $v = $this->validator();
+        
+        $v->fill($_POST);
+        
+        $v->rule('lengthBetween', 'username', 4, 20);
+        
+        $v->rule('lengthBetween', 'password', 4, 30);
+        
+        if (! $v->validate()) {
+            // Errors
+            return $this->error($v->errors());
+        }
+        
         return $this->success();
     }
 }

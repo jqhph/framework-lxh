@@ -38,6 +38,7 @@ $config['sea-config'] = [
         'toastr' => 's/plugins/toastr/toastr.min',
         'core' => 's/js/jquery.core',
         'blade' => 's/js/blade',
+        'validate' => 's/js/validate',
     ]
 ];
 
@@ -51,6 +52,12 @@ $config['public-css'] = [
 ];
 
 // 引入默认js
-$config['public-js'] = ['parsley', 'toastr', 'container', 'core', 'blade'];
+$config['public-js'] = [
+    'validate',
+    'toastr',
+    'container',
+    'core',
+    'blade'
+];
 
 return $config;

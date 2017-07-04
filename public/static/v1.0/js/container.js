@@ -49,6 +49,63 @@ window.Lxh = function (options) {
         form: function () {
             return this.get('form') || this.set('form', new Form()).get('form')
         },
+        // 显示表单错误
+        formValidatorDisplayErrorMsg: function (name, e, msg) {
+            msg = trans(msg)
+            e.addClass('parsley-error')
+            e.parent().append('<ul class="parsley-errors-list filled validator-error-' + name + '" id="parsley-id-4"><li class="parsley-required">' + msg + '</li></ul>')
+        },
+        // 移除表单验证错误
+        formValidatorRemoveError: function ($e, name) {
+            $e.removeClass('parsley-error')
+            $('.validator-error-' + name).remove()
+        },
+        // 初始化表单验证
+        formValidator: function (options, call, selector) {
+            selector = selector || 'form'
+
+            var self = this
+
+            $(selector).submit(function () {
+                return false;
+            })
+
+            var $form = document.querySelector(selector)
+
+            var v = new FormValidator($form, options, function (errors, event) {
+                if (errors.length < 1 && event.type == 'submit') {
+                    // 验证成功后回调
+                    typeof call != 'function' || call(event)
+                }
+            }, validateCall)
+
+
+            // 给表单元素添加focus和keyup事件
+            for (var key in options) {
+                if (options.hasOwnProperty(key)) {
+                    var field = options[key] || {},
+                        element = $form[field.name]
+
+                    if (element && element !== undefined) {
+                        element.onfocus = element.onkeyup = function (e) {
+                            v._validateForm(e)
+                        }
+                    }
+                }
+            }
+
+            // 显示错误信息
+            function validateCall(field, errorObject) {
+                var $e = $(field.element)
+                // 移除表单错误
+                self.formValidatorRemoveError($e, field.name)
+                if (errorObject) {
+                    self.formValidatorDisplayErrorMsg(field.name, $e, errorObject.message)
+                }
+            }
+
+            return v
+        },
         env: {
             val: 'dev',
             set: function (type) {

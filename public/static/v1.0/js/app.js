@@ -26,10 +26,12 @@ function LxhApp() {
         seajs.use(config.publicJs, function () {
             var plugIns = arguments // 所有加载进来的js插件变量数组
             init(function () {
-                if (typeof lxh_action == 'function') {
-                    // 运行当前页js
-                    lxh_action(plugIns)
-                }
+                $(function () {
+                    if (typeof lxh_action == 'function') {
+                        // 运行当前页js
+                        lxh_action(plugIns)
+                    }
+                })
             })
 
         })

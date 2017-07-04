@@ -1,32 +1,45 @@
 <script>
-    function LxhAction() {
-        var $parsley = $('form').parsley({});
-
+    function lxh_action() {
         var language = $lxh.language
 
-        $lxh.createModel('Test').request('/test/Global.json', 'GET')
+        var v = $lxh.formValidator([
+            {
+                name: 'username',
+                rules: 'required|min_length[6]'
+            },
+            {
+                name: 'password',
+                rules: 'required'
+            },
+            {
+                name: 'repassword',
+                rules: 'required|matches[password]'
+            },
 
-        $('.submit').click(function (e) {
-            if (!$parsley.isValid()) {
+        ], submit)
+
+        var notify = $lxh.ui.notify()
+        var model = $lxh.createModel('User')
+
+        function submit(e) {
+            if (! model.requestEnded()) {
                 return
             }
-            var notify = $lxh.ui.notify()
+
             notify.remove()
             notify.info(language.trans('loading'))
-
-            var model = $lxh.createModel('User')
 
             // 设置成功回调函数
             model.on('success', function (data) {
                 // success
                 notify.remove()
-                notify.success(language.trans('login success'))
+                notify.success(language.trans('Successful registration.'))
 
                 console.log('success: ', data)
             })
             // 发起登录请求
             model.touchAction('Register', 'POST')
 
-        })
+        }
     }
 </script>

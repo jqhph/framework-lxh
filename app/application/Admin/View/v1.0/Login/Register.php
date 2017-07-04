@@ -41,23 +41,24 @@
             <h4 class="text-uppercase font-bold m-b-0"><?php echo trans_with_global('register');?></h4>
         </div>
         <div class="panel-body">
-            <form class="form-horizontal m-t-20 User_form" action="index.html">
+            <form class="form-horizontal m-t-20 User_form" action onsubmit="return false" >
 
-<!--                <div class="form-group ">-->
-<!--                    <div class="col-xs-12">-->
-<!--                        <input class="form-control" type="email" required="" placeholder="Email">-->
-<!--                    </div>-->
-<!--                </div>-->
 
                 <div class="form-group ">
                     <div class="col-xs-12">
-                        <input class="form-control" type="text" required="" placeholder="Username">
+                        <input name="username"  class="form-control form-username" type="text"  placeholder="<?php echo trans('Username')?>">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-xs-12">
-                        <input class="form-control" type="password" required="" placeholder="Password">
+                        <input class="form-control password" name="password" type="password"  placeholder="<?php echo trans('Password')?>">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <input class="form-control" type="password" name="repassword"  placeholder="<?php echo trans('Confirm Password')?>">
                     </div>
                 </div>
 
@@ -77,7 +78,7 @@
 
                 <div class="form-group text-center m-t-40">
                     <div class="col-xs-12">
-                        <button class="btn btn-custom btn-bordred btn-block waves-effect waves-light" type="submit">
+                        <button class="btn btn-custom btn-bordred btn-block waves-effect waves-light submit"  type="submit" name="submit">
                             <?php echo ucfirst(trans_with_global('register'));?>
                         </button>
                     </div>

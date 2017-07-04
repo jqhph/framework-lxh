@@ -169,8 +169,10 @@ class Response extends PsrResponse
 
         $this->container->make('events')->fire('response.send.after', [$this->request, $this]);
 
+		$controllerManager = $this->container->make('controller.manager');
+
 		// 非生产环境和非命令行环境则输出控制台调试日志
-		if (! is_prod() && ! $this->request->isCli() && config('response-console-log', true) && ! $this->request->isAjax() && __CONTROLLER__ != 'Js') {
+		if (! is_prod() && ! $this->request->isCli() && config('response-console-log', true) && ! $this->request->isAjax() && $controllerManager->controllerName() != 'Js') {
 			echo Console::fetch();
 		}
 	}
