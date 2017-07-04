@@ -9,13 +9,15 @@ function LxhApp() {
     var $cache = new Cache()
 
     // 设置缓存token
-    $cache.setToken(config.options.config['cache-token'])
+    $cache.setToken(config.options.config['js-version'])
 
     config.options.cache = $cache
     // 处理需要加载的js数组
     config.publicJs = get_public_js(config.publicJs)
     // 处理需要加载的js数组
-    config.publicCss = get_public_css(config.publicCss)
+    config.publicCss = get_public_css(config.publicCss, config.options.config['js-version'])
+
+    config.seaConfig = get_sea_config(config.seaConfig, config.options.config['js-version'])
 
     seajs.config(config.seaConfig)
     // 加载css
@@ -71,19 +73,22 @@ function LxhApp() {
         }
         return t
     }
-    function get_public_css(publicCss) {
-        if (typeof add_public_css == 'function') {
-            var csss = add_public_css()
+    function get_public_css(publicCss, v) {
+        if (typeof add_css == 'function') {
+            var csss = add_css()
             for (var i in csss) {
                 publicCss.push(csss[i])
             }
         }
+        for (i in publicCss) {
+            publicCss[i] = publicCss[i] + '?v=' + v
+        }
         return publicCss
     }
     // 处理需要加载的js数组
-    function get_public_js(publicJs) {
-        if (typeof add_public_js == 'function') {
-            var jss = add_public_js()
+    function get_public_js(publicJs, version) {
+        if (typeof add_js == 'function') {
+            var jss = add_js()
             for (var i in jss) {
                 publicJs.push(jss[i])
             }
@@ -95,6 +100,14 @@ function LxhApp() {
 
         publicJs.push('api/language?scopes=' + scopes.join(',') + '&lang=' + config.options.config.language)
         return publicJs
+    }
+
+    function get_sea_config(config, version)
+    {
+        for (var i in config.alias) {
+            config.alias[i] = config.alias[i] + '.js?v=' + version
+        }
+        return config
     }
 
     // 缓存管理类

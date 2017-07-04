@@ -15,6 +15,10 @@
                 name: 'repassword',
                 rules: 'required|matches[password]'
             },
+            {
+                name: 'terms',
+                rules: 'required'
+            },
 
         ], submit)
 

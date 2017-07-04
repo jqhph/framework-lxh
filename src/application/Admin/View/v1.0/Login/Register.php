@@ -65,7 +65,7 @@
                 <div class="form-group">
                     <div class="col-xs-12">
                         <div class="checkbox checkbox-custom">
-                            <input id="checkbox-signup" type="checkbox" checked="checked">
+                            <input id="checkbox-signup" name="terms" type="checkbox" checked="checked">
                             <label for="checkbox-signup"><?php echo trans('iAccept')?>
                                 <a href="#">
                                     <?php echo trans_with_global('terms')?>

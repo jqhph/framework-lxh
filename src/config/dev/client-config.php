@@ -38,7 +38,7 @@ $config['sea-config'] = [
         'toastr' => 's/plugins/toastr/toastr.min',
         'core' => 's/js/jquery.core',
         'blade' => 's/js/blade',
-        'validate' => 's/js/validate',
+        'validate' => 's/js/validate.min',
     ]
 ];
 

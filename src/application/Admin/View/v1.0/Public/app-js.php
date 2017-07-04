@@ -21,6 +21,8 @@ echo fetch_view(__ACTION__ . '-Js');
         config.options = <?php
             $config = (array) config('client-config');
             $config['language'] = config('language');
+            $config['js-version'] = & $GLOBALS['js-version'];
+            $config['css-version'] = & $GLOBALS['css-version'];
 
             echo json_encode([
                 'controller' => __CONTROLLER__,

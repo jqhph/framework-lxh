@@ -77,22 +77,24 @@ window.Lxh = function (options) {
                     // 验证成功后回调
                     typeof call != 'function' || call(event)
                 }
-            }, validateCall)
+            }, validateCall);
 
 
             // 给表单元素添加focus和keyup事件
-            for (var key in options) {
-                if (options.hasOwnProperty(key)) {
-                    var field = options[key] || {},
-                        element = $form[field.name]
+            (function (options) {
+                for (var key in options) {
+                    if (options.hasOwnProperty(key)) {
+                        var field = options[key] || {},
+                            element = $form[field.name]
 
-                    if (element && element !== undefined) {
-                        element.onfocus = element.onkeyup = function (e) {
-                            v._validateForm(e)
+                        if (element && element !== undefined) {
+                            element.onfocus = element.onkeyup = function (e) {
+                                v._validateForm(e)
+                            }
                         }
                     }
                 }
-            }
+            })(options);
 
             // 显示错误信息
             function validateCall(field, errorObject) {
