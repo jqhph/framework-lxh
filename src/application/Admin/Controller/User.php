@@ -40,11 +40,21 @@ class User extends Controller
         $v->rule('lengthBetween', 'username', 4, 20);
         
         $v->rule('lengthBetween', 'password', 4, 30);
-        
+
+        $v->rule('equals', 'password', 'repassword');
+
         if (! $v->validate()) {
             // Errors
             return $this->error($v->errors());
         }
+
+        $user = $this->getModel('User');
+
+//        if (! $this->getModel('User')->register($_POST, $req->ip())) {
+//            return $this->failed();
+//        }
+
+        $user->login($_POST['username'], $_POST['password'], true, true);
         
         return $this->success();
     }

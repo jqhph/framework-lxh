@@ -5,15 +5,15 @@
         var v = $lxh.formValidator([
             {
                 name: 'username',
-                rules: 'required|min_length[6]'
+                rules: 'length_between[4-20]',
             },
             {
                 name: 'password',
-                rules: 'required'
+                rules: 'length_between[4-30]'
             },
             {
                 name: 'repassword',
-                rules: 'required|matches[password]'
+                rules: 'matches[password]'
             },
             {
                 name: 'terms',

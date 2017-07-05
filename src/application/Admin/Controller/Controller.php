@@ -55,7 +55,9 @@ class Controller extends LxhController
     }
 
     /**
-     * 获取字段验证对象
+     * 获取字段验证处理器
+     * 用法清请参考：https://github.com/vlucas/valitron
+     *
      *  $v->fill(['name' => '张三', 'email' => 'jqh@163.com'])
         ->rule('required', array('name', 'email'))
         ->rule('email', 'email');

@@ -14,6 +14,8 @@
 
     var defaults = {
         messages: {
+            // 'Please choose a stronger password using at least 10 number.'
+            length_between: 'The %s field length is invalid. It should be between %s characters long.',
             required: 'The %s field is required.',
             matches: 'The %s field does not match the %s field.',
             "default": 'The %s field is still set to default, please change.',
@@ -299,9 +301,9 @@
              * This ensures that a callback will always be called but other rules will be skipped.
              */
 
-            if (indexOfRequired === -1 && method.indexOf('!callback_') === -1 && isEmpty) {
-                continue;
-            }
+            // if (indexOfRequired === -1 && method.indexOf('!callback_') === -1 && isEmpty) {
+            //     continue;
+            // }
 
             /*
              * If the rule has a parameter (i.e. matches[param]) split it out
@@ -458,6 +460,15 @@
             }
 
             return (field.value.length <= parseInt(length, 10));
+        },
+
+        length_between: function(field, param) {
+            param = param.split('-')
+            if (param.length != 2) {
+                return false;
+            }
+
+            return (field.value.length <= parseInt(param[1]) && field.value.length >= parseInt(param[0]));
         },
 
         exact_length: function(field, length) {

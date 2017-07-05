@@ -141,13 +141,16 @@ class Handler
 	{
 		$code = $e->getCode();
 
-		if ($code) {
-            if (Status::vertify($code)) {
-                $this->response->withStatus($code);
-            }
-		}
-
 		$isAjax = $this->request->isAjax();
+
+		if ($code) {
+            if (! Status::vertify($code)) {
+				$code = 500;
+
+            }
+
+			$this->response->withStatus($code);
+		}
 
 		// 非生产环境以及非ajax请求显示错误界面
 		if (! is_prod() && ! $isAjax) {

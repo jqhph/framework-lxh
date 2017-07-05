@@ -56,7 +56,14 @@ function LxhApp() {
         return 'language_' + lang
     }
 
-    // 检测缓存中是否存在语言包，返回需要加载的语言包模块
+    /**
+     * 检测缓存中是否存在语言包，返回需要加载的语言包模块
+     *
+     * @param lang
+     * @param scopes
+     * @param useCache
+     * @returns {*}
+     */
     function check_cache_language(lang, scopes, useCache) {
         var cacheKey = get_lang_cache_key(lang), package = $cache.get(cacheKey), t = [], i
 
@@ -73,6 +80,14 @@ function LxhApp() {
         }
         return t
     }
+
+    /**
+     * 处理需要加载的css数组
+     *
+     * @param publicCss
+     * @param v
+     * @returns {*}
+     */
     function get_public_css(publicCss, v) {
         if (typeof add_css == 'function') {
             var csss = add_css()
@@ -85,7 +100,14 @@ function LxhApp() {
         }
         return publicCss
     }
-    // 处理需要加载的js数组
+
+    /**
+     * 处理需要加载的js数组
+     *
+     * @param publicJs
+     * @param version
+     * @returns {*}
+     */
     function get_public_js(publicJs, version) {
         if (typeof add_js == 'function') {
             var jss = add_js()
@@ -102,6 +124,13 @@ function LxhApp() {
         return publicJs
     }
 
+    /**
+     * 处理seajs配置
+     *
+     * @param config
+     * @param version
+     * @returns {*}
+     */
     function get_sea_config(config, version)
     {
         for (var i in config.alias) {
@@ -110,32 +139,69 @@ function LxhApp() {
         return config
     }
 
-    // 缓存管理类
+    /**
+     * 缓存管理类
+     *
+     * @constructor
+     */
     function Cache() {
         this.storage = window.localStorage || {}
+
+        /**
+         * token值，用于跟服务器的token进行对比，如两值不同则刷新缓存
+         *
+         * @type {null|int|string}
+         */
         this.token = null
+
+        /**
+         * 缓存前缀
+         *
+         * @type {{general: string, timeout: string}}
+         */
         this.prefix = {
             general: "$lxh_",
             timeout: "@lxh_"
         }
 
-        // 设置token
+        /**
+         * 设置token
+         *
+         * @param token
+         */
         this.setToken = function (token) {
             this.token = token
         }
-        // 保存token
+
+        /**
+         * 缓存token
+         *
+         * @param token
+         */
         this.saveToken = function (token) {
             this.set('$$token', token || this.token)
         }
 
-        // 设置缓存，timeout为秒
+        /**
+         * 设置缓存
+         *
+         * @param key
+         * @param val
+         */
         this.set = function (key, val) {
             if (val instanceof Object) {
                 val = JSON.stringify(val)
             }
             this.storage.setItem(this.prefix.general + key, val)
         }
-        // 获取缓存
+
+        /**
+         * 获取缓存
+         *
+         * @param key
+         * @param def
+         * @returns {*}
+         */
         this.get = function (key, def) {
             if (! this.checkTokenValid(key)) {
                 return def || null
@@ -153,7 +219,12 @@ function LxhApp() {
             return (def || null)
         }
 
-        // 检查是否应该更新缓存，是则返回false，否则返回true
+        /**
+         * 检查是否应该更新缓存，是则返回false，否则返回true
+         *
+         * @param key
+         * @returns {boolean}
+         */
         this.checkTokenValid = function (key) {
             if (key == '$$token') {
                 return true
@@ -166,7 +237,10 @@ function LxhApp() {
             return true
         }
 
-        // 清除所有过期的key
+        /**
+         * 清除所有过期的key
+         *
+         */
         this.clearPastDueKey = function () {
             for (var key in this.storage) {
                 if (key.indexOf(this.prefix.timeout) == -1) {
@@ -176,6 +250,12 @@ function LxhApp() {
             }
         }
 
+        /**
+         * 检查key是否过期，是则清除并返回true，否则返回false
+         *
+         * @param key
+         * @returns {boolean}
+         */
         this.clearTimeout = function (key) {
             var d, timeoutKey = this.prefix.timeout + key, timeout = this.storage.getItem(timeoutKey)
 
@@ -190,17 +270,31 @@ function LxhApp() {
             return false
         }
 
-        //设置缓存时间，tiemeout毫秒后过期
+        /**
+         * 设置缓存时间，tiemeout毫秒后过期
+         *
+         * @param key
+         * @param timeout
+         */
         this.expire = function (key, timeout) {
             var d = new Date().getTime() + (parseInt(timeout))
             this.storage.setItem(this.prefix.timeout + key, d)
         }
-        // 具体某一时间点过期
+
+        /**
+         * 具体某一时间点过期
+         *
+         * @param key
+         * @param timeout
+         */
         this.expireAt = function (key, timeout) {
             this.storage.setItem(this.prefix.timeout + key, timeout)
         }
 
-        // 清除所有数据
+        /**
+         * 清除所有缓存
+         *
+         */
         this.clearAll = function () {
             for (var i in this.storage) {
                 delete this.storage[i]

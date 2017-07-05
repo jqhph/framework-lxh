@@ -16,7 +16,7 @@ $config['pdo'] = [
     'user' => 'root',
     'pwd' => '',
     'charset' => 'utf8',
-    'name' => 'test',
+    'name' => 'lxh',
 ];
 
 return $config;

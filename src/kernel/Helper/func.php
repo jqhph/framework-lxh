@@ -195,16 +195,31 @@ function fetch_complete_view($action = __ACTION__, $controller = __CONTROLLER__,
     return $view->fetch('Public/header') . $view->fetch("$controller/$action") . $view->fetch('Public/footer');
 }
 
+/**
+ * 是否是开发环境
+ *
+ * @return bool
+ */
 function is_dev()
 {
     return __ENV__ == ENV_DEV;
 }
 
+/**
+ * 是否是测试环境
+ *
+ * @return bool
+ */
 function is_test()
 {
     return __ENV__ == ENV_TEST;
 }
 
+/**
+ * 是否是生产环境
+ *
+ * @return bool
+ */
 function is_prod()
 {
     return __ENV__ == ENV_PROD;

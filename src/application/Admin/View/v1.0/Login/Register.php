@@ -41,7 +41,7 @@
             <h4 class="text-uppercase font-bold m-b-0"><?php echo trans_with_global('register');?></h4>
         </div>
         <div class="panel-body">
-            <form class="form-horizontal m-t-20 User_form" action onsubmit="return false" >
+            <form class="form-horizontal m-t-20 User-form" action onsubmit="return false" >
 
 
                 <div class="form-group ">
