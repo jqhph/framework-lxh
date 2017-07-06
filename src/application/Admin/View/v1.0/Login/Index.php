@@ -46,14 +46,14 @@
 
                 <div class="form-group ">
                     <div class="col-xs-12">
-                        <input class="form-control" name="username" type="text" data-parsley-length="[4, 20]" required=""
+                        <input class="form-control" name="username" type="text" data-parsley-length="[4, 20]"
                                placeholder="<?php echo trans('Username')?>">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-xs-12">
-                        <input class="form-control" name="password" type="password"  data-parsley-length="[4, 30]"  required=""
+                        <input class="form-control" name="password" type="password"  data-parsley-length="[4, 30]"
                                placeholder="<?php echo trans('Password')?>">
                     </div>
                 </div>
@@ -73,7 +73,7 @@
 
                 <div class="form-group text-center m-t-30">
                     <div class="col-xs-12">
-                        <button class=" submit btn btn-custom btn-bordred btn-block waves-effect waves-light" type="submit">
+                        <button class="  btn btn-custom btn-bordred btn-block waves-effect waves-light" type="submit">
                             <?php echo $language->translate('log in');?>
                         </button>
                     </div>

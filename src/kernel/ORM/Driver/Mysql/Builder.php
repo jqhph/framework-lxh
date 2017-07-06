@@ -12,6 +12,8 @@ class Builder extends Base
     protected $tableName;
     
     protected $field;
+
+    protected $orWhereData = [];
     
     protected $wheres = [];
     
@@ -187,7 +189,8 @@ class Builder extends Base
 	
 		return $this->leftJoin($left, "`$table2`.id", "$as.{$this->tableName}_id");
 	}
-	
+
+
 	/**
 	 * 解析where条件字句
 	 * 
@@ -199,7 +202,7 @@ class Builder extends Base
 	 * @param array $prepareData 用于保存pdo预处理数据
 	 * @param bool $autoAddTable 是否给字段加表名
 	 */
-    protected function whereHandler(& $data, $TB, & $p1, $p2 = null, $p3 = null, & $prepareData, $autoAddTable = true)
+    protected function whereHandler(& $data, & $TB, & $p1, $p2 = null, $p3 = null, & $prepareData, $autoAddTable = true)
     {
         $table = '';
         if ($autoAddTable) {
@@ -215,6 +218,10 @@ class Builder extends Base
                         $ors = [];
                         $this->whereHandler($ors, $TB, $val, null, null, $prepareData, $autoAddTable);
                         $data[] = '(' . implode(' OR ', $ors)  . ')';
+                    } elseif($field == 'ors' || $field == 'ORS') {
+                        $ors = [];
+                        $this->whereHandler($ors, $TB, $val, null, null, $prepareData, $autoAddTable);
+                        $this->orWheres[] = '(' . implode(' OR ', $ors)  . ')';
                     } else {
                         $this->whereHandler($data, $TB, $field, $val[0], $val[1], $prepareData, $autoAddTable);
                     }
@@ -370,7 +377,7 @@ class Builder extends Base
             } 
         
         } else {
-            foreach ($data as $k => & $v) {
+            foreach ((array) $data as $k => & $v) {
                 if (is_numeric($k)) {
                     $this->fieldHandler($fieldsContainer, $v, $table);
                 	
@@ -393,6 +400,35 @@ class Builder extends Base
             }
         }
     }
+
+    public function querySql()
+    {
+        $table  = "`$this->tableName`";
+
+        $fields   = '';
+        $leftJoin = '';
+        $where    = '';
+        $orWhere  = '';
+        $orderBy  = '';
+        $groupBy  = '';
+        $limit	  = '';
+        $having   = '';
+
+        $this->getFieldsSql($fields);
+        $this->getLeftJoinSql($leftJoin);
+        $this->getWhereSql($where);
+        $this->getOrderBySql($orderBy);
+        $this->getGroupBySql($groupBy);
+        $this->getLimitSql($limit);
+
+        if ($groupBy) {
+            $this->getWhereSql($having, true);
+
+            $this->whereData = $this->whereData + $this->havingData;
+        }
+
+        return "SELECT $fields FROM {$table}{$leftJoin}{$where}{$groupBy}{$orderBy}{$having}{$limit}";
+    }
 	
 	/**
 	 * 读取单行数据
@@ -402,33 +438,8 @@ class Builder extends Base
         if (! $this->tableName) {
             throw new InternalServerError('Can not found table name.');
         }
-        
-        $table  = "`$this->tableName`";
-        
-        $fields   = '';
-        $leftJoin = '';
-        $where    = '';
-        $orderBy  = '';
-        $groupBy  = '';
-        $having	  = '';
-        
-        $this->getFieldsSql($fields);
-        $this->getLeftJoinSql($leftJoin);
-        $this->getWhereSql($where);
-        $this->getOrderBySql($orderBy);
-        $this->getGroupBySql($groupBy);
-        
-        if ($groupBy) {
-            $this->getWhereSql($having, true);
-            
-            $this->whereData = $this->whereData + $this->havingData;
-        }
-        
-        $limit = ' LIMIT 1';
-        
-        $sql = "SELECT $fields FROM {$table}{$leftJoin}{$where}{$groupBy}{$orderBy}{$having}{$limit}";
-        
-        $res = $this->getConnection()->one($sql, $this->whereData);
+
+        $res = $this->getConnection()->one($this->querySql(), $this->whereData);
         
         $this->clear();
         
@@ -443,38 +454,12 @@ class Builder extends Base
         if (! $this->tableName) {
             throw new InternalServerError('Can not found table name.');
         }
-        
-        $table  = "`$this->tableName`";
-        
-        $fields   = '';
-        $leftJoin = '';
-        $where    = '';
-        $orderBy  = '';
-        $groupBy  = '';
-        $limit	  = '';
-        $having   = '';
-        
-        $this->getFieldsSql($fields);
-        $this->getLeftJoinSql($leftJoin);
-        $this->getWhereSql($where);
-        $this->getOrderBySql($orderBy);
-        $this->getGroupBySql($groupBy);
-        $this->getLimitSql($limit);
-        
-        if ($groupBy) {
-            $this->getWhereSql($having, true);
-            
-            $this->whereData = $this->whereData + $this->havingData;
-        }
-        
-        $sql = "SELECT $fields FROM {$table}{$leftJoin}{$where}{$groupBy}{$orderBy}{$having}{$limit}";
-        
-        $res = $this->getConnection()->all($sql, $this->whereData);
+
+        $res = $this->getConnection()->all($this->querySql(), $this->whereData);
         
         $this->clear();
         
         return $res;
-    	
     }
 	
     public function sort($order, $desc = '')

@@ -1,7 +1,7 @@
 <?php
 namespace Lxh\ORM\Driver\Mysql;
 
-use Lxh\ORM\DB\PDO;
+use Lxh\ORM\Connect\PDO;
 
 class Base 
 {
@@ -27,7 +27,7 @@ class Base
 	/**
 	 * 获取where字符串
 	 * */
-    protected function getWhereSql(& $where, $isHaving = false) 
+    protected function getWhereSql(& $where, $isHaving = false, $isOrWhere = false)
     {
         $where  = '';
         $data   = [];
@@ -53,7 +53,7 @@ class Base
             if ($where) {
             	$where .= ' OR ';
             }
-            $where .= implode(' OR ', $orData);
+            $where .= '(' . implode(' AND ', $orData) . ')';
         		
         }
         

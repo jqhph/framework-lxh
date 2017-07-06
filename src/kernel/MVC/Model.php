@@ -15,6 +15,13 @@ class Model extends Entity
     protected $idFieldsName = 'id';
 
     /**
+     * 默认查询的字段
+     *
+     * @var string|array
+     */
+    protected $defaultSelectFields = '*';
+
+    /**
      * 模型名称
      *
      * @var string
@@ -55,11 +62,11 @@ class Model extends Entity
         $id = $this->{$this->idFieldsName};
 
         if ($id) {
-            $data = $this->query()->where($this->idFieldsName, $id)->findOne();
+            $data = $this->query()->select($this->defaultSelectFields)->where($this->idFieldsName, $id)->findOne();
             $this->fill($data);
             return $data;
         }
-        return $this->query()->find();
+        return $this->query()->select($this->defaultSelectFields)->find();
     }
 
     /**

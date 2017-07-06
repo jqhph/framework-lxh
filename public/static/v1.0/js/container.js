@@ -94,6 +94,21 @@ window.Lxh = function (options) {
         },
 
         /**
+         * 跳转
+         *
+         * @param routePath
+         * @param timeout
+         */
+        redirect: function (routePath, timeout) {
+            if (! timeout) {
+                return window.location = routePath
+            }
+            setTimeout(function () {
+                window.location = routePath
+            }, timeout)
+        },
+
+        /**
          * 创建一个模型
          *
          * @param name    模型名称
@@ -599,7 +614,8 @@ window.Lxh = function (options) {
                  * @param data
                  */
                 failed: function (data) {
-                    container.ui.notify().error(data.msg)
+                    container.ui.notify().remove()
+                    container.ui.notify().error(trans(data.msg))
                 },
 
                 /**
@@ -880,7 +896,7 @@ window.Lxh = function (options) {
         var formEles = ['input', 'textarea', 'select']
 
         // 获取指定form中的所有的<input>对象
-        function getElements(selector) {
+        function get_elements(selector) {
             var form = document.querySelector(selector)// || document.querySelector('form');
             if (! form) return []
             var elements = [], tagElements
@@ -894,15 +910,18 @@ window.Lxh = function (options) {
         }
 
         //获取单个input中的【name,value】数组
-        function inputSelector(element) {
-            if (element.checked) return [element.name, element.value];
+        function input_selector(element) {
+            if (element.checked) {
+                return [element.name, element.value]
+            }
+            return [element.name, '']
         }
 
         function input(element) {
             switch (element.type.toLowerCase()) {
                 case 'checkbox':
                 case 'radio':
-                    return inputSelector(element);
+                    return input_selector(element);
                 default:
                     return [element.name, element.value];
             }
@@ -910,7 +929,7 @@ window.Lxh = function (options) {
         }
 
         //组合URL
-        function serializeElement(element) {
+        function serialize_element(element) {
 //            var method = element.tagName.toLowerCase();
             return input(element)
         }
@@ -922,10 +941,10 @@ window.Lxh = function (options) {
          * @returns {{}}
          */
         this.get = function (selector) {
-            var elements = getElements(selector);
+            var elements = get_elements(selector);
             var data = {};
             for (var i = 0; i < elements.length; i++) {
-                var component = serializeElement(elements[i]);
+                var component = serialize_element(elements[i]);
                 if (!component || typeof component[1] == 'undefined') continue
                 data[component[0]] = component[1]
             }

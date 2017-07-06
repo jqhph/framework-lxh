@@ -274,6 +274,16 @@ LEFT JOIN `user` ON `user_up`.user_id = `user`.id
 	{
 	    return $this->builder->read();
 	}
+
+	/**
+	 * 获取数据库查询语句字符串
+	 *
+	 * @return string
+	 */
+	public function querySql()
+	{
+		return $this->builder->querySql();
+	}
 	
 	public function findOne()
 	{

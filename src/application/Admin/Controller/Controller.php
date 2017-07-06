@@ -41,7 +41,7 @@ class Controller extends LxhController
      */
     protected function failed($msg = 'FAILED', array $options = [])
     {
-        return $this->toMsg($msg, Status::SUCCESS, $options);
+        return $this->toMsg($msg, Status::FAILED, $options);
     }
 
     /**

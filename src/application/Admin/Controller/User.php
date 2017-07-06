@@ -8,13 +8,22 @@
 
 namespace Lxh\Admin\Controller;
 
+use Lxh\Helper\Arr;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
 
 class User extends Controller
 {
+    /**
+     * 用户登录api
+     *
+     * @return json
+     */
     public function actionLogin(Request $req, Response $resp)
     {
+        if (empty($_POST)) {
+            return $this->error();
+        }
         $v = $this->validator();
         
         $v->fill($_POST);
@@ -24,15 +33,22 @@ class User extends Controller
         $v->rule('lengthBetween', 'password', 4, 30);
 
         if (! $v->validate()) {
-            // Errors
             return $this->error($v->errors());
+        }
+
+        if (! $this->getModel()->login($_POST['username'], $_POST['password'], I('remember'))) {
+            return $this->failed();
         }
 
         return $this->success();
     }
     
+    
     public function actionRegister(Request $req, Response $resp)
     {
+        if (empty($_POST)) {
+            return $this->error();
+        }
         $v = $this->validator();
         
         $v->fill($_POST);
@@ -44,15 +60,14 @@ class User extends Controller
         $v->rule('equals', 'password', 'repassword');
 
         if (! $v->validate()) {
-            // Errors
             return $this->error($v->errors());
         }
 
-        $user = $this->getModel('User');
+        $user = $this->getModel();
 
-//        if (! $this->getModel('User')->register($_POST, $req->ip())) {
-//            return $this->failed();
-//        }
+        if (! $user->register($_POST, $req->ip())) {
+            return $this->failed();
+        }
 
         $user->login($_POST['username'], $_POST['password'], true, true);
         

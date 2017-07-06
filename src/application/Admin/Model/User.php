@@ -14,11 +14,11 @@ use Lxh\MVC\Model;
 class User extends Model
 {
     /**
-     * 查询的字段
+     * 默认查询的字段
      *
-     * @var array
+     * @var string|array
      */
-    protected $selectFileds = ['id', 'first_name', 'last_name', 'email', 'mobile', 'sex', 'avatar', 'created_at'];
+    protected $defaultSelectFields = ['id', 'username', 'first_name', 'last_name', 'email', 'mobile', 'sex', 'avatar', 'created_at'];
 
     /**
      * 缓存用户信息的session和cookie键名
@@ -42,11 +42,15 @@ class User extends Model
      */
     public function register(array & $options, $ip)
     {
-        $this->username = $options['username'];
-        $this->password = $this->encrypt($options['password']);
-        $this->reg_ip   = $ip;
+        if ($this->query()->select('id')->where('username', $options['username'])->findOne()) {
+            return false;
+        }
+
+        $this->username      = $options['username'];
+        $this->password      = $this->encrypt($options['password']);
+        $this->reg_ip        = $ip;
         $this->last_login_ip = $ip;
-        $this->created_at = time();
+        $this->created_at    = time();
 
         return $this->add();
     }
@@ -66,18 +70,21 @@ class User extends Model
      * @param  bool   $skipVertify 是否跳过用户信息验证
      * @return bool
      */
-    public function login($username, $password, $remember = false, $skipVertify = false)
+    public function login($account, $password, $remember = false, $skipVertify = false)
     {
-        $username = 'admin';
-        $password = 'admin1';
-
         $query = $this->query();
 
-        $userData = $query->from($this->getTableName())
-            ->select(array_push($this->selectFileds, 'password'))
-            ->where(['username' => & $username, 'deleted' => 0])
-            ->findOne();
+        array_push($this->defaultSelectFields, 'password');
 
+        $userData = $query
+                    ->select($this->defaultSelectFields)
+                    ->where(
+                        [
+                            'deleted' => 0, 'OR' => ['username' => & $account, 'email' => & $account, 'mobile' => & $account]
+                        ]
+                    )
+                    ->findOne();
+// debug($userData);die;
         if (! $userData) {
             return false;
         }
@@ -107,7 +114,8 @@ class User extends Model
      */
     public function saveCookie()
     {
-        $_COOKIE[$this->sessionKey] = $this->id;
+        // 默认一个月免登陆
+        setcookie($this->sessionKey, $this->id, time() + config('login-time', 2592000));
     }
 
     /**
@@ -121,36 +129,54 @@ class User extends Model
             session_start();
         }
 
-        $userData = $this->all();
+        foreach ($this->all() as $k => & $v) {
+            if ($k == 'password') continue;
 
-        unset($userData['cookie']);
-        unset($userData['session']);
-        unset($userData['password']);
-
-        foreach ($userData as $k => & $v) {
             $_SESSION[$this->sessionKey][$k] = $v;
         }
     }
 
-    // 注入session数据
+    /**
+     * 注入session数据
+     *
+     * @return void
+     */
     public function fillSession()
     {
+        $this->isFillSession = true;
+
         // 如果没有开启session，则自动开启
         if (! isset($_SESSION)) {
             session_start();
         }
-        $this->fill($_SESSION[$this->sessionKey]);
-        $this->isFillSession = true;
+
+        // 检查session是否存在用户数据
+        if (! empty($_SESSION[$this->sessionKey])) {
+            $this->fill($_SESSION[$this->sessionKey]);
+            return;
+        }
+
+        // 检测cookie是否存在用户数据
+        if (empty($_COOKIE[$this->sessionKey])) {
+            return;
+        }
+        $this->id = $_COOKIE[$this->sessionKey];
+
+        // 查出用户数据
+        $this->find();
+
+        // 保存到session
+        $this->saveSession();
     }
 
     /**
-     * 判断是否已经登录，否则跳转到登录界面
+     * 判断是否已经登录
      *
-     * @return bool
+     * @return int
      */
     public function auth()
     {
-        return $this->id ? true : false;
+        return $this->id;
     }
 
     // 获取前操作

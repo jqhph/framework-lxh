@@ -1,5 +1,5 @@
 <script>
-//function add_public_js()
+//function add_js()
 //{
 //    return ['test111']
 //}
@@ -7,17 +7,22 @@
 //    return ['User']
 //}
 function lxh_action(plugIns) {
-    var $parsley = $('form').parsley({});
+    var v = $lxh.formValidator([
+        {
+            name: 'username',
+            rules: 'length_between[4-20]',
+        },
+        {
+            name: 'password',
+            rules: 'length_between[4-30]'
+        },
 
-//    console.log(111, $lxh.cache.get('$$token'), $lxh.cache.storage)
+    ], submit)
 
     var model = $lxh.createModel('User')
     var notify = $lxh.ui.notify()
 
-    $('.submit').click(function (e) {
-        if (!$parsley.isValid()) {
-            return
-        }
+    function submit(e) {
         if (! model.requestEnded()) {
             return notify.warning(trans('Logging in, please wait a moment'))
         }
@@ -31,11 +36,11 @@ function lxh_action(plugIns) {
             notify.remove()
             notify.success(trans('login success'))
 
-            console.log('success: ', data)
+            $lxh.redirect('/', 500)
         })
         // 发起登录请求
         model.touchAction('Login', 'POST')
 
-    })
+    }
 }
 </script>

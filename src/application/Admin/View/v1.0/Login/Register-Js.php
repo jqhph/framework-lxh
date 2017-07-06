@@ -38,8 +38,8 @@
                 // success
                 notify.remove()
                 notify.success(language.trans('Successful registration.'))
-
-                console.log('success: ', data)
+            
+                $lxh.redirect('/', 500)
             })
             // 发起登录请求
             model.touchAction('Register', 'POST')
