@@ -594,7 +594,7 @@ textarea.form-control {
 .form-control {
   background-color: #FFFFFF;
   border: 1px solid #E3E3E3;
-  border-radius: 4px;
+  border-radius: 0px;
   color: #565656;
   padding: 7px 12px;
   height: 38px;

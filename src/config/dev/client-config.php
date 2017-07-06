@@ -11,10 +11,10 @@ $config = [];
 // 是否启用缓存
 $config['use-cache'] = true;
 
-// 设置缓存token，当需要客户端更新缓存时，则修改此配置值
-$config['cache-token'] = 118888;
+// 前端缓存的默认缓存时间，单位毫秒
+$config['cache-expire'] = 259200 * 1000;
 
-// 语言包缓存时间
+// 语言包缓存时间，单位毫秒
 $config['lang-package-expire'] = 259200 * 1000; // 缓存时间，3天
 
 // 配置资源服务器
@@ -60,6 +60,15 @@ $config['public-js'] = [
     'core',
     'blade',
     'router',
+];
+
+$config['route-init'] = [
+    'mode' => 'hash',
+    'root' => '/'
+];
+
+$config['route'] = [
+    
 ];
 
 return $config;

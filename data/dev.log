@@ -12,3 +12,12 @@
 
     ],
 ],
+
+
+// 前端
+add_tpls()
+add_lang_scopes()
+add_js()
+add_css()
+
+

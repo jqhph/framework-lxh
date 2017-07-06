@@ -23,6 +23,7 @@ echo fetch_view(__ACTION__ . '-Js');
             $config['language'] = config('language');
             $config['js-version'] = & $GLOBALS['js-version'];
             $config['css-version'] = & $GLOBALS['css-version'];
+//            $config['language-packages'] = language()->getPackages(['Global', __CONTROLLER__]);
 
             echo json_encode([
                 'controller' => __CONTROLLER__,
@@ -38,7 +39,9 @@ echo fetch_view(__ACTION__ . '-Js');
         // 需要载入的js
         config.publicJs = config.options.config['public-js']
         // 需要载入的语言包模块
-        config.langScopes = <?php echo json_encode(['Global', __CONTROLLER__])?>
+        config.langScopes = <?php echo json_encode(['Global', __CONTROLLER__]);?>
+        // 需要载入的模板
+        config.tplnames = <?php echo json_encode(['component.fields.int.int', 'component.fields.string.string']);?>
 
         return config
     }

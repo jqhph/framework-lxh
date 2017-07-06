@@ -24,21 +24,12 @@ class Language extends Controller
     {
         $scopes = explode(',', I('scopes'));
 
+        if (empty($scopes)) {
+            return $this->success('SUCCESS', ['list' => []]);
+        }
+
         $lang = I('lang', 'en');
 
-        $l = language();
-
-        if ($scopes) {
-            foreach ($scopes as & $s) {
-                $l->loadPackage($s, $lang);
-            }
-        }
-        $data = $l->all();
-
-        if (! in_array('Global', $scopes)) {
-            unset($data[$lang]['Global']);
-        }
-
-        return $this->success('SUCCESS', ['list' => & $data]);
+        return $this->success('SUCCESS', ['list' => language()->getPackages($scopes, $lang)]);
     }
 }

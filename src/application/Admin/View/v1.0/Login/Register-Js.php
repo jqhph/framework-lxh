@@ -1,8 +1,8 @@
 <script>
     function lxh_action() {
-        var language = $lxh.language
+        var language = $lxh.language()
 
-        var v = $lxh.formValidator([
+        var v = $lxh.validator([
             {
                 name: 'username',
                 rules: 'length_between[4-20]',
@@ -22,7 +22,7 @@
 
         ], submit)
 
-        var notify = $lxh.ui.notify()
+        var notify = $lxh.ui().notify()
         var model = $lxh.createModel('User')
 
         function submit(e) {
@@ -38,7 +38,8 @@
                 // success
                 notify.remove()
                 notify.success(language.trans('Successful registration.'))
-            
+
+                // 500毫秒后跳转到首页
                 $lxh.redirect('/', 500)
             })
             // 发起登录请求

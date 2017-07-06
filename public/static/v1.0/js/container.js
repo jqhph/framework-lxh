@@ -10,7 +10,36 @@ window.Lxh = function (options) {
      * @constructor
      */
     function Container(options) {
-        var actions = []
+        var self = this, config, cache, store, user, language, view, ui, env, tpl, route
+
+        function init() {
+            // 配置文件管理
+            config = new Store(options.config || {})
+
+            // 缓存管理
+            cache = options.cache
+
+            // 存储仓库
+            store = new Store()
+
+            // 登陆用户信息管理
+            user = new Store(options.user || {})
+
+            // 语言包管理
+            language = new Language(self, cache, config)
+
+            // 视图管理
+            view = new View(self, options.tpls || {})
+
+            // ui组件
+            ui = new UI()
+
+            // 环境管理
+            env = new Env()
+
+            // 模板管理器
+            tpl = new Tpl(self, cache, config)
+        }
 
         /**
          * 获取控制器名称
@@ -39,23 +68,80 @@ window.Lxh = function (options) {
             return options.action
         }
 
-        // 配置文件管理
-        this.config = new Store(options.config || {})
+        /**
+         *
+         * @returns {Store}
+         */
+        this.config = function () {
+            return config
+        }
 
-        // 缓存管理
-        this.cache = options.cache
+        /**
+         *
+         * @returns {Cache}
+         */
+        this.cache = function () {
+            return cache
+        }
 
-        // 存储仓库
-        this.store = new Store()
+        /**
+         *
+         * @returns {Store}
+         */
+        this.store = function () {
+            return store
+        }
 
-        // 登陆用户信息管理
-        this.user = new Store(options.user || {})
+        /**
+         *
+         * @returns {Store}
+         */
+        this.user = function () {
+            return user
+        }
 
-        // 语言包管理
-        this.language = new Language(this, this.cache, this.config)
+        /**
+         *
+         * @returns {Language}
+         */
+        this.language = function () {
+            return language
+        }
 
-        // 视图管理
-        this.view = new View(this, options.tpls || {})
+        /**
+         *
+         * @returns {View}
+         */
+        this.view = function () {
+            return view
+        }
+
+        /**
+         * 
+         * @returns {UI}
+         */
+        this.ui = function () {
+            return ui
+        }
+
+        /**
+         *
+         * @returns {Env}
+         */
+        this.env = function () {
+            return env
+        }
+
+        /**
+         *
+         * @returns {Tpl}
+         */
+        this.tpl = function () {
+            return tpl
+        }
+
+        // 初始化
+        init()
     }
 
     Container.prototype = {
@@ -79,7 +165,7 @@ window.Lxh = function (options) {
          * @returns {Container}
          */
         set: function (name, val) {
-            this.store.set(name, val)
+            this.store().set(name, val)
             return this
         },
 
@@ -90,7 +176,7 @@ window.Lxh = function (options) {
          * @param {*}
          */
         get: function (name, $def) {
-            return this.store.get(name, $def)
+            return this.store().get(name, $def)
         },
 
         /**
@@ -138,43 +224,6 @@ window.Lxh = function (options) {
         },
 
         /**
-         * 显示表单错误
-         *
-         * @param name 表单name属性
-         * @param e    表单dom元素
-         * @param msg  错误信息
-         */
-        formValidatorDisplayErrorMsg: function (name, e, msg) {
-            msg = trans(msg)
-            e.addClass('parsley-error')
-            e.parent().append('<ul class="parsley-errors-list filled validator-error-' + name + '" id="parsley-id-4"><li class="parsley-required">' + msg + '</li></ul>')
-        },
-
-        /**
-         * 移除表单验证错误
-         *
-         * @param $e   表单dom元素
-         * @param name 表单name属性
-         */
-        formValidatorRemoveError: function ($e, name) {
-            $e.removeClass('parsley-error')
-            $('.validator-error-' + name).remove()
-        },
-
-        /**
-         * 注册自定义表单验证规则
-         *
-         * @param validator
-         */
-        registerValidatorRules: function (validator) {
-            // validator.registerCallback('length_between', function(value, param, field) {
-            //     console.log(7890, value.length, param)
-            //     return false
-            // }).setMessage('length_between', 'This value length is invalid. It should be between 5 and 10 characters long.')
-
-        },
-
-        /**
          * 初始化表单验证对象
          * 用法参考：http://rickharrison.github.io/validate.js/
          *
@@ -183,104 +232,28 @@ window.Lxh = function (options) {
          * @param selector form表单CSS选择器
          * @returns {FormValidator}
          */
-        formValidator: function (options, call, selector) {
-            selector = selector || 'form'
+        validator: function (options, call, selector) {
+            return validator(options, call, selector)
+        }
+    }
 
-            var self = this
-
-            $(selector).submit(function () {
-                return false;
-            })
-
-            var $form = document.querySelector(selector)
-            var v = new FormValidator($form, options, function (errors, event) {
-                if (errors.length < 1 && event.type == 'submit') {
-                    // 验证成功后回调
-                    typeof call != 'function' || call(event)
-                }
-            }, validateCall);
-
-            // 注册自定义验证规则
-            this.registerValidatorRules(v)
-
-            add_events(options)
+    /*
+      --------------------------------------------------------------------------------------
+     |  往下为js组件
+     |
+     ---------------------------------------------------------------------------------------
+    */
 
 
-            // 给表单元素添加focus和keyup事件
-            function add_events(options) {
-                for (var key in options) {
-                    if (options.hasOwnProperty(key)) {
-                        var field = options[key] || {},
-                            element = $form[field.name]
-
-                        if (element && element !== undefined) {
-                            element.onfocus = element.onkeyup = function (e) {
-                                v._validateForm(e)
-                            }
-                        }
-                    }
-                }
-            }
-
-            // 显示错误信息
-            function validateCall(field, errorObject) {
-                var $e = $(field.element)
-                // 移除表单错误
-                self.formValidatorRemoveError($e, field.name)
-                if (errorObject) {
-                    self.formValidatorDisplayErrorMsg(field.name, $e, errorObject.message)
-                }
-            }
-
-            return v
-        },
-
-        /**
-         * 环境管理
-         */
-        env: {
-            val: 'dev',
-            /**
-             * 设置当前环境
-             *
-             * @param type
-             */
-            set: function (type) {
-                this.val = type
-            },
-
-            /**
-             * 是否是生产环境
-             *
-             * @returns {boolean}
-             */
-            isProd: function () {
-                return this.val == 'prod'
-            },
-
-            /**
-             * 是否是开发环境
-             *
-             * @returns {boolean}
-             */
-            isDev: function () {
-                return this.val == 'dev'
-            },
-
-            /**
-             * 是否是测试环境
-             *
-             * @returns {boolean}
-             */
-            isTest: function () {
-                return this.val == 'test'
-            }
-        },
-
-        /**
-         * ui 组件
-         */
-        ui: {
+    /**
+     * -------------------------------------------------------------------------------------
+     * UI组件
+     *
+     * @returns {{loading: loading, notify: notify}}
+     * @constructor
+     */
+    function UI() {
+        return {
             /**
              * loading
              *
@@ -339,8 +312,16 @@ window.Lxh = function (options) {
             }
         }
     }
+    // --------------------------------------UI END-----------------------------------------------
 
-    // 视图管理
+    /**
+     * -------------------------------------------------------------------------------------
+     * 视图管理
+     *
+     * @param container
+     * @param tpls
+     * @constructor
+     */
     function View(container, tpls)
     {
         var data = new Store()
@@ -350,8 +331,295 @@ window.Lxh = function (options) {
             return data.get('tpls.' + name)
         }
     }
+    // --------------------------------------View END-----------------------------------------------
 
     /**
+     * -------------------------------------------------------------------------------------
+     * 环境管理
+     */
+    function Env() {
+        return {
+            val: 'dev',
+            /**
+             * 设置当前环境
+             *
+             * @param type
+             */
+            set: function (type) {
+                this.val = type
+            },
+
+            /**
+             * 是否是生产环境
+             *
+             * @returns {boolean}
+             */
+            isProd: function () {
+                return this.val == 'prod'
+            },
+
+            /**
+             * 是否是开发环境
+             *
+             * @returns {boolean}
+             */
+            isDev: function () {
+                return this.val == 'dev'
+            },
+
+            /**
+             * 是否是测试环境
+             *
+             * @returns {boolean}
+             */
+            isTest: function () {
+                return this.val == 'test'
+            }
+        }
+    }
+    // --------------------------------------Env END-----------------------------------------------
+
+    /**
+     * -------------------------------------------------------------------------------------
+     * 初始化表单验证对象
+     * 用法参考：http://rickharrison.github.io/validate.js/
+     *
+     * @param options  表单验证配置数组
+     * @param call     验证通过后执行的毁掉函数
+     * @param selector form表单CSS选择器
+     * @returns {FormValidator}
+     */
+    function validator(options, call, selector) {
+        selector = selector || 'form'
+
+        var self = this
+
+        $(selector).submit(function () {
+            return false;
+        })
+
+        var $form = document.querySelector(selector)
+        var v = new FormValidator($form, options, function (errors, event) {
+            if (errors.length < 1 && event.type == 'submit') {
+                // 验证成功后回调
+                typeof call != 'function' || call(event)
+            }
+        }, validateCall);
+
+        // 注册自定义验证规则
+        registerRules(v)
+
+        add_events(options)
+
+
+        // 给表单元素添加focus和keyup事件
+        function add_events(options) {
+            for (var key in options) {
+                if (options.hasOwnProperty(key)) {
+                    var field = options[key] || {},
+                        element = $form[field.name]
+
+                    if (element && element !== undefined) {
+                        element.onfocus = element.onkeyup = function (e) {
+                            v._validateForm(e)
+                        }
+                    }
+                }
+            }
+        }
+
+        // 显示错误信息
+        function validateCall(field, errorObject) {
+            var $e = $(field.element)
+            // 移除表单错误
+            removeError($e, field.name)
+            if (errorObject) {
+                displayErrorMsg(field.name, $e, errorObject.message)
+            }
+        }
+
+        /**
+         * 显示表单错误
+         *
+         * @param name 表单name属性
+         * @param e    表单dom元素
+         * @param msg  错误信息
+         */
+        function displayErrorMsg (name, e, msg) {
+            msg = trans(msg)
+            e.addClass('parsley-error')
+            e.parent().append('<ul class="parsley-errors-list filled validator-error-' + name + '" id="parsley-id-4"><li class="parsley-required">' + msg + '</li></ul>')
+        }
+
+        /**
+         * 移除表单验证错误
+         *
+         * @param $e   表单dom元素
+         * @param name 表单name属性
+         */
+        function removeError($e, name) {
+            $e.removeClass('parsley-error')
+            $('.validator-error-' + name).remove()
+        }
+
+        /**
+         * 注册自定义表单验证规则
+         *
+         * @param validator
+         */
+        function registerRules(validator) {
+            // validator.registerCallback('length_between', function(value, param, field) {
+            //     console.log(7890, value.length, param)
+            //     return false
+            // }).setMessage('length_between', 'This value length is invalid. It should be between 5 and 10 characters long.')
+
+        }
+
+        return v
+    }
+    // --------------------------------------Validator END-----------------------------------------------
+
+    /**
+     * -----------------------------------------------------------------------------------
+     * 模板管理器
+     *
+     * @constructor
+     */
+    function Tpl(container, cache, config)
+    {
+        var store = {},
+            expireTime = config.get('cache-expire'),
+            cacheKey = 'tpls',
+            useCache = config.get('use-cache'),
+            defaultScope = container.controllerName()
+
+        /**
+         * 注入数据
+         *
+         * @param packages {object} <code>
+         *     {"tplname":"<div>..."}
+         *  </code>
+         * @param save {bool} 是否缓存到localStore，默认false
+         * @type {Language.fill}
+         */
+        var fill = this.fill = function (packages, save) {
+            if (! packages) {
+                // 如果没有数据，则从缓存中获取并注入
+                packages = cache.get(cacheKey, {})
+                save = false
+            }
+            for (var tplname in packages) {
+                store[tplname] = packages[tplname]
+            }
+            if (save) {
+                this.save(packages)
+            }
+        }
+
+        /**
+         * 缓存语言包
+         *
+         * @param packages
+         */
+        this.save = function (packages) {
+            if (! useCache) {
+                return
+            }
+            var cachePackage = {}, i
+            cachePackage = cache.get(cacheKey, {})
+            for (var tplname in packages) {
+                cachePackage[tplname] = packages[tplname]
+            }
+            cache.set(cacheKey, cachePackage)
+            cache.expire(cacheKey, expireTime)
+        }
+
+        /**
+         * 获取模板，如果缓存中没有会从服务器中获取，如果缓存中有则直接从缓存中获取
+         *
+         * @param {array} names 模板名称数组
+         * @param {function} call 获取成功后回调函数
+         * @returns void
+         */
+        this.fetch = function (names, call) {
+            names = typeof names == 'string' ? [names] : names
+            if (useCache) {
+                var packages = {}
+                packages = cache.get(cacheKey)
+                fill(packages)
+            }
+
+            // 取出缓存中没有的语言包模块
+            var missingNames = []
+            for (var i in names) {
+                if (! store[names[i]]) {
+                    missingNames.push(names[i])
+                }
+            }
+
+            if (missingNames.length < 1) {
+                // 缓存中有需要的语言包
+                return call(store)
+            }
+
+            // 缓存中没有需要的语言包
+            var model = container.createModel('Tpl')
+
+            model.data({names: missingNames.join(',')})
+
+            model.on('success', function (data) {
+                // 注入并缓存
+                fill(data.list, true)
+
+                call(store)
+            })
+            model.touchAction('Get', 'POST')
+
+        }
+
+        this.all = function () {
+            return store
+        }
+
+        /**
+         * 获取模板内容
+         *
+         * @param name
+         */
+        this.get = function (name) {
+            return store[name] || null
+        }
+
+        /**
+         * 获取普通模块组件
+         */
+        this.module = function (name) {
+            return store[defaultScope + '.' + name] || null
+        }
+
+        /**
+         * 获取组件模板
+         *
+         * @param name
+         * @returns {*}
+         */
+        this.component = function (name) {
+            return store['component.' + name] || null
+        }
+
+        /**
+         * 获取字段组件模板
+         *
+         * @param name
+         */
+        this.fields = function (name) {
+            return store['component.fields.' + name] || null
+        }
+    }
+    // --------------------------------------Tpl END-----------------------------------------------
+
+    /**
+     * -----------------------------------------------------------------------------------
      * 语言包管理
      *
      * @param container {Container}
@@ -361,8 +629,15 @@ window.Lxh = function (options) {
      */
     function Language(container, cache, config)
     {
-        var store = {}, cache = cache, lang = config.get('language'), defaultScope = container.controllerName(), self = this
-        var cacheKey = 'language_' + lang, useCache = config.get('use-cache'), expireTime = config.get('lang-package-expire')
+        var store = {},
+            cache = cache,
+            lang = config.get('language'),
+            defaultScope = container.controllerName(),
+            self = this,
+            cacheKeyPrefix = 'language_',
+            cacheKey = cacheKeyPrefix + lang,
+            useCache = config.get('use-cache'),
+            expireTime = config.get('lang-package-expire')
 
         store[lang] = new Store()
 
@@ -404,17 +679,17 @@ window.Lxh = function (options) {
             if (! useCache) {
                 return
             }
-            var cachePackage = {}, i
+            var cachePackage = {}, i, key
             for (var lang in packages) {
-                cachePackage = cache.get(cacheKey, {})
+                key = cacheKeyPrefix + lang
+                cachePackage = cache.get(key, {})
                 for (i in packages[lang]) {
                     cachePackage[i] = packages[lang][i]
                 }
-                cache.set(cacheKey, cachePackage)
-                cache.expire(cacheKey, expireTime)
+                cache.set(key, cachePackage)
+                cache.expire(key, expireTime)
             }
         }
-
 
         /**
          * 获取语言包数据，此函数如果缓存中没有会从服务器中获取，如果缓存中有则直接从缓存中获取
@@ -508,8 +783,10 @@ window.Lxh = function (options) {
         }
 
     }
+    // --------------------------------------Language END-----------------------------------------------
 
     /**
+     * -------------------------------------------------------------------------------------
      * Created by Jqh on 2017/6/27.
      */
     function Model(name, module, container) {
@@ -614,8 +891,8 @@ window.Lxh = function (options) {
                  * @param data
                  */
                 failed: function (data) {
-                    container.ui.notify().remove()
-                    container.ui.notify().error(trans(data.msg))
+                    container.ui().notify().remove()
+                    container.ui().notify().error(trans(data.msg))
                 },
 
                 /**
@@ -627,8 +904,8 @@ window.Lxh = function (options) {
                  * @param e
                  */
                 error: function (req, msg, e) {
-                    container.ui.notify().remove()
-                    container.ui.notify().error(req.status + ' ' + trans(req.statusText) + ' ' + trans(req.responseText))
+                    container.ui().notify().remove()
+                    container.ui().notify().error(req.status + ' ' + trans(req.statusText) + ' ' + trans(req.responseText))
                     store.call.error(req, msg, e)
                 },
 
@@ -886,8 +1163,10 @@ window.Lxh = function (options) {
             },
         }
     }
+    // --------------------------------------Model END-----------------------------------------------
 
     /**
+     * -------------------------------------------------------------------------------------
      * 表单数据获取器
      *
      * @constructor
@@ -951,8 +1230,10 @@ window.Lxh = function (options) {
             return data;
         }
     }
+    // --------------------------------------Form END-----------------------------------------------
 
     /**
+     * -------------------------------------------------------------------------------------
      * 数据管理
      *
      * @param data
@@ -1057,6 +1338,7 @@ window.Lxh = function (options) {
             data[key][name].push(val)
         }
     }
+    // --------------------------------------Store END-----------------------------------------------
     
     return new Container(options)
 }

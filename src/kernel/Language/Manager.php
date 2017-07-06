@@ -165,6 +165,34 @@ class Manager
     }
 
     /**
+     * 获取语言包数据
+     *
+     * @param  array  $scopes
+     * @param  string $lang
+     * @return array
+     */
+    public function getPackages(array $scopes, $lang = null)
+    {
+        $lang = $lang ?: $this->language;
+
+        if ($scopes) {
+            foreach ($scopes as & $s) {
+                $this->loadPackage($s, $lang);
+            }
+        }
+
+        $data = [];
+
+        $data[$lang] = $this->packages[$lang]->all();
+
+        if (! in_array('Global', $scopes)) {
+            unset($data[$lang]['Global']);
+        }
+
+        return $data;
+    }
+
+    /**
      * 获取语言包路径
      *
      * @param  string $scope

@@ -7,7 +7,7 @@
 //    return ['User']
 //}
 function lxh_action(plugIns) {
-    var v = $lxh.formValidator([
+    var v = $lxh.validator([
         {
             name: 'username',
             rules: 'length_between[4-20]',
@@ -20,7 +20,7 @@ function lxh_action(plugIns) {
     ], submit)
 
     var model = $lxh.createModel('User')
-    var notify = $lxh.ui.notify()
+    var notify = $lxh.ui().notify()
 
     function submit(e) {
         if (! model.requestEnded()) {
@@ -36,6 +36,7 @@ function lxh_action(plugIns) {
             notify.remove()
             notify.success(trans('login success'))
 
+            // 500豪秒后跳转到首页
             $lxh.redirect('/', 500)
         })
         // 发起登录请求
