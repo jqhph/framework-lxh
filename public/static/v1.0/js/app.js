@@ -12,6 +12,8 @@
 
     var $cache = new Cache()
 
+    var router = new Router()
+
     // 设置缓存token
     $cache.setToken(config.options.config['js-version'])
 
@@ -215,6 +217,22 @@
         return config
     }
 
+
+    function Router()
+    {
+        // page('*', fn);
+        page('/user/:id', load, {id1: '1'});
+
+        function load(ctx, next)
+        {
+            console.log(123, ctx)
+        }
+
+        page.start({
+            hashbang: true
+        })
+    }
+
     /**
      * 缓存管理类
      *
@@ -379,4 +397,6 @@
 
         this.clearPastDueKey()
     }
+
+
 })(window)
