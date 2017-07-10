@@ -57,13 +57,5 @@ load_js('jquery.core');
 load_js('jquery.app');
 ?>
 
-<script>
-    $(document).ready(function() {
-        // 调用所有动作
-        Lxh.call()
-    })
-
-</script>
-
 </body>
 </html>

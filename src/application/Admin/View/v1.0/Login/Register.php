@@ -15,7 +15,7 @@
 
     <!-- App CSS -->
     <?php
-        echo fetch_view('app-js', 'Public');
+        echo fetch_view('app-js', 'Public', ['loadCurrentJs' => true]);
     ?>
 
     <!-- HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries -->

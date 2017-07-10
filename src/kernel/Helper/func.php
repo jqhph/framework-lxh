@@ -45,7 +45,7 @@ function make($abstract)
 // 加载js
 function load_js($name, $dir = 'js')
 {
-    echo "<script src=\"{$GLOBALS['resource-server']}/static/{$GLOBALS['resource-version']}/$dir/$name.js?v={$GLOBALS['js-version']}\"></script>";
+    echo "<script src=\"{$GLOBALS['resource-server']}/static/{$GLOBALS['resource-version']}/lib/$dir/$name.js?v={$GLOBALS['js-version']}\"></script>";
 }
 
 // 加载css

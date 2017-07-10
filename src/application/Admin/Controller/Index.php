@@ -17,26 +17,10 @@ class Index extends Controller
     {
     }
 
-    public function actionCall()
-    {
-        return ['I am call'];
-    }
 
     public function actionIndex()
     {
-
-        return fetch_complete_view();
-    }
-
-    public function addMiddleware(array $allMiddleware, $m)
-    {
-        $data = [];
-        foreach ($allMiddleware as $module => & $middlewares) {
-            if ($module == '*' || $module == $m) {
-                $data = array_merge($data, $middlewares);
-            }
-        }
-        return $data;
+        return fetch_view();
     }
 
 }

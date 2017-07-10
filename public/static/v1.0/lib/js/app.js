@@ -12,38 +12,51 @@
 
     var $cache = new Cache()
 
-    var router = new Router()
+    var router = new Router(config.options.config, dispatcher)
 
-    // 设置缓存token
-    $cache.setToken(config.options.config['js-version'])
 
-    config.options.cache = $cache
-    // 处理需要加载的js数组
-    config.publicJs = get_public_js(config.publicJs)
-    // 处理需要加载的js数组
-    config.publicCss = get_public_css(config.publicCss, config.options.config['js-version'])
+    function dispatcher(controller, action, params) {
+        config.options.controller = controller
+        config.options.action = action
+        config.options.params = params
 
-    config.seaConfig = get_sea_config(config.seaConfig, config.options.config['js-version'])
+        config.langScopes = ['Global', controller]
 
-    seajs.config(config.seaConfig)
-    // 加载css
-    seajs.use(config.publicCss)
+        var currentView = parse_view_name(controller, action)
 
-    // 优先加载jquery
-    seajs.use('jquery', function (q) {
-        seajs.use(config.publicJs, function () {
-            var plugIns = arguments // 所有加载进来的js插件变量数组
-            init(function () {
-                $(function () {
-                    if (typeof lxh_action == 'function') {
-                        // 运行当前页js
-                        lxh_action(plugIns)
-                    }
+        config.publicJs.push(currentView)
+
+        // 设置缓存token
+        $cache.setToken(config.options.config['js-version'])
+
+        config.options.cache = $cache
+        // 处理需要加载的js数组
+        config.publicJs = get_public_js(config.publicJs)
+        // 处理需要加载的js数组
+        config.publicCss = get_public_css(config.publicCss, config.options.config['js-version'])
+
+        config.seaConfig = get_sea_config(config.seaConfig, config.options.config['js-version'])
+
+        seajs.config(config.seaConfig)
+        // 加载css
+        seajs.use(config.publicCss)
+
+        // 优先加载jquery
+        seajs.use('jquery', function (q) {
+            seajs.use(config.publicJs, function () {
+                var plugIns = arguments // 所有加载进来的js插件变量数组
+                init(function () {
+                    $(function () {
+                        if (typeof lxh_action == 'function') {
+                            // 运行当前页js
+                            lxh_action.apply(this, plugIns)
+                        }
+                    })
                 })
-            })
 
+            })
         })
-    })
+    }
 
     /**
      * 初始化
@@ -69,6 +82,37 @@
         
         call()
     }
+
+    /**
+     * Convert name from Camel Case format to underscore.
+     * ex. camelCase to camel_case
+     *
+     * @param string
+     * @return string
+     */
+    function to_under_score(str) {
+        str = str.replace(/([A-Z])/g, function (full, match) {
+            return '_' + match.toLowerCase()
+        })
+        if (str.indexOf('_') === 0) {
+            return str.replace('_', '')
+        }
+        return str
+    }
+
+    /**
+     * 解析视图路径名
+     *
+     * @param c controller
+     * @param a action
+     * @returns {*}
+     */
+    function parse_view_name(c, a) {
+        return 'module/' + to_under_score(c) + '/' + to_under_score(a)
+
+    }
+    window.to_under_score = to_under_score
+    window.parse_view_name = parse_view_name
 
     function get_lang_cache_key(lang) {
         return 'language_' + lang
@@ -108,23 +152,23 @@
     /**
      * 检测缓存中是否存在需要载入的模板，返回需要载入的模板名称
      */
-    function check_cache_tpl(names, useCache)
-    {
-        var cacheKey = get_tpl_cache_key(), tpls = $cache.get(cacheKey), t = [], i
-
-        if (typeof add_tpls == 'function') {
-            var addTpls = add_tpls()
-            for (i in addTpls) {
-                names.push(addTpls[i])
-            }
-        }
-
-        if (! tpls || ! useCache) return names
-        for (i in names) {
-            if (! tpls[scopes[i]]) t.push(names[i])
-        }
-        return t
-    }
+    // function check_cache_tpl(names, useCache)
+    // {
+    //     var cacheKey = get_tpl_cache_key(), tpls = $cache.get(cacheKey), t = [], i
+    //
+    //     if (typeof add_tpls == 'function') {
+    //         var addTpls = add_tpls()
+    //         for (i in addTpls) {
+    //             names.push(addTpls[i])
+    //         }
+    //     }
+    //
+    //     if (! tpls || ! useCache) return names
+    //     for (i in names) {
+    //         if (! tpls[names[i]]) t.push(names[i])
+    //     }
+    //     return t
+    // }
 
     /**
      * 处理需要加载的css数组
@@ -170,12 +214,12 @@
             loads.language = scopes.join(',')
         }
 
-        var tplnames = check_cache_tpl(config.tplnames, config.options.config['use-cache'])
+        // var tplnames = check_cache_tpl(config.tplnames, config.options.config['use-cache'])
 
         // 判断是否需要载入模板
-        if (tplnames.length > 0) {
-            loads.tpl = tplnames.join(',')
-        }
+        // if (tplnames.length > 0) {
+        //     loads.tpl = tplnames.join(',')
+        // }
 
         var jsApi = get_load_data_js_api(loads)
 
@@ -218,19 +262,36 @@
     }
 
 
-    function Router()
+    function Router(config, callback)
     {
-        // page('*', fn);
-        page('/user/:id', load, {id1: '1'});
-
-        function load(ctx, next)
-        {
-            console.log(123, ctx)
+        var store = {
+            routes: {},
+            defaultController: 'Index',
+            defaultAction: 'Index',
+            controller: null,
+            action: null,
+            options: {
+                hashbang: true
+            },
+            params: {}
         }
 
-        page.start({
-            hashbang: true
-        })
+        store.routes = config.routes
+
+        for (var i in store.routes) {
+            page(store.routes[i], dispatch)
+        }
+
+        // 启动路由
+        page(store.options)
+
+        function dispatch(ctx, next) {
+            store.controller = ctx.params.controller || store.defaultController
+            store.action = ctx.params.action || store.defaultAction
+            store.params = ctx.params
+
+            callback(store.controller, store.action, store.params)
+        }
     }
 
     /**

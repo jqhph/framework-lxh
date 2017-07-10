@@ -18,7 +18,7 @@ class User extends Model
      *
      * @var string|array
      */
-    protected $defaultSelectFields = ['id', 'username', 'first_name', 'last_name', 'email', 'mobile', 'sex', 'avatar', 'created_at'];
+    protected $defaultSelectFields = ['id', 'is_admin', 'username', 'first_name', 'last_name', 'email', 'mobile', 'sex', 'avatar', 'created_at'];
 
     /**
      * 缓存用户信息的session和cookie键名

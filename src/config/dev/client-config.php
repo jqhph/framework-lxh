@@ -24,28 +24,32 @@ $config['resource-server'] = '';
 $config['resource-version'] = 'v1.0';
 
 // seajs配置
+$base = "{$config['resource-server']}/static/{$config['resource-version']}";
 $config['sea-config'] = [
     // 设置路径，方便跨目录调用
     'paths' => [
-        's' => "{$config['resource-server']}/static/{$config['resource-version']}",
-        'api' => '/api/Js'
+        's' => $base,
+        'lib' => "$base/lib",
+        'api' => '/api/Js',
+        'view' => "$base/view",
+        'module' => "$base/view/module",
     ],
     // 设置别名，方便调用
     'alias' => [
-        'jquery' => 's/js/jquery.min',
-        'parsley' => 's/plugins/parsleyjs/dist/parsley.min',
-        'container' => 's/js/container',
-        'toastr' => 's/plugins/toastr/toastr.min',
-        'core' => 's/js/jquery.core',
-        'blade' => 's/js/blade',
-        'validate' => 's/js/validate',
-        'router' => 's/js/router',
+        'jquery' => 'lib/js/jquery.min',
+        'parsley' => 'lib/plugins/parsleyjs/dist/parsley.min',
+        'container' => 'lib/js/container',
+        'toastr' => 'lib/plugins/toastr/toastr.min',
+        'core' => 'lib/js/jquery.core',
+        'blade' => 'lib/js/blade',
+        'validate' => 'lib/js/validate',
+        'router' => 'lib/js/router',
     ]
 ];
 
 // 引入默认css
 $config['public-css'] = [
-    's/plugins/toastr/toastr.min.css',
+    'lib/plugins/toastr/toastr.min.css',
     's/css/core.css',
     's/css/components.css',
     's/css/icons.css',
@@ -59,7 +63,7 @@ $config['public-js'] = [
     'container',
     'core',
     'blade',
-    'router',
+//    'router',
 ];
 
 $config['route-init'] = [
@@ -67,8 +71,13 @@ $config['route-init'] = [
     'root' => '/'
 ];
 
-$config['route'] = [
-    
+$config['routes'] = [
+    '/',
+    '/:controller',
+    '/:controller/action/:action',
+    '/:controller/view/:id',
+
+    // '/:controller/' => '',
 ];
 
 return $config;

@@ -9,7 +9,9 @@ load_css('bootstrap.min');
 load_css('pages');
 
 // 载入当前页js
-echo fetch_view(__ACTION__ . '-Js');
+if ($args->loadCurrentJs) {
+    echo fetch_view(__ACTION__ . '-Js');
+}
 ?>
 
 <script>

@@ -10,7 +10,7 @@ window.Lxh = function (options) {
      * @constructor
      */
     function Container(options) {
-        var self = this, config, cache, store, user, language, view, ui, env, tpl, route
+        var self = this, config, cache, store, user, language, view, ui, env, tpl, router
 
         function init() {
             // 配置文件管理
@@ -28,9 +28,6 @@ window.Lxh = function (options) {
             // 语言包管理
             language = new Language(self, cache, config)
 
-            // 视图管理
-            view = new View(self, options.tpls || {})
-
             // ui组件
             ui = new UI()
 
@@ -39,6 +36,10 @@ window.Lxh = function (options) {
 
             // 模板管理器
             tpl = new Tpl(self, cache, config)
+
+            // 视图管理
+            view = new View(self, tpl)
+
         }
 
         /**
@@ -66,6 +67,15 @@ window.Lxh = function (options) {
          */
         this.actionName = function () {
             return options.action
+        }
+
+        /**
+         * 获取请求参数
+         *
+         * @return {object}
+         */
+        this.requestParams = function () {
+            return options.params
         }
 
         /**
@@ -138,6 +148,16 @@ window.Lxh = function (options) {
          */
         this.tpl = function () {
             return tpl
+        }
+
+        /**
+         * 代理seajs define函数
+         *
+         * @param deps 依赖的组件，必须是一个数组
+         * @param callback 回调函数
+         */
+        this.define = function (deps, callback) {
+            view.call(deps, callback)
         }
 
         // 初始化
@@ -322,13 +342,40 @@ window.Lxh = function (options) {
      * @param tpls
      * @constructor
      */
-    function View(container, tpls)
+    function View(container, tpl)
     {
-        var data = new Store()
-        data.set('tpls', tpls)
+        var store = {
+            tpl: tpl
+        }
 
-        this.getTpl = function (name) {
-            return data.get('tpls.' + name)
+        /**
+         * 创建一个视图
+         *
+         */
+        this.create = function (viewname, options) {
+
+            return this
+        }
+
+        /**
+         * 加载视图并初始化
+         *
+         * @param callback
+         */
+        this.then = function (callback) {
+
+        }
+
+        /**
+         *
+         * @param deps
+         * @param callback
+         */
+        this.call = function (deps, callback) {
+            seajs.use(deps, function () {
+
+                var view = callback.call(arguments)
+            })
         }
     }
     // --------------------------------------View END-----------------------------------------------

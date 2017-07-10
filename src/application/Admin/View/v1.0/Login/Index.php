@@ -17,7 +17,7 @@
     <title><?php echo $language->translateWithGolobal('web-title');?></title>
 
     <?php
-        echo fetch_view('app-js', 'Public');
+        echo fetch_view('app-js', 'Public', ['loadCurrentJs' => true]);
     ?>
 
     <!-- HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -92,7 +92,7 @@
 
     <div class="row">
         <div class="col-sm-12 text-center">
-            <p class="text-muted"><?php echo $language->translate('unaccount')?> <a href="page-register.html" class="text-primary m-l-5"><b>
+            <p class="text-muted"><?php echo $language->translate('unaccount')?> <a href="/Register" class="text-primary m-l-5"><b>
                         <?php echo $language->translateWithGolobal('sign up');?></b></a></p>
         </div>
     </div>
