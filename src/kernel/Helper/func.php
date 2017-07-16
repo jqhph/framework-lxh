@@ -99,12 +99,12 @@ function trans_with_global($label, $category = 'labels')
  * 选项翻译
  *
  * @param  string|int $value 选项值
- * @param  string     $value 选项名称
+ * @param  string     $field 选项名称
  * @return string|int
  */
-function trans_option($value, $label)
+function trans_option($value, $field)
 {
-    return $GLOBALS['__language__']->translateOption($value, $label);
+    return $GLOBALS['__language__']->translateOption($value, $field);
 }
 
 function ucfirst_trans($label, $category = 'labels')

@@ -2,6 +2,7 @@
 namespace Lxh\Admin\Acl;
 
 use Lxh\Helper\Util;
+use Lxh\Kernel\AdminUrlCreator;
 
 class Menu
 {
@@ -61,7 +62,7 @@ class Menu
      */
     public function makeUrl($controller, $action)
     {
-        return "/lxhadmin/$controller/$action";
+        return AdminUrlCreator::makeAction($controller, $action);
     }
 
     /**
@@ -96,7 +97,7 @@ class Menu
     {
         $tree = [];
         foreach ($data as & $v) {
-            if ($v['parent_id'] == $id) { //父亲找到儿子
+            if ($v['parent_id'] == $id) {
                 $v['subs'] = $this->makeTree($data, $v['id']);
                 $tree[] = $v;
             }

@@ -24,6 +24,7 @@ class Menu extends Controller
         $titles = [
             'id' => ['priority' => 0,],
             'icon' => [
+                'view' => 'fields/icon/list'
             ],
             'name' => [
             ],
@@ -32,17 +33,17 @@ class Menu extends Controller
             'action' => [
             ],
             'show' => [
-//                'view' => 'bool'
+                'view' => 'fields/bool/list'
             ],
             'type' => [
-//                'view' => 'enum'
+                'view' => 'fields/enum/list'
             ],
             'priority' => [
             ],
         ];
 
         $list = make('acl-menu')->all();
-console_info(33, $list);
+
         assign('titles', $titles);
         assign('list', $list);
 

@@ -1,3 +1,4 @@
+<?php use Lxh\Kernel\AdminUrlCreator; ?>
 <tr>
     <?php foreach ($titles as $name => & $v) { ?>
         <th><?php
@@ -26,7 +27,7 @@
         </th>
     <?php }
     ?>
-    <th><a href="lxhadmin/<?php echo __CONTROLLER__; ?>/view/<?php echo $r['id'];?>">
+    <th><a href="<?php echo AdminUrlCreator::makeDetail($r['id']);?>">
             <i class="zmdi zmdi-edit"></i></a>&nbsp;&nbsp;
         <a href="javascript:"><i class="zmdi zmdi-delete"></i></a></th>
 </tr>

@@ -263,13 +263,13 @@ class Manager
      * @param  string     $value 选项名称
      * @return string|int
      */
-    public function translateOption($value, $label)
+    public function translateOption($value, $field)
     {
         if (! isset($this->packages[$this->language])) {
             return $value;
         }
 
-        $options = $this->packages[$this->language]->get($this->scopeName. '.options.' . $label);
+        $options = $this->packages[$this->language]->get($this->scopeName. '.options.' . $field);
 
         return isset($options[$value]) ? $options[$value] : $value;
     }

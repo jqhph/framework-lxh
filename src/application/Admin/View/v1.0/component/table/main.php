@@ -1,3 +1,5 @@
+<?php use Lxh\Kernel\AdminUrlCreator; ?>
+
 <!--col-sm-12-->
 <div class="<?php echo empty($topClass) ? '' : $topClass; ?>">
     <div class="card-box">
@@ -38,7 +40,7 @@
 
                         if (! empty($useAction)) {
                         ?>
-                        <th><a href="lxhadmin/<?php echo isset($controller) ? $controller : __CONTROLLER__; ?>/view/<?php echo $r['id'];?>">
+                        <th><a href="<?php echo AdminUrlCreator::makeDetail($r['id'], isset($controller) ? $controller : __CONTROLLER__);?>">
                                 <i class="zmdi zmdi-edit"></i></a>&nbsp;&nbsp;
                             <a href="javascript:"><i class="zmdi zmdi-delete"></i></a></th>
                         <?php } ?>
