@@ -111,4 +111,38 @@ class Util
         return $return;
     }
 
+    // 二维数组按某个字段值正序快速排序
+    public static function quickSort(array & $sort, $k, $start, $end)
+    {
+        if ($start >= $end) {
+            return;
+        }
+        $i = $start;
+        $j = $end + 1;
+        while (1) {
+            do {
+                $i++;
+            } while (! ($sort[$start][$k] <= $sort[$i][$k] || $i == $end));
+
+            do {
+                $j--;
+            } while (! ($sort[$j][$k] <= $sort[$start][$k] || $j == $start));
+
+
+            if ($i < $j) {
+                $temp 	  = $sort[$i];
+                $sort[$i] = $sort[$j];
+                $sort[$j] = $temp;
+            } else {
+                break;
+            }
+        }
+        $temp		  = $sort[$start];
+        $sort[$start] = $sort[$j];
+        $sort[$j]     = $temp;
+
+        self::quickSort($sort, $k, $start, $j - 1);
+        self::quickSort($sort, $k, $j + 1, $end);
+    }
+
 }

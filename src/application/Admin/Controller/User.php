@@ -65,6 +65,10 @@ class User extends Controller
 
         $user = $this->getModel();
 
+        if ($user->userExists($_POST['username'])) {
+            return $this->error('The username exists.');
+        }
+
         if (! $user->register($_POST, $req->ip())) {
             return $this->failed();
         }

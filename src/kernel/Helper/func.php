@@ -159,10 +159,16 @@ function redirect_404($msg = null)
 
 }
 
-// 获取模板内容并输出
+// 获取模板内容
 function fetch_view($action = __ACTION__, $controller = __CONTROLLER__, array $vars = [])
 {
    return $GLOBALS['__container__']->make('view')->fetch("$controller/$action", $vars);
+}
+
+// 获取视图组件
+function component_view($name, array $vars = [])
+{
+    return $GLOBALS['__container__']->make('view')->fetch("component/$name", $vars);
 }
 
 // 输出模板内容

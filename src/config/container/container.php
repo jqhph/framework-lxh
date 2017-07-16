@@ -8,5 +8,9 @@
 
 $config = [];
 
+$config['acl-menu'] = [
+    'class' => 'Lxh\Admin\Acl\Menu'
+];
+
 
 return $config;

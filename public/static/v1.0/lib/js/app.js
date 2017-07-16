@@ -12,17 +12,16 @@
 
     var $cache = new Cache()
 
-    var router = new Router(config.options.config, dispatcher)
+    dispatcher()
 
+    // var router = new Router(config.options.config, dispatcher)
 
     function dispatcher(controller, action, params) {
-        config.options.controller = controller
-        config.options.action = action
-        config.options.params = params
+        // config.options.controller = controller
+        // config.options.action = action
+        // config.options.params = params
 
-        config.langScopes = ['Global', controller]
-
-        var currentView = parse_view_name(controller, action)
+        var currentView = parse_view_name(config.options.controller, config.options.action, config.options.config['js-version'])
 
         config.publicJs.push(currentView)
 
@@ -42,20 +41,20 @@
         seajs.use(config.publicCss)
 
         // 优先加载jquery
-        seajs.use('jquery', function (q) {
-            seajs.use(config.publicJs, function () {
-                var plugIns = arguments // 所有加载进来的js插件变量数组
-                init(function () {
-                    $(function () {
-                        if (typeof lxh_action == 'function') {
-                            // 运行当前页js
-                            lxh_action.apply(this, plugIns)
-                        }
-                    })
+        // seajs.use('jquery', function (q) {
+        seajs.use(config.publicJs, function () {
+            var plugIns = arguments // 所有加载进来的js插件变量数组
+            init(function () {
+                $(function () {
+                    if (typeof lxh_action == 'function') {
+                        // 运行当前页js
+                        lxh_action.apply(this, plugIns)
+                    }
                 })
-
             })
+
         })
+        // })
     }
 
     /**
@@ -107,8 +106,8 @@
      * @param a action
      * @returns {*}
      */
-    function parse_view_name(c, a) {
-        return 'module/' + to_under_score(c) + '/' + to_under_score(a)
+    function parse_view_name(c, a, v) {
+        return 'module/' + to_under_score(c) + '/' + to_under_score(a) + '.js?v=' + v
 
     }
     window.to_under_score = to_under_score
@@ -136,11 +135,11 @@
             }
         }
 
-        if (! package || ! useCache) return scopes
+        if (! package || ! useCache) return scopes || []
         for (i in scopes) {
             if (! package[scopes[i]]) t.push(scopes[i])
         }
-        return t
+        return t || []
     }
 
 

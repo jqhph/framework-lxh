@@ -1,8 +1,9 @@
 <?php
 /**
- *
- * @author Jqh
- * @date   2017-06-14 11:38:38
+ * Created by PhpStorm.
+ * User: Jqh
+ * Date: 2017/7/16
+ * Time: 12:57
  */
 
 namespace Lxh\Admin\Controller;
@@ -11,7 +12,7 @@ use Lxh\MVC\Controller;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
 
-class Index extends Controller
+class Menu extends Controller
 {
     public function __construct()
     {

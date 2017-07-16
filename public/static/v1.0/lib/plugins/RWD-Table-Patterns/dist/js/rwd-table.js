@@ -85,7 +85,6 @@
         if(this.$dropdownContainer.is(':empty')){
             this.$dropdownGroup.hide();
         }
-
         // Event binding
         // -------------------------
 
@@ -106,7 +105,7 @@
         stickyTableHeader: true,
         fixedNavbar: '.navbar-fixed-top',  // Is there a fixed navbar? The stickyTableHeader needs to know about it!
         addDisplayAllBtn: true, // should it have a display-all button?
-        addFocusBtn: true,  // should it have a focus button?
+        addFocusBtn: false,  // should it have a focus button?
         focusBtnIcon: 'glyphicon glyphicon-screenshot'
     };
 
@@ -127,32 +126,7 @@
         this.$dropdownContainer = $('<ul class="dropdown-menu"/>');
 
         // Focus btn
-        if(this.options.addFocusBtn) {
-            // Create focus btn group
-            this.$focusGroup = $('<div class="btn-group focus-btn-group" />');
 
-            // Create focus btn
-            this.$focusBtn = $('<button class="btn btn-default">Focus</button>');
-
-            if(this.options.focusBtnIcon) {
-                this.$focusBtn.prepend('<span class="' + this.options.focusBtnIcon + '"></span> ');
-            }
-
-            // Add btn to group
-            this.$focusGroup.append(this.$focusBtn);
-            // Add focus btn to toolbar
-            this.$btnToolbar.append(this.$focusGroup);
-
-            // bind click on focus btn
-            this.$focusBtn.click(function(){
-                $.proxy(that.activateFocus(), that);
-            });
-
-            // bind click on rows
-            this.$bodyRows.click(function(){
-                $.proxy(that.focusOnRow($(this)), that);
-            });
-        }
 
          // Display-all btn
         if(this.options.addDisplayAllBtn) {
@@ -182,36 +156,11 @@
         this.$tableScrollWrapper.before(this.$btnToolbar);
     };
 
-    ResponsiveTable.prototype.clearAllFocus = function() {
-        this.$bodyRows.removeClass('unfocused');
-        this.$bodyRows.removeClass('focused');
-    };
 
-    ResponsiveTable.prototype.activateFocus = function() {
-        // clear all
-        this.clearAllFocus();
 
-        if(this.$focusBtn){
-            this.$focusBtn.toggleClass('btn-primary');
-        }
 
-        this.$table.toggleClass('focus-on');
-    };
 
-    ResponsiveTable.prototype.focusOnRow = function(row) {
-        // only if activated (.i.e the table has the class focus-on)
-        if(this.$table.hasClass('focus-on')) {
-            var alreadyFocused = $(row).hasClass('focused');
 
-            // clear all
-            this.clearAllFocus();
-
-            if(!alreadyFocused) {
-                this.$bodyRows.addClass('unfocused');
-                $(row).addClass('focused');
-            }
-        }
-    };
 
     /**
      * @param activate Forces the displayAll to be active or not. If anything else than bool, it will not force the state so it will toggle as normal.

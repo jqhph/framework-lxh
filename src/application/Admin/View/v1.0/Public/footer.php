@@ -22,15 +22,15 @@
 
 <?php
 // <!-- jQuery  -->
-load_js('jquery.min');
-load_js('bootstrap.min');
-load_js('detect');
-load_js('fastclick');
-load_js('jquery.blockUI');
-load_js('waves');
-load_js('jquery.nicescroll');
-load_js('jquery.slimscroll');
-load_js('jquery.scrollTo.min');
+//load_js('jquery.min');
+//load_js('bootstrap.min');
+//load_js('detect');
+//load_js('fastclick');
+//load_js('jquery.blockUI');
+//load_js('waves');
+//load_js('jquery.nicescroll');
+//load_js('jquery.slimscroll');
+//load_js('jquery.scrollTo.min');
 
 // <!-- KNOB JS -->
 //
@@ -39,22 +39,22 @@ load_js('jquery.scrollTo.min');
 
 <!-- KNOB JS -->
 <!--[if IE]>
-<?php load_js('excanvas', 'plugins/jquery-knob');?>
+<?php //load_js('excanvas', 'plugins/jquery-knob');?>
 <![endif]-->
 
 <?php
-load_js('jquery.knob', 'plugins/jquery-knob');
+//load_js('jquery.knob', 'plugins/jquery-knob');
 
 // <!--Morris Chart-->
-load_js('morris.min', 'plugins/morris');
-load_js('raphael-min', 'plugins/raphael');
+//load_js('morris.min', 'plugins/morris');
+//load_js('raphael-min', 'plugins/raphael');
 
 // <!-- Dashboard init -->
-load_js('jquery.dashboard', 'pages');
+//load_js('jquery.dashboard', 'pages');
 
 // <!-- App js -->
-load_js('jquery.core');
-load_js('jquery.app');
+//load_js('jquery.core');
+//load_js('jquery.app');
 ?>
 
 </body>

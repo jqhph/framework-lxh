@@ -23,7 +23,7 @@ window.Lxh = function (options) {
             store = new Store()
 
             // 登陆用户信息管理
-            user = new Store(options.user || {})
+            user = new Store(options.users || {})
 
             // 语言包管理
             language = new Language(self, cache, config)

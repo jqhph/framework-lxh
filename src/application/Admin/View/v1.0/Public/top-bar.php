@@ -2,7 +2,7 @@
 
     <!-- LOGO -->
     <div class="topbar-left">
-        <a href="index.html" class="logo"><span>Admin<span>to</span></span><i class="zmdi zmdi-layers"></i></a>
+        <a href="index.html" class="logo"><span>L<span>xh</span></span><i class="zmdi zmdi-layers"></i></a>
     </div>
 
     <!-- Button mobile view to collapse sidebar menu -->
@@ -17,7 +17,7 @@
                     </button>
                 </li>
                 <li>
-                    <h4 class="page-title">Dashboard</h4>
+                    <h4 class="page-title"><?php echo make('acl-menu')->makeNav();?></h4>
                 </li>
             </ul>
 

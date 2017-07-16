@@ -42,10 +42,6 @@ class User extends Model
      */
     public function register(array & $options, $ip)
     {
-        if ($this->query()->select('id')->where('username', $options['username'])->findOne()) {
-            return false;
-        }
-
         $this->username      = $options['username'];
         $this->password      = $this->encrypt($options['password']);
         $this->reg_ip        = $ip;
@@ -53,6 +49,20 @@ class User extends Model
         $this->created_at    = time();
 
         return $this->add();
+    }
+
+    /**
+     * 检测用户名是否存在
+     *
+     * @param $username
+     * @return bool
+     */
+    public function userExists($username)
+    {
+        if ($this->query()->select('id')->where('username', $username)->findOne()) {
+            return true;
+        }
+        return false;
     }
 
     protected function beforeSave($id, array & $data)
@@ -193,6 +203,20 @@ class User extends Model
             $this->fillSession();
         }
 
+    }
+
+    public function all()
+    {
+        $id = $this->id;
+
+        return $this->attrs;
+    }
+
+    public function toJson()
+    {
+        $id = $this->id;
+
+        return json_encode($this->attrs);
     }
 
     public function get($name = null, $default = null)

@@ -8,24 +8,24 @@
 
     <link rel="shortcut icon" href="assets/images/favicon.ico">
 
-    <title>Adminto - Responsive Admin Dashboard Template</title>
+    <title><?php echo trans('web-title'); ?></title>
 
     <!--Morris Chart CSS -->
 
     <?php
         // <!--Morris Chart CSS -->
-        load_css('morris', 'plugins/morris');
+//        load_css('morris', 'lib/plugins/morris');
 
-        // App css
         load_css('bootstrap.min');
-        load_css('core');
-        load_css('components');
-        load_css('icons');
-        load_css('pages');
+        // App css
+
         load_css('menu');
         load_css('responsive');
 
-        load_js('modernizr.min');
+//        load_js('modernizr.min');
+        load_js('jquery.min');
+
+        echo fetch_view('app-js', 'Public');
     ?>
 
     <!-- HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries -->

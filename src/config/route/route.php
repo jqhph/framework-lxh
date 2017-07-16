@@ -76,9 +76,10 @@ $config[] = [
 
 
 $config[] = [
-    'pattern' => '/:controller/:action',
+    'pattern' => 'lxhadmin/:controller/:action',
     'method' => '*',
     'params' => [
+        'module' => 'Admin',
         'controller' => ':controller',
         'action' => ':action'
     ]

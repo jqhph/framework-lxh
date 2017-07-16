@@ -32,8 +32,10 @@ if ($args->loadCurrentJs) {
                 'module' => __MODULE__,
                 'action' => __ACTION__,
                 'config' => & $config,
+                'users' => user()->all()
             ]);
             ?>
+
         // seajs配置
         config.seaConfig = config.options.config['sea-config']
         // 需要载入的css
@@ -42,8 +44,8 @@ if ($args->loadCurrentJs) {
         config.publicJs = config.options.config['public-js']
         // 需要载入的语言包模块
         config.langScopes = <?php echo json_encode(['Global', __CONTROLLER__]);?>
-        // 需要载入的模板
-        config.tplnames = <?php echo json_encode(['component.fields.int.int', 'component.fields.string.string']);?>
+
+//        config.tplnames = <?php //echo json_encode(['component.fields.int.int', 'component.fields.string.string']);?>
 
         return config
     }

@@ -243,7 +243,7 @@ var changeptype = function(){
 }
 
 
-var debounce = function(func, wait, immediate) {
+function debounce (func, wait, immediate) {
   var timeout, result;
   return function() {
     var context = this, args = arguments;

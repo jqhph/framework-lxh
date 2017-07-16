@@ -54,15 +54,22 @@ $config['public-css'] = [
     's/css/components.css',
     's/css/icons.css',
     's/css/pages.css',
+//    's/css/bootstrap.min.css'
 ];
 
 // 引入默认js
 $config['public-js'] = [
+    'lib/js/detect',
+    'lib/js/fastclick',
     'validate',
     'toastr',
     'container',
     'core',
-    'blade',
+    'lib/js/bootstrap.min',
+    'lib/js/jquery.app',
+    'lib/js/jquery.slimscroll',
+//    'lib/pages/jquery.dashboard'
+//    'blade',
 //    'router',
 ];
 
