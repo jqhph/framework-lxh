@@ -1,5 +1,5 @@
 <!--col-sm-12-->
-<div class="<?php echo $args->topClass; ?>">
+<div class="<?php echo empty($topClass) ? '' : $topClass; ?>">
     <div class="card-box">
 
         <div class="table-rep-plugin">
@@ -7,25 +7,40 @@
                 <table id="tech-companies-1" class="table  table-striped">
                     <thead>
                     <tr>
-                        <?php foreach ($args->titles as $k => & $v) {?>
-                        <th data-priority="<?php echo $k;?>"><?php echo trans($v, 'fields'); ?></th>
+                        <?php
+                        foreach ($titles as $k => & $v) {?>
+                        <th class="<?php echo get_value($v, 'class');?>"
+                            data-priority="<?php echo get_value($v, 'priority', 1);?>"><?php echo trans($k, 'fields'); ?></th>
+                        <?php }
+
+                        if (! empty($useAction)) {
+                            // 是否开启动作
+                        ?>
+                        <th></th>
                         <?php } ?>
                     </tr>
                     </thead>
                     <tbody>
 
                     <?php
-                    foreach ($args->list as $k => & $r) {?>
+                    foreach ($list as $k => & $r) {?>
                     <tr>
-                        <?php foreach ($r as $name => & $v) { ?>
+                        <?php foreach ($titles as $name => & $v) { ?>
                         <th><?php
-                            if (! empty($args->fieldsType[$name])) {
-                                echo component_view($args->fieldsType[$name], ['val' => $v]);
+                            if (! empty($titles[$name]['view'])) {
+                                echo component_view($titles[$name]['view'], ['val' => $r[$name], 'name' => $name]);
                             } else {
-                                echo $v;
+                                echo $r[$name];
                             }
                             ?>
                         </th>
+                        <?php }
+
+                        if (! empty($useAction)) {
+                        ?>
+                        <th><a href="lxhadmin/<?php echo isset($controller) ? $controller : __CONTROLLER__; ?>/view/<?php echo $r['id'];?>">
+                                <i class="zmdi zmdi-edit"></i></a>&nbsp;&nbsp;
+                            <a href="javascript:"><i class="zmdi zmdi-delete"></i></a></th>
                         <?php } ?>
                     </tr>
                     <?php } ?>
@@ -40,7 +55,7 @@
 </div>
 <?php
 
-if ($args->useRwd) {
+if (! empty($useRwd)) {
     load_css('rwd-table.min', 'lib/plugins/RWD-Table-Patterns/dist/css');
     load_js('rwd-table', 'plugins/RWD-Table-Patterns/dist/js');
 }

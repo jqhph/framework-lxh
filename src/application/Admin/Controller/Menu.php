@@ -21,6 +21,32 @@ class Menu extends Controller
 
     public function actionIndex()
     {
+        $titles = [
+            'id' => ['priority' => 0,],
+            'icon' => [
+            ],
+            'name' => [
+            ],
+            'controller' => [
+            ],
+            'action' => [
+            ],
+            'show' => [
+//                'view' => 'bool'
+            ],
+            'type' => [
+//                'view' => 'enum'
+            ],
+            'priority' => [
+            ],
+        ];
+
+        $list = make('acl-menu')->all();
+console_info(33, $list);
+        assign('titles', $titles);
+        assign('list', $list);
+
+
         return fetch_complete_view();
     }
 

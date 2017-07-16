@@ -1,4 +1,3 @@
-<div style="height: 10px;"></div>
 
 <div class="row">
 <!--    col-lg-4 -->

@@ -70,13 +70,13 @@
     <h1 class="danger">ERROR: </h1>
 
     <div id="body">
-        <p><b>MSG:</b>  <span class="danger"><?php echo $args->msg;?></span></p>
+        <p><b>MSG:</b>  <span class="danger"><?php echo $msg;?></span></p>
 
-        <p><b>CODE:</b> <span class="danger"><?php echo $args->code;?></span></p>
+        <p><b>CODE:</b> <span class="danger"><?php echo $code;?></span></p>
 
-        <p><b>FILE:</b> <span class="danger"><?php echo $args->file;?>(<?php echo $args->line;?>)</span></p>
+        <p><b>FILE:</b> <span class="danger"><?php echo $file;?>(<?php echo $line;?>)</span></p>
 
-        <code><?php echo str_replace("\n", '<br/>', $args->trace);?></code>
+        <code><?php echo str_replace("\n", '<br/>', $trace);?></code>
 
         <p></p>
     </div>

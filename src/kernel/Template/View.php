@@ -28,7 +28,7 @@ class View
 
     public function __construct()
     {
-        $this->vars = new Entity();
+//        $this->vars = new Entity();
         $this->version = config('view-version', 'v1.0');
         $this->module = make('controller.manager')->moduleName();
     }
@@ -42,7 +42,8 @@ class View
      */
     public function assign($key, & $value = null)
     {
-        $this->vars->$key = $value;
+//        $this->vars->$key = $value;
+        $this->vars[$key] = & $value;
     }
 
     /**
@@ -57,15 +58,16 @@ class View
         // 页面缓存
         ob_start();
 
-//        foreach ($this->vars as $k => & $v) {
-//            ${$k} = & $v;
-//        }
-
-        foreach ($vars as $k => & $v) {
-            $this->vars->$k = $v;
+        foreach ($this->vars as $k => & $v) {
+            ${$k} = & $v;
         }
 
-        $args = $this->vars;
+        foreach ($vars as $k => & $v) {
+//            $this->vars->$k = $v;
+            ${$k} = & $v;
+        }
+
+//        $args = $this->vars;
 
         // 读取模板
         include $this->getTemplatePath($viewName);

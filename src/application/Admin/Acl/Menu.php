@@ -13,6 +13,13 @@ class Menu
     protected $data;
 
     /**
+     * 未经处理的原始菜单数据
+     *
+     * @var array
+     */
+    protected $list;
+
+    /**
      * 当前菜单数据
      *
      * @var array
@@ -70,6 +77,35 @@ class Menu
     }
 
     /**
+     * 获取所有的按层级排序好的菜单
+     *
+     * @return array
+     */
+    public function all()
+    {
+        $list = query()->from('menu')->where(['deleted' => 0])->read();
+
+        $data = $this->makeTree($list);
+
+        $this->sort($data);
+
+        return $data;
+    }
+
+    protected function & makeTree(& $data, & $id = 0)
+    {
+        $tree = [];
+        foreach ($data as & $v) {
+            if ($v['parent_id'] == $id) { //父亲找到儿子
+                $v['subs'] = $this->makeTree($data, $v['id']);
+                $tree[] = $v;
+            }
+        }
+        return $tree;
+    }
+
+
+    /**
      * 获取按层级排序好的菜单
      *
      * @return array
@@ -80,39 +116,16 @@ class Menu
             return $this->data;
         }
 
-        $this->data = query()->from('menu')->where(['deleted' => 0, 'show' => 1])->read();
+        $this->data = $this->list = query()->from('menu')->where(['deleted' => 0, 'show' => 1])->read();
 
-        $this->level($this->data);
+        $this->data = $this->makeTree($this->data);
 
-        # 如果存在子菜单则根据priority字段排序, priority越小越前面
+        // 如果存在子菜单则根据priority字段排序, priority越小越前面
         $this->sort($this->data);
 
         return $this->data;
     }
 
-    // 递归按层级排序菜单
-    public function level(array & $list, & $id = 0)
-    {
-        static $result = [];
-
-        foreach ($list as & $row) {
-            if (! $this->current && $this->isActive($row['controller'], $row['action'])) {
-                $this->current = $row;
-            }
-
-            if ($row['parent_id'] != $id) {
-                continue;
-            }
-
-            if (isset($result[$row['parent_id']])) {
-                $result[$row['parent_id']]['subs'][] = & $row;
-            } else {
-                $result[$row['id']] = & $row;
-            }
-
-            $this->level($list, $row['id']);
-        }
-    }
 
     protected function sort(array & $lst, $key = 'priority')
     {

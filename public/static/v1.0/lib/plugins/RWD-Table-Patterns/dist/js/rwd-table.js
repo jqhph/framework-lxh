@@ -157,11 +157,6 @@
     };
 
 
-
-
-
-
-
     /**
      * @param activate Forces the displayAll to be active or not. If anything else than bool, it will not force the state so it will toggle as normal.
      * @param trigger Bool to indicate if the displayAllTrigger should be triggered.
@@ -410,6 +405,7 @@
                         }
                       // checkbox has been unchecked
                       else {
+
                             // decrement colSpan if it's not 1 (because colSpan should not be 0)
                             if(parseInt($cell.prop('colSpan'))>1){
                                 $cell.prop('colSpan', parseInt($cell.prop('colSpan')) - 1);
