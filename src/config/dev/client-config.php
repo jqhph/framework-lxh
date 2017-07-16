@@ -54,6 +54,7 @@ $config['public-css'] = [
     's/css/components.css',
     's/css/icons.css',
     's/css/pages.css',
+    's/css/responsive.css'
 //    's/css/bootstrap.min.css'
 ];
 

@@ -1,3 +1,2 @@
-<div class="checkbox checkbox-custom">
-    <input type="checkbox" disabled="disabled" <?php if ($val) echo 'checked="checked"'?>><label></label>
-</div>
+<div class="fields"><div class="checkbox checkbox-danger">
+    <input type="checkbox" disabled <?php if ($val) echo 'checked'?>><label></label></div></div>

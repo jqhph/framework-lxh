@@ -16,11 +16,12 @@
         // <!--Morris Chart CSS -->
 //        load_css('morris', 'lib/plugins/morris');
 
+
         load_css('bootstrap.min');
         // App css
 
         load_css('menu');
-        load_css('responsive');
+//        load_css('responsive');
 
 //        load_js('modernizr.min');
         load_js('jquery.min');
