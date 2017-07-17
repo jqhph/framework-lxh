@@ -5,8 +5,13 @@
  * Date: 2017/6/30
  * Time: 22:34
  */
-load_css('bootstrap.min');
+
 load_css('pages');
+//load_css('responsive');
+
+load_css('components');
+load_css('icons');
+load_css('core');
 
 // 载入当前页js
 if (! empty($loadCurrentJs)) {

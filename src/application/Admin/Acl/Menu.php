@@ -1,6 +1,7 @@
 <?php
 namespace Lxh\Admin\Acl;
 
+use Lxh\Exceptions\Error;
 use Lxh\Helper\Util;
 use Lxh\Kernel\AdminUrlCreator;
 
@@ -93,12 +94,16 @@ class Menu
         return $data;
     }
 
-    protected function & makeTree(& $data, & $id = 0)
+    protected function & makeTree(& $data, & $id = 0, $level = 1)
     {
+        if ($level > 4) {
+            throw new Error("Maximum function nesting level of '$level' reached, aborting!");
+        }
+
         $tree = [];
         foreach ($data as & $v) {
             if ($v['parent_id'] == $id) {
-                $v['subs'] = $this->makeTree($data, $v['id']);
+                $v['subs'] = $this->makeTree($data, $v['id'], $level + 1);
                 $tree[] = $v;
             }
         }

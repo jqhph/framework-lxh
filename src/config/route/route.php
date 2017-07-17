@@ -87,7 +87,7 @@ $config[] = [
 
 $config[] = [
     'pattern' => 'lxhadmin/:controller/view/:id',
-    'method' => '*',
+    'method' => 'GET',
     'params' => [
         'module' => 'Admin',
         'controller' => ':controller',

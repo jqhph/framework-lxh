@@ -17,6 +17,7 @@
     <title><?php echo $language->translateWithGolobal('web-title');?></title>
 
     <?php
+        load_js('jquery.min');
         echo fetch_view('app-js', 'Public', ['loadCurrentJs' => true]);
     ?>
 

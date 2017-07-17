@@ -16,14 +16,9 @@
 
     // var router = new Router(config.options.config, dispatcher)
 
-    function dispatcher(controller, action, params) {
-        // config.options.controller = controller
-        // config.options.action = action
-        // config.options.params = params
-
-        var currentView = parse_view_name(config.options.controller, config.options.action, config.options.config['js-version'])
-
-        config.publicJs.push(currentView)
+    function dispatcher() {
+        // var currentView = parse_view_name(config.options.controller, config.options.action, config.options.config['js-version'])
+        // config.publicJs.push(currentView)
 
         // 设置缓存token
         $cache.setToken(config.options.config['js-version'])
@@ -78,6 +73,14 @@
         $lxh.language().fill(serverOptions.get('language') || null, true)
         // 注入模板数据
         $lxh.tpl().fill(serverOptions.get('tpl') || null, true)
+
+        // 生成table 展示隐藏字段功能按键
+        $('[data-pattern]').each(function () {
+            var $tableScrollWrapper = $(this);
+            if (typeof $tableScrollWrapper.responsiveTable != 'undefined') {
+                $tableScrollWrapper.responsiveTable($tableScrollWrapper.data());
+            }
+        });
         
         call()
     }
@@ -177,12 +180,12 @@
      * @returns {*}
      */
     function get_public_css(publicCss, v) {
-        if (typeof add_css == 'function') {
-            var csss = add_css()
-            for (var i in csss) {
-                publicCss.push(csss[i])
+        if (typeof cssLibArr != 'undefined') {
+            for (var i in cssLibArr) {
+                publicCss.push(cssLibArr[i])
             }
         }
+
         for (i in publicCss) {
             publicCss[i] = publicCss[i] + '?v=' + v
         }
@@ -197,10 +200,9 @@
      * @returns {*}
      */
     function get_public_js(publicJs, version) {
-        if (typeof add_js == 'function') {
-            var jss = add_js()
-            for (var i in jss) {
-                publicJs.push(jss[i])
+        if (typeof jsLibArr != 'undefined') {
+            for (var i in jsLibArr) {
+                publicJs.push(jsLibArr[i])
             }
         }
 

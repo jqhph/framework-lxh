@@ -21,12 +21,14 @@
         // App css
 
         load_css('menu');
-//        load_css('responsive');
 
-//        load_js('modernizr.min');
-        load_js('jquery.min');
+//    'lib/plugins/toastr/toastr.min.css',
+//    's/css/core.css',
+//    's/css/components.css',
+//    's/css/icons.css',
+//    's/css/pages.css',
+//    's/css/responsive.css'
 
-        echo fetch_view('app-js', 'Public');
     ?>
 
     <!-- HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -38,6 +40,33 @@
 
 
 </head>
+<script>
+    // 添加需要引入的js
+    window.jsLibArr = []
+    function add_js(data)
+    {
+        if (typeof data == 'string') {
+            jsLibArr.push(data)
+        } else {
+            for (var i in data) {
+                jsLibArr.push(data[i])
+            }
+        }
+    }
+
+    // 添加需要引入的css
+    window.cssLibArr = []
+    function add_css(data)
+    {
+        if (typeof data == 'string') {
+            cssLibArr.push(data)
+        } else {
+            for (var i in data) {
+                cssLibArr.push(data[i])
+            }
+        }
+    }
+</script>
 <body class="fixed-left">
     <!-- Begin page -->
     <div id="wrapper">
@@ -57,4 +86,4 @@
             <!-- Start content -->
             <div class="content">
                 <div class="container">
-                    <div style="height:15px;"></div>
+                    <div style="height:8px;"></div>

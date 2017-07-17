@@ -122,7 +122,7 @@
         this.$btnToolbar = $('<div class="btn-toolbar" />');
 
         this.$dropdownGroup = $('<div class="btn-group dropdown-btn-group pull-right" />');
-        this.$dropdownBtn = $('<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Display <span class="caret"></span></button>');
+        this.$dropdownBtn = $('<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">' + trans('Display') + ' <span class="caret"></span></button>');
         this.$dropdownContainer = $('<ul class="dropdown-menu"/>');
 
         // Focus btn
@@ -131,7 +131,7 @@
          // Display-all btn
         if(this.options.addDisplayAllBtn) {
             // Create display-all btn
-            this.$displayAllBtn = $('<button class="btn btn-default">Display all</button>');
+            this.$displayAllBtn = $('<button class="btn btn-default">' + trans('Display all') + '</button>');
             // Add display-all btn to dropdown-btn-group
             this.$dropdownGroup.append(this.$displayAllBtn);
 
@@ -563,12 +563,12 @@
     // RESPONSIVE TABLE DATA-API
     // ==================
 
-    $(document).on('ready.responsive-table.data-api', function () {
-        $('[data-pattern]').each(function () {
-            var $tableScrollWrapper = $(this);
-            $tableScrollWrapper.responsiveTable($tableScrollWrapper.data());
-        });
-    });
+    // $(document).on('ready.responsive-table.data-api', function () {
+    //     $('[data-pattern]').each(function () {
+    //         var $tableScrollWrapper = $(this);
+    //         $tableScrollWrapper.responsiveTable($tableScrollWrapper.data());
+    //     });
+    // });
 
 
     // DROPDOWN
@@ -598,7 +598,7 @@
     }
 
 
-    $(document).ready(function() {
+    // $(document).ready(function() {
         // Change `no-js` to `js`
         $('html').removeClass('no-js').addClass('js');
 
@@ -615,5 +615,5 @@
         } else {
             $('html').addClass('no-touch');
         }
-    });
+    // });
 })(jQuery);

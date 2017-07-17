@@ -155,8 +155,12 @@ function($) {
      //on doc load
     App.prototype.onDocReady = function(e) {
       FastClick.attach(document.body);
-      resizefunc.push("initscrolls");
-      resizefunc.push("changeptype");
+        if (typeof resizefunc == 'undefined') {
+            window.resizefunc = []
+        }
+        resizefunc.push("initscrolls");
+        resizefunc.push("changeptype");
+
 
       $('.animate-number').each(function(){
         $(this).animateNumbers($(this).attr("data-value"), true, parseInt($(this).attr("data-duration")));

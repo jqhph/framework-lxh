@@ -8,6 +8,7 @@
 
 namespace Lxh\Admin\Controller;
 
+use Lxh\Exceptions\Forbidden;
 use Lxh\MVC\Controller;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
@@ -18,6 +19,21 @@ class Menu extends Controller
     {
     }
 
+    /**
+     * 详情页
+     *
+     * @return array
+     */
+    public function actionDetail(Request $req, Response $resp, & $params)
+    {
+        if (empty($params['id'])) {
+            throw new Forbidden();
+        }
+        $id = $params['id'];
+
+
+        return fetch_complete_view();
+    }
 
     public function actionIndex()
     {

@@ -157,7 +157,9 @@ class Response extends PsrResponse
 	 */
 	public function send()
 	{
-	    $this->container->make('events')->fire('response.send.before', [$this->request, $this]);
+		$events = $this->container->make('events');
+
+		$events->fire('response.send.before', [$this->request, $this]);
 
 		$this->sendHeader();
 
@@ -167,12 +169,15 @@ class Response extends PsrResponse
 			echo $this->data;
 		}
 
-        $this->container->make('events')->fire('response.send.after', [$this->request, $this]);
+		$events->fire('response.send.after', [$this->request, $this]);
 
 		$controllerManager = $this->container->make('controller.manager');
 
 		// 非生产环境和非命令行环境则输出控制台调试日志
-		if (! is_prod() && ! $this->request->isCli() && config('response-console-log', true) && ! $this->request->isAjax() && $controllerManager->controllerName() != 'Js') {
+		if (
+			! is_prod() && ! $this->request->isCli() && config('response-console-log', true) && ! $this->request->isAjax()
+			&& $controllerManager->controllerName() != 'Js'
+		) {
 			echo Console::fetch();
 		}
 	}
