@@ -102,6 +102,11 @@ class Menu
 
         $tree = [];
         foreach ($data as & $v) {
+            // 存储当前菜单
+            if (! $this->current && $this->isActive($v['controller'], $v['action'])) {
+                $this->current = $v;
+            }
+
             if ($v['parent_id'] == $id) {
                 $v['subs'] = $this->makeTree($data, $v['id'], $level + 1);
                 $tree[] = $v;

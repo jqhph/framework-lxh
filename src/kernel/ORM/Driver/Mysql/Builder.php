@@ -439,7 +439,7 @@ class Builder extends Base
             throw new InternalServerError('Can not found table name.');
         }
 
-        $res = $this->getConnection()->one($this->querySql(), $this->whereData);
+        $res = $this->getConnection()->one($this->querySql() . ' LIMIT 1', $this->whereData);
         
         $this->clear();
         

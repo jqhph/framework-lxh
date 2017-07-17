@@ -31,6 +31,12 @@ class Menu extends Controller
         }
         $id = $params['id'];
 
+        $row = query()->from('Menu')->where('id', $id)->findOne();
+
+        $menus = make('acl-menu')->all();
+
+        assign('row', $row);
+        assign('menus', $menus);
 
         return fetch_complete_view();
     }

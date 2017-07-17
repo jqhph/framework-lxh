@@ -42,22 +42,20 @@
 </head>
 <script>
     // 添加需要引入的js
-    window.jsLibArr = []
-    function add_js(data)
-    {
+    window.jsLibArr = {}
+    function add_js(data) {
         if (typeof data == 'string') {
-            jsLibArr.push(data)
+            jsLibArr[data] = data
         } else {
             for (var i in data) {
-                jsLibArr.push(data[i])
+                jsLibArr[i] = data[i]
             }
         }
     }
 
     // 添加需要引入的css
     window.cssLibArr = []
-    function add_css(data)
-    {
+    function add_css(data) {
         if (typeof data == 'string') {
             cssLibArr.push(data)
         } else {

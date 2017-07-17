@@ -23,10 +23,6 @@
 <?php
 
 load_js('jquery.min');
-load_js('bootstrap.min');
-load_js('fastclick');
-load_js('detect');
-load_js('jquery.slimscroll');
 
 echo fetch_view('app-js', 'Public');
 // <!-- jQuery  -->

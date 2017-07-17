@@ -17,7 +17,10 @@
     <title><?php echo $language->translateWithGolobal('web-title');?></title>
 
     <?php
+        load_css('bootstrap.min');
+
         load_js('jquery.min');
+
         echo fetch_view('app-js', 'Public', ['loadCurrentJs' => true]);
     ?>
 

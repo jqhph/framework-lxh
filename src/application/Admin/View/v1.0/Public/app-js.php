@@ -13,6 +13,11 @@ load_css('components');
 load_css('icons');
 load_css('core');
 
+load_js('bootstrap.min');
+load_js('fastclick');
+load_js('detect');
+load_js('jquery.slimscroll');
+
 // 载入当前页js
 if (! empty($loadCurrentJs)) {
     echo fetch_view(__ACTION__ . '-Js');
