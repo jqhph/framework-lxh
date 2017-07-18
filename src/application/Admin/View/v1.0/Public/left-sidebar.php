@@ -34,15 +34,14 @@ $menu = make('acl-menu');
 <!--                <li class="text-muted menu-title">Navigation</li>-->
 
                 <li>
-                    <a href="/" class="waves-effect
-                    <?php if ($menu->isActive('Index', 'Index')) echo 'active';?>
-                    "><i class="zmdi zmdi-view-dashboard"></i> <span>
+                    <a href="<?php echo Lxh\Kernel\AdminUrlCreator::makeHome();?>" class="waves-effect
+                    <?php if ($menu->isActive('Index', 'Index')) echo 'active';?> "><i class="zmdi zmdi-view-dashboard"></i> <span>
                             <?php echo trans('Home');?> </span> </a>
                 </li>
 
                 <?php foreach ($menu->get() as & $m) { ?>
                 <li class="has_sub">
-                    <a href="<?php echo empty($m['subs']) ? $menu->makeUrl($m['controller'], $m['action']) : 'javascript:void(0);';?>"
+                    <a href="<?php echo empty($m['subs']) ? $m['url'] : 'javascript:void(0);';?>"
                        class="waves-effect <?php if ($menu->isActive($m['controller'], $m['action'])) echo 'active';?>">
                         <i class="<?php echo $m['icon'];?>"></i>
                         <span><?php echo trans_with_global($m['name'], 'menu');?></span>
@@ -56,7 +55,7 @@ $menu = make('acl-menu');
                         <?php foreach ($m['subs'] as & $sub) { ?>
                         <li>
                             <a class="<?php if ($menu->isActive($sub['controller'], $sub['action'])) echo 'active';?>"
-                               href="<?php echo $menu->makeUrl($sub['controller'], $sub['action'])?>"><?php echo trans_with_global($sub['name'], 'menu');?></a></li>
+                               href="<?php echo $sub['url'];?>"><?php echo trans_with_global($sub['name'], 'menu');?></a></li>
                         <?php } ?>
                     </ul>
                     <?php } ?>

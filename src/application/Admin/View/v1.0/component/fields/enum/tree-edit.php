@@ -1,7 +1,7 @@
 <div class="form-group">
     <label class="col-md-2 control-label"><?php echo trans($label, 'fields'); ?></label>
     <div class="col-md-8">
-        <select class="form-control">
+        <select name="<?php echo $name;?>" class="form-control">
             <option value="0" ><?php echo trans_with_global('Top level');?></option>
             <?php foreach ($list as & $v) {
                 if ($v['id'] == $id) continue;

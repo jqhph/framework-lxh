@@ -437,7 +437,7 @@ window.Lxh = function (options) {
      * @returns {FormValidator}
      */
     function validator(options, call, selector) {
-        selector = selector || 'form'
+        selector = selector || ('.' + $lxh.controllerName() + '-form')
 
         var self = this
 
@@ -468,6 +468,7 @@ window.Lxh = function (options) {
 
                     if (element && element !== undefined) {
                         element.onfocus = element.onkeyup = function (e) {
+
                             v._validateForm(e)
                         }
                     }
@@ -1184,7 +1185,7 @@ window.Lxh = function (options) {
                     case 'add':
                         return store.apiPrefix + store.name
                     case 'edit':
-                        return store.apiPrefix + store.name + '/' + self.get('id')
+                        return store.apiPrefix + store.name + '/view/' + self.get('id')
                     case 'delete':
                         var id = self.get('id')
                         if (id) {

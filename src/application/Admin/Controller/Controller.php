@@ -11,9 +11,37 @@ namespace Lxh\Admin\Controller;
 use Lxh\MVC\Controller as LxhController;
 use Lxh\Status;
 use Lxh\Helper\Valitron\Validator;
+use Lxh\Http\Request;
+use Lxh\Http\Response;
 
 class Controller extends LxhController
 {
+
+    /**
+     * 修改数据接口
+     *
+     * @return array
+     */
+    public function actionUpdate(Request $req, Response $resp, & $params)
+    {
+        $validator = $this->validator();
+
+        $this->updateValidate($_POST, $validator);
+
+        return $params;
+    }
+
+    /**
+     * 修改前字段验证
+     *
+     * @param  array
+     * @return bool
+     */
+    protected function updateValidate(array & $fields, Validator $validator)
+    {
+
+    }
+
     /**
      * 返回数据到web
      *

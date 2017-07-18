@@ -22,6 +22,11 @@ class AdminUrlCreator
         return "/{$pre}/$controller/$action";
     }
 
+    public static function makeHome()
+    {
+        return "/lxhadmin";
+    }
+
     /**
      * 生成读取视图详情url
      */

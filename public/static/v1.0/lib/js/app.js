@@ -25,7 +25,7 @@
 
         config.options.cache = $cache
         // 处理需要加载的js数组
-        config.publicJs = get_public_js(config.publicJs)
+        config.publicJs = get_public_js(config.publicJs, config.options.config['js-version'])
         // 处理需要加载的js数组
         config.publicCss = get_public_css(config.publicCss, config.options.config['js-version'])
 
@@ -84,37 +84,6 @@
         
         call()
     }
-
-    /**
-     * Convert name from Camel Case format to underscore.
-     * ex. camelCase to camel_case
-     *
-     * @param string
-     * @return string
-     */
-    function to_under_score(str) {
-        str = str.replace(/([A-Z])/g, function (full, match) {
-            return '_' + match.toLowerCase()
-        })
-        if (str.indexOf('_') === 0) {
-            return str.replace('_', '')
-        }
-        return str
-    }
-
-    /**
-     * 解析视图路径名
-     *
-     * @param c controller
-     * @param a action
-     * @returns {*}
-     */
-    function parse_view_name(c, a, v) {
-        return 'module/' + to_under_score(c) + '/' + to_under_score(a) + '.js?v=' + v
-
-    }
-    window.to_under_score = to_under_score
-    window.parse_view_name = parse_view_name
 
     function get_lang_cache_key(lang) {
         return 'language_' + lang
@@ -202,7 +171,7 @@
     function get_public_js(publicJs, version) {
         if (typeof jsLibArr != 'undefined') {
             for (var i in jsLibArr) {
-                publicJs.push(jsLibArr[i])
+                publicJs.push(jsLibArr[i] + '.js?v=' + version)
             }
         }
 

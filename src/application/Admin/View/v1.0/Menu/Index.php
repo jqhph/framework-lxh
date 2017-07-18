@@ -1,3 +1,7 @@
+<!-- Top Bar Start -->
+<?php echo fetch_view('top-bar', 'Public')?>
+<!-- Top Bar End -->
+
 <!--col-sm-12-->
 <div class="">
     <div class="card-box">

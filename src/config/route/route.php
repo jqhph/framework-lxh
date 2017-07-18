@@ -19,6 +19,16 @@ $config[] = [
 ];
 
 $config[] = [
+    'pattern' => '/lxhadmin',
+    'method' => 'GET',
+    'params' => [
+        'module' => 'Admin',
+        'controller' => 'Index',
+        'action' => 'Index'
+    ]
+];
+
+$config[] = [
     'pattern' => '/Register',
     'method' => 'GET',
     'params' => [
@@ -49,6 +59,17 @@ $config[] = [
         'controller' => 'Js',
         'action' => 'Entrance',
         'type' => ':type'
+    ]
+];
+
+$config[] = [
+    'pattern' => '/api/:controller/view/:id',
+    'method' => 'PUT',
+    'params' => [
+        'module' => 'Admin',
+        'controller' => ':controller',
+        'action' => 'Update',
+        'id' => ':id'
     ]
 ];
 

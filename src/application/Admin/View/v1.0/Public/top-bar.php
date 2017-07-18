@@ -2,9 +2,11 @@
 
     <!-- LOGO -->
     <div class="topbar-left">
-        <a href="index.html" class="logo"><span>L<span>xh</span></span><i class="zmdi zmdi-layers"></i></a>
+        <a href="<?php echo Lxh\Kernel\AdminUrlCreator::makeHome();?>" class="logo"><span>L<span>xh</span></span><i class="zmdi zmdi-layers"></i></a>
     </div>
-
+    <style>
+        .page-title a{color:#505458}
+    </style>
     <!-- Button mobile view to collapse sidebar menu -->
     <div class="navbar navbar-default" role="navigation">
         <div class="container">
@@ -17,7 +19,7 @@
                     </button>
                 </li>
                 <li>
-                    <h4 class="page-title"><?php echo make('acl-menu')->makeNav();?></h4>
+                    <h5 class="page-title"><?php echo empty($nav) ? make('acl-menu')->makeNav() : $nav;?></h5>
                 </li>
             </ul>
 
@@ -42,7 +44,7 @@
                 </li>
                 <li class="hidden-xs">
                     <form role="search" class="app-search">
-                        <input type="text" placeholder="Search..."
+                        <input type="text" placeholder="<?php echo trans_with_global('Search');?>..."
                                class="form-control">
                         <a href=""><i class="fa fa-search"></i></a>
                     </form>
@@ -52,3 +54,6 @@
         </div><!-- end container -->
     </div><!-- end navbar -->
 </div>
+<!--<ol class="breadcrumb">-->
+<!--    <li><a href="#">Menu management</a></li><li>Modify menu</li>-->
+<!--</ol>-->

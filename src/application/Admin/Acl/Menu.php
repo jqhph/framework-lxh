@@ -45,13 +45,42 @@ class Menu
         }
 
         $last = trans_with_global($this->current['name'], 'menu');
-        if ($this->current['layer'] == 1) {
-            return $last;
-        }
+//        if ($this->current['layer'] == 1) {
+        return $last;
+//        }
 
         $prevUrl = $this->makeUrl($this->data[$this->current['id']]['controller'], $this->data[$this->current['id']]['action']);
 
         return "<a href='$prevUrl'>" . trans_with_global($this->data[$this->current['id']]['name'], 'menu') . "</a> / $last";
+    }
+
+    /**
+     * 根据id获取菜单名称生成导航标题
+     *
+     * @param  string | int $condition
+     * @return string
+     */
+    public function makeNavByNameOrId($condition)
+    {
+        $select = [];
+        foreach ($this->list as & $m) {
+            if ($m['name'] == $condition || $m['id'] == $condition) {
+                $select = & $m;
+                break;
+            }
+        }
+
+        $url = $this->makeUrl($select['controller'], $select['action']);
+
+        $nav = "<a href='$url'>" . trans_with_global($select['name'], 'menu') . "</a>";
+
+        if ($select['parent_id']) {
+            $parent = $this->makeNavByNameOrId($select['parent_id']);
+
+            return $parent . ' / ' . $nav;
+        }
+
+        return $nav;
     }
 
     /**
@@ -102,6 +131,8 @@ class Menu
 
         $tree = [];
         foreach ($data as & $v) {
+            $v['url'] = $this->makeUrl($v['controller'], $v['action']);
+
             // 存储当前菜单
             if (! $this->current && $this->isActive($v['controller'], $v['action'])) {
                 $this->current = $v;

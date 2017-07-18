@@ -9,14 +9,26 @@
 namespace Lxh\Admin\Controller;
 
 use Lxh\Exceptions\Forbidden;
-use Lxh\MVC\Controller;
+//use Lxh\MVC\Controller;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
+use Lxh\Helper\Valitron\Validator;
 
 class Menu extends Controller
 {
     public function __construct()
     {
+    }
+
+    /**
+     * 修改前字段验证
+     *
+     * @param  array
+     * @return bool
+     */
+    protected function updateValidate(array & $fields, Validator $validator)
+    {
+
     }
 
     /**
