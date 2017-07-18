@@ -4,8 +4,8 @@
         <button class="btn btn-primary waves-effect waves-light" type="submit">
             <?php echo trans_with_global('Save');?>
         </button>
-        <button type="reset" class="btn btn-default waves-effect waves-light m-l-5">
+        <a href="<?php echo empty($back) ? '#' : $back;?>" type="reset" class="btn btn-default waves-effect waves-light m-l-5">
             <?php echo trans_with_global('Cancel');?>
-        </button>
+        </a>
     </div>
 </div>

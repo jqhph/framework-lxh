@@ -1,6 +1,8 @@
 <!-- Top Bar Start -->
 <?php
 
+use Lxh\Kernel\AdminUrlCreator;
+
 $currentTitle = trans('Modify menu');
 
 echo fetch_view('top-bar', 'Public', ['nav' => $currentTitle])?>
@@ -10,7 +12,7 @@ echo fetch_view('top-bar', 'Public', ['nav' => $currentTitle])?>
 <div class="row">
     <div class="col-sm-12">
         <div class="card-box">
-            <br/>
+            <h4 class="header-title m-t-0 m-b-30"><?php echo trans_with_global('Primary');?></h4>
 
             <div class="row">
                 <form class="form-horizontal Menu-form" role="form">
@@ -37,7 +39,7 @@ echo fetch_view('top-bar', 'Public', ['nav' => $currentTitle])?>
 
                         <?php echo component_view('fields/bool/edit', ['name' => 'show', 'label' => 'show', 'value' => $row['show']]); ?>
 
-                        <?php echo component_view('detail-button');?>
+                        <?php echo component_view('detail-button', ['back' => AdminUrlCreator::makeAction('Menu', 'Index')]);?>
                     </div><!-- end col -->
 
                 </form>

@@ -26,18 +26,30 @@ class Controller extends LxhController
     {
         $validator = $this->validator();
 
-        $this->updateValidate($_POST, $validator);
+        $data = json_decode(file_get_contents('php://input'), true);
 
-        return $params;
+        if (! $data) {
+            return $this->error();
+        }
+
+        if ($msg = $this->updateValidate($params['id'], $data, $validator)) {
+            return $this->error($msg);
+        }
+
+        if (! $validator->validate()) {
+            return $this->error($validator->errors());
+        }
+
+        return $data;
     }
 
     /**
      * 修改前字段验证
      *
      * @param  array
-     * @return bool
+     * @return array
      */
-    protected function updateValidate(array & $fields, Validator $validator)
+    protected function updateValidate($id, array & $fields, Validator $validator)
     {
 
     }

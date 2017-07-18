@@ -86,7 +86,7 @@ class Validator
      * @param  string                    $langDir
      * @throws \InvalidArgumentException
      */
-    public function fill(array $data)
+    public function fill(array & $data)
     {
     	$this->reset();
     	// Allows filtering of used input fields against optional second array of field names allowed
@@ -136,14 +136,14 @@ class Validator
      */
     protected function validateRequired($field, $value)
     {
-    	return ! empty($value);
-//         if (is_null($value)) {
-//             return false;
-//         } elseif (is_string($value) && trim($value) === '') {
-//             return false;
-//         }
+//    	return $value !== null;
+         if (is_null($value)) {
+             return false;
+         } elseif (trim($value) === '') {
+             return false;
+         }
 
-//         return true;
+         return true;
     }
 
     /**

@@ -24,11 +24,29 @@ class Menu extends Controller
      * 修改前字段验证
      *
      * @param  array
-     * @return bool
+     * @return mixed
      */
-    protected function updateValidate(array & $fields, Validator $validator)
+    protected function updateValidate($id, array & $fields, Validator $validator)
     {
+        if ($fields['parent_id'] == $id) {
+            return trans('Can\'t put self as a parent');
+        }
 
+        $validator->fill($fields);
+
+        $validator->rule('lengthBetween', 'icon', 4, 30);
+
+        $validator->rule('lengthBetween', 'password', 4, 30);
+
+        $validator->rule('lengthBetween', 'name', 4, 30);
+
+        $validator->rule('lengthBetween', 'controller', 1, 15);
+
+        $validator->rule('lengthBetween', 'action', 1, 15);
+
+        $validator->rule('required', 'parent_id');
+
+        $validator->rule('integer', 'priority');
     }
 
     /**

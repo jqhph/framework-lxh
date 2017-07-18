@@ -30,10 +30,6 @@ define([], function () {
         var model = $lxh.createModel('Menu')
         var notify = $lxh.ui().notify()
 
-        var data = $lxh.form().get('.Menu-form')
-
-        model.set('id', data.id)
-
         function submit(e) {
             if (! model.requestEnded()) {
                 return

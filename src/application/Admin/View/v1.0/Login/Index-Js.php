@@ -17,7 +17,7 @@ function lxh_action(plugIns) {
             rules: 'length_between[4-30]'
         },
 
-    ], submit)
+    ], submit, '.User-form')
 
     var model = $lxh.createModel('User')
     var notify = $lxh.ui().notify()

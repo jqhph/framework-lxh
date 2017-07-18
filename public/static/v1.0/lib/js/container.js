@@ -10,11 +10,14 @@ window.Lxh = function (options) {
      * @constructor
      */
     function Container(options) {
-        var self = this, config, cache, store, user, language, view, ui, env, tpl, router
+        var self = this, config, cache, store, user, language, view, ui, env, tpl, util
 
         function init() {
             // 配置文件管理
             config = new Store(options.config || {})
+
+            // 工具函数管理
+            util = new Util()
 
             // 缓存管理
             cache = options.cache
@@ -150,15 +153,11 @@ window.Lxh = function (options) {
             return tpl
         }
 
-        /**
-         * 代理seajs define函数
-         *
-         * @param deps 依赖的组件，必须是一个数组
-         * @param callback 回调函数
-         */
-        this.define = function (deps, callback) {
-            view.call(deps, callback)
+        this.util = function () {
+            return util
         }
+
+
 
         // 初始化
         init()
@@ -263,6 +262,76 @@ window.Lxh = function (options) {
      |
      ---------------------------------------------------------------------------------------
     */
+
+    /**
+     * -------------------------------------------------------------------------------------
+     * 工具函数集合
+     *
+     * @returns {{}}
+     * @constructor
+     */
+    function Util() {
+        return {
+            /**
+             * 比较两个对象是否一致
+             *
+             * @param x
+             * @param y
+             * @returns {boolean}
+             */
+            cmp: function (x, y) {
+                // If both x and y are null or undefined and exactly the same
+                if (x === y) {
+                    return true;
+                }
+
+                // If they are not strictly equal, they both need to be Objects
+                if (!( x instanceof Object ) || !( y instanceof Object )) {
+                    return false;
+                }
+
+                //They must have the exact same prototype chain,the closest we can do is
+                //test the constructor.
+                if (x.constructor !== y.constructor) {
+                    return false;
+                }
+
+                for (var p in x) {
+                    //Inherited properties were tested using x.constructor === y.constructor
+                    if (x.hasOwnProperty(p)) {
+                        // Allows comparing x[ p ] and y[ p ] when set to undefined
+                        if (!y.hasOwnProperty(p)) {
+                            return false;
+                        }
+
+                        // If they have the same strict value or identity then they are equal
+                        if (x[p] === y[p]) {
+                            continue;
+                        }
+
+                        // Numbers, Strings, Functions, Booleans must be strictly equal
+                        if (typeof( x[p] ) !== "object") {
+                            return false;
+                        }
+
+                        // Objects and Arrays must be tested recursively
+                        if (!Object.equals(x[p], y[p])) {
+                            return false;
+                        }
+                    }
+                }
+
+                for (p in y) {
+                    // allows x[ p ] to be set to undefined
+                    if (y.hasOwnProperty(p) && !x.hasOwnProperty(p)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+    }
+    // --------------------------------------UI END-----------------------------------------------
 
 
     /**
@@ -854,6 +923,11 @@ window.Lxh = function (options) {
             attrs: {},
 
             /**
+             * 初始数据
+             */
+            initialData: {},
+
+            /**
              * 项目模块名称
              *
              * @type {string}
@@ -968,6 +1042,8 @@ window.Lxh = function (options) {
 
         store.formHandler = container.form()
         store.name = name
+        // 保存初始数据
+        store.initialData = store.formHandler.get(get_form_selector())
 
         /**
          * 设置模型属性值
@@ -1062,13 +1138,20 @@ window.Lxh = function (options) {
             store.api = api || store.api
             // 标记请求开始
             store.isRequsting = true
+
+            var data = util.getData()
+
+            if (store.method.toLocaleUpperCase() == 'PUT') {
+                data = JSON.stringify(data)
+            }
+
             $.ajax({
                 url: store.api,
                 ifModified: false,
                 type: store.method,
                 cache: true,
                 async: true,
-                data: util.getData(),
+                data: data,
                 timeout: store.timeout,
                 success: function(data) {
                     // 标记请求结束
@@ -1117,6 +1200,13 @@ window.Lxh = function (options) {
          *
          */
         this.edit = function () {
+            // 判断是否有修改过表单内容
+            if (container.util().cmp(store.initialData, store.formHandler.get(get_form_selector())) === true) {
+                var notify = container.ui().notify()
+                notify.remove()
+                return notify.warning(trans('Nothing has been change.'))
+            }
+
             return this.request(util.parseApi('edit'), 'PUT')
         }
 
@@ -1149,7 +1239,7 @@ window.Lxh = function (options) {
         /**
          * 工具类
          *
-         * @type {{getData: util.getData, parseApi: util.parseApi, getFormSelector: util.getFormSelector}}
+         * @type {{getData: util.getData, parseApi: util.parseApi}}
          */
         var util = {
             /**
@@ -1164,7 +1254,7 @@ window.Lxh = function (options) {
                     return data
                 }
 
-                data = store.formHandler.get(this.getFormSelector())
+                data = store.formHandler.get(get_form_selector())
 
                 for (var i in data) {
                     self.set(i, data[i])
@@ -1185,7 +1275,8 @@ window.Lxh = function (options) {
                     case 'add':
                         return store.apiPrefix + store.name
                     case 'edit':
-                        return store.apiPrefix + store.name + '/view/' + self.get('id')
+                        var id = self.get('id') || store.formHandler.get(get_form_selector()).id
+                        return store.apiPrefix + store.name + '/view/' + id
                     case 'delete':
                         var id = self.get('id')
                         if (id) {
@@ -1201,14 +1292,15 @@ window.Lxh = function (options) {
                 }
             },
 
-            /**
-             * 获取表单选择器
-             *
-             * @returns {string}
-             */
-            getFormSelector: function () {
-                return store.formSelector || (store.formSelector = '.' + store.name + '-form')
-            },
+        }
+
+        /**
+         * 获取表单选择器
+         *
+         * @returns {string}
+         */
+        function get_form_selector () {
+            return store.formSelector || (store.formSelector = '.' + store.name + '-form')
         }
     }
     // --------------------------------------Model END-----------------------------------------------
