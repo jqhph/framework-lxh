@@ -145,4 +145,69 @@ class Util
         self::quickSort($sort, $k, $j + 1, $end);
     }
 
+    /**
+     * 把php数据转化成文本形式，并以"return"形式返回
+     *
+     * @param array $array
+     * @return string
+     */
+    public static function arrayToReturnText(array & $array)
+    {
+        return "<?php \nreturn " . static::arrayToText($array) . ";\n";
+    }
+
+    /**
+     * 把php数据转化成文本形式
+     *
+     * @param array $array
+     * @param int $level
+     * @return string
+     */
+    public static function arrayToText(array & $array, $level = 1)
+    {
+        $start = '[';
+        $end   = ']';
+
+        $txt = "$start\n";
+
+        foreach ($array as $k => & $v) {
+            if (is_array($v)) {
+                $pre = is_string($k) ? "'$k' => " : '';
+
+                $txt .= "\n" . static::makeBlank($level) . $pre . static::arrayToText($v, $level + 1) . ',';
+
+                continue;
+            }
+            $t = $v;
+
+            if ($v === true) {
+                $t = 'true';
+            } elseif ($v === false) {
+                $t = 'false';
+            } elseif ($v === null) {
+                $t = 'null';
+            } elseif (is_string($v)) {
+                $t = "'$v'";
+            }
+
+            $pre = is_string($k) ? "'$k' => " : '';
+
+            $txt .= static::makeBlank($level) . "{$pre}{$t},\n";
+        }
+
+        $txt = rtrim($txt, "\n");
+
+        return "$txt\n" . static::makeBlank($level - 1) . "$end";
+    }
+
+    // 输出空格（4个空格缩进）
+    public static function makeBlank($level)
+    {
+        $txt = '';
+        for ($i = 0; $i < $level; $i ++) {
+            $txt .= '    ';
+        }
+        return $txt;
+    }
+
 }

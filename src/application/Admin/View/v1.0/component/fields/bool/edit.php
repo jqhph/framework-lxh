@@ -1,4 +1,4 @@
-<div class="form-group">
+<div class="form-group clearfix">
     <label class="col-md-2 control-label"><?php echo trans($label, 'fields'); ?></label>
     <div class="col-md-8">
         <div class="checkbox checkbox-danger">

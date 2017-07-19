@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2017-07-16 22:01:31
+Date: 2017-07-20 00:28:46
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -34,19 +34,15 @@ CREATE TABLE `menu` (
   `type` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1普通菜单，2系统菜单，不能被删除或修改',
   `priority` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '排序权重值，值越小排序越靠前',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of menu
 -- ----------------------------
-INSERT INTO `menu` VALUES ('1', 'Menu management', 'zmdi zmdi-menu', '1', '0', '1', 'Menu', 'Index', '0', '1500180853', '1', '1', '0');
-INSERT INTO `menu` VALUES ('3', 'test', 'wew', '1', '0', '1', 'Test', '', '0', '0', '1', '1', '0');
-INSERT INTO `menu` VALUES ('2', 'test2', 'werr', '1', '3', '1', 'Test', 'Index', '0', '0', '1', '1', '0');
-INSERT INTO `menu` VALUES ('5', 'ttt', 'eee', '1', '0', '1', '', '', '0', '0', '1', '1', '0');
-INSERT INTO `menu` VALUES ('6', 'test3', 'qq', '1', '3', '1', '', '', '0', '0', '1', '1', '0');
-INSERT INTO `menu` VALUES ('8', 'test32', 'sdf', '1', '6', '1', '', '', '0', '0', '1', '1', '0');
-INSERT INTO `menu` VALUES ('9', 'test44', '123', '1', '6', '1', '', '', '0', '0', '1', '1', '0');
-INSERT INTO `menu` VALUES ('10', 'test4', '232', '1', '3', '1', '', '', '0', '0', '1', '1', '0');
+INSERT INTO `menu` VALUES ('1', 'Menu management', 'zmdi zmdi-menu', '1', '0', '1', 'Menu', 'Index', '0', '1500180853', '1', '2', '0');
+INSERT INTO `menu` VALUES ('13', 'System', 'zmdi zmdi-settings', '1', '0', '1', 'System', '0', '0', '1500466810', '1', '1', '0');
+INSERT INTO `menu` VALUES ('14', 'Making modules', 'zmdi zmdi-widgets', '1', '13', '1', 'System', 'MakeModules', '0', '1500467096', '1', '1', '0');
+INSERT INTO `menu` VALUES ('15', 'Create reports', 'zmdi zmdi-view-list', '1', '13', '1', 'System', 'CreateReports', '0', '1500467299', '1', '1', '0');
 
 -- ----------------------------
 -- Table structure for role

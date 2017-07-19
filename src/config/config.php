@@ -39,7 +39,7 @@ $config['add-config-name'] = [
 
 // 模块设定, 支持多模块, 多个用数组表示
 // 如果设置了多模块, 且没有开启子域名部署, 配置路由的时候默认指向第一个模块, 如需走第二个模块需要在路由配置中使用"module"参数指定
-$config['modules'] = ['Admin', 'Home', 'Api'];
+$config['modules'] = ['Admin', 'Home'];
 
 // 开启子域名部署
 $config['domain-deploy'] = false;
