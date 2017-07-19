@@ -1,12 +1,22 @@
 <!-- Top Bar Start -->
-<?php echo fetch_view('top-bar', 'Public')?>
+<?php
+
+use Lxh\Kernel\AdminUrlCreator;
+
+echo fetch_view('top-bar', 'Public')?>
 <!-- Top Bar End -->
 
 <!--col-sm-12-->
 <div class="">
     <div class="card-box">
-
         <div class="table-rep-plugin">
+            <div class="btn-toolbar" >
+                <div class="btn-group dropdown-btn-group pull-right">
+                    <a href="<?php echo AdminUrlCreator::makeAction('Create'); ?>" data-action="create-row" class="btn btn-primary"><?php echo trans('Create Menu'); ?></a>
+                </div>
+
+            </div>
+
             <div class="table-responsive" data-pattern="priority-columns">
                 <table id="tech-companies-1" class="table  table-striped">
                     <thead>

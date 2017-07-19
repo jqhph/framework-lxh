@@ -45,7 +45,8 @@ define(['css/sweet-alert.css', 'lib/js/sweet-alert.min'], function () {
                 model.delete()
             });
 
-        }
+        },
+        
     }
 
     // 绑定删除事件

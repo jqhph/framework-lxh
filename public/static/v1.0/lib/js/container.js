@@ -1053,6 +1053,7 @@ window.Lxh = function (options) {
                  * @param data
                  */
                 failed: function (data) {
+                    swal.close() // 关闭提示窗
                     notify.remove()
                     notify.error(trans(data.msg, 'tip'))
                 },
@@ -1253,6 +1254,17 @@ window.Lxh = function (options) {
             }
 
             return this.request(util.parseApi('edit'), 'PUT')
+        }
+
+        /**
+         * 保存数据，根据是否存在id判断是新增操作还是修改操作
+         */
+        this.save = function () {
+            var data = store.formHandler.get(get_form_selector())
+            if (data.id) {
+                return this.edit()
+            }
+            return this.add()
         }
 
         /**

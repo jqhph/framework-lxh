@@ -26,8 +26,8 @@ define([''], function () {
                 $lxh.redirect($lxh.url().makeAction('Index'), 500)
             })
 
-           // 发起修改操作
-           model.edit()
+           // 发起修改或新增操作
+           model.save()
 
         }
     }

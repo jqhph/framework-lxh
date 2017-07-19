@@ -13,6 +13,12 @@ use Lxh\MVC\Model;
 
 class Menu extends Model
 {
+
+    protected function beforeAdd(array & $data)
+    {
+        print_r($data);die;
+    }
+
     // 保存数据前置钩子
     protected function beforeSave($id, array & $data)
     {

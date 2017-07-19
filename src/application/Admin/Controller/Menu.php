@@ -57,6 +57,23 @@ class Menu extends Controller
     }
 
     /**
+     * 新增操作界面
+     *
+     * @return string
+     */
+    public function actionCreate(Request $req, Response $resp, & $params)
+    {
+        $currentTitle = trans('Create Menu');
+
+        $menus = make('acl-menu')->all();
+
+        assign('currentTitle', $currentTitle);
+        assign('menus', $menus);
+
+        return fetch_complete_view('Detail');
+    }
+
+    /**
      * 详情页
      *
      * @return array
@@ -72,6 +89,9 @@ class Menu extends Controller
 
         $menus = make('acl-menu')->all();
 
+        $currentTitle = trans('Modify menu');
+
+        assign('currentTitle', $currentTitle);
         assign('row', $row);
         assign('menus', $menus);
 

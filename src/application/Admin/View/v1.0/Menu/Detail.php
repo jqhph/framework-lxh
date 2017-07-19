@@ -1,11 +1,12 @@
 <!-- Top Bar Start -->
 <?php
 
+if (empty($row)) {
+    $row = [];
+}
 use Lxh\Kernel\AdminUrlCreator;
 
-$currentTitle = trans('Modify menu');
-
-echo fetch_view('top-bar', 'Public', ['nav' => $currentTitle])?>
+echo fetch_view('top-bar', 'Public', ['nav' => $currentTitle]); ?>
 <!-- Top Bar End -->
 
 
@@ -17,27 +18,27 @@ echo fetch_view('top-bar', 'Public', ['nav' => $currentTitle])?>
             <div class="row">
                 <form class="form-horizontal Menu-form" role="form">
                     <div class="col-lg-6">
-                        <input type="hidden" name="id" value="<?php echo $row['id'];?>" />
+                        <input type="hidden" name="id" value="<?php echo get_value($row, 'id');?>" />
 
                         <?php echo component_view('fields/enum/tree-edit', [
-                            'id' => $row['id'],
+                            'id' => get_value($row, 'id'),
                             'name' => 'parent_id',
                             'label' => 'parent',
-                            'value' => $row['parent_id'],
+                            'value' => get_value($row, 'parent_id'),
                             'list' => & $menus,
                         ]); ?>
 
-                        <?php echo component_view('fields/varchar/edit', ['name' => 'icon', 'label' => 'icon', 'value' => $row['icon']]); ?>
+                        <?php echo component_view('fields/varchar/edit', ['name' => 'icon', 'label' => 'icon', 'value' => get_value($row, 'icon')]); ?>
 
-                        <?php echo component_view('fields/varchar/edit', ['name' => 'name', 'label' => 'name', 'value' => $row['name']]); ?>
+                        <?php echo component_view('fields/varchar/edit', ['name' => 'name', 'label' => 'name', 'value' => get_value($row, 'name')]); ?>
 
-                        <?php echo component_view('fields/varchar/edit', ['name' => 'controller', 'label' => 'controller', 'value' => $row['controller']]); ?>
+                        <?php echo component_view('fields/varchar/edit', ['name' => 'controller', 'label' => 'controller', 'value' => get_value($row, 'controller')]); ?>
 
-                        <?php echo component_view('fields/varchar/edit', ['name' => 'action', 'label' => 'action', 'value' => $row['action']]); ?>
+                        <?php echo component_view('fields/varchar/edit', ['name' => 'action', 'label' => 'action', 'value' => get_value($row, 'action')]); ?>
 
-                        <?php echo component_view('fields/varchar/edit', ['name' => 'priority', 'label' => 'priority', 'value' => $row['priority']]); ?>
+                        <?php echo component_view('fields/varchar/edit', ['name' => 'priority', 'label' => 'priority', 'value' => get_value($row, 'priority', 0)]); ?>
 
-                        <?php echo component_view('fields/bool/edit', ['name' => 'show', 'label' => 'show', 'value' => $row['show']]); ?>
+                        <?php echo component_view('fields/bool/edit', ['name' => 'show', 'label' => 'show', 'value' => get_value($row, 'show')]); ?>
 
                         <?php echo component_view('detail-button', ['back' => AdminUrlCreator::makeAction('Index')]);?>
                     </div><!-- end col -->

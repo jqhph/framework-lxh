@@ -51,7 +51,31 @@ class Controller extends LxhController
      */
     public function actionAdd(Request $req, Response $resp, & $params)
     {
+        if (! $_POST) {
+            return $this->error();
+        }
 
+        $validator = $this->validator();
+
+        $validator->fill($_POST);
+
+        // 验证表单数据
+        if ($msg = $this->updateValidate($params['id'], $data, $validator)) {
+            return $this->error($msg);
+        }
+
+        // 验证并获取结果
+        if (! $validator->validate()) {
+            return $this->error($validator->errors());
+        }
+
+        // 获取模型
+        $model = $this->getModel();
+
+        // 注入表单数据
+        $model->fill($_POST);
+
+        return $model->add() ? $this->success() : $this->failed();
     }
 
     /**

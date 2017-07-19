@@ -111,7 +111,7 @@
 
     // Wrap table
     ResponsiveTable.prototype.wrapTable = function() {        
-        this.$tableScrollWrapper.wrap('<div class="table-wrapper"/>');
+        // this.$tableScrollWrapper.wrap('<div class="table-wrapper"/>');
         this.$tableWrapper = this.$tableScrollWrapper.parent();
     };
 
@@ -119,7 +119,7 @@
     ResponsiveTable.prototype.createButtonToolbar = function() {
         var that = this;
 
-        this.$btnToolbar = $('<div class="btn-toolbar" />');
+        this.$btnToolbar = $('.btn-toolbar')//$('<div class="btn-toolbar" />');
 
         this.$dropdownGroup = $('<div class="btn-group dropdown-btn-group pull-right" />');
         this.$dropdownBtn = $('<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">' + trans('Display') + ' <span class="caret"></span></button>');
