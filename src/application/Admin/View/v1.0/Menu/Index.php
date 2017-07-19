@@ -69,5 +69,6 @@
 <script>
     add_css('lib/plugins/RWD-Table-Patterns/dist/css/rwd-table.min.css');
     add_js('lib/plugins/RWD-Table-Patterns/dist/js/rwd-table');
+    add_js('view/public-index');
 //    console.log(111, ResponsiveTable)
 </script>

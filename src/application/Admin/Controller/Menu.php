@@ -32,8 +32,6 @@ class Menu extends Controller
             return trans('Can\'t put self as a parent');
         }
 
-        $validator->fill($fields);
-
         $validator->rule('lengthBetween', 'icon', 4, 30);
 
         $validator->rule('lengthBetween', 'password', 4, 30);

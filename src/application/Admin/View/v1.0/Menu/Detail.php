@@ -39,7 +39,7 @@ echo fetch_view('top-bar', 'Public', ['nav' => $currentTitle])?>
 
                         <?php echo component_view('fields/bool/edit', ['name' => 'show', 'label' => 'show', 'value' => $row['show']]); ?>
 
-                        <?php echo component_view('detail-button', ['back' => AdminUrlCreator::makeAction('Menu', 'Index')]);?>
+                        <?php echo component_view('detail-button', ['back' => AdminUrlCreator::makeAction('Index')]);?>
                     </div><!-- end col -->
 
                 </form>

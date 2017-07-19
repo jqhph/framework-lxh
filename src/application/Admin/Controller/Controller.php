@@ -16,6 +16,29 @@ use Lxh\Http\Response;
 
 class Controller extends LxhController
 {
+    /**
+     * 删除数据接口
+     *
+     * @return array
+     */
+    public function actionDelete(Request $req, Response $resp, & $params)
+    {
+        if (empty($params['id'])) {
+            return $this->error(trans_with_global('Missing id.'));
+        }
+
+        return $params;
+    }
+
+    /**
+     * 新增数据接口
+     *
+     * @return array
+     */
+    public function actionAdd(Request $req, Response $resp, & $params)
+    {
+
+    }
 
     /**
      * 修改数据接口
@@ -24,23 +47,38 @@ class Controller extends LxhController
      */
     public function actionUpdate(Request $req, Response $resp, & $params)
     {
-        $validator = $this->validator();
+        if (empty($params['id'])) {
+            return $this->error(trans_with_global('Missing id.'));
+        }
 
+        // 获取表单数据
         $data = json_decode(file_get_contents('php://input'), true);
 
         if (! $data) {
             return $this->error();
         }
 
+        $validator = $this->validator();
+
+        $validator->fill($data);
+
+        // 验证表单数据
         if ($msg = $this->updateValidate($params['id'], $data, $validator)) {
             return $this->error($msg);
         }
 
+        // 验证并获取结果
         if (! $validator->validate()) {
             return $this->error($validator->errors());
         }
 
-        return $data;
+        // 获取模型
+        $model = $this->getModel();
+
+        // 注入表单数据
+        $model->fill($data);
+
+        return $model->save() ? $this->success() : $this->failed();
     }
 
     /**

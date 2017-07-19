@@ -74,6 +74,28 @@ $config[] = [
 ];
 
 $config[] = [
+    'pattern' => '/api/:controller/view/:id',
+    'method' => 'DELETE',
+    'params' => [
+        'module' => 'Admin',
+        'controller' => ':controller',
+        'action' => 'Delete',
+        'id' => ':id'
+    ]
+];
+
+$config[] = [
+    'pattern' => '/api/:controller',
+    'method' => 'POST',
+    'params' => [
+        'module' => 'Admin',
+        'controller' => ':controller',
+        'action' => 'Add',
+        'id' => ':id'
+    ]
+];
+
+$config[] = [
     'pattern' => '/api/:controller/:action',
     'method' => '*',
     'params' => [

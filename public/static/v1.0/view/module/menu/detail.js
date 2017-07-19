@@ -1,40 +1,18 @@
-define([], function () {
+define([''], function () {
     window.lxh_action = function () {
         var v = $lxh.validator([
-            {
-                name: 'parent_id',
-                rules: 'required',
-            },
-            {
-                name: 'icon',
-                rules: 'length_between[4-30]'
-            },
-            {
-                name: 'name',
-                rules: 'length_between[4-30]'
-            },
-            {
-                name: 'controller',
-                rules: 'length_between[1-15]'
-            },
-            {
-                name: 'action',
-                rules: 'length_between[1-15]'
-            },
-            {
-                name: 'priority',
-                rules: 'integer'
-            },
+            {name: 'parent_id', rules: 'required',},
+            {name: 'icon', rules: 'length_between[4-30]'},
+            {name: 'name', rules: 'length_between[4-30]'},
+            {name: 'controller', rules: 'length_between[1-15]'},
+            {name: 'action', rules: 'length_between[1-15]'},
+            {name: 'priority', rules: 'integer'},
         ], submit)
 
-        var model = $lxh.createModel('Menu')
+        var model = $lxh.createModel()
         var notify = $lxh.ui().notify()
 
         function submit(e) {
-            if (! model.requestEnded()) {
-                return
-            }
-
             notify.remove()
             notify.info(trans('loading'))
 
@@ -45,7 +23,7 @@ define([], function () {
                 notify.success(trans('success'))
 
                 // 500豪秒后跳转到菜单编辑界面
-                // $lxh.redirect('/lxhadmin/Menu/Index', 500)
+                $lxh.redirect($lxh.url().makeAction('Index'), 500)
             })
 
            // 发起修改操作

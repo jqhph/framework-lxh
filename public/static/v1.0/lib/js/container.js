@@ -10,7 +10,7 @@ window.Lxh = function (options) {
      * @constructor
      */
     function Container(options) {
-        var self = this, config, cache, store, user, language, view, ui, env, tpl, util
+        var self = this, config, cache, store, user, language, view, ui, env, tpl, util, urlMaker
 
         function init() {
             // 配置文件管理
@@ -43,6 +43,8 @@ window.Lxh = function (options) {
             // 视图管理
             view = new View(self, tpl)
 
+
+            urlMaker = new UrlMaker(self)
         }
 
         /**
@@ -157,7 +159,14 @@ window.Lxh = function (options) {
             return util
         }
 
-
+        /**
+         * url管理
+         *
+         * @returns {*}
+         */
+        this.url = function () {
+            return urlMaker
+        }
 
         // 初始化
         init()
@@ -221,6 +230,7 @@ window.Lxh = function (options) {
          * @returns {Model}
          */
         createModel: function (name, module) {
+            name = name || this.controllerName()
             return new Model(name, module, this)
         },
 
@@ -331,7 +341,35 @@ window.Lxh = function (options) {
             }
         }
     }
-    // --------------------------------------UI END-----------------------------------------------
+    // --------------------------------------Util END-----------------------------------------------
+
+
+    /**
+     * -------------------------------------------------------------------------------------
+     * URL管理
+     *
+     * @returns {{}}
+     * @constructor
+     */
+    function UrlMaker(container) {
+        var store = {
+            prefix: '/lxhadmin'
+        }
+
+        return {
+            makeAction: function (a, c) {
+                a = a || container.actionName()
+                c = c || container.controllerName()
+
+                return store.prefix + '/' + c + '/' + a
+            },
+
+            makeHome: function () {
+                return store.prefix
+            }
+        }
+    }
+    // --------------------------------------UrlMaker END-----------------------------------------------
 
 
     /**
@@ -907,6 +945,8 @@ window.Lxh = function (options) {
      * Created by Jqh on 2017/6/27.
      */
     function Model(name, module, container) {
+        var notify = container.ui().notify()
+
         var store = {
             /**
              * 表示当前模型是否在发起请求中
@@ -1013,8 +1053,8 @@ window.Lxh = function (options) {
                  * @param data
                  */
                 failed: function (data) {
-                    container.ui().notify().remove()
-                    container.ui().notify().error(trans(data.msg))
+                    notify.remove()
+                    notify.error(trans(data.msg))
                 },
 
                 /**
@@ -1026,9 +1066,9 @@ window.Lxh = function (options) {
                  * @param e
                  */
                 error: function (req, msg, e) {
-                    container.ui().notify().remove()
-                    container.ui().notify().error(req.status + ' ' + trans(req.statusText) + ' ' + trans(req.responseText))
-                    store.call.error(req, msg, e)
+                    notify.remove()
+                    notify.error(req.status + ' ' + trans(req.statusText) + ' ' + trans(req.responseText))
+                    // store.call.error(req, msg, e)
                 },
 
                 /**
@@ -1136,6 +1176,12 @@ window.Lxh = function (options) {
         this.request = function (api, method) {
             store.method = method || store.method
             store.api = api || store.api
+
+            // 判断是否已经在发起请求中
+            if (! this.requestEnded()) {
+                return
+            }
+
             // 标记请求开始
             store.isRequsting = true
 
@@ -1202,9 +1248,8 @@ window.Lxh = function (options) {
         this.edit = function () {
             // 判断是否有修改过表单内容
             if (container.util().cmp(store.initialData, store.formHandler.get(get_form_selector())) === true) {
-                var notify = container.ui().notify()
                 notify.remove()
-                return notify.warning(trans('Nothing has been change.'))
+                return notify.info(trans('Nothing has been change.'))
             }
 
             return this.request(util.parseApi('edit'), 'PUT')
@@ -1279,10 +1324,7 @@ window.Lxh = function (options) {
                         return store.apiPrefix + store.name + '/view/' + id
                     case 'delete':
                         var id = self.get('id')
-                        if (id) {
-                            return store.apiPrefix + store.name + '/' + id
-                        }
-                        return store.apiPrefix + store.name
+                        return store.apiPrefix + store.name + '/view/' + id
                     case 'list':
                         return store.apiPrefix + store.name + '/list'
                     case 'detail':

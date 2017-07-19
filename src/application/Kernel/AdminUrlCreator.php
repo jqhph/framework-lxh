@@ -15,7 +15,7 @@ class AdminUrlCreator
     protected static $prefix = 'lxhadmin';
 
     // 生成普通的url
-    public static function makeAction($controller = __CONTROLLER__, $action = __ACTION__)
+    public static function makeAction($action = __ACTION__, $controller = __CONTROLLER__)
     {
         $pre = static::$prefix;
 

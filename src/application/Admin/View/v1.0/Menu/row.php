@@ -29,5 +29,5 @@
     ?>
     <th><a href="<?php echo AdminUrlCreator::makeDetail($r['id']);?>">
             <i class="zmdi zmdi-edit"></i></a>&nbsp;&nbsp;
-        <a href="javascript:"><i class="zmdi zmdi-delete"></i></a></th>
+        <a data-model="<?php echo empty($model) ? __CONTROLLER__ : $model;?>" data-action="delete-row" data-id="<?php echo $r['id'];?>" href="javascript:"><i class="zmdi zmdi-delete"></i></a></th>
 </tr>

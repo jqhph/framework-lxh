@@ -33,6 +33,7 @@ $config['sea-config'] = [
         'api' => '/api/Js',
         'view' => "$base/view",
         'module' => "$base/view/module",
+        'css' => "$base/css",
     ],
     // 设置别名，方便调用
     'alias' => [

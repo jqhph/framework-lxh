@@ -79,10 +79,15 @@ class Model extends Entity
         if (empty($data[$this->idFieldsName])) {
             return false;
         }
+        $id = $data[$this->idFieldsName];
 
-        $result = $this->query()->where($this->idFieldsName, $data[$this->idFieldsName])->update($data);
+        unset($data[$this->idFieldsName]);
+
+        $this->beforeSave($id, $data);
+
+        $result = $this->query()->where($this->idFieldsName, $id)->update($data);
         if ($result) {
-            $this->afterSave($data[$this->idFieldsName], $data);
+            $this->afterSave($id, $data);
         }
         return $result;
     }

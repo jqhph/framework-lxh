@@ -92,7 +92,7 @@ class Menu
      */
     public function makeUrl($controller, $action)
     {
-        return AdminUrlCreator::makeAction($controller, $action);
+        return AdminUrlCreator::makeAction($action, $controller);
     }
 
     /**
