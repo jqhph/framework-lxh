@@ -4,7 +4,7 @@
         <button class="btn btn-primary waves-effect waves-light" type="submit">
             <?php echo trans_with_global('Save');?>
         </button>
-        <a href="<?php echo empty($back) ? '#' : $back;?>" type="reset" class="btn btn-default waves-effect waves-light m-l-5">
+        <a href="<?php echo empty($back) ? 'javascript:history.go(-1)' : $back;?>" type="reset" class="btn btn-default waves-effect waves-light m-l-5">
             <?php echo trans_with_global('Cancel');?>
         </a>
     </div>

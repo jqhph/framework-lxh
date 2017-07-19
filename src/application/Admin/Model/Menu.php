@@ -16,7 +16,14 @@ class Menu extends Model
 
     protected function beforeAdd(array & $data)
     {
-        print_r($data);die;
+        $data['created_at'] = $_SERVER['REQUEST_TIME'];
+
+        $data['created_by_id'] = user()->id;
+
+        if (empty($data['show'])) {
+            $data['show'] = 0;
+        }
+
     }
 
     // 保存数据前置钩子

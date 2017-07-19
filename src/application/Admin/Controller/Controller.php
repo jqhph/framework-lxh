@@ -60,7 +60,7 @@ class Controller extends LxhController
         $validator->fill($_POST);
 
         // 验证表单数据
-        if ($msg = $this->updateValidate($params['id'], $data, $validator)) {
+        if ($msg = $this->updateValidate(null, $_POST, $validator)) {
             return $this->error($msg);
         }
 

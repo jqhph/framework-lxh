@@ -18,7 +18,9 @@ echo fetch_view('top-bar', 'Public', ['nav' => $currentTitle]); ?>
             <div class="row">
                 <form class="form-horizontal Menu-form" role="form">
                     <div class="col-lg-6">
-                        <input type="hidden" name="id" value="<?php echo get_value($row, 'id');?>" />
+                        <?php if (! empty($row['id'])) { ?>
+                        <input type="hidden" name="id" value="<?php echo $row['id'];?>" />
+                        <?php } ?>
 
                         <?php echo component_view('fields/enum/tree-edit', [
                             'id' => get_value($row, 'id'),
@@ -38,9 +40,9 @@ echo fetch_view('top-bar', 'Public', ['nav' => $currentTitle]); ?>
 
                         <?php echo component_view('fields/varchar/edit', ['name' => 'priority', 'label' => 'priority', 'value' => get_value($row, 'priority', 0)]); ?>
 
-                        <?php echo component_view('fields/bool/edit', ['name' => 'show', 'label' => 'show', 'value' => get_value($row, 'show')]); ?>
+                        <?php echo component_view('fields/bool/edit', ['name' => 'show', 'label' => 'show', 'value' => get_value($row, 'show', 1)]); ?>
 
-                        <?php echo component_view('detail-button', ['back' => AdminUrlCreator::makeAction('Index')]);?>
+                        <?php echo component_view('detail-button');?>
                     </div><!-- end col -->
 
                 </form>
