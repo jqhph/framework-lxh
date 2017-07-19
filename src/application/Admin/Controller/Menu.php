@@ -29,7 +29,7 @@ class Menu extends Controller
     protected function updateValidate($id, array & $fields, Validator $validator)
     {
         if ($fields['parent_id'] == $id) {
-            return trans('Can\'t put self as a parent');
+            return 'Can\'t put self as a parent';
         }
 
         $validator->rule('lengthBetween', 'icon', 4, 30);
@@ -45,6 +45,15 @@ class Menu extends Controller
         $validator->rule('required', 'parent_id');
 
         $validator->rule('integer', 'priority');
+    }
+
+    // 删除操作验证方法
+    public function deleteValidate($id)
+    {
+        // 判断是否是系统菜单，如果是则不允许删除
+        if ($this->getModel()->isSystem($id)) {
+            return 'Can\'t delete the system menu!';
+        }
     }
 
     /**

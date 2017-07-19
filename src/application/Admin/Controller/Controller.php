@@ -27,7 +27,21 @@ class Controller extends LxhController
             return $this->error(trans_with_global('Missing id.'));
         }
 
-        return $params;
+        if ($msg = $this->deleteValidate($params['id'])) {
+            return $this->error($msg);
+        }
+
+        $model = $this->getModel();
+        
+        $model->id = $params['id'];
+
+        return $model->delete() ? $this->success() : $this->failed();
+    }
+
+    // 删除操作验证操作方法
+    protected function deleteValidate($id)
+    {
+
     }
 
     /**

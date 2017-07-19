@@ -20,4 +20,26 @@ class Menu extends Model
             if (! $data['show']) $data['show'] = 0;
         }
     }
+
+    // 删除后置钩子方法，删除成功后触发
+    protected function afterDelete($id, $result)
+    {
+        if (! $result) {
+            return;
+        }
+
+        // 如果删除成功，把所有的下级菜单也一并删除
+        // 以后有空再做
+    }
+
+    // 判断菜单是否是系统菜单
+    public function isSystem($id)
+    {
+        $r = $this->query()->select('type')->where($this->idFieldsName, $id)->findOne();
+
+        if (! $r) {
+            return false;
+        }
+        return $r['type'] == 2 ? true : false;
+    }
 }

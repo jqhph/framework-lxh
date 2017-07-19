@@ -1054,7 +1054,7 @@ window.Lxh = function (options) {
                  */
                 failed: function (data) {
                     notify.remove()
-                    notify.error(trans(data.msg))
+                    notify.error(trans(data.msg, 'tip'))
                 },
 
                 /**

@@ -86,9 +86,9 @@ class Model extends Entity
         $this->beforeSave($id, $data);
 
         $result = $this->query()->where($this->idFieldsName, $id)->update($data);
-        if ($result) {
-            $this->afterSave($id, $data);
-        }
+
+        $this->afterSave($id, $data, $result);
+
         return $result;
     }
 
@@ -100,11 +100,50 @@ class Model extends Entity
         $this->beforeAdd($data);
 
         $this->insertId = $this->query()->add($data);
-        if ($this->insertId) {
-            $this->afterAdd($this->insertId, $data);
-        }
+
+        $this->afterAdd($this->insertId, $data);
 
         return $this->insertId;
+    }
+
+    // 删除一条记录
+    public function delete()
+    {
+        $id = $this->id;
+        if (empty($id)) {
+            return false;
+        }
+
+        $this->beforeDelete($id);
+
+        $result = $this->query()->where($this->idFieldsName, $id)->delete();
+
+        $this->afterDelete($id, $result);
+
+        return $result;
+    }
+
+    /**
+     * 删除操作前置钩子方法
+     *
+     * @param  string $id
+     * @return mixed
+     */
+    protected function beforeDelete($id)
+    {
+
+    }
+
+    /**
+     * 删除操作后置钩子方法
+     *
+     * @param  string $id
+     * @param  bool   $result 删除结果
+     * @return mixed
+     */
+    protected function afterDelete($id, $result)
+    {
+
     }
 
     /**
@@ -133,7 +172,7 @@ class Model extends Entity
 
     }
 
-    // 新增操作钩子方法，新增成功后调用
+    // 新增操作钩子方法
     protected function afterAdd($insertId, array & $data)
     {
 
@@ -145,8 +184,8 @@ class Model extends Entity
 
     }
 
-    // 修改钩子方法，修改成功后调用
-    protected function afterSave($id, array & $data)
+    // 修改钩子方法
+    protected function afterSave($id, array & $data, $result)
     {
 
     }
