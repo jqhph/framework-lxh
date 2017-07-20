@@ -896,7 +896,7 @@ class Validator
                     $values = array($values);
                 }
 
-                $result = true;
+//                $result = true;
      
                 foreach ($values as & $value) {
                     $result = call_user_func($callback, $field, $value, $v['params']);

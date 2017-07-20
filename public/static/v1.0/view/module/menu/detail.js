@@ -3,10 +3,10 @@ define([''], function () {
         var v = $lxh.validator([
             {name: 'parent_id', rules: 'required',},
             {name: 'icon', rules: 'length_between[4-30]'},
-            {name: 'name', rules: 'length_between[4-30]'},
+            {name: 'name', rules: 'required|length_between[4-30]'},
             {name: 'controller', rules: 'length_between[1-15]'},
             {name: 'action', rules: 'length_between[1-15]'},
-            {name: 'priority', rules: 'integer'},
+            {name: 'priority', rules: 'required|integer'},
         ], submit)
 
         var model = $lxh.createModel()

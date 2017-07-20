@@ -554,7 +554,7 @@ window.Lxh = function (options) {
 
         var $form = document.querySelector(selector)
         var v = new FormValidator($form, options, function (errors, event) {
-            if (errors.length < 1 && event.type == 'submit') {
+            if (errors.length < 1 && (event === 'submit' || event.type == 'submit')) {
                 // 验证成功后回调
                 typeof call != 'function' || call(event)
             }

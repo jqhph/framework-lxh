@@ -32,9 +32,9 @@ class Menu extends Controller
             return 'Can\'t put self as a parent';
         }
 
-        $validator->rule('lengthBetween', 'icon', 4, 30);
+        $validator->rule('required', ['name', 'priority']);
 
-        $validator->rule('lengthBetween', 'password', 4, 30);
+        $validator->rule('lengthBetween', 'icon', 4, 30);
 
         $validator->rule('lengthBetween', 'name', 4, 30);
 
@@ -67,6 +67,8 @@ class Menu extends Controller
 
         $menus = make('acl-menu')->all();
 
+        array_unshift($menus, ['id' => 0, 'name' => 'Top level', 'required' => 1]);
+        console_info($menus);
         assign('currentTitle', $currentTitle);
         assign('menus', $menus);
 
@@ -90,6 +92,8 @@ class Menu extends Controller
         $menus = make('acl-menu')->all();
 
         $currentTitle = trans('Modify menu');
+
+        array_unshift($menus, ['id' => 0, 'name' => 'Top level', 'required' => 1]);
 
         assign('currentTitle', $currentTitle);
         assign('row', $row);

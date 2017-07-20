@@ -44,6 +44,37 @@ class System extends Controller
 
         $controllers = [['value' => 'Lxh\Admin\Controller\Controller']];
 
+
+        $fields = [
+            [
+                'label' => 'Input',
+                'list' => [
+                    ['id' => 'varchar', 'name' => 'varchar'],
+                    ['id' => 'icon', 'name' => 'icon'],
+                ]
+            ],
+            [
+                'label' => 'Select box',
+                'list' => [
+                    ['id' => 'layer-enum', 'name' => 'layer-enum'],
+                    ['id' => 'tree-enum', 'name' => 'tree-enum'],
+                ]
+            ],
+            [
+                'label' => 'checkbox',
+                'list' => [
+                    ['id' => 'bool', 'name' => 'bool'],
+                ]
+            ],
+        ];
+
+        $groups = [
+            ['value' => 'primary'],
+            ['value' => 'advanced'],
+        ];
+
+        assign('fields', $fields);
+        assign('groups', $groups);
         assign('moduleOptions', $options);
         assign('controllerOptions', $controllers);
 

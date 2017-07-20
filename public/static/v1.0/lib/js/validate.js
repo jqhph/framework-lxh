@@ -301,9 +301,9 @@
              * This ensures that a callback will always be called but other rules will be skipped.
              */
 
-            // if (indexOfRequired === -1 && method.indexOf('!callback_') === -1 && isEmpty) {
-            //     continue;
-            // }
+            if (indexOfRequired === -1 && method.indexOf('!callback_') === -1 && isEmpty) {
+                continue;
+            }
 
             /*
              * If the rule has a parameter (i.e. matches[param]) split it out
