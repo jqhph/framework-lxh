@@ -33,6 +33,15 @@ class System extends Controller
     }
 
     /**
+     * 创建模块接口
+     *
+     */
+    public function actionCreateModule()
+    {
+        return $_REQUEST;
+    }
+
+    /**
      * 创建模块入口
      */
     public function actionMakeModules()

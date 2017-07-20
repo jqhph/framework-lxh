@@ -558,13 +558,12 @@ window.Lxh = function (options) {
                 // 验证成功后回调
                 typeof call != 'function' || call(event)
             }
-        }, validateCall);
+        }, validate_call);
 
         // 注册自定义验证规则
-        registerRules(v)
+        register_rules(v)
 
         add_events(options)
-
 
         // 给表单元素添加focus和keyup事件
         function add_events(options) {
@@ -584,12 +583,12 @@ window.Lxh = function (options) {
         }
 
         // 显示错误信息
-        function validateCall(field, errorObject) {
+        function validate_call(field, errorObject) {
             var $e = $(field.element)
             // 移除表单错误
-            removeError($e, field.name)
+            remove_error($e, field.name)
             if (errorObject) {
-                displayErrorMsg(field.name, $e, errorObject.message)
+                display_error_msg(field.name, $e, errorObject.message)
             }
         }
 
@@ -600,7 +599,8 @@ window.Lxh = function (options) {
          * @param e    表单dom元素
          * @param msg  错误信息
          */
-        function displayErrorMsg (name, e, msg) {
+        function display_error_msg (name, e, msg) {
+            name = name.replace('[]', '')
             msg = trans(msg)
             e.addClass('parsley-error')
             e.parent().append('<ul class="parsley-errors-list filled validator-error-' + name + '" id="parsley-id-4"><li class="parsley-required">' + msg + '</li></ul>')
@@ -612,7 +612,8 @@ window.Lxh = function (options) {
          * @param $e   表单dom元素
          * @param name 表单name属性
          */
-        function removeError($e, name) {
+        function remove_error($e, name) {
+            name = name.replace('[]', '')
             $e.removeClass('parsley-error')
             $('.validator-error-' + name).remove()
         }
@@ -622,7 +623,7 @@ window.Lxh = function (options) {
          *
          * @param validator
          */
-        function registerRules(validator) {
+        function register_rules(validator) {
             // validator.registerCallback('length_between', function(value, param, field) {
             //     console.log(7890, value.length, param)
             //     return false

@@ -2,19 +2,37 @@
  * Created by Jqh on 2017/7/19.
  */
 define(['blade'], function () {
-    var modules = {
+
+    // 当前tab显示位置
+    var current = 0,
+
+    // tab数量
+    total = 3,
+
+    modules = {
         store: {
             formSelector: '.System-form',
 
             inputValues: {},
+            addFieldsValidator: null,
             moduleInfoValidator: null,
+            fieldsExtraValidator: null,
             fieldsExtraBlade: null,
         },
 
         init: function () {
             this.$nextButton = $('a[data-action="next-tab"]')
             this.$prevButton = $('a[data-action="prev-tab"]')
+            this.$saveButton = $('a[data-action="save"]')
             this.$tab = $('a[data-action="tab"]')
+            this.$fieldsExtraTableBody = $('.fields-extra table tbody')
+            this.$addButton = $('button[data-action="addToTable"]')
+
+            // 创建模型
+            this.model = $lxh.createModel()
+
+            // 绑定成功回调事件
+            this.model.on('success', this.success.bind(this))
 
             this.editTable()
 
@@ -31,6 +49,67 @@ define(['blade'], function () {
             ], this.saveModuleInfo.bind(this), this.store.formSelector)
         },
 
+        events: {
+            // 保存按钮点击事件
+            save: function (e) {
+                this.store.inputValues = $lxh.form().get(this.store.formSelector)
+
+                // 设置接口请求数据
+                this.model.data(this.store.inputValues)
+
+                // 发起创建模块请求
+                this.model.touchAction('CreateModule', 'POST')
+            },
+
+            prevTab: function (e) {
+                if (current < 1) return
+
+                current --;
+
+                compute_progressbar_percent(current)
+
+                e.preventDefault()
+
+                this.$tab.eq(current).tab('show')
+
+                this.$nextButton.show()
+                this.$saveButton.hide()
+            },
+
+            nextTab: function (e) {
+                if (current > total - 2) return
+
+                e.preventDefault()
+
+                // 手动验证表单
+                this.store.moduleInfoValidator._validateForm('submit')
+
+                // 最后一个tab页，显示保存按钮
+                if (current == total - 1) {
+                    this.$saveButton.show()
+                    this.$nextButton.hide()
+
+                    // 判断是否添加了字段信息
+                    if (typeof this.store.inputValues.field_name == 'undefined') {
+                        return $lxh.ui().notify().error(trans('Invalid argument.', 'tip'))
+                    }
+
+                    if (this.store.inputValues.field_name.length < 1) {
+                        return $lxh.ui().notify().error(trans('Please add a field at least', 'tip'))
+                    }
+
+                    this.makeFieldsExtraEditRows(modules.store.inputValues.field_name)
+                } else {
+                    this.$nextButton.show()
+                }
+            }
+        },
+
+        // 生成模块成功回调事件
+        success: function (data) {
+console.log('Success', data)
+        },
+
         // 保存模块信息
         saveModuleInfo: function (e) {
             current ++;
@@ -38,8 +117,9 @@ define(['blade'], function () {
             compute_progressbar_percent(current)
 
             // 显示下个tab页
-            $('a[data-action="tab"]').eq(current).tab('show')
+            this.$tab.eq(current).tab('show')
 
+            // 保存表单数据
             this.store.inputValues = $lxh.form().get(this.store.formSelector)
 
             // console.log(123, this.store.inputValues)
@@ -50,11 +130,12 @@ define(['blade'], function () {
             var $editTableBody = $('.edit-fields table tbody'),
                 rowTpls = $('#add-fields-edit-rows').text(),
                 blade = new Blade(rowTpls),
-            // 序号
-                no = 1
+                // 序号
+                no = 1,
+                self = this
 
             // 添加下一行字段信息
-            $('button[data-action="addToTable"]').click(function () {
+            this.$addButton.click(function () {
                 // 计算tr行数
                 no = $editTableBody.find('tr').length
 
@@ -75,17 +156,26 @@ define(['blade'], function () {
         },
 
         // 字段拓展信息
-        addFieldsExtraEditRows: function (fieldName) {
+        addFieldsExtraEditRow: function (fieldName) {
             if (! this.store.fieldsExtraBlade) {
-                var fieldsExtraRowTpl = $('#fields-extra-edit-rows').text(),
-                    $fieldsExtraTableBody = $('.fields-extra table tbody')
+                var fieldsExtraRowTpl = $('#fields-extra-edit-rows').text()
 
-                    this.store.fieldsExtraBlade = new Blade(fieldsExtraRowTpl)
+                this.store.fieldsExtraBlade = new Blade(fieldsExtraRowTpl)
             }
 
             this.store.fieldsExtraBlade.assign('fieldName', fieldName)
 
-            $fieldsExtraTableBody.append(this.store.fieldsExtraBlade.fetch())
+            this.$fieldsExtraTableBody.append(this.store.fieldsExtraBlade.fetch())
+        },
+
+        // 生成字段额外配置表单
+        makeFieldsExtraEditRows: function (fields) {
+            this.$fieldsExtraTableBody.html('')
+
+            for (var i in fields) {
+                this.addFieldsExtraEditRow(fields[i])
+            }
+
         }
     }
 
@@ -97,41 +187,18 @@ define(['blade'], function () {
         $('#progressbarwizard').find('.bar').css  ({width:$percent+'%'})
     }
 
-    // 当前tab显示位置
-    var current = 0,
-    // tab数量
-        total = 3
-
     window.lxh_action = function () {
         modules.init()
 
         compute_progressbar_percent(current)
 
+        // 跳到上个tab页
+        modules.$prevButton.click(modules.events.prevTab.bind(modules))
 
-        modules.$prevButton.click(function (e) {
-            if (current < 1) return
+        // 跳到下个tab页
+        modules.$nextButton.click(modules.events.nextTab.bind(modules))
 
-            current --;
-
-            compute_progressbar_percent(current)
-
-            e.preventDefault()
-
-            modules.$tab.eq(current).tab('show')
-
-        })
-
-        modules.$nextButton.click(function (e) {
-            if (current > total - 2) return
-
-            e.preventDefault()
-
-            // 手动验证表单
-            modules.store.moduleInfoValidator._validateForm('submit')
-
-            if (current == 2) {
-
-            }
-        })
+        // 生成新的模块
+        modules.$saveButton.click(modules.events.save.bind(modules))
     }
 })

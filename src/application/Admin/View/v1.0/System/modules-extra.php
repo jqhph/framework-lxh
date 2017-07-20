@@ -37,7 +37,7 @@
 <script type="text/html" id="fields-extra-edit-rows">
     <tr data-name="{fieldName}">
         <td scope="row"><input name="fieldsName[]" class="form-control" readonly value="{fieldName}"/></td>
-        <td><input name="rank[]" class="form-control" value=""/></td>
+        <td><input name="rank[]" class="form-control" value="0"/></td>
         <td><?php echo component_view('fields/enum/edit',
                 ['name' => 'group[]', 'formWidth' => '', 'formGroup' => '', 'list' => & $groups]); ?></td>
         <td><div class="checkbox checkbox-danger"><input value="1" name="sorting[]" type="checkbox" checked /><label></label></div></td>
