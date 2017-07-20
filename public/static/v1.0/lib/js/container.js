@@ -1419,7 +1419,15 @@ window.Lxh = function (options) {
             for (var i = 0; i < elements.length; i++) {
                 var component = serialize_element(elements[i]);
                 if (!component || typeof component[1] == 'undefined') continue
-                data[component[0]] = component[1]
+                if (component[0].indexOf('[') !== -1 && component[0].indexOf(']') !== -1 ) {
+                    component[0] = component[0].replace('[]', '')
+                    if (typeof data[component[0]] == 'undefined') {
+                        data[component[0]] = []
+                    }
+                    data[component[0]].push(component[1])
+                } else {
+                    data[component[0]] = component[1]
+                }
             }
             return data;
         }

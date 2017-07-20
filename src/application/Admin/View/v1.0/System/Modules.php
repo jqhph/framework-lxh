@@ -60,10 +60,18 @@ echo fetch_view('top-bar', 'Public', ['nav' => trans('Making modules')]); ?>
                         </div>
                     </div>
                     <ul class="pager m-b-0 wizard">
-                        <li class="previous "><a  data-action="prev-tab"  href="#" class="btn btn-primary waves-effect waves-light">
+                        <li class="previous "><a  data-action="prev-tab"  class="btn btn-primary waves-effect waves-light">
                                 <?php echo trans_with_global('Previous');?></a></li>
-                        <li class="next "><a type="submit" data-action="next-tab" href="#" class="btn btn-primary waves-effect waves-light">
-                                <?php echo trans_with_global('Next');?></a></li></a></li>
+
+                        <li class="next ">
+                            <a type="submit" data-action="next-tab" class="btn btn-primary waves-effect waves-light">
+                                <?php echo trans_with_global('Next');?></a>
+                            <a style="display: none" type="submit" data-action="save"  class="btn btn-success waves-effect waves-light">
+                                <?php echo trans_with_global('Save');?></a>
+                        </li>
+
+
+
                     </ul>
 
 

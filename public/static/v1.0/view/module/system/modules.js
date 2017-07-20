@@ -4,11 +4,18 @@
 define(['blade'], function () {
     var modules = {
         store: {
+            formSelector: '.System-form',
+
+            inputValues: {},
             moduleInfoValidator: null,
             fieldsExtraBlade: null,
         },
 
         init: function () {
+            this.$nextButton = $('a[data-action="next-tab"]')
+            this.$prevButton = $('a[data-action="prev-tab"]')
+            this.$tab = $('a[data-action="tab"]')
+
             this.editTable()
 
             // 给添加模块信息tab表单添加字段验证信息
@@ -21,19 +28,21 @@ define(['blade'], function () {
                 {name: 'module', rules: 'required'},
                 {name: 'inheritance', rules: 'required'},
                 {name: 'limit', rules: 'required|integer'},
-            ], this.saveModuleInfo, '.System-form')
+            ], this.saveModuleInfo.bind(this), this.store.formSelector)
         },
 
         // 保存模块信息
         saveModuleInfo: function (e) {
             current ++;
 
-            console.log(111)
-
             compute_progressbar_percent(current)
 
             // 显示下个tab页
             $('a[data-action="tab"]').eq(current).tab('show')
+
+            this.store.inputValues = $lxh.form().get(this.store.formSelector)
+
+            // console.log(123, this.store.inputValues)
         },
 
         // 字段编辑信息
@@ -93,10 +102,13 @@ define(['blade'], function () {
     // tab数量
         total = 3
 
-    $(document).ready(function() {
+    window.lxh_action = function () {
+        modules.init()
+
         compute_progressbar_percent(current)
 
-        $('a[data-action="prev-tab"]').click(function (e) {
+
+        modules.$prevButton.click(function (e) {
             if (current < 1) return
 
             current --;
@@ -105,25 +117,21 @@ define(['blade'], function () {
 
             e.preventDefault()
 
-            $('a[data-action="tab"]').eq(current).tab('show')
+            modules.$tab.eq(current).tab('show')
 
         })
 
-        $('a[data-action="next-tab"]').click(function (e) {
+        modules.$nextButton.click(function (e) {
             if (current > total - 2) return
 
             e.preventDefault()
 
-            if (current == 0) {
-                // 手动验证表单
-                modules.store.moduleInfoValidator._validateForm('submit')
+            // 手动验证表单
+            modules.store.moduleInfoValidator._validateForm('submit')
+
+            if (current == 2) {
+
             }
-
         })
-
-    });
-
-    window.lxh_action = function () {
-        modules.init()
     }
 })

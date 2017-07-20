@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="m-b-30">
-                        <button data-action="addToTable" class="btn btn-inverse waves-effect waves-light"><?php echo trans_with_global('Add');?> <i class="fa fa-plus"></i></button>
+                        <button type="button" data-action="addToTable" class="btn btn-inverse waves-effect waves-light"><?php echo trans_with_global('Add');?> <i class="fa fa-plus"></i></button>
                     </div>
                 </div>
             </div>
