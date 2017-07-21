@@ -149,21 +149,23 @@ class Util
      * 把php数据转化成文本形式，并以"return"形式返回
      *
      * @param array $array
+     * @param bool  $numericKey 是否输出数字键值，默认true
      * @return string
      */
-    public static function arrayToReturnText(array & $array)
+    public static function arrayToReturnText(array & $array, $numericKey = true)
     {
-        return "<?php \nreturn " . static::arrayToText($array) . ";\n";
+        return "<?php \nreturn " . static::arrayToText($array, $numericKey) . ";\n";
     }
 
     /**
      * 把php数据转化成文本形式
      *
      * @param array $array
-     * @param int $level
+     * @param bool  $numericKey 是否输出数字键值，默认true
+     * @param int   $level
      * @return string
      */
-    public static function arrayToText(array & $array, $level = 1)
+    public static function arrayToText(array & $array, $numericKey = true, $level = 1)
     {
         $start = '[';
         $end   = ']';
@@ -172,9 +174,13 @@ class Util
 
         foreach ($array as $k => & $v) {
             if (is_array($v)) {
-                $pre = is_string($k) ? "'$k' => " : '';
+                if ($numericKey) {
+                    $pre = is_string($k) ? "'$k' => " : "$k => ";
+                } else {
+                    $pre = is_string($k) ? "'$k' => " : '';
+                }
 
-                $txt .= "\n" . static::makeBlank($level) . $pre . static::arrayToText($v, $level + 1) . ',';
+                $txt .= "\n" . static::makeBlank($level) . $pre . static::arrayToText($v, $numericKey, $level + 1) . ',';
 
                 continue;
             }
@@ -190,7 +196,11 @@ class Util
                 $t = "'$v'";
             }
 
-            $pre = is_string($k) ? "'$k' => " : '';
+            if ($numericKey) {
+                $pre = is_string($k) ? "'$k' => " : "$k => ";
+            } else {
+                $pre = is_string($k) ? "'$k' => " : '';
+            }
 
             $txt .= static::makeBlank($level) . "{$pre}{$t},\n";
         }
@@ -208,6 +218,148 @@ class Util
             $txt .= '    ';
         }
         return $txt;
+    }
+
+    /**
+     * 合并新的数组到旧的数组
+     *
+     * @param  array $content
+     * @param  array $new
+     * @return array
+     */
+    public static function merge(array & $content, array & $new, $recurrence = false)
+    {
+        foreach ($new as $k => & $v) {
+            if ($recurrence) {
+                if (isset($content[$k]) && is_array($content[$k]) && is_array($v)) {
+                    $content[$k] = static::merge($content[$k], $v, true);
+                    continue;
+                }
+            }
+
+            $content[$k] = $v;
+        }
+
+        return $content;
+    }
+
+    /**
+     * Unset a value in array recursively
+     *
+     * @param  array  $haystack
+     * @param  string $needle
+     * @return array
+     */
+    public static function unsetInArrayByValue(array & $haystack, $needle)
+    {
+        foreach($haystack as $key => & $value) {
+            if (is_array($value)) {
+                $haystack[$key] = static::unsetInArrayByValue($needle, $value);
+            } else if ($needle === $value) {
+
+                unset($haystack[$key]);
+            }
+        }
+
+        return $haystack;
+    }
+
+    /**
+     * 'User.fields.id' 转化为
+     *
+     *  [
+     *      'User' => [
+     *          'fields' => ['id']
+     *      ]
+     * ]
+     *
+     * @param
+     * @return void
+     */
+    public static function multilayerStringToArray($str)
+    {
+        $data = [];
+
+        $tmp = explode('.', $str);
+
+        $last = count($tmp) - 1;
+
+        foreach ($tmp as $k => & $v) {
+            if ($k == $last) {
+                static::appendValueToArray($data, $v, true);
+            } else {
+                static::appendValueToArray($data, $v);
+            }
+        }
+
+        return $data;
+    }
+
+    // 追加元素到数组最底层
+    public static function appendValueToArray(array & $data, $value, $toValue = false)
+    {
+        if (empty($data)) {
+            if ($toValue) {
+                $data[] = $value;
+            } else {
+                $data[$value] = [];
+            }
+            return;
+        }
+        foreach ($data as $k => & $v) {
+            if (empty($v)) {
+                if ($toValue) {
+                    $data[$k] = [$value];
+                } else {
+                    $data[$k][$value] = [];
+                }
+                break;
+            }
+
+            static::appendValueToArray($v, $value, $toValue);
+        }
+    }
+
+
+    /**
+     * Unset content items defined in the unset.json
+     *
+     * @param array $content
+     * @param string | array $unsets in format
+     *   [
+     *      'key1' => ['unsetKey1', 'unsetKey2'],
+     *      'key2' => ['unsetKey1', 'unsetKey2'],
+     *      'key3' => ['key' => ['unsetKey3', 'unsetKey4']]
+     *  ]
+     *  OR
+     *  ['key.unset1', 'key1.key2.unset2', .....]
+     *  OR
+     *  'key1.unset1'
+     *
+     * @return array
+     */
+    public static function unsetInArray(array & $content, $unsets)
+    {
+        if (empty($unsets)) {
+            return $content;
+        }
+
+        foreach((array) $unsets as $key => & $unsetItem) {
+            if (is_string($unsetItem)) {
+                $unsetItem = static::multilayerStringToArray($unsetItem);
+            }
+
+            foreach ($unsetItem as $k => & $v) {
+                if (is_array($v) && isset($content[$k]) && is_array($content[$k])) {
+                    $content[$k] = static::unsetInArray($content[$k], $unsetItem);
+
+                    continue;
+                }
+                unset($content[$v]);
+            }
+        }
+
+        return $content;
     }
 
 }

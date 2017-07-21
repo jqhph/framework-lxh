@@ -1,9 +1,17 @@
-<?php
+<?php 
+return [
 
-$config = [];
+    'labels' => [
+    ],
+    'fields' => [
+        'email' => 'Email',
+    ],
+    'options' => [
 
-$config['labels'] = [
-    'uesr' => 'user',
+        'status' => [
+            1 => 'hi',
+            2 => 'hello',
+            3 => 'hey',
+        ],
+    ],
 ];
-
-return $config;

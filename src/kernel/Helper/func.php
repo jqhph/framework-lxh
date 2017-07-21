@@ -76,11 +76,12 @@ function language()
  * @param  string $label name of label
  * @param  string $category
  * @param  mixed $default
+ * @param  array $sprints format fields array
  * @return string | array
  */
-function trans($label, $category = 'labels')
+function trans($label, $category = 'labels', array $sprints = [])
 {
-    return $GLOBALS['__language__']->translate($label, $category);
+    return $GLOBALS['__language__']->translate($label, $category, $sprints);
 }
 
 /**
@@ -88,11 +89,12 @@ function trans($label, $category = 'labels')
  *
  * @param  string $label 需要翻译的名称
  * @param  string $category 翻译的类型
- * @return void
+ * @param  array  $sprints 需要插入到格式化翻译字符的参数
+ * @return string
  */
-function trans_with_global($label, $category = 'labels')
+function trans_with_global($label, $category = 'labels', array $sprints = [])
 {
-    return $GLOBALS['__language__']->translateWithGolobal($label, $category);
+    return $GLOBALS['__language__']->translateWithGolobal($label, $category, $sprints);
 }
 
 /**

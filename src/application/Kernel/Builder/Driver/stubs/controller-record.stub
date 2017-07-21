@@ -1,0 +1,128 @@
+<?php
+/**
+ *
+ * @author {author}
+ * @date   {date}
+ */
+
+namespace {root-namespace}\{module}\Controller;
+
+use {root-namespace}\Exceptions\Forbidden;
+use {root-namespace}\Http\Request;
+use {root-namespace}\Http\Response;
+use {root-namespace}\Helper\Valitron\Validator;
+
+class {controller} extends {extends}
+{
+    public function __construct()
+    {
+    }
+
+    /**
+     * 新增或修改前字段验证
+     *
+     * @param  array
+     * @return mixed
+     */
+    protected function updateValidate($id, array & $fields, Validator $validator)
+    {
+        {updateValidate}
+    }
+
+    // 删除操作验证方法
+    public function deleteValidate($id)
+    {
+        {deleteValidate}
+    }
+
+    /**
+     * 新增操作界面
+     *
+     * @return string
+     */
+    public function actionCreate(Request $req, Response $resp, & $params)
+    {
+        $currentTitle = trans('Create {controllerEnName}');
+
+
+        assign('currentTitle', $currentTitle);
+
+        return fetch_complete_view('Detail');
+    }
+
+    /**
+     * 详情页
+     *
+     * @return string
+     */
+    public function actionDetail(Request $req, Response $resp, & $params)
+    {
+        if (empty($params['id'])) {
+            throw new Forbidden();
+        }
+        $id = $params['id'];
+
+        $row = query()->from({Controller})->where(['id' => $id, 'deleted' => 0])->findOne();
+
+        $currentTitle = trans('Modify {controllerEnName}');
+
+        assign('currentTitle', $currentTitle);
+        assign('row', $row);
+
+        return fetch_complete_view();
+    }
+
+    /**
+     * list页
+     *
+     * @return string
+     */
+    public function actionIndex()
+    {
+        $page = I('page', 1);
+
+        $titles = {titles};
+
+        $maxSize = {maxSize};
+
+        $offset = ceil($page - 1) * $maxSize;
+
+        {search}
+
+        $q = query();
+
+        $q->from({Controller})->where(array_merge($this->makeWhereContent(), ['deleted' => 0]))->limit($offset, $maxSize)
+
+        $orders = $this->makeOrderContent();
+
+        if ($orders) {
+            $q->sort($orders[0], $orders[1]);
+        }
+
+        $list = $q->find();
+
+        assign('titles', $titles);
+        assign('list', $list);
+
+        return fetch_complete_view();
+    }
+
+    /**
+     * 生成where条件内容
+     *
+     */
+    protected function makeWhereContent()
+    {
+        {whereContent}
+    }
+
+    /**
+     * 生成order by内容
+     *
+     */
+    protcted function makeOrderContent()
+    {
+
+    }
+
+}

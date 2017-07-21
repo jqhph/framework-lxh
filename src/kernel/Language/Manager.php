@@ -10,6 +10,7 @@ namespace Lxh\Language;
 
 use Lxh\Helper\Entity;
 use Lxh\Contracts\Container\Container;
+use Lxh\Helper\Util;
 
 class Manager
 {
@@ -214,9 +215,10 @@ class Manager
      * @param  string $label name of label
      * @param  string $category
      * @param  mixed $default
+     * @param  array $sprints format fields array
      * @return string | array
      */
-    public function translate($label, $category = 'labels')
+    public function translate($label, $category = 'labels', array $sprints = [])
     {
         if (! isset($this->packages[$this->language])) {
             return $label;
@@ -238,22 +240,42 @@ class Manager
             $translated = $this->packages[$this->language]->get("Global.{$category}.$label");
         }
 
-        return $translated ?: $label;
+        $result = $translated ?: $label;
+
+        if ($sprints && $result) {
+            $result = vsprintf($result, $sprints);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return \Lxh\File\FileManager
+     */
+    protected function fileManager()
+    {
+        return make('file.manager');
     }
 
     /**
      * 使用全局语言包翻译
      *
      * @param  string $label 需要翻译的名称
-     * @param  string $category 翻译的类型  
-     * @return void
+     * @param  string $category 翻译的类型
+     * @param  array  $sprints 需要插入到格式化翻译字符的参数
+     * @return string
      */
-    public function translateWithGolobal($label, $category = 'labels')
+    public function translateWithGolobal($label, $category = 'labels', array $sprints = [])
     {
         if (! isset($this->packages[$this->language])) {
             return $label;
         }
-        return $this->packages[$this->language]->get("Global.{$category}.$label", $label);
+        $translated = $this->packages[$this->language]->get("Global.{$category}.$label", $label);
+        if ($sprints && $translated) {
+            $translated = vsprintf($translated, $sprints);
+        }
+
+        return $translated;
     }
 
     /**
@@ -281,33 +303,33 @@ class Manager
      */
     public function save()
     {
-//        $paths = $this->paths['customPath'];
-//        $currentLanguage = $this->getLanguage();
-//
-//        $result = true;
-//        if (!empty($this->changedData)) {
-//            foreach ($this->changedData as $scope => & $data) {
-//                if (!empty($data)) {
-//                    $result &= $this->fileManager->mergeContents(array($path, $currentLanguage, $scope.'.php'), $data, true);
-//                }
-//            }
-//        }
-//
-//        if (!empty($this->deletedData)) {
-//            foreach ($this->deletedData as $scope => & $unsetData) {
-//                if (!empty($unsetData)) {
-//                    $result &= $this->fileManager->unsetContents(array($path, $currentLanguage, $scope.'.php'), $unsetData, true);
-//                }
-//            }
-//        }
-//
-//        if ($result == false) {
-//            throw new Error("Error saving languages. See log file for details.");
-//        }
-//
-//        $this->clearChanges();
-//
-//        return (bool) $result;
+        $file = $this->fileManager();
+
+        foreach ($this->changedData as $scope => & $data) {
+            if (!empty($data)) {
+                $path = $this->getPackagePath($scope);
+
+                if (! $file->mergePhpContents($path, $data)) {
+                    return false;
+                }
+            }
+        }
+
+        foreach ($this->deletedData as $scope => & $unsetData) {
+            if (!empty($unsetData)) {
+                $path = $this->getPackagePath($scope);
+
+                $data = [$unsetData];
+
+                if (! $file->unsetContents($path, $data, true)) {
+                    return false;
+                }
+            }
+        }
+
+        $this->clearChanges();
+
+        return true;
     }
 
     /**
@@ -323,75 +345,55 @@ class Manager
     }
 
     /**
-     * Get data of Unifier language files
-     *
-     * @return array
-     */
-    protected function getData()
-    {
-        $currentLanguage = $this->getLanguage();
-        if (!isset($this->data[$currentLanguage])) {
-
-        }
-
-        return $this->data[$currentLanguage];
-    }
-
-    /**
      * Set/change a label
      *
      * @param string $scope
      * @param string $category
-     * @param string | array $name
+     * @param string | array $labelName
      * @param mixed $value
      *
      * @return void
      */
-    public function set($scope, $category, $name, $value)
+    public function set($scope, $category, $labelName, $value)
     {
-        if (is_array($name)) {
-            foreach ($name as $rowLabel => & $rowValue) {
+        if (is_array($labelName)) {
+            foreach ($labelName as $rowLabel => & $rowValue) {
                 $this->set($scope, $category, $rowLabel, $rowValue);
             }
             return;
         }
 
-        $this->changedData[$scope][$category][$name] = & $value;
+        $this->changedData[$scope][$category][$labelName] = & $value;
 
-        $this->undelete($scope, $category, $name);
+        $this->undelete($scope, $category, $labelName);
     }
 
     /**
      * Remove a label
      *
-     * @param  string $name
-     * @param  string $category
      * @param  string $scope
+     * @param  string $category
+     * @param  string $labelName
      *
      * @return void
      */
-    public function delete($scope, $category, $name)
+    public function delete($scope, $category, $labelName, $value = null)
     {
-        if (is_array($name)) {
-            foreach ($name as $rowLabel) {
+        if (is_array($labelName)) {
+            foreach ($labelName as $k => & $rowLabel) {
                 $this->delete($scope, $category, $rowLabel);
             }
             return;
         }
 
-        $this->deletedData[$scope][$category][] = $name;
-
-        $currentLanguage = $this->getLanguage();
-        if (!isset($this->data[$currentLanguage])) {
-
+        if ($value) {
+            $this->deletedData[$scope][$category][$labelName] = (array) $value;
+        } else {
+            $this->deletedData[$scope][$category][] = & $labelName;
         }
 
-        if (isset($this->data[$currentLanguage][$scope][$category][$name])) {
-            unset($this->data[$currentLanguage][$scope][$category][$name]);
-        }
-
-        if (isset($this->changedData[$scope][$category][$name])) {
-            unset($this->changedData[$scope][$category][$name]);
+        if (isset($this->changedData[$scope][$category][$labelName])) {
+            unset($this->changedData[$scope][$category][$labelName]);
         }
     }
 

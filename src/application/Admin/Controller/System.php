@@ -11,7 +11,6 @@
 namespace Lxh\Admin\Controller;
 
 use Lxh\Exceptions\Forbidden;
-//use Lxh\MVC\Controller;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
 use Lxh\Helper\Valitron\Validator;
@@ -21,6 +20,7 @@ class System extends Controller
 {
     public function __construct()
     {
+
     }
 
     /**
@@ -51,8 +51,7 @@ class System extends Controller
             $options[] = ['value' => $module];
         }
 
-        $controllers = [['value' => 'Lxh\Admin\Controller\Controller']];
-
+        $controllers = [['value' => 'Lxh\Kernel\Controller\Record']];
 
         $fields = [
             [

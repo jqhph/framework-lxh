@@ -1,0 +1,23 @@
+<?php
+/**
+ *
+ * @author {author}
+ * @date   {date}
+ */
+
+namespace Gets\Controller;
+
+use Gets\MVC\Controller;
+use Gets\Http\Request;
+use Gets\Http\Response;
+
+class {class} extends {extends}
+{
+    public function __construct()
+    {
+    }
+
+    {methods}
+
+
+}
