@@ -19,7 +19,7 @@
                     </button>
                 </li>
                 <li>
-                    <h5 class="page-title"><?php echo empty($nav) ? make('acl-menu')->makeNav() : $nav;?></h5>
+                    <h5 class="page-title"><?php echo empty($navTitle) ? make('acl-menu')->makeNav() : trans($navTitle);?></h5>
                 </li>
             </ul>
 

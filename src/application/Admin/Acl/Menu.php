@@ -168,16 +168,18 @@ class Menu
         return $this->data;
     }
 
-
+    // 按$key字段值正序排序
     protected function sort(array & $lst, $key = 'priority')
     {
-        foreach ($lst as & $r) {
+        // 顶级菜单排序
+        Util::quickSort($lst, $key, 0, count($lst) - 1);
 
-            if (! isset($r['subs'])) {
+        // 子菜单排序
+        foreach ($lst as & $r) {
+            if (empty($r['subs'])) {
                 continue;
             }
-            // 按$key字段值正序排序
-            Util::quickSort($r['subs'], $key, 0, count($r['subs']) - 1);
+
             // 递归排序子菜单的子菜单
             $this->sort($r['subs'], $key);
         }

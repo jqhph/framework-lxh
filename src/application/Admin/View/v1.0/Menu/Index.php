@@ -1,10 +1,8 @@
-<!-- Top Bar Start -->
 <?php
 
 use Lxh\Kernel\AdminUrlCreator;
+?>
 
-echo fetch_view('top-bar', 'Public')?>
-<!-- Top Bar End -->
 
 <!--col-sm-12-->
 <div class="">

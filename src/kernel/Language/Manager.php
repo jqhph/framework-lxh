@@ -208,6 +208,14 @@ class Manager
         return "{$this->root}{$this->dir}/{$lang}/{$this->moduleName}/$scope.php";
     }
 
+    /**
+     * 获取根目录
+     */
+    public function getBasePath()
+    {
+        return "{$this->root}{$this->dir}/";
+    }
+
 
     /**
      * Translate label/labels

@@ -1,13 +1,11 @@
-<!-- Top Bar Start -->
 <?php
 
 if (empty($row)) {
     $row = [];
 }
 use Lxh\Kernel\AdminUrlCreator;
+ ?>
 
-echo fetch_view('top-bar', 'Public', ['nav' => $currentTitle]); ?>
-<!-- Top Bar End -->
 
 
 <div class="row">

@@ -63,13 +63,13 @@ class Menu extends Controller
      */
     public function actionCreate(Request $req, Response $resp, & $params)
     {
-        $currentTitle = trans('Create Menu');
+        $currentTitle = 'Create Menu';
 
         $menus = make('acl-menu')->all();
 
         array_unshift($menus, ['id' => 0, 'name' => 'Top level', 'required' => 1]);
-        console_info($menus);
-        assign('currentTitle', $currentTitle);
+
+        assign('navTitle', $currentTitle);
         assign('menus', $menus);
 
         return fetch_complete_view('Detail');
@@ -91,11 +91,11 @@ class Menu extends Controller
 
         $menus = make('acl-menu')->all();
 
-        $currentTitle = trans('Modify menu');
+        $currentTitle = 'Modify menu';
 
         array_unshift($menus, ['id' => 0, 'name' => 'Top level', 'required' => 1]);
 
-        assign('currentTitle', $currentTitle);
+        assign('navTitle', $currentTitle);
         assign('row', $row);
         assign('menus', $menus);
 

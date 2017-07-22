@@ -54,7 +54,7 @@ $menu = make('acl-menu');
                     <ul class="list-unstyled">
                         <?php foreach ($m['subs'] as & $sub) { ?>
                         <li class="<?php if ($menu->isActive($sub['controller'], $sub['action'])) echo 'active';?>">
-                            <a class="<?php if ($menu->isActive($sub['controller'], $sub['action'])) echo 'active';?>" href="<?php echo $sub['url'];?>"><i style="margin-right:3px;" class="<?php echo $sub['icon'];?>"></i>
+                            <a class="<?php if ($menu->isActive($sub['controller'], $sub['action'])) echo 'active';?>" href="<?php echo $sub['url'];?>">
                                 <?php echo trans_with_global($sub['name'], 'menu');?></a></li>
                         <?php } ?>
                     </ul>

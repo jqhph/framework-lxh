@@ -1,9 +1,7 @@
-<!-- Top Bar Start -->
 <?php
 
 use Lxh\Kernel\AdminUrlCreator;
-
-echo fetch_view('top-bar', 'Public', ['nav' => trans('Making modules')]); ?>
+?>
 
 <div class="">
     <div class="card-box p-b-0">

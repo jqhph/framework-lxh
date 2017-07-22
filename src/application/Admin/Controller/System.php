@@ -81,6 +81,9 @@ class System extends Controller
             ['value' => 'advanced'],
         ];
 
+        $nav = 'Making modules';
+
+        assign('navTitle', $nav);
         assign('fields', $fields);
         assign('groups', $groups);
         assign('moduleOptions', $options);

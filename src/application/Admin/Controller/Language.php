@@ -32,4 +32,18 @@ class Language extends Controller
 
         return $this->success('SUCCESS', ['list' => language()->getPackages($scopes, $lang)]);
     }
+
+    public function actionList()
+    {
+        $file = make('file.manager');
+
+        $languagePackDir = language()->getBasePath();
+
+        $fileList = $file->getFileList($languagePackDir, true);
+//debug($fileList);
+
+        assign('list', $fileList);
+
+        return fetch_complete_view('List');
+    }
 }
