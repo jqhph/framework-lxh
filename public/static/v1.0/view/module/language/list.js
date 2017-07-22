@@ -31,8 +31,18 @@ define([], function () {
         });
 
         $('a.jstree-anchor').on("click.jstree", function (e, data) {
-            var $this = $(e.currentTarget)
-            console.log(1233, $this.parents('li').parents('li').parents('li').text())//attr('aria-level')
+            var $this = $(e.currentTarget),
+                // 父级文件夹字符串
+                parentString = $this.find('span').attr('data-parent'),
+                // 文件夹名或文件名
+                name = $this.text(),
+                // parent表示文件夹，sub表示文件
+                type = $this.find('span').hasClass('parent') ? 'parent' : 'sub'
+
+            if (type == 'parent') return;
+
+
+
         });
 
     }
