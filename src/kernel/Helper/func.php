@@ -71,6 +71,14 @@ function language()
 }
 
 /**
+ * @return Lxh\File\FileManager
+ */
+function file_manager()
+{
+    return $GLOBALS['__container__']->make('file.manager');
+}
+
+/**
  * Translate label/labels
  *
  * @param  string $label name of label

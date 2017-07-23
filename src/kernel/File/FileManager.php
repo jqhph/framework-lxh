@@ -184,7 +184,7 @@ class FileManager
      * Get PHP array from PHP file
      *
      * @param  string | array $path
-     * @return array | bool
+     * @return array
      */
     public function getPhpContents($path)
     {

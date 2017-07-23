@@ -436,7 +436,49 @@ window.Lxh = function (options) {
                 //     //timeOut: 3000,
                 toastr.options = options
                 return toastr
-            }
+            },
+
+            // 弹窗
+            modal: function (options, call) {
+                options = options || {}
+                options.closeButton = options.closeButton || true
+                options.class = options.class || 'modal-container'
+
+                options.title = trans(options.title) || ''
+                options.content = options.content || ''
+                options.saveButton = options.saveButton || true
+                options.saveButtonClass = options.saveButtonClass || 'btn-primary'
+                options.buttons = options.buttons || {}
+                options.closeButtonLabel = trans(options.closeButtonLabel) || trans('Close')
+                options.saveButtonLabel = trans(options.saveButtonLabel) || trans('Save')
+                options.tpl = options.tpl || $('#modal-basic').text()
+
+                var blade = new Blade(options.tpl, options)
+
+                $('body').append(blade.fetch())
+
+                var $container = $('div.' + options.class)
+
+                $container.find('button[data-action="modal-basic-close"]').click(close)
+
+                var modal = $container.modal()
+
+                if (call) {
+                    $container.find('button[data-action="modal-basic-save"]').click(function () {
+                        call(modal)
+                    })
+                }
+
+                // 添加close事件
+                modal.close = close
+
+                return modal
+
+                function close() {
+                    $('.modal-backdrop').remove()
+                    $container.remove()
+                }
+            },
         }
     }
     // --------------------------------------UI END-----------------------------------------------
@@ -1290,6 +1332,13 @@ window.Lxh = function (options) {
          */
         this.fetchRow = function () {
             return this.request(util.parseApi('detail'), 'GET')
+        }
+
+        /**
+         * 获取表单数据
+         */
+        this.getFormData = function () {
+            return store.formHandler.get(get_form_selector())
         }
 
         var self = this

@@ -344,7 +344,7 @@
   background-color: #ffffff;
   width: 478px;
   padding: 17px;
-  border-radius: 5px;
+  border-radius: 0px;
   text-align: center;
   position: fixed;
   left: 50%;
@@ -562,3 +562,4 @@
 .sweet-alert button::-moz-focus-inner {
   border: 0;
 }
+.sweet-alert h2{font-size: 20px;border-bottom: 0px solid #e5e5e5;margin-top:0px;}

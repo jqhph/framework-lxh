@@ -35,7 +35,7 @@ class Language extends Controller
 
     public function actionList()
     {
-        $file = make('file.manager');
+        $file = file_manager();
 
         $languagePackDir = language()->getBasePath();
 
@@ -45,5 +45,108 @@ class Language extends Controller
         assign('list', $fileList);
 
         return fetch_complete_view('List');
+    }
+
+    /**
+     * 获取语言包接口
+     */
+    public function actionGetPackage()
+    {
+        $path = I('content');
+
+        if (empty($path)) {
+            return $this->error();
+        }
+        $languagePackDir = language()->getBasePath();
+
+//        print_r($languagePackDir . ltrim($path, '/'));
+
+        $list = file_manager()->getPhpContents($languagePackDir . $path);
+
+        return $this->success('Success', ['content' => & $list]);
+
+    }
+
+    /**
+     * 保存语言包接口
+     */
+    public function actionSave()
+    {
+        if (empty($_POST['path']) || empty($_POST['content'])) {
+            return $this->error();
+        }
+
+        $_POST['content'] = json_decode($_POST['content'], true);
+
+        $languagePackDir = language()->getBasePath();
+
+        $result = file_manager()->putPhpContents($languagePackDir . $_POST['path'], $_POST['content']);
+
+        if ($result) {
+            return $this->success();
+        }
+        return $this->error();
+    }
+
+    /**
+     * 创建一个新的分类
+     */
+    public function actionCreateCategory()
+    {
+        if (empty($_POST['path']) || empty($_POST['name'])) {
+            return $this->error();
+        }
+        $file = file_manager();
+        $languagePackDir = language()->getBasePath();
+
+        $path = $languagePackDir . $_POST['path'];
+
+        $package = $file->getPhpContents($path);
+
+        if (isset($package[$_POST['name']])) {
+            return $this->error("The category already exist");
+        }
+
+        $package[$_POST['name']] = [];
+
+        if ($file->putPhpContents($path, $package)) {
+            return $this->success('success', ['content' => & $package]);
+        }
+
+        return $this->failed();
+    }
+
+    /**
+     * 创建语言包文件
+     */
+    public function actionCreateFile()
+    {
+        $lang = I('lang');
+        $module = I('module');
+        $file = ucfirst(I('file'));
+
+        if (! $lang || ! $module || ! $file) {
+            return $this->error();
+        }
+        if (strpos($file, '.') !== false) {
+            return $this->error();
+        }
+
+        $languagePackDir = language()->getBasePath();
+        $path = "{$languagePackDir}{$lang}/{$module}/{$file}.php";
+
+        if (is_file($path)) {
+            return $this->error('File already exist');
+        }
+
+        $data = [
+            'labels' => [],
+            'fields' => [],
+        ];
+
+        if (file_manager()->putPhpContents($path, $data)) {
+            return $this->success();
+        }
+        return $this->failed();
     }
 }

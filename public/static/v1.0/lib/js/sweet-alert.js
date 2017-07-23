@@ -24,7 +24,9 @@
         textClass: '',
         imageUrl: null,
         imageSize: null,
-        timer: null
+        timer: null,
+        html: false,
+          width: '478px',
       };
 
 
@@ -236,6 +238,8 @@
         params.closeOnConfirm     = arguments[0].closeOnConfirm !== undefined ? arguments[0].closeOnConfirm : defaultParams.closeOnConfirm;
         params.closeOnCancel      = arguments[0].closeOnCancel !== undefined ? arguments[0].closeOnCancel : defaultParams.closeOnCancel;
         params.timer              = arguments[0].timer || defaultParams.timer;
+        params.html               = arguments[0].html || defaultParams.html;
+        params.width              = arguments[0].width || defaultParams.width;
 
         // Show "Confirm" instead of "OK" if cancel button is visible
         params.confirmButtonText  = (defaultParams.showCancelButton) ? 'Confirm' : defaultParams.confirmButtonText;
@@ -420,7 +424,7 @@
       }
     }
 
-    $okButton.onblur = handleOnBlur;
+    // $okButton.onblur = handleOnBlur;
     $cancelButton.onblur = handleOnBlur;
 
     window.onfocus = function() {
@@ -474,7 +478,12 @@
     $title.innerHTML = escapeHtml(params.title).split("\n").join("<br>");
 
     // Text
-    $text.innerHTML = escapeHtml(params.text || '').split("\n").join("<br>");
+    if (params.html) {
+        $text.innerHTML = params.text
+    } else {
+        $text.innerHTML = escapeHtml(params.text || '').split("\n").join("<br>");
+    }
+
     if (params.text) {
       show($text);
     }
