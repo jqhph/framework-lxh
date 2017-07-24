@@ -8,7 +8,7 @@
 $config = [];
 
 // 语言包
-$config['language'] = 'en';
+$config['language'] = 'zh';
 
 // view version模板版本
 $config['view-version'] = 'v1.0';

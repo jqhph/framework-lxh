@@ -25,12 +25,12 @@ class Language extends Controller
         $scopes = explode(',', I('scopes'));
 
         if (empty($scopes)) {
-            return $this->success('SUCCESS', ['list' => []]);
+            return $this->success('sucess', ['list' => []]);
         }
 
         $lang = I('lang', 'en');
 
-        return $this->success('SUCCESS', ['list' => language()->getPackages($scopes, $lang)]);
+        return $this->success('sucess', ['list' => language()->getPackages($scopes, $lang)]);
     }
 
     public function actionList()
@@ -63,7 +63,7 @@ class Language extends Controller
 
         $list = file_manager()->getPhpContents($languagePackDir . $path);
 
-        return $this->success('Success', ['content' => & $list]);
+        return $this->success('success', ['content' => & $list]);
 
     }
 
@@ -104,7 +104,7 @@ class Language extends Controller
         $package = $file->getPhpContents($path);
 
         if (isset($package[$_POST['name']])) {
-            return $this->error("The category already exist");
+            return $this->error("The category already exists");
         }
 
         $package[$_POST['name']] = [];
@@ -117,7 +117,7 @@ class Language extends Controller
     }
 
     /**
-     * 创建语言包文件
+     * 创建语言包文件接口
      */
     public function actionCreateFile()
     {
@@ -136,7 +136,7 @@ class Language extends Controller
         $path = "{$languagePackDir}{$lang}/{$module}/{$file}.php";
 
         if (is_file($path)) {
-            return $this->error('File already exist');
+            return $this->error('File already exists');
         }
 
         $data = [
@@ -148,5 +148,38 @@ class Language extends Controller
             return $this->success();
         }
         return $this->failed();
+    }
+
+    /**
+     * 创建分类下的key - value键值对接口
+     *
+     */
+    public function actionCreateValue()
+    {
+        if (empty($_POST['path']) || empty($_POST['content'])) {
+            return $this->error();
+        }
+        $path = $_POST['path'];
+        $content = $_POST['content'];
+
+        $language = language();
+        $file     = file_manager();
+
+        $path = $language->getBasePath() . $path;
+
+        if ($file->mergePhpContents($path, $content)) {
+            return $this->success('Success', ['content' => $file->getPhpContents($path)]);
+        }
+
+        return $this->failed();
+    }
+
+    /**
+     * 创建options下的key - value键值对接口
+     *
+     */
+    public function actionCreateOptions()
+    {
+        return $_POST;
     }
 }

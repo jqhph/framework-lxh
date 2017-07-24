@@ -83,6 +83,7 @@
     </tr>
     @endforeach
 </script>
+
 <script type="text/html" id="tableTpl">
     <table class="table table-bordered m-0">
         @foreach {list} {k} {row}
@@ -144,6 +145,7 @@
     </div>
 
 </script>
+
 <script type="text/html" id="addKeyValueTpl">
     <div class="form-group clearfix">
         <label class="col-md-2 control-label"><?php echo trans('key-value', 'fields'); ?></label>
@@ -158,5 +160,5 @@
             <i data-action="remove-key-value-row" class="fa fa-times" style="color:#ff5b5b;cursor:pointer"></i>
         </div>
     </div>
-</script>>
+</script>
 

@@ -145,7 +145,7 @@ class Record extends LxhController
      *
      * @return array
      */
-    protected function success($msg = 'SUCCESS', array $options = [])
+    protected function success($msg = 'Success', array $options = [])
     {
         return $this->toMsg($msg, Status::SUCCESS, $options);
     }
@@ -155,7 +155,7 @@ class Record extends LxhController
      *
      * @return array
      */
-    protected function failed($msg = 'FAILED', array $options = [])
+    protected function failed($msg = 'Failed', array $options = [])
     {
         return $this->toMsg($msg, Status::FAILED, $options);
     }
@@ -165,7 +165,7 @@ class Record extends LxhController
      *
      * @return array
      */
-    protected function error($msg = 'INVALID ARGUMENTS', $status = Status::INVALID_ARGUMENTS)
+    protected function error($msg = 'Invalid arguments', $status = Status::INVALID_ARGUMENTS)
     {
         return $this->toMsg($msg, $status);
     }

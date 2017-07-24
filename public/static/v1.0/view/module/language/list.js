@@ -245,6 +245,8 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
                 })
 
             },
+
+            // 创建普通语言包键值对
             createValue: function (e) {
                 var path = this.$packageTitle.text()
 
@@ -256,7 +258,9 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
                 var data = this.saveModel.getFormData(),
                     categories = [],
                     keyValueTpl = $('#addKeyValueTpl').text(),
-                    blade = new Blade($('#createValueTpl').text())
+                    blade = new Blade($('#createValueTpl').text()),
+                    model = $lxh.createModel(),
+                    notify = this.notify
 
                 for (var i in data.category) {
                     categories.push(data.category[i])
@@ -271,9 +275,44 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
                 }, function (modal) {
                     var formData = $lxh.form().get('.modal-container')
 
+                    try {
+                        formData = normalize(formData)
+                    } catch (e) {
+                        return notify.error(trans('Invalid arguments', 'tip'))
+                    }
 
+                    notify.info(trans('loading'))
 
-                })
+                    model.data({path: path, content: formData})
+
+                    // 创建成功回调函数
+                    model.on('success', function (data) {
+                        // 重新渲染table
+                        this.renderLanguageList(data)
+                        notify.success(trans('success'))
+                        // 关闭弹窗
+                        modal.close()
+                    }.bind(this))
+
+                    model.touchAction('CreateValue', 'POST')
+
+                    // 格式化
+                    function normalize(data) {
+                        var newData = {}
+
+                        if (! data.category_name) throw new Error('Invalid arguments')
+
+                        newData[data.category_name] = {}
+                        for (i in data.key) {
+                            if (! data.key[i] || ! data.value[i]) {
+                                throw new Error('Invalid arguments')
+                            }
+                            newData[data.category_name][data.key[i]] = data.value[i]
+                        }
+                        return newData
+                    }
+
+                }.bind(this))
 
                 $('i[data-action="add-key-value-row"]').click(add_key_value_row)
 
@@ -283,6 +322,15 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
 
                     $('i[data-action="remove-key-value-row"]').unbind('click')
                     $('i[data-action="remove-key-value-row"]').click(remove_key_value_row)
+
+                    var v = $lxh.validator([
+                        {name: 'category_name', rules: 'required', },
+                        {name: 'key[]', rules: 'required', },
+                        {name: 'value[]', rules: 'required' },
+                    ], function () {
+
+                    }, '.modal-container')
+                    v._validateForm('submit')
                 }
 
                 function remove_key_value_row(e) {

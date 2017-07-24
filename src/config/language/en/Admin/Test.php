@@ -4,9 +4,13 @@ return [
     'labels' => [
         'name' => 'Name',
         'b1' => 'd',
+        'teee' => '11',
+        'vvvv' => '1111',
+        'waa' => 'rdssd',
     ],
     'fields' => [
         'email' => 'Email',
+        'nn' => 'nnnnn',
     ],
     'options' => [
 
@@ -15,9 +19,5 @@ return [
             1 => 'male',
             2 => 'female',
         ],
-    ],
-    'tetsdfds2' => [
-    ],
-    'test' => [
     ],
 ];

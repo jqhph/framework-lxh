@@ -10,6 +10,7 @@ use Lxh\Container\Container;
 use Lxh\ORM\Connect\PDO;
 use Lxh\Helper\Console;
 use Lxh\Language\Manager;
+use Lxh\File\FileManager;
 
 // 常用的变量先注册到全局变量中
 $GLOBALS['__container__'] = Container::getInstance();
@@ -71,7 +72,7 @@ function language()
 }
 
 /**
- * @return Lxh\File\FileManager
+ * @return FileManager
  */
 function file_manager()
 {
