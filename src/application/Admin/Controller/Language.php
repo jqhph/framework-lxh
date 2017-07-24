@@ -182,4 +182,32 @@ class Language extends Controller
     {
         return $_POST;
     }
+
+    /**
+     * 复制语言包
+     */
+    public function actionCopyFile()
+    {
+        if (empty($_POST['path']) || empty($_POST['newPath']) ) {
+            return $this->error();
+        }
+
+        $base = language()->getBasePath();
+
+        $file = file_manager();
+
+        $data = $file->getPhpContents($base . $_POST['path']);
+
+        $newPath = $base . $_POST['newPath'];
+
+        if (is_file($newPath)) {
+            return $this->error('File already exists');
+        }
+
+        if ($file->putPhpContents($newPath, $data)) {
+            return $this->success();
+        }
+
+        return $this->failed();
+    }
 }

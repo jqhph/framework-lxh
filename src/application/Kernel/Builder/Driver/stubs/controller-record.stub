@@ -87,8 +87,6 @@ class {controller} extends {extends}
 
         $offset = ceil($page - 1) * $maxSize;
 
-        {search}
-
         $q = query();
 
         $q->from({Controller})->where(array_merge($this->makeWhereContent(), ['deleted' => 0]))->limit($offset, $maxSize)

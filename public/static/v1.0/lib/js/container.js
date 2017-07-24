@@ -455,9 +455,15 @@ window.Lxh = function (options) {
 
                 var blade = new Blade(options.tpl, options)
 
+                var $container = $('div.' + options.class)
+
+                if ($container.length > 0) {
+                    return $container.modal()
+                }
+
                 $('body').append(blade.fetch())
 
-                var $container = $('div.' + options.class)
+                $container = $('div.' + options.class)
 
                 $container.find('button[data-action="modal-basic-close"]').click(close)
 
@@ -477,6 +483,7 @@ window.Lxh = function (options) {
                 function close() {
                     $('.modal-backdrop').remove()
                     $container.remove()
+                    $('body').removeClass('modal-open')
                 }
             },
         }

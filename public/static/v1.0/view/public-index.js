@@ -39,6 +39,7 @@ define(['css/sweet-alert.css', 'lib/js/sweet-alert.min'], function () {
                 showCancelButton: true,
                 confirmButtonClass: 'btn-danger',
                 confirmButtonText: trans("Yes, delete it!", 'tip'),
+                cancelButtonText: trans('Cancel'),
                 closeOnConfirm: false
             }, function () {
                 // 发起删除请求

@@ -435,7 +435,7 @@ class FileManager
 
          if (!empty($permissionDeniedList)) {
              $betterPermissionList = $this->permission->arrangePermissionList($permissionDeniedList);
-             throw new Error("Permission denied for <br>". implode(", <br>", $betterPermissionList));
+             throw new Error("Permission denied for ". implode(", ", $betterPermissionList));
          }
 
          $res = true;

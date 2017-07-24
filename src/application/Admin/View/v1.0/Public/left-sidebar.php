@@ -36,7 +36,7 @@ $menu = make('acl-menu');
                 <li>
                     <a href="<?php echo Lxh\Kernel\AdminUrlCreator::makeHome();?>" class="waves-effect
                     <?php if ($menu->isActive('Index', 'Index')) echo 'active';?> "><i class="zmdi zmdi-view-dashboard"></i> <span>
-                            <?php echo trans('Home');?> </span> </a>
+                            <?php echo trans('Home', 'menu');?> </span> </a>
                 </li>
 
                 <?php foreach ($menu->get() as & $m) { ?>

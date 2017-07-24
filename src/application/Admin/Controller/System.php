@@ -83,7 +83,7 @@ class System extends Controller
 
         $nav = 'Making modules';
 
-        assign('navTitle', $nav);
+//        assign('navTitle', $nav);
         assign('fields', $fields);
         assign('groups', $groups);
         assign('moduleOptions', $options);

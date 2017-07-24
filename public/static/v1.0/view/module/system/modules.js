@@ -91,7 +91,7 @@ define(['blade'], function () {
 
                     // 判断是否添加了字段信息
                     if (typeof this.store.inputValues.field_name == 'undefined') {
-                        return $lxh.ui().notify().error(trans('Invalid argument.', 'tip'))
+                        return $lxh.ui().notify().error(trans('Invalid argument', 'tip'))
                     }
 
                     if (this.store.inputValues.field_name.length < 1) {

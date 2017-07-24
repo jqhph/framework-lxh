@@ -1,17 +1,6 @@
 <div class="col-md-2">
     <div class="card-box">
-        <div class="dropdown pull-right">
-            <a href="#" class="dropdown-toggle card-drop" data-toggle="dropdown" aria-expanded="false">
-                <i class="zmdi zmdi-more-vert"></i>
-            </a>
-            <ul class="dropdown-menu" role="menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li><a href="#">Separated link</a></li>
-            </ul>
-        </div>
+
 
         <h4 class="header-title m-t-0 m-b-30"><?php echo trans('Catalog'); ?></h4>
 
@@ -29,9 +18,10 @@
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button  data-action="edit" class="btn btn-custom  "><?php echo trans_with_global('Edit'); ?></button>
             <button data-action="create-value"  class="btn btn-info "><?php echo trans('Create Value');?></button>
-            <button data-action="create-options"  class="btn btn-primary "><?php echo trans('Create Options');?></button>
-            <button data-action="create-category" class="btn btn-purple "><?php echo trans('Create Category');?></button>
-            <button  data-action="create-file" class="btn btn-success"><?php echo trans('Create File'); ?></button>
+            <button data-action="create-options"  class="btn btn-success  "><?php echo trans('Create Options');?></button>
+            <button data-action="create-category" class="btn btn-primary "><?php echo trans('Create Category');?></button>
+            <button  data-action="create-file" class="btn btn-purple"><?php echo trans('Create File'); ?></button>
+            <button  data-action="copy-file" class="btn btn-inverse"><?php echo trans('Copy File'); ?></button>
         </div>
 
         <h4 class="header-title m-t-0 m-b-30 package-title pull-left"><?php echo trans('Details'); ?></h4>
@@ -120,7 +110,7 @@
 
 <script type="text/html" id="createValueTpl">
     <div class="form-group clearfix">
-        <label class="col-md-2 control-label"><?php echo trans('Category', 'fields'); ?></label>
+        <label class="col-md-2 control-label"><?php echo trans('category', 'fields'); ?></label>
 
         <div class="col-md-10">
             <select name="category_name" class="form-control">

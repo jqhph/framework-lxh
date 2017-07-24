@@ -42,7 +42,7 @@
         <h5 class="text-muted m-t-0 font-600"><?php echo $language->translateWithGolobal('project-desc')?></h5>
     </div>
     <div class="m-t-40 card-box portlet">
-        <div class="text-center">
+        <div class="text-center" style="display: none">
             <h4 class="text-uppercase font-bold m-b-0"><?php echo $language->translate('sign in')?></h4>
         </div>
         <div class="panel-body">
@@ -97,7 +97,7 @@
     <div class="row">
         <div class="col-sm-12 text-center">
             <p class="text-muted"><?php echo $language->translate('unaccount')?> <a href="/Register" class="text-primary m-l-5"><b>
-                        <?php echo $language->translateWithGolobal('sign up');?></b></a></p>
+                        <?php echo $language->translate('sign up');?></b></a></p>
         </div>
     </div>
 

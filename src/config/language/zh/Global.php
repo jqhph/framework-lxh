@@ -1,13 +1,47 @@
-<?php
-/**
- * 公共语言包
- *
- * @author Jqh
- * @date   2017/6/29 20:18
- */
+<?php 
+return [
 
-$config = [];
-
-$config['labels'] = [];
-
-return $config;
+    'labels' => [
+        'name' => '名称',
+        'Create' => '创建',
+        'Cancel' => '取消',
+        'Close' => '关闭',
+        'Save' => '保存',
+        'Edit' => '编辑',
+        'success' => '成功',
+        'Success' => '成功',
+        'Failed' => '失败',
+        'web-title' => 'LXH framework',
+        'web-description' => 'LXH framework, PHP',
+        'sign in' => '登陆',
+        'project-desc' => '高效代码生成器',
+        'loading' => '加载中......',
+        'register' => '注册',
+        'Display' => '显示',
+        'Display all' => '显示所有',
+        'Primary' => '主体',
+        'Add' => '新增',
+        'add' => '新增',
+        'update' => '修改',
+        'delete' => '删除',
+        'list' => '列表',
+        'search' => '搜索',
+    ],
+    'fields' => [
+        'name' => '名称',
+    ],
+    'tip' => [
+        'Are you sure?' => '您确定要继续此操作吗？',
+        'You will not be able to recover this row!' => '此操作将无法进行复原',
+        'Yes, delete it!' => '是的，删除！',
+        'Invalid arguments' => '参数不合法',
+    ],
+    'menu' => [
+        'Language Management' => '语言包管理',
+        'System' => '系统设置',
+        'Making modules' => '创建模块',
+        'Home' => '主页',
+        'Menu management' => '菜单管理',
+        'Create reports' => '创建报表',
+    ],
+];

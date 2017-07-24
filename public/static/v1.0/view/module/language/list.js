@@ -68,6 +68,7 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
             $('button[data-action="create-category"]').click(this.events.createCategory.bind(this))
             $('button[data-action="create-value"]').click(this.events.createValue.bind(this))
             $('button[data-action="create-file"]').click(this.events.createFile.bind(this))
+            $('button[data-action="copy-file"]').click(this.events.copyFile.bind(this))
             $('button[data-action="create-options"]').click(this.events.createOptions.bind(this))
             this.$saveButton.click(this.events.save.bind(this))
             this.$cancelButton.click(this.events.cancel.bind(this))
@@ -189,6 +190,7 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
                     text: trans("You will not be able to recover this row!", 'tip'),
                     type: "warning",
                     showCancelButton: true,
+                    cancelButtonText: trans('Cancel'),
                     confirmButtonClass: 'btn-danger',
                     confirmButtonText: trans("Yes, delete it!", 'tip'),
                     closeOnConfirm: false
@@ -211,16 +213,17 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
                 this.toggleTableInput(true)
             },
             createCategory: function (e) {
+                var path = this.$packageTitle.text()
+
+                // 判断是否选择了文件
+                if (path.indexOf('/') == -1) {
+                    this.notify.error(trans('Please select a file first', 'tip'))
+                    return swal.close()
+                }
+
                 // 弹窗
                 this.modal("Create Category", $('#createCategoryTpl').text(), 'Create', function () {
-                    var path = this.$packageTitle.text(),
-                        name = $('input[name="cate_name"]').val()
-
-                    // 判断是否选择了文件
-                    if (path.indexOf('/') == -1) {
-                        this.notify.error(trans('Please select a file first', 'tip'))
-                        return swal.close()
-                    }
+                    var name = $('input[name="cate_name"]').val()
 
                     if (! name) {2
                         return this.notify.error(trans('The category name is required', 'tip'))
@@ -268,7 +271,7 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
 
                 // 创建弹出窗
                 var modal = $lxh.ui().modal({
-                    title: 'test',
+                    title: 'Create Value',
                     content: blade.fetch({categories: categories}),
                     saveButtonLabel: 'Create',
                     class: '',
@@ -314,6 +317,7 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
 
                 }.bind(this))
 
+                $('i[data-action="add-key-value-row"]').unbind('click')
                 $('i[data-action="add-key-value-row"]').click(add_key_value_row)
 
 
@@ -340,6 +344,45 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
             },
             createOptions: function (e) {
                 console.log('createOptions')
+            },
+
+            // 复制文件
+            copyFile: function (e) {
+                var path = this.$packageTitle.text()
+                // 判断是否选择了文件
+                if (path.indexOf('/') == -1) {
+                    return this.notify.error(trans('Please select a file first', 'tip'))
+                }
+
+                this.modal('Target', $('#createFileTpl').text(), 'Save', function () {
+                    var lang = $('input[name="lang_name"]').val(),
+                        module =  $('input[name="module_name"]').val(),
+                        file = $('input[name="filename"]').val()
+
+                    if (! lang || ! module || ! file) {
+                        return this.notify.error(trans('Invalid arguments', 'tip'))
+                    }
+
+                    if (file.indexOf('.') != -1) {
+                        return this.notify.error(trans('Invalid arguments', 'tip'))
+                    }
+
+                    this.notify.info(trans('loading'))
+
+                    var model = $lxh.createModel()
+                    model.on('success', function (data) {
+                        swal.close()
+
+                        window.location.reload()
+
+                    }.bind(this))
+
+                    var newPath = lang + '/' + module + '/' + file + '.php'
+
+                    model.data({newPath: newPath, path: path})
+
+                    model.touchAction('CopyFile', 'POST')
+                })
             },
 
             // 创建语言包
@@ -405,7 +448,7 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
         modal: function (title, text, confirmButtonText, call) {
             swal({
                 title: trans(title), text: text, showCancelButton: true, confirmButtonClass: 'btn-success',
-                confirmButtonText: confirmButtonText, closeOnConfirm: false, allowEscapeKey: true,
+                confirmButtonText: trans(confirmButtonText), cancelButtonText: trans('Cancel'), closeOnConfirm: false, allowEscapeKey: true,
                 showLoaderOnConfirm: true, animation: true, html: true, containerClass: 'col-md-4'
             }, call.bind(this))
         },

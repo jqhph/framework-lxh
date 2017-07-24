@@ -67,7 +67,7 @@ class Menu extends Controller
 
         $menus = make('acl-menu')->all();
 
-        array_unshift($menus, ['id' => 0, 'name' => 'Top level', 'required' => 1]);
+        array_unshift($menus, ['id' => 0, 'name' => trans('Top level'), 'required' => 1]);
 
         assign('navTitle', $currentTitle);
         assign('menus', $menus);

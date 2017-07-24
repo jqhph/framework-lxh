@@ -59,11 +59,11 @@ use Lxh\Kernel\AdminUrlCreator;
                     </div>
                     <ul class="pager m-b-0 wizard">
                         <li class="previous "><a  data-action="prev-tab"  class="btn btn-primary waves-effect waves-light">
-                                <?php echo trans_with_global('Previous');?></a></li>
+                                <?php echo trans('Previous');?></a></li>
 
                         <li class="next ">
                             <a type="submit" data-action="next-tab" class="btn btn-primary waves-effect waves-light">
-                                <?php echo trans_with_global('Next');?></a>
+                                <?php echo trans('Next');?></a>
                             <a style="display: none" type="submit" data-action="save"  class="btn btn-success waves-effect waves-light">
                                 <?php echo trans_with_global('Save');?></a>
                         </li>

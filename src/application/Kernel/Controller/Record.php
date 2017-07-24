@@ -17,6 +17,23 @@ use Lxh\Http\Response;
 class Record extends LxhController
 {
     /**
+     * 获取where数组
+     *
+     * @param array $options
+     * @return array
+     */
+    protected function normalizeWhereData(& $options)
+    {
+        $data = [];
+        if (empty($options['where'])) {
+            return $data;
+        }
+
+
+
+    }
+
+    /**
      * 删除数据接口
      *
      * @return array
