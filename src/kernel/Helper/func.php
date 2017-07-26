@@ -11,6 +11,7 @@ use Lxh\ORM\Connect\PDO;
 use Lxh\Helper\Console;
 use Lxh\Language\Manager;
 use Lxh\File\FileManager;
+use Lxh\Logger\Manager as LoggerManager;
 
 // 常用的变量先注册到全局变量中
 $GLOBALS['__container__'] = Container::getInstance();
@@ -146,6 +147,12 @@ function user()
 
 }
 
+/**
+ * 获取日志通道实例
+ *
+ * @param  string $channel 日志通道名称
+ * @return LoggerManager
+ */
 function logger($channel = 'exception')
 {
     return $GLOBALS['__container__']->make('logger')->channel($channel);
@@ -170,13 +177,26 @@ function redirect_404($msg = null)
 
 }
 
-// 获取模板内容
+/**
+ * 获取模板内容
+ *
+ * @param  string $action
+ * @param  string $controller
+ * @param  array  $vars 要传递到模板的值，只有当前模板可以用
+ * @return string
+ */
 function fetch_view($action = __ACTION__, $controller = __CONTROLLER__, array $vars = [])
 {
    return $GLOBALS['__container__']->make('view')->fetch("$controller/$action", $vars);
 }
 
-// 获取视图组件
+/**
+ * 获取组件模板内容
+ *
+ * @param  string $name 组件模板路径
+ * @param  array  $vars 要传递到模板的值，只有当前模板可以用
+ * @return void
+ */
 function component_view($name, array $vars = [])
 {
     return $GLOBALS['__container__']->make('view')->fetch("component/$name", $vars);
@@ -198,18 +218,33 @@ function call($controller, $action, array $params = [])
     return $GLOBALS['__container__']->make('controller.manager')->call($controller, $action, $params);
 }
 
-// 分配变量到模板
+/**
+ * 分配变量到模板输出
+ * 通过此方法分配的变量所有引入的模板都可用
+ *
+ * @param  string $key  在模板使用的变量名称
+ * @param  mixed $value 变量值，此处使用引用传值，分配时变量必须先定义
+ * @return void
+ */
 function assign($key, $value)
 {
     $GLOBALS['__container__']->make('view')->assign($key, $value);
 }
 
-// 返回完整的模板
-function fetch_complete_view($action = __ACTION__, $controller = __CONTROLLER__, array $vars = [])
+/**
+ * 返回完整的模板（包括header和footer）
+ *
+ * @param  string $action
+ * @param  array  $vars 要传递到模板的值，只有当前模板可以用
+ * @return string
+ */
+function fetch_complete_view($action = __ACTION__, array $vars = [])
 {
+    $controller = __CONTROLLER__;
+
     $view = $GLOBALS['__container__']->make('view');
 
-    return $view->fetch('Public/header') . $view->fetch("$controller/$action") . $view->fetch('Public/footer');
+    return $view->fetch('Public/header') . $view->fetch("$controller/$action", $vars) . $view->fetch('Public/footer');
 }
 
 /**

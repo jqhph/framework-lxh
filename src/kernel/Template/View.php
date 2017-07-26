@@ -35,6 +35,7 @@ class View
 
     /**
      * 分配变量到模板输出
+     * 通过此方法分配的变量所有引入的模板都可用
      *
      * @param  string $key  在模板使用的变量名称
      * @param  mixed $value 变量值，此处使用引用传值，分配时变量必须先定义
@@ -50,10 +51,10 @@ class View
      * 读取模板内容并返回
      *
      * @param  string $viewName 模板名称
-     * @param  array  $vars     要传递到模板的值
+     * @param  array  $vars     要传递到模板的值，只有当前模板可以用
      * @return string
      */
-    public function fetch($viewName, array $vars = [])
+    public function fetch($viewName, array & $vars = [])
     {
         // 页面缓存
         ob_start();

@@ -14,7 +14,7 @@ return [
         'web-title' => 'LXH framework',
         'web-description' => 'LXH framework, PHP',
         'sign in' => '登陆',
-        'project-desc' => '高效代码生成器',
+        'project-desc' => '高效后台代码生成器',
         'loading' => '加载中......',
         'register' => '注册',
         'Display' => '显示',

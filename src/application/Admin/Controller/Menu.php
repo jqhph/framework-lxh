@@ -65,14 +65,11 @@ class Menu extends Controller
     {
         $currentTitle = 'Create Menu';
 
-        $menus = make('acl-menu')->all();
-
         array_unshift($menus, ['id' => 0, 'name' => trans('Top level'), 'required' => 1]);
 
         assign('navTitle', $currentTitle);
-        assign('menus', $menus);
 
-        return fetch_complete_view('Detail');
+        return fetch_complete_view('Detail', ['menus' => make('acl-menu')->all()]);
     }
 
     /**
@@ -96,10 +93,11 @@ class Menu extends Controller
         array_unshift($menus, ['id' => 0, 'name' => 'Top level', 'required' => 1]);
 
         assign('navTitle', $currentTitle);
-        assign('row', $row);
-        assign('menus', $menus);
 
-        return fetch_complete_view();
+        return fetch_complete_view(__ACTION__, [
+            'row' => & $row,
+            'menus' => & $menus,
+        ]);
     }
 
     public function actionIndex()
@@ -127,11 +125,7 @@ class Menu extends Controller
 
         $list = make('acl-menu')->all();
 
-        assign('titles', $titles);
-        assign('list', $list);
-
-
-        return fetch_complete_view();
+        return fetch_complete_view('Index', ['titles' => & $titles, 'list' => & $list]);
     }
 
 }

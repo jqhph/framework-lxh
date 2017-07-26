@@ -33,18 +33,21 @@ class Language extends Controller
         return $this->success('sucess', ['list' => language()->getPackages($scopes, $lang)]);
     }
 
+    /**
+     * 语言包编辑界面
+     *
+     * @return string
+     */
     public function actionList()
     {
         $file = file_manager();
 
         $languagePackDir = language()->getBasePath();
 
+        // 获取语言包目录
         $fileList = $file->getFileList($languagePackDir, true);
-//debug($fileList);
 
-        assign('list', $fileList);
-
-        return fetch_complete_view('List');
+        return fetch_complete_view('List', ['list' => & $fileList]);
     }
 
     /**
@@ -175,7 +178,7 @@ class Language extends Controller
     }
 
     /**
-     * 创建options下的key - value键值对接口
+     * 创建options下的key - value键值对api
      *
      */
     public function actionCreateOptions()
@@ -184,7 +187,7 @@ class Language extends Controller
     }
 
     /**
-     * 复制语言包
+     * 复制语言包api
      */
     public function actionCopyFile()
     {
