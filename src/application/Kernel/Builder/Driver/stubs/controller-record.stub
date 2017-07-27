@@ -1,5 +1,6 @@
 <?php
 /**
+ * {controllerEnName}
  *
  * @author {author}
  * @date   {date}
@@ -12,7 +13,7 @@ use {root-namespace}\Http\Request;
 use {root-namespace}\Http\Response;
 use {root-namespace}\Helper\Valitron\Validator;
 
-class {controller} extends {extends}
+class {class} extends {extends}
 {
     public function __construct()
     {
@@ -43,7 +44,6 @@ class {controller} extends {extends}
     public function actionCreate(Request $req, Response $resp, & $params)
     {
         $currentTitle = trans('Create {controllerEnName}');
-
 
         assign('currentTitle', $currentTitle);
 
@@ -81,28 +81,35 @@ class {controller} extends {extends}
     {
         $page = I('page', 1);
 
-        $titles = {titles};
+        $titles = {listTitles};
 
         $maxSize = {maxSize};
 
         $offset = ceil($page - 1) * $maxSize;
 
+        $wheres = array_merge($this->makeWhereContent(), ['deleted' => 0]);
+
         $q = query();
 
-        $q->from({Controller})->where(array_merge($this->makeWhereContent(), ['deleted' => 0]))->limit($offset, $maxSize)
+        $total = $q->from({Controller})->where($wheres)->count();
 
-        $orders = $this->makeOrderContent();
+        $list = [];
 
-        if ($orders) {
-            $q->sort($orders[0], $orders[1]);
+        if ($total) {
+            $q->from({Controller})->where($wheres)->limit($offset, $maxSize)
+
+            $orders = $this->makeOrderContent();
+
+            if ($orders) {
+                $q->sort($orders[0], $orders[1]);
+            }
+
+            $list = $q->find();
         }
 
-        $list = $q->find();
+        $pages = pages($total, $page, $maxSize);
 
-        assign('titles', $titles);
-        assign('list', $list);
-
-        return fetch_complete_view();
+        return fetch_complete_view('Index', ['list' => & $list, 'titles' => & $titles, 'pages' => & $pages]);
     }
 
     /**
@@ -120,7 +127,7 @@ class {controller} extends {extends}
      */
     protcted function makeOrderContent()
     {
-
+        {orderByContent}
     }
 
 }

@@ -13,6 +13,13 @@ use Lxh\Kernel\Builder\CodeGenerator;
 abstract class Creator
 {
     /**
+     * @var array
+     */
+    private $options;
+
+    private $contents;
+
+    /**
      * @var CodeGenerator
      */
     protected $generator;
@@ -20,6 +27,21 @@ abstract class Creator
     public function __construct(CodeGenerator $generator)
     {
         $this->generator = $generator;
+    }
+
+    /**
+     * 设置或获取生成内容
+     *
+     * @param  mixed $data
+     * @return mixed
+     */
+    public function content($data = null)
+    {
+        if ($data) {
+            $this->contents = $data;
+            return;
+        }
+        return $this->contents;
     }
 
     /**
@@ -51,6 +73,26 @@ abstract class Creator
     public function rollback()
     {
 
+    }
+
+    /**
+     * 获取配置文件
+     *
+     * @param  string $name
+     * @param  mixed  $default
+     * @return mixed
+     */
+    protected function options($name, $default = null)
+    {
+        if (empty($name)) {
+            return $this->options;
+        }
+        return isset($this->options[$name]) ? $this->options[$name] : $default;
+    }
+
+    protected function setOptions(array $opts)
+    {
+        $this->options = $opts;
     }
 
 }

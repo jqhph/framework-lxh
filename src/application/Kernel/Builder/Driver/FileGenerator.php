@@ -65,7 +65,7 @@ abstract class FileGenerator extends Creator
     {
         parent::__construct($generator);
 
-        $this->files = make('file.manager');
+        $this->files = file_manager();
     }
 
     protected function getAuthor()
@@ -104,7 +104,9 @@ abstract class FileGenerator extends Creator
             return false;
         }
 
-        return $this->files->putContents($path, $this->buildClass($name), LOCK_EX);
+        return $this->buildClass($name);
+
+//        return $this->files->putContents($path, $data, LOCK_EX);
 
     }
 
@@ -131,7 +133,17 @@ abstract class FileGenerator extends Creator
     {
         $name = str_replace($this->getRootNamespace(), '', $name);
 
-        return $this->getBasePath() . $this->folder . str_replace('\\', '/', $name) . '.php';
+        return $this->getBasePath() . $this->getFolder() . '/' . str_replace('\\', '/', $name) . '.php';
+    }
+
+    /**
+     * 设置文件存储文件夹
+     *
+     * @return string
+     */
+    protected function getFolder()
+    {
+        return $this->folder;
     }
 
     /**
@@ -172,7 +184,7 @@ abstract class FileGenerator extends Creator
             $name = str_replace('/', '\\', $name);
         }
 
-        return $this->parseName($this->getfileNamespace(trim($rootNamespace, '\\')) . "{$this->fileNamespace}\\$name");
+        return $this->parseName($this->getFileNamespace(trim($rootNamespace, '\\')) . "{$this->fileNamespace}\\$name");
     }
 
     /**

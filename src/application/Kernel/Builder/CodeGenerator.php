@@ -24,6 +24,8 @@ class CodeGenerator
      */
     protected $creators = [];
 
+    protected $recoreds = [];
+
     /**
      * 错误提示信息数组
      *
@@ -211,6 +213,17 @@ class CodeGenerator
         }
 
         return true;
+    }
+
+    /**
+     * 保存记录
+     *
+     * @param  string $name
+     * @return void
+     */
+    public function record($name)
+    {
+        $this->records[] = $name;
     }
 
     /**

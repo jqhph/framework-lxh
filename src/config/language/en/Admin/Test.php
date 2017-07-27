@@ -2,7 +2,7 @@
 return [
 
     'labels' => [
-        'name' => 'Name',
+        'name1111' => 'Name2222',
         'b1' => 'd',
         'teee' => '11',
         'vvvv' => '1111',

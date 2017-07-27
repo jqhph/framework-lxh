@@ -1,11 +1,7 @@
 <div class="col-md-2">
     <div class="card-box">
-
-
         <h4 class="header-title m-t-0 m-b-30"><?php echo trans('Catalog'); ?></h4>
-
         <?php echo component_view('tree/basic', ['class' => 'basic-language', 'list' => & $list]); ?>
-
     </div>
 </div>
 
@@ -23,12 +19,8 @@
             <button  data-action="create-file" class="btn btn-purple"><?php echo trans('Create File'); ?></button>
             <button  data-action="copy-file" class="btn btn-inverse"><?php echo trans('Copy File'); ?></button>
         </div>
-
         <h4 class="header-title m-t-0 m-b-30 package-title pull-left"><?php echo trans('Details'); ?></h4>
-
-
         <table class="table table-bordered m-0 language-table">
-
             <thead>
             <tr>
                 <th class="col-md-1"><?php echo trans('category', 'fields'); ?></th>
@@ -38,15 +30,12 @@
             </thead>
 
             <tbody>
-            <tr>
-                <td class="col-md-1" colspan="2">&nbsp;</td>
-            </tr>
+            <tr><td class="col-md-1" colspan="2">&nbsp;</td></tr>
             </tbody>
         </table>
         </form>
     </div>
 </div>
-
 
 <script>
     add_css(['lib/plugins/jstree/style.css', 'lib/plugins/custombox/dist/custombox.min.css']);

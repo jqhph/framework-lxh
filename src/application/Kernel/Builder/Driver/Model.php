@@ -10,6 +10,8 @@ namespace Lxh\Kernel\Builder\Driver;
 
 class Model extends Creator
 {
+    protected $defaultStub = 'controller-record';
+
     public function make(array $options)
     {
         // TODO: Implement make() method.
