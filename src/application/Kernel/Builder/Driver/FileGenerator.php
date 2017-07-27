@@ -181,7 +181,7 @@ abstract class FileGenerator extends Creator
      * @param  string  $rootNamespace
      * @return string
      */
-    protected function getfileNamespace($rootNamespace)
+    protected function getFileNamespace($rootNamespace)
     {
         return $rootNamespace;
     }
