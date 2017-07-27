@@ -29,7 +29,6 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
 
             this.notify = $lxh.ui().notify()
 
-
             // 注册成功回调事件
             this.saveModel.on('success', this.saveSuccess.bind(this))
             this.model.on('success', this.renderLanguageList.bind(this))
@@ -37,26 +36,12 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
             // 初始化语言包树
             $('.basic-language').jstree({
                 'core' : {
-                    // 'data': languageCatelog,
-                    'themes' : {
-                        'responsive': true
-                    },
-                    'check_callback':
-                        function (operation, node, parent, position, more) {
-                            console.log('operation', operation)
-                            console.log('node', node)
-                            console.log('parent', parent)
-                            console.log('position', position)
-                            console.log('more', more)
-                        }
+                    'themes' : {'responsive': true},
+                    // 'check_callback': false
                 },
                 'types' : {
-                    'default' : {
-                        'icon' : 'zmdi zmdi-folder folder',
-                    },
-                    'file' : {
-                        'icon' : 'zmdi zmdi-file file'
-                    }
+                    'default' : {'icon' : 'zmdi zmdi-folder folder',},
+                    'file' : {'icon' : 'zmdi zmdi-file file'}
                 },
                 'plugins' : ['types', 'wholerow', 'sort', 'ui']
             })
@@ -225,7 +210,7 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
                 this.modal("Create Category", $('#createCategoryTpl').text(), 'Create', function () {
                     var name = $('input[name="cate_name"]').val()
 
-                    if (! name) {2
+                    if (! name) {
                         return this.notify.error(trans('The category name is required', 'tip'))
                     }
 
@@ -470,4 +455,3 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
         language.init()
     }
 })
-
