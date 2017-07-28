@@ -38,9 +38,6 @@ class PDO
     public function __construct(array $config = [])
     {
         if (! $config) {
-            $config = config('pdo');
-        }
-        if (! $config) {
             throw new Exception('Lack of database configuration information.');
         }
         
@@ -222,6 +219,16 @@ class PDO
         $res = $stmt->rowCount();
 
         return $res;
+    }
+
+    /**
+     * 获取原始pdo对象
+     *
+     * @return \PDO
+     */
+    public function resource()
+    {
+        return $this->pdo;
     }
 
     /**

@@ -288,11 +288,20 @@ function config($key = null, $default = null)
 }
 
 /**
+ * 获取pdo连接实例
+ *
+ * @param  string $name 对应配置文件数据库配置键名
  * @return Lxh\ORM\Connect\PDO
  */
-function pdo()
+function pdo($name = 'primary')
 {
-    return $GLOBALS['__container__']->make('pdo');
+    static $instances = [];
+
+    if (isset($instances[$name])) {
+        return $instances[$name];
+    }
+
+    return $instances[$name] = new PDO(config("RDBMS.$name"));
 }
 
 /**

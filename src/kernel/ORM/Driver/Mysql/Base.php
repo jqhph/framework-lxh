@@ -119,10 +119,10 @@ class Base
 	    }
 	    switch ($this->connectionType) {
 	    	case $this->defaultConnectionType:
-		        $this->connections[$this->defaultConnectionType] = $this->container->make('pdo');
+		        $this->connections[$this->defaultConnectionType] = pdo();
 		        break;
 	    	default:
-	    	    $this->connections[$this->connectionType] = new PDO(config($this->connectionType));
+	    	    $this->connections[$this->connectionType] = pdo($this->connectionType);
 	    	    break;  
 	    }
 	    

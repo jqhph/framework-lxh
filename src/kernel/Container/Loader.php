@@ -40,10 +40,6 @@ class Loader
                 'shared' => true,
                 'class' => 'Lxh\\Http\\Input',
             ],
-            'pdo' => [
-                'shared' => true,
-                'class' => 'Lxh\ORM\Connect\PDO',
-            ],
             'redis' => [
                 'shared' => true,
                 'class' => 'Lxh\ORM\Connect\Redis',

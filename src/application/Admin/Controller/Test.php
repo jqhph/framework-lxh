@@ -19,15 +19,9 @@ class Test extends Controller
     {
         $data = [];
 
-        $s = microtime(true);
+        $data = pdo()->prepare('SELECT * FROM user WHERE id = :id AND is_admin = :is_admin', [':id' => 1, ':is_admin' => 1])->fetchAll(\PDO::FETCH_ASSOC);
 
-        $a = [];
-
-//        $r = query()->from('user')->where('id', 18)->find();
-
-        $a['a'][] = $req->date();
-
-        assign('data', $a);
+        assign('data', $data);
 
         return fetch_complete_view();
 
