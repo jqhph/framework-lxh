@@ -12,17 +12,17 @@ class View extends Creator
 {
     public function make(array $options)
     {
-        // TODO: Implement make() method.
+
     }
 
     public function preview(array $options)
     {
-        // TODO: Implement preview() method.
+
     }
 
     public function previewCode(array $options)
     {
-        // TODO: Implement previewCode() method.
+
     }
 
 }

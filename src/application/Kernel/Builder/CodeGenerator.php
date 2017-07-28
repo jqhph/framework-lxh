@@ -76,40 +76,23 @@ class CodeGenerator
             return false;
         }
 
+        // 生成字段配置信息
+        $this->record('Fields', $this->creator('Fields')->make($options));
+
         // 生成控制器
-        if (! $this->creator('Controller')->make($options)) {
-            return false;
-        }
+        $this->record('Controller', $this->creator('Controller')->make($options));
         
         // 生成模型
-        if (! $this->creator('Model')->make($options)) {
-            $this->rollback('Controller');
-            return false;
-        }
+        $this->record('Model', $this->creator('Model')->make($options));
 
         // 生成模板
-        if (! $this->creator('View')->make($options)) {
-            $this->rollback(['Controller', 'Model']);
-            return false;
-        }
+        $this->record('View',  $this->creator('View')->make($options));
 
         // 生成语言包
-        if (! $this->creator('Language')->make($options)) {
-            $this->rollback(['Controller', 'Model', 'View']);
-            return false;
-        }
-
-        // 生成字段配置信息
-        if (! $this->creator('Fields')->make($options)) {
-            $this->rollback(['Controller', 'Model', 'View', 'Language']);
-            return false;
-        }
+        $this->record('Language', $this->creator('Language')->make($options));
 
         // 打包
-        if (! $this->creator('FilePack')->make($options)) {
-            $this->rollback(['Controller', 'Model', 'View', 'Language', 'Fields']);
-            return false;
-        }
+        $this->record('FilePack', $this->creator('FilePack')->make($options));
 
         // 安装
         if (! $this->creator('Install')->make($options)) {
@@ -216,14 +199,20 @@ class CodeGenerator
     }
 
     /**
-     * 保存记录
+     * 保存或获取记录
      *
      * @param  string $name
-     * @return void
+     * @return mixed
      */
-    public function record($name)
+    public function record($name = null, $data = null)
     {
-        $this->records[] = $name;
+        if ($data === null) {
+            if ($name === null) {
+                return $this->recoreds;
+            }
+            return isset($this->recoreds[$name]) ? $this->recoreds[$name] : null;
+        }
+        $this->records[$name] = & $data;
     }
 
     /**

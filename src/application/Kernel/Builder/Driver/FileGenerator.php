@@ -68,6 +68,23 @@ abstract class FileGenerator extends Creator
         $this->files = file_manager();
     }
 
+    /**
+     * 生成文件
+     *
+     * @return mixed
+     */
+    public function make(array $options)
+    {
+        $this->setOptions($options);
+
+        $data = $this->fire($options['controller_name']);
+
+        // 保存生成结果
+        $this->content($data);
+
+        return $data;
+    }
+
     protected function getAuthor()
     {
         return $this->author;

@@ -197,7 +197,7 @@ class PDO
      * @param  $select bool 是否为查询操作，默认true
      * @return mixed
      */
-    public function prepare($sql, array $data = [], $select = true)
+    public function prepare($sql, array & $data = [], $select = true)
     {
         self::$lastSql = & $sql;
         self::$lastPrepareData = & $data;

@@ -47,7 +47,7 @@ abstract class Creator
     /**
      * 生成代码
      *
-     * @return bool
+     * @return mixed
      */
     abstract public function make(array $options);
 

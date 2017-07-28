@@ -11,27 +11,7 @@ namespace Lxh\Kernel\Builder\Driver;
 class Controller extends FileGenerator
 {
     protected $defaultStub = 'controller-record';
-
-    /**
-     * 生成文件
-     *
-     * @return bool
-     */
-    public function make(array $options)
-    {
-        $this->setOptions($options);
-
-        $data = $this->fire($options['controller_name']);
-
-        // 保存生成结果
-        $this->content($data);
-
-        // 生成模块记录
-        $this->generator->record('Controller');
-
-        return true;
-    }
-
+    
     /**
      * 预览效果
      *
