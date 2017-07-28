@@ -1,0 +1,36 @@
+<?php
+/**
+ * {controllerEnName}
+ *
+ * @author {author}
+ * @date   {date}
+ */
+
+namespace {root-namespace}\{module}\Model;
+
+use {root-namespace}\Helper\Entity;
+use {root-namespace}\MVC\Model;
+use {root-namespace}\Kernel\Model\Record;
+
+class {class} extends Record
+{
+    // 新增数据前置钩子
+    protected function beforeAdd(array & $data)
+    {
+        {beforeAdd}
+
+    }
+
+    // 保存数据前置钩子
+    protected function beforeSave($id, array & $data)
+    {
+        {beforeSave}
+    }
+
+    // 删除后置钩子方法，删除成功后触发
+    protected function afterDelete($id, $result)
+    {
+        {afterDelete}
+    }
+
+}

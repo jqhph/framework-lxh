@@ -8,7 +8,7 @@
 $config = [];
 
 // 语言包 ===> 已移至可写配置文件
-$config['language'] = 'zh';
+//$config['language'] = 'zh';
 
 // view version模板版本
 $config['view-version'] = 'v1.0';

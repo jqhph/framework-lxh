@@ -15,6 +15,10 @@ use {root-namespace}\Helper\Valitron\Validator;
 
 class {class} extends {extends}
 {
+    protected $maxSize = {maxSize};
+
+    protected $listTableTitles = {listTitles};
+
     public function __construct()
     {
     }
@@ -73,71 +77,14 @@ class {class} extends {extends}
     }
 
     /**
-     * list页
-     *
-     * @return string
-     */
-    public function actionIndex()
-    {
-        $page = I('page', 1);
-
-        if ($page < 1) {
-            $page = 1;
-        }
-
-        $titles = {listTitles};
-
-        $maxSize = {maxSize};
-
-        $offset = ceil($page - 1) * $maxSize;
-
-        $wheres = array_merge($this->makeWhereContent(), ['deleted' => 0]);
-
-        $q = query();
-
-        $total = $q->from('{Controller}')->where($wheres)->count();
-
-        $totalPage = ceil($total / $maxSize);
-
-        if ($page > $totalPage) {
-            $page = $totalPage;
-        }
-
-        $list = [];
-
-        if ($total) {
-            $q->from('{Controller}')->where($wheres)->limit($offset, $maxSize)
-
-            $orders = $this->makeOrderContent();
-
-            if ($orders) {
-                $q->sort($orders);
-            }
-
-            $list = $q->find();
-        }
-
-        $pages = pages($total, $page, $maxSize);
-
-        return fetch_complete_view('Index', ['list' => & $list, 'titles' => & $titles, 'pages' => & $pages]);
-    }
-
-    /**
      * 生成where条件内容
      *
+     * @param array $options
+     * @return array
      */
-    protected function makeWhereContent()
+    protected function makeWhereContent(array & $options)
     {
-        {whereContent}
-    }
-
-    /**
-     * 生成order by内容
-     *
-     */
-    protcted function makeOrderContent()
-    {
-        {orderByContent}
+        return {whereContent};
     }
 
 }

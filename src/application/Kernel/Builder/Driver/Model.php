@@ -10,7 +10,7 @@ namespace Lxh\Kernel\Builder\Driver;
 
 class Model extends Creator
 {
-    protected $defaultStub = 'controller-record';
+    protected $defaultStub = 'model-record';
 
     public function make(array $options)
     {

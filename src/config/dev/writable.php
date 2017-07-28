@@ -1,7 +1,7 @@
 <?php 
 return [
-    'js-version' => 18,
-    'css-version' => 1501227155,
+    'js-version' => time(),
+    'css-version' => time(),
     'language' => 'zh',
 
     'replica-client-config' => [

@@ -123,7 +123,7 @@ class Application
     protected function loadFunctionFile()
     {
         require $this->root . 'Kernel/Helper/func.php';
-        require $this->root . 'application/Kernel/Func/func.php';
+        require $this->root . 'application/Kernel/Support/func.php';
     }
 
     /**

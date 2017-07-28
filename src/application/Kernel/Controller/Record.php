@@ -16,21 +16,68 @@ use Lxh\Http\Response;
 
 class Record extends LxhController
 {
+    protected $maxSize = 20;
+
+    protected $listTableTitles = [];
+
     /**
-     * 获取where数组
+     * list页
+     *
+     * @return string
+     */
+    public function actionIndex()
+    {
+        $page = I('page', 1);
+
+        if ($page < 1) {
+            $page = 1;
+        }
+
+        $wheres = array_merge($this->makeWhereContent($_REQUEST), ['deleted' => 0]);
+
+        $model = $this->getModel();
+
+        // 获取记录总条数
+        $total = $model->count($wheres);
+
+        $totalPage = ceil($total / $this->maxSize);
+
+        if ($page > $totalPage) {
+            $page = $totalPage;
+        }
+
+        $list = [];
+
+        if ($total) {
+            $list = $model->records($wheres, $page, $this->maxSize, $this->makeOrderContent($_REQUEST));
+        }
+
+        $pages = pages($total, $page, $this->maxSize);
+
+        return fetch_complete_view('Index', ['list' => & $list, 'titles' => & $this->listTableTitles, 'pages' => & $pages]);
+    }
+
+
+    /**
+     * 生成where条件内容
      *
      * @param array $options
      * @return array
      */
-    protected function normalizeWhereData(& $options)
+    protected function makeWhereContent(array & $options)
     {
-        $data = [];
-        if (empty($options['where'])) {
-            return $data;
-        }
+        return [];
+    }
 
-
-
+    /**
+     * 生成order by字符串
+     *
+     * @param array $options
+     * @return string
+     */
+    protected function makeOrderContent(array & $options)
+    {
+        return 'id Desc';
     }
 
     /**
