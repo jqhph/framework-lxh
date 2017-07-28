@@ -8,7 +8,7 @@
 
 $config = [];
 
-$config['RDBMS'] = [
+$config['db'] = [
     'primary' => [
         'usepool' => false,
         'type' => 'mysql',
@@ -18,7 +18,8 @@ $config['RDBMS'] = [
         'pwd' => '',
         'charset' => 'utf8',
         'name' => 'lxh',
-    ]
+    ],
+
 ];
 
 return $config;

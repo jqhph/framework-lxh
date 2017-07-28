@@ -10,20 +10,57 @@ use Lxh\Contracts\Container\Container;
  */
 class Query
 {
+	/**
+	 * @var Container
+	 */
 	protected $container;
-	
+
+	/**
+	 * @var BuilderManager
+	 */
 	protected $builderManager;
-	
+
+	/**
+	 * 构造器
+	 *
+	 * @var mixed
+	 */
 	protected $builder;
-	
-	public function __construct(BuilderManager $builderManager, Container $container) 
+
+	/**
+	 * 数据库连接实例
+	 */
+	protected $connection;
+
+	protected $defaultConnectionType = 'primary';
+
+	public function __construct(BuilderManager $builderManager, Container $container)
 	{
 		$this->builderManager = $builderManager;
+
+		$builderManager->setQuery($this);
 		
 		$this->builder = $builderManager->get();
 		
 		$this->container = $container;
 		
+	}
+
+	/**
+	 * 设置或获取数据库连接实例
+	 *
+	 * @return object
+	 */
+	public function connection($name = null)
+	{
+		if ($name && ! $this->connection) {
+			$this->connection = pdo($name);
+		}
+		if ($this->connection) {
+			return $this->connection;
+		}
+
+		return $this->connection = pdo($this->defaultConnectionType);
 	}
 	
 /**

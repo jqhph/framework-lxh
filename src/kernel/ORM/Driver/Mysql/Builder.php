@@ -4,13 +4,23 @@ namespace Lxh\ORM\Driver\Mysql;
 
 use Lxh\Exceptions\InternalServerError;
 use Lxh\Contracts\Container\Container;
+use Lxh\ORM\Query;
 
-class Builder extends Base
+class Builder
 {
+    /**
+     * @var Container
+     */
     protected $container;
-    
+
+    /**
+     * @var string
+     */
     protected $tableName;
-    
+
+    /**
+     * @var string
+     */
     protected $field;
 
     protected $orWhereData = [];
@@ -26,18 +36,34 @@ class Builder extends Base
     protected $having = [];
     
     protected $orHaving = [];
-    
+
+    /**
+     * @var string
+     */
     protected $groupBy;
-    
+
+    /**
+     * @var string
+     */
     protected $orderBy;
     
     protected $leftJoin = [];
-    
+
+    /**
+     * @var string
+     */
     protected $limit;
+
+    /**
+     * @var Query
+     */
+    protected $query;
 	
-    public function __construct(Container $container)
+    public function __construct(Container $container, Query $query)
     {
         $this->container = $container;
+
+        $this->query = $query;
     }
 	
     public function from($table, $p2 = null) 
@@ -433,7 +459,7 @@ class Builder extends Base
             throw new InternalServerError('Can not found table name.');
         }
 
-        $res = $this->getConnection()->one($this->querySql() . ' LIMIT 1', $this->whereData);
+        $res = $this->query->connection()->one($this->querySql() . ' LIMIT 1', $this->whereData);
         
         $this->clear();
         
@@ -449,7 +475,7 @@ class Builder extends Base
             throw new InternalServerError('Can not found table name.');
         }
 
-        $res = $this->getConnection()->all($this->querySql(), $this->whereData);
+        $res = $this->query->connection()->all($this->querySql(), $this->whereData);
         
         $this->clear();
         
@@ -557,7 +583,7 @@ class Builder extends Base
             $this->where('id', $id);
         }
         $where = $this->getWhereSql();
-        $res = $this->getConnection()->delete($this->tableName, $where, $this->whereData);
+        $res = $this->query->connection()->delete($this->tableName, $where, $this->whereData);
         $this->clear();
         return $res;
     }
@@ -569,21 +595,21 @@ class Builder extends Base
 	
     public function insert(array $p1) 
     {
-        $res = $this->getConnection()->add($this->tableName, $p1);
+        $res = $this->query->connection()->add($this->tableName, $p1);
         $this->clear();
         return $res;
     }
     
     public function replace(array $p1)
     {
-        $res = $this->getConnection()->replace($this->tableName, $p1);
+        $res = $this->query->connection()->replace($this->tableName, $p1);
         $this->clear();
         return $res;
     }
 	
     public function add(array $p1)
     {
-        $res = $this->getConnection()->add($this->tableName, $p1);
+        $res = $this->query->connection()->add($this->tableName, $p1);
         $this->clear();
         return $res;
     }
@@ -618,7 +644,7 @@ class Builder extends Base
         
         $where = $this->getWhereSql();
         
-        $res = $this->getConnection()->update($this->tableName, $p1, $where, $this->whereData);
+        $res = $this->query->connection()->update($this->tableName, $p1, $where, $this->whereData);
         $this->clear();
         return $res;
     }
@@ -638,6 +664,92 @@ class Builder extends Base
     public function insertBulk() 
     {
     	
+    }
+
+    protected function getOrderBySql()
+    {
+        return $this->orderBy;
+    }
+
+    protected function getLeftJoinSql()
+    {
+        if (count($this->leftJoin) > 0) {
+            return implode(' ', $this->leftJoin);
+        }
+    }
+
+    /**
+     * 获取where字符串
+     * */
+    public function getWhereSql($isHaving = false, $isOrWhere = false)
+    {
+        $where  = '';
+        $data   = [];
+        $orData = [];
+
+        $t = ' WHERE ';
+
+        if ($isHaving) {
+            $data   = & $this->having;
+            $orData = & $this->orHaving;
+
+            $t = ' HAVING ';
+        } else {
+            $data   = & $this->wheres;
+            $orData = & $this->orWheres;
+        }
+
+        if (count($data) > 0) {
+            $where .= implode(' AND ', $data);
+        }
+
+        if (count($orData) > 0) {
+            if ($where) {
+                $where .= ' OR ';
+            }
+            $where .= '(' . implode(' AND ', $orData) . ')';
+
+        }
+
+        if ($where) {
+            $where = $t . $where;
+        }
+
+        return $where;
+
+    }
+
+
+    protected function getFieldsSql()
+    {
+        return $this->field ? rtrim($this->field, ', ') : '* ';
+    }
+
+    protected function getLimitSql()
+    {
+        return $this->limit;
+    }
+
+    protected function clear()
+    {
+        $this->tableName = null;
+        $this->field     = null;
+        $this->limit 	 = null;
+        $this->orderBy	 = null;
+        $this->groupBy	 = null;
+
+        $this->whereData  = [];
+        $this->havingData = [];
+        $this->leftJoin   = [];
+        $this->wheres     = [];
+        $this->orWheres   = [];
+        $this->having	  = [];
+        $this->orHaving   = [];
+    }
+
+    protected function getGroupBySql()
+    {
+        return $this->groupBy;
     }
 	
 }

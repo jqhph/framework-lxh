@@ -45,7 +45,7 @@ class Loader
                 'class' => 'Lxh\ORM\Connect\Redis',
             ],
             'query' => [
-                'shared' => true,
+                'shared' => false,
                 'class' => 'Lxh\ORM\Query',
                 'dependencies' => ['builder.manager', 'container']	
         	],

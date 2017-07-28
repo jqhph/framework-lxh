@@ -4,6 +4,7 @@ namespace Lxh\MVC;
 use Lxh\Exceptions\InternalServerError;
 use Lxh\Contracts\Container\Container;
 use Lxh\Helper\Entity;
+use Lxh\ORM\Query;
 
 class Model extends Entity
 {
@@ -191,11 +192,11 @@ class Model extends Entity
     }
 
     /**
-     * @return \Lxh\ORM\Query
+     * @return Query
      */
-    protected function query()
+    protected function query($name = 'primary')
     {
-        return $this->container->make('query')->from($this->getTableName());
+        return query($name)->from($this->getTableName());
     }
 
 }

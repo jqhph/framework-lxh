@@ -12,6 +12,8 @@ use Lxh\Helper\Console;
 use Lxh\Language\Manager;
 use Lxh\File\FileManager;
 use Lxh\Logger\Manager as LoggerManager;
+use Lxh\Config\Config;
+use Lxh\ORM\Query;
 
 // 常用的变量先注册到全局变量中
 $GLOBALS['__container__'] = Container::getInstance();
@@ -37,7 +39,7 @@ function container()
  * 获取一个服务
  *
  * @param  string $abstract 服务名称
- * @return instance
+ * @return object
  */
 function make($abstract)
 {
@@ -280,7 +282,7 @@ function is_prod()
 /**
  * 获取配置文件参数代理函数
  *
- * @return mixed | \Lxh\Config\Config
+ * @return mixed | Config
  */
 function config($key = null, $default = null)
 {
@@ -291,7 +293,7 @@ function config($key = null, $default = null)
  * 获取pdo连接实例
  *
  * @param  string $name 对应配置文件数据库配置键名
- * @return Lxh\ORM\Connect\PDO
+ * @return PDO
  */
 function pdo($name = 'primary')
 {
@@ -301,15 +303,24 @@ function pdo($name = 'primary')
         return $instances[$name];
     }
 
-    return $instances[$name] = new PDO(config("RDBMS.$name"));
+    return $instances[$name] = new PDO(config("db.$name"));
 }
 
 /**
- * @return Lxh\ORM\Query
+ * @return Query
  */
-function query()
+function query($name = 'primary')
 {
-    return $GLOBALS['__container__']->make('query');
+    static $instances = [];
+
+    if (isset($instances[$name])) {
+        return $instances[$name];
+    }
+
+    $q = $GLOBALS['__container__']->make('query');
+    // 设置连接类型
+    $q->connection($name);
+    return $instances[$name] = $q;
 }
 
 /**

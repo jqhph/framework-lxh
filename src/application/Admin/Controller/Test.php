@@ -23,7 +23,7 @@ class Test extends Controller
 
         assign('data', $data);
 
-        return fetch_complete_view();
+        return fetch_view();
 
     }
 
