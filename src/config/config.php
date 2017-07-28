@@ -7,7 +7,7 @@
  */
 $config = [];
 
-// 语言包
+// 语言包 ===> 已移至可写配置文件
 $config['language'] = 'zh';
 
 // view version模板版本
@@ -26,7 +26,6 @@ $config['add-config'] = [
     // 数据库配置文件
     __ENV__ . '/db/config',
     __ENV__ . '/app',
-    __ENV__ . '/writable',
     'client',
     'system'
 

@@ -28,10 +28,10 @@ if (! empty($loadCurrentJs)) {
     // 配置
     function get_config()
     {
-        var config = {}
+        var data = {}
         // 容器配置
-        config.options = <?php
-            $config = (array) config('client-config');
+        data.options = <?php
+            $config = array_merge(config('client-config'), config('replica-client-config'));
             $config['language'] = config('language');
             $config['js-version'] = & $GLOBALS['js-version'];
             $config['css-version'] = & $GLOBALS['css-version'];
@@ -45,19 +45,19 @@ if (! empty($loadCurrentJs)) {
                 'users' => user()->all()
             ]);
             ?>
-
+            
         // seajs配置
-        config.seaConfig = config.options.config['sea-config']
+        data.seaConfig = data.options.config['sea-config']
         // 需要载入的css
-        config.publicCss = config.options.config['public-css']
+        data.publicCss = data.options.config['public-css']
         // 需要载入的js
-        config.publicJs = config.options.config['public-js']
+        data.publicJs = data.options.config['public-js']
         // 需要载入的语言包模块
-        config.langScopes = <?php echo json_encode(['Global', __CONTROLLER__]);?>
+        data.langScopes = <?php echo json_encode(['Global', __CONTROLLER__]);?>
 
 //        config.tplnames = <?php //echo json_encode(['component.fields.int.int', 'component.fields.string.string']);?>
 
-        return config
+        return data
     }
 </script>
 <?php

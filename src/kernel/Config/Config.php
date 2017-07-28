@@ -19,11 +19,11 @@ class Config extends Entity
     protected static $instance;
 
     /**
-     * 在使用时才读取的配置文件路径
+     * 可写配置文件路径
      *
      * @var string
      */
-    protected $fileName;
+    protected $writableConfigName = 'writable';
 
     /**
      * 配置文件路径
@@ -37,56 +37,31 @@ class Config extends Entity
         $this->fillConfig();
     }
 
-
-    /**
-     * 设置配置文件路径
-     *
-     * @param $file string
-     * @return $this
-     */
-    public function file($file)
-    {
-        $this->fileName = $file;
-        return $this;
-    }
-
-    /**
-     * 获取配置信息
-     *
-     * @param string $name 多级参数用"."隔开, 如 get('db.mysql')
-     * @param string|array|null $default 默认值
-     */
-    public function get($key = null, $default = null)
-    {
-        if ($this->fileName) {
-            $tmp = explode(',', $key);
-            if (! isset($this->attrs[$tmp[0]])) {
-                $this->attrs += include "{$this->root}{$this->fileName}.php";
-            }
-            $this->fileName = null;
-        }
-
-        return parent::get($key, $default);
-    }
-
     // 加载配置文件
     public function fillConfig()
     {
-        $pre = "{$this->root}{$this->prefix}/";
+        $pre = $this->getBasePath();
 
         foreach ($this->confFiles as & $f) {
             $file = "{$pre}{$f}.php";
 
-            $this->attrs += (array) include $file;
+            $this->attrs += (array)include $file;
         }
 
-        foreach ((array) $this->get('add-config') as & $filename) {
+        foreach ((array)$this->get('add-config') as & $filename) {
             $this->attrs += include "{$pre}{$filename}.php";
         }
 
-        foreach ((array) $this->get('add-config-name') as $k => & $filename) {
+        foreach ((array)$this->get('add-config-name') as $k => & $filename) {
             $this->attrs[basename($filename)] = include "{$pre}{$filename}.php";
         }
+
+        $this->attrs += include $this->getWritableConfigPath();
+    }
+
+    public function getBasePath()
+    {
+        return "{$this->root}{$this->prefix}/";
     }
 
     // 获取容器配置参数
@@ -94,4 +69,31 @@ class Config extends Entity
     {
         return include $this->root . 'config/container/container.php';
     }
+
+    /**
+     * 获取环境配置文件路径
+     *
+     * @return string
+     */
+    protected function getEnvConfigPath($filename)
+    {
+        return $this->getBasePath() . __ENV__ . "/$filename.php";
+    }
+
+    protected function getWritableConfigPath()
+    {
+        return $this->getEnvConfigPath($this->writableConfigName);
+    }
+
+    /**
+     * 保存配置
+     *
+     * @param  array $opts 要保存的配置数据
+     * @return bool
+     */
+    public function save(array $opts)
+    {
+        return file_manager()->mergeContents($this->getWritableConfigPath(), $opts);
+    }
+
 }

@@ -19,7 +19,8 @@ class Test extends Controller
     {
         $data = [];
 
-        $data = pdo()->prepare('SELECT * FROM user WHERE id = :id AND is_admin = :is_admin', [':id' => 1, ':is_admin' => 1])->fetchAll(\PDO::FETCH_ASSOC);
+//        $data = pdo()->prepare('SELECT * FROM user WHERE id = :id AND is_admin = :is_admin', [':id' => 1, ':is_admin' => 1])->fetchAll(\PDO::FETCH_ASSOC);
+        $r = make('config')->save(['js-version' => 18]);
 
         assign('data', $data);
 

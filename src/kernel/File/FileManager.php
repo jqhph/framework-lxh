@@ -462,7 +462,7 @@ class FileManager
      *
      * @return bool | array
      */
-    public function mergeContents($path, & $content, $removeOptions = null, $isPhp = false)
+    public function mergeContents($path, & $content, $removeOptions = null, $isPhp = true)
     {
         if ($isPhp) {
             $fileContent = $this->getPhpContents($path);

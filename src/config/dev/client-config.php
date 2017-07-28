@@ -8,14 +8,14 @@
 
 $config = [];
 
-// 是否启用缓存
-$config['use-cache'] = true;
+// 是否启用缓存 ===> 已移至可写配置文件
+//$config['use-cache'] = true;
 
-// 前端缓存的默认缓存时间，单位毫秒
-$config['cache-expire'] = 259200 * 1000;
+// 前端缓存的默认缓存时间，单位毫秒 ===> 已移至可写配置文件
+//$config['cache-expire'] = 259200 * 1000;
 
-// 语言包缓存时间，单位毫秒
-$config['lang-package-expire'] = 259200 * 1000; // 缓存时间，3天
+// 语言包缓存时间，单位毫秒 ===> 已移植可写配置文件
+//$config['lang-package-expire'] = 259200 * 1000; // 缓存时间，3天
 
 // 配置资源服务器
 $config['resource-server'] = '';
@@ -71,20 +71,6 @@ $config['public-js'] = [
 //    'lib/js/jquery.slimscroll',
 //    'lib/pages/jquery.dashboard'
 //    'blade',
-];
-
-$config['route-init'] = [
-    'mode' => 'hash',
-    'root' => '/'
-];
-
-$config['routes'] = [
-    '/',
-    '/:controller',
-    '/:controller/action/:action',
-    '/:controller/view/:id',
-
-    // '/:controller/' => '',
 ];
 
 return $config;

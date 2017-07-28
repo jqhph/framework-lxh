@@ -282,7 +282,7 @@ function is_prod()
 /**
  * 获取配置文件参数代理函数
  *
- * @return mixed | Config
+ * @return mixed
  */
 function config($key = null, $default = null)
 {
