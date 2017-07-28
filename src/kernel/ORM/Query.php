@@ -290,10 +290,30 @@ LEFT JOIN `user` ON `user_up`.user_id = `user`.id
 	    return $this->builder->readRow();
 	}
 	
-	public function sort($order, $desc = '')
+	public function sort($orderString)
 	{
-	    $this->builder->sort($order, $desc);
+	    $this->builder->sort($orderString);
 	    return $this;
+	}
+
+	/**
+	 * 获取where条件字符串
+	 *
+	 * @return string
+	 */
+	public function getWhereString($isHaving = false)
+	{
+		return $this->builder->getWhereSql($isHaving);
+	}
+
+	/**
+	 * 获取绑定参数
+	 *
+	 * @return array
+	 */
+	public function getBindParams()
+	{
+		return $this->builder->getBindParams();
 	}
 	
 	public function group($data)

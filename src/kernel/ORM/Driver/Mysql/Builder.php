@@ -404,25 +404,19 @@ class Builder extends Base
     public function querySql()
     {
         $table  = "`$this->tableName`";
-
-        $fields   = '';
-        $leftJoin = '';
-        $where    = '';
+        
         $orWhere  = '';
-        $orderBy  = '';
-        $groupBy  = '';
-        $limit	  = '';
         $having   = '';
 
-        $this->getFieldsSql($fields);
-        $this->getLeftJoinSql($leftJoin);
-        $this->getWhereSql($where);
-        $this->getOrderBySql($orderBy);
-        $this->getGroupBySql($groupBy);
-        $this->getLimitSql($limit);
+        $fields = $this->getFieldsSql();
+        $leftJoin = $this->getLeftJoinSql();
+        $where = $this->getWhereSql();
+        $orderBy = $this->getOrderBySql();
+        $groupBy = $this->getGroupBySql();
+        $limit = $this->getLimitSql();
 
         if ($groupBy) {
-            $this->getWhereSql($having, true);
+            $having = $this->getWhereSql(true);
 
             $this->whereData = $this->whereData + $this->havingData;
         }
@@ -461,32 +455,21 @@ class Builder extends Base
         
         return $res;
     }
-	
-    public function sort($order, $desc = '')
+
+    /**
+     * 获取绑定参数
+     *
+     * @return array
+     */
+    public function getBindParams()
     {
-        if ($desc !== '') {
-            $desc = $desc ? ' DESC' : ' ASC';
-        }
-        
-        $table = $this->tableName;
-        
-        $field = $order;
-        # 数组, 表名=>字段名
-        if (is_array($order)) {
-            $table = key($order);
-            
-            $field = $order[$table];
-            
-            $this->orderBy = " ORDER BY $field $desc";
-        } else {
-            # 字符串	
-            if (strpos($order, '.') === false) {
-                $this->orderBy = " ORDER BY `$table`.`$field` $desc";
-            } else {
-                $this->orderBy = " ORDER BY $field $desc";
-            }
-        }
-        
+        return $this->whereData + $this->havingData;
+    }
+	
+    public function sort($orderString)
+    {
+        $this->orderBy = " ORDER BY $orderString";
+
         return $this;
     }
 	
@@ -573,14 +556,13 @@ class Builder extends Base
         if ($id) {
             $this->where('id', $id);
         }
-        $where = '';
-        $this->getWhereSql($where);
+        $where = $this->getWhereSql();
         $res = $this->getConnection()->delete($this->tableName, $where, $this->whereData);
         $this->clear();
         return $res;
     }
 	
-    public function delete($id = null) 
+    public function delete($id = null)
     {
         return $this->remove($id);
     }
@@ -634,9 +616,7 @@ class Builder extends Base
         		
         }
         
-        $where = '';
-        
-        $this->getWhereSql($where);
+        $where = $this->getWhereSql();
         
         $res = $this->getConnection()->update($this->tableName, $p1, $where, $this->whereData);
         $this->clear();

@@ -12,22 +12,22 @@ class Base
     protected $connections = [];
     
 	
-    protected function getOrderBySql(& $orderBy) 
+    protected function getOrderBySql()
     {
-        $orderBy = $this->orderBy;
+        return $this->orderBy;
     }
     
-    protected function getLeftJoinSql(& $leftJoin) 
+    protected function getLeftJoinSql()
     {
         if (count($this->leftJoin) > 0) {
-            $leftJoin = implode(' ', $this->leftJoin);
+            return implode(' ', $this->leftJoin);
         }
     }
 	
 	/**
 	 * 获取where字符串
 	 * */
-    protected function getWhereSql(& $where, $isHaving = false, $isOrWhere = false)
+    public function getWhereSql($isHaving = false, $isOrWhere = false)
     {
         $where  = '';
         $data   = [];
@@ -60,24 +60,20 @@ class Base
         if ($where) {
             $where = $t . $where;
         }
+
+        return $where;
     
     }
 	
 	
-    protected function getFieldsSql(& $fields) 
+    protected function getFieldsSql()
     {
-        if ($this->field) {
-            $fields .= rtrim($this->field, ', ');
-        }
-        
-        if (! $fields) {
-            $fields = '* ';
-        }
+        return $this->field ? rtrim($this->field, ', ') : '* ';
     }
 	
-    protected function getLimitSql(& $limit) 
+    protected function getLimitSql()
     {
-        $limit = $this->limit;
+        return $this->limit;
     }
 	
     protected function clear()
@@ -97,9 +93,9 @@ class Base
         $this->orHaving   = [];
     }
 	
-    protected function getGroupBySql(& $groupBy) 
+    protected function getGroupBySql()
     {
-        $groupBy = $this->groupBy;
+        return $this->groupBy;
     }
 	
 	/**

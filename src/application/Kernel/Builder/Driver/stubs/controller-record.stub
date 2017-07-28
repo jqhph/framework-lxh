@@ -62,7 +62,7 @@ class {class} extends {extends}
         }
         $id = $params['id'];
 
-        $row = query()->from({Controller})->where(['id' => $id, 'deleted' => 0])->findOne();
+        $row = query()->from('{Controller}')->where(['id' => $id, 'deleted' => 0])->findOne();
 
         $currentTitle = trans('Modify {controllerEnName}');
 
@@ -81,6 +81,10 @@ class {class} extends {extends}
     {
         $page = I('page', 1);
 
+        if ($page < 1) {
+            $page = 1;
+        }
+
         $titles = {listTitles};
 
         $maxSize = {maxSize};
@@ -91,17 +95,23 @@ class {class} extends {extends}
 
         $q = query();
 
-        $total = $q->from({Controller})->where($wheres)->count();
+        $total = $q->from('{Controller}')->where($wheres)->count();
+
+        $totalPage = ceil($total / $maxSize);
+
+        if ($page > $totalPage) {
+            $page = $totalPage;
+        }
 
         $list = [];
 
         if ($total) {
-            $q->from({Controller})->where($wheres)->limit($offset, $maxSize)
+            $q->from('{Controller}')->where($wheres)->limit($offset, $maxSize)
 
             $orders = $this->makeOrderContent();
 
             if ($orders) {
-                $q->sort($orders[0], $orders[1]);
+                $q->sort($orders);
             }
 
             $list = $q->find();
