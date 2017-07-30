@@ -28,6 +28,8 @@ return [
         'search' => '搜索',
         'first-logo-text' => 'L',
         'last-logo-text' => 'xh',
+        'Search Items' => '搜索项',
+        'Reset' => '重置',
     ],
     'fields' => [
         'name' => '名称',
