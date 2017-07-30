@@ -32,6 +32,13 @@ class Config extends Entity
      */
     protected $confFiles = ['config'];
 
+    /**
+     * 可写配置参数
+     *
+     * @var array
+     */
+    protected $writableData = [];
+
     public function __construct()
     {
         $this->fillConfig();
@@ -56,7 +63,19 @@ class Config extends Entity
             $this->attrs[basename($filename)] = include "{$pre}{$filename}.php";
         }
 
-        $this->attrs += include $this->getWritableConfigPath();
+        $this->writableData = include $this->getWritableConfigPath();
+
+        $this->attrs += $this->writableData;
+    }
+
+    /**
+     * 获取可变动数据
+     *
+     * @return array
+     */
+    public function getVariableData()
+    {
+        return $this->writableData;
     }
 
     public function getBasePath()

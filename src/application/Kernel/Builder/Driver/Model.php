@@ -29,7 +29,7 @@ class Model extends FileGenerator
         return strtr(
             parent::buildClass($name),
             [
-                'module' => $this->options('module'),
+                'module' => $this->generator->module(),
                 'beforeAdd' => $this->makeBeforeAddContent($this->options()),
                 'beforeSave' => $this->makeBeforeSaveContent($this->options()),
                 'controllerEnName' => $this->options('en_name'),

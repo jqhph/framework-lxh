@@ -91,4 +91,19 @@ class System extends Controller
 
         return fetch_complete_view('Modules');
     }
+
+    /**
+     * 设置界面
+     */
+    public function actionSetting()
+    {
+        $languageList = file_manager()->getFileList(language()->getBasePath());
+
+        $list = [];
+        foreach ($languageList as & $lang) {
+            $list[]['value'] = $lang;
+        }
+
+        return fetch_complete_view('Setting', ['languageList' => & $list]);
+    }
 }

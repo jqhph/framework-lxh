@@ -109,6 +109,11 @@ class CodeGenerator
         return true;
     }
 
+    public function module()
+    {
+        return __MODULE__;
+    }
+
     /**
      * 回滚操作
      *

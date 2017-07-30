@@ -39,7 +39,7 @@ class Controller extends FileGenerator
         return strtr(
             parent::buildClass($name),
             [
-                'module' => $this->options('module'),
+                'module' => $this->generator->module(),
                 'extends' => $this->options('inheritance'),
                 'updateValidate' => $this->normalizeUpdateValidate($this->options()),
                 'deleteValidate' => $this->normalizeDeleteValidate(),

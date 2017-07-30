@@ -3,7 +3,6 @@
 use Lxh\Kernel\AdminUrlCreator;
 ?>
 
-
 <!--col-sm-12-->
 <div class="">
     <div class="card-box">
@@ -34,7 +33,7 @@ use Lxh\Kernel\AdminUrlCreator;
                     foreach ($list as $k => & $r) {
                         echo fetch_view('row', 'Menu', ['r' => $r, 'level' => 0]);
 
-                        // 如果有子菜单则展示
+                        // 如果有子菜单则展示， 最多展示三层
                         if (! empty($r['subs'])) {
                             $secondMenuCount = count($r['subs']) - 1;
                             foreach ($r['subs'] as $k => & $r) {

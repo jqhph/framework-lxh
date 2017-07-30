@@ -44,10 +44,9 @@ class Menu
             return trans_with_global('Home');
         }
 
-        $last = trans_with_global($this->current['name'], 'menu');
-//        if ($this->current['layer'] == 1) {
-        return $last;
-//        }
+        // $last = trans_with_global($this->current['name'], 'menu');
+
+        return $this->current['name'];
 
         $prevUrl = $this->makeUrl($this->data[$this->current['id']]['controller'], $this->data[$this->current['id']]['action']);
 
@@ -72,7 +71,7 @@ class Menu
 
         $url = $this->makeUrl($select['controller'], $select['action']);
 
-        $nav = "<a href='$url'>" . trans_with_global($select['name'], 'menu') . "</a>";
+        $nav = "<a href='$url'>" . $select['name'] . "</a>";
 
         if ($select['parent_id']) {
             $parent = $this->makeNavByNameOrId($select['parent_id']);
@@ -131,6 +130,8 @@ class Menu
 
         $tree = [];
         foreach ($data as & $v) {
+            $v['name'] = trans_with_global($v['name'], 'menus');
+
             $v['url'] = $this->makeUrl($v['controller'], $v['action']);
 
             // 存储当前菜单

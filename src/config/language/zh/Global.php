@@ -26,9 +26,13 @@ return [
         'delete' => '删除',
         'list' => '列表',
         'search' => '搜索',
+        'first-logo-text' => 'L',
+        'last-logo-text' => 'xh',
     ],
     'fields' => [
         'name' => '名称',
+        'created_at' => '创建时间',
+        'created_by_id' => '创建人',
     ],
     'tip' => [
         'Are you sure?' => '您确定要继续此操作吗？',
@@ -36,12 +40,13 @@ return [
         'Yes, delete it!' => '是的，删除！',
         'Invalid arguments' => '参数不合法',
     ],
-    'menu' => [
+    'menus' => [
         'Language Management' => '语言包管理',
         'System' => '系统设置',
         'Making modules' => '创建模块',
         'Home' => '主页',
         'Menu management' => '菜单管理',
         'Create reports' => '创建报表',
+        'Setting' => '设置',
     ],
 ];

@@ -2,7 +2,9 @@
 
     <!-- LOGO -->
     <div class="topbar-left">
-        <a href="<?php echo Lxh\Kernel\AdminUrlCreator::makeHome();?>" class="logo"><span>L<span>xh</span></span><i class="zmdi zmdi-layers"></i></a>
+        <a href="<?php echo Lxh\Kernel\AdminUrlCreator::makeHome();?>" class="logo">
+            <span><?php echo trans_with_global('first-logo-text', 'labels'); ?><span>
+                    <?php echo trans_with_global('last-logo-text', 'labels'); ?></span></span><i class="zmdi zmdi-layers"></i></a>
     </div>
     <style>
         .page-title a{color:#505458}

@@ -11,9 +11,6 @@
     ['name' => 'author', 'label' => 'author', 'value' => '']); ?>
 
 <?php echo component_view('fields/enum/edit',
-    ['name' => 'module', 'label' => 'module', 'list' => & $moduleOptions]); ?>
-
-<?php echo component_view('fields/enum/edit',
     ['name' => 'inheritance', 'label' => 'inheritance of controller', 'list' => & $controllerOptions]); ?>
 
 <?php echo component_view('fields/checkbox/edit',
