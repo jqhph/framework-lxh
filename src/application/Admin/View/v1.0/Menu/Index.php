@@ -69,6 +69,40 @@ use Lxh\Kernel\AdminUrlCreator;
                 <!-- items row -->
                 <div class="icon-list-demo row">
                     <div class=" col-md-3">
+                        <form class="form-inline fields-radio-search">
+                            <div class="form-group ">
+                                <p class="form-control-static"><strong>单选：</strong></p>
+                            </div>
+
+                            <div class="form-group " style="width: 28%">
+                                <input placeholder="<?php echo trans_with_global('Search')?>" class="form-control col-md-12" style="width: 100%" type="text" value="">
+                            </div>
+                            &nbsp;-&nbsp;
+                            <div class="form-group " style="width: 48%">
+                                <select name="" class="form-control"  style="width: 100%">
+                                    <option value="6">2017年6月</option>
+                                    <option value="5">2017年5月</option>
+                                    <option value="4">2017年4月</option>
+                                    <option value="3">2017年3月</option>
+                                    <option value="42">203年5月</option>
+                                    <option value="65">203年4月</option>
+                                    <option value="11">204年3月</option>
+                                </select>
+                            </div>
+
+                        </form>
+                    </div>
+
+
+
+                </div>
+                <!-- items row end -->
+
+
+
+                <!-- items row -->
+                <div class="icon-list-demo row">
+                    <div class=" col-md-3">
                         <form class="form-inline">
                             <div class="form-group ">
                                 <p class="form-control-static"><strong>名称：</strong></p>
@@ -91,7 +125,7 @@ use Lxh\Kernel\AdminUrlCreator;
                     </div>
 
                     <div class=" col-md-6">
-                        <form class="form-inline">
+                        <form class="form-inline ">
                             <div class="form-group ">
                                 <p class="form-control-static"><strong>时间：</strong></p>
                             </div>
@@ -110,7 +144,7 @@ use Lxh\Kernel\AdminUrlCreator;
 
                 <div style="height: 1em"></div>
                 <div class="pull-left">
-                    <a data-action="page-search" class="btn btn-primary ">&nbsp;&nbsp;&nbsp;<i class="fa fa-search"></i>&nbsp;&nbsp;&nbsp;</a>&nbsp;
+                    <a data-action="page-search" class="btn btn-primary "><?php echo trans_with_global('Search')?>&nbsp; <i class="fa fa-search"></i></a>&nbsp;
                     <a data-action="page-search-reset" class="btn btn-default"><?php echo trans_with_global('Reset'); ?></a>
                 </div>
                 <div class="clearfix"></div>
@@ -197,6 +231,7 @@ use Lxh\Kernel\AdminUrlCreator;
     add_css('lib/plugins/RWD-Table-Patterns/dist/css/rwd-table.min.css');
     add_js('lib/plugins/RWD-Table-Patterns/dist/js/rwd-table');
     add_js('view/fields/enum/search-items');
+    add_js('view/fields/enum/search-fliter');
     // 引入index界面公共js
     add_js('view/public-index');
 //    console.log(111, ResponsiveTable)

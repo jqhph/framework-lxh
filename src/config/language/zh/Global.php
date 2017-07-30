@@ -30,6 +30,7 @@ return [
         'last-logo-text' => 'xh',
         'Search Items' => '搜索项',
         'Reset' => '重置',
+        'Search' => '搜索',
     ],
     'fields' => [
         'name' => '名称',
