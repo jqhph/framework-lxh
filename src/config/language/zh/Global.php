@@ -31,6 +31,13 @@ return [
         'Search Items' => '搜索项',
         'Reset' => '重置',
         'Search' => '搜索',
+        'Toggle' => '切换',
+        'Hidden' => '隐藏',
+        'Show' => '显示',
+        'start' => '开始',
+        'end' => '结束',
+        'All' => '全部',
+        ':' => '：',
     ],
     'fields' => [
         'name' => '名称',

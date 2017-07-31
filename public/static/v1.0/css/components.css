@@ -60,7 +60,7 @@ File: Components
 }
 .btn-custom {
   background-color: #71b6f9;
-  border-color: #71b6f9;
+  border: 1px solid #71b6f9 !important;
 }
 .btn-custom:hover,
 .btn-custom:focus,

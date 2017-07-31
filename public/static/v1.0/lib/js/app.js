@@ -14,12 +14,7 @@
 
     dispatcher()
 
-    // var router = new Router(config.options.config, dispatcher)
-
     function dispatcher() {
-        // var currentView = parse_view_name(config.options.controller, config.options.action, config.options.config['js-version'])
-        // config.publicJs.push(currentView)
-
         // 设置缓存token
         $cache.setToken(config.options.config['js-version'])
 
@@ -114,33 +109,6 @@
         return t || []
     }
 
-
-    function get_tpl_cache_key()
-    {
-        return 'tpls'
-    }
-
-    /**
-     * 检测缓存中是否存在需要载入的模板，返回需要载入的模板名称
-     */
-    // function check_cache_tpl(names, useCache)
-    // {
-    //     var cacheKey = get_tpl_cache_key(), tpls = $cache.get(cacheKey), t = [], i
-    //
-    //     if (typeof add_tpls == 'function') {
-    //         var addTpls = add_tpls()
-    //         for (i in addTpls) {
-    //             names.push(addTpls[i])
-    //         }
-    //     }
-    //
-    //     if (! tpls || ! useCache) return names
-    //     for (i in names) {
-    //         if (! tpls[names[i]]) t.push(names[i])
-    //     }
-    //     return t
-    // }
-
     /**
      * 处理需要加载的css数组
      *
@@ -150,6 +118,7 @@
      */
     function get_public_css(publicCss, v) {
         if (typeof cssLibArr != 'undefined') {
+            cssLibArr = array_unique(cssLibArr)
             for (var i in cssLibArr) {
                 publicCss.push(cssLibArr[i])
             }
@@ -170,6 +139,7 @@
      */
     function get_public_js(publicJs, version) {
         if (typeof jsLibArr != 'undefined') {
+            jsLibArr = array_unique(jsLibArr)
             for (var i in jsLibArr) {
                 publicJs.push(jsLibArr[i] + '.js?v=' + version)
             }
@@ -184,13 +154,6 @@
             loads.language = scopes.join(',')
         }
 
-        // var tplnames = check_cache_tpl(config.tplnames, config.options.config['use-cache'])
-
-        // 判断是否需要载入模板
-        // if (tplnames.length > 0) {
-        //     loads.tpl = tplnames.join(',')
-        // }
-
         var jsApi = get_load_data_js_api(loads)
 
         if (jsApi) {
@@ -198,10 +161,8 @@
         }
 
         return publicJs
-
-
-        function get_load_data_js_api(data)
-        {
+        
+        function get_load_data_js_api(data) {
             var api = 'api/data'
 
             var p = ''
@@ -229,39 +190,6 @@
             config.alias[i] = config.alias[i] + '.js?v=' + version
         }
         return config
-    }
-
-
-    function Router(config, callback)
-    {
-        var store = {
-            routes: {},
-            defaultController: 'Index',
-            defaultAction: 'Index',
-            controller: null,
-            action: null,
-            options: {
-                hashbang: true
-            },
-            params: {}
-        }
-
-        store.routes = config.routes
-
-        for (var i in store.routes) {
-            page(store.routes[i], dispatch)
-        }
-
-        // 启动路由
-        page(store.options)
-
-        function dispatch(ctx, next) {
-            store.controller = ctx.params.controller || store.defaultController
-            store.action = ctx.params.action || store.defaultAction
-            store.params = ctx.params
-
-            callback(store.controller, store.action, store.params)
-        }
     }
 
     /**
@@ -428,6 +356,4 @@
 
         this.clearPastDueKey()
     }
-
-
 })(window)

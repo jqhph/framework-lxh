@@ -86,6 +86,8 @@ class Language extends Controller
         $result = file_manager()->putPhpContents($languagePackDir . $_POST['path'], $_POST['content']);
 
         if ($result) {
+            // 更新前端缓存
+            make('front.client')->updateCache();
             return $this->success();
         }
         return $this->error();
@@ -113,6 +115,8 @@ class Language extends Controller
         $package[$_POST['name']] = [];
 
         if ($file->putPhpContents($path, $package)) {
+            // 更新前端缓存
+            make('front.client')->updateCache();
             return $this->success('success', ['content' => & $package]);
         }
 
@@ -171,6 +175,8 @@ class Language extends Controller
         $path = $language->getBasePath() . $path;
 
         if ($file->mergePhpContents($path, $content)) {
+            // 更新前端缓存
+            make('front.client')->updateCache();
             return $this->success('Success', ['content' => $file->getPhpContents($path)]);
         }
 
@@ -208,6 +214,8 @@ class Language extends Controller
         }
 
         if ($file->putPhpContents($newPath, $data)) {
+            // 更新前端缓存
+            make('front.client')->updateCache();
             return $this->success();
         }
 
