@@ -13,7 +13,21 @@ use Lxh\Kernel\AdminUrlCreator;
     </li>
 </ol>
 
-<?php echo component_view('search-items');?>
+<?php echo component_view('search-items', [
+    'opts' => [
+        [
+            ['view' => 'enum/align-search', 'vars' => ['name' => 'type','options' => [1, 2]]],
+        ],
+        [
+            ['view' => 'enum/fliter-search', 'vars' => ['name' => 'status','options' => [1, 2]]],
+            ['view' => 'varchar/search', 'vars' => ['name' => 'controller']],
+            ['view' => 'varchar/search', 'vars' => ['name' => 'name']],
+        ],
+        [
+            ['view' => 'varchar/date-search', 'vars' => ['name' => 'created_at']],
+        ],
+    ]
+]);?>
 
 <!--col-sm-12-->
 <div class="">
@@ -90,5 +104,4 @@ use Lxh\Kernel\AdminUrlCreator;
     add_js('lib/plugins/RWD-Table-Patterns/dist/js/rwd-table');
     // 引入index界面公共js
     add_js('view/public-index');
-//    console.log(111, ResponsiveTable)
 </script>

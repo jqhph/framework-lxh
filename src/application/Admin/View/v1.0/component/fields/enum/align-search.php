@@ -15,7 +15,7 @@ $value = isset($value) ? $value : get_value($_REQUEST, $name, false);
 <div class=" col-md-12">
     <form class="form-inline">
         <div class="form-group " >
-            <p class="form-control-static"><strong><?php echo trans($name, 'fields') . trans_with_global(':');?> </strong></p>
+            <p class="form-control-static"><span><?php echo trans($name, 'fields') . trans_with_global(':');?> </span></p>
         </div>
         <div class="form-group fields-radio" style="width: 85%">
             <input type="hidden" name="<?php echo $name;?>" value="" />

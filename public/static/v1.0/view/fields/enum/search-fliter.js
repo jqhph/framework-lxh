@@ -29,16 +29,15 @@ define([], function () {
 
         events: {
             search: function (e) {
-                var $options = this.$select.find('option')
+                var $options = this.$select.find('option'), text = $(e.currentTarget).val(), i, selectedText = '', likeTexts = [], value
                 $options.show()
 
-                var text = $(e.currentTarget).val(), i, selectedText = '', likeTexts = [], value
                 for (i in this.optionTexts) {
                     if (text == this.optionTexts[i]) {
                         selectedText = text
                         break
                     }
-                    if (this.optionTexts[i].indexOf(text) != -1) {
+                    if (text && this.optionTexts[i].indexOf(text) != -1) {
                         likeTexts.push(this.optionTexts[i])
                     }
                 }

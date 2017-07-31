@@ -23,7 +23,7 @@ if (is_array($value)) {
 <div class=" col-md-6 " >
     <form class="form-inline ">
         <div class="form-group ">
-            <p class="form-control-static"><strong><?php echo trans($name, 'fields') . trans_with_global(':');?></strong></p>
+            <p class="form-control-static"><span><?php echo trans($name, 'fields') . trans_with_global(':');?></span></p>
         </div>
         <div class="form-group">
             <div class="input-daterange input-group date-search-box" >

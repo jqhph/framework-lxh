@@ -20,37 +20,15 @@
                 <div class="search-card-box-content">
                     <div style="height: 1em"></div>
 
-
-                    <!-- items row -->
+                    <?php foreach ($opts as & $row) {
+                        ?>
                     <div class="icon-list-demo row">
-                        <?php echo component_view('fields/enum/align-search', [
-                            'name' => 'type',
-                            'options' => [1, 2]
-                        ])?>
+                        <?php foreach ($row as & $item) {
+                            // 列
+                            echo component_view("fields/{$item['view']}", $item['vars']);
+                        } ?>
                     </div>
-                    <!-- items row end -->
-
-                    <!-- items row -->
-                    <div class="icon-list-demo row">
-                        <?php echo component_view('fields/enum/fliter-search', [
-                            'name' => 'status',
-                            'options' => [1, 2]
-                        ]);?>
-
-                
-                    </div>
-                    <!-- items row end -->
-
-                    <!-- items row -->
-                    <div class="icon-list-demo row">
-                        <?php echo component_view('fields/varchar/search', ['name' => 'controller']);?>
-
-                        <?php echo component_view('fields/varchar/search', ['name' => 'name']);?>
-
-                        <?php echo component_view('fields/varchar/date-search', ['name' => 'created_at']);?>
-
-                    </div>
-                    <!-- items row end -->
+                    <?php } ?>
 
                     <div style="height: 1em"></div>
                     <div class="pull-left">

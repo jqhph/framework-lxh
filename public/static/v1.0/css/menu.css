@@ -622,7 +622,7 @@ File: Menu
   margin-left: 20px;
   background: rgba(152, 166, 173, 0.1);
   box-shadow: none;
-  border-radius: 30px;
+  border-radius: 0px;
   width: 190px;
 }
 input.app-search-input::-webkit-input-placeholder {

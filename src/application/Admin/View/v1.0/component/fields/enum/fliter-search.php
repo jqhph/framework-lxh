@@ -10,7 +10,7 @@ $value = isset($value) ? $value : get_value($_REQUEST, $name, false);
 <div class=" col-md-4">
     <form class="form-inline fields-radio-search">
         <div class="form-group ">
-            <p class="form-control-static"><strong><?php echo trans($name, 'fields') . trans_with_global(':');?></strong></p>
+            <p class="form-control-static"><span><?php echo trans($name, 'fields') . trans_with_global(':');?></span></p>
         </div>
         <div class="form-group " style="width: 26%">
             <input placeholder="<?php echo trans_with_global('Search')?>" class="form-control col-md-12" style="width: 100%" type="text" value="">
