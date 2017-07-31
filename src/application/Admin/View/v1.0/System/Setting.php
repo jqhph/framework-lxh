@@ -5,7 +5,14 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="card-box">
-            <h4 class="header-title m-t-0 m-b-30"><?php echo trans('Config');?></h4>
+            <div class="card-box-header">
+                <span class="card-box-title"><?php echo trans('Config');?></span>
+                <div class="pull-right">
+                    <a data-action="clear-client-cache" class="btn btn-purple "><?php echo trans('Clear client cache')?></a>
+                    <a data-action="clear-js-css-cache" class="btn btn-custom "><?php echo trans('Clear all client cache')?></a>
+                </div>
+            </div>
+            <div class="card-box-line m-b-30"></div>
 
             <div class="row">
                 <form class="form-horizontal Menu-form" role="form">
@@ -21,14 +28,6 @@
                         <?php echo component_view('fields/varchar/edit', [
                             'name' => 'cache-expire', 'label' => 'Cache expire after',
                             'value' => config('replica-client-config.cache-expire') / 1000, 'labelCol' => 4]); ?>
-
-                        <?php echo component_view('fields/varchar/edit', [
-                            'name' => 'js-version', 'label' => 'Js Token', 'value' => config('js-version'),
-                            'labelCol' => 4
-                        ]); ?>
-
-                        <?php echo component_view('fields/varchar/edit', [
-                            'name' => 'css-version', 'label' => 'Css Token', 'value' => config('css-version'), 'labelCol' => 4]); ?>
 
                         <?php echo component_view('fields/bool/edit', [
                             'name' => 'use-cache', 'label' => 'Use cache', 'value' => config('replica-client-config.use-cache'), 'labelCol' => 4]); ?>

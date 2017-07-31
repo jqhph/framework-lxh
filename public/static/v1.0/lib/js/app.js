@@ -36,15 +36,20 @@
             var plugIns = arguments // 所有加载进来的js插件变量数组
             init(function () {
                 $(function () {
-                    if (typeof lxh_action == 'function') {
-                        // 运行当前页js
-                        lxh_action.apply(this, plugIns)
-                    }
+                    call_actions(plugIns)
                 })
             })
 
         })
-        // })
+    }
+
+    // 初始化完成，执行动作
+    function call_actions(plugIns) {
+        for (var i in lxhActions) {
+            if (typeof lxhActions[i] == 'function') {
+                lxhActions[i].apply(this, plugIns)
+            }
+        }
     }
 
     /**

@@ -189,6 +189,11 @@ class User extends Model
         return $this->id;
     }
 
+    public function isAdmin()
+    {
+        return $this->is_admin;
+    }
+
     // 获取前操作
     // 只有当获取需要的数据才加载
     protected function beforeGet(& $name)

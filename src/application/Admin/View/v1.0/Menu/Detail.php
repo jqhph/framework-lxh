@@ -11,7 +11,11 @@ use Lxh\Kernel\AdminUrlCreator;
 <div class="row">
     <div class="col-sm-12">
         <div class="card-box">
-            <h4 class="header-title m-t-0 m-b-30"><?php echo trans_with_global('Primary');?></h4>
+            <div class="card-box-header">
+                <span class="card-box-title"><?php echo trans_with_global('Primary');?></span>
+                <div class="pull-right"></div>
+            </div>
+            <div class="card-box-line m-b-30"></div>
 
             <div class="row">
                 <form class="form-horizontal Menu-form" role="form">

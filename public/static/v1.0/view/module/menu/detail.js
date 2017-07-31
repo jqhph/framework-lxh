@@ -1,5 +1,5 @@
 define([''], function () {
-    window.lxh_action = function () {
+    add_action(function () {
         var v = $lxh.validator([
             {name: 'parent_id', rules: 'required',},
             {name: 'icon', rules: 'length_between[4-30]'},
@@ -30,5 +30,5 @@ define([''], function () {
            model.save()
 
         }
-    }
+    })
 })

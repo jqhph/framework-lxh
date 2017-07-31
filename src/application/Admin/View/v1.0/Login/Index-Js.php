@@ -6,7 +6,7 @@
 //function add_lang_scopes() {
 //    return ['User']
 //}
-function lxh_action(plugIns) {
+add_action(function (plugIns) {
     var v = $lxh.validator([
         {
             name: 'username',
@@ -43,5 +43,5 @@ function lxh_action(plugIns) {
         model.touchAction('Login', 'POST')
 
     }
-}
+})
 </script>

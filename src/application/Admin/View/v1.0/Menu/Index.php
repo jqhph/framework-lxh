@@ -3,15 +3,6 @@
 use Lxh\Kernel\AdminUrlCreator;
 ?>
 
-<!--导航路径-->
-<ol class="breadcrumb">
-    <li>
-        指标报表
-    </li>
-    <li>
-        <a href="#">层级指标报表</a>
-    </li>
-</ol>
 
 <?php echo component_view('search-items', [
     'opts' => [
@@ -19,11 +10,12 @@ use Lxh\Kernel\AdminUrlCreator;
             ['view' => 'enum/align-search', 'vars' => ['name' => 'type','options' => [1, 2]]],
         ],
         [
-            ['view' => 'enum/fliter-search', 'vars' => ['name' => 'status','options' => [1, 2]]],
             ['view' => 'varchar/search', 'vars' => ['name' => 'controller']],
-            ['view' => 'varchar/search', 'vars' => ['name' => 'name']],
+            ['view' => 'enum/fliter-search', 'vars' => ['name' => 'status','options' => [1, 2]]],
+
         ],
         [
+            ['view' => 'varchar/search', 'vars' => ['name' => 'name']],
             ['view' => 'varchar/date-search', 'vars' => ['name' => 'created_at']],
         ],
     ]

@@ -21,7 +21,9 @@ use Lxh\Kernel\AdminUrlCreator;
                 </div>
             </div>
 
-            <h4 class="header-title m-t-0 m-b-30"><?php echo trans_with_global('Primary');?></h4>
+            <div class="card-box-header m-b-15">
+                <span class="card-box-title"><?php echo trans_with_global('Primary');?></span>
+            </div>
 
             <div id="progressbarwizard" class="pull-in">
                 <ul class="nav nav-tabs navtab-wizard nav-justified bg-muted">

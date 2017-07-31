@@ -1226,3 +1226,5 @@ pre {
     margin-top: 0px;
   }
 }
+.card-box-line{border-bottom: 1px solid #DBDDDE;margin-top: 13px;}
+.card-box-title{font-size: 1.2em;color: #505458}

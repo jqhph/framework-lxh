@@ -451,7 +451,7 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
         }
     }
 
-    window.lxh_action = function () {
+    add_action(function () {
         language.init()
-    }
+    })
 })

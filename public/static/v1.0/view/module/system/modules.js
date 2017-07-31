@@ -187,7 +187,7 @@ console.log('Success', data)
         $('#progressbarwizard').find('.bar').css  ({width:$percent+'%'})
     }
 
-    window.lxh_action = function () {
+    add_action(function () {
         modules.init()
 
         compute_progressbar_percent(current)
@@ -200,5 +200,5 @@ console.log('Success', data)
 
         // 生成新的模块
         modules.$saveButton.click(modules.events.save.bind(modules))
-    }
+    })
 })

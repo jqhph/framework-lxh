@@ -1,5 +1,5 @@
 <script>
-    function lxh_action() {
+    add_action(function () {
         var language = $lxh.language()
 
         var v = $lxh.validator([
@@ -46,5 +46,5 @@
             model.touchAction('Register', 'POST')
 
         }
-    }
+    })
 </script>

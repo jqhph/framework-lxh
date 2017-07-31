@@ -21,6 +21,8 @@ return [
         'order by' => '排序',
         'display menu ' => '菜单项',
         'Config' => '网站配置',
+        'Clear client cache' => '清除前端缓存',
+        'Clear all client cache' => '清除所有前端缓存',
     ],
     'fields' => [
         'controller' => '控制器',
@@ -40,9 +42,10 @@ return [
         'Use cache' => '使用缓存',
     ],
     'options' => [
+
         'language' => [
             'en' => '英文',
             'zh' => '简体中文',
-        ]
+        ],
     ],
 ];

@@ -1,6 +1,8 @@
 <div class="col-md-2">
     <div class="card-box">
-        <h4 class="header-title m-t-0 m-b-30"><?php echo trans('Catalog'); ?></h4>
+        <div class="card-box-header m-b-30">
+            <span class="card-box-title"><?php echo trans('Catalog');?></span>
+        </div>
         <?php echo component_view('tree/basic', ['class' => 'basic-language', 'list' => & $list]); ?>
     </div>
 </div>

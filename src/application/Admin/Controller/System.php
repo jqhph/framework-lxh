@@ -106,4 +106,32 @@ class System extends Controller
 
         return fetch_complete_view('Setting', ['languageList' => & $list]);
     }
+
+    // 清除客户端所有缓存接口
+    public function actionClearAllClientCache()
+    {
+        if (! user()->isAdmin()) {
+            return $this->failed('Forbidden');
+        }
+
+        if (make('front.client')->clearCache()) {
+            return $this->success();
+        }
+
+        return $this->failed();
+    }
+
+    // 清除客户端js缓存接口
+    public function actionClearClientCache()
+    {
+        if (! user()->isAdmin()) {
+            return $this->failed('Forbidden');
+        }
+
+        if (make('front.client')->updateCache()) {
+            return $this->success();
+        }
+
+        return $this->failed();
+    }
 }

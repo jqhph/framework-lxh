@@ -11,6 +11,12 @@
         return res;
     }
 
+    // 添加初始化完成后执行的动作
+    o.lxhActions = []
+    o.add_action = function (call) {
+        lxhActions.push(call)
+    }
+
     // 添加需要引入的js
     o.jsLibArr = []
     o.add_js = function (data) {
