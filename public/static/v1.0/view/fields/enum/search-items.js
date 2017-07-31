@@ -15,17 +15,29 @@ define([], function () {
             select: function (e) {
                 var $this = $(e.currentTarget),
                     $all = $this.parent().find('a.btn'),
-                    $input = $this.parent().find('input[type="hidden"]')
+                    $input = $this.parent().find('input[type="hidden"]'),
+                    inputVal = $input.val(),
+                    i, data = []
 
-                // 给所有按钮重置透明效果
-                $all.removeClass('btn-trans')
-                $all.addClass('btn-trans')
+                $this.toggleClass('btn-trans')
 
-                // 移除选中按钮的透明效果
-                $this.removeClass('btn-trans')
+                if ($this.hasClass('btn-trans') && inputVal) {
+                    inputVal = inputVal.split(',')
+                    for (i in inputVal) {
+                        if (inputVal[i] == $this.attr('data-value')) continue
+                        data.push(inputVal[i])
+                    }
+                    inputVal = data.join(',')
+                } else {
+                    if (inputVal) {
+                        inputVal += ',' + $this.attr('data-value')
+                    } else {
+                        inputVal = $this.attr('data-value')
+                    }
+                }
 
                 // 表单赋值
-                $input.val($this.attr('data-value'))
+                $input.val(inputVal)
             }
         },
     }
