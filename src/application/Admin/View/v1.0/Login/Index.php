@@ -21,7 +21,7 @@
 
         load_js('jquery.min');
 
-        echo fetch_view('app-js', 'Public', ['loadCurrentJs' => true]);
+        load_js('util');
     ?>
 
     <!-- HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -103,18 +103,9 @@
 
 </div>
 <!-- end wrapper page -->
+<script>add_js(parse_view_name('Login', 'Index'))</script>
 
-<?php
-
-
-//load_js('parsley.min', 'plugins/parsleyjs/dist');
-//load_js('container');
-//load_js('toastr.min', 'plugins/toastr');
-////load_js('bootstrap.min');
-//load_js('jquery.core');
-?>
-
-
+<?php echo fetch_view('app-js', 'Public');?>
 
 </body>
 </html>

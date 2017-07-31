@@ -1,11 +1,3 @@
-<script>
-//function add_js()
-//{
-//    return ['test111']
-//}
-//function add_lang_scopes() {
-//    return ['User']
-//}
 add_action(function (plugIns) {
     var v = $lxh.validator([
         {
@@ -44,4 +36,3 @@ add_action(function (plugIns) {
 
     }
 })
-</script>

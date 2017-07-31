@@ -15,7 +15,8 @@
 
     <!-- App CSS -->
     <?php
-        echo fetch_view('app-js', 'Public', ['loadCurrentJs' => true]);
+        load_js('util');
+
     ?>
 
     <!-- HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -99,7 +100,8 @@
 
 </div>
 <!-- end wrapper page -->
-
+<script>add_js(parse_view_name('Login', 'Register'))</script>
+<?php echo fetch_view('app-js', 'Public');?>
 
 </body>
 </html>
