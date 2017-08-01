@@ -26,12 +26,16 @@ $formCol  = empty($formCol) ? 8 : $formCol;
                 <th></th>
             </tr>
             <tr>
-                <td>查看</td>
-                <td>新增</td>
-                <td>编辑</td>
-                <td>删除</td>
+                <td><div class="checkbox pull-left">查看</div><div class="checkbox checkbox-primary pull-left" style="margin-left: 10px;">
+                        <input type="checkbox" checked=""><label></label></div></td>
+                <td><div class="checkbox pull-left">新增</div><div class="checkbox checkbox-success pull-left" style="margin-left: 10px;">
+                        <input type="checkbox" checked=""><label></label></div></td>
+                <td><div class="checkbox pull-left">编辑</div><div class="checkbox checkbox-warning pull-left" style="margin-left: 10px;">
+                        <input type="checkbox" checked=""><label></label></div></td>
+                <td><div class="checkbox pull-left">删除</div><div class="checkbox checkbox-danger pull-left" style="margin-left: 10px;">
+                        <input type="checkbox" checked=""><label></label></div></td>
             </tr>
-            <tr><td colspan="4">&nbsp;</td></tr>
+            <tr><td colspan="4" style="border-left: 1px solid #fff;border-right: 1px solid #fff;"></td></tr>
             <tr>
                 <th>用户</th>
                 <th></th>
@@ -39,14 +43,18 @@ $formCol  = empty($formCol) ? 8 : $formCol;
                 <th></th>
             </tr>
             <tr>
-                <td>查看</td>
-                <td>新增</td>
-                <td>编辑</td>
-                <td>删除</td>
+                <td><div class="checkbox pull-left">查看</div><div class="checkbox checkbox-primary pull-left" style="margin-left: 10px;">
+                        <input type="checkbox" checked=""><label></label></div></td>
+                <td><div class="checkbox pull-left">新增</div><div class="checkbox checkbox-success pull-left" style="margin-left: 10px;">
+                        <input type="checkbox" checked=""><label></label></div></td>
+                <td><div class="checkbox pull-left">编辑</div><div class="checkbox checkbox-warning pull-left" style="margin-left: 10px;">
+                        <input type="checkbox" checked=""><label></label></div></td>
+                <td><div class="checkbox pull-left">删除</div><div class="checkbox checkbox-danger pull-left" style="margin-left: 10px;">
+                        <input type="checkbox" checked=""><label></label></div></td>
             </tr>
 
 
         </table>
-        <a class="btn btn-danger btn-trans"><?php echo trans_with_global('detail')?>&nbsp;<i class="fa fa-search-plus"></i></a>
+        <a class="btn btn-danger btn-trans hidden"><?php echo trans_with_global('detail')?>&nbsp;<i class="fa fa-search-plus"></i></a>
     </div>
 </div>
