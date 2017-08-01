@@ -22,7 +22,7 @@ use Symfony\Component\Console\Exception\RuntimeException;
 class ControllerManager extends Factory
 {
     protected $defaultController = 'Index';// 默认控制器
-    protected $defaultAction = 'Index';// 默认方法
+    protected $defaultAction = 'List';// 默认方法
     protected $module;
     protected $folder;
     protected $controllerName;

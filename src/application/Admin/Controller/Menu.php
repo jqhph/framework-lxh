@@ -102,7 +102,7 @@ class Menu extends Controller
         ]);
     }
 
-    public function actionIndex()
+    public function actionList()
     {
         $titles = [
             'id' => ['priority' => 0,],
@@ -129,7 +129,7 @@ class Menu extends Controller
 
         assign('titles', $titles);
 
-        return fetch_complete_view('Index', ['list' => & $list]);
+        return fetch_complete_view('List', ['list' => & $list]);
     }
 
 }

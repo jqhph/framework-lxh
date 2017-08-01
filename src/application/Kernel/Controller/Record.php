@@ -19,18 +19,12 @@ class Record extends LxhController
 {
     protected $maxSize = 20;
 
-    // 列表标题
-    protected $listTableTitles = [];
-
-    // 搜索项
-    protected $searchItems = [];
-
     /**
      * list页
      *
      * @return string
      */
-    public function actionIndex()
+    public function actionList()
     {
         $page = I('page', 1);
 
@@ -59,7 +53,27 @@ class Record extends LxhController
 
         $pages = pages($total, $page, $this->maxSize);
 
-        return fetch_complete_view('Index', ['list' => & $list, 'searchItems' => & $this->searchItems, 'titles' => & $this->listTableTitles, 'pages' => & $pages]);
+        return fetch_complete_view('List', ['list' => & $list, 'searchItems' => $this->getSearchItems(), 'titles' => $this->getListTableTitles(), 'pages' => & $pages]);
+    }
+
+    /**
+     * 获取list页table标题信息
+     *
+     * @return array
+     */
+    protected function getListTableTitles()
+    {
+        return [];
+    }
+
+    /**
+     * 获取搜索项
+     *
+     * @return array
+     */
+    protected function getSearchItems()
+    {
+        return [];
     }
 
     /**
@@ -71,7 +85,17 @@ class Record extends LxhController
 
         assign('navTitle', $currentTitle);
 
-        return fetch_complete_view('Detail', ['detailFields' => []]);
+        return fetch_complete_view('Detail', ['detailFields' => $this->getDetailFields()]);
+    }
+
+    /**
+     * 获取详情界面字段视图信息
+     *
+     * @return array
+     */
+    protected function getDetailFields()
+    {
+        return [];
     }
 
     /**
@@ -101,7 +125,7 @@ class Record extends LxhController
         assign('navTitle', $currentTitle);
 
         return fetch_complete_view(__ACTION__, [
-            'row' => & $row, 'detailFields' => []
+            'row' => & $row, 'detailFields' => $this->getDetailFields()
         ]);
     }
 

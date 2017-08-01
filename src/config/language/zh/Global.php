@@ -39,6 +39,7 @@ return [
         'All' => '全部',
         ':' => '：',
         'fontawesome icon CSS' => '请输入fontawesome图标CSS',
+        'detail' => '详情',
     ],
     'fields' => [
         'name' => '名称',

@@ -10,15 +10,14 @@ use Lxh\Kernel\AdminUrlCreator;
 
 $row = isset($row) ? $row : [];
 
+$width = isset($width) ? $width : 6;
+
 $id = get_value($row, 'id');
 
 // 是否加载js
 $loadJs = isset($loadJs) ? $loadJs : '';
 
 ?>
-
-
-
 <div class="row">
     <div class="col-sm-12">
         <div class="card-box">
@@ -30,14 +29,14 @@ $loadJs = isset($loadJs) ? $loadJs : '';
 
             <div class="row">
                 <form class="form-horizontal <?php echo __CONTROLLER__;?>-form" role="form">
-                    <div class="col-lg-6">
+                    <div class="col-lg-<?php echo $width;?>">
                         <?php if (! empty($row['id'])) { ?>
                             <input type="hidden" name="id" value="<?php echo $id;?>" />
                         <?php  }
 
                         foreach ($opts as & $v) {
                             $v['vars']['id'] = & $id;
-                            $v['vars']['value'] = get_value($row, $v['name']);
+                            $v['vars']['value'] = get_value($row, $v['vars']['name']);
 
                             echo component_view("fields/{$v['view']}", $v['vars']);
                         }

@@ -15,5 +15,37 @@ use Lxh\Helper\Valitron\Validator;
 
 class Role extends Controller
 {
+    /**
+     * 获取list页table标题信息
+     *
+     * @return array
+     */
+    protected function getListTableTitles()
+    {
+        return [];
+    }
+
+    /**
+     * 获取搜索项
+     *
+     * @return array
+     */
+    protected function getSearchItems()
+    {
+        return [];
+    }
+
+    /**
+     * 获取详情界面字段视图信息
+     *
+     * @return array
+     */
+    protected function getDetailFields()
+    {
+        return [
+            ['view' => 'varchar/edit', 'vars' => ['name' => 'name', 'labelCol' => 1, 'formCol' => 10]],
+            ['view' => 'checkbox/items-edit', 'vars' => ['name' => 'permissions', 'labelCol' => 1, 'formCol' => 10]],
+        ];
+    }
 
 }
