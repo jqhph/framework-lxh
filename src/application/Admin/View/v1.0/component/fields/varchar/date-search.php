@@ -34,9 +34,6 @@ if (is_array($value)) {
         </div>
     </form>
 </div>
-<script>
-    add_css(['css/bootstrap-datetimepicker.min.css'])
-    add_js('lib/js/bootstrap-datetimepicker.min')
-</script>
+<script>add_css(['css/bootstrap-datetimepicker.min.css']), add_js('lib/js/bootstrap-datetimepicker.min')</script>
 
 

@@ -1,5 +1,5 @@
 /**
- * 单选搜索
+ * 列表项多选
  * Created by Jqh on 2017/7/30.
  */
 define([], function () {

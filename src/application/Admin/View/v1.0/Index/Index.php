@@ -1,6 +1,3 @@
-<!-- Top Bar Start -->
-<?php echo fetch_view('top-bar', 'Public')?>
-<!-- Top Bar End -->
 
 <!--    col-lg-4 -->
 <div class="">

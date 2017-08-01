@@ -8,8 +8,21 @@
 
 namespace Lxh\Kernel\Builder\Driver;
 
+use Lxh\Kernel\Builder\CodeGenerator;
+
 class View extends Creator
 {
+    protected $listView;
+
+    protected $detailView;
+
+    protected $searchView;
+
+    public function __construct(CodeGenerator $generator)
+    {
+        parent::__construct($generator);
+    }
+
     public function make(array $options)
     {
 

@@ -4,9 +4,9 @@
 define([], function () {
     var view = {
         init: function () {
-            this.$el = '.search-form'
+            this.el = '.search-form'
             this.$content = $('.search-card-box-content')
-            this.$searchForm = $('.search-form')
+            this.$searchForm = $(this.el)
             this.$inputs = this.$searchForm.find('input')
             this.selects = this.$searchForm.find('select')
 
@@ -83,7 +83,7 @@ define([], function () {
             // 搜索
             search: function (e) {
                 var url = location.origin + location.pathname
-                var data = $lxh.form().get(this.$el)
+                var data = $lxh.form().get(this.el)
                 console.log('data', data)
                 console.log(build_http_params(data))
             },

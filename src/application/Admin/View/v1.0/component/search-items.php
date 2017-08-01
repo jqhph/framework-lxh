@@ -16,12 +16,11 @@
                     <div class="pull-right"><a data-action="toggle-search-content" class="btn btn-purple btn-trans"><?php echo trans_with_global('Hidden')?></a></div>
                 </div>
                 <div class="card-box-line"></div>
-
                 <div class="search-card-box-content">
                     <div style="height: 1em"></div>
-
-                    <?php foreach ($opts as & $row) {
-                        ?>
+                    <?php
+                    // 循环输出搜索选项视图
+                    foreach ($opts as & $row) { ?>
                     <div class="icon-list-demo row">
                         <?php foreach ($row as & $item) {
                             // 列
@@ -39,6 +38,5 @@
             </div>
         </div>
     </div>
-
 </div>
 <script>add_js(['view/search-items'])</script>

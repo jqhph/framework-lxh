@@ -49,6 +49,7 @@ return [
         'You will not be able to recover this row!' => '此操作将无法进行复原',
         'Yes, delete it!' => '是的，删除！',
         'Invalid arguments' => '参数不合法',
+        'Yes' => '是的',
     ],
     'menus' => [
         'Language Management' => '语言包管理',
@@ -58,5 +59,6 @@ return [
         'Menu management' => '菜单管理',
         'Create reports' => '创建报表',
         'Setting' => '设置',
+        'Permissions' => '权限管理',
     ],
 ];

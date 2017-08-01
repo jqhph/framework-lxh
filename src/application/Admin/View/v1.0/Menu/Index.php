@@ -3,7 +3,6 @@
 use Lxh\Kernel\AdminUrlCreator;
 ?>
 
-
 <?php echo component_view('search-items', [
     'opts' => [
         [
@@ -85,12 +84,7 @@ use Lxh\Kernel\AdminUrlCreator;
 
     </div>
 </div>
-<?php
 
-//    load_css('rwd-table.min', 'lib/plugins/RWD-Table-Patterns/dist/css');
-//    load_js('rwd-table', 'plugins/RWD-Table-Patterns/dist/js');
-
-?>
 <script>
     add_css('lib/plugins/RWD-Table-Patterns/dist/css/rwd-table.min.css');
     add_js('lib/plugins/RWD-Table-Patterns/dist/js/rwd-table');

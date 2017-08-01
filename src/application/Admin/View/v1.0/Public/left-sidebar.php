@@ -37,7 +37,7 @@ $name = $user->first_name . $user->last_name;
 
                 <li>
                     <a href="<?php echo Lxh\Kernel\AdminUrlCreator::makeHome();?>" class="waves-effect
-                    <?php if ($menu->isActive('Index', 'Index')) echo 'active';?> "><i class="zmdi zmdi-view-dashboard"></i> <span>
+                    <?php if ($menu->isActive('Index', 'Index')) echo 'active';?> "><i class="zmdi zmdi-home"></i> <span>
                             <?php echo trans('Home', 'menus');?> </span> </a>
                 </li>
 
