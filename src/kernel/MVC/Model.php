@@ -4,6 +4,7 @@ namespace Lxh\MVC;
 use Lxh\Exceptions\InternalServerError;
 use Lxh\Contracts\Container\Container;
 use Lxh\Helper\Entity;
+use Lxh\Helper\Util;
 use Lxh\ORM\Query;
 
 class Model extends Entity
@@ -50,7 +51,9 @@ class Model extends Entity
 
     public function __construct($name, Container $container)
     {
-        $this->modelName = $this->tableName = $name;
+        $this->modelName = $name;
+
+        $this->tableName = Util::toUnderScore($name, true);
 
         $this->container = $container;
 

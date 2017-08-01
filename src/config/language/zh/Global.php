@@ -38,6 +38,7 @@ return [
         'end' => '结束',
         'All' => '全部',
         ':' => '：',
+        'fontawesome icon CSS' => '请输入fontawesome图标CSS',
     ],
     'fields' => [
         'name' => '名称',
@@ -60,5 +61,6 @@ return [
         'Create reports' => '创建报表',
         'Setting' => '设置',
         'Permissions' => '权限管理',
+        'Role' => '角色',
     ],
 ];

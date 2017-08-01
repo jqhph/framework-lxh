@@ -15,6 +15,10 @@ class PublicEntrance extends Controller
     // 字体展示
     public function actionFontAwesome()
     {
+        $navTitle = 'Font awesome';
+
+        assign('navTitle', $navTitle);
+
         return fetch_complete_view('FontAwesome');
     }
 }

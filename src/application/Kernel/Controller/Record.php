@@ -18,7 +18,11 @@ class Record extends LxhController
 {
     protected $maxSize = 20;
 
+    // 列表标题
     protected $listTableTitles = [];
+
+    // 搜索项
+    protected $searchItems = [];
 
     /**
      * list页
@@ -54,7 +58,19 @@ class Record extends LxhController
 
         $pages = pages($total, $page, $this->maxSize);
 
-        return fetch_complete_view('Index', ['list' => & $list, 'titles' => & $this->listTableTitles, 'pages' => & $pages]);
+        return fetch_complete_view('Index', ['list' => & $list, 'searchItems' => & $this->searchItems, 'titles' => & $this->listTableTitles, 'pages' => & $pages]);
+    }
+
+    // 创建记录界面
+    public function actionCreate()
+    {
+
+    }
+
+    // 修改记录界面
+    public function actionDetail(Request $req, Response $resp, & $params)
+    {
+
     }
 
 

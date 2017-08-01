@@ -32,7 +32,11 @@ use Lxh\Kernel\AdminUrlCreator;
                             'list' => & $menus,
                         ]); ?>
 
-                        <?php echo component_view('fields/varchar/edit', ['name' => 'icon', 'label' => 'icon', 'value' => get_value($row, 'icon')]); ?>
+                        <?php echo component_view('fields/varchar/edit', [
+                                'name' => 'icon', 'label' => 'icon', 'value' => get_value($row, 'icon'),
+                                'help' => '<a target="_blank" href="' . AdminUrlCreator::makeAction('FontAwesome', 'PublicEntrance')
+                                    . '">' . trans_with_global('fontawesome icon CSS') . '</a>'
+                        ]); ?>
 
                         <?php echo component_view('fields/varchar/edit', ['name' => 'name', 'label' => 'name', 'value' => get_value($row, 'name')]); ?>
 

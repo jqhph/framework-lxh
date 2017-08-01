@@ -1,3 +1,4 @@
+<?php use Lxh\Kernel\AdminUrlCreator;?>
 <?php echo component_view('fields/varchar/edit',
     ['name' => 'controller_name', 'label' => 'controller', 'value' => '']); ?>
 
@@ -25,7 +26,8 @@
     ]]); ?>
 
 <?php echo component_view('fields/varchar/edit',
-    ['name' => 'icon', 'label' => 'icon', 'value' => '']); ?>
+    ['name' => 'icon', 'label' => 'icon', 'value' => '', 'help' => '<a target="_blank" href="' . AdminUrlCreator::makeAction('FontAwesome', 'PublicEntrance')
+        . '">' . trans_with_global('fontawesome icon CSS') . '</a>']); ?>
 
 <?php echo component_view('fields/varchar/edit',
     ['name' => 'limit', 'label' => 'page limit', 'value' => 20]); ?>

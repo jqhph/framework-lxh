@@ -51,8 +51,10 @@ class System extends Controller
             $options[] = ['value' => $module];
         }
 
+        // 可选的控制器父类
         $controllers = [['value' => 'Lxh\Kernel\Controller\Record']];
 
+        // 字段类型
         $fields = [
             [
                 'label' => 'Input',

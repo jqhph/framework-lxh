@@ -86,7 +86,7 @@ class Menu extends Controller
         }
         $id = $params['id'];
 
-        $row = query()->from('Menu')->where('id', $id)->findOne();
+        $row = query()->from('menu')->where('id', $id)->findOne();
 
         $menus = make('acl-menu')->all();
 
