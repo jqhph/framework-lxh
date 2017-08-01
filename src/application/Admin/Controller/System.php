@@ -52,7 +52,7 @@ class System extends Controller
         }
 
         // 可选的控制器父类
-        $controllers = [['value' => 'Lxh\Kernel\Controller\Record']];
+        $controllers = ['Lxh\Kernel\Controller\Record'];
 
         // 字段类型
         $fields = [
@@ -79,8 +79,8 @@ class System extends Controller
         ];
 
         $groups = [
-            ['value' => 'primary'],
-            ['value' => 'advanced'],
+            'primary',
+            'advanced',
         ];
 
         $nav = 'Making modules';
@@ -103,7 +103,7 @@ class System extends Controller
 
         $list = [];
         foreach ($languageList as & $lang) {
-            $list[]['value'] = $lang;
+            $list[] = $lang;
         }
 
         return fetch_complete_view('Setting', ['languageList' => & $list]);

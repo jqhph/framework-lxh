@@ -1,11 +1,19 @@
+<?php
+$value    = isset($value) ? $value : null;
+$hideLabe = isset($hideLabe) ? $hideLabe : false;
+$labelCol = empty($labelCol) ? 2 : $labelCol;
+$formCol  = empty($formCol) ? 8 : $formCol;
+
+?>
 <div class="form-group clearfix">
-    <label class="col-md-2 control-label"><?php echo trans($label, 'fields'); ?></label>
-    <div class="col-md-8">
-        <?php foreach ($rows as & $r) { ?>
+    <?php if (! $hideLabe) {?>
+    <label class="col-md-<?php echo $labelCol;?> control-label"><?php echo trans($name, 'fields'); ?></label>
+    <?php }?>
+    <div class="col-md-<?php echo $formCol;?>">
+        <?php foreach ($opts as & $r) { ?>
             <div class="checkbox checkbox-danger" style="display: inline;">
                 <input value="<?php echo $r['value'];?>" name="<?php echo $name;?>[]" type="checkbox" <?php if (! empty($r['checked'])) echo 'checked'?>><label>
-                    <?php echo trans($r['label']); ?></label></div>
-            &nbsp;
+                    <?php echo trans($r['value'], $name); ?></label></div> &nbsp;
         <?php } ?>
     </div>
 </div>

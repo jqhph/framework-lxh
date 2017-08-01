@@ -34,7 +34,7 @@ return [
         'actions' => '动作',
         'icon' => '图标',
         'page limit' => '每页显示行数',
-        'Language' => '语言',
+        'language' => '语言',
         'Language package expire after' => '前台语言包缓存时长（秒）',
         'Cache expire after' => '前台所有缓存时长（秒）',
         'Js Token' => 'Js版本号',

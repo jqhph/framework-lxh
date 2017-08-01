@@ -19,7 +19,7 @@
                     <div class="col-lg-6">
 
                         <?php echo component_view('fields/enum/edit', [
-                            'name' => 'language', 'label' => 'Language', 'value' => config('language'), 'list' => & $languageList, 'labelCol' => 4]); ?>
+                            'name' => 'language', 'value' => config('language'), 'opts' => & $languageList, 'labelCol' => 4]); ?>
 
                         <?php echo component_view('fields/varchar/edit', [
                             'name' => 'lang-package-expire', 'label' => 'Language package expire after',

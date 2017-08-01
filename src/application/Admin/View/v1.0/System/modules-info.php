@@ -12,10 +12,10 @@
     ['name' => 'author', 'label' => 'author', 'value' => '']); ?>
 
 <?php echo component_view('fields/enum/edit',
-    ['name' => 'inheritance', 'label' => 'inheritance of controller', 'list' => & $controllerOptions]); ?>
+    ['name' => 'inheritance', 'label' => 'inheritance of controller', 'opts' => & $controllerOptions]); ?>
 
 <?php echo component_view('fields/checkbox/edit',
-    ['name' => 'actions', 'label' => 'actions', 'rows' => [
+    ['name' => 'actions', 'opts' => [
         ['label' => 'add', 'value' => 'add', 'checked' => 1],
         ['label' => 'update', 'value' => 'update', 'checked' => 1],
         ['label' => 'delete', 'value' => 'delete', 'checked' => 1],

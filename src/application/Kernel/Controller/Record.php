@@ -8,6 +8,7 @@
 
 namespace Lxh\Kernel\Controller;
 
+use Lxh\Exceptions\Forbidden;
 use Lxh\MVC\Controller as LxhController;
 use Lxh\Status;
 use Lxh\Helper\Valitron\Validator;
@@ -61,16 +62,47 @@ class Record extends LxhController
         return fetch_complete_view('Index', ['list' => & $list, 'searchItems' => & $this->searchItems, 'titles' => & $this->listTableTitles, 'pages' => & $pages]);
     }
 
-    // 创建记录界面
-    public function actionCreate()
+    /**
+     * 创建记录界面
+     */
+    public function actionCreate(Request $req, Response $resp, & $params)
     {
+        $currentTitle = 'Create ' . __CONTROLLER__;
 
+        assign('navTitle', $currentTitle);
+
+        return fetch_complete_view('Detail', ['detailFields' => []]);
     }
 
-    // 修改记录界面
+    /**
+     * 修改记录界面
+     *
+     * @param Request $req
+     * @param Response $resp
+     * @param $params
+     * @return string
+     * @throws Forbidden
+     */
     public function actionDetail(Request $req, Response $resp, & $params)
     {
+        if (empty($params['id'])) {
+            throw new Forbidden();
+        }
+        $id = $params['id'];
 
+        $model = $this->getModel();
+
+        $model->id = $id;
+
+        $row = $model->find();
+
+        $currentTitle = 'Modify ' . __CONTROLLER__;
+
+        assign('navTitle', $currentTitle);
+
+        return fetch_complete_view(__ACTION__, [
+            'row' => & $row, 'detailFields' => []
+        ]);
     }
 
 
@@ -255,15 +287,15 @@ class Record extends LxhController
      * 用法清请参考：https://github.com/vlucas/valitron
      *
      *  $v->fill(['name' => '张三', 'email' => 'jqh@163.com'])
-    ->rule('required', array('name', 'email'))
-    ->rule('email', 'email');
+        ->rule('required', array('name', 'email'))
+        ->rule('email', 'email');
 
-    if ($v->validate()) {
-    echo "Yay! We're all good!<br>";
-    } else {
-    // Errors
-    debug($v->errors());
-    }
+        if ($v->validate()) {
+            echo "Yay! We're all good!<br>";
+        } else {
+            // Errors
+            debug($v->errors());
+        }
      *
      * @return Validator
      */

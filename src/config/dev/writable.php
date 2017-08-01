@@ -1,6 +1,6 @@
 <?php 
 return [
-    'js-version' => 1501592197,
+    'js-version' => 1501599151,
     'css-version' => 1501549539,
     'language' => 'zh',
 
