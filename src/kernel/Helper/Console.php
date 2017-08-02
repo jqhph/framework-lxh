@@ -92,6 +92,8 @@ class Console
             } else if (is_int($log) || is_float($log)) {
                 $txt .= "$log,";
             } else {
+                // 转义单引号
+                $log = str_replace("'", "\\'", $log);
                 $txt .= "'$log',";
             }
         }

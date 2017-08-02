@@ -502,13 +502,3 @@ function debug($data, $print = true, $json = false)
     echo "<br/><br/>";
 
 }
-
-// 用于测试性能
-function nature_test(callable $call, $times = 15000)
-{
-    $s = microtime(true);
-    for ($i = 0; $i < $times; $i++) {
-        $call();
-    }
-    return microtime(true) - $s;
-}
