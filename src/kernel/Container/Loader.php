@@ -112,10 +112,6 @@ class Loader
                 'shared' => true,
                 'class' => 'Lxh\Helper\Valitron\Validator'
             ],
-            'page' => [
-                'shared' => true,
-                'class' => 'Lxh\Helpers\Page'
-            ],
             'mongo' => [
                 'shared' => true,
                  'class' => 'Lxh\ORM\DB\Mongo\Connection'

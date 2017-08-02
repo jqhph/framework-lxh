@@ -31,11 +31,7 @@ class Record extends LxhController
             throw new Forbidden();
         }
 
-        $page = I('page', 1);
-
-        if ($page < 1) {
-            $page = 1;
-        }
+        $pages = pages();
 
         $wheres = array_merge($this->makeWhereContent($_REQUEST), ['deleted' => 0]);
 
@@ -44,21 +40,18 @@ class Record extends LxhController
         // 获取记录总条数
         $total = $model->count($wheres);
 
-        $totalPage = ceil($total / $this->maxSize);
+        $pageString = $pages->make($total, $this->maxSize);
 
-        if ($page > $totalPage) {
-            $page = $totalPage;
-        }
+        // 生成分页字符串后获取当前分页（做过安全判断）
+        $currentPage = $pages->current();
 
         $list = [];
 
         if ($total) {
-            $list = $model->records($wheres, $page, $this->maxSize, $this->makeOrderContent($_REQUEST));
+            $list = $model->records($wheres, $currentPage, $this->maxSize, $this->makeOrderContent($_REQUEST));
         }
 
-        $pages = pages($total, $page, $this->maxSize);
-
-        return fetch_complete_view('List', ['list' => & $list, 'searchItems' => $this->getSearchItems(), 'titles' => $this->getListTableTitles(), 'pages' => & $pages]);
+        return fetch_complete_view('List', ['list' => & $list, 'searchItems' => $this->getSearchItems(), 'titles' => $this->getListTableTitles(), 'pages' => & $pageString]);
     }
 
     /**

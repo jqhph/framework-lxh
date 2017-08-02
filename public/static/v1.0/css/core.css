@@ -769,15 +769,7 @@ textarea.form-control {
   -webkit-border-radius: 3px;
   border-radius: 3px;
 }
-.pagination > .active > a,
-.pagination > .active > span,
-.pagination > .active > a:hover,
-.pagination > .active > span:hover,
-.pagination > .active > a:focus,
-.pagination > .active > span:focus {
-  background-color: #71b6f9;
-  border-color: #71b6f9;
-}
+
 .pager li > a,
 .pager li > span {
   -moz-border-radius: 3px;

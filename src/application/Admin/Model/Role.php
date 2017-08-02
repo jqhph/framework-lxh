@@ -12,7 +12,7 @@ use Lxh\Kernel\Model\Record;
 
 class Role extends Record
 {
-    protected $selectFields = ['id', 'name', 'created_at', 'user.username AS created_by'];
+    protected $selectFields = ['id', 'name', 'created_at', 'modify_at', 'user.username AS created_by'];
 
     protected $permissions;
 

@@ -15,6 +15,7 @@ use Lxh\Helper\Valitron\Validator;
 
 class Role extends Controller
 {
+    protected $maxSize = 20;
     /**
      * 获取list页table标题信息
      *
@@ -26,7 +27,13 @@ class Role extends Controller
             'id' => ['priority' => 0,],
             'name' => [
             ],
+            'permissions' => [
+                'view' => 'permit/btn'
+            ],
             'created_at' => [
+                'view' => 'varchar/date-list'
+            ],
+            'modify_at' => [
                 'view' => 'varchar/date-list'
             ],
             'created_by' => [

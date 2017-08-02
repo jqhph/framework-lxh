@@ -40,11 +40,14 @@ return [
         ':' => '：',
         'fontawesome icon CSS' => '请输入fontawesome图标CSS',
         'detail' => '详情',
+        'Total' => '总数',
+        'Showing' => '显示',
     ],
     'fields' => [
         'name' => '名称',
         'created_at' => '创建时间',
         'created_by' => '创建人',
+        'modify_at' => '修改时间',
     ],
     'tip' => [
         'Are you sure?' => '您确定要继续此操作吗？',

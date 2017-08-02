@@ -18,4 +18,9 @@ $config['front.client'] = [
     'class' => 'Lxh\Kernel\Client'
 ];
 
+$config['page'] = [
+    'shared' => true,
+    'class' => 'Lxh\Kernel\Support\Page'
+];
+
 return $config;

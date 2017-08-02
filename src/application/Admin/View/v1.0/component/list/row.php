@@ -11,9 +11,9 @@ use Lxh\Kernel\AdminUrlCreator;
     <?php foreach ($titles as $name => & $v) { ?>
     <th><?php
         if (! empty($titles[$name]['view'])) {
-            echo component_view('fields/' . $titles[$name]['view'], ['val' => $r[$name], 'name' => $name]);
+            echo component_view('fields/' . $titles[$name]['view'], ['val' => get_value($r, $name), 'name' => $name]);
         } else {
-            echo $r[$name];
+            echo get_value($r, $name);
         }
         ?>
     </th>

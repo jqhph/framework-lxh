@@ -19,14 +19,15 @@ $createBtnText = "Create $scope";
 if (! empty($searchItems))  echo component_view('search-items', $searchItems);
 ?>
 <!--col-sm-12-->
-<div class="col-md-12">
-    <div class="card-box">
+<div class="">
+    <div class="card-box table-responsive">
         <div class="table-rep-plugin">
             <div class="btn-toolbar" >
                 <div class="btn-group dropdown-btn-group pull-right">
                     <a href="<?php echo $createUrl; ?>" data-action="create-row" class="btn btn-success"><?php echo trans($createBtnText); ?></a>
                 </div>
             </div>
+            <div class="dt-buttons btn-group"></div>
 
             <div class="table-responsive" data-pattern="priority-columns">
                 <table id="tech-companies-1" class="table ">
@@ -47,7 +48,13 @@ if (! empty($searchItems))  echo component_view('search-items', $searchItems);
                     } ?>
                     </tbody>
                 </table>
+                <?php if ($pages) {?>
+                <div class="dataTables_paginate paging_simple_numbers pull-center"  >
+                    <ul class="pagination"><?php echo $pages;?></ul>
+                </div>
+                <?php } ?>
             </div>
+
         </div>
     </div>
 </div>
