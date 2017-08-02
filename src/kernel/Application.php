@@ -60,7 +60,7 @@ class Application
         debug_track('start');
 
         $this->container = container();
-        $this->events    = $this->container->make('events');
+        $this->events    = events();
     }
 
     /**

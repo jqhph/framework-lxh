@@ -1,5 +1,4 @@
 <div class="topbar">
-
     <!-- LOGO -->
     <div class="topbar-left">
         <a href="<?php echo Lxh\Kernel\AdminUrlCreator::makeHome();?>" class="logo">
@@ -12,13 +11,10 @@
     <!-- Button mobile view to collapse sidebar menu -->
     <div class="navbar navbar-default" role="navigation">
         <div class="container">
-
             <!-- Page title -->
             <ul class="nav navbar-nav navbar-left">
                 <li>
-                    <button class="button-menu-mobile open-left">
-                        <i class="zmdi zmdi-menu"></i>
-                    </button>
+                    <button class="button-menu-mobile open-left"><i class="zmdi zmdi-menu"></i></button>
                 </li>
                 <li>
                     <h5 class="page-title"><?php echo empty($navTitle) ? make('acl-menu')->makeNav() : trans($navTitle);?></h5>
@@ -52,7 +48,6 @@
                     </form>
                 </li>
             </ul>
-
         </div><!-- end container -->
     </div><!-- end navbar -->
 </div>

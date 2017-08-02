@@ -18,7 +18,6 @@ $createBtnText = "Create $scope";
 // 搜索项界面
 if (! empty($searchItems))  echo component_view('search-items', $searchItems);
 ?>
-
 <!--col-sm-12-->
 <div class="col-md-12">
     <div class="card-box">
@@ -27,7 +26,6 @@ if (! empty($searchItems))  echo component_view('search-items', $searchItems);
                 <div class="btn-group dropdown-btn-group pull-right">
                     <a href="<?php echo $createUrl; ?>" data-action="create-row" class="btn btn-success"><?php echo trans($createBtnText); ?></a>
                 </div>
-
             </div>
 
             <div class="table-responsive" data-pattern="priority-columns">
@@ -50,12 +48,9 @@ if (! empty($searchItems))  echo component_view('search-items', $searchItems);
                     </tbody>
                 </table>
             </div>
-
         </div>
-
     </div>
 </div>
-
 <script>
     add_css('lib/plugins/RWD-Table-Patterns/dist/css/rwd-table.min.css');
     add_js('lib/plugins/RWD-Table-Patterns/dist/js/rwd-table');

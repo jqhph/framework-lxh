@@ -6,6 +6,8 @@
  * @date   2017/6/15 15:17
  */
 
+use Lxh\Admin\Acl\Permit;
+
 /**
  * 分页函数
  *
@@ -104,4 +106,16 @@ function pageurl($urlrule, $page, $array = array())
         if (!empty($_SERVER["QUERY_STRING"])) $url .= '?' . $_SERVER["QUERY_STRING"];
 
     return $url;
+}
+
+/**
+ * 权限管理
+ *
+ * @return Permit
+ */
+function permit()
+{
+    static $instance = null;
+
+    return $instance ?: ($instance = new Permit());
 }

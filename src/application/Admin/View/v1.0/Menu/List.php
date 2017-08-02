@@ -28,11 +28,10 @@ use Lxh\Kernel\AdminUrlCreator;
                 <div class="btn-group dropdown-btn-group pull-right">
                     <a href="<?php echo AdminUrlCreator::makeAction('Create'); ?>" data-action="create-row" class="btn btn-success"><?php echo trans('Create Menu'); ?></a>
                 </div>
-
             </div>
 
             <div class="table-responsive" data-pattern="priority-columns">
-                <table id="tech-companies-1" class="table  table-striped">
+                <table id="tech-companies-1" class="table ">
                     <thead>
                     <tr>
                         <?php

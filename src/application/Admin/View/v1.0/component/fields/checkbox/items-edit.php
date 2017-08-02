@@ -5,12 +5,13 @@
  * Date: 2017/8/1
  * Time: 23:41
  */
-$value    = isset($value) ? $value : null;
+$value    = isset($value) ? $value : 1;
 $hideLabe = isset($hideLabe) ? $hideLabe : false;
 $labelCol = empty($labelCol) ? 2 : $labelCol;
 $formCol  = empty($formCol) ? 8 : $formCol;
+$columns = isset($columns) ? $columns : 4;
+$labelCategory = isset($labelCategory) ? $labelCategory : 'labels';
 ?>
-
 <div class="form-group clearfix">
     <?php if (! $hideLabe) {?>
         <label class="col-md-<?php echo $labelCol;?> control-label"><?php echo trans($name, 'fields'); ?></label>
@@ -18,43 +19,29 @@ $formCol  = empty($formCol) ? 8 : $formCol;
     <div class="col-md-<?php echo $formCol;?>">
         <input value="<?php echo $value;?>" type="hidden"  name="<?php echo $name;?>" />
         <table class="table table-bordered m-0">
-
+            <?php foreach ($list as & $r) {
+                if (! empty($r['title'])) {
+                ?>
+            <tr><th colspan="<?php echo $columns?>"><?php echo trans($r['title'], $labelCategory)?></th></tr>
+            <?php } $rowsEnd = count($r['rows']) - 1; foreach ($r['rows'] as $k => & $items) { ?>
             <tr>
-                <th>用户</th>
-                <th></th>
-                <th></th>
-                <th></th>
+                <?php
+                // 计算colspan
+                $itemsNum = count($items);
+                $tdColumns = $columns - $itemsNum;
+                $len = $itemsNum - 1;
+                foreach ($items as $k => & $v) { ?>
+                <td <?php echo $k == $len ? "colspan='$tdColumns'" : '';?>><?php if ($v) {
+                        $checkboxName = empty($r['title']) ? $v['name'] : "{$r['title']}-{$v['name']}";
+                        $value = isset($v['value']) ? $v['value'] : 1;
+                        ?><div class="checkbox pull-left"><?php echo trans($v['name'], $labelCategory)?></div>
+                    <div class="checkbox checkbox-<?php echo isset($v['color']) ? $v['color'] : 'primary';?> pull-left" style="margin-left: 10px;">
+                        <input name="<?php echo $checkboxName;?>" type="checkbox" value="<?php echo $value;?>" ><label></label></div> <?php } ?></td>
+                <?php } ?>
             </tr>
-            <tr>
-                <td><div class="checkbox pull-left">查看</div><div class="checkbox checkbox-primary pull-left" style="margin-left: 10px;">
-                        <input type="checkbox" checked=""><label></label></div></td>
-                <td><div class="checkbox pull-left">新增</div><div class="checkbox checkbox-success pull-left" style="margin-left: 10px;">
-                        <input type="checkbox" checked=""><label></label></div></td>
-                <td><div class="checkbox pull-left">编辑</div><div class="checkbox checkbox-warning pull-left" style="margin-left: 10px;">
-                        <input type="checkbox" checked=""><label></label></div></td>
-                <td><div class="checkbox pull-left">删除</div><div class="checkbox checkbox-danger pull-left" style="margin-left: 10px;">
-                        <input type="checkbox" checked=""><label></label></div></td>
-            </tr>
-            <tr><td colspan="4" style="border-left: 1px solid #fff;border-right: 1px solid #fff;"></td></tr>
-            <tr>
-                <th>用户</th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tr>
-            <tr>
-                <td><div class="checkbox pull-left">查看</div><div class="checkbox checkbox-primary pull-left" style="margin-left: 10px;">
-                        <input type="checkbox" checked=""><label></label></div></td>
-                <td><div class="checkbox pull-left">新增</div><div class="checkbox checkbox-success pull-left" style="margin-left: 10px;">
-                        <input type="checkbox" checked=""><label></label></div></td>
-                <td><div class="checkbox pull-left">编辑</div><div class="checkbox checkbox-warning pull-left" style="margin-left: 10px;">
-                        <input type="checkbox" checked=""><label></label></div></td>
-                <td><div class="checkbox pull-left">删除</div><div class="checkbox checkbox-danger pull-left" style="margin-left: 10px;">
-                        <input type="checkbox" checked=""><label></label></div></td>
-            </tr>
-
-
+            <?php }  ?>
+            <tr><td colspan="<?php echo $columns?>" style="border-left: 1px solid #fff;border-right: 1px solid #fff;"></td></tr>
+            <?php }  ?>
         </table>
-        <a class="btn btn-danger btn-trans hidden"><?php echo trans_with_global('detail')?>&nbsp;<i class="fa fa-search-plus"></i></a>
     </div>
 </div>

@@ -8,14 +8,14 @@ use Lxh\Kernel\AdminUrlCreator;
 class Menu
 {
     /**
-     * 保存处理后的菜单数据
+     * 保存处理后的菜单数据（开启显示的菜单）
      *
      * @var array
      */
     protected $data;
 
     /**
-     * 未经处理的原始菜单数据
+     * 未经处理的原始菜单数据（开启显示的菜单）
      *
      * @var array
      */
@@ -28,8 +28,15 @@ class Menu
      */
     protected $current;
 
+    /**
+     * @var \Lxh\Admin\Model\Menu
+     */
+    protected $model;
+
     public function __construct()
     {
+        $this->model = model('Menu');
+
         $this->get();
     }
 
@@ -107,13 +114,97 @@ class Menu
     }
 
     /**
+     * 权限列表
+     *
+     * @return array
+     */
+    public function permissionsList()
+    {
+        $list = $this->all();
+
+        // 每行显示选项数量
+        $colspan = 6;
+
+        $data = [];
+        $others = [
+            'rows' => [[],]
+        ];
+
+        $hasTop = false;
+
+        foreach ($list as & $r) {
+            if (! empty($r['subs'])) {
+                // 有子菜单，合并所有子菜单
+                array_push($data, ['title' => $r['originName'], 'rows' => $this->mergeTree($r['subs'], $colspan)]);
+                continue;
+            }
+            if (empty($r['action']) || empty($r['controller'])) {
+                continue;
+            }
+
+            $hasTop = true;
+            // 没有子菜单的情况
+            // 每个row最多包含6个数组
+            $this->makeItem($others['rows'], $r, $colspan);
+        }
+
+        if ($hasTop) {
+            array_push($data, $others);
+        }
+
+        return $data;
+    }
+
+    // 没有子菜单的情况
+    // 每个row最多包含6个数组
+    protected function makeItem(& $items, & $record, $colspan = 6)
+    {
+        foreach ($items as & $row) {
+            if (count($row) < $colspan) break;
+        }
+        if (count($row) >= $colspan) {
+            // 大于6个，则创建一个新的数组
+            array_push($items, [['name' => $record['originName'], 'value' => $record['id']]]);
+        } else {
+            // 小于6个直接push
+            array_push($row, ['name' => $record['originName'], 'value' => $record['id']]);
+        }
+    }
+
+    /**
+     * 合并树状数组为普通数组
+     *
+     * @param  array $tree
+     * @return array
+     */
+    public function mergeTree(& $tree, $colspan = 6)
+    {
+        $items = [[]];
+
+        foreach ($tree as & $r) {
+            // 没有子菜单的情况
+            // 每个row最多包含6个数组
+            if (! empty($r['action']) && ! empty($r['controller'])) {
+                $this->makeItem($items, $r, $colspan);
+            }
+
+            if (! empty($r['subs'])) {
+                // 有子菜单，合并所有子菜单
+                $items = array_merge($items, $this->mergeTree($r['subs'], $colspan));
+            }
+        }
+
+        return $items;
+    }
+
+    /**
      * 获取所有的按层级排序好的菜单
      *
      * @return array
      */
     public function all()
     {
-        $list = query()->from('menu')->where(['deleted' => 0])->read();
+        $list = $this->model->find();
 
         $data = $this->makeTree($list);
 
@@ -122,6 +213,14 @@ class Menu
         return $data;
     }
 
+    /**
+     * 生成层级树状数组
+     *
+     * @param  array $data 要生成层级树状的数组
+     * @param  int   $id
+     * @param  int   $level
+     * @return array
+     */
     protected function & makeTree(& $data, & $id = 0, $level = 1)
     {
         if ($level > 4) {
@@ -130,6 +229,7 @@ class Menu
 
         $tree = [];
         foreach ($data as & $v) {
+            $v['originName'] = $v['name'];
             $v['name'] = trans_with_global($v['name'], 'menus');
 
             $v['url'] = $this->makeUrl($v['controller'], $v['action']);
@@ -150,6 +250,7 @@ class Menu
 
     /**
      * 获取按层级排序好的菜单
+     * 只获取显示的菜单
      *
      * @return array
      */
@@ -159,7 +260,7 @@ class Menu
             return $this->data;
         }
 
-        $this->data = $this->list = query()->from('menu')->where(['deleted' => 0, 'show' => 1])->read();
+        $this->data = $this->list = $this->model->findShow();
 
         $this->data = $this->makeTree($this->data);
 
@@ -169,7 +270,13 @@ class Menu
         return $this->data;
     }
 
-    // 按$key字段值正序排序
+    /**
+     * 按$key字段值给层级树状数组正序排序
+     *
+     * @param  array  $lst 层级树状数组
+     * @param  string $key 排序依据字段键名
+     * @return array
+     */
     protected function sort(array & $lst, $key = 'priority')
     {
         // 顶级菜单排序

@@ -42,9 +42,13 @@ class Role extends Controller
      */
     protected function getDetailFields()
     {
+//        debug(make('acl-menu')->permissionsList());die;
         return [
-            ['view' => 'varchar/edit', 'vars' => ['name' => 'name', 'labelCol' => 1, 'formCol' => 10]],
-            ['view' => 'checkbox/items-edit', 'vars' => ['name' => 'permissions', 'labelCol' => 1, 'formCol' => 10]],
+            ['view' => 'varchar/edit', 'vars' => ['name' => 'name', 'labelCol' => 1, 'formCol' => 9]],
+            ['view' => 'checkbox/items-edit', 'vars' => [
+                'name' => 'permissions', 'labelCol' => 1, 'formCol' => 9, 'labelCategory' => 'menus', 'columns' => 6,
+                'list' => make('acl-menu')->permissionsList(), ]
+            ],
         ];
     }
 

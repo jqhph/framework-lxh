@@ -10,9 +10,19 @@ namespace Lxh\Admin\Model;
 
 use Lxh\Helper\Entity;
 use Lxh\MVC\Model;
+use Lxh\Contracts\Container\Container;
 
 class Menu extends Model
 {
+    /**
+     * 获取可显示菜单
+     *
+     * @return []
+     */
+    public function findShow()
+    {
+        return $this->query()->where(['deleted' => 0, 'show' => 1])->read();
+    }
 
     protected function beforeAdd(array & $data)
     {
@@ -34,15 +44,29 @@ class Menu extends Model
         }
     }
 
-    // 删除后置钩子方法，删除成功后触发
+    protected function afterAdd($insertId, array & $data)
+    {
+        if (! $insertId) return;
+
+//        $this->events->fire('Menu.add');
+    }
+
+    protected function afterSave($id, array & $data, $result)
+    {
+        if (! $result) return;
+
+//        $this->events->fire('Menu.save');
+    }
+
+    // 删除后置钩子方法
     protected function afterDelete($id, $result)
     {
-        if (! $result) {
-            return;
-        }
+        if (! $result) return;
 
         // 如果删除成功，把所有的下级菜单也一并删除
         // 以后有空再做
+
+//        $this->events->fire('Menu.delete');
     }
 
     // 判断菜单是否是系统菜单

@@ -26,6 +26,11 @@ class Record extends LxhController
      */
     public function actionList()
     {
+        // 判断是否有权限访问
+        if (! permit()->access()) {
+            throw new Forbidden();
+        }
+
         $page = I('page', 1);
 
         if ($page < 1) {
@@ -81,6 +86,11 @@ class Record extends LxhController
      */
     public function actionCreate(Request $req, Response $resp, & $params)
     {
+        // 判断是否有权限访问
+        if (! permit()->access()) {
+            throw new Forbidden();
+        }
+
         $currentTitle = 'Create ' . __CONTROLLER__;
 
         assign('navTitle', $currentTitle);
@@ -109,6 +119,11 @@ class Record extends LxhController
      */
     public function actionDetail(Request $req, Response $resp, & $params)
     {
+        // 判断是否有权限访问
+        if (! permit()->access()) {
+            throw new Forbidden();
+        }
+
         if (empty($params['id'])) {
             throw new Forbidden();
         }
@@ -159,6 +174,11 @@ class Record extends LxhController
      */
     public function actionDelete(Request $req, Response $resp, & $params)
     {
+        // 判断是否有权限访问
+        if (! permit()->access()) {
+            throw new Forbidden();
+        }
+
         if (empty($params['id'])) {
             return $this->error(trans_with_global('Missing id.'));
         }
@@ -187,6 +207,11 @@ class Record extends LxhController
      */
     public function actionAdd(Request $req, Response $resp, & $params)
     {
+        // 判断是否有权限访问
+        if (! permit()->accessCreate()) {
+            throw new Forbidden();
+        }
+
         if (! $_POST) {
             return $this->error();
         }
@@ -221,6 +246,11 @@ class Record extends LxhController
      */
     public function actionUpdate(Request $req, Response $resp, & $params)
     {
+        // 判断是否有权限访问
+        if (! permit()->accessUpdate()) {
+            throw new Forbidden();
+        }
+
         if (empty($params['id'])) {
             return $this->error(trans_with_global('Missing id.'));
         }

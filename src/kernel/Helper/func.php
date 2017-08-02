@@ -14,11 +14,15 @@ use Lxh\File\FileManager;
 use Lxh\Logger\Manager as LoggerManager;
 use Lxh\Config\Config;
 use Lxh\ORM\Query;
+use Lxh\MVC\Model;
+use Lxh\Contracts\Events\Dispatcher;
 
 // 常用的变量先注册到全局变量中
-$GLOBALS['__container__'] = Container::getInstance();
-$GLOBALS['__config__']    = $GLOBALS['__container__']->make('config');
-$GLOBALS['__language__']  = $GLOBALS['__container__']->make('language.manager');
+$GLOBALS['__container__']     = Container::getInstance();
+$GLOBALS['__config__']        = $GLOBALS['__container__']->make('config');
+$GLOBALS['__language__']      = $GLOBALS['__container__']->make('language.manager');
+$GLOBALS['__model_factory__'] = $GLOBALS['__container__']->make('model.factory');
+$GLOBALS['__events__']        = $GLOBALS['__container__']->make('events');
 
 $GLOBALS['resource-server']  = $GLOBALS['__config__']->get('client-config.resource-server');
 $GLOBALS['js-version']       = $GLOBALS['__config__']->get('js-version');
@@ -44,6 +48,38 @@ function container()
 function make($abstract)
 {
     return $GLOBALS['__container__']->make($abstract);
+}
+
+/**
+ * 获取单例模型
+ *
+ * @param  string $name
+ * @return Model
+ */
+function model($name = __CONTROLLER__)
+{
+    return $GLOBALS['__model_factory__']->get($name);
+}
+
+/**
+ * 创建一个新的模型
+ *
+ * @param  string $name
+ * @return Model
+ */
+function create_model($name = __CONTROLLER__)
+{
+    return $GLOBALS['__model_factory__']->create($name);
+}
+
+/**
+ * 事件管理
+ *
+ * @return Dispatcher
+ */
+function events()
+{
+    return $GLOBALS['__events__'];
 }
 
 // 加载js
@@ -136,14 +172,16 @@ function ucfirst_trans_option($value, $label)
     return ucfirst($GLOBALS['__language__']->translateOption($value, $label));
 }
 
-// 获取用户信息管理对象
+/**
+ * 获取用户信息管理对象
+ *
+ * @return Model
+ */
 function user()
 {
     static $instance = null;
 
-    if ($instance) {
-        return $instance;
-    }
+    if ($instance) return $instance;
 
     return $instance = $GLOBALS['__container__']->make('model.factory')->get('User');
 
@@ -299,9 +337,7 @@ function pdo($name = 'primary')
 {
     static $instances = [];
 
-    if (isset($instances[$name])) {
-        return $instances[$name];
-    }
+    if (isset($instances[$name])) return $instances[$name];
 
     return $instances[$name] = new PDO(config("db.$name"));
 }

@@ -9,7 +9,7 @@ $formCol  = empty($formCol) ? 8 : $formCol;
     <label class="col-md-<?php echo $labelCol;?> control-label"><?php echo trans($name, 'fields'); ?></label>
     <?php }?>
     <div class="col-md-<?php echo $formCol;?>">
-        <div class="checkbox checkbox-danger">
+        <div class="checkbox checkbox-primary">
             <input value="1" name="<?php echo $name;?>" type="checkbox" <?php if ($value) echo 'checked'?>><label></label></div>
     </div>
 </div>

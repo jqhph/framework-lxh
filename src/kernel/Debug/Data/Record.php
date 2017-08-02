@@ -103,7 +103,7 @@ class Record
             $useageTime = $this->data->get("useageTime.$k", 0);
             $type = $this->data->get("type.$k");
             $this->records['info'][] = [
-                'useage-time' => & $useageTime,
+                'useage-time' => $useageTime,
                 'command' => $command,
                 'type' => $type,
                 'params' => $this->data->get("params.$k"),

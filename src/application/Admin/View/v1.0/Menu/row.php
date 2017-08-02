@@ -27,7 +27,7 @@
         </th>
     <?php }
     ?>
-    <th><a href="<?php echo AdminUrlCreator::makeDetail($r['id']);?>">
-            <i class="zmdi zmdi-edit"></i></a>&nbsp;&nbsp;
-        <a data-model="<?php echo empty($model) ? __CONTROLLER__ : $model;?>" data-action="delete-row" data-id="<?php echo $r['id'];?>" href="javascript:"><i class="zmdi zmdi-delete"></i></a></th>
+    <th><a class="" href="<?php echo AdminUrlCreator::makeDetail($r['id']);?>">
+            <i class="fa fa-search-plus"></i></a>&nbsp;&nbsp;
+        <a style="color:#ff5b5b" data-model="<?php echo empty($model) ? __CONTROLLER__ : $model;?>" data-action="delete-row" data-id="<?php echo $r['id'];?>" href="javascript:"><i class="zmdi zmdi-delete"></i></a></th>
 </tr>

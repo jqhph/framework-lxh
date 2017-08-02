@@ -56,10 +56,8 @@
     </div>
 </div>
 <?php
-
 if (! empty($useRwd)) {
     load_css('rwd-table.min', 'lib/plugins/RWD-Table-Patterns/dist/css');
     load_js('rwd-table', 'plugins/RWD-Table-Patterns/dist/js');
 }
-
 ?>

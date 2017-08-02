@@ -6,6 +6,7 @@ use Lxh\Contracts\Container\Container;
 use Lxh\Helper\Entity;
 use Lxh\Helper\Util;
 use Lxh\ORM\Query;
+use Lxh\Contracts\Events\Dispatcher;
 
 class Model extends Entity
 {
@@ -49,6 +50,11 @@ class Model extends Entity
      */
     protected $container;
 
+    /**
+     * @var Dispatcher
+     */
+    protected $events;
+
     public function __construct($name, Container $container)
     {
         $this->modelName = $name;
@@ -56,6 +62,8 @@ class Model extends Entity
         $this->tableName = Util::toUnderScore($name, true);
 
         $this->container = $container;
+
+        $this->events = events();
 
         parent::__construct([]);
     }
@@ -70,7 +78,7 @@ class Model extends Entity
             $this->fill($data);
             return $data;
         }
-        return $this->query()->select($this->defaultSelectFields)->find();
+        return $this->query()->select($this->defaultSelectFields)->where('deleted', 0)->find();
     }
 
     /**
