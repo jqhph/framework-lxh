@@ -103,7 +103,7 @@ class Record extends LxhController
      *
      * @return array
      */
-    protected function getDetailFields()
+    protected function getDetailFields($id = null)
     {
         return [];
     }
@@ -140,7 +140,7 @@ class Record extends LxhController
         assign('navTitle', $currentTitle);
 
         return fetch_complete_view(__ACTION__, [
-            'row' => & $row, 'detailFields' => $this->getDetailFields()
+            'row' => & $row, 'detailFields' => $this->getDetailFields($id)
         ]);
     }
 

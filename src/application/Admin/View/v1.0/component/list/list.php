@@ -29,7 +29,7 @@ if (! empty($searchItems))  echo component_view('search-items', $searchItems);
             </div>
 
             <div class="table-responsive" data-pattern="priority-columns">
-                <table id="tech-companies-1" class="table  table-striped">
+                <table id="tech-companies-1" class="table ">
                     <thead>
                     <tr>
                         <?php
@@ -43,7 +43,7 @@ if (! empty($searchItems))  echo component_view('search-items', $searchItems);
                     <tbody>
                     <?php
                     foreach ($list as $k => & $r) {
-                        echo component_view($rowView, ['r' => $r]);
+                        echo component_view($rowView, ['r' => $r, 'titles' => & $titles]);
                     } ?>
                     </tbody>
                 </table>

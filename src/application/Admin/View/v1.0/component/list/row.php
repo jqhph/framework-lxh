@@ -10,7 +10,11 @@ use Lxh\Kernel\AdminUrlCreator;
 <tr>
     <?php foreach ($titles as $name => & $v) { ?>
     <th><?php
-            echo component_view($titles[$name]['view'], ['val' => $r[$name], 'name' => $name]);
+        if (! empty($titles[$name]['view'])) {
+            echo component_view('fields/' . $titles[$name]['view'], ['val' => $r[$name], 'name' => $name]);
+        } else {
+            echo $r[$name];
+        }
         ?>
     </th>
     <?php } ?>

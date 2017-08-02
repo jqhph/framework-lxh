@@ -116,11 +116,12 @@ class Menu
     /**
      * 权限列表
      *
+     * @param  array $permissionIds 已选权限id
      * @return array
      */
-    public function permissionsList()
+    public function permissionsList(array $permissionIds = [])
     {
-        $list = $this->all();
+        $list = $this->all(false);
 
         // 每行显示选项数量
         $colspan = 6;
@@ -135,7 +136,7 @@ class Menu
         foreach ($list as & $r) {
             if (! empty($r['subs'])) {
                 // 有子菜单，合并所有子菜单
-                array_push($data, ['title' => $r['originName'], 'rows' => $this->mergeTree($r['subs'], $colspan)]);
+                array_push($data, ['title' => $r['name'], 'rows' => $this->mergeTree($r['subs'], $colspan, $permissionIds)]);
                 continue;
             }
             if (empty($r['action']) || empty($r['controller'])) {
@@ -145,7 +146,7 @@ class Menu
             $hasTop = true;
             // 没有子菜单的情况
             // 每个row最多包含6个数组
-            $this->makeItem($others['rows'], $r, $colspan);
+            $this->makeItem($others['rows'], $r, $colspan, $permissionIds);
         }
 
         if ($hasTop) {
@@ -157,17 +158,23 @@ class Menu
 
     // 没有子菜单的情况
     // 每个row最多包含6个数组
-    protected function makeItem(& $items, & $record, $colspan = 6)
+    protected function makeItem(& $items, & $record, $colspan = 6, array & $permissionIds = [])
     {
         foreach ($items as & $row) {
             if (count($row) < $colspan) break;
         }
+
+        $checked = false;
+        if (in_array($record['id'], $permissionIds)) {
+            $checked = true;
+        }
+
         if (count($row) >= $colspan) {
             // 大于6个，则创建一个新的数组
-            array_push($items, [['name' => $record['originName'], 'value' => $record['id']]]);
+            array_push($items, [['name' => $record['name'], 'value' => $record['id'], 'checked' => $checked]]);
         } else {
             // 小于6个直接push
-            array_push($row, ['name' => $record['originName'], 'value' => $record['id']]);
+            array_push($row, ['name' => $record['name'], 'value' => $record['id'], 'checked' => $checked]);
         }
     }
 
@@ -177,7 +184,7 @@ class Menu
      * @param  array $tree
      * @return array
      */
-    public function mergeTree(& $tree, $colspan = 6)
+    public function mergeTree(& $tree, $colspan = 6, array & $permissionIds = [])
     {
         $items = [[]];
 
@@ -185,12 +192,12 @@ class Menu
             // 没有子菜单的情况
             // 每个row最多包含6个数组
             if (! empty($r['action']) && ! empty($r['controller'])) {
-                $this->makeItem($items, $r, $colspan);
+                $this->makeItem($items, $r, $colspan, $permissionIds);
             }
 
             if (! empty($r['subs'])) {
                 // 有子菜单，合并所有子菜单
-                $items = array_merge($items, $this->mergeTree($r['subs'], $colspan));
+                $items = array_merge($items, $this->mergeTree($r['subs'], $colspan, $permissionIds));
             }
         }
 
@@ -202,11 +209,13 @@ class Menu
      *
      * @return array
      */
-    public function all()
+    public function all($trans = true)
     {
         $list = $this->model->find();
 
-        $data = $this->makeTree($list);
+        $parent = 0;
+
+        $data = $this->makeTree($list, $parent, 1, $trans);
 
         $this->sort($data);
 
@@ -221,7 +230,7 @@ class Menu
      * @param  int   $level
      * @return array
      */
-    protected function & makeTree(& $data, & $id = 0, $level = 1)
+    protected function & makeTree(& $data, & $id = 0, $level = 1, $trans = true)
     {
         if ($level > 4) {
             throw new Error("Maximum function nesting level of '$level' reached, aborting!");
@@ -229,8 +238,10 @@ class Menu
 
         $tree = [];
         foreach ($data as & $v) {
-            $v['originName'] = $v['name'];
-            $v['name'] = trans_with_global($v['name'], 'menus');
+            if ($trans) {
+                $v['originName'] = $v['name'];
+                $v['name'] = trans_with_global($v['name'], 'menus');
+            }
 
             $v['url'] = $this->makeUrl($v['controller'], $v['action']);
 
@@ -240,7 +251,7 @@ class Menu
             }
 
             if ($v['parent_id'] == $id) {
-                $v['subs'] = $this->makeTree($data, $v['id'], $level + 1);
+                $v['subs'] = $this->makeTree($data, $v['id'], $level + 1, $trans);
                 $tree[] = $v;
             }
         }

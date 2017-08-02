@@ -216,9 +216,7 @@ class PDO
             return $stmt;
         }
 
-        $res = $stmt->rowCount();
-
-        return $res;
+        return $stmt->rowCount();
     }
 
     /**
@@ -305,8 +303,9 @@ class PDO
     
         $updateStr = substr($updateStr, 0, - 1);
         $sql = "UPDATE `$table` SET {$updateStr} {$where}";
-        //debug($sql);die;
-        return $this->prepare($sql, array_merge($data, $whereData), false);
+
+        $data = array_merge($data, $whereData);
+        return $this->prepare($sql, $data, false);
     }
 
     /**

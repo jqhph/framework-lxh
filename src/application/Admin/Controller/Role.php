@@ -22,7 +22,17 @@ class Role extends Controller
      */
     protected function getListTableTitles()
     {
-        return [];
+        return [
+            'id' => ['priority' => 0,],
+            'name' => [
+            ],
+            'created_at' => [
+                'view' => 'varchar/date-list'
+            ],
+            'created_by' => [
+            ],
+           
+        ];
     }
 
     /**
@@ -40,16 +50,32 @@ class Role extends Controller
      *
      * @return array
      */
-    protected function getDetailFields()
+    protected function getDetailFields($id = null)
     {
-//        debug(make('acl-menu')->permissionsList());die;
+        $permissions = ['menus' => [], 'custom' => []];
+        if ($id) {
+            $permissions = $this->getModel('Role')->getPermissions($id);
+        }
+
+        $menuList = make('acl-menu')->permissionsList($permissions['menus']);
+
         return [
             ['view' => 'varchar/edit', 'vars' => ['name' => 'name', 'labelCol' => 1, 'formCol' => 9]],
             ['view' => 'checkbox/items-edit', 'vars' => [
-                'name' => 'permissions', 'labelCol' => 1, 'formCol' => 9, 'labelCategory' => 'menus', 'columns' => 6,
-                'list' => make('acl-menu')->permissionsList(), ]
+                'name' => 'permissions',
+                'labelCol' => 1, 'formCol' => 9,
+                'labelCategory' => 'menus',
+                'columns' => 6,
+                'list' => $menuList, ]
             ],
         ];
+    }
+
+    protected function updateValidate($id, array & $fields, Validator $validator)
+    {
+        if (empty($fields['permissions'])) {
+            return 'The permissions fields is required';
+        }
     }
 
 }

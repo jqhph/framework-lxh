@@ -44,7 +44,7 @@ return [
     'fields' => [
         'name' => '名称',
         'created_at' => '创建时间',
-        'created_by_id' => '创建人',
+        'created_by' => '创建人',
     ],
     'tip' => [
         'Are you sure?' => '您确定要继续此操作吗？',

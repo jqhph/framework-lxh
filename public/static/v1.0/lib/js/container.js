@@ -325,8 +325,11 @@ window.Lxh = function (options) {
                         }
 
                         // Objects and Arrays must be tested recursively
-                        if (!Object.equals(x[p], y[p])) {
-                            return false;
+                        // if (!Object.equals(x[p], y[p])) {
+                        //     return false;
+                        // }
+                        if (! this.cmp(x[p], y[p])) {
+                            return false
                         }
                     }
                 }
@@ -1103,7 +1106,7 @@ window.Lxh = function (options) {
                  * @param data
                  */
                 failed: function (data) {
-                    swal.close() // 关闭提示窗
+                    if (typeof swal != 'undefined') swal.close() // 关闭提示窗
                     notify.remove()
                     notify.error(trans(data.msg, 'tip'))
                 },
@@ -1311,6 +1314,7 @@ window.Lxh = function (options) {
          */
         this.save = function () {
             var data = store.formHandler.get(get_form_selector())
+
             if (data.id) {
                 return this.edit()
             }
