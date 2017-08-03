@@ -119,8 +119,11 @@ class Role extends Record
         $q = $this->query()
             ->select($this->selectFields)
             ->leftJoin('user', 'user.id', 'created_by_id')
-            ->where($where)
             ->limit(($page - 1) * $maxSize, $maxSize);
+
+        if ($where) {
+            $q->where($where);
+        }
 
         if ($orderString) {
             $q->sort($orderString);

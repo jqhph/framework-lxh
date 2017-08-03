@@ -36,8 +36,6 @@ class Record extends LxhController
         // 生成where条件数组
         $wheres = $this->makeWhereContent($_REQUEST);
 
-        $wheres['deleted'] = 0;
-
         $model = $this->getModel();
 
         // 获取记录总条数
@@ -138,7 +136,7 @@ class Record extends LxhController
 
         assign('navTitle', $currentTitle);
 
-        return fetch_complete_view(__ACTION__, [
+        return fetch_complete_view('Detail', [
             'row' => & $row, 'detailFields' => $this->getDetailFields($id)
         ]);
     }
@@ -152,7 +150,7 @@ class Record extends LxhController
      */
     protected function makeWhereContent(array & $options)
     {
-        return [];
+        return ['deleted' => 0];
     }
 
     /**
@@ -163,7 +161,7 @@ class Record extends LxhController
      */
     protected function makeOrderContent(array & $options)
     {
-        return 'id Desc';
+        return 'id DESC';
     }
 
     /**

@@ -22,7 +22,13 @@ class Record extends Model
      */
     public function count($where)
     {
-        return $this->query()->where($where)->count();
+        $q = $this->query();
+
+        if ($where) {
+            $q->where($where);
+        }
+
+        return $q->count();
     }
 
     /**
@@ -38,8 +44,11 @@ class Record extends Model
     {
         $q = $this->query()
             ->select($this->selectFields)
-            ->where($where)
             ->limit(($page - 1) * $maxSize, $maxSize);
+
+        if ($where) {
+            $q->where($where);
+        }
 
         if ($orderString) {
             $q->sort($orderString);
