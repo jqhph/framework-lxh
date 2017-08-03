@@ -24,7 +24,7 @@ function pages()
  *
  * @return Permit
  */
-function permit()
+function acl()
 {
     static $instance = null;
 

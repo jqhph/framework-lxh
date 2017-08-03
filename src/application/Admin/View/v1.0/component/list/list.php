@@ -20,7 +20,7 @@ if (! empty($searchItems))  echo component_view('search-items', $searchItems);
 ?>
 <!--col-sm-12-->
 <div class="">
-    <div class="card-box table-responsive">
+    <div class="card-box">
         <div class="table-rep-plugin">
             <div class="btn-toolbar" >
                 <div class="btn-group dropdown-btn-group pull-right">
@@ -29,8 +29,8 @@ if (! empty($searchItems))  echo component_view('search-items', $searchItems);
             </div>
             <div class="dt-buttons btn-group"></div>
 
-            <div class="table-responsive" data-pattern="priority-columns">
-                <table id="tech-companies-1" class="table ">
+            <div class="table-responsive" data-pattern="priority-columns" style="margin-bottom:0px;">
+                <table  class="table">
                     <thead>
                     <tr>
                         <?php

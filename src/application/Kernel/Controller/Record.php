@@ -27,13 +27,16 @@ class Record extends LxhController
     public function actionList()
     {
         // 判断是否有权限访问
-        if (! permit()->access()) {
+        if (! acl()->access()) {
             throw new Forbidden();
         }
 
         $pages = pages();
 
-        $wheres = array_merge($this->makeWhereContent($_REQUEST), ['deleted' => 0]);
+        // 生成where条件数组
+        $wheres = $this->makeWhereContent($_REQUEST);
+
+        $wheres['deleted'] = 0;
 
         $model = $this->getModel();
 
@@ -51,7 +54,10 @@ class Record extends LxhController
             $list = $model->records($wheres, $currentPage, $this->maxSize, $this->makeOrderContent($_REQUEST));
         }
 
-        return fetch_complete_view('List', ['list' => & $list, 'searchItems' => $this->getSearchItems(), 'titles' => $this->getListTableTitles(), 'pages' => & $pageString]);
+        // 获取列表table标题信息
+        $titles = $this->getListTableTitles();
+
+        return fetch_complete_view('List', ['list' => & $list, 'searchItems' => $this->getSearchItems(), 'titles' => & $titles, 'pages' => & $pageString]);
     }
 
     /**
@@ -80,7 +86,7 @@ class Record extends LxhController
     public function actionCreate(Request $req, Response $resp, & $params)
     {
         // 判断是否有权限访问
-        if (! permit()->access()) {
+        if (! acl()->access()) {
             throw new Forbidden();
         }
 
@@ -113,7 +119,7 @@ class Record extends LxhController
     public function actionDetail(Request $req, Response $resp, & $params)
     {
         // 判断是否有权限访问
-        if (! permit()->access()) {
+        if (! acl()->access()) {
             throw new Forbidden();
         }
 
@@ -168,7 +174,7 @@ class Record extends LxhController
     public function actionDelete(Request $req, Response $resp, & $params)
     {
         // 判断是否有权限访问
-        if (! permit()->access()) {
+        if (! acl()->access()) {
             throw new Forbidden();
         }
 
@@ -201,7 +207,7 @@ class Record extends LxhController
     public function actionAdd(Request $req, Response $resp, & $params)
     {
         // 判断是否有权限访问
-        if (! permit()->accessCreate()) {
+        if (! acl()->accessCreate()) {
             throw new Forbidden();
         }
 
@@ -240,7 +246,7 @@ class Record extends LxhController
     public function actionUpdate(Request $req, Response $resp, & $params)
     {
         // 判断是否有权限访问
-        if (! permit()->accessUpdate()) {
+        if (! acl()->accessUpdate()) {
             throw new Forbidden();
         }
 
