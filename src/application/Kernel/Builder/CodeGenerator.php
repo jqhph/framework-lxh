@@ -85,8 +85,11 @@ class CodeGenerator
         // 生成模型
         $this->record('Model', $this->creator('Model')->make($options));
 
-        // 生成模板
-        $this->record('View',  $this->creator('View')->make($options));
+        // 生成List模板
+        $this->record('ListView',  $this->creator('ListView')->make($options));
+
+        // 生成Detail模板
+        $this->record('DetailView',  $this->creator('DetailView')->make($options));
 
         // 生成语言包
         $this->record('Language', $this->creator('Language')->make($options));
@@ -133,7 +136,7 @@ class CodeGenerator
      * @param  string $name
      * @return Driver\Creator
      */
-    protected function creator($name)
+    public function creator($name)
     {
         if (isset($this->creators[$name])) {
             return $this->creators[$name];

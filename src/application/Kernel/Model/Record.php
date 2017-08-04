@@ -12,6 +12,9 @@ use Lxh\MVC\Model;
 
 class Record extends Model
 {
+    /**
+     * @var array
+     */
     protected $selectFields = [];
 
     /**

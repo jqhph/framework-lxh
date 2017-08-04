@@ -10,6 +10,7 @@ namespace Lxh\MVC;
 
 use Lxh\Contracts\Container\Container;
 use Lxh\MVC\ControllerManager;
+use Lxh\MVC\Model;
 
 abstract class Controller
 {
@@ -45,7 +46,7 @@ abstract class Controller
      * 创建一个模型
      *
      * @param  string $name 模型名称
-     * @return \Lxh\ORM\Entity
+     * @return Model
      */
     protected function createModel($name = __CONTROLLER__)
     {
@@ -56,7 +57,7 @@ abstract class Controller
      * 创建一个模型
      *
      * @param  string $name 模型名称
-     * @return \Lxh\ORM\Entity
+     * @return Model
      */
     protected function getModel($name = __CONTROLLER__)
     {

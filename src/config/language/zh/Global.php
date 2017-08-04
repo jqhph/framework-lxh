@@ -55,6 +55,7 @@ return [
         'Yes, delete it!' => '是的，删除！',
         'Invalid arguments' => '参数不合法',
         'Yes' => '是的',
+        'Are you sure to delete the row?' => '您确定要删除这行数据吗？',
     ],
     'menus' => [
         'Language Management' => '语言包管理',

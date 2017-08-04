@@ -34,7 +34,7 @@ class Record extends LxhController
         $pages = pages();
 
         // 生成where条件数组
-        $wheres = $this->makeWhereContent($_REQUEST);
+        $wheres = $this->makeListWhereContent($_REQUEST);
 
         $model = $this->getModel();
 
@@ -53,9 +53,9 @@ class Record extends LxhController
         }
 
         // 获取列表table标题信息
-        $titles = $this->getListTableTitles();
+        $titles = $this->makeListTableTitles();
 
-        return fetch_complete_view('List', ['list' => & $list, 'searchItems' => $this->getSearchItems(), 'titles' => & $titles, 'pages' => & $pageString]);
+        return fetch_complete_view('List', ['list' => & $list, 'searchItems' => $this->makeSearchItems(), 'titles' => & $titles, 'pages' => & $pageString]);
     }
 
     /**
@@ -63,7 +63,7 @@ class Record extends LxhController
      *
      * @return array
      */
-    protected function getListTableTitles()
+    protected function makeListTableTitles()
     {
         return [];
     }
@@ -73,7 +73,7 @@ class Record extends LxhController
      *
      * @return array
      */
-    protected function getSearchItems()
+    protected function makeSearchItems()
     {
         return [];
     }
@@ -92,7 +92,7 @@ class Record extends LxhController
 
         assign('navTitle', $currentTitle);
 
-        return fetch_complete_view('Detail', ['detailFields' => $this->getDetailFields()]);
+        return fetch_complete_view('Detail', ['detailFields' => $this->makeDetailFields()]);
     }
 
     /**
@@ -100,7 +100,7 @@ class Record extends LxhController
      *
      * @return array
      */
-    protected function getDetailFields($id = null)
+    protected function makeDetailFields($id = null)
     {
         return [];
     }
@@ -137,7 +137,7 @@ class Record extends LxhController
         assign('navTitle', $currentTitle);
 
         return fetch_complete_view('Detail', [
-            'row' => & $row, 'detailFields' => $this->getDetailFields($id)
+            'row' => & $row, 'detailFields' => $this->makeDetailFields($id)
         ]);
     }
 
@@ -148,7 +148,7 @@ class Record extends LxhController
      * @param array $options
      * @return array
      */
-    protected function makeWhereContent(array & $options)
+    protected function makeListWhereContent(array & $options)
     {
         return ['deleted' => 0];
     }
@@ -161,6 +161,11 @@ class Record extends LxhController
      */
     protected function makeOrderContent(array & $options)
     {
+        if (! empty($options['sort'])) {
+            $desc = I('desc', true);
+            return "`{$options['sort']}`" . ($desc ? ' DESC ' : ' ASC ');
+        }
+
         return 'id DESC';
     }
 

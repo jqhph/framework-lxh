@@ -22,7 +22,7 @@ define(['css/sweet-alert.css', 'lib/js/sweet-alert.min'], function () {
 
             model.on('success', function () {
                 swal({
-                    title: trans("Deleted!"),
+                    title: trans("Deleted!", 'tip'),
                     text: trans("The row has been deleted.", 'tip'),
                     type: "success"
                 }, function () {
@@ -31,10 +31,12 @@ define(['css/sweet-alert.css', 'lib/js/sweet-alert.min'], function () {
 
             })
 
+            var rowText = $this.parent().parent().text()
+            if (rowText) rowText = rowText.replace(/[\n]|[\s]]/gi, ' ') + "\n"
             // 确认窗
             swal({
-                title: trans("Are you sure?", 'tip'),
-                text: trans("You will not be able to recover this row!", 'tip'),
+                title: trans("Are you sure to delete the row?", 'tip'),
+                text: rowText + trans("You will not be able to recover this row!", 'tip'),
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonClass: 'btn-danger',

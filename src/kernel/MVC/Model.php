@@ -22,7 +22,7 @@ class Model extends Entity
      *
      * @var string|array
      */
-    protected $defaultSelectFields = '*';
+    protected $selectFields = '*';
 
     /**
      * 模型名称
@@ -74,11 +74,11 @@ class Model extends Entity
         $id = $this->{$this->idFieldsName};
 
         if ($id) {
-            $data = $this->query()->select($this->defaultSelectFields)->where($this->idFieldsName, $id)->findOne();
+            $data = $this->query()->select($this->selectFields)->where($this->idFieldsName, $id)->findOne();
             $this->fill($data);
             return $data;
         }
-        return $this->query()->select($this->defaultSelectFields)->where('deleted', 0)->find();
+        return $this->query()->select($this->selectFields)->where('deleted', 0)->find();
     }
 
     /**
@@ -173,7 +173,7 @@ class Model extends Entity
      *
      * @return string
      */
-    protected function getTableName()
+    public function getTableName()
     {
         return $this->tableName;
     }
@@ -207,7 +207,7 @@ class Model extends Entity
      */
     protected function query($name = 'primary')
     {
-        return query($name)->from($this->getTableName());
+        return query($name)->from($this->tableName);
     }
 
 }

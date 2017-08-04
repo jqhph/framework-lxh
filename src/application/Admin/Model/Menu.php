@@ -64,9 +64,38 @@ class Menu extends Model
         if (! $result) return;
 
         // 如果删除成功，把所有的下级菜单也一并删除
-        // 以后有空再做
+        if ($ids = $this->getSubIds($id)) {
+            if (! $this->query()->where('id', 'IN', $ids)->delete()) {
+                logger()->warning("删除菜单[$id]的下级菜单失败");
+            }
+        }
+    }
 
-//        $this->events->fire('Menu.delete');
+    /**
+     * 获取所有下级菜单id数组
+     *
+     * @param  int $parentId
+     * @return array
+     */
+    public function getSubIds($parentId)
+    {
+        $rows = $this->query()->select('id')->where('parent_id', $parentId)->find();
+
+        $result = [];
+
+        if (! $rows) {
+            return $result;
+        }
+
+        foreach ($rows as & $row) {
+            $ids = $this->getSubIds($row['id']);
+
+            $ids[] = $row['id'];
+
+            $result = array_merge($result, $ids);
+        }
+
+        return $result;
     }
 
     // 判断菜单是否是系统菜单

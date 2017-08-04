@@ -7,13 +7,23 @@
  */
 use Lxh\Kernel\AdminUrlCreator;
 
+// 行公共模板
 $rowView = isset($rowView) ? $rowView : 'list/row';
 
+// 是否引入公共js
+$loadPublicJs = isset($loadPublicJs) ? $loadPublicJs : true;
+
+// 是否使用RWD-Table
+$useRWD = isset($useRWD) ? $useRWD : true;
+
+// 模块名
 $scope = isset($scope) ? $scope : __CONTROLLER__;
 
 $createUrl = AdminUrlCreator::makeAction('Create');
 
 $createBtnText = "Create $scope";
+
+
 
 // 搜索项界面
 if (! empty($searchItems))  echo component_view('search-items', $searchItems);
@@ -59,8 +69,15 @@ if (! empty($searchItems))  echo component_view('search-items', $searchItems);
     </div>
 </div>
 <script>
+    <?php if ($useRWD) {
+    // 控制字段显示隐藏
+    ?>
     add_css('lib/plugins/RWD-Table-Patterns/dist/css/rwd-table.min.css');
     add_js('lib/plugins/RWD-Table-Patterns/dist/js/rwd-table');
+    <?php }
+        if ($loadPublicJs) {
     // 引入index界面公共js
+    ?>
     add_js('view/public-index');
+    <?php } ?>
 </script>

@@ -131,4 +131,17 @@ class Role extends Record
 
         return $q->find();
     }
+
+    // 查找数据
+    public function find()
+    {
+        $id = $this->{$this->idFieldsName};
+
+        if ($id) {
+            $data = $this->query()->select($this->selectFields)->leftJoin('user', 'user.id', 'created_by_id')->where($this->idFieldsName, $id)->findOne();
+            $this->fill($data);
+            return $data;
+        }
+        return $this->query()->select($this->selectFields)->leftJoin('user', 'user.id', 'created_by_id')->where('deleted', 0)->find();
+    }
 }

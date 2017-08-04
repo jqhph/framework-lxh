@@ -14,23 +14,35 @@ use {root-namespace}\Kernel\Model\Record;
 
 class {class} extends Record
 {
-    // 新增数据前置钩子
+    /**
+     * 默认查询的字段
+     *
+     * @var string|array
+     */
+    protected $selectFields = {selectFields};
+
+    // 新增数据前置钩子方法
     protected function beforeAdd(array & $data)
     {
         {beforeAdd}
 
     }
 
-    // 保存数据前置钩子
+    // 保存数据前置钩子方法
     protected function beforeSave($id, array & $data)
     {
         {beforeSave}
     }
 
-    // 删除后置钩子方法，删除成功后触发
-    protected function afterDelete($id, $result)
+    /**
+     * 删除操作前置钩子方法
+     *
+     * @param  string $id
+     * @return mixed
+     */
+    protected function beforeDelete($id)
     {
-        {afterDelete}
+
     }
 
 }

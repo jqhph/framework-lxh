@@ -21,24 +21,15 @@ class Role extends Controller
      *
      * @return array
      */
-    protected function getListTableTitles()
+    protected function makeListTableTitles()
     {
         return [
             'id' => ['priority' => 0,],
-            'name' => [
-            ],
-            'permissions' => [
-                'view' => 'permit/btn'
-            ],
-            'created_at' => [
-                'view' => 'varchar/date-list'
-            ],
-            'modify_at' => [
-                'view' => 'varchar/date-list'
-            ],
-            'created_by' => [
-            ],
-           
+            'name' => [],
+            'permissions' => ['view' => 'permit/btn'],
+            'created_at' => ['view' => 'varchar/date-list'],
+            'modify_at' => ['view' => 'varchar/date-list'],
+            'created_by' => [],
         ];
     }
 
@@ -47,7 +38,7 @@ class Role extends Controller
      *
      * @return array
      */
-    protected function getSearchItems()
+    protected function makeSearchItems()
     {
         return [];
     }
@@ -57,7 +48,7 @@ class Role extends Controller
      *
      * @return array
      */
-    protected function getDetailFields($id = null)
+    protected function makeDetailFields($id = null)
     {
         $permissions = ['menus' => [], 'custom' => []];
         if ($id) {
@@ -68,12 +59,16 @@ class Role extends Controller
 
         return [
             ['view' => 'varchar/edit', 'vars' => ['name' => 'name', 'labelCol' => 1, 'formCol' => 9]],
-            ['view' => 'checkbox/items-edit', 'vars' => [
-                'name' => 'permissions',
-                'labelCol' => 1, 'formCol' => 9,
-                'labelCategory' => 'menus',
-                'columns' => 6,
-                'list' => $menuList, ]
+            [
+                'view' => 'checkbox/items-edit',
+                'vars' => [
+                    'name' => 'permissions',
+                    'labelCol' => 1,
+                    'formCol' => 9,
+                    'labelCategory' => 'menus',
+                    'columns' => 6,
+                    'list' => & $menuList,
+                ]
             ],
         ];
     }
