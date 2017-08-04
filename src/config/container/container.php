@@ -23,4 +23,9 @@ $config['page'] = [
     'class' => 'Lxh\Kernel\Support\Page'
 ];
 
+$config['code.generator'] = [
+    'shared' => true,
+    'class' => 'Lxh\Kernel\Builder\CodeGenerator'
+];
+
 return $config;

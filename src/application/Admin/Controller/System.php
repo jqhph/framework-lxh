@@ -38,7 +38,13 @@ class System extends Controller
      */
     public function actionCreateModule()
     {
-        return $_REQUEST;
+        $code = make('code.generator');
+
+        $fields = $code->make($_REQUEST);
+
+        print_r($fields->all());
+
+        return $fields->all();
     }
 
     /**
@@ -85,7 +91,7 @@ class System extends Controller
 
         $nav = 'Making modules';
 
-//        assign('navTitle', $nav);
+        assign('navTitle', $nav);
         assign('fields', $fields);
         assign('groups', $groups);
         assign('moduleOptions', $options);

@@ -26,4 +26,11 @@ class ListView extends FileGenerator
     {
 
     }
+
+    public function getPath()
+    {
+        $module = $this->generator->module();
+
+        return $this->getBasePath() . "application/$module/View/Detail.php";
+    }
 }

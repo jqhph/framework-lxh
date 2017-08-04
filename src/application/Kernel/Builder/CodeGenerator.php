@@ -8,6 +8,8 @@
 
 namespace Lxh\Kernel\Builder;
 
+use Lxh\Kernel\Builder\Driver\Fields;
+
 class CodeGenerator
 {
     /**
@@ -16,6 +18,11 @@ class CodeGenerator
      * @var string
      */
     protected $errorMsg;
+
+    /**
+     * @var Fields
+     */
+    protected $fields;
 
     /**
      * 生成器
@@ -38,6 +45,11 @@ class CodeGenerator
         'exists' => '%s already exists',
         'default' => 'Unknown Error'
     ];
+
+    public function __construct()
+    {
+        $this->fields = $this->creator('Fields');
+    }
 
     /**
      * 生成器入口
@@ -77,25 +89,27 @@ class CodeGenerator
         }
 
         // 生成字段配置信息
-        $this->record('Fields', $this->creator('Fields')->make($options));
+        $this->fields()->make($options);
+
+        return $this->fields;
 
         // 生成控制器
-        $this->record('Controller', $this->creator('Controller')->make($options));
+        $this->creator('Controller')->make($options);
         
         // 生成模型
-        $this->record('Model', $this->creator('Model')->make($options));
+        $this->creator('Model')->make($options);
 
         // 生成List模板
-        $this->record('ListView',  $this->creator('ListView')->make($options));
+        $this->creator('ListView')->make($options);
 
         // 生成Detail模板
-        $this->record('DetailView',  $this->creator('DetailView')->make($options));
+        $this->creator('DetailView')->make($options);
 
         // 生成语言包
-        $this->record('Language', $this->creator('Language')->make($options));
+        $this->creator('Language')->make($options);
 
         // 打包
-        $this->record('FilePack', $this->creator('FilePack')->make($options));
+        $this->creator('FilePack')->make($options);
 
         // 安装
         if (! $this->creator('Install')->make($options)) {
@@ -115,6 +129,14 @@ class CodeGenerator
     public function module()
     {
         return __MODULE__;
+    }
+
+    /**
+     * @return Fields
+     */
+    public function fields()
+    {
+        return $this->fields;
     }
 
     /**
@@ -141,7 +163,7 @@ class CodeGenerator
         if (isset($this->creators[$name])) {
             return $this->creators[$name];
         }
-        $class = "Driver/$name";
+        $class = "Lxh\\Kernel\\Builder\\Driver\\$name";
 
         return $this->creators[$name] = new $class($this);
     }
@@ -162,11 +184,6 @@ class CodeGenerator
 
         if (empty($options['field_name'])) {
             $this->setError('required', ['field_name']);
-            return false;
-        }
-
-        if (empty($options['module'])) {
-            $this->setError('required', ['module']);
             return false;
         }
 

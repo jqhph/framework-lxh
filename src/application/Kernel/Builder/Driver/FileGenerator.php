@@ -21,6 +21,13 @@ abstract class FileGenerator extends Creator
     protected $files;
 
     /**
+     * filename
+     *
+     * @var string
+     */
+    protected $name;
+
+    /**
      * author
      *
      * @var string
@@ -113,7 +120,9 @@ abstract class FileGenerator extends Creator
 
         $name = $this->parseName($name);
 
-        $path = $this->getPath($name);
+        $this->name = $name;
+
+//        $path = $this->getPath($name);
 
         if ($this->alreadyExists($name)) {
             $this->generator->setError('exists', [$this->type]);
@@ -146,8 +155,10 @@ abstract class FileGenerator extends Creator
      * @param  string  $name
      * @return string
      */
-    protected function getPath($name)
+    public function getPath($name = null)
     {
+        $name = $name ?: $this->name;
+
         $name = str_replace($this->getRootNamespace(), '', $name);
 
         return $this->getBasePath() . $this->getFolder() . '/' . str_replace('\\', '/', $name) . '.php';

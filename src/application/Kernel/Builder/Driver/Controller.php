@@ -58,7 +58,7 @@ class Controller extends FileGenerator
      */
     protected function getFolder()
     {
-        $module = $this->options('module');
+        $module = $this->generator->module();
         return "application/$module/Controller";
     }
 

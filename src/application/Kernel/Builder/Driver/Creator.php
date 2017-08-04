@@ -30,6 +30,14 @@ abstract class Creator
     }
 
     /**
+     * @return Fields
+     */
+    public function fields()
+    {
+        return $this->generator->fields();
+    }
+
+    /**
      * 设置或获取生成内容
      *
      * @param  mixed $data
