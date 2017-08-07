@@ -31,7 +31,7 @@ class CodeGenerator
      */
     protected $creators = [];
 
-    protected $recoreds = [];
+//    protected $recoreds = [];
 
     /**
      * 错误提示信息数组
@@ -221,23 +221,6 @@ class CodeGenerator
         }
 
         return true;
-    }
-
-    /**
-     * 保存或获取记录
-     *
-     * @param  string $name
-     * @return mixed
-     */
-    public function record($name = null, $data = null)
-    {
-        if ($data === null) {
-            if ($name === null) {
-                return $this->recoreds;
-            }
-            return isset($this->recoreds[$name]) ? $this->recoreds[$name] : null;
-        }
-        $this->records[$name] = & $data;
     }
 
     /**

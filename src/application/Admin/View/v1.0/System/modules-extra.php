@@ -31,7 +31,38 @@
         <!-- end: panel body -->
 
     </div> <!-- end panel -->
+
+    <!-- 添加字段选项值 -->
+    <div class="card-box field-options " style="display:none">
+
+    </div>
+
 </div> <!-- end col-->
+
+<script type="text/html" id="fields-extra-options">
+    <div class="card-box-header">
+        <span class="card-box-title"><?php echo trans_with_global('Options');?> - {field}</span>
+        <div class="pull-right"></div>
+    </div>
+    <div class="card-box-line m-b-30"></div>
+    {#view 'fieldsExtraOptionsInput' field i #}
+</script>
+
+<script type="text/html" id="fieldsExtraOptionsInput">
+    <div class="row form-group">
+        <label class="col-md-2 control-label" style="font-weight:normal;color:#333"><?php echo trans('key-value', 'fields'); ?></label>
+        <div class="col-md-2">
+            <input value="" type="text" placeholder="key" name="{field}-key[]" class="form-control" >
+        </div>
+        <div class="col-md-2">
+            <input value="" type="text" placeholder="English" name="{field}-English[]" class="form-control" >
+        </div>
+        <div class="col-md-2">
+            <input value="" type="text" placeholder="Chinese" name="{field}-Chinese[]" class="form-control" >
+        </div>
+        <div class="col-md-1">{btn}</div>
+    </div>
+</script>
 
 <!-- blade模板文件内容 -->
 <script type="text/html" id="fields-extra-edit-rows">

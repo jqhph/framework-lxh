@@ -2,6 +2,19 @@
  * Created by Jqh on 2017/7/19.
  */
 define(['blade'], function () {
+    // 添加自定义标签
+    BladeConfig.addTag('view', function ($view, options, tpl) {
+        var name = options[0],
+            fieldName = options[1],
+            i = options[2]
+
+        var blade = new Blade($('#' + name).text())
+
+        // 第一次，用+号按钮
+        var plusBtn = '<i data-action="add-key-value-row" class="fa fa-plus" style="color:#0eac5c;cursor:pointer"></i>'
+
+        return blade.fetch({field: fieldName, btn: plusBtn})
+    })
 
     // 当前tab显示位置
     var current = 0,
@@ -99,6 +112,8 @@ define(['blade'], function () {
                     }
 
                     this.makeFieldsExtraEditRows(modules.store.inputValues.field_name)
+
+                    this.displayFieldsExtraForm(modules.store.inputValues)
                 } else {
                     this.$nextButton.show()
                 }
@@ -176,6 +191,46 @@ console.log('Success', data)
                 this.addFieldsExtraEditRow(fields[i])
             }
 
+        },
+
+        // 显示额外字段配置表单
+        displayFieldsExtraForm: function (values) {
+            for (var i in values.field_type) {
+                // 枚举类型，需要添加键值对表单
+                if (values.field_type[i].indexOf('enum') != -1) {
+                    this.displayFieldOptions(values.field_name[i], values.field_type[i], i)
+                }
+            }
+        },
+
+        // 显示枚举类型字段options键值对表单
+        displayFieldOptions: function (name, type, i) {
+            var blade = new Blade($('#fields-extra-options').text()),
+                $options = $('.field-options')
+
+            $options.show()
+            $options.append(blade.fetch({field: name, i: i}))
+
+            var $addBtn = $('i[data-action="add-key-value-row"]'),
+                $closeBtn = $('i[data-action="remove-key-value-row"]'),
+                inputTpl = $('#fieldsExtraOptionsInput').text(),
+                $options = $('.field-options')
+
+            $addBtn.unbind('click')
+            $closeBtn.unbind('click')
+
+            // 添加表单
+            $addBtn.click(function (e) {
+                var closeBtn = '<i data-action="remove-key-value-row" class="fa fa-times" style="color:#ff5b5b;cursor:pointer"></i>',
+                    blade = new Blade(inputTpl, {field: name, btn: closeBtn})
+                $options.append(blade.fetch())
+
+            })
+            // 移除表单
+            $closeBtn.click(function (e) {
+                var plusBtn = '<i data-action="add-key-value-row" class="fa fa-plus" style="color:#0eac5c;cursor:pointer"></i>'
+
+            })
         }
     }
 

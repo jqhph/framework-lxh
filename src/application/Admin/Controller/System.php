@@ -63,25 +63,28 @@ class System extends Controller
         // 字段类型
         $fields = [
             [
-                'label' => 'Input',
+                'label' => 'char',
                 'list' => [
-                    ['id' => 'varchar', 'name' => 'varchar'],
-                    ['id' => 'icon', 'name' => 'icon'],
+                    ['id' => 'char', 'name' => 'char'],
+                    ['id' => 'date-char', 'name' => 'date'],
+                    ['id' => 'password-char', 'name' => 'password'],
                 ]
             ],
             [
-                'label' => 'Select box',
+                'label' => 'int',
                 'list' => [
-                    ['id' => 'layer-enum', 'name' => 'layer-enum'],
-                    ['id' => 'tree-enum', 'name' => 'tree-enum'],
+                    ['id' => 'int', 'name' => 'int'],
                 ]
             ],
             [
-                'label' => 'checkbox',
+                'label' => 'enum',
                 'list' => [
-                    ['id' => 'bool', 'name' => 'bool'],
+                    ['id' => 'enum', 'name' => 'enum'],
+                    ['id' => 'fliter-enum', 'name' => 'fliter'],
+                    ['id' => 'align-enum', 'name' => 'items'],
                 ]
             ],
+
         ];
 
         $groups = [
