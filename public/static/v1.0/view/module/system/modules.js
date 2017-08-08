@@ -11,7 +11,7 @@ define(['blade'], function () {
         var blade = new Blade($('#' + name).text())
 
         // 第一次，用+号按钮
-        var plusBtn = '<i data-action="add-key-value-row" class="fa fa-plus" style="color:#0eac5c;cursor:pointer"></i>'
+        var plusBtn = '<i data-name="' + fieldName + '" data-action="add-key-value-row" class="fa fa-plus" style="color:#0eac5c;cursor:pointer"></i>'
 
         return blade.fetch({field: fieldName, btn: plusBtn})
     })
@@ -221,7 +221,10 @@ console.log('Success', data)
 
             // 添加表单
             $addBtn.click(function (e) {
-                var closeBtn = '<i data-action="remove-key-value-row" class="fa fa-times" style="color:#ff5b5b;cursor:pointer"></i>',
+                var $this = $(e.currentTarget),
+                    fieldName = $this.attr('data-name')
+
+                var closeBtn = '<i data-name="' + fieldName + '" data-action="remove-key-value-row" class="fa fa-times" style="color:#ff5b5b;cursor:pointer"></i>',
                     blade = new Blade(inputTpl, {field: name, btn: closeBtn})
                 $options.append(blade.fetch())
 

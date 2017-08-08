@@ -40,12 +40,14 @@
 </div> <!-- end col-->
 
 <script type="text/html" id="fields-extra-options">
-    <div class="card-box-header">
-        <span class="card-box-title"><?php echo trans_with_global('Options');?> - {field}</span>
-        <div class="pull-right"></div>
+    <div class="field-options-{field}">
+        <div class="card-box-header">
+            <span class="card-box-title"><?php echo trans_with_global('Options');?> - {field}</span>
+            <div class="pull-right"></div>
+        </div>
+        <div class="card-box-line m-b-30"></div>
+        {#view 'fieldsExtraOptionsInput' field i #}
     </div>
-    <div class="card-box-line m-b-30"></div>
-    {#view 'fieldsExtraOptionsInput' field i #}
 </script>
 
 <script type="text/html" id="fieldsExtraOptionsInput">
