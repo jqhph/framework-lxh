@@ -194,11 +194,15 @@ console.log('Success', data)
         },
 
         // 显示额外字段配置表单
+        alreadyDisplayOptionFields: {},
         displayFieldsExtraForm: function (values) {
             for (var i in values.field_type) {
                 // 枚举类型，需要添加键值对表单
                 if (values.field_type[i].indexOf('enum') != -1) {
-                    this.displayFieldOptions(values.field_name[i], values.field_type[i], i)
+                    if (typeof this.alreadyDisplayOptionFields[values.field_name[i]] == 'undefined') {
+                        this.displayFieldOptions(values.field_name[i], values.field_type[i], i)
+                        this.alreadyDisplayOptionFields[values.field_name[i]] = 1
+                    }
                 }
             }
         },
@@ -212,27 +216,26 @@ console.log('Success', data)
             $options.append(blade.fetch({field: name, i: i}))
 
             var $addBtn = $('i[data-action="add-key-value-row"]'),
-                $closeBtn = $('i[data-action="remove-key-value-row"]'),
-                inputTpl = $('#fieldsExtraOptionsInput').text(),
-                $options = $('.field-options')
+                inputTpl = $('#fieldsExtraOptionsInput').text()
 
             $addBtn.unbind('click')
-            $closeBtn.unbind('click')
 
-            // 添加表单
+            // 添加options键值对表单
             $addBtn.click(function (e) {
                 var $this = $(e.currentTarget),
                     fieldName = $this.attr('data-name')
 
                 var closeBtn = '<i data-name="' + fieldName + '" data-action="remove-key-value-row" class="fa fa-times" style="color:#ff5b5b;cursor:pointer"></i>',
-                    blade = new Blade(inputTpl, {field: name, btn: closeBtn})
-                $options.append(blade.fetch())
+                    blade = new Blade(inputTpl, {field: fieldName, btn: closeBtn})
+                $options.find('.field-options-' + fieldName).append(blade.fetch())
 
-            })
-            // 移除表单
-            $closeBtn.click(function (e) {
-                var plusBtn = '<i data-action="add-key-value-row" class="fa fa-plus" style="color:#0eac5c;cursor:pointer"></i>'
+                var $closeBtn = $('i[data-action="remove-key-value-row"]')
+                $closeBtn.unbind('click')
 
+                // 移除表单
+                $closeBtn.click(function (e) {
+                    $(e.currentTarget).parent().parent().remove()
+                })
             })
         }
     }

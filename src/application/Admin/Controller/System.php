@@ -44,7 +44,7 @@ class System extends Controller
 
         print_r($fields->all());
 
-        return $fields->all();
+        return $_REQUEST;
     }
 
     /**

@@ -52,15 +52,15 @@
 
 <script type="text/html" id="fieldsExtraOptionsInput">
     <div class="row form-group">
-        <label class="col-md-2 control-label" style="font-weight:normal;color:#333"><?php echo trans('key-value', 'fields'); ?></label>
+        <label class="col-md-2 control-label" style="font-weight:normal;color:#333"><?php echo trans('option value', 'fields'); ?></label>
         <div class="col-md-2">
-            <input value="" type="text" placeholder="key" name="{field}-key[]" class="form-control" >
-        </div>
-        <div class="col-md-2">
-            <input value="" type="text" placeholder="English" name="{field}-English[]" class="form-control" >
+            <input value="" type="text" placeholder="value" name="{field}-value[]" class="form-control" >
         </div>
         <div class="col-md-2">
             <input value="" type="text" placeholder="Chinese" name="{field}-Chinese[]" class="form-control" >
+        </div>
+        <div class="col-md-2">
+            <input value="" type="text" placeholder="English" name="{field}-English[]" class="form-control" >
         </div>
         <div class="col-md-1">{btn}</div>
     </div>
