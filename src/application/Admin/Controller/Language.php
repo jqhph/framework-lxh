@@ -8,6 +8,7 @@
 
 namespace Lxh\Admin\Controller;
 
+use Lxh\Exceptions\Forbidden;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
 
@@ -40,6 +41,10 @@ class Language extends Controller
      */
     public function actionList()
     {
+        if (! acl()->isAdmin()) {
+            throw new Forbidden();
+        }
+
         $file = file_manager();
 
         $languagePackDir = language()->getBasePath();
@@ -55,6 +60,10 @@ class Language extends Controller
      */
     public function actionGetPackage()
     {
+        if (! acl()->isAdmin()) {
+            throw new Forbidden();
+        }
+
         $path = I('content');
 
         if (empty($path)) {
@@ -75,6 +84,10 @@ class Language extends Controller
      */
     public function actionSave()
     {
+        if (! acl()->isAdmin()) {
+            throw new Forbidden();
+        }
+
         if (empty($_POST['path']) || empty($_POST['content'])) {
             return $this->error();
         }
@@ -98,6 +111,10 @@ class Language extends Controller
      */
     public function actionCreateCategory()
     {
+        if (! acl()->isAdmin()) {
+            throw new Forbidden();
+        }
+
         if (empty($_POST['path']) || empty($_POST['name'])) {
             return $this->error();
         }
@@ -128,6 +145,10 @@ class Language extends Controller
      */
     public function actionCreateFile()
     {
+        if (! acl()->isAdmin()) {
+            throw new Forbidden();
+        }
+
         $lang = I('lang');
         $module = I('module');
         $file = ucfirst(I('file'));
@@ -163,6 +184,10 @@ class Language extends Controller
      */
     public function actionCreateValue()
     {
+        if (! acl()->isAdmin()) {
+            throw new Forbidden();
+        }
+
         if (empty($_POST['path']) || empty($_POST['content'])) {
             return $this->error();
         }
@@ -189,6 +214,10 @@ class Language extends Controller
      */
     public function actionCreateOption()
     {
+        if (! acl()->isAdmin()) {
+            throw new Forbidden();
+        }
+
         if (empty($_POST['path']) || empty($_POST['content'])) {
             return $this->error();
         }
@@ -210,19 +239,14 @@ class Language extends Controller
     }
 
     /**
-     * 创建options下的key - value键值对api
-     *
-     */
-    public function actionCreateOptions()
-    {
-        return $_POST;
-    }
-
-    /**
      * 复制语言包api
      */
     public function actionCopyFile()
     {
+        if (! acl()->isAdmin()) {
+            throw new Forbidden();
+        }
+
         if (empty($_POST['path']) || empty($_POST['newPath']) ) {
             return $this->error();
         }
