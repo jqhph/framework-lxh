@@ -184,6 +184,32 @@ class Language extends Controller
     }
 
     /**
+     * 创建options分类下的key - value键值对接口
+     *
+     */
+    public function actionCreateOption()
+    {
+        if (empty($_POST['path']) || empty($_POST['content'])) {
+            return $this->error();
+        }
+        $path = $_POST['path'];
+        $content = ['options' => & $_POST['content']];
+
+        $language = language();
+        $file     = file_manager();
+
+        $path = $language->getBasePath() . $path;
+
+        if ($file->mergePhpContents($path, $content)) {
+            // 更新前端缓存
+            make('front.client')->updateCache();
+            return $this->success('Success', ['content' => $file->getPhpContents($path)]);
+        }
+
+        return $this->failed();
+    }
+
+    /**
      * 创建options下的key - value键值对api
      *
      */

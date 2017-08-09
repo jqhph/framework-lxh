@@ -10,6 +10,7 @@ return [
         'Avoid the suffix' => '请不要带文件后缀',
         'Copy File' => '复制文件',
         'Target' => '复制地址',
+        'Create Option' => '创建字段选项键值对',
     ],
     'fields' => [
         'category' => '分类',
@@ -18,6 +19,7 @@ return [
         'language' => '语言',
         'module' => '模块',
         'filename' => '文件名',
+        'field name' => '字段名称',
     ],
     'tip' => [
         'Please select a file first' => '请先选择语言包文件',

@@ -81,9 +81,33 @@ class Fields extends Creator
                 'en' => $options['field_en_name'][$k],
                 // 中文名
                 'zh' => $options['field_zh_name'][$k],
+                // 如果是枚举类型字段，应该有选项值
+                'options' => $this->normalizeFieldOptions($name, $options),
             ]);
         }
+    }
 
+    // 获取字段option值
+    protected function normalizeFieldOptions($name, array & $options)
+    {
+        $valueKey  = "$name-value";
+        $enlishKey = "$name-English";
+        $zhKey     = "$name-Chinese";
+
+        if (empty($options[$valueKey]) || empty($options[$enlishKey]) || empty($options[$zhKey])) {
+            return false;
+        }
+
+        $data = [];
+
+        foreach ($options[$valueKey] as $k => & $v) {
+            $data[$v] = [
+                'English' => get_value($options[$enlishKey], $k),
+                'Chinese' => get_value($options[$zhKey], $k),
+            ];
+        }
+
+        return $data;
     }
 
     /**

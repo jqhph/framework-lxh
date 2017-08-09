@@ -12,6 +12,7 @@ return [
     'fields' => [
         'email' => 'Email',
         'nn' => 'nnnnn',
+        'tet' => '测试123',
     ],
     'options' => [
 
@@ -19,6 +20,11 @@ return [
             0 => 'unknown',
             1 => 'male',
             2 => 'female',
+        ],
+        'func' => [
+            1 => 'qwe',
+            2 => 'ew',
+            3 => 'df',
         ],
     ],
 ];

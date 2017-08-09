@@ -196,12 +196,20 @@ console.log('Success', data)
         // 显示额外字段配置表单
         alreadyDisplayOptionFields: {},
         displayFieldsExtraForm: function (values) {
+            // 先隐藏每个项
+            $('.field-options .field-options-item').hide()
+
             for (var i in values.field_type) {
+                var fieldName = values.field_name[i]
                 // 枚举类型，需要添加键值对表单
                 if (values.field_type[i].indexOf('enum') != -1) {
-                    if (typeof this.alreadyDisplayOptionFields[values.field_name[i]] == 'undefined') {
-                        this.displayFieldOptions(values.field_name[i], values.field_type[i], i)
-                        this.alreadyDisplayOptionFields[values.field_name[i]] = 1
+                    // 如果有枚举类型字段才显示option表单
+                    $('.field-options .field-options-' + fieldName).show()
+
+                    if (typeof this.alreadyDisplayOptionFields[fieldName] == 'undefined') {
+                        // 如果未生成option表单，则先生成
+                        this.displayFieldOptions(fieldName, values.field_type[i], i)
+                        this.alreadyDisplayOptionFields[fieldName] = 1
                     }
                 }
             }

@@ -40,7 +40,7 @@
 </div> <!-- end col-->
 
 <script type="text/html" id="fields-extra-options">
-    <div class="field-options-{field}">
+    <div class="field-options-{field} field-options-item">
         <div class="card-box-header">
             <span class="card-box-title"><?php echo trans_with_global('Options');?> - {field}</span>
             <div class="pull-right"></div>

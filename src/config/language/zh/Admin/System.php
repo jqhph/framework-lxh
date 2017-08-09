@@ -40,6 +40,11 @@ return [
         'Js Token' => 'Js版本号',
         'Css Token' => 'Css版本号',
         'Use cache' => '使用缓存',
+        'controller_name' => '控制器',
+        'en_name' => '控制器英文名称',
+        'zh_name' => '控制器中文名称',
+        'inheritance' => '控制器父类',
+        'limit' => 'list列表显示记录数',
     ],
     'options' => [
 

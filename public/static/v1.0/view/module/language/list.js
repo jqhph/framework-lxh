@@ -236,99 +236,21 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
 
             // 创建普通语言包键值对
             createValue: function (e) {
-                var path = this.$packageTitle.text()
-
-                // 判断是否选择了文件
-                if (path.indexOf('/') == -1) {
-                    return this.notify.error(trans('Please select a file first', 'tip'))
-                }
-                // 获取表单数据
-                var data = this.saveModel.getFormData(),
-                    categories = [],
-                    keyValueTpl = $('#addKeyValueTpl').text(),
-                    blade = new Blade($('#createValueTpl').text()),
-                    model = $lxh.createModel(),
-                    notify = this.notify
-
-                for (var i in data.category) {
-                    categories.push(data.category[i])
-                }
-
-                // 创建弹出窗
-                var modal = $lxh.ui().modal({
-                    title: 'Create Value',
-                    content: blade.fetch({categories: categories}),
-                    saveButtonLabel: 'Create',
-                    class: '',
-                }, function (modal) {
-                    var formData = $lxh.form().get('.modal-container')
-
-                    try {
-                        formData = normalize(formData)
-                    } catch (e) {
-                        return notify.error(trans('Invalid arguments', 'tip'))
-                    }
-
-                    notify.info(trans('loading'))
-
-                    model.data({path: path, content: formData})
-
-                    // 创建成功回调函数
-                    model.on('success', function (data) {
-                        // 重新渲染table
-                        this.renderLanguageList(data)
-                        notify.success(trans('success'))
-                        // 关闭弹窗
-                        modal.close()
-                    }.bind(this))
-
-                    model.touchAction('CreateValue', 'POST')
-
-                    // 格式化
-                    function normalize(data) {
-                        var newData = {}
-
-                        if (! data.category_name) throw new Error('Invalid arguments')
-
-                        newData[data.category_name] = {}
-                        for (i in data.key) {
-                            if (! data.key[i] || ! data.value[i]) {
-                                throw new Error('Invalid arguments')
-                            }
-                            newData[data.category_name][data.key[i]] = data.value[i]
-                        }
-                        return newData
-                    }
-
-                }.bind(this))
-
-                $('i[data-action="add-key-value-row"]').unbind('click')
-                $('i[data-action="add-key-value-row"]').click(add_key_value_row)
-
-
-                function add_key_value_row(e) {
-                    modal.find('.modal-body').append(keyValueTpl)
-
-                    $('i[data-action="remove-key-value-row"]').unbind('click')
-                    $('i[data-action="remove-key-value-row"]').click(remove_key_value_row)
-
-                    var v = $lxh.validator([
-                        {name: 'category_name', rules: 'required', },
-                        {name: 'key[]', rules: 'required', },
-                        {name: 'value[]', rules: 'required' },
-                    ], function () {
-
-                    }, '.modal-container')
-                    v._validateForm('submit')
-                }
-
-                function remove_key_value_row(e) {
-                    $(e.currentTarget).parent().parent().remove()
-                }
+                this.renderValueOrOptionsForm({
+                    tplId: 'createValueTpl',
+                    modalTitle: 'Create Value',
+                    action: 'CreateValue',
+                    firstInputName: 'category_name',
+                })
 
             },
             createOptions: function (e) {
-                console.log('createOptions')
+                this.renderValueOrOptionsForm({
+                    tplId: 'createOptionsTpl',
+                    modalTitle: 'Create Option',
+                    action: 'CreateOption',
+                    firstInputName: 'field',
+                })
             },
 
             // 复制文件
@@ -426,6 +348,98 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
 
                 // 获取语言包
                 this.model.touchAction('GetPackage', 'POST')
+            }
+        },
+
+        renderValueOrOptionsForm: function (opts) {
+            var path = this.$packageTitle.text()
+
+            // 判断是否选择了文件
+            if (path.indexOf('/') == -1) {
+                return this.notify.error(trans('Please select a file first', 'tip'))
+            }
+            // 获取表单数据
+            var data = this.saveModel.getFormData(),
+                categories = [],
+                keyValueTpl = $('#addKeyValueTpl').text(),
+                blade = new Blade($('#' + opts.tplId).text()),
+                model = $lxh.createModel(),
+                notify = this.notify
+
+            for (var i in data.category) {
+                categories.push(data.category[i])
+            }
+
+            // 创建弹出窗
+            var modal = $lxh.ui().modal({
+                title: opts.modalTitle,
+                content: blade.fetch({categories: categories}),
+                saveButtonLabel: 'Create',
+                class: '',
+            }, function (modal) {
+                var formData = $lxh.form().get('.modal-container')
+
+                try {
+                    formData = normalize(formData)
+                } catch (e) {
+                    return notify.error(trans('Invalid arguments', 'tip'))
+                }
+
+                notify.info(trans('loading'))
+
+                model.data({path: path, content: formData})
+
+                // 创建成功回调函数
+                model.on('success', function (data) {
+                    // 重新渲染table
+                    this.renderLanguageList(data)
+                    notify.success(trans('success'))
+                    // 关闭弹窗
+                    modal.close()
+                }.bind(this))
+
+                model.touchAction(opts.action, 'POST')
+
+                // 格式化
+                function normalize(data) {
+                    var newData = {}
+
+                    if (! data[opts.firstInputName]) throw new Error('Invalid arguments')
+
+                    newData[data[opts.firstInputName]] = {}
+                    for (i in data.key) {
+                        if (! data.key[i] || ! data.value[i]) {
+                            throw new Error('Invalid arguments')
+                        }
+                        newData[data[opts.firstInputName]][data.key[i]] = data.value[i]
+                    }
+                    return newData
+                }
+
+            }.bind(this))
+
+            $('i[data-action="add-key-value-row"]').unbind('click')
+            $('i[data-action="add-key-value-row"]').click(add_key_value_row)
+
+
+            function add_key_value_row(e) {
+                modal.find('.modal-body').append(keyValueTpl)
+
+                $('i[data-action="remove-key-value-row"]').unbind('click')
+                $('i[data-action="remove-key-value-row"]').click(remove_key_value_row)
+
+                var v = $lxh.validator([
+                    {name: opts.firstInputName, rules: 'required', },
+                    {name: 'key[]', rules: 'required', },
+                    {name: 'value[]', rules: 'required' },
+                ], function () {
+
+                }, '.modal-container')
+                v._validateForm('submit')
+            }
+
+            function remove_key_value_row(e) {
+                $(e.currentTarget).parent().parent().remove()
             }
         },
 

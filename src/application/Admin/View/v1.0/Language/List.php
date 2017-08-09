@@ -143,3 +143,27 @@
     </div>
 </script>
 
+<script type="text/html" id="createOptionsTpl">
+    <div class="form-group clearfix">
+        <label class="col-md-2 control-label"><?php echo trans('field name', 'fields'); ?></label>
+
+        <div class="col-md-10">
+            <input value="" type="text" placeholder="" name="field" class="form-control" >
+        </div>
+    </div>
+    <div class="form-group clearfix">
+        <label class="col-md-2 control-label"><?php echo trans('key-value', 'fields'); ?></label>
+        <div class="col-md-4">
+            <input value="" type="text" placeholder="key" name="key[]" class="form-control" >
+        </div>
+
+        <div class="col-md-5">
+            <input value="" type="text" placeholder="value" name="value[]" class="form-control" >
+        </div>
+        <div class="col-md-1">
+            <i data-action="add-key-value-row" class="fa fa-plus" style="color:#0eac5c;cursor:pointer"></i>
+        </div>
+    </div>
+
+</script>
+
