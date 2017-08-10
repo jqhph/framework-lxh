@@ -16,6 +16,7 @@ use Lxh\Config\Config;
 use Lxh\ORM\Query;
 use Lxh\MVC\Model;
 use Lxh\Contracts\Events\Dispatcher;
+use Lxh\Http\Client;
 
 // 常用的变量先注册到全局变量中
 $GLOBALS['__container__']     = Container::getInstance();
@@ -185,6 +186,16 @@ function user()
 
     return $instance = $GLOBALS['__container__']->make('model.factory')->get('User');
 
+}
+
+/**
+ * Http客户端
+ *
+ * @return Client
+ */
+function http()
+{
+    return make('http.client');
 }
 
 /**
@@ -500,5 +511,4 @@ function debug($data, $print = true, $json = false)
         var_dump($data);
     }
     echo "<br/><br/>";
-
 }

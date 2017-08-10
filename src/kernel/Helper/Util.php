@@ -193,6 +193,7 @@ class Util
             } elseif ($v === null) {
                 $t = 'null';
             } elseif (is_string($v)) {
+                $v = str_replace("'", "\\'", $v);
                 $t = "'$v'";
             }
 

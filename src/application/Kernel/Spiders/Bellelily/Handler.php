@@ -1,0 +1,71 @@
+<?php
+/**
+ * Bellelily网站爬虫
+ *
+ * @author Jqh
+ * @date   2017/8/10 18:22
+ */
+
+namespace Lxh\Kernel\Spiders\Bellelily;
+
+use Lxh\Kernel\Spiders\Handler as Basic;
+
+class Handler extends Basic
+{
+    /**
+     * @var Category
+     */
+    protected $category;
+
+    protected $prototype = 'http';
+
+    protected $host = 'www.bellelily.com';
+
+    /**
+     * 爬虫抓取并发数
+     *
+     * @var int
+     */
+    protected $concurrenceNum = 3;
+
+    /**
+     * 暂停时间（毫秒）
+     *
+     * @var int
+     */
+    protected $sleep = 10;
+
+    // 获取url
+    public function url($name = null)
+    {
+        $name = trim($name, '/');
+        return "{$this->prototype}://{$this->host}/$name";
+    }
+
+    public function getConcurrenceNum()
+    {
+        return $this->concurrenceNum;
+    }
+
+    /**
+     * 抓取产品分类数据
+     *
+     * @return array
+     */
+    public function makeClassifiedData()
+    {
+        $tops = $this->category()->fetch($this->concurrenceNum);
+
+        return $tops;
+    }
+
+    /**
+     * 抓取分类数据
+     *
+     * @return Category
+     */
+    protected function category()
+    {
+        return $this->category ? $this->category : ($this->category = new Category($this));
+    }
+}

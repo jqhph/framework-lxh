@@ -15,16 +15,16 @@ use Lxh\Http\Response;
 
 class Test extends Controller
 {
-    public function actionHi(Request $req, Response $resp)
+    public function actionTest(Request $req, Response $resp)
     {
         $data = [];
 
-//        $data = pdo()->prepare('SELECT * FROM user WHERE id = :id AND is_admin = :is_admin', [':id' => 1, ':is_admin' => 1])->fetchAll(\PDO::FETCH_ASSOC);
-        $r = make('config')->save(['js-version' => 18]);
 
-        assign('data', $data);
+        $crawler = new \Lxh\Kernel\Spiders\Crawler();
 
-        return fetch_view();
+        $sorts = $crawler->makeClassifiedData();
+
+        debug($sorts);die;
 
     }
 

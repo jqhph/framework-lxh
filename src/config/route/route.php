@@ -19,6 +19,17 @@ $config[] = [
 ];
 
 $config[] = [
+    'pattern' => '/dev',
+    'method' => 'GET',
+    'params' => [
+        'auth' => false,
+        'module' => 'Admin',
+        'controller' => 'Test',
+        'action' => 'Test'
+    ]
+];
+
+$config[] = [
     'pattern' => '/lxhadmin',
     'method' => 'GET',
     'params' => [

@@ -66,7 +66,7 @@ class Loader
             ],
             'http.client' => [
                 'shared' => true,
-                'class' => 'Lxh\\Http\\KC_Request'
+                'class' => 'Lxh\\Http\\Client'
             ],
             'http.response' => [
                 'shared' => true,
