@@ -13,16 +13,11 @@ abstract class Basic
     protected $handler;
 
     /**
-     * @var Client
-     */
-    private $client;
-
-    /**
      * 抓取记录
      *
      * @var array
      */
-    protected $records = [];
+    private $records = [];
 
     /**
      * 重试时间
@@ -34,7 +29,6 @@ abstract class Basic
     public function __construct(Handler $handler)
     {
         $this->handler = $handler;
-        $this->client = http();
     }
 
     /**
@@ -43,7 +37,7 @@ abstract class Basic
      */
     protected function client()
     {
-        return $this->client;
+        return http();
     }
 
     /**
@@ -54,6 +48,29 @@ abstract class Basic
         return $this->handler->crawler()->dom($content);
     }
 
+    /**
+     * 保存抓取记录
+     *
+     */
+    protected function setRecord(array $data)
+    {
+        // 如果记录已经保存过，则跳过
+        if (isset($this->records[$data['id']])) {
+            return;
+        }
+
+        $this->records[$data['id']] = & $data;
+    }
+
+    /**
+     * 获取抓取的记录
+     *
+     * @return array
+     */
+    public function & records()
+    {
+        return $this->records;
+    }
 
     /**
      * HTTP GET

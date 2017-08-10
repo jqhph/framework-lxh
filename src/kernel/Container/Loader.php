@@ -65,7 +65,7 @@ class Loader
                 'dependencies' => 'config'
             ],
             'http.client' => [
-                'shared' => true,
+                'shared' => false,
                 'class' => 'Lxh\\Http\\Client'
             ],
             'http.response' => [

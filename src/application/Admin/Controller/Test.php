@@ -23,7 +23,7 @@ class Test extends Controller
         $crawler = new \Lxh\Kernel\Spiders\Crawler();
 
         $sorts = $crawler->makeClassifiedData();
-
+//return $sorts;
         debug($sorts);die;
 
     }
