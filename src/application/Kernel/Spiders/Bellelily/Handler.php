@@ -17,6 +17,11 @@ class Handler extends Basic
      */
     protected $category;
 
+    /**
+     * @var Product
+     */
+    protected $prod;
+
     protected $prototype = 'http';
 
     protected $host = 'www.bellelily.com';
@@ -26,7 +31,7 @@ class Handler extends Basic
      *
      * @var int
      */
-    protected $concurrenceNum = 3;
+    protected $concurrenceNum = 5;
 
     /**
      * 暂停时间（毫秒）
@@ -39,6 +44,11 @@ class Handler extends Basic
     public function url($name = null)
     {
         $name = trim($name, '/');
+
+        if (strpos($name, '://') !== false) {
+            return $name;
+        }
+
         return "{$this->prototype}://{$this->host}/$name";
     }
 
@@ -52,11 +62,19 @@ class Handler extends Basic
      *
      * @return array
      */
-    public function makeClassifiedData()
+    public function makeCategoriesData($useCache = true)
     {
-        $tops = $this->category()->fetch($this->concurrenceNum);
+        return $this->category()->fetch($this->concurrenceNum, $useCache);
+    }
 
-        return $tops;
+    /**
+     * 抓取产品数据
+     *
+     * @return array
+     */
+    public function makeProdsData()
+    {
+        return $this->prod()->fetch($this->concurrenceNum);
     }
 
     /**
@@ -67,5 +85,10 @@ class Handler extends Basic
     protected function category()
     {
         return $this->category ? $this->category : ($this->category = new Category($this));
+    }
+
+    protected function prod()
+    {
+        return $this->prod ? $this->prod : ($this->prod = new Product($this));
     }
 }

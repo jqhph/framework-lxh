@@ -47,8 +47,7 @@ class Application
 
     public function __construct($rootDir)
     {
-        define('ROOT_PATH', $rootDir . '/');
-        define('__ROOT__', ROOT_PATH);
+        define('__ROOT__', $rootDir . '/');
 
         $this->root = __ROOT__;
 

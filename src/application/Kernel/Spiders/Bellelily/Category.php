@@ -7,10 +7,8 @@
  */
 namespace Lxh\Kernel\Spiders\Bellelily;
 
-class Category extends Basic
+class Category extends Finder
 {
-    protected $cateUrl = '{name}-t-{id}';
-
     protected $notTopCates = [
         'sale', 'tops', 'collections', 'new'
     ];
@@ -25,28 +23,18 @@ class Category extends Basic
     ];
 
     /**
+     * 缓存时间，秒
+     *
+     * @var int
+     */
+    protected $timeout = 1800;
+
+    /**
      * 记录并发抓取时出错的url，并发抓取结束后重试
      *
      * @var array
      */
     protected $errorUrl = [];
-
-    /**
-     * 获取分类界面url
-     *
-     * @param  int $id 分类id
-     * @param  string $name 分类名称
-     * @return string
-     */
-    protected function cateUrl($id, $name = 'test')
-    {
-        return $this->handler->url(
-            strtr($this->cateUrl, [
-                '{name}' => & $name,
-                '{id}' => & $id
-            ])
-        );
-    }
 
     /**
      * 抓取顶级分类数据
@@ -65,12 +53,11 @@ class Category extends Basic
         $content = $this->requestGet($url);
 
         if (! $content) {
-            // 请求失败， 重试
-            $this->error("抓取顶级分类失败！[$url]请求失败，重试次数：{$this->retryTimes}");
+            // 重试之后最终请求失败
+            $this->error("抓取顶级分类失败！[$url]请求失败，重试次数：{$this->retryTimes}，请检查网站是否能正常访问");
 
             return false;
         }
-
 
         $dom = $this->dom($content);
 
@@ -91,6 +78,7 @@ class Category extends Basic
                 'url' => $url,
                 'name' => $a->innertext,
                 'parent_id' => 0,
+//                'seo' => $this->fetchSeoInfo($url)
             ];
 
             $sorts[] = $content;
@@ -119,6 +107,50 @@ class Category extends Basic
         return $sorts;
     }
 
+    /**
+     * 进入分类界面抓取SEO信息
+     *
+     * @param  string $url
+     * @return array
+     */
+    protected function fetchSeoInfo($url)
+    {
+        $content = $this->requestGet($url);
+
+        if (! $content)
+            return $this->info("抓取SEO信息失败 [$url]!");
+
+        return $this->parseCatePageToSeo($content);
+    }
+
+    /**
+     * 解析分类界面seo信息
+     *
+     * @param string|object $html
+     * @return array
+     */
+    protected function parseCatePageToSeo(& $dom)
+    {
+        if (is_string($dom)) {
+            $dom = $this->dom($dom);
+        }
+
+        $head = $dom->find('head', 0);
+
+        $title = $head->find('title', 0)->innertext;
+
+        $desc = $head->find('meta[name="Description"]', 0)->content;
+
+        $keyword = $head->find('meta[name="Keywords"]', 0)->content;
+
+        return [
+            'title' => & $title,
+            'desc' => & $desc,
+            'keyword' => & $keyword
+        ];
+    }
+
+
     // 从url中获取id
     protected function getIdFormUrl($url)
     {
@@ -131,10 +163,17 @@ class Category extends Basic
      * 抓取数据
      *
      * @param  int $c 并发抓取数
+     * @param  bool $useCache 是否获取缓存中的数据
      * @return array
      */
-    public function fetch($c = 1)
+    public function fetch($c = 1, $useCache = true)
     {
+        if ($useCache && ($records = $this->cache->get('belle-categories'))) {
+            $count = count($records);
+            $this->info("获取分类数据成功，缓存中存在数据，总数：{$count}！");
+            return $records;
+        }
+
         $tops = $this->fetchTopCate();
 
         if (! $tops) {
@@ -155,6 +194,9 @@ class Category extends Basic
 
         $this->success("抓取子分类数据结束，共抓取{$total}条数据，耗时：$useTime");
 
+        // 缓存12小时
+        $this->cache->set('belle-categories', $records, $this->timeout);
+
         return $records;
     }
 
@@ -168,64 +210,89 @@ class Category extends Basic
     protected function fetchSubCates(array $tops, $c = 1, $retryTimes = 5)
     {
         // 进入分类页面抓取分类信息，如 http://www.bellelily.com/clothing-t-444
-        $selector = '.dirWrap .dirLeft .top_dd dd';
-
         $client = $this->client();
 
-        $i = 1;
         while ($data = $this->arrayShift($tops, $c)) {
 
+            $s = microtime(true);
+
             foreach ($data as $r) {
-                $client->get($this->handler->url($r['url']));
+                $url = $this->handler->url($r['url']);
+
                 if (empty($r['id'])) {
                     // 没有id，则是重试数据
-                    $this->info("失败重试 [{$r['url']}]，剩余重试次数：{$retryTimes}");
+                    $this->info("失败重试 [{$url}]，剩余重试次数：{$retryTimes}");
                 }
 
+                // 设置批量抓取url
+                $client->get($url);
             }
 
-            $client->then(function ($output, $info, $error, $request) use ($i, $selector, $retryTimes) {
+            // 开始抓取
+            $client->then(function ($output, $info, $error, $request) use ($c, $retryTimes, $s) {
+                $useTime = round(microtime(true) - $s, 4);
+
+                // 记录请求结果
+                $this->saveRequestInfo($request['url'], $useTime, $error);
+
                 if ($error) {
                     if ($retryTimes > 0) {
-                        $this->fetchSubCates([['url' => & $request['url'],]], $retryTimes - 1);
+                        $this->fetchSubCates([['url' => & $request['url'],]], $c, $retryTimes - 1);
+                    } else {
+                        return $this->warning("抓取 [{$request['url']}] 数据失败（剩余重试次数0），错误信息：$error");
                     }
+
                     return $this->warning("抓取 [{$request['url']}] 数据出错，错误信息：$error");
                 }
 
-                $dom = $this->dom($output);
-
-                $parentId = $this->getIdFormUrl($request['url']);
-
-                foreach ($dom->find($selector) as & $dd) {
-                    $a = $dd->find('a', 0);
-
-                    $href = $a->href;
-
-                    $id = $this->getIdFormUrl($href);
-
-                    // 保存二级分类
-                    $this->setRecord([
-                        'id' => $id,
-                        'name' => $a->innertext,
-                        'parent_id' => $parentId,
-                    ]);
-
-                    // 三级分类
-                    foreach ((array) $dd->find('dd') as & $thridDd) {
-                        $a = $thridDd->find('a', 0);
-
-                        $this->setRecord([
-                            'id' => $this->getIdFormUrl($a->href),
-                            'name' => $a->innertext,
-                            'parent_id' => $id,
-                        ]);
-
-                    }
-                }
-
+                // 解析抓取的数据结果
+                $this->parseSubCatesHtml($request['url'], $output);
             });
+        }
+    }
 
-            $i ++;
+    // 解析分类界面html
+    protected function parseSubCatesHtml($url, & $output)
+    {
+        $selector = '.dirWrap .dirLeft .top_dd dd';
+
+        $dom = $this->dom($output);
+
+        // 获取顶级分类的seo信息
+        $seo = $this->parseCatePageToSeo($dom);
+
+        $parentId = $this->getIdFormUrl($url);
+
+        // 保存seo信息
+        $this->setRecordItem($parentId, 'SEO', $seo);
+
+        foreach ($dom->find($selector) as & $dd) {
+            $a = $dd->find('a', 0);
+
+            $href = $a->href;
+
+            $id = $this->getIdFormUrl($href);
+
+            // 保存二级分类
+            $this->setRecord([
+                'id' => $id,
+                'name' => $a->innertext,
+                'parent_id' => $parentId,
+                'SEO' => $this->fetchSeoInfo($this->handler->url($href))
+            ]);
+
+            // 三级分类
+            foreach ((array) $dd->find('dd') as & $thridDd) {
+                $a = $thridDd->find('a', 0);
+
+                $this->setRecord([
+                    'id' => $this->getIdFormUrl($a->href),
+                    'name' => $a->innertext,
+                    'parent_id' => $id,
+                    'SEO' => $this->fetchSeoInfo($this->handler->url($a->href))
+                ]);
+
+            }
         }
     }
 }

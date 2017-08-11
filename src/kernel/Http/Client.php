@@ -80,9 +80,11 @@ class Client
      * info
      * error
      */
-    public function response()
+    public function response($key = null)
     {
-    	return $this->response;
+        if ($key === null) return $this->response;
+
+        return isset($this->response[$key]) ? $this->response[$key] : null;
     }
     
     /**
@@ -117,6 +119,8 @@ class Client
      */
     public function timeout($timeout)
     {
+        $this->timeout = $timeout;
+
         $this->options[CURLOPT_TIMEOUT] = $timeout;
         return $this;
     }
@@ -523,6 +527,8 @@ class Client
     	$this->callback   = [];
     	$this->headers    = [];
     	$this->requestMap = [];
+
+        $this->timeout = 10;
     }
     
 }

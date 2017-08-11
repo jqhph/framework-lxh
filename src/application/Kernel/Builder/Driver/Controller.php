@@ -8,6 +8,8 @@
 
 namespace Lxh\Kernel\Builder\Driver;
 
+use Lxh\Helper\Util;
+
 class Controller extends FileGenerator
 {
     protected $defaultStub = 'controller-record';
@@ -87,9 +89,38 @@ class Controller extends FileGenerator
         return '[\'deleted\' => 0]';
     }
 
+    // 生成搜索项配置数组
     protected function makePhpSearchItems()
     {
-        return '[]';
+        $fields = $this->fields();
+
+        $items = [];
+
+        // 循环获取字段列表
+        foreach ($fields->nameList() as & $name) {
+            // 判断字段是否是搜索项，否则跳过
+            $isSearchItem = $fields->name($name)->options('isSearchItem');
+
+            if (! $isSearchItem) continue;
+
+            // 获取字段类型
+            $view = $fields->name($name)->options('view');
+
+            $items[0][] = [
+                'view' => $this->getSearchView($view),
+                'vars' => [
+                    'name' => $name,
+                ]
+            ];
+        }
+
+        return Util::arrayToText($items);
+    }
+
+    // 获取字段搜索项公共模板
+    protected function getSearchView($view)
+    {
+        
     }
 
     protected function makeListTableTitles()

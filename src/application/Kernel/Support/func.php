@@ -8,6 +8,7 @@
 
 use Lxh\Admin\Acl\Permit;
 use Lxh\Kernel\Support\Page;
+use Lxh\Kernel\Cache\Cache;
 
 /**
  * @return Page
@@ -29,4 +30,22 @@ function acl()
     static $instance = null;
 
     return $instance ?: ($instance = new Permit());
+}
+
+/**
+ * 缓存
+ *
+ * @return Cache
+ */
+function cache($key = null)
+{
+    static $instances = [];
+
+    $key = $key ?: config('cache-driver', 'File');
+
+    if (isset($instances[$key])) return $instances[$key];
+
+    $class = "\\Lxh\\Kernel\\Cache\\{$key}";
+
+    return $instances[$key] = new $class();
 }

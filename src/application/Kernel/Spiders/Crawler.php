@@ -19,10 +19,49 @@ class Crawler
 
     protected $drivers = [];
 
+    /**
+     * 记录爬虫抓取记录
+     *
+     * @var array
+     */
+    protected $requestInfo = [];
+
     public function __construct()
     {
         // 无限时间
         set_time_limit(0);
+    }
+
+    /**
+     * 保存请求记录
+     *
+     * @param  array $data
+     * @return void
+     */
+    public function saveRequestInfo($url, $useTime, $error, array $data = [])
+    {
+        $this->requestInfo[] = [
+            'url' => & $url,
+            'useTime' => & $useTime,
+            'error' => & $error,
+            'params' => & $data,
+        ];
+    }
+
+    // 输出请求结果
+    public function outputRequestResult()
+    {
+        // 抓取界面总数
+        $total = count($this->requestInfo);
+
+        // 成功数
+        $totalSussess = 0;
+        foreach ($this->requestInfo as & $r) {
+            if (! $r['error']) $totalSussess ++;
+
+        }
+
+        $this->info("\n抓取界面总数：{$total}，成功总数：{$totalSussess}。");
     }
 
     /**
@@ -33,14 +72,10 @@ class Crawler
         return new SimpleHtmlDom($html);
     }
 
-    /**
-     * 抓取产品分类数据
-     *
-     * @return array
-     */
-    public function makeClassifiedData()
+
+    public function __call($name, $arguments)
     {
-        return $this->driver()->makeClassifiedData();
+        return call_user_func_array([$this->driver(), $name], $arguments);
     }
 
     /**

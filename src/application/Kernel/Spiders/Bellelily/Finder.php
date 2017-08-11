@@ -3,9 +3,10 @@
 namespace Lxh\Kernel\Spiders\Bellelily;
 
 use Lxh\Http\Client;
+use Lxh\Kernel\Cache\Cache;
 use Lxh\Kernel\Spiders\SimpleHtmlDomNode;
 
-abstract class Basic
+abstract class Finder
 {
     /**
      * @var Handler
@@ -24,11 +25,18 @@ abstract class Basic
      *
      * @var int
      */
-    protected $retryTimes = 3;
+    protected $retryTimes = 5;
+
+    /**
+     * @var Cache
+     */
+    protected $cache;
 
     public function __construct(Handler $handler)
     {
         $this->handler = $handler;
+
+        $this->cache = cache();
     }
 
     /**
@@ -52,14 +60,33 @@ abstract class Basic
      * 保存抓取记录
      *
      */
-    protected function setRecord(array $data)
+    protected function setRecord(array $data, $id = null)
     {
+        if ($id === null) {
+            $id = $data['id'];
+        }
+
         // 如果记录已经保存过，则跳过
-        if (isset($this->records[$data['id']])) {
+        if (isset($this->records[$id])) {
             return;
         }
 
         $this->records[$data['id']] = & $data;
+    }
+
+    protected function setRecordItem($id, $key, $val)
+    {
+        if (! isset($this->records[$id])) {
+            return;
+        }
+
+        $this->records[$id][$key] = & $val;
+    }
+
+    // 记录请求信息
+    protected function saveRequestInfo($url, $useTime, $error, array $data = [])
+    {
+        return $this->handler->crawler()->saveRequestInfo($url, $useTime, $error, $data);
     }
 
     /**
@@ -67,9 +94,11 @@ abstract class Basic
      *
      * @return array
      */
-    public function & records()
+    public function & records($id = null)
     {
-        return $this->records;
+        if ($id === null) return $this->records;
+
+        return $this->records[$id];
     }
 
     /**
@@ -77,14 +106,31 @@ abstract class Basic
      *
      * @return mixed
      */
-    protected function requestGet($url, $retry = null)
+    protected function requestGet($url, $retry = null, $isRetry = false)
     {
         $retry = $retry === null ? $this->retryTimes : $retry;
 
-        $content = $this->client()->get($url)->then();
+        $s = microtime(true);
 
-        if (! $content && $retry > 0) {
-            return $this->requestGet($url, $retry - 1);
+        $client = $this->client();
+
+        $content = $client->get($url)->then();
+
+        $error = $client->response('error');
+
+        if ($error) {
+            $msg = "请求 [$url] 出错：{$error}！";
+            if ($isRetry) {
+                $msg = "请求 [$url] 出错（重试）：{$error}！剩余重试次数：$retry";
+            }
+            $this->warning($msg);
+        }
+
+        // 记录请求信息
+        $this->saveRequestInfo($url, round(microtime(true) - $s, 4), $error);
+
+        if ($error && $retry > 0) {
+            return $this->requestGet($url, $retry - 1, true);
         }
         return $content;
     }
@@ -132,9 +178,10 @@ abstract class Basic
      * 抓取数据
      *
      * @param  int $c 并发抓取数
+     * @param  bool $useCache 是否获取缓存中的数据
      * @return array
      */
-    abstract public function fetch($c = 1);
+    abstract public function fetch($c = 1, $useCache = true);
 
     /**
      * 弹出数组前面$num个元素

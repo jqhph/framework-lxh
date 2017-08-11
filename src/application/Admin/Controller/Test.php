@@ -9,6 +9,7 @@ namespace Lxh\Admin\Controller;
 
 use Lxh\Exceptions\NotFound;
 use Lxh\Helper\Console;
+use Lxh\Helper\Util;
 use Lxh\MVC\Controller;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
@@ -22,10 +23,13 @@ class Test extends Controller
 
         $crawler = new \Lxh\Kernel\Spiders\Crawler();
 
-        $sorts = $crawler->makeClassifiedData();
-//return $sorts;
-        debug($sorts);die;
+        $sorts = $crawler->makeProdsData();
 
+        $crawler->outputRequestResult();
+//return $sorts;
+//        debug($sorts);die;
+
+        return '<pre>' . Util::arrayToText($sorts);
     }
 
     public function actionHello()
