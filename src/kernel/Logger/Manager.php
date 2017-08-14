@@ -127,7 +127,7 @@ class Manager extends Factory
 	/**
 	 * 代理monolog处理日志方法, 使用前请先通过配置文件定义好相应的日志通道信息
 	 * 使用示例:
-	 *  logger()->info('啦啦~'); //此方法会在日志信息后面带上$_SERVER['REQUEST_METHOD']和$_SERVER['REQUEST_URI']等信息, info表示日志级别
+	 *  logger()->info('啦啦~'); //此方法会在日志信息后面带上$_SERVER['REQUEST_METHOD']和get_value($_SERVER, 'REQUEST_URI')等信息, info表示日志级别
 	 * 输出如下:
 	 *  [2016-09-18 18:12:58] INFO: 啦啦~ [GET: /api/Index/index] [] []
 	 *
@@ -146,7 +146,7 @@ class Manager extends Factory
 	 */
 	public function error($msg, $extra = [])
 	{
-		$extra[$_SERVER['REQUEST_METHOD']] = $_SERVER['REQUEST_URI'];
+		$extra[$_SERVER['REQUEST_METHOD']] = get_value($_SERVER, 'REQUEST_URI');
 		return $this->get($this->channelName)->error($msg, $extra);
 	}
 
@@ -157,7 +157,7 @@ class Manager extends Factory
 
 	public function warning($msg, $extra = [])
 	{
-		$extra[$_SERVER['REQUEST_METHOD']] = $_SERVER['REQUEST_URI'];
+		$extra[$_SERVER['REQUEST_METHOD']] = get_value($_SERVER, 'REQUEST_URI');
 		return $this->get($this->channelName)->warning($msg, $extra);
 	}
 
@@ -168,7 +168,7 @@ class Manager extends Factory
 
 	public function notice($msg, $extra = [])
 	{
-		$extra[$_SERVER['REQUEST_METHOD']] = $_SERVER['REQUEST_URI'];
+		$extra[$_SERVER['REQUEST_METHOD']] = get_value($_SERVER, 'REQUEST_URI');
 		return $this->get($this->channelName)->warning($msg, $extra);
 	}
 
@@ -179,7 +179,7 @@ class Manager extends Factory
 
 	public function info($msg, $extra = [])
 	{
-		$extra[$_SERVER['REQUEST_METHOD']] = $_SERVER['REQUEST_URI'];
+		$extra[$_SERVER['REQUEST_METHOD']] = get_value($_SERVER, 'REQUEST_URI');
 		return $this->get($this->channelName)->info($msg, $extra);
 	}
 
@@ -190,7 +190,7 @@ class Manager extends Factory
 
 	public function critica($msg, $extra = [])
 	{
-		$extra[$_SERVER['REQUEST_METHOD']] = $_SERVER['REQUEST_URI'];
+		$extra[$_SERVER['REQUEST_METHOD']] = get_value($_SERVER, 'REQUEST_URI');
 		return $this->get($this->channelName)->critica($msg, $extra);
 	}
 
@@ -201,7 +201,7 @@ class Manager extends Factory
 
 	public function emergency($msg, $extra = [])
 	{
-		$extra[$_SERVER['REQUEST_METHOD']] = $_SERVER['REQUEST_URI'];
+		$extra[$_SERVER['REQUEST_METHOD']] = get_value($_SERVER, 'REQUEST_URI');
 		return $this->get($this->channelName)->emergency($msg, $extra);
 	}
 
@@ -212,7 +212,7 @@ class Manager extends Factory
 
 	public function alert($msg, $extra = [])
 	{
-		$extra[$_SERVER['REQUEST_METHOD']] = $_SERVER['REQUEST_URI'];
+		$extra[$_SERVER['REQUEST_METHOD']] = get_value($_SERVER, 'REQUEST_URI');
 		return $this->get($this->channelName)->alert($msg, $extra);
 	}
 

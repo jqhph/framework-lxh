@@ -23,13 +23,13 @@ class Test extends Controller
 
         $crawler = new \Lxh\Kernel\Spiders\Crawler();
 
-        $sorts = $crawler->makeProdsData();
+        $crawler->makeProdsData();
 
         $crawler->outputRequestResult();
 //return $sorts;
 //        debug($sorts);die;
 
-        return '<pre>' . Util::arrayToText($sorts);
+//        return '<pre>' . Util::arrayToText($sorts);
     }
 
     public function actionHello()

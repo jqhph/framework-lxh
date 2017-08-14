@@ -60,15 +60,15 @@ class File extends Cache
      * 设置缓存目录
      *
      * @param  string $dirname 目录名
-     * @return bool
+     * @return static
      */
     public function setType($dirname)
     {
         if (empty($dirname)) {
-            return false;
+            return $this;
         }
         $this->type = $dirname;
-        return true;
+        return $this;
     }
 
     /**
@@ -172,7 +172,7 @@ class File extends Cache
     
     public function normalizePath($key)
     {
-        return "{$this->root}{$this->type}/{$key}-file";
+        return "{$this->root}{$this->type}/{$key}";
     }
 
     /**

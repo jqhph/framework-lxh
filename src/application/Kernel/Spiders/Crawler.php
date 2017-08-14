@@ -150,7 +150,7 @@ class Crawler
 
         $type = strtoupper($type);
 
-        echo "[$type] $data{$n}";
+//        echo "[$type] $data{$n}";
     }
 
 }

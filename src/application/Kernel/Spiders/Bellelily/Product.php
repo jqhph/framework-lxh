@@ -31,6 +31,22 @@ class Product extends Finder
      */
     protected $prodApiInfo = [];
 
+    /**
+     * 已采集详情页缓存文件名数组
+     *
+     * @var array
+     */
+    protected $detailFileList = [];
+
+    protected $detailHtmlDir = 'prods-detail-html';
+
+    public function __construct(Handler $handler)
+    {
+        parent::__construct($handler);
+
+        $this->detailFileList = $this->getDetailHtmlFileList();
+    }
+
     protected function api($id)
     {
         return $this->handler->url(
@@ -65,6 +81,11 @@ class Product extends Finder
 
     public function fetch($c = 1, $useCache = true)
     {
+        if (make('http.request')->isCli()) {
+            $this->fetchValidProdIds($c);
+        }
+        return $this->parseDetailHtml();
+
         $prods = [];
 
         // 抓取有效的产品id
@@ -79,12 +100,9 @@ class Product extends Finder
         // 每次抓取3000个产品
         $i = 1;
         while ($data = $this->arrayShift($ids, 1000)) {
-            $records = $this->fetchDetail($data, $c);
+            $count = $this->fetchDetail($data, $c);
 
-            $total += count($records);
-
-            // 缓存数据
-            $this->cache->set('prod-detail-' . $i, $records);
+            $total += $count;
 
             // 暂停1000微妙
             usleep(1000);
@@ -95,36 +113,71 @@ class Product extends Finder
 
         $this->success("抓取产品详情数据结束，总数：{$total}，耗时：{$useTime}");
 
+        // 对已抓取数据进行解析
+        $this->parseDetailHtml();
+
         return $ids;
     }
 
-    // 抓取产品详情页数据
+    protected function getDetailHtmlFileList()
+    {
+        return $this->file->getFileList($this->cache->getBasePath() . $this->detailHtmlDir);
+    }
+
+    /**
+     * 解析已抓取的产品详情页数据，并缓存结果
+     *
+     * @return array
+     */
+    public function parseDetailHtml()
+    {
+        foreach ($this->getDetailHtmlFileList() as & $id) {
+            if (! $html = $this->cache->setType($this->detailHtmlDir)->get($id)) {
+                continue;
+            }
+            $prod = $this->parser('Product');
+
+            // 设置id
+            $prod->id = $id;
+
+            $data = $prod->handler($html);
+
+            $this->cache->setType('prods')->set($id, $data);
+            
+        }
+    }
+
+    // 抓取产品详情页数据，并缓存
     protected function fetchDetail(array & $ids, $c, $retryTimes = 5)
     {
         $client = $this->client();
 
-        $records = [];
-
+        $i = 0;
+        // 批量取出数据
         while ($data = $this->arrayShift($ids, $c)) {
 
             $s = microtime(true);
 
             foreach ($data as & $id) {
-                $url = $this->detailUrl($id);
+                // 如果已经采集过的，则跳过
+                if (in_array($id, $this->detailFileList)) continue;
 
-                $client->get($url);
+                // 批量采集
+                $client->get($this->detailUrl($id));
             }
 
-            $client->then(function ($output, $info, $error, $request) use ($s, $records, $c, $retryTimes) {
+            // 开始抓取数据
+            $client->then(function ($output, $info, $error, $request) use ($s, $i, $c, $retryTimes) {
                 $useTime = round(microtime(true) - $s, 4);
                 // 从接口url中获取产品id
-                $id = $this->getIdFormUrl($request['url'], '/');
+                $id = $this->getIdFormUrl($request['url']);
 
                 // 记录请求结果
                 $this->saveRequestInfo($request['url'], $useTime, $error);
 
                 if ($error) {
                     if ($retryTimes > 0) {
+                        // 重试
                         $t = [$id];
                         $this->fetchDetail($t, $c, $retryTimes - 1);
                     } else {
@@ -133,10 +186,18 @@ class Product extends Finder
 
                     return $this->warning("抓取 [{$request['url']}] 数据出错，错误信息：$error");
                 }
+
+                // 请求成功
+                $this->cache->setType($this->detailHtmlDir);
+
+                // 缓存
+                $this->cache->set($id, $output);
+
+                $i++;
             });
         }
 
-        return $records;
+        return $i;
     }
 
     // 抓取有效的产品id
@@ -170,7 +231,7 @@ class Product extends Finder
         $this->success("抓取有效产品ID结束，总数：{$count}，耗时：{$useTime}。");
 
         // 缓存抓取的数据
-        $this->cache->set($key, $prodIds, $this->timeout);
+        $this->cache->reset()->set($key, $prodIds, $this->timeout);
 
         // 保存最大id为最小id
         $this->saveMinId($this->maxId);
@@ -197,38 +258,43 @@ class Product extends Finder
             foreach ($data as & $r) {
                 $client->get($this->api($r));
             }
-        }
 
-        $client->then(function ($output, $info, $error, $request) use ($s, $c, $retryTimes) {
-            $useTime = round(microtime(true) - $s, 4);
-            // 从接口url中获取产品id
-            $id = $this->getIdFormUrl($request['url'], '/');
+            $client->then(function ($output, $info, $error, $request) use ($s, $c, $retryTimes) {
+                $useTime = round(microtime(true) - $s, 4);
+                // 从接口url中获取产品id
+                $id = $this->getIdFormUrl($request['url'], '/');
 
-            // 记录请求结果
-            $this->saveRequestInfo($request['url'], $useTime, $error);
+                // 记录请求结果
+                $this->saveRequestInfo($request['url'], $useTime, $error);
 
-            if ($error) {
-                if ($retryTimes > 0) {
-                    $this->getNormalizeProdIds([$id], $c, $retryTimes - 1);
-                } else {
-                    return $this->warning("抓取 [{$request['url']}] 数据失败（剩余重试次数0），错误信息：$error");
+                if ($error) {
+                    if ($retryTimes > 0) {
+                        $this->getNormalizeProdIds([$id], $c, $retryTimes - 1);
+                    } else {
+                        return $this->warning("抓取 [{$request['url']}] 数据失败（剩余重试次数0），错误信息：$error");
+                    }
+
+                    return $this->warning("抓取 [{$request['url']}] 数据出错，错误信息：$error");
                 }
 
-                return $this->warning("抓取 [{$request['url']}] 数据出错，错误信息：$error");
-            }
+                // 接口返回false说明没有数据，直接跳过
+                if ($output == 'false') return;
 
-            // 接口返回false说明没有数据，直接跳过
-            if ($output == 'false') return;
+                $output = json_decode($output, true);
 
-            $output = json_decode($output, true);
+                // 缓存api数据
+                $this->cache->setType('prod-api-result')->set($id, $output);
 
-            // 保存接口数据
-            $this->prodApiInfo[$id] = & $output;
-        });
+                // 保存接口数据
+                $this->prodApiInfo[$id] = 1;
+            });
+        }
+
     }
 
     protected function getMinId()
     {
+        return 1;
         $id = $this->cache->get('valid-prod-min');
         return $id ?: 1;
     }

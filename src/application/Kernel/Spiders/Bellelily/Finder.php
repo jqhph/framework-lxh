@@ -5,6 +5,7 @@ namespace Lxh\Kernel\Spiders\Bellelily;
 use Lxh\Http\Client;
 use Lxh\Kernel\Cache\Cache;
 use Lxh\Kernel\Spiders\SimpleHtmlDomNode;
+use \Lxh\File\FileManager;
 
 abstract class Finder
 {
@@ -32,11 +33,35 @@ abstract class Finder
      */
     protected $cache;
 
+    /**
+     * @var FileManager
+     */
+    protected $file;
+
+    protected $parsers = [];
+
     public function __construct(Handler $handler)
     {
         $this->handler = $handler;
 
+        $this->file = file_manager();
+
         $this->cache = cache();
+    }
+
+    /**
+     * 获取解析器
+     *
+     * @param string $name
+     * @return self
+     */
+    protected function parser($name)
+    {
+        if (isset($this->parser[$name])) return $this->parser[$name];
+
+        $class = "Lxh\\Kernel\\Spiders\\Bellelily\\Parsers\\$name";
+
+        return $this->parser[$name] = new $class($this->handler, $this);
     }
 
     /**

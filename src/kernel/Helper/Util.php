@@ -180,7 +180,7 @@ class Util
                     $pre = is_string($k) ? "'$k' => " : '';
                 }
 
-                $txt .= "\n" . static::makeBlank($level) . $pre . static::arrayToText($v, $numericKey, $level + 1) . ',';
+                $txt .= static::makeBlank($level) . $pre . static::arrayToText($v, $numericKey, $level + 1) . ",\n";
 
                 continue;
             }

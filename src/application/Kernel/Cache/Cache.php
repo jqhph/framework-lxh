@@ -57,6 +57,6 @@ abstract class Cache
 
     public function reset()
     {
-
+        return $this;
     }
 }

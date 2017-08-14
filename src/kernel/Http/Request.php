@@ -41,7 +41,7 @@ class Request extends Message\ServerRequest
 	{
 		parent::__construct();
 
-		$this->protocolVersion = str_replace('HTTP/', '', $_SERVER['SERVER_PROTOCOL']);
+		$this->protocolVersion = str_replace('HTTP/', '', get_value($_SERVER, 'SERVER_PROTOCOL'));
 
 		$this->initUploadFiles();
 
