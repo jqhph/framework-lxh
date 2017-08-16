@@ -66,9 +66,9 @@ class Builder
         $this->query = $query;
     }
 	
-    public function from($table, $p2 = null) 
+    public function from($table) 
     {
-        $this->tableName = $table;
+        $this->tableName = & $table;
 
         return $this;
     }

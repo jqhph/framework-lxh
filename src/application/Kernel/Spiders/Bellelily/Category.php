@@ -19,7 +19,7 @@ class Category extends Finder
      * @var array
      */
     protected $tops = [
-        ['id' => '610', 'name' => 'Men', 'url' => '/men-t-610']
+        ['id' => '610', 'name' => 'Men', 'url' => '/men-t-610', 'parent_id' => 0]
     ];
 
     /**
@@ -27,7 +27,7 @@ class Category extends Finder
      *
      * @var int
      */
-    protected $timeout = 1800;
+    protected $timeout = 0;
 
     /**
      * 记录并发抓取时出错的url，并发抓取结束后重试
@@ -35,6 +35,8 @@ class Category extends Finder
      * @var array
      */
     protected $errorUrl = [];
+
+    protected $cacheKey = 'belle-categories';
 
     /**
      * 抓取顶级分类数据
@@ -131,6 +133,7 @@ class Category extends Finder
      */
     protected function parseCatePageToSeo(& $dom)
     {
+        return [];
         if (is_string($dom)) {
             $dom = $this->dom($dom);
         }
@@ -168,7 +171,9 @@ class Category extends Finder
      */
     public function fetch($c = 1, $useCache = true)
     {
-        if ($useCache && ($records = $this->cache->get('belle-categories'))) {
+        return $this->install();
+
+        if ($useCache && ($records = $this->cache->get($this->cacheKey))) {
             $count = count($records);
             $this->info("获取分类数据成功，缓存中存在数据，总数：{$count}！");
             return $records;
@@ -195,9 +200,32 @@ class Category extends Finder
         $this->success("抓取子分类数据结束，共抓取{$total}条数据，耗时：$useTime");
 
         // 缓存12小时
-        $this->cache->set('belle-categories', $records, $this->timeout);
+        $this->cache->set($this->cacheKey, $records);
+
+        // 安装数据
+        $this->install($records);
 
         return $records;
+    }
+
+    protected function install(array & $data = [])
+    {
+        $this->info('开始安装分类数据 ...');
+
+        $s = microtime(true);
+
+        if (! $data) {
+            $data = $this->cache->get($this->cacheKey);
+
+        }
+
+        $total = count($data);
+
+        $count = $this->installer('Category')->handler($data);
+
+        $u = round(microtime(true) - $s, 4);
+
+        $this->success("安装结束，共有{$total}条数据，耗时：{$u}");
     }
 
     /**
@@ -283,12 +311,15 @@ class Category extends Finder
 
             // 三级分类
             foreach ((array) $dd->find('dd') as & $thridDd) {
+
                 $a = $thridDd->find('a', 0);
+
+                $parentHref = $thridDd->parent()->prev_sibling()->find('a', 0)->href;
 
                 $this->setRecord([
                     'id' => $this->getIdFormUrl($a->href),
                     'name' => $a->innertext,
-                    'parent_id' => $id,
+                    'parent_id' => $this->getIdFormUrl($parentHref),
                     'SEO' => $this->fetchSeoInfo($this->handler->url($a->href))
                 ]);
 

@@ -26,8 +26,7 @@ $config['add-config'] = [
     // 数据库配置文件
     __ENV__ . '/db/config',
     __ENV__ . '/app',
-    'client',
-    'system'
+    __ENV__ . '/home',
 
 ];
 
@@ -41,11 +40,11 @@ $config['add-config-name'] = [
 $config['modules'] = ['Admin', 'Home'];
 
 // 开启子域名部署
-$config['domain-deploy'] = false;
+$config['domain-deploy'] = true;
 // 配置子域名指向模块
 $config['domain-deploy-config'] = [
-    'www.jqh.com'   => 'Api',
-    'admin.jqh.com' => 'Admin'
+    'new.suitshe.com'   => 'Home',
+    'dev.lxh.com' => 'Admin',
 ];
 
 /**
@@ -71,7 +70,7 @@ $config['middleware'] = [
 
     ],
     'Home' => [
-
+        Lxh\Home\Middleware\Globals::class,
     ],
 ];
 

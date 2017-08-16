@@ -141,7 +141,7 @@ class PDO
 
     
     // 批量添加
-    public function batchAdd($table = '', array & $data)
+    public function batchAdd($table = '', array & $data, $replace = false)
     {
         $field  = '';
         $values = '';
@@ -170,9 +170,10 @@ class PDO
             $vals    = '';
         }
         $values = substr($values, 0, -1);
-        //
+
+        $pre = $replace ? 'REPLACE' : 'INSERT';
     
-        $sql = 'INSERT INTO `' . $table . '` (' . $field . ') VALUES ' . $values;
+        $sql = $pre . ' INTO `' . $table . '` (' . $field . ') VALUES ' . $values;
     
         self::$lastSql = & $sql;
 

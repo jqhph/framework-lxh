@@ -22,7 +22,7 @@ class Product extends Finder
      *
      * @var int
      */
-    protected $timeout = 1800;
+    protected $timeout = 0;
 
     /**
      * 从接口获取的产品数据
@@ -79,14 +79,40 @@ class Product extends Finder
         );
     }
 
+    // 安装数据
+    protected function install(array & $data = [])
+    {
+        $this->info('开始安装产品数据 ...');
+
+        $s = microtime(true);
+
+        if (! $data) {
+            $flist = $this->file->getFileList($this->cache->getTypePath('prods'));
+
+            $data = [];
+
+            $this->cache->setType('prods');
+
+            foreach ($flist as & $id) {
+                if ($prod = $this->cache->get($id)) {
+                    $data[] = $prod;
+                }
+            }
+        }
+
+        $total = count($data);
+        
+        $count = $this->installer('Product')->handler($data);
+
+        $u = round(microtime(true) - $s, 4);
+
+        $this->success("安装结束，共有{$total}条数据，耗时：{$u}");
+    }
+
     public function fetch($c = 1, $useCache = true)
     {
-        if (make('http.request')->isCli()) {
-            $this->fetchValidProdIds($c);
-        }
-        return $this->parseDetailHtml();
 
-        $prods = [];
+        return $this->install();
 
         // 抓取有效的产品id
         $ids = $this->fetchValidProdIds($c);
@@ -114,7 +140,10 @@ class Product extends Finder
         $this->success("抓取产品详情数据结束，总数：{$total}，耗时：{$useTime}");
 
         // 对已抓取数据进行解析
-        $this->parseDetailHtml();
+        $prods = $this->parseDetailHtml();
+
+        // 安装数据
+        $this->install($prods);
 
         return $ids;
     }
@@ -131,7 +160,13 @@ class Product extends Finder
      */
     public function parseDetailHtml()
     {
-        foreach ($this->getDetailHtmlFileList() as & $id) {
+        $this->info('开始解析详情页html数据 ... ');
+
+        $s = microtime(true);
+
+        $prods = [];
+
+        foreach ($this->getDetailHtmlFileList() as $i => & $id) {
             if (! $html = $this->cache->setType($this->detailHtmlDir)->get($id)) {
                 continue;
             }
@@ -143,8 +178,17 @@ class Product extends Finder
             $data = $prod->handler($html);
 
             $this->cache->setType('prods')->set($id, $data);
-            
+
+            $prods[] = $data;
         }
+
+        $u = round(microtime(true) - $s, 4);
+
+        $count = count($prods);
+
+        $this->success("解析详情页数据结束，共解析{$count}个界面，耗时：{$u}");
+
+        return $prods;
     }
 
     // 抓取产品详情页数据，并缓存
@@ -231,7 +275,7 @@ class Product extends Finder
         $this->success("抓取有效产品ID结束，总数：{$count}，耗时：{$useTime}。");
 
         // 缓存抓取的数据
-        $this->cache->reset()->set($key, $prodIds, $this->timeout);
+        $this->cache->setType()->set($key, $prodIds, $this->timeout);
 
         // 保存最大id为最小id
         $this->saveMinId($this->maxId);

@@ -40,6 +40,8 @@ abstract class Finder
 
     protected $parsers = [];
 
+    protected $installers = [];
+
     public function __construct(Handler $handler)
     {
         $this->handler = $handler;
@@ -62,6 +64,15 @@ abstract class Finder
         $class = "Lxh\\Kernel\\Spiders\\Bellelily\\Parsers\\$name";
 
         return $this->parser[$name] = new $class($this->handler, $this);
+    }
+
+    protected function installer($name)
+    {
+        if (isset($this->installers[$name])) return $this->installers[$name];
+
+        $class = "Lxh\\Kernel\\Spiders\\Bellelily\\Install\\$name";
+
+        return $this->installers[$name] = new $class($this->handler, $this);
     }
 
     /**
@@ -213,13 +224,13 @@ abstract class Finder
      *
      * @return array
      */
-    protected function arrayShift(array & $data, $num)
+    public function arrayShift(array & $data, $num)
     {
         if (! $data) return [];
 
         $content = [];
         for ($i = 0; $i < $num; $i ++) {
-            if (count($data) < 1) break;
+            if (count($data) < 1) return $content;
 
             $content[] = array_shift($data);
         }

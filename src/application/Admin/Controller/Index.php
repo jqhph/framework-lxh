@@ -18,7 +18,7 @@ class Index extends Controller
     }
 
 
-    public function actionIndex()
+    public function actionList()
     {
         return fetch_complete_view();
     }

@@ -19,11 +19,11 @@ class Test extends Controller
     public function actionTest(Request $req, Response $resp)
     {
         $data = [];
-
-
+        
         $crawler = new \Lxh\Kernel\Spiders\Crawler();
 
-        $crawler->makeProdsData();
+//        $crawler->makeProdsData();
+        $crawler->makeCategoriesData();
 
         $crawler->outputRequestResult();
 //return $sorts;

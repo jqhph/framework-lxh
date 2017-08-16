@@ -12,9 +12,8 @@ $config[] = [
     'pattern' => '/',
     'method' => '*',
     'params' => [
-//        'module' => 'Home',
         'controller' => 'Index',
-        'action' => 'Index'
+        'action' => 'List'
     ]
 ];
 

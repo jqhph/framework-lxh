@@ -16,13 +16,18 @@ class Product extends Parser
 
         $leftDom = $dom->find('.productLeft', 0);
 
+        if (! is_object($leftDom)) {
+            $this->finder->error("解析数据失败，不存在'.productLeft'节点，id：{$this->id}");
+            return [];
+        }
+
         $prod['id'] = $this->id;
 
         // seo信息
         $prod['SEO'] = $this->parseSEO($dom);
 
-        // 获取
-        $prod['name'] = $leftDom->find('.productInfoBox h1', 0)->innertext;
+        // 产品名称
+        $prod['name'] = get_value($content, 'goods_name');
 
         // 描述
         $prod['desc'] = $this->parseDesc($leftDom);
@@ -82,34 +87,61 @@ class Product extends Parser
     {
         $data = [];
 
-        $title = [];
+        $anotherType = false;
 
-        foreach ($dom->find('.szieTableBox table tr') as & $tr) {
+        foreach ($dom->find('.szieTableBox table tr') as $i => & $tr) {
             // 子标题跳过
             if ($tr->class == 'border_bottom') continue;
 
             $sizeName = '';
 
+            // 标题
+            foreach ($tr->find('th') as $k => & $th) {
+                if ($k == 0) continue;
+
+                $content = ($p = $th->find('p', 0)) ? $p : $th;
+
+                //标题
+                $data['title'][] = trim($content->innertext);
+                $anotherType = true;
+            }
+
             foreach ($tr->find('td') as $k => & $td) {
-                switch ($tr->class) {
-                    case 'subtitle':
-                        if ($k == 0) continue;
-                        //标题
-                        $data['title'][] = $td->find('p', 0)->innertext;
-                        break;
-                    default:
-                        if ($k == 0) {
-                            $sizeName = trim(str_replace('&nbsp;', '', $td->find('p', 0)->innertext));
-                            $data[$sizeName] = [];
-                        } else {
-                            if (! $td->class) continue;
-                            // 只记录厘米
-                            $data[$sizeName][] = trim(str_replace('&nbsp;', '', $td->find('p', 0)->innertext));
-                        }
+                $content = ($p = $td->find('p', 0)) ? $p : $td->find('span', 0);
+                $content = $content ?: $td;
+
+                if ($i == 0 && !$anotherType) {
+                    if ($k == 0) continue;
+                    //标题
+                    $data['title'][] = trim(str_replace('&nbsp;', '', $content->innertext));
+//                    break;
+                } else {
+                    if ($k == 0) {
+                        $sizeName = trim(str_replace('&nbsp;', '', $content->innertext));
+                        $data[$sizeName] = [];
+                    } else {
+                        if ($k % 2 == 0) continue;
+                        // 只记录厘米
+                        $data[$sizeName][] = trim(str_replace('&nbsp;', '', $content->innertext));
+                    }
                 }
+
             }
         }
 
+        $data['img_size'] = $this->parseArgxSizeImg($dom);
+
+        return $data;
+    }
+
+    // 图片尺码
+    protected function parseArgxSizeImg($dom)
+    {
+        $data = [];
+        foreach ($dom->find('.sizeTable .sizeTableTitle') as $k => $title) {
+            $data[$k]['title'] = $title->innertext;
+            $data[$k]['img'] = $dom->find('.sizeTable img', $k)->src;
+        }
         return $data;
     }
 
@@ -126,7 +158,7 @@ class Product extends Parser
         foreach ($prod['desc'] as $name => & $value) {
             if (in_array($name, $notAttrs)) continue;
 
-            $data[$name] = $value;
+            $data[$name] = trim($value);
         }
 
         return $data;
@@ -192,7 +224,11 @@ class Product extends Parser
     {
         $data = [];
         foreach ($leftDom->find('#describe li') as & $li) {
-            $key = $li->find('span', 0)->innertext;
+            if (! $span = $li->find('span', 0)) {
+                continue;
+            }
+
+            $key = $span->innertext;
 
             $key = trim(str_replace(':', '', $key));
 

@@ -164,10 +164,9 @@ LEFT JOIN `user` ON `user_up`.user_id = `user`.id
 	
 	/**
 	 * 选择模块（表名）, from表名不支持AS
-	 * */
+	 */
 	public function from($p1) 
 	{
-	    $this->entityType = $p1;
 	    $this->builder->from($p1);
 	    return $this;
 	}

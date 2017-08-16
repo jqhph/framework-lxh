@@ -31,7 +31,7 @@ class Handler extends Basic
      *
      * @var int
      */
-    protected $concurrenceNum = 3;
+    protected $concurrenceNum = 5;
 
     /**
      * 暂停时间（毫秒）

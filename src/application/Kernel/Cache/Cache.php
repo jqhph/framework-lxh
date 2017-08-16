@@ -29,6 +29,14 @@ abstract class Cache
     abstract public function get($key);
 
     /**
+     * 是否使用缓存
+     * 是返回true，否则返回false
+     *
+     * @return bool
+     */
+    abstract public function useCache();
+
+    /**
      * 删除缓存
      *
      * @param string $key

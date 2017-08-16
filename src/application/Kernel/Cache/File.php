@@ -28,10 +28,18 @@ class File extends Cache
      *
      * @var string
      */
-    protected $type = 'default';
+    protected $type;
 
-    public function __construct()
+    protected $defaultType = 'default';
+
+    /**
+     * File constructor.
+     * @param string $name 文件夹名，默认为空
+     */
+    public function __construct($name = '')
     {
+        $this->type = $name;
+
         $this->root = __DATA_ROOT__ . 'data/file-cache/';
 
         $this->file = file_manager();
@@ -71,24 +79,43 @@ class File extends Cache
         return $this;
     }
 
+    public function getType()
+    {
+        return $this->type ?: $this->defaultType;
+    }
+
+    public function getTypePath($name)
+    {
+        return $this->getBasePath() . $name;
+    }
+
     /**
      * 移除缓存目录类型下的所有缓存
      *
-     * @param  string $dirname 目录名
+     * @param  string $dirname 目录名，传空则清除默认目录
      * @return bool
      */
-    public function removeType($dirname)
+    public function removeType($dirname = '')
     {
-        if (empty($dirname)) {
-            return false;
-        }
+        $dirname = $dirname ?: $this->defaultType;
+
         return $this->file->removeInDir($this->getBasePath() . $dirname);
     }
 
     public function reset()
     {
-        $this->type = 'default';
         return $this;
+    }
+
+    /**
+     * 是否使用缓存
+     * 是返回true，否则返回false
+     *
+     * @return bool
+     */
+    public function useCache()
+    {
+        return USE_CACHE;
     }
 
     /**
@@ -99,7 +126,7 @@ class File extends Cache
      */
     public function get($key)
     {
-        if (empty($key)) {
+        if (! $this->useCache() || empty($key)) {
             return false;
         }
         $data = $this->file->getPhpContents($this->normalizePath($key));
@@ -172,7 +199,9 @@ class File extends Cache
     
     public function normalizePath($key)
     {
-        return "{$this->root}{$this->type}/{$key}";
+        $type = $this->getType();
+
+        return "{$this->root}{$type}/{$key}";
     }
 
     /**

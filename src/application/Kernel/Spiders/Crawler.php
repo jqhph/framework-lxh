@@ -30,6 +30,8 @@ class Crawler
     {
         // 无限时间
         set_time_limit(0);
+
+        ini_set('memory_limit', '728M');
     }
 
     /**
@@ -140,7 +142,9 @@ class Crawler
     public function output($data, $type = 'info')
     {
         // 判断是否是命令行
-        if (make('http.request')->isCli()) {
+        $isCli = make('http.request')->isCli();
+
+        if ($isCli) {
             $n = "\n";
         } else {
             $n = '<hr>';
@@ -150,7 +154,7 @@ class Crawler
 
         $type = strtoupper($type);
 
-//        echo "[$type] $data{$n}";
+        if (! $isCli) echo "[$type] $data{$n}";
     }
 
 }

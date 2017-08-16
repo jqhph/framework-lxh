@@ -50,6 +50,8 @@ class Model extends Entity
      */
     protected $container;
 
+    protected $connectionType = 'primary';
+
     /**
      * @var Dispatcher
      */
@@ -205,9 +207,9 @@ class Model extends Entity
     /**
      * @return Query
      */
-    protected function query($name = 'primary')
+    protected function query($name = null)
     {
-        return query($name)->from($this->tableName);
+        return query($name ?: $this->connectionType)->from($this->tableName);
     }
 
 }

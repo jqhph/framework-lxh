@@ -20,11 +20,10 @@ $container->singleton('router', function (Container $container) {
 
     $defaultRoutePath = __ROOT__ . 'config/route/route.php';
 
-    $domainDeploy = config('domain-deploy');
     // 判断是否开启了子域名部署
-    if ($domainDeploy) {
+    if (config('domain-deploy')) {
         $domains   = config('domain-deploy-config');
-        $module    = Arr::getValue($domains, $request->host());
+        $module    = get_value($domains, $request->host());
         $routeFile = __ROOT__ . 'config/route/' . $module . '.php';
 
         if (! is_file($routeFile)) {
