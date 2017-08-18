@@ -84,21 +84,21 @@ function events()
 }
 
 // 加载js
-function load_js($name, $dir = 'js')
+function load_js($name, $dir = 'js', $module = __MODULE__)
 {
-    echo "<script src=\"{$GLOBALS['resource-server']}/static/{$GLOBALS['resource-version']}/lib/$dir/$name.js?v={$GLOBALS['js-version']}\"></script>";
+    echo "<script src=\"{$GLOBALS['resource-server']}/static/{$GLOBALS['resource-version']}/{$module}/lib/$dir/$name.js?v={$GLOBALS['js-version']}\"></script>";
 }
 
 // 加载css
-function load_css($name, $dir = 'css')
+function load_css($name, $dir = 'css', $module = __MODULE__)
 {
-    echo "<link href=\"{$GLOBALS['resource-server']}/static/{$GLOBALS['resource-version']}/$dir/$name.css?v={$GLOBALS['css-version']}\" rel=\"stylesheet\" type=\"text/css\" />";
+    echo "<link href=\"{$GLOBALS['resource-server']}/static/{$GLOBALS['resource-version']}/{$module}/$dir/$name.css?v={$GLOBALS['css-version']}\" rel=\"stylesheet\" type=\"text/css\" />";
 }
 
 // 加载图片
-function load_img($name, $dir = 'images')
+function load_img($name, $dir = 'images', $module = __MODULE__)
 {
-    echo "{$GLOBALS['resource-server']}/static/{$GLOBALS['resource-version']}/$dir/$name";
+    echo "{$GLOBALS['resource-server']}/static/{$GLOBALS['resource-version']}/{$module}/$dir/$name";
 }
 
 /**
@@ -212,20 +212,11 @@ function logger($channel = 'exception')
 // 获取request参数
 function I($name = null, $default = null, $isEmpty = false)
 {
-    if (! $name) {
-        return file_get_contents('php://input');
-    }
+    if (! $name) return file_get_contents('php://input');
 
-    if ($isEmpty) {
-        return empty($_REQUEST[$name]) ? $default : $_REQUEST[$name];
-    }
+    if ($isEmpty) return empty($_REQUEST[$name]) ? $default : $_REQUEST[$name];
 
     return isset($_REQUEST[$name]) ? $_REQUEST[$name] : $default;
-}
-
-function redirect_404($msg = null)
-{
-
 }
 
 /**
@@ -289,10 +280,8 @@ function assign($key, $value)
  * @param  array  $vars 要传递到模板的值，只有当前模板可以用
  * @return string
  */
-function fetch_complete_view($action = __ACTION__, array $vars = [])
+function fetch_complete_view($action = __ACTION__, array $vars = [], $controller = __CONTROLLER__)
 {
-    $controller = __CONTROLLER__;
-
     $view = $GLOBALS['__container__']->make('view');
 
     return $view->fetch('Public/header') . $view->fetch("$controller/$action", $vars) . $view->fetch('Public/footer');

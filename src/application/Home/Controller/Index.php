@@ -11,6 +11,14 @@ class Index extends Controller
 {
     public function actionList()
     {
+        $cache = cache('home');
+
+        $key = 'i' . currency()->current();
+
+        if ($data = $cache->get($key)) {
+            return $data;
+        }
+
         $carousel = $this->getCarousel();
 
         $commends = $this->getRecommend();
@@ -33,7 +41,12 @@ class Index extends Controller
         assign('reImgs', $commends['imgs']);
         assign('carousel', $carousel);
 
-        return fetch_complete_view('List');
+        $data = fetch_complete_view('List');
+
+        // 缓存半小时
+        $cache->set($key, $data, 1800);
+
+        return $data;
     }
 
     // 获取轮播窗配置

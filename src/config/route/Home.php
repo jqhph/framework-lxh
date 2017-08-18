@@ -21,6 +21,18 @@ $config[] = [
 
 // 新品页
 $config[] = [
+    'pattern' => '/404.html',
+    'method' => 'GET',
+    'params' => [
+        'auth' => false,
+        'module' => 'Home',
+        'controller' => 'App',
+        'action' => 'NotFound'
+    ]
+];
+
+// 新品页
+$config[] = [
     'pattern' => '/new.html',
     'method' => 'GET',
     'params' => [
@@ -40,6 +52,31 @@ $config[] = [
         'module' => 'Home',
         'controller' => 'Produce',
         'action' => 'Hot'
+    ]
+];
+
+// 搜索页
+$config[] = [
+    'pattern' => '/search.html',
+    'method' => 'GET',
+    'params' => [
+        'auth' => false,
+        'module' => 'Home',
+        'controller' => 'App',
+        'action' => 'Search'
+    ]
+];
+
+
+// 文章界面
+$config[] = [
+    'pattern' => '/article/@([a-zA-Z]+)\.(html|htm)$@',
+    'method' => 'GET',
+    'params' => [
+        'auth' => false,
+        'module' => 'Home',
+        'controller' => 'Article',
+        'action' => 1
     ]
 ];
 
@@ -96,8 +133,8 @@ $config[] = [
 $config[] = [
     'pattern' => '/@([a-zA-Z_]+)\.(html|htm)$@',
     'method' => 'GET',
-    'params' => [
-        'auth' => false,
+    '' => [
+        'auparamsth' => false,
         'module' => 'Home',
         'controller' => 1,
         'action' => 'List'

@@ -24,7 +24,7 @@ $config['resource-server'] = '';
 $config['resource-version'] = 'v1.0';
 
 // seajs配置
-$base = "{$config['resource-server']}/static/{$config['resource-version']}";
+$base = "{$config['resource-server']}/static/{$config['resource-version']}/Admin";
 $config['sea-config'] = [
     // 设置路径，方便跨目录调用
     'paths' => [
