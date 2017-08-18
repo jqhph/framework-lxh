@@ -27,7 +27,7 @@ $config['add-config'] = [
     __ENV__ . '/db/config',
     __ENV__ . '/app',
     __ENV__ . '/home',
-
+    __ENV__ . '/ucenter',
 ];
 
 // 增加配置文件，并使用文件名作为key
@@ -37,15 +37,16 @@ $config['add-config-name'] = [
 
 // 模块设定, 支持多模块, 多个用数组表示
 // 如果设置了多模块, 且没有开启子域名部署, 配置路由的时候默认指向第一个模块, 如需走第二个模块需要在路由配置中使用"module"参数指定
-$config['modules'] = ['Admin', 'Home'];
+$config['modules'] = ['Admin', 'Home', 'Ucenter'];
 
 // 开启子域名部署
 $config['domain-deploy'] = true;
-// 配置子域名指向模块
-$config['domain-deploy-config'] = [
-    'new.suitshe.com'   => 'Home',
-    'dev.lxh.com' => 'Admin',
-];
+// 配置子域名指向模块，已移至app.php配置文件
+//$config['domain-deploy-config'] = [
+//    'wo.suitshe.com'   => 'Ucenter',
+//    'new.suitshe.com'   => 'Home',
+//    'dev.lxh.com' => 'Admin',
+//];
 
 /**
  * 事件监听配置

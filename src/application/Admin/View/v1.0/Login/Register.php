@@ -8,14 +8,14 @@
     <meta name="author" content="Coderthemes">
 
     <!-- App Favicon -->
-    <link rel="shortcut icon" href="<?php load_img('favicon.ico'); ?>">
+    <link rel="shortcut icon" href="<?php echo load_img('favicon.ico'); ?>">
 
     <!-- App title -->
     <title><?php echo $language->translateWithGolobal('web-title');?></title>
 
     <!-- App CSS -->
     <?php
-        load_js('util');
+        echo load_js('util');
 
     ?>
 

@@ -8,7 +8,7 @@
             <li class="list-group-item">
                 <a href="#" class="user-list-item">
                     <div class="avatar">
-                        <img src="<?php load_img('users/avatar-2.jpg') ?>" alt="">
+                        <img src="<?php echo load_img('users/avatar-2.jpg') ?>" alt="">
                     </div>
                     <div class="user-desc">
                         <span class="name">Michael Zenaty</span>

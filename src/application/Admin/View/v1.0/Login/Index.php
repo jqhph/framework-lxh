@@ -11,17 +11,17 @@
     <meta name="author" content="Coderthemes">
 
     <!-- App Favicon -->
-    <link rel="shortcut icon" href="<?php load_img('favicon.ico'); ?>">
+    <link rel="shortcut icon" href="<?php echo load_img('favicon.ico'); ?>">
 
     <!-- App title -->
     <title><?php echo $language->translateWithGolobal('web-title');?></title>
 
     <?php
-        load_css('bootstrap.min');
+        echo load_css('bootstrap.min');
 
-        load_js('jquery.min');
+        echo load_js('jquery.min');
 
-        load_js('util');
+        echo load_js('util');
     ?>
 
     <!-- HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries -->

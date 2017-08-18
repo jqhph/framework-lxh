@@ -43,6 +43,11 @@ class Kc
         //} 
     }
 
+    public function cookie(array $cookies)
+    {
+        return $this->cookies = & $cookies;
+    }
+
     public function get($url, $data = array())
     {
         $query = !empty($data) ? http_build_query($data) : '';

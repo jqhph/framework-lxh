@@ -14,13 +14,13 @@
 
     <?php
     // <!--Morris Chart CSS -->
-//        load_css('morris', 'lib/plugins/morris');
+//        echo load_css('morris', 'lib/plugins/morris');
 
     // App css
-    load_css('bootstrap.min');
-    load_css('menu');
+    echo load_css('bootstrap.min');
+    echo load_css('menu');
     
-    load_js('util');
+    echo load_js('util');
     ?>
 
     <!-- HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries -->

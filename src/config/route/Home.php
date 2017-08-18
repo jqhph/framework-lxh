@@ -7,13 +7,15 @@
  */
 $config = [];
 
+$module = 'Home';
+
 // 首页
 $config[] = [
     'pattern' => '/',
     'method' => 'GET',
     'params' => [
         'auth' => false,
-        'module' => 'Home',
+        'module' => & $module,
         'controller' => 'Index',
         'action' => 'List'
     ]
@@ -25,7 +27,7 @@ $config[] = [
     'method' => 'GET',
     'params' => [
         'auth' => false,
-        'module' => 'Home',
+        'module' => & $module,
         'controller' => 'App',
         'action' => 'NotFound'
     ]
@@ -37,7 +39,7 @@ $config[] = [
     'method' => 'GET',
     'params' => [
         'auth' => false,
-        'module' => 'Home',
+        'module' => & $module,
         'controller' => 'Produce',
         'action' => 'New'
     ]
@@ -49,7 +51,7 @@ $config[] = [
     'method' => 'GET',
     'params' => [
         'auth' => false,
-        'module' => 'Home',
+        'module' => & $module,
         'controller' => 'Produce',
         'action' => 'Hot'
     ]
@@ -61,7 +63,7 @@ $config[] = [
     'method' => 'GET',
     'params' => [
         'auth' => false,
-        'module' => 'Home',
+        'module' => & $module,
         'controller' => 'App',
         'action' => 'Search'
     ]
@@ -74,7 +76,7 @@ $config[] = [
     'method' => 'GET',
     'params' => [
         'auth' => false,
-        'module' => 'Home',
+        'module' => & $module,
         'controller' => 'Article',
         'action' => 1
     ]
@@ -86,7 +88,7 @@ $config[] = [
     'method' => 'GET,POST',
     'params' => [
         'auth' => false,
-        'module' => 'Home',
+        'module' => & $module,
         'controller' => 'User',
         'action' => 'auth'
     ]
@@ -97,7 +99,7 @@ $config[] = [
     'method' => '*',
     'params' => [
         'auth' => false,
-        'module' => 'Home',
+        'module' => & $module,
         'controller' => ':controller',
         'action' => ':action'
     ]
@@ -109,7 +111,7 @@ $config[] = [
     'method' => 'GET',
     'params' => [
         'auth' => false,
-        'module' => 'Home',
+        'module' => & $module,
         'controller' => 'Produce',
         'action' => 'Detail',
         'id' => 2
@@ -122,7 +124,7 @@ $config[] = [
     'method' => 'GET',
     'params' => [
         'auth' => false,
-        'module' => 'Home',
+        'module' => & $module,
         'controller' => 'Sort',
         'action' => 'Detail',
         'id' => 2
@@ -135,7 +137,7 @@ $config[] = [
     'method' => 'GET',
     'params' => [
         'auth' => false,
-        'module' => 'Home',
+        'module' => & $module,
         'controller' => 1,
         'action' => 'List'
     ]
@@ -146,7 +148,7 @@ $config[] = [
     'pattern' => '*',
     'params' => [
         'auth' => false,
-        'module' => 'Home',
+        'module' => & $module,
         'controller' => 'App',
         'action' => 'NotFound'
     ]

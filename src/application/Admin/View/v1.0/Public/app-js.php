@@ -6,17 +6,17 @@
  * Time: 22:34
  */
 
-load_css('pages');
-//load_css('responsive');
+echo load_css('pages');
+//echo load_css('responsive');
 
-load_css('components');
-load_css('icons');
-load_css('core');
+echo load_css('components');
+echo load_css('icons');
+echo load_css('core');
 
-load_js('bootstrap.min');
-load_js('fastclick');
-load_js('detect');
-load_js('jquery.slimscroll');
+echo load_js('bootstrap.min');
+echo load_js('fastclick');
+echo load_js('detect');
+echo load_js('jquery.slimscroll');
 
 ?>
 
@@ -57,5 +57,5 @@ load_js('jquery.slimscroll');
     }
 </script>
 <?php
-load_js('app');
+echo load_js('app');
 ?>

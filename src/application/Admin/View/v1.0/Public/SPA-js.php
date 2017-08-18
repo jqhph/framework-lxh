@@ -6,15 +6,15 @@
  * Time: 22:34
  */
 // <!--Morris Chart CSS -->
-//    load_css('morris', 'plugins/morris');
+//    echo load_css('morris', 'plugins/morris');
 
 // App css
-load_css('bootstrap.min');
-load_css('pages');
-load_css('menu');
-load_css('responsive');
+echo load_css('bootstrap.min');
+echo load_css('pages');
+echo load_css('menu');
+echo load_css('responsive');
 
-//    load_js('modernizr.min');
+//    echo load_js('modernizr.min');
 
 ?>
 
@@ -53,6 +53,6 @@ load_css('responsive');
     }
 </script>
 <?php
-load_js('router');
-load_js('app');
+echo load_js('router');
+echo load_js('app');
 ?>

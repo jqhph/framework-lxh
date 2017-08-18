@@ -177,7 +177,7 @@ class Dispatcher implements Router
         $patharr = $this->getPathArr();
 
         $pathlen = count($patharr);
-console_info($patharr);
+
         // 匹配路由
         foreach ($this->getRouterRules() as & $rule) {
             if (empty($rule['pattern'])) continue;

@@ -9,7 +9,8 @@
 use Lxh\Admin\Acl\Permit;
 use Lxh\Kernel\Support\Page;
 use Lxh\Kernel\Cache\Cache;
-use Lxh\Home\Url;
+use Lxh\Home\Url as HomeUrl;
+use Lxh\Ucenter\Url as UcenterUrl;
 use Lxh\Home\Kernel\Currency;
 
 /**
@@ -59,13 +60,25 @@ function cache($name = '', $driver = null)
 /**
  * url生成器
  *
- * @return Url
+ * @return HomeUrl
  */
 function home_url()
 {
     static $instance = null;
 
-    return $instance ?: ($instance = new Url());
+    return $instance ?: ($instance = new HomeUrl());
+}
+
+/**
+ * url生成器
+ *
+ * @return UcenterUrl
+ */
+function ucenter_url()
+{
+    static $instance = null;
+
+    return $instance ?: ($instance = new UcenterUrl());
 }
 
 /**
@@ -108,4 +121,19 @@ function return_usd_price($price)
      * 2.perlin 的价格为 beads 基准价格的1.5倍
      */
     return ceil(($price * $priceControl / $defaultExchangeRate) * 100) / 100;
+}
+
+// 获取国家配置数组
+function get_countries_data()
+{
+    static $data = null;
+
+    if ($data !== null) return $data;
+
+    $path = __DATA_ROOT__ . 'cache/global/allCountries';
+
+    if (is_file($path)) {
+        return $data = include $path;
+    }
+    return $data;
 }

@@ -66,14 +66,14 @@ class Builder
         $this->query = $query;
     }
 	
-    public function from($table) 
+    public function from(& $table)
     {
         $this->tableName = & $table;
 
         return $this;
     }
 	
-    public function where($p1, $p2 = '=', $p3 = null, $table = null) 
+    public function where(& $p1, & $p2 = '=', $p3 = null, $table = null)
     {
         $tb = $table ? $table : $this->tableName;
     
@@ -172,13 +172,15 @@ class Builder
 	 */
 	public function count()
 	{
-		$r = $this->select("COUNT(*) AS `TOTAL`")->readRow();
+        $t = 'COUNT(*) AS `TOTAL`';
+		$r = $this->select($t)->readRow();
 		return $r ? $r['TOTAL'] : 0;
 	}
 	
 	public function sum($field, $as = 'SUM')
 	{
-		$this->select("SUM(`$field`) AS `$as`");
+        $t = "SUM(`$field`) AS `$as`";
+		$this->select($t);
 		return $this;
 	}
 	
@@ -343,7 +345,7 @@ class Builder
         }
     }
 	
-    public function orWhere($p1, $p2 = '=', $p3 = null, $table = null) 
+    public function orWhere(& $p1, $p2 = '=', $p3 = null, $table = null)
     {
         $tb = $table ? $table : $this->tableName;
         
@@ -351,7 +353,7 @@ class Builder
         return $this;
     }
     
-    public function having($p1, $p2 = '=', $p3 = null, $table = null)
+    public function having(& $p1, $p2 = '=', $p3 = null, $table = null)
     {
         $tb = $table ? $table : $this->tableName;
         
@@ -379,7 +381,7 @@ class Builder
 	 `menu_content`.`content` AS content,`wechat_menu_type`.`code` AS code,
 	 `wechat_menu_type`.`menu_type` AS menuTyp
 	 */
-    public function select($data) 
+    public function select(& $data)
     {
         $this->fieldHandler($this->field, $data, $this->tableName);
         return $this;
@@ -387,14 +389,11 @@ class Builder
 	
     protected function fieldHandler(& $fieldsContainer, & $data, $table) 
     {
-        if (is_string($data)) {
-            if (strpos($data, '(') !== false) {
-                $fieldsContainer .=  $data . ', ';
-            	
-            } elseif (strpos($data, ' ') !== false || strpos($data, '.') !== false) {
-                $fieldsContainer .= $data . ', ';
-            	
-            } elseif(strpos($data, '*') !== false) {
+        if (! is_array($data)) {
+            if (
+                $data == '*' || strpos($data, ',') !== false || strpos($data, '(') !== false
+                || strpos($data, ' ') !== false || strpos($data, '.') !== false
+            ) {
                 $fieldsContainer .= $data . ', ';
             	
             } else {
@@ -403,7 +402,7 @@ class Builder
             } 
         
         } else {
-            foreach ((array) $data as $k => & $v) {
+            foreach ($data as $k => & $v) {
                 if (is_numeric($k)) {
                     $this->fieldHandler($fieldsContainer, $v, $table);
                 	
@@ -444,7 +443,7 @@ class Builder
         if ($groupBy) {
             $having = $this->getWhereSql(true);
 
-            $this->whereData = $this->whereData + $this->havingData;
+            $this->whereData = array_merge($this->whereData, $this->havingData);
         }
 
         return "SELECT $fields FROM {$table}{$leftJoin}{$where}{$groupBy}{$orderBy}{$having}{$limit}";
@@ -508,7 +507,7 @@ class Builder
     public function limit($p1, $p2 = 0) 
     {
         if (! $p2) {
-	       $this->limit = " LIMIT $p1";		 
+	        $this->limit = " LIMIT $p1";
         } else
             $this->limit = " LIMIT $p1, $p2";
         return $this;
@@ -553,7 +552,7 @@ class Builder
 	 LEFT JOIN `menu_content` AS u    ON `table`.`menu_content_id`      = `u`.`id`
 	 LEFT JOIN `wechat_menu_type` AS w ON `u`.`wechat_menu_type_id` = `w`.`id`
 	 */
-    public function leftJoin($table, $p1 = null, $p2 = null)
+    public function leftJoin(& $table, $p1 = null, $p2 = null)
     {
         if (strpos($table, ' ') === false) {
             $table = "`$table`";
@@ -580,7 +579,8 @@ class Builder
     public function remove($id = null) 
     {
         if ($id) {
-            $this->where('id', $id);
+            $k = 'id';
+            $this->where($k, $id);
         }
         $where = $this->getWhereSql();
         $res = $this->query->connection()->delete($this->tableName, $where, $this->whereData);
@@ -593,23 +593,16 @@ class Builder
         return $this->remove($id);
     }
 	
-    public function insert(array $p1) 
+    public function insert(array & $p1)
     {
         $res = $this->query->connection()->add($this->tableName, $p1);
         $this->clear();
         return $res;
     }
     
-    public function replace(array $p1)
+    public function replace(array & $p1)
     {
         $res = $this->query->connection()->replace($this->tableName, $p1);
-        $this->clear();
-        return $res;
-    }
-	
-    public function add(array $p1)
-    {
-        $res = $this->query->connection()->add($this->tableName, $p1);
         $this->clear();
         return $res;
     }
@@ -626,7 +619,7 @@ class Builder
 	 *
 	 *  $this->update('age', '-');
 	 */
-    public function update($p1, $p2 = null, $p3 = 1) 
+    public function update(& $p1, $p2 = null, $p3 = 1)
     {
         if ($p2) {
             switch ($p2) {
@@ -718,7 +711,6 @@ class Builder
         return $where;
 
     }
-
 
     protected function getFieldsSql()
     {

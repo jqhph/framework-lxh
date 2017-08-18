@@ -14,4 +14,7 @@ class Status
     const FAILED  = 10002;
     // 参数错误
     const INVALID_ARGUMENTS = 10003;
+
+    // 用户身份鉴权失败
+    const NOT_AUTH = 10008;
 }
