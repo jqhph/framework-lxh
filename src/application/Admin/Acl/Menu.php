@@ -3,7 +3,7 @@ namespace Lxh\Admin\Acl;
 
 use Lxh\Exceptions\Error;
 use Lxh\Helper\Util;
-use Lxh\Kernel\AdminUrlCreator;
+use Lxh\Admin\Kernel\Url;
 
 class Menu
 {
@@ -98,7 +98,7 @@ class Menu
      */
     public function makeUrl($controller, $action)
     {
-        return AdminUrlCreator::makeAction($action, $controller);
+        return Url::makeAction($action, $controller);
     }
 
     /**

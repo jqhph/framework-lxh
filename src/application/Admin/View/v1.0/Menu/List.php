@@ -1,6 +1,6 @@
 <?php
 
-use Lxh\Kernel\AdminUrlCreator;
+use Lxh\Admin\Kernel\Url;
 ?>
 
 <?php echo component_view('search-items', [
@@ -26,7 +26,7 @@ use Lxh\Kernel\AdminUrlCreator;
         <div class="table-rep-plugin">
             <div class="btn-toolbar" >
                 <div class="btn-group dropdown-btn-group pull-right">
-                    <a href="<?php echo AdminUrlCreator::makeAction('Create'); ?>" data-action="create-row" class="btn btn-success"><?php echo trans('Create Menu'); ?></a>
+                    <a href="<?php echo Url::makeAction('Create'); ?>" data-action="create-row" class="btn btn-success"><?php echo trans('Create Menu'); ?></a>
                 </div>
             </div>
 

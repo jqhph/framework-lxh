@@ -1,4 +1,4 @@
-<?php use Lxh\Kernel\AdminUrlCreator; ?>
+<?php use Lxh\Admin\Kernel\Url; ?>
 <tr>
     <?php foreach ($titles as $name => & $v) { ?>
         <th><?php
@@ -27,7 +27,7 @@
         </th>
     <?php }
     ?>
-    <th><a class="" href="<?php echo AdminUrlCreator::makeDetail($r['id']);?>">
+    <th><a class="" href="<?php echo Url::makeDetail($r['id']);?>">
             <i class="fa fa-search-plus"></i></a>&nbsp;&nbsp;
         <a style="color:#ff5b5b" data-model="<?php echo empty($model) ? __CONTROLLER__ : $model;?>" data-action="delete-row" data-id="<?php echo $r['id'];?>" href="javascript:"><i class="zmdi zmdi-delete"></i></a></th>
 </tr>

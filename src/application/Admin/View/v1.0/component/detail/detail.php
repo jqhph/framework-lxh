@@ -6,7 +6,7 @@
  * @date   2017/8/1 09:28
  */
 
-use Lxh\Kernel\AdminUrlCreator;
+use Lxh\Admin\Kernel\Url;
 
 $row = isset($row) ? $row : [];
 

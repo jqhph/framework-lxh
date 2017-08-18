@@ -1,7 +1,7 @@
 <div class="topbar">
     <!-- LOGO -->
     <div class="topbar-left">
-        <a href="<?php echo Lxh\Kernel\AdminUrlCreator::makeHome();?>" class="logo">
+        <a href="<?php echo Lxh\Admin\Kernel\Url::makeHome();?>" class="logo">
             <span><?php echo trans_with_global('first-logo-text', 'labels'); ?><span>
                     <?php echo trans_with_global('last-logo-text', 'labels'); ?></span></span><i class="zmdi zmdi-layers"></i></a>
     </div>

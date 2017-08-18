@@ -162,7 +162,7 @@ class Application
 
                 $path = "{$this->root}config/route/{$module}.php";
 
-                if (is_file($configPath)) {
+                if (is_file($path)) {
                     $configPath = & $path;
                 }
             }

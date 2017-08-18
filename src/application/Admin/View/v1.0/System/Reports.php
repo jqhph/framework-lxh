@@ -1,7 +1,7 @@
 <!-- Top Bar Start -->
 <?php
 
-use Lxh\Kernel\AdminUrlCreator;
+use Lxh\Admin\Kernel\Url;
 
 echo fetch_view('top-bar', 'Public', ['nav' => trans('Create reports')]); ?>
 

@@ -8,9 +8,9 @@
  * Time: 22:38
  */
 
-namespace Lxh\Kernel;
+namespace Lxh\Admin\Kernel;
 
-class AdminUrlCreator
+class Url
 {
     protected static $prefix = 'lxhadmin';
 

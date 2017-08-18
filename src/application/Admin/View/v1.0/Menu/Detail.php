@@ -3,7 +3,7 @@
 if (empty($row)) {
     $row = [];
 }
-use Lxh\Kernel\AdminUrlCreator;
+use Lxh\Admin\Kernel\Url;
  ?>
 
 
@@ -34,7 +34,7 @@ use Lxh\Kernel\AdminUrlCreator;
 
                         <?php echo component_view('fields/varchar/edit', [
                                 'name' => 'icon', 'label' => 'icon', 'value' => get_value($row, 'icon'),
-                                'help' => '<a target="_blank" href="' . AdminUrlCreator::makeAction('FontAwesome', 'PublicEntrance')
+                                'help' => '<a target="_blank" href="' . Url::makeAction('FontAwesome', 'PublicEntrance')
                                     . '">' . trans_with_global('fontawesome icon CSS') . '</a>'
                         ]); ?>
 

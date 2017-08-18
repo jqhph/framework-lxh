@@ -5,7 +5,7 @@
  * @author Jqh
  * @date   2017/8/1 09:27
  */
-use Lxh\Kernel\AdminUrlCreator;
+use Lxh\Admin\Kernel\Url;
 
 // 行公共模板
 $rowView = isset($rowView) ? $rowView : 'list/row';
@@ -19,7 +19,7 @@ $useRWD = isset($useRWD) ? $useRWD : true;
 // 模块名
 $scope = isset($scope) ? $scope : __CONTROLLER__;
 
-$createUrl = AdminUrlCreator::makeAction('Create');
+$createUrl = Url::makeAction('Create');
 
 $createBtnText = "Create $scope";
 

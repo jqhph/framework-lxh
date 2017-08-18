@@ -1,4 +1,4 @@
-<?php use Lxh\Kernel\AdminUrlCreator;?>
+<?php use Lxh\Admin\Kernel\Url;?>
 <?php echo component_view('fields/varchar/edit',
     ['name' => 'controller_name', 'label' => 'controller', 'value' => '']); ?>
 
@@ -26,7 +26,7 @@
     ]]); ?>
 
 <?php echo component_view('fields/varchar/edit',
-    ['name' => 'icon', 'label' => 'icon', 'value' => '', 'help' => '<a target="_blank" href="' . AdminUrlCreator::makeAction('FontAwesome', 'PublicEntrance')
+    ['name' => 'icon', 'label' => 'icon', 'value' => '', 'help' => '<a target="_blank" href="' . Url::makeAction('FontAwesome', 'PublicEntrance')
         . '">' . trans_with_global('fontawesome icon CSS') . '</a>']); ?>
 
 <?php echo component_view('fields/varchar/edit',

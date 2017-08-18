@@ -1,4 +1,4 @@
-<?php use Lxh\Kernel\AdminUrlCreator; ?>
+<?php use Lxh\Admin\Kernel\Url; ?>
 
 <!--col-sm-12-->
 <div class="<?php echo empty($topClass) ? '' : $topClass; ?>">
@@ -40,7 +40,7 @@
 
                         if (! empty($useAction)) {
                         ?>
-                        <th><a href="<?php echo AdminUrlCreator::makeDetail($r['id'], isset($controller) ? $controller : __CONTROLLER__);?>">
+                        <th><a href="<?php echo Url::makeDetail($r['id'], isset($controller) ? $controller : __CONTROLLER__);?>">
                                 <i class="zmdi zmdi-edit"></i></a>&nbsp;&nbsp;
                             <a href="javascript:"><i class="zmdi zmdi-delete"></i></a></th>
                         <?php } ?>

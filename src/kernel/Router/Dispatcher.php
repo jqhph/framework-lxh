@@ -177,7 +177,7 @@ class Dispatcher implements Router
         $patharr = $this->getPathArr();
 
         $pathlen = count($patharr);
-
+console_info($patharr);
         // 匹配路由
         foreach ($this->getRouterRules() as & $rule) {
             if (empty($rule['pattern'])) continue;
@@ -397,11 +397,11 @@ class Dispatcher implements Router
     {
         $new = [];
         foreach ($arr as & $row) {
-            if (! $row) continue;
+            if (empty($row)) continue;
 
             $new[] = $row;
         }
-        $arr = & $new;
+        $arr = $new;
     }
 
 }

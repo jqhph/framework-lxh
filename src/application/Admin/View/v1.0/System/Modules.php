@@ -1,6 +1,6 @@
 <?php
 
-use Lxh\Kernel\AdminUrlCreator;
+use Lxh\Admin\Kernel\Url;
 ?>
 
 <div class="">
