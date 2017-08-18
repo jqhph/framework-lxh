@@ -133,11 +133,22 @@ $config[] = [
 $config[] = [
     'pattern' => '/@([a-zA-Z_]+)\.(html|htm)$@',
     'method' => 'GET',
-    '' => [
-        'auparamsth' => false,
+    'params' => [
+        'auth' => false,
         'module' => 'Home',
         'controller' => 1,
         'action' => 'List'
+    ]
+];
+
+// 匹配任意路由，当所有路由都匹配不成功时，会匹配此路由
+$config[] = [
+    'pattern' => '*',
+    'params' => [
+        'auth' => false,
+        'module' => 'Home',
+        'controller' => 'App',
+        'action' => 'NotFound'
     ]
 ];
 

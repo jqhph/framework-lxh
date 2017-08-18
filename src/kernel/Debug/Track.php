@@ -132,8 +132,8 @@ class Track
         $base = [
             '请求信息'     => & $requestInfo,
             '运行时间'     => $this->getRunTime(),
-            //'吞吐率'	    => number_format(1 / $this->getRunTime(), 2) . 'req/s',
-            //'内存开销'     => number_format((memory_get_usage()) / 1024, 2) . 'kb',
+//            '吞吐率'	    => number_format(1 / $this->getRunTime(), 2) . 'req/s',
+            '内存开销'     => number_format((memory_get_usage()) / 1024, 2) . 'kb',
             '最后执行SQL' 	=> $db->last(),
             '查询信息'       => $db->computeTypeTimes('r') . ' queries ' . $db->computeTypeTimes('w') . ' writes ' . $db->computeTypeTimes('c') . ' connected',
             '数据库操作详情' => $db->all(),
@@ -142,6 +142,7 @@ class Track
             '文件加载数量'   => count(get_included_files()),
             '文件加载详情'   => get_included_files(),
             '会话信息'       => 'SESSION_ID='.session_id(),
+            'SERVER'         => & $_SERVER
         ];
 
         Console::info('%c[Trace Information]', 'color:chocolate;font-weight:bold', $base);

@@ -9,12 +9,13 @@
 namespace Lxh;
 
 use Lxh\Exceptions\Exception;
-use Lxh\Contracts\Router;
 use Lxh\Exceptions\NotFound;
 use Lxh\Contracts\Container\Container;
 use Lxh\Contracts\Events\Dispatcher;
 use Lxh\Http\Response;
 use Lxh\Http\Request;
+use Lxh\Helper\Arr;
+use Lxh\Router\Dispatcher as Router;
 
 class Application
 {
@@ -45,7 +46,11 @@ class Application
      */
     protected $events;
 
-    public function __construct($rootDir)
+    /**
+     * Application constructor.
+     * @param string $rootDir 项目根目录
+     */
+    public function __construct($rootDir = '')
     {
         define('__ROOT__', $rootDir . '/');
 
@@ -60,6 +65,8 @@ class Application
 
         $this->container = container();
         $this->events    = events();
+
+        $this->bindRouter();
     }
 
     /**
@@ -98,14 +105,10 @@ class Application
 
             $router = $this->container->make('router');
 
-            $router->handle();
-
-            switch ($router->getDispatchResult()) {
-                case Router::SUCCESS:
-                    $this->container->make('controller.manager')->handle($router, $this->request, $this->response);
-                    break;
-                default:
-                    throw new NotFound();
+            if ($router->handle()) {
+                $this->container->make('controller.manager')->handle($router, $this->request, $this->response);
+            } else {
+                throw new NotFound();
             }
 
             return $this->response;
@@ -141,7 +144,35 @@ class Application
     }
 
     /**
-     * 执行命令台命令
+     * 注册路由服务
+     *
+     * @return void
+     */
+    protected function bindRouter()
+    {
+        $this->container->singleton('router', function (Container $container) {
+            $request = $container->make('http.request');
+
+            $configPath = $this->root . 'config/route/route.php';
+
+            // 判断是否开启了子域名部署
+            if (config('domain-deploy')) {
+                $domains = config('domain-deploy-config');
+                $module  = get_value($domains, $request->host());
+
+                $path = "{$this->root}config/route/{$module}.php";
+
+                if (is_file($configPath)) {
+                    $configPath = & $path;
+                }
+            }
+
+            return new Router((array) include $configPath);
+        });
+    }
+
+    /**
+     * 执行命令
      *
      * @return void
      */
