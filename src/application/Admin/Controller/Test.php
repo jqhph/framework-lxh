@@ -18,19 +18,10 @@ class Test extends Controller
 {
     public function actionTest(Request $req, Response $resp)
     {
-        $data = [1, 2];
-        $a = '123RT(s';
-        
-        $crawler = new \Lxh\Kernel\Spiders\Crawler();
+        $data = 'suitshe.com';
+        $host = 'www.suitshe.com';
 
-//        $crawler->makeProdsData();
-        $crawler->makeCategoriesData();
-
-        $crawler->outputRequestResult();
-//return $sorts;
-//        debug($sorts);die;
-
-//        return '<pre>' . Util::arrayToText($sorts);
+        console_log(substr_count($data, '.'), substr_count($host, '.'));
     }
 
     public function actionHello()

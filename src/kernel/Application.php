@@ -161,7 +161,7 @@ class Application
 
                 $host = $request->host();
 
-                if (count(explode('.', $host)) < 3) {
+                if (substr_count($host, '.') < 2) {
                     $host = 'www.' . $host;
                 }
 

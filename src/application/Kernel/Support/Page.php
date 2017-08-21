@@ -171,6 +171,7 @@ class Page
                 $_ = 0;
             } elseif ($this->currentPage + $this->centerNum >= $this->totalPages) {
                 $_ = $this->totalPages - $this->rollPage;
+                $_ = $_ < 0 ? 0 : $_;
             }
             $page = $_ + $i;
 
