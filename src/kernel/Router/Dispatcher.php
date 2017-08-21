@@ -29,13 +29,6 @@ class Dispatcher implements Router
     protected $requestPath;
 
     /**
-     * uri是否含有“-”，有则需要用正则路由规则匹配
-     *
-     * @var bool
-     */
-    protected $isRegUri;
-
-    /**
      * 任意定界符
      *
      * @var string
@@ -295,11 +288,6 @@ class Dispatcher implements Router
         // 路由模式
         $rule['pattern'] = explode('/', $rule['pattern']);
 
-        // 添加配置文件制定的路由前缀
-//        if ($this->routePrefix) {
-//            array_unshift($rule['pattern'], $this->routePrefix);
-//        }
-
         $this->arrayFilter($rule['pattern']);
 
         if ($pathlen != count($rule['pattern'])) {
@@ -315,11 +303,6 @@ class Dispatcher implements Router
         if ($hasReg) {
             // 正则比较
             return $this->compareReg($rule, $patharr);
-        }
-
-        // 需要用正则路由规则判断
-        if ($this->isRegUri) {
-            return false;
         }
 
         // 字符串比较
@@ -372,10 +355,6 @@ class Dispatcher implements Router
         }
 
         $uri = get_value($_SERVER, 'PATH_INFO', '/');
-
-        if (strpos($uri, $this->regularSymbolByUri) !== false) {
-            $this->isRegUri = true;
-        }
 
         return $this->requestPath = & $uri;
     }

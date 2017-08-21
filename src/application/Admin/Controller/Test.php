@@ -19,10 +19,7 @@ class Test extends Controller
     public function actionTest(Request $req, Response $resp)
     {
         $data = [1, 2];
-        $b = [3, 4];
-
-        debug($data + $b);
-        die;
+        $a = '123RT(s';
         
         $crawler = new \Lxh\Kernel\Spiders\Crawler();
 

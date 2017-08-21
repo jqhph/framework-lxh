@@ -124,7 +124,7 @@ class Application
      */
     protected function loadFunctionFile()
     {
-        require $this->root . 'Kernel/Helper/func.php';
+        require $this->root . 'kernel/Helper/func.php';
         require $this->root . 'application/Kernel/Support/func.php';
     }
 
@@ -158,7 +158,14 @@ class Application
             // 判断是否开启了子域名部署
             if (config('domain-deploy')) {
                 $domains = config('domain-deploy-config');
-                $module  = get_value($domains, $request->host());
+
+                $host = $request->host();
+
+                if (count(explode('.', $host)) < 3) {
+                    $host = 'www.' . $host;
+                }
+
+                $module = get_value($domains, $host);
 
                 $path = "{$this->root}config/route/{$module}.php";
 

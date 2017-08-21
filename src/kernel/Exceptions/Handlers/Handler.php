@@ -172,7 +172,7 @@ class Handler
 		}
 
 		// 生产环境
-		redirect_404('System Failure');
+		make('events')->fire('exception.response', ['mag' => 'System Failure']);
 	}
 
 }

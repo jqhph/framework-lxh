@@ -58,6 +58,13 @@ class Builder
      * @var Query
      */
     protected $query;
+
+    /**
+     * 匹配普通变量正则
+     *
+     * @var string
+     */
+    protected $varPattern = '/^[\w0-9_]+$/i';
 	
     public function __construct(Container $container, Query $query)
     {
@@ -108,7 +115,6 @@ class Builder
         $tmp = "`$mid`";
         return $this->leftJoin($mid, "$tmp.{$this->tableName}_id", 'id')
                     ->leftJoin($relate, "$tmp.{$relate}_id", "`$relate`.id");
-        return $this; 
     }
 	
 	/**
@@ -340,7 +346,7 @@ class Builder
 	
     protected function normalizeWhereField(& $table, & $field)
     {
-        if (strpos($field, '.') === false) {
+        if (preg_match($this->varPattern, $field)) {
             $field = $table . '`' . $field . '`';
         }
     }
@@ -390,14 +396,11 @@ class Builder
     protected function fieldHandler(& $fieldsContainer, & $data, $table) 
     {
         if (! is_array($data)) {
-            if (
-                $data == '*' || strpos($data, ',') !== false || strpos($data, '(') !== false
-                || strpos($data, ' ') !== false || strpos($data, '.') !== false
-            ) {
-                $fieldsContainer .= $data . ', ';
-            	
-            } else {
+            if (preg_match($this->varPattern, $data)) {
                 $fieldsContainer .= '`' . $table . '`.`' . $data . '`, ';
+
+            } else {
+                $fieldsContainer .= $data . ', ';
             	
             } 
         
@@ -535,7 +538,7 @@ class Builder
             }
             $groupContainer = ' GROUP BY ' . rtrim($groupContainer, ',');
         } else {
-            if (strpos($data, '.') === false && strpos($data, ',') === false) {
+            if (preg_match($this->varPattern, $data)) {
                 $groupContainer = " GROUP BY `$table`.`$data`";
             } else {
                 $groupContainer = " GROUP BY $data";
@@ -554,14 +557,17 @@ class Builder
 	 */
     public function leftJoin(& $table, $p1 = null, $p2 = null)
     {
-        if (strpos($table, ' ') === false) {
+        if (preg_match($this->varPattern, $table)) {
             $table = "`$table`";
-        } 
+        }
+
+        $p1IsVar = preg_match($this->varPattern, $p1);
+        $p2IsVar = preg_match($this->varPattern, $p2);
         
-        if (strpos($p1, '.') !== false && strpos($p2, '.') !== false) {
+        if (! $p1IsVar && ! $p2IsVar) {
             $this->leftJoin[] = " LEFT JOIN $table ON $p1 = $p2";
         
-        } elseif (strpos($p1, '.') !== false) {
+        } elseif (! $p1IsVar) {
             $this->leftJoin[] = " LEFT JOIN $table ON $p1 = `{$this->tableName}`.`$p2`";
         		
         } else {
