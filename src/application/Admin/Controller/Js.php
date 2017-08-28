@@ -32,6 +32,9 @@ class Js extends Controller
     {
         $this->rootPrefix = __PUBLIC_ROOT__ . 'static/' . $GLOBALS['resource-version'] . '/';
         $this->tplPrefix = $this->rootPrefix . 'tpl/' . __MODULE__ . '/';
+
+        // 禁止输出控制台调试信息
+        $this->withConsoleOutput(false);
     }
 
     /**

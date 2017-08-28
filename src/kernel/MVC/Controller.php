@@ -9,6 +9,8 @@
 namespace Lxh\MVC;
 
 use Lxh\Contracts\Container\Container;
+use Lxh\Http\Request;
+use Lxh\Http\Response;
 use Lxh\MVC\ControllerManager;
 use Lxh\MVC\Model;
 
@@ -34,12 +36,45 @@ abstract class Controller
     protected $middleware = [];
 
     /**
+     * @var mixed
+     */
+    protected $currentMiddleware;
+
+    /**
      * @var Container;
      */
     protected $container;
 
     public function __construct()
     {
+    }
+
+    /**
+     * @return Request
+     */
+    public function request()
+    {
+        return $this->container->make('http.request');
+    }
+
+    /**
+     * @return Response
+     */
+    public function response()
+    {
+        return $this->container->make('http.response');
+    }
+
+    /**
+     * 是否输出控制台调试信息
+     *
+     * @param  bool $flag
+     * @return static
+     */
+    public function withConsoleOutput($flag = true)
+    {
+        $this->response()->withConsoleOutput($flag);
+        return $this;
     }
 
     /**
@@ -84,7 +119,7 @@ abstract class Controller
      *
      * @param string $middleware 中间件名称
      * @param array  $options
-     * @return void
+     * @return static
      */
     protected function middleware($middleware)
     {

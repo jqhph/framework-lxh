@@ -40,7 +40,7 @@ class File extends Cache
     {
         $this->type = $name;
 
-        $this->root = __DATA_ROOT__ . 'data/file-cache/';
+        $this->root = __DATA_ROOT__ . 'file-cache/';
 
         $this->file = file_manager();
     }
@@ -129,6 +129,7 @@ class File extends Cache
         if (! $this->useCache() || empty($key)) {
             return false;
         }
+
         $data = $this->file->getPhpContents($this->normalizePath($key));
         if (empty($data['value'])) {
             return false;
@@ -196,12 +197,31 @@ class File extends Cache
         }
         return $this->file->removeFile($this->normalizePath($key));
     }
-    
+
+    /**
+     * 获取缓存路径
+     *
+     * @param  string $Key
+     * @return string
+     */
     public function normalizePath($key)
     {
         $type = $this->getType();
 
         return "{$this->root}{$type}/{$key}";
+    }
+
+    /**
+     * 获取缓存文件修改时间
+     *
+     * @param  string $k
+     * @return int
+     */
+    public function filemtime($k)
+    {
+        $path = $this->normalizePath($k);
+
+        return is_file($path) ? filemtime($path) : 0;
     }
 
     /**

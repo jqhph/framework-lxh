@@ -53,6 +53,13 @@ class Response extends PsrResponse
 	protected $length;
 
 	/**
+	 * 是否输出控制器信息
+	 *
+	 * @var bool
+	 */
+	protected $outputConsoleMsg = true;
+
+	/**
 	 * @var View
 	 */
 	public $viewManager;
@@ -76,9 +83,9 @@ class Response extends PsrResponse
 	{
 		return $this->viewManager ?: ($this->viewManager = $this->container->make('view'));
 	}
-	
+
 	//发送header头及返回消息
-	public function sendHeader() 
+	public function sendHeader()
 	{
 		//Send status
 		if (strpos(PHP_SAPI, 'cgi') === 0) {
@@ -149,7 +156,7 @@ class Response extends PsrResponse
 		$this->withHeader('Content-Type', $contentType . '; charset=' . $charset);
 		return $this;
 	}
-	
+
 	/**
 	 * 输出内容到客户端
 	 *
@@ -171,15 +178,24 @@ class Response extends PsrResponse
 
 		$events->fire('response.send.after', [$this->request, $this]);
 
-		$controllerManager = $this->container->make('controller.manager');
-
 		// 非生产环境和非命令行环境则输出控制台调试日志
 		if (
-			! is_prod() && ! $this->request->isCli() && config('response-console-log', true) && ! $this->request->isAjax()
-			&& $controllerManager->controllerName() != 'Js'
+			$this->outputConsoleMsg && ! is_prod() && ! $this->request->isCli() && config('response-console-log', true) && ! $this->request->isAjax()
 		) {
 			echo Console::fetch();
 		}
+	}
+
+	/**
+	 * 是否输出控制台调试信息
+	 *
+	 * @param  bool $flag true输出，false不输出
+	 * @return static
+	 */
+	public function withConsoleOutput($flag = true)
+	{
+		$this->outputConsoleMsg = $flag;
+		return $this;
 	}
 
 	/**
@@ -203,7 +219,7 @@ class Response extends PsrResponse
 		$this->data = & $data;
 		return $this;
 	}
-	
+
 	/**
 	 * Redirect
 	 *
@@ -213,98 +229,98 @@ class Response extends PsrResponse
 	 * @param string $url    The redirect destination
 	 * @param int    $status The redirect HTTP status code
 	 */
-	public function redirect($url, $status = 302) 
+	public function redirect($url, $status = 302)
 	{
 		$this->withStatus($status);
 		$this->withHeader('Location', $url);
 	}
-	
+
 	/**
 	 * Helpers: Empty?
 	 * @return bool
 	 */
-	public function isEmpty() 
+	public function isEmpty()
 	{
 		return in_array($this->getStatusCode(), [201, 204, 304]);
 	}
-	
+
 	/**
 	 * Helpers: Informational?
 	 * @return bool
 	 */
-	public function isInformational() 
+	public function isInformational()
 	{
 		return $this->getStatusCode() >= 100 && $this->getStatusCode() < 200;
 	}
-	
+
 	/**
 	 * Helpers: OK?
 	 * @return bool
 	 */
-	public function isOk() 
+	public function isOk()
 	{
 		return $this->getStatusCode() === 200;
 	}
-	
+
 	/**
 	 * Helpers: Successful?
 	 * @return bool
 	 */
-	public function isSuccessful() 
+	public function isSuccessful()
 	{
 		return $this->getStatusCode() >= 200 && $this->getStatusCode() < 300;
 	}
-	
+
 	/**
 	 * Helpers: Redirect?
 	 * @return bool
 	 */
-	public function isRedirect() 
+	public function isRedirect()
 	{
 		return in_array($this->getStatusCode(), array(301, 302, 303, 307));
 	}
-	
+
 	/**
 	 * Helpers: Redirection?
 	 * @return bool
 	 */
-	public function isRedirection() 
+	public function isRedirection()
 	{
 		return $this->getStatusCode() >= 300 && $this->getStatusCode() < 400;
 	}
-	
+
 	/**
 	 * Helpers: Forbidden?
 	 * @return bool
 	 */
-	public function isForbidden() 
+	public function isForbidden()
 	{
 		return $this->getStatusCode() === 403;
 	}
-	
+
 	/**
 	 * Helpers: Not Found?
 	 * @return bool
 	 */
-	public function isNotFound() 
+	public function isNotFound()
 	{
 		return $this->getStatusCode() === 404;
 	}
-	
+
 	/**
 	 * Helpers: Client error?
 	 * @return bool
 	 */
-	public function isClientError() 
+	public function isClientError()
 	{
 		return $this->getStatusCode() >= 400 && $this->getStatusCode() < 500;
 	}
-	
+
 	/**
 	 * Helpers: Server Error?
 	 * @return bool
 	 */
-	public function isServerError() 
+	public function isServerError()
 	{
 		return $this->getStatusCode() >= 500 && $this->getStatusCode() < 600;
 	}

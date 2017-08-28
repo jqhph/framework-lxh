@@ -247,7 +247,7 @@ class Dispatcher implements Router
 
             foreach ($params as $pn => & $param) {
                 if ($param == $r) {
-                    $param = & $patharr[$k];
+                    $param = $patharr[$k];
                 }
 
                 if (isset($this->regResultData[$param])) {
