@@ -89,11 +89,11 @@ class Console
         foreach ($content['args'] as & $log) {
             if (is_array($log)) {
                 $txt .= json_encode($log) . ', ';
-            } else if (is_int($log) || is_float($log)) {
+            } else if (is_int($log) || is_float($log) || is_bool($log)) {
                 $txt .= "$log,";
             } else {
-                // 转义单引号
-                $log = str_replace("'", "\\'", $log);
+                // 转义单引号，换行符
+                $log = str_replace(["'", "\n", "\r"], ["\\'", '', ''], (string) $log);
                 $txt .= "'$log',";
             }
         }

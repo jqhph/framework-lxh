@@ -6,11 +6,7 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
         // 初始化方法
         init: function () {
             // 添加自定义标签
-            BladeConfig.addTag('view', function ($view, options, tpl) {
-                var name = options[0],
-                    data = options[1],
-                    category = options[2]
-
+            BladeConfig.addTag('view', function ($view, name, data, category) {
                 if (typeof data != 'object') return ''
 
                 var blade = new Blade($('#' + name).text())

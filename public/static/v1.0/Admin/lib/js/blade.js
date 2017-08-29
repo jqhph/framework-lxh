@@ -1,1 +1,475 @@
-eval(function(p,a,c,k,e,r){e=function(c){return(c<62?'':e(parseInt(c/62)))+((c=c%62)>35?String.fromCharCode(c+29):c.toString(36))};if('0'.replace(0,e)==0){while(c--)r[e(c)]=k[c];k=[function(e){return r[e]||e}];e=function(){return'([3-8joD-RT-Z]|1\\w)'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('1k.1l={version:"1.0-dev",T:{},addTag:3(n,p){4("3"!=G p)K L("Invalid argument");D.T[n]=p}};1k.Blade=3(n,p){3 t(a){5 a.6(16 17("["+d.1d.1m+"|"+d.1d.U+"]","8"),"")}3 u(a,c,b){c=q(c.V,W,!0,"");5 d.1n["$"+a].6("{V}",c).6("{H}",\'j 1o = "\'+b+\'"\')}3 A(a,c){5-1!=c.M(d.7["$"+a])&&-1!=c.M(d.7["$U"+a])?!0:!1}3 r(a,c,b,e,f){j k=d.7["$"+a],h=d.7["$"+c];c=b.Z(16 17(k+"[ ]*([^@]*?)\\n","i"));4(!c||!c[0])K L(\'O P: "\'+k+\'" 10 1p H\');b=b.6(c[0],"");f&&"@"!=h&&(f=b.lastIndexOf(h),b=-1!=f?b.substr(0,f):b.6(h,""));c=c[0].6(16 17("(?:"+k+"[ ])*|\\n","8"),"");A(a,b)&&"4"==a&&(b=v(b));e?a=b:(a=b.Z(16 17("([^"+h+"]*)","8")),a=a[0]);b=b.6(a,"");5{V:c,H:a,11:b}}3 l(a,c){5(a=c.Z(d.E[d.7["$"+a]]))?a.12:0}j d={18:"#blade",13:W,14:n,I:{},1d:{1m:"{",U:"}"},7:{$4:"@4",$o:"@o",$J:"@J",$Q:"@Q",$F:"@F",$R:"@R",$U:"@",$19:{1a:"#1a"},$T:{}},E:{$j:/{([a-z|_]*[0-9]*[_]*[\\.]*([a-z|_]*[0-9]*[_]*)+([\\[]?([a-z|_]*[0-9]*[_]*[\\.]*([a-z|_]*[0-9]*[_]*)+)[\\]]?))}/8,1q:/[\\[]([a-z|_]*[0-9]*[_]*[\\.]*([a-z|_]*[0-9]*[_]*)+)[\\]]/8,1r:/[ ]*((?![\\\'|\\"])[\\[_\\.\\]a-z]+[0-9\\]]*)+[ ]*/8,1s:/[ ]+((?![\\\'|\\"])[\\[_\\.\\]a-z]+[0-9\\]]*)+[ ]*/8,$4:/@4[ ]+([\\s\\S.])+@Q\\b/8,$F:/@F[ ]+([\\s\\S.])+@R\\b/8,1t:/{(#[^{|{#]+)}/8,1e:/#[a-z]*\\b/i,1u:/{(#[^{|{#]+)#}/8,"@4":/@4\\b/8,"@Q":/@Q\\b/8,"@J":/@J\\b/8,"@o":/@o\\b/8,"@F":/@F\\b/8,"@R":/@R\\b/8},1n:{$4:"\\n 4 ({V}) { \\n {H} \\n } \\n",$J:" o 4 ({V}) { \\n {H} \\n } \\n",$o:" o { \\n {H} \\n } \\n"}};d.14=n;d.I=p||{};d.7.$T=1l.T;j w=D;D.getVars=3(){5 d.I};D.getTpl=3(){5 d.14};D.1v=3(a){d.I=a||d.I;a=d.14;j c=l("4",a),b=l("Q",a);4(c>b)K L(\'O P: 10 "\'+d.7.$Q+\'"\');4(c<b)K L(\'O P: 10 "\'+d.7.$4+\'"\');4(l("o",a)>c)K L(\'O P: 1w "\'+d.7.$o+\'" 1x\');b=l("J",a);4(0==c&&0<b)K L(\'O P: 1w "\'+d.7.$J+\'" 1x\');c=l("F",a);a=l("R",a);4(c>a)K L(\'O P: 10 "\'+d.7.$R+\'"\');4(c<a)K L(\'O P: 10 "\'+d.7.$F+\'"\');5 q(x(y(v(B(d.14)))))};D.1y=3(a,c){d.18=a||d.18;d.13=c||d.13;document.querySelector(d.18).innerHTML=D.1v();"3"!=G d.13||d.13(D)};D.rerender=3(a){d.I=a||d.I;D.1y()};D.1f=3(a,c){"1b"==G a?d.I=a:d.I[a]=c};j x=3(a){5 a.6(d.E.1u,3(a,b,e){e=b.Z(d.E.1e);j c,k,h;b=b.6(e[0],"");e=e[0].6("#","");N(c X d.7.$T)4(c==e){a=C.1g(b,!1,"!!").6(/(^\\s*)|(\\s*$)/g,"");a=a.15("!!");b=[];N(k X a)4(e=a[k],e=0===e.M("{")&&-1!=e.M("}")||0===e.M("[")&&-1!=e.M("]")?!0:!1,e)a[k]=1c.parse(a[k]),b.Y(a[k]);o N(h X a[k]=a[k].6(/\'|"/g,""),e=a[k].15(" "),e)e[h]&&b.Y(e[h]);5 d.7.$T[c](w,b,a)}5 a})},y=3(a){5 a?a.6(d.E.1t,3(a,b,e){e=b.Z(d.E.1e);e=e[0];N(j c X d.7.$19)4(e==d.7.$19[c])5 C[c](b.6(e,""));5 a}):""},C={1a:3(a){a=D.1h(a,"??",2);j c=D.1h(a[1],"::",1),b="{",e;N(e X c)"3"!=G c[e]&&(1==e&&(b+="} o {"),b=-1!=c[e].M("\'")||-1!=c[e].M(\'"\')?b+(" j 1i = "+c[e]):b+(" j 1i = "+D.1g(c[e],!0)));b="4 ("+D.1z(a[0],!0)+") "+b+"}";1A(b);5 1i||""},1g:3(a,c,b){b=b||" ";5 a.6(d.E.1r,3(a,d){a=z(d,W,c);5"1b"==G a?b+1c.1j(a)+b:b+a+b})},1z:3(a,c,b){b=b||" ";5 a.6(d.E.1s,3(a,d){a=z(d,W,c);5"1b"==G a?b+1c.1j(a)+b:b+a+b})},1h:3(a,c,b){a=a.15(c);4(a.12<b)K L(\'O P: "\'+d.7.$19.1a+\'" 1p is not legal\');5 a}},B=3(a){5 a.6(d.E.$F,3(a,b,e){a=r("F","R",a,!0,!0);e=a.V.15(" ");j c=[];N(b=0;b<e.12;b++)e[b]&&"\\n"!=e[b]&&c.Y(e[b].6(/[\\s\\n]/8,""));e="";j d,h=W,g,l=!1;d=c.1B();d=t(d);d=m(d)||[];1<c.12&&(h=c.1B());c=c.pop();N(b X d)4("3"!=G d[b]){g=a.H;h&&w.1f(t(h),b);w.1f(t(c),d[b]);4(l||A("F",g))l=!0,g=B(g);e+=q(x(y(v(g))))}5 e})},v=3(a,c){5 a.6(d.E.$4,3(a,c,f){f=r("4","U",a);a=f.11;c=[];c.Y(f.H);f=u("4",f,0);N(j b=l("J",a),e=1;e<=b;e++){j g=r("J","U",a);a=g.11;c.Y(g.H);f+=u("J",g,e)}l("o",a)&&(g=r("o","U",a),g.11&&(a=g.11.6("o","")),c.Y(g.H),f+=u("o",g,e));1A(f);a&&(a=a.6(d.7.$Q,""));5(q(x(y(c[1o])))||"")+a})},q=3(a,c,b,e){5 a?a.6(d.E.$j,3(a,d,h){5 z(d,c,b,e)}):W},z=3(a,c,b,e){5-1==a.M("[")?b?(a=m(a,c,e),"1b"==G a?1c.1j(a):\'"\'+a+\'"\'):m(a,c,e):m(a.6(d.E.1q,3(a,b){5"."+m(b,c,e)}),e)},m=3(a,c,b){c=c||d.I;N(j e=a.15("."),f=0;f<e.12;f++)4("1C"!=G c[e[f]])c=c[e[f]];o 5"1C"!=G b?b:a;5 c}};',[],101,'|||function|if|return|replace|placeholders|gi|||||||||||var|||||else|||||||||||||||this|regs|foreach|typeof|content|vars|elseif|throw|Error|indexOf|for|Syntax|error|endif|endforeach||customTags|end|exp|null|in|push|match|miss|full|length|call|tpl|split|new|RegExp|selector|tags|compare|object|JSON|delimiter|tagName|assign|transVar|compareSyntaxAnalysis|result|stringify|window|BladeConfig|start|model|key|expression|stringVar|jsvar|compareJsvar|tag|customTag|fetch|redundant|placeholder|render|compareTransVar|eval|shift|undefined'.split('|'),0,{}))
+window.BladeConfig = {
+    version: '1.0-dev',
+    customTags: {},
+    // 添加自定义标签
+    addTag: function (name, call) {
+        if (typeof call != 'function')  throw new Error('Invalid argument')
+        this.customTags[name] = call
+    }
+}
+
+window.Blade = function (tpl, vars) {
+    var store = {
+        // 渲染节点
+        selector: '#blade',
+        // 渲染成功后的回调函数
+        call: null,
+        // 模板内容
+        tpl: tpl,
+        // 需要编译的变量
+        vars: {},
+        // 变量分隔符
+        delimiter: {start: '{', end: '}'},
+        // 模板占位符
+        placeholders: {
+            $if: '@if',
+            $else: '@else',
+            $elseif: '@elseif',
+            $endif: '@endif',
+            $foreach: '@foreach',
+            $endforeach: '@endforeach',
+            $end: '@',
+            $tags: {
+                compare: '#compare'
+            },
+            $customTags: {}
+        },
+        regs: {
+            // 普通变量，精确匹配 var: /{([a-z|_]*[0-9]*[_]*[\.]*([a-z|_]+[0-9]*[_]*)+([\[]?[a-z0-9_]*[\]]?))}/gi,
+            $var: /{([a-z|_]*[0-9]*[_]*[\.]*([a-z|_]*[0-9]*[_]*)+([\[]?([a-z|_]*[0-9]*[_]*[\.]*([a-z|_]*[0-9]*[_]*)+)[\]]?))}/gi,
+            stringVar: /[\[]([a-z|_]*[0-9]*[_]*[\.]*([a-z|_]*[0-9]*[_]*)+)[\]]/gi,
+            // js变量（非模板变量）
+            jsvar: /[ ]([\'|\"]*[\[_\.\]a-z]+[0-9\]]*[\'|\"]*)+/gi,///[ ]((?![\'|\"])[\[_\.\]a-z]+[0-9\]]*)+/gi
+            compareJsvar: /[ ]+((?![\'|\"])[\[_\.\]a-z]+[0-9\]]*)+[ ]*/gi,
+            $if: /@if[ ]+([\s\S.])+@endif\b/gi,
+            $foreach: /@foreach[ ]+([\s\S.])+@endforeach\b/gi,
+            // 标签，精确匹配
+            tag: /{(#[^{|{#]+)}/gi,
+            tagName: /#[a-z]*\b/i,
+            customTag: /{(#[^{|{#]+)#}/gi,
+            '@if': /@if\b/gi,
+            '@endif': /@endif\b/gi,
+            '@elseif': /@elseif\b/gi,
+            '@else': /@else\b/gi,
+            '@foreach': /@foreach\b/gi,
+            '@endforeach': /@endforeach\b/gi,
+        },
+        model: {
+            $if: "\n if ({exp}) { \n {content} \n } \n",
+            $elseif: " else if ({exp}) { \n {content} \n } \n",
+            $else: " else { \n {content} \n } \n"
+        }
+    }
+
+    store.tpl = tpl
+    store.vars = vars || {}
+    store.placeholders.$customTags = BladeConfig.customTags
+    var self = this
+
+    // 获取编译变量
+    this.getVars = function () {
+        return store.vars
+    }
+
+    this.getTpl = function () {
+        return store.tpl
+    }
+
+    // 解析并获取模板内容
+    this.fetch = function (vars) {
+        store.vars = vars || store.vars
+
+        // 语法检测
+        syntax_analysis(store.tpl)
+
+        // 模板表达式解析
+        return parse_var(
+            parse_custom_tag(
+                parse_tag(
+                    parse_expression_if(
+                        parse_expression_foreach(store.tpl)
+                    )
+                )
+            )
+        )
+    }
+
+    // 渲染模板
+    this.render = function (selector, callback) {
+        store.selector = selector || store.selector
+        store.call = callback || store.call
+
+        document.querySelector(store.selector).innerHTML = this.fetch()
+
+        typeof store.call != 'function' || store.call(this)
+    }
+
+    // 重新渲染模板
+    this.rerender = function (vars) {
+        store.vars = vars || store.vars
+        this.render()
+    }
+
+    // 分配变量到模板
+    this.assign = function (key, value) {
+        if (typeof key == 'object') {
+            store.vars = key
+        } else {
+            store.vars[key] = value
+        }
+    }
+
+    // 自定义标签解析
+    var parse_custom_tag = function (tpl) {
+        return tpl.replace(store.regs.customTag, function (full, $match, position) {
+            var tagName = $match.match(store.regs.tagName), d, i, j, o, t, q
+
+            $match = $match.replace(tagName[0], "")
+
+            tagName = tagName[0].replace('#', '')
+
+            for (i in store.placeholders.$customTags) {
+                if (i != tagName) continue
+                d = trim(compile_tags.transVar($match, false, '!!'))
+
+                d = d.split('!!')
+
+                // 解析变量，并把解析后的变量放置到一个数组中s
+                t = []
+                t.push(self)
+                for (j in d) {
+                    if (typeof d[j] == 'function') continue
+                    if (is_object(d[j])) {
+                        d[j] = JSON.parse(trim(d[j]))
+                        t.push(d[j])
+                    } else {
+                        d[j] = d[j].replace(/'|"/g, '')
+                        if (typeof d[j] != 'function') t.push(trim(d[j]))
+                    }
+                }
+
+                return store.placeholders.$customTags[i].apply(self, t)
+            }
+            return full
+        })
+    }
+
+    var is_object = function (d) {
+        if ((d.indexOf('{') === 0 && d.indexOf('}') != -1) ||
+            (d.indexOf('[') === 0 && d.indexOf(']') != -1)
+        ) {
+            return true
+        }
+        return false
+    }
+
+    // 标签解析
+    var parse_tag = function (tpl) {
+        if (! tpl) return ''
+        return tpl.replace(store.regs.tag, function (full, $match, position) {
+            var tagName = $match.match(store.regs.tagName)
+            tagName = tagName[0]
+            for (var i in store.placeholders.$tags) {
+                if (tagName == store.placeholders.$tags[i]) {
+                    return compile_tags[i]($match.replace(tagName, ""))
+                }
+            }
+            return full
+        })
+    }
+
+    // 解析标签
+    var compile_tags = {
+        compare: function (tpl) {
+            var tagContent = this.compareSyntaxAnalysis(tpl, '??', 2)
+            var content = this.compareSyntaxAnalysis(tagContent[1], '::', 1)
+
+            var exp = '{'
+            for (var i in content) {
+                if (typeof content[i] == 'function') continue
+                if (i == 1) exp += '} else {'
+                if (content[i].indexOf("'") != -1 || content[i].indexOf('"') != -1 ) {
+                    exp += ' var result = ' + content[i]
+                } else {
+                    exp += ' var result = ' + this.transVar(content[i], true)
+                }
+            }
+            exp = 'if (' + this.compareTransVar(tagContent[0], true) + ') ' + exp + '}'
+            eval(exp)
+            return result || ''
+
+        },
+        // 翻译变量  compareJsvar
+        transVar: function (tpl, toString, delimiter) {
+            delimiter = delimiter || ' '
+            var i = 0, d, s = delimiter, e = delimiter
+            return tpl.replace(store.regs.jsvar, function (full, $match) {
+                d = trans_var($match, null, toString)
+                i++
+                if (i == 1) s = ''
+                return (typeof d == 'object' ? s + JSON.stringify(d) + e : s + d + e)
+            })
+        },
+        // 翻译compare标签变量
+        compareTransVar: function (tpl, toString, delimiter) {
+            delimiter = delimiter || ' '
+            return tpl.replace(store.regs.compareJsvar, function (full, $match) {
+                var d = trans_var($match, null, toString)
+                return (typeof d == 'object' ? delimiter + JSON.stringify(d) + delimiter : delimiter + d + delimiter)
+            })
+        },
+        compareSyntaxAnalysis: function (content, type, length) {
+            content = content.split(type)
+            if (content.length < length) {
+                throw new Error('Syntax error: "' + store.placeholders.$tags.compare + '" expression is not legal')
+            }
+            return content
+        }
+    }
+
+    var parse_expression_foreach = function (tpl) {
+        return tpl.replace(store.regs.$foreach, function (full, $match, position) {
+            var results = get_exp_and_content('foreach', 'endforeach', full, true, true)
+            var tmpExps = results.exp.split(' '), exps = []
+            for (var i = 0; i < tmpExps.length; i++) {
+                if (!tmpExps[i] || tmpExps[i] == "\n")  continue
+                exps.push(tmpExps[i].replace(/[\s\n]/gi, ""))
+            }
+
+            var content = '', list = [], key = null, value, i, foreachTpl, hasSubForeach = false
+            // 获取循环list数组
+            list = exps.shift()
+            list = get_var_name(list)
+            list = get_var(list) || []
+            // 循环key和value变量赋值
+            if (exps.length > 1) {
+                key = exps.shift()
+            }
+            value = exps.pop()
+
+            for (i in list) {
+                if (typeof list[i] == 'function') {
+                    continue
+                }
+
+                foreachTpl = results.content
+
+                if (key) {
+                    self.assign(get_var_name(key), i)
+                }
+                self.assign(get_var_name(value), list[i])
+
+                if (hasSubForeach || has('foreach', foreachTpl)) {
+                    hasSubForeach = true
+                    foreachTpl = parse_expression_foreach(foreachTpl)
+                }
+
+                // 解析foreach循环里面的标签、if表达式、变量
+                content += parse_var(
+                    parse_custom_tag(
+                        parse_tag(
+                            parse_expression_if(foreachTpl)
+                        )
+                    )
+                )
+            }
+            return content
+        })
+    }
+
+    var parse_expression_if = function (tpl, notParseForeach) {
+        return tpl.replace(store.regs.$if, function (full, $match, position) {
+            var ifContent = get_exp_and_content('if', 'end', full)
+
+            full = ifContent.full
+
+            var allContents = []
+            allContents.push(ifContent.content)
+            // 解析if
+            var evalString = get_eval_string('if', ifContent, 0)
+
+            // 计算elseif出现次数
+            var elseifTimes = get_length('elseif', full)
+
+            // 解析elseif
+            for (var i = 1; i <= elseifTimes; i++) {
+                var tmp = get_exp_and_content('elseif', 'end', full)
+                full = tmp.full
+
+                allContents.push(tmp.content)
+
+                evalString += get_eval_string('elseif', tmp, i)
+            }
+
+            var elseTimes = get_length('else', full)
+
+            // 解析else
+            if (elseTimes) {
+                tmp = get_exp_and_content('else', 'end', full)
+
+                if (tmp.full) {
+                    full = tmp.full.replace('else', "")
+                }
+
+                allContents.push(tmp.content)
+
+                evalString += get_eval_string('else', tmp, i)
+            }
+
+            eval(evalString)
+
+            if (full) {
+                full = full.replace(store.placeholders.$endif, "")
+            }
+
+            return (parse_var(parse_custom_tag(parse_tag(allContents[key]))) || '') + full
+        })
+    }
+
+    // 解析变量
+    var parse_var = function (tpl, vars, toString, $default) {
+        if (!tpl) return null
+        return tpl.replace(store.regs.$var, function (full, $match, position) {
+            return trans_var($match, vars, toString, $default)
+        })
+    }
+
+    var trans_var = function ($var, vars, toString, $default) {
+        if ($var.indexOf('[') == -1) {
+            if (toString) {
+                var t = get_var($var, vars, $default)
+                if (typeof t == 'object') {
+                    return JSON.stringify(t)
+                }
+                return '"' + t + '"'
+            }
+            return get_var($var, vars, $default)
+        } else {
+            return get_var($var.replace(store.regs.stringVar, function (f, $m) {
+                return '.' + get_var($m, vars, $default)
+            }), $default)
+        }
+    }
+
+    // 解析变量
+    var get_var = function ($key, vars, $default) {
+        var $lastItem = vars || store.vars, keys = $key.split('.')
+        for (var i = 0; i < keys.length; i++) {
+            if (typeof $lastItem[keys[i]] != 'undefined') {
+                $lastItem = $lastItem[keys[i]]
+            } else {
+                return (typeof $default != 'undefined') ? $default : $key
+            }
+        }
+        return $lastItem;
+    }
+
+    // 语法检测
+    function syntax_analysis(tpl) {
+        var msg = 'Syntax error: '
+        // 计算if次数
+        var ifTimes = get_length('if', tpl), endifTimes = get_length('endif', tpl)
+
+        if (ifTimes > endifTimes) {
+            throw new Error(msg + 'miss "' + store.placeholders.$endif + '"')
+        } else if (ifTimes < endifTimes) {
+            throw new Error(msg + 'miss "' + store.placeholders.$if + '"')
+        }
+        // 计算else次数
+        var elseTimes = get_length('else', tpl)
+        if (elseTimes > ifTimes) {
+            throw new Error(msg + 'redundant "' + store.placeholders.$else + '" placeholder')
+        }
+        var elseifTimes = get_length('elseif', tpl)
+        if (ifTimes == 0 && elseifTimes > 0) {
+            throw new Error(msg + 'redundant "' + store.placeholders.$elseif + '" placeholder')
+        }
+        // 计算foreach
+        var foreachTimes = get_length('foreach', tpl)
+        var endforeachTimes = get_length('endforeach', tpl)
+        if (foreachTimes > endforeachTimes) {
+            throw new Error(msg + 'miss "' + store.placeholders.$endforeach + '"')
+        } else if (foreachTimes < endforeachTimes) {
+            throw new Error(msg + 'miss "' + store.placeholders.$foreach + '"')
+        }
+    }
+
+    // 或取变量名称
+    function get_var_name($key) {
+        return $key.replace(new RegExp('[' + store.delimiter.start + '|' + store.delimiter.end + ']', 'gi'), "")
+    }
+
+    function get_eval_string(type, tmp, i) {
+        var exp = parse_var(tmp.exp, null, true, '')
+        var str = store.model['$' + type].replace('{exp}', exp)
+        return str.replace('{content}', 'var key = "' + i + '"')
+    }
+
+    // 判断模板是否含有表达式标签
+    function has(type, content) {
+        if (content.indexOf(store.placeholders['$' + type]) != -1 && content.indexOf(store.placeholders['$end' + type]) != -1) {
+            return true
+        }
+        return false
+    }
+
+    function get_exp_and_content(startType, endType, values, getAll, unset) {
+        var start = store.placeholders['$' + startType], end = store.placeholders['$' + endType]
+
+        var exp = values.match(new RegExp(start + '[ ]*([^@]*?)\n', 'i'))
+        if (!exp || !exp[0]) {
+            throw new Error('Syntax error: "' + start + '" miss expression content')
+        }
+
+        // 去除if 表达式部分
+        values = values.replace(exp[0], "")
+
+        if (unset) {
+            if (end != '@') {
+                var index = values.lastIndexOf(end)
+                if (index != -1) {
+                    values = values.substr(0, index)
+                } else {
+                    values = values.replace(end, "")
+                }
+            }
+        }
+
+        // 去掉@if头和换行，获得表达式条件
+        exp = exp[0].replace(new RegExp('(?:' + start + '[ ])*|\n', 'gi'), '')
+
+        // 检测是否存在嵌套if表达式标签
+        if (has(startType, values)) {
+            if (startType == 'if') {
+                values = parse_expression_if(values)
+            }
+        }
+
+        // 获取if表达式主体内容
+        var content = ''
+        if (getAll) {
+            content = values
+        } else {
+            content = values.match(new RegExp('([^' + end + ']*)', 'gi')) // /([^@]*)/gi  ((?!@).*)
+            content = content[0]
+        }
+
+        // 去除if主体内容
+        values = values.replace(content, "")
+
+        return {exp: exp, content: content, full: values}
+    }
+
+    // 计算表达式出现次数
+    function get_length(type, tpl) {
+        var t = tpl.match(store.regs[store.placeholders['$'+type]])
+        if (!t) {
+            return 0
+        }
+        return t.length
+    }
+    // 去除空行
+    function trim(tpl) {
+        return tpl.replace(/(^\s*)|(\s*$)/g, "")
+    }
+}

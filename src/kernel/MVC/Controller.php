@@ -54,7 +54,7 @@ abstract class Controller
      */
     public function request()
     {
-        return $this->container->make('http.request');
+        return make('http.request');
     }
 
     /**
@@ -62,7 +62,7 @@ abstract class Controller
      */
     public function response()
     {
-        return $this->container->make('http.response');
+        return make('http.response');
     }
 
     /**

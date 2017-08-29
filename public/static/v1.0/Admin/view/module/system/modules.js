@@ -3,11 +3,7 @@
  */
 define(['blade'], function () {
     // 添加自定义标签
-    BladeConfig.addTag('view', function ($view, options, tpl) {
-        var name = options[0],
-            fieldName = options[1],
-            i = options[2]
-
+    BladeConfig.addTag('view', function ($view, name, fieldName, i) {
         var blade = new Blade($('#' + name).text())
 
         // 第一次，用+号按钮
