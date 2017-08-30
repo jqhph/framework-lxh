@@ -26,7 +26,7 @@ use Lxh\Admin\Kernel\Url;
         <div class="table-rep-plugin">
             <div class="btn-toolbar" >
                 <div class="btn-group dropdown-btn-group pull-right">
-                    <a href="<?php echo Url::makeAction('Create'); ?>" data-action="create-row" class="btn btn-success"><?php echo trans('Create Menu'); ?></a>
+                    <a href="<?php echo Url::makeAction('create'); ?>" data-action="create-row" class="btn btn-success"><?php echo trans('Create Menu'); ?></a>
                 </div>
             </div>
 

@@ -3,7 +3,10 @@ return [
     'fields' => [
         'email' => 'Email',
         'nn' => 'nnnnn',
-        'tetnn111' => '测试12366111',
+        'tetnn111sdfd' => '测试12366111',
+        'f' => 'dfd',
+        'fds' => 'ffff',
+        'fff' => 'ddd',
     ],
     'options' => [
         'sex' => [

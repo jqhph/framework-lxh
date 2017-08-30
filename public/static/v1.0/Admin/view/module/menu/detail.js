@@ -22,7 +22,7 @@ add_action(function () {
             notify.success(trans('success'))
 
             // 500豪秒后跳转到菜单编辑界面
-            $lxh.redirect($lxh.url().makeAction('List'), 500)
+            $lxh.redirect($lxh.url().makeAction('list'), 500)
         })
 
         // 发起修改或新增操作

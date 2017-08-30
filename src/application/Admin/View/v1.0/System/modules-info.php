@@ -26,7 +26,7 @@
     ]]); ?>
 
 <?php echo component_view('fields/varchar/edit',
-    ['name' => 'icon', 'label' => 'icon', 'value' => '', 'help' => '<a target="_blank" href="' . Url::makeAction('FontAwesome', 'PublicEntrance')
+    ['name' => 'icon', 'label' => 'icon', 'value' => '', 'help' => '<a target="_blank" href="' . Url::makeAction('font-awesome', 'public-entrance')
         . '">' . trans_with_global('fontawesome icon CSS') . '</a>']); ?>
 
 <?php echo component_view('fields/varchar/edit',

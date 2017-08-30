@@ -34,7 +34,7 @@ use Lxh\Admin\Kernel\Url;
 
                         <?php echo component_view('fields/varchar/edit', [
                                 'name' => 'icon', 'label' => 'icon', 'value' => get_value($row, 'icon'),
-                                'help' => '<a target="_blank" href="' . Url::makeAction('FontAwesome', 'PublicEntrance')
+                                'help' => '<a target="_blank" href="' . Url::makeAction('font-awesome', 'public-entrance')
                                     . '">' . trans_with_global('fontawesome icon CSS') . '</a>'
                         ]); ?>
 

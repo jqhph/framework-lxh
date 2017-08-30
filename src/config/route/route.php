@@ -29,17 +29,17 @@ $config[] = [
 ];
 
 $config[] = [
-    'pattern' => '/lxhadmin',
+    'pattern' => '/admin',
     'method' => 'GET',
     'params' => [
         'module' => 'Admin',
         'controller' => 'Index',
-        'action' => 'Index'
+        'action' => 'List'
     ]
 ];
 
 $config[] = [
-    'pattern' => '/Register',
+    'pattern' => '/register',
     'method' => 'GET',
     'params' => [
         'auth' => false,
@@ -50,7 +50,7 @@ $config[] = [
 ];
 
 $config[] = [
-    'pattern' => '/api/User/Login',
+    'pattern' => '/api/user/login',
     'method' => 'POST',
     'params' => [
         'auth' => false,
@@ -129,7 +129,7 @@ $config[] = [
 
 
 $config[] = [
-    'pattern' => 'lxhadmin/:controller/:action',
+    'pattern' => 'admin/:controller/:action',
     'method' => '*',
     'params' => [
         'module' => 'Admin',
@@ -139,7 +139,7 @@ $config[] = [
 ];
 
 $config[] = [
-    'pattern' => 'lxhadmin/:controller/view/:id',
+    'pattern' => 'admin/:controller/view/:id',
     'method' => 'GET',
     'params' => [
         'module' => 'Admin',

@@ -10,21 +10,27 @@
 
 namespace Lxh\Admin\Kernel;
 
+use Lxh\Helper\Util;
+
 class Url
 {
-    protected static $prefix = 'lxhadmin';
+    protected static $prefix = 'admin';
 
     // 生成普通的url
     public static function makeAction($action = __ACTION__, $controller = __CONTROLLER__)
     {
         $pre = static::$prefix;
 
+        $action = Util::toUnderScore($action, true, '-');
+
+        $controller = Util::toUnderScore($controller, true, '-');
+
         return "/{$pre}/$controller/$action";
     }
 
     public static function makeHome()
     {
-        return "/lxhadmin";
+        return "/admin";
     }
 
     /**
@@ -33,6 +39,8 @@ class Url
     public static function makeDetail($id, $controller = __CONTROLLER__)
     {
         $pre = static::$prefix;
+
+        $controller = Util::toUnderScore($controller, true, '-');
 
         return "/$pre/$controller/view/$id";
     }

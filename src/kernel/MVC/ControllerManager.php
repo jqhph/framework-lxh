@@ -11,6 +11,7 @@ namespace Lxh\MVC;
 use Lxh\Contracts\Router;
 use Lxh\Exceptions\NotFound;
 use Lxh\Basis\Factory;
+use Lxh\Helper\Util;
 use Lxh\Http\Response;
 use Lxh\Http\Request;
 use Lxh\Contracts\Container\Container;
@@ -116,6 +117,18 @@ class ControllerManager extends Factory
         $this->setAuthParams($router->auth);
         $this->setModule($router->module);
         $this->setFolder($router->folder);
+
+        // 初始化语言包
+        language()->loadPackage('Global');
+        language()->scope($this->controllerName);
+
+        if (! defined('__CONTROLLER__')) {
+            define('__CONTROLLER__', $this->controllerName);
+        }
+
+        if (! defined('__ACTION__')) {
+            define('__ACTION__', $this->actionName);
+        }
 
         $this->response->data = $this->call($this->controllerName, $this->actionName, $this->requestParams);
 
@@ -346,23 +359,12 @@ class ControllerManager extends Factory
 
     protected function setControllerName($name)
     {
-        $this->controllerName = $name ? ucfirst($name) : $this->defaultController;
-
-        language()->loadPackage('Global');
-        language()->scope($this->controllerName);
-
-        if (! defined('__CONTROLLER__')) {
-            define('__CONTROLLER__', $this->controllerName);
-        }
+        $this->controllerName = $name ? Util::toCamelCase($name, true, '-') : $this->defaultController;
     }
 
     protected function setActionName($name)
     {
-        $this->actionName = $name ?: $this->defaultAction;
-
-        if (! defined('__ACTION__')) {
-            define('__ACTION__', $this->actionName);
-        }
+        $this->actionName = $name ? Util::toCamelCase($name, true, '-') : $this->defaultAction;
     }
 
     protected function setRequestParams($params)

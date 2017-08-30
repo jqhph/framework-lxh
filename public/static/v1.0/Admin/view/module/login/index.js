@@ -32,7 +32,7 @@ add_action(function (plugIns) {
             $lxh.redirect('/', 500)
         })
         // 发起登录请求
-        model.touchAction('Login', 'POST')
+        model.touchAction('login', 'POST')
 
     }
 })

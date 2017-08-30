@@ -282,6 +282,15 @@ window.Lxh = function (options) {
      */
     function Util() {
         return {
+            // 去除左右两边的字符串，默认去除空格
+            trim: function (str, symbol) {
+                symbol = symbol || "\\s"
+
+                var reg = new RegExp('(^' + symbol + '*)|(' + symbol + '*$)', 'g')
+
+                return str.replace(reg, "")
+            },
+
             /**
              * 比较两个对象是否一致
              *
@@ -356,7 +365,7 @@ window.Lxh = function (options) {
      */
     function UrlMaker(container) {
         var store = {
-            prefix: '/lxhadmin'
+            prefix: '/admin'
         }
 
         return {
@@ -781,7 +790,7 @@ window.Lxh = function (options) {
 
                 call(store)
             })
-            model.touchAction('Get', 'POST')
+            model.touchAction('get', 'POST')
 
         }
 
@@ -938,7 +947,7 @@ window.Lxh = function (options) {
 
                 call()
             })
-            model.touchAction('Get', 'POST')
+            model.touchAction('get', 'POST')
 
         }
 
@@ -998,7 +1007,7 @@ window.Lxh = function (options) {
      * Created by Jqh on 2017/6/27.
      */
     function Model(name, module, container) {
-        var notify = container.ui().notify()
+        var notify = container.ui().notify(), globalUtil = container.util()
 
         var store = {
             /**
@@ -1389,22 +1398,30 @@ window.Lxh = function (options) {
              * @returns {string}
              */
             parseApi: function (type, options) {
+                var scopeName = this.normalizeRequestName(store.name)
                 switch (type) {
                     case 'add':
-                        return store.apiPrefix + store.name
+                        return store.apiPrefix + scopeName
                     case 'edit':
                         var id = self.get('id') || store.formHandler.get(get_form_selector()).id
-                        return store.apiPrefix + store.name + '/view/' + id
+                        return store.apiPrefix + scopeName + '/view/' + id
                     case 'delete':
                         var id = self.get('id')
-                        return store.apiPrefix + store.name + '/view/' + id
+                        return store.apiPrefix + scopeName + '/view/' + id
                     case 'list':
-                        return store.apiPrefix + store.name + '/list'
+                        return store.apiPrefix + scopeName + '/list'
                     case 'detail':
-                        return store.apiPrefix + store.name + '/view/' + self.get('id')
+                        return store.apiPrefix + scopeName + '/view/' + self.get('id')
                     case 'action':
-                        return store.apiPrefix + store.name + '/' + options.action
+                        return store.apiPrefix + scopeName + '/' + this.normalizeRequestName(options.action)
                 }
+            },
+
+            // 驼峰转化为中划线小写形式
+            normalizeRequestName: function (name) {
+                return globalUtil.trim(name.replace(/([A-Z])/g, function (full, $match) {
+                    return '-' + $match.toLocaleLowerCase()
+                }), '-')
             },
 
         }

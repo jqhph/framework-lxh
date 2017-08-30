@@ -67,7 +67,7 @@ define(['blade'], function () {
                 this.model.data(this.store.inputValues)
 
                 // 发起创建模块请求
-                this.model.touchAction('CreateModule', 'POST')
+                this.model.touchAction('create-module', 'POST')
             },
 
             prevTab: function (e) {

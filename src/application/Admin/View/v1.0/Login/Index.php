@@ -96,7 +96,7 @@
 
     <div class="row">
         <div class="col-sm-12 text-center">
-            <p class="text-muted"><?php echo $language->translate('unaccount')?> <a href="/Register" class="text-primary m-l-5"><b>
+            <p class="text-muted"><?php echo $language->translate('unaccount')?> <a href="/register" class="text-primary m-l-5"><b>
                         <?php echo $language->translate('sign up');?></b></a></p>
         </div>
     </div>

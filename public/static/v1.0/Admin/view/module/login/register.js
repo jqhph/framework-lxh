@@ -42,7 +42,7 @@ add_action(function () {
             $lxh.redirect('/', 500)
         })
         // 发起登录请求
-        model.touchAction('Register', 'POST')
+        model.touchAction('register', 'POST')
 
     }
 })

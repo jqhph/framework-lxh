@@ -19,7 +19,7 @@ define(['css/sweet-alert.css', 'lib/js/sweet-alert.min'], function () {
             $('a[data-action="clear-client-cache"]').click(function () {
                 this.confirm(function () {
                     notify.info(trans('loading'))
-                    model.touchAction('ClearClientCache')
+                    model.touchAction('clear-client-cache')
                 })
             }.bind(this))
 
@@ -27,7 +27,7 @@ define(['css/sweet-alert.css', 'lib/js/sweet-alert.min'], function () {
             $('a[data-action="clear-js-css-cache"]').click(function () {
                 this.confirm(function () {
                     notify.info(trans('loading'))
-                    model.touchAction('ClearAllClientCache')
+                    model.touchAction('clear-all-client-cache')
                 })
             }.bind(this))
         },

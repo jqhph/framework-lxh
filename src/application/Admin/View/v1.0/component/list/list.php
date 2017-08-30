@@ -19,7 +19,7 @@ $useRWD = isset($useRWD) ? $useRWD : true;
 // 模块名
 $scope = isset($scope) ? $scope : __CONTROLLER__;
 
-$createUrl = Url::makeAction('Create');
+$createUrl = Url::makeAction('create');
 
 $createBtnText = "Create $scope";
 

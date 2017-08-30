@@ -15,20 +15,20 @@ class Util
      * Convert name to Camel Case format, ex. camel_case to camelCase
      *
      * @param  string  $name
-     * @param  string | array  $symbol
      * @param  boolean $capitaliseFirstChar
+     * @param  string  $symbol
      *
      * @return string
      */
-    public static function toCamelCase($name, $capitaliseFirstChar = false)
+    public static function toCamelCase($name, $capitaliseFirstChar = false, $symbol = '_')
     {
         if ($capitaliseFirstChar) {
-            return ucfirst(preg_replace_callback('/_([a-z])/', 'static::toCamelCaseConversion', $name));
+            return ucfirst(preg_replace_callback("/{$symbol}([a-z])/", 'static::toCamelCaseConversion', $name));
         }
-        return preg_replace_callback('/_([a-z])/', 'static::toCamelCaseConversion', $name);
+        return preg_replace_callback("/{$symbol}([a-z])/", 'static::toCamelCaseConversion', $name);
     }
 
-    protected static function toCamelCaseConversion($matches)
+    protected static function toCamelCaseConversion(& $matches)
     {
         return ucfirst($matches[1]);
     }
@@ -41,17 +41,13 @@ class Util
      * @param string $trim
      * @return string
      */
-    public static function toUnderScore($name, $trim = false)
+    public static function toUnderScore($name, $trim = false, $symbol = '_')
     {
-        if ($trim) {
-            return ltrim(preg_replace_callback('/([A-Z])/', 'static::toUnderline', $name), '_');
-        }
-        return preg_replace_callback('/([A-Z])/', 'static::toUnderline', $name);
-    }
+        $text = preg_replace_callback('/([A-Z])/', function (& $text) use ($symbol) {
+            return $symbol . strtolower($text[1]);
+        }, $name);
 
-    protected static function toUnderline(& $text)
-    {
-        return '_' . strtolower($text[1]);
+        return $trim ? ltrim($text, $symbol) : $text;
     }
 
     /**
@@ -275,7 +271,7 @@ class Util
      * ]
      *
      * @param
-     * @return void
+     * @return array
      */
     public static function multilayerStringToArray($str)
     {

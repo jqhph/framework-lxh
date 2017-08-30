@@ -162,7 +162,7 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
 
                 this.saveModel.data(this.saveData)
 
-                this.saveModel.touchAction('Save', 'POST')
+                this.saveModel.touchAction('save', 'POST')
             },
             removeRow: function (e) {
                 // 确认窗
@@ -224,7 +224,7 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
 
                     model.data({path: path, name: name})
 
-                    model.touchAction('CreateCategory', 'POST')
+                    model.touchAction('create-category', 'POST')
 
                 })
 
@@ -284,7 +284,7 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
 
                     model.data({newPath: newPath, path: path})
 
-                    model.touchAction('CopyFile', 'POST')
+                    model.touchAction('copy-file', 'POST')
                 })
             },
 
@@ -314,7 +314,7 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
 
                     model.data({lang: lang, module: module, file: file})
 
-                    model.touchAction('CreateFile', 'POST')
+                    model.touchAction('create-file', 'POST')
                 })
             },
 
@@ -343,7 +343,7 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
                 this.model.data({'content': path})
 
                 // 获取语言包
-                this.model.touchAction('GetPackage', 'POST')
+                this.model.touchAction('get-package', 'POST')
             }
         },
 
