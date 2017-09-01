@@ -13,11 +13,12 @@ use Lxh\Http\Request;
 use Lxh\Http\Response;
 use Lxh\MVC\ControllerManager;
 use Lxh\MVC\Model;
+use Lxh\Template\View;
 
 abstract class Controller
 {
     /**
-     * 控制器父类
+     * 控制器名称
      *
      * @var string
      */
@@ -47,6 +48,16 @@ abstract class Controller
 
     public function __construct()
     {
+    }
+
+    /**
+     * View
+     *
+     * @return View
+     */
+    protected function view()
+    {
+        return make('view');
     }
 
     /**
@@ -85,7 +96,7 @@ abstract class Controller
      */
     protected function createModel($name = __CONTROLLER__)
     {
-        return $this->container->make('model.factory')->create($name);
+        return make('model.factory')->create($name);
     }
 
     /**
@@ -96,7 +107,7 @@ abstract class Controller
      */
     protected function getModel($name = __CONTROLLER__)
     {
-        return $this->container->make('model.factory')->get($name);
+        return make('model.factory')->get($name);
     }
 
     /**

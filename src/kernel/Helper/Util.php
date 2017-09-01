@@ -39,9 +39,10 @@ class Util
      *
      * @param string | array $name
      * @param string $trim
+     * @param  string  $symbol
      * @return string
      */
-    public static function toUnderScore($name, $trim = false, $symbol = '_')
+    public static function convertWith($name, $trim = false, $symbol = '_')
     {
         $text = preg_replace_callback('/([A-Z])/', function (& $text) use ($symbol) {
             return $symbol . strtolower($text[1]);
@@ -202,9 +203,7 @@ class Util
             $txt .= static::makeBlank($level) . "{$pre}{$t},\n";
         }
 
-        $txt = rtrim($txt, "\n");
-
-        return "$txt\n" . static::makeBlank($level - 1) . "$end";
+        return $txt . static::makeBlank($level - 1) . $end;
     }
 
     // 输出空格（4个空格缩进）

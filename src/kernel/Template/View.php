@@ -89,6 +89,17 @@ class View
     }
 
     /**
+     * 判断模板是否存在
+     *
+     * @param  string $name 路径名称
+     * @return bool
+     */
+    public function exist($name)
+    {
+        return is_file($this->getTemplatePath($name)) ? true : false;
+    }
+
+    /**
      * 输出模板内容
      *
      * @param  string $viewName 模板名称

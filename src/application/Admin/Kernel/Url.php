@@ -21,9 +21,9 @@ class Url
     {
         $pre = static::$prefix;
 
-        $action = Util::toUnderScore($action, true, '-');
+        $action = Util::convertWith($action, true, '-');
 
-        $controller = Util::toUnderScore($controller, true, '-');
+        $controller = Util::convertWith($controller, true, '-');
 
         return "/{$pre}/$controller/$action";
     }
@@ -40,7 +40,7 @@ class Url
     {
         $pre = static::$prefix;
 
-        $controller = Util::toUnderScore($controller, true, '-');
+        $controller = Util::convertWith($controller, true, '-');
 
         return "/$pre/$controller/view/$id";
     }

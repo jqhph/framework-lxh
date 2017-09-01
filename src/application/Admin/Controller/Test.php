@@ -18,10 +18,20 @@ class Test extends Controller
 {
     public function actionTest(Request $req, Response $resp)
     {
-        $data = 'suitshe.com';
-        $host = 'www.suitshe.com';
+        $data = [
+            'a' => '123ff',
+            343 => 'yyy',
+            'f' => [
+                'name' => 22,
+                'attr' => [
+                    'ur' => false
+                ]
+            ],
+        ];
 
-        console_log(substr_count($data, '.'), substr_count($host, '.'));
+        console_log('data', Util::arrayToText($data));
+
+        return debug(Util::arrayToText($data));
     }
 
     public function actionHello()
