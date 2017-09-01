@@ -17,6 +17,7 @@ use Lxh\ORM\Query;
 use Lxh\MVC\Model;
 use Lxh\Contracts\Events\Dispatcher;
 use Lxh\Http\Client;
+use Lxh\Helper\Util;
 
 // 常用的变量先注册到全局变量中
 $GLOBALS['__container__']     = Container::getInstance();
@@ -229,6 +230,8 @@ function I($name = null, $default = null, $isEmpty = false)
  */
 function fetch_view($action = __ACTION__, $controller = __CONTROLLER__, array $vars = [])
 {
+    $action = Util::convertWith($action, true, '-');
+
    return $GLOBALS['__container__']->make('view')->fetch("$controller/$action", $vars);
 }
 
@@ -242,12 +245,6 @@ function fetch_view($action = __ACTION__, $controller = __CONTROLLER__, array $v
 function component_view($name, array $vars = [])
 {
     return $GLOBALS['__container__']->make('view')->fetch("component/$name", $vars);
-}
-
-// 输出模板内容
-function display_view($action = __ACTION__, $controller = __CONTROLLER__, array $vars = [])
-{
-    return $GLOBALS['__container__']->make('view')->display("$controller/$action", $vars);
 }
 
 /**
@@ -278,11 +275,14 @@ function assign($key, $value)
  *
  * @param  string $action
  * @param  array  $vars 要传递到模板的值，只有当前模板可以用
+ * @param  string $controller
  * @return string
  */
 function fetch_complete_view($action = __ACTION__, array $vars = [], $controller = __CONTROLLER__)
 {
     $view = $GLOBALS['__container__']->make('view');
+
+    $action = Util::convertWith($action, true, '-');
 
     return $view->fetch('Public/header') . $view->fetch("$controller/$action", $vars) . $view->fetch('Public/footer');
 }

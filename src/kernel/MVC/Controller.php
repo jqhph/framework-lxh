@@ -9,6 +9,7 @@
 namespace Lxh\MVC;
 
 use Lxh\Contracts\Container\Container;
+use Lxh\Helper\Util;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
 use Lxh\MVC\ControllerManager;
