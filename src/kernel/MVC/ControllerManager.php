@@ -71,7 +71,10 @@ class ControllerManager extends Factory
      */
     protected $authParams = 'User';// 登录验证相关信息
 
-    protected $requestParams;// 请求参数
+    /**
+     * @var array
+     */
+    protected $requestParams = [];// 请求参数
 
     /**
      * 认证类实例
@@ -169,19 +172,19 @@ class ControllerManager extends Factory
         $this->getContrMiddleware($middleware, $contr);
 
         return $this->pipeline
-                ->send(['req' => $this->request, 'resp' => $this->response, 'params' => & $params])
-                ->through($middleware)
-                ->then(function () use ($contr, $action, $params) {
+            ->send(['req' => $this->request, 'resp' => $this->response, 'params' => & $params])
+            ->through($middleware)
+            ->then(function () use ($contr, $action, $params) {
 
-                    if ($this->first) {
-                        $this->events->fire('route.auth.success', [$this->request, $this->response, $this->requestParams]);
+                if ($this->first) {
+                    $this->events->fire('route.auth.success', [$this->request, $this->response, $this->requestParams]);
 
-                        // 注册当前控制器
-                        $this->container->instance('controller', $contr);
-                    }
+                    // 注册当前控制器
+                    $this->container->instance('controller', $contr);
+                }
 
-                    return $contr->$action($this->request, $this->response, $params);
-                });
+                return $contr->$action($this->request, $this->response, $params);
+            });
     }
 
     /**

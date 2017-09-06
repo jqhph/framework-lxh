@@ -12,6 +12,7 @@ use Lxh\Exceptions\Exception;
 use Lxh\Exceptions\NotFound;
 use Lxh\Contracts\Container\Container;
 use Lxh\Contracts\Events\Dispatcher;
+use Lxh\Helper\Console;
 use Lxh\Http\Response;
 use Lxh\Http\Request;
 use Lxh\Helper\Arr;
@@ -59,6 +60,7 @@ class Application
         $this->loadInitConfig();
         $this->loadFunctionFile();
         $this->loadServiceBindConfig();
+        register_shutdown_function([$this, 'shutdown']);
 
         // 记录程序执行开始时间
         debug_track('start');
@@ -67,6 +69,30 @@ class Application
         $this->events    = events();
 
         $this->bindRouter();
+    }
+
+    /**
+     * 程序异常终结
+     *
+     * @return void
+     */
+    public function shutdown()
+    {
+        if ($err = error_get_last()) {
+            // 记录错误日志
+            logger('exception')->addEmergency('', $err);
+        }
+
+        $response = $this->container->make('http.response');
+
+        // 触发程序终结时间
+        $this->events->fire('app.shutdown', [$response, & $err]);
+
+        if ($response->sent()) {
+            return;
+        }
+
+        $response->send();
     }
 
     /**
@@ -88,7 +114,7 @@ class Application
     /**
      * 运行WEB应用
      *
-     * @return void
+     * @return Response
      */
     public function handle()
     {
