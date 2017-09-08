@@ -18,18 +18,18 @@ class PDO
     private $dbname;	//数据库名称
     private $prefix;	//表前缀
     private $pdo;		//PDO实例化对象
-    
+
     protected $config;
     // 是否启用连接池
     protected $usepool;
-    
+
     // 保存最后执行的sql语句
     public static $lastSql;
 
     public static $lastPrepareData = [];
-    
+
     protected $stmt;
-    
+
     /**
      * 构造方法 初始化数据库连接
      * @param array $arr   = array() 连接数据库信息数组
@@ -40,20 +40,20 @@ class PDO
         if (! $config) {
             throw new Exception('Lack of database configuration information.');
         }
-        
+
         $this->usepool = isset($config['usepool']) ? $config['usepool'] : false;
         $this->db_type = isset($config['type'])    ? $config['type']    : 'mysql';
         $this->host    = isset($config['host'])    ? $config['host']    : 'localhost';
-        $this->port    = isset($config['port'])    ? $config['port']    : 3306; 
-        $this->user    = isset($config['user'])    ? $config['user']    : 'root'; 
-        $this->pass    = isset($config['pwd'])     ? $config['pwd']     : ''; 
-        $this->charset = isset($config['charset']) ? $config['charset'] : 'utf8'; 
-        $this->dbname  = isset($config['name'])    ? $config['name']    : ''; 
-        $this->prefix  = isset($config['prefix'])  ? $config['prefix']  : ''; 
-    
+        $this->port    = isset($config['port'])    ? $config['port']    : 3306;
+        $this->user    = isset($config['user'])    ? $config['user']    : 'root';
+        $this->pass    = isset($config['pwd'])     ? $config['pwd']     : '';
+        $this->charset = isset($config['charset']) ? $config['charset'] : 'utf8';
+        $this->dbname  = isset($config['name'])    ? $config['name']    : '';
+        $this->prefix  = isset($config['prefix'])  ? $config['prefix']  : '';
+
         //连接数据库
         $this->connect();
-    
+
         //设置编码
         $this->pdo->query('set names ' . $this->charset);
     }
@@ -62,7 +62,7 @@ class PDO
     {
         return $this->pdo;
     }
-    
+
     /*
      * 连接数据库
      * 成功产生PDO对象,失败提示错误信息
@@ -85,7 +85,7 @@ class PDO
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);//开启异常处理
         return $this->pdo;
     }
-    
+
     /**
      * 开启连接池后需要调用此方法来释放这个进程占用的连接到池子里面;
      */
@@ -105,7 +105,7 @@ class PDO
     public function exec($command)
     {
         self::$lastSql = & $command;
-        
+
         if (! $this->check($command)) {
             throw new \Exception('It is not safe to do this query', 0);
         }
@@ -118,7 +118,7 @@ class PDO
         db_track($command, $s, 'w');
 
         $this->release();
-    
+
         return $res;
     }
 
@@ -128,18 +128,18 @@ class PDO
         return $this->stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
-    
+
     public function numRows()
     {
         return $this->stmt ? $this->stmt->fetchAll(\PDO::FETCH_NUM) : false;
     }
-    
+
     public function numFields()
     {
         return $this->stmt ? $this->stmt->fetchAll(\PDO::FETCH_COLUMN) : false;
     }
 
-    
+
     // 批量添加
     public function batchAdd($table = '', array & $data, $replace = false)
     {
@@ -147,19 +147,19 @@ class PDO
         $values = '';
         $key    = '';
         $vals   = '';
-        
+
         $prepearData = [];
-    
+
         foreach ($data as & $info) {
             if (empty($info))
                 continue;
-    
+
             foreach ($info as $k => & $v) {
                 if ($key != 'ok')
                     $key  .= "`$k`,";
-                    $vals .= '?,';//$vals .= '"' . $v . '",';
-                    
-                    $prepearData[] = $v;
+                $vals .= '?,';//$vals .= '"' . $v . '",';
+
+                $prepearData[] = $v;
             }
             if (empty($field)) {
                 $field  = substr($key,  0, - 1);
@@ -172,20 +172,20 @@ class PDO
         $values = substr($values, 0, -1);
 
         $pre = $replace ? 'REPLACE' : 'INSERT';
-    
+
         $sql = $pre . ' INTO `' . $table . '` (' . $field . ') VALUES ' . $values;
-    
+
         self::$lastSql = & $sql;
 
         $res = $this->prepare($sql, $prepearData, false);
         $id  = $this->pdo->lastInsertId();
 
         $this->release();
-        
+
         return $id ?: $res;
     }
-    
-    
+
+
     //--------------------------------------------------------------
     // | 预处理执行sql操作
     //--------------------------------------------------------------
@@ -204,7 +204,7 @@ class PDO
         self::$lastPrepareData = & $data;
 
         $s = microtime(true);
-            
+
         $this->stmt = $stmt = $this->pdo->prepare($sql);
         $stmt->execute($data);
 
@@ -249,36 +249,36 @@ class PDO
 
         return $this->stmt;
     }
-    
-    
+
+
     /**
      * 查询单条数据操作
      *
      * @param  string $sql 要处理的SQL语句
      * @param array $whereData where字句值, 如: [48, '小强']
-     * @return mixed       成功返回关联一维数组,失败返回false
+     * @return mixed       成功返回关联一维数组,失败返回空数组
      */
     public function one($sql, array $whereData = [])
     {
         $stmt = $this->prepare($sql, $whereData);
-    
-        return $stmt ? $stmt->fetch(\PDO::FETCH_ASSOC) : false;
+
+        return $stmt ? $stmt->fetch(\PDO::FETCH_ASSOC) : [];
     }
-    
+
     /**
      * 查询多条数据操作
      *
      * @param  string $sql 要处理的SQL语句
      * @param array $whereData where字句值, 如: [48, '小强']
-     * @return mixed       成功返回关联二维数组,失败返回false
+     * @return mixed       成功返回关联二维数组,失败返回空数组
      */
     public function all($sql, array $whereData = [])
     {
         $stmt = $this->prepare($sql, $whereData);
-    
-        return $stmt ? $stmt->fetchAll(\PDO::FETCH_ASSOC) : false;
+
+        return $stmt ? $stmt->fetchAll(\PDO::FETCH_ASSOC) : [];
     }
-    
+
     /**
      * 预处理修改
      *
@@ -297,11 +297,11 @@ class PDO
             } else {
                 $updateStr .= "$key ?,";
             }
-            	
+
             $data[] = $val;
             unset($data[$key]);
         }
-    
+
         $updateStr = substr($updateStr, 0, - 1);
         $sql = "UPDATE `$table` SET {$updateStr} {$where}";
 
@@ -353,8 +353,8 @@ class PDO
         }
         return rtrim($instr, ',');
     }
-    
-    
+
+
     /**
      * 添加数据
      *
@@ -366,52 +366,52 @@ class PDO
     {
         $field = '';
         $values = '';
-    
+
         foreach ($data as $k => $v) {
             $field  .= "`$k`,";
             $values .= '?,';
-            	
+
             unset($data[$k]);
             $data[] = $v;
         }
         $field  = substr($field,  0, - 1);
         $values = substr($values, 0, - 1);
-    
+
         $sql = "INSERT INTO `$table` ($field) VALUES ($values)";
-    
+
         $res = $this->prepare($sql, $data, false);
         $id = $this->pdo->lastInsertId();
-        
+
         return $id ?: $res;
     }
-    
+
     public function replace($table, array $data)
     {
         $field = '';
         $values = '';
-    
+
         foreach ($data as $k => & $v) {
             $field  .= "`$k`,";
             $values .= '?,';
-    
+
             unset($data[$k]);
             $data[] = $v;
         }
         $field  = substr($field,  0, - 1);
         $values = substr($values, 0, - 1);
-    
+
         $sql = "REPLACE INTO `$table` ($field) VALUES ($values)";
-    
+
         $res = $this->prepare($sql, $data, false);
         $id = $this->pdo->lastInsertId();
-        
+
         return $id ?: $res;
     }
-    
+
     public function delete($table, $where = '', array $whereData = [])
     {
         $sql = "DELETE FROM `$table` $where";
         return $this->prepare($sql, $whereData, false);
     }
-    
+
 }
