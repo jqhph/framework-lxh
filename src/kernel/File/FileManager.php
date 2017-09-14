@@ -177,6 +177,53 @@ class FileManager
     }
 
     /**
+     * Get the contents of a file.
+     *
+     * @param  string  $path
+     * @param  bool  $lock
+     * @return string
+     *
+     * @throws \Error
+     */
+    public function get($path, $lock = false)
+    {
+        if (is_file($path)) {
+            return $lock ? $this->sharedGet($path) : file_get_contents($path);
+        }
+
+        throw new Error("File does not exist at path {$path}");
+    }
+
+    /**
+     * Get contents of a file with shared access.
+     *
+     * @param  string  $path
+     * @return string
+     */
+    public function sharedGet($path)
+    {
+        $contents = '';
+
+        $handle = fopen($path, 'rb');
+
+        if ($handle) {
+            try {
+                if (flock($handle, LOCK_SH)) {
+                    clearstatcache(true, $path);
+
+                    $contents = fread($handle, filesize($path) ?: 1);
+
+                    flock($handle, LOCK_UN);
+                }
+            } finally {
+                fclose($handle);
+            }
+        }
+
+        return $contents;
+    }
+
+    /**
      * Get PHP array from PHP file
      *
      * @param  string | array $path
@@ -201,12 +248,12 @@ class FileManager
      *
      * @param  string | array $path
      * @param  mixed $data
-     * @param  integer $flags
+     * @param  integer $flags LOCK_EX
      * @param  resource $context
      *
      * @return bool
      */
-    public function putContents($path, & $data, $flags = 0, $context = null)
+    public function putContents($path, & $data, $lock = false, $context = null)
     {
         $fullPath = $this->concatPaths($path); //todo remove after changing the params
 
@@ -214,7 +261,7 @@ class FileManager
             throw new Error('Permission denied for ' . $fullPath);
         }
 
-        $res = (file_put_contents($fullPath, $data, $flags, $context) !== false);
+        $res = (file_put_contents($fullPath, $data, $lock ? LOCK_EX : 0, $context) !== false);
 
         if ($res && function_exists('opcache_invalidate')) {
             // 清除文件缓存

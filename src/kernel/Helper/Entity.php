@@ -1,6 +1,6 @@
 <?php
 /**
- * 集合
+ * 实体
  *
  * @author Jqh
  * @date   2017/6/13 19:13
@@ -8,14 +8,17 @@
 
 namespace Lxh\Helper;
 
-class Entity
+use Lxh\Contracts\Support\Arrayable;
+use Lxh\Contracts\Support\Jsonable;
+
+class Entity implements Arrayable, Jsonable
 {
     /**
      * 属性
      *
      * @var array
      */
-    protected $attrs = [];
+    protected $items = [];
 
     /**
      * 属性回收站
@@ -26,32 +29,32 @@ class Entity
 
     public function __construct(array $data = [])
     {
-        $this->attrs = $data;
+        $this->items = $data;
     }
 
     // 回收数据
     public function recycle($name)
     {
-        $this->recycled[$name] = $this->attrs[$name];
-        unset($this->attrs[$name]);
+        $this->recycled[$name] = $this->items[$name];
+        unset($this->items[$name]);
     }
 
     // 删除数据
     public function remove($name)
     {
-        unset($this->attrs[$name]);
+        unset($this->items[$name]);
     }
 
     // 判断属性是否存在
     public function has($name)
     {
-        return isset($this->attrs[$name]);
+        return isset($this->items[$name]);
     }
 
     // 注入属性
     public function fill(array $data)
     {
-        $this->attrs = array_merge($this->attrs, $data);
+        $this->items = array_merge($this->items, $data);
     }
 
     /**
@@ -63,11 +66,13 @@ class Entity
      */
     public function get($key = null, $default = null)
     {
-        if (empty($key)) {
-            return $this->attrs;
+        if ($key === null) {
+            return $this->items;
         }
 
-        $lastItem = & $this->attrs;
+        if (isset($this->items[$key])) return $this->items[$key];
+
+        $lastItem = & $this->items;
         foreach (explode('.', $key) as & $keyName) {
             if (isset($lastItem[$keyName])) {
                 $lastItem = & $lastItem[$keyName];
@@ -82,52 +87,52 @@ class Entity
     // 设置属性值
     public function set($name, $value)
     {
-        $this->attrs[$name] = $value;
+        $this->items[$name] = $value;
         return $this;
     }
 
     // 追加值到某一属性中
     public function append($name, $value)
     {
-        $this->attrs[$name][] = $value;
+        $this->items[$name][] = $value;
         return $this;
     }
 
     // 清除属性
     public function reset()
     {
-        $this->attrs = [];
+        $this->items = [];
     }
 
     public function all()
     {
-        return $this->attrs;
+        return $this->items;
     }
 
     public function toArray()
     {
-        return $this->attrs;
+        return $this->items;
     }
 
-    public function toJson()
+    public function toJson($options = 0)
     {
-        return json_encode($this->attrs);
+        return json_encode($this->items);
     }
 
     // 获取属性值
     public function __get($name)
     {
-        return isset($this->attrs[$name]) ? $this->attrs[$name] : null;
+        return isset($this->items[$name]) ? $this->items[$name] : null;
     }
 
     // 设置属性值
     public function __set($name, $value)
     {
-        $this->attrs[$name] = $value;
+        $this->items[$name] = $value;
     }
 
     public function __toString()
     {
-        return json_encode($this->attrs);
+        return json_encode($this->items);
     }
 }

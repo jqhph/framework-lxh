@@ -15,6 +15,7 @@ use Lxh\Http\Response;
 use Lxh\MVC\ControllerManager;
 use Lxh\MVC\Model;
 use Lxh\Template\View;
+use Lxh\View\Factory;
 
 abstract class Controller
 {
@@ -54,11 +55,51 @@ abstract class Controller
     /**
      * View
      *
-     * @return View
+     * @return Factory
      */
-    protected function view()
+    protected function viewFactory()
     {
-        return make('view');
+        return make('view.factory');
+    }
+
+    /**
+     * Add a piece of shared data to the environment.
+     *
+     * @param  array|string  $key
+     * @param  mixed  $value
+     * @return mixed
+     */
+    protected function share($key, $value = null)
+    {
+        return make('view.factory')->share($key, $value);
+    }
+
+    /**
+     * Get the rendered content of the view based
+     *
+     * @param  string  $view
+     * @param  array   $data
+     * @param  bool    $compalete
+     * @return string
+     */
+    protected function render($view, array $data = [], $compalete = false)
+    {
+        $factory = make('view.factory');
+
+        $module = Util::convertWith(__MODULE__, true, '-');
+
+        $view = Util::convertWith($view, true, '-');
+
+        if (strpos($view, '.') === false) {
+            $view = Util::convertWith(__CONTROLLER__, true, '-') . '.' . $view;
+        }
+
+        if ($compalete) {
+            return $factory->make($module . '.public.header')->render()
+                 . $factory->make($module . $view, $data)->render()
+                 . $factory->make($module . '.public.footer')->render();
+        }
+        return $factory->make($module . '.' . $view, $data)->render();
     }
 
     /**

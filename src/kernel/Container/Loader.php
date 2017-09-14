@@ -142,7 +142,7 @@ class Loader
 	 * 载入服务实例并注册到服务容器上
 	 * 
 	 * @param $abstract string 载入类实例的别名
-	 * @return instance
+	 * @return object
 	 */
     public function load($abstract, $binding) 
     {
@@ -185,7 +185,7 @@ class Loader
      * 获取依赖类实例
      * 
      * @param string $alias 别名
-     * @return instance
+     * @return object
      */
     protected function getDependencyInstance($alias)
     {

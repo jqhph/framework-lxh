@@ -8,5 +8,6 @@
 
 use Lxh\Config\Config;
 use Lxh\Contracts\Container\Container;
+use Lxh\View\ViewServiceProvider;
 
 $container = container();

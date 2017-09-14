@@ -18,18 +18,21 @@ use Lxh\MVC\Model;
 use Lxh\Contracts\Events\Dispatcher;
 use Lxh\Http\Client;
 use Lxh\Helper\Util;
+use Lxh\Support\Arr;
+use Lxh\Support\Collection;
+use Lxh\Contracts\Support\Htmlable;
 
 // 常用的变量先注册到全局变量中
-$GLOBALS['__container__']     = Container::getInstance();
-$GLOBALS['__config__']        = $GLOBALS['__container__']->make('config');
-$GLOBALS['__language__']      = $GLOBALS['__container__']->make('language.manager');
-$GLOBALS['__model_factory__'] = $GLOBALS['__container__']->make('model.factory');
-$GLOBALS['__events__']        = $GLOBALS['__container__']->make('events');
+$GLOBALS['CONTAINER']     = new Container();
+$GLOBALS['CONFIG']        = $GLOBALS['CONTAINER']->make('config');
+$GLOBALS['LANGUAGE']      = $GLOBALS['CONTAINER']->make('language.manager');
+$GLOBALS['MODEL_FACTORY'] = $GLOBALS['CONTAINER']->make('model.factory');
+$GLOBALS['EVENTS']        = $GLOBALS['CONTAINER']->make('events');
 
-$GLOBALS['resource-server']  = $GLOBALS['__config__']->get('client-config.resource-server');
-$GLOBALS['js-version']       = $GLOBALS['__config__']->get('js-version');
-$GLOBALS['css-version']      = $GLOBALS['__config__']->get('css-version');
-$GLOBALS['resource-version'] = $GLOBALS['__config__']->get('client-config.resource-version');
+$GLOBALS['resource-server']  = $GLOBALS['CONFIG']->get('client-config.resource-server');
+$GLOBALS['js-version']       = $GLOBALS['CONFIG']->get('js-version');
+$GLOBALS['css-version']      = $GLOBALS['CONFIG']->get('css-version');
+$GLOBALS['resource-version'] = $GLOBALS['CONFIG']->get('client-config.resource-version');
 
 /**
  * 获取容器对象
@@ -38,7 +41,7 @@ $GLOBALS['resource-version'] = $GLOBALS['__config__']->get('client-config.resour
  */
 function container()
 {
-    return $GLOBALS['__container__'];
+    return $GLOBALS['CONTAINER'];
 }
 
 /**
@@ -49,7 +52,7 @@ function container()
  */
 function make($abstract)
 {
-    return $GLOBALS['__container__']->make($abstract);
+    return $GLOBALS['CONTAINER']->make($abstract);
 }
 
 /**
@@ -60,7 +63,7 @@ function make($abstract)
  */
 function model($name = __CONTROLLER__)
 {
-    return $GLOBALS['__model_factory__']->get($name);
+    return $GLOBALS['MODEL_FACTORY']->get($name);
 }
 
 /**
@@ -71,7 +74,7 @@ function model($name = __CONTROLLER__)
  */
 function create_model($name = __CONTROLLER__)
 {
-    return $GLOBALS['__model_factory__']->create($name);
+    return $GLOBALS['MODEL_FACTORY']->create($name);
 }
 
 /**
@@ -81,7 +84,7 @@ function create_model($name = __CONTROLLER__)
  */
 function events()
 {
-    return $GLOBALS['__events__'];
+    return $GLOBALS['EVENTS'];
 }
 
 // 加载js
@@ -109,7 +112,7 @@ function load_img($name, $dir = 'images', $module = __MODULE__)
  */
 function language()
 {
-    return $GLOBALS['__language__'];
+    return $GLOBALS['LANGUAGE'];
 }
 
 /**
@@ -117,8 +120,9 @@ function language()
  */
 function file_manager()
 {
-    return $GLOBALS['__container__']->make('file.manager');
+    return $GLOBALS['CONTAINER']->make('file.manager');
 }
+
 
 /**
  * Translate label/labels
@@ -131,7 +135,7 @@ function file_manager()
  */
 function trans($label, $category = 'labels', array $sprints = [])
 {
-    return $GLOBALS['__language__']->translate($label, $category, $sprints);
+    return $GLOBALS['LANGUAGE']->translate($label, $category, $sprints);
 }
 
 /**
@@ -144,7 +148,7 @@ function trans($label, $category = 'labels', array $sprints = [])
  */
 function trans_with_global($label, $category = 'labels', array $sprints = [])
 {
-    return $GLOBALS['__language__']->translateWithGolobal($label, $category, $sprints);
+    return $GLOBALS['LANGUAGE']->translateWithGolobal($label, $category, $sprints);
 }
 
 /**
@@ -156,22 +160,22 @@ function trans_with_global($label, $category = 'labels', array $sprints = [])
  */
 function trans_option($value, $field)
 {
-    return $GLOBALS['__language__']->translateOption($value, $field);
+    return $GLOBALS['LANGUAGE']->translateOption($value, $field);
 }
 
 function ucfirst_trans($label, $category = 'labels')
 {
-    return ucfirst($GLOBALS['__language__']->translate($label, $category));
+    return ucfirst($GLOBALS['LANGUAGE']->translate($label, $category));
 }
 
 function ucfirst_trans_with_global($label, $category = 'labels')
 {
-    return ucfirst($GLOBALS['__language__']->translateWithGolobal($label, $category));
+    return ucfirst($GLOBALS['LANGUAGE']->translateWithGolobal($label, $category));
 }
 
 function ucfirst_trans_option($value, $label)
 {
-    return ucfirst($GLOBALS['__language__']->translateOption($value, $label));
+    return ucfirst($GLOBALS['LANGUAGE']->translateOption($value, $label));
 }
 
 /**
@@ -185,7 +189,7 @@ function user()
 
     if ($instance) return $instance;
 
-    return $instance = $GLOBALS['__container__']->make('model.factory')->get('User');
+    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->get('User');
 
 }
 
@@ -207,7 +211,7 @@ function http()
  */
 function logger($channel = 'exception')
 {
-    return $GLOBALS['__container__']->make('logger')->channel($channel);
+    return $GLOBALS['CONTAINER']->make('logger')->channel($channel);
 }
 
 // 获取request参数
@@ -218,6 +222,144 @@ function I($name = null, $default = null, $isEmpty = false)
     if ($isEmpty) return empty($_REQUEST[$name]) ? $default : $_REQUEST[$name];
 
     return isset($_REQUEST[$name]) ? $_REQUEST[$name] : $default;
+}
+
+/**
+ * Call the given Closure with the given value then return the value.
+ *
+ * @param  mixed  $value
+ * @param  callable|null  $callback
+ * @return mixed
+ */
+function tap($value, $callback = null)
+{
+    if (is_null($callback)) {
+        return new Lxh\Support\HigherOrderTapProxy($value);
+    }
+
+    $callback($value);
+
+    return $value;
+}
+
+/**
+ * Return the default value of the given value.
+ *
+ * @param  mixed  $value
+ * @return mixed
+ */
+function value($value)
+{
+    return $value instanceof Closure ? $value() : $value;
+}
+
+/**
+ * Get an item from an array or object using "dot" notation.
+ *
+ * @param  mixed   $target
+ * @param  string|array  $key
+ * @param  mixed   $default
+ * @return mixed
+ */
+function data_get($target, $key, $default = null)
+{
+    if (is_null($key)) {
+        return $target;
+    }
+
+    $key = is_array($key) ? $key : explode('.', $key);
+
+    while (! is_null($segment = array_shift($key))) {
+        if ($segment === '*') {
+            if ($target instanceof Collection) {
+                $target = $target->all();
+            } elseif (! is_array($target)) {
+                return value($default);
+            }
+
+            $result = Arr::pluck($target, $key);
+
+            return in_array('*', $key) ? Arr::collapse($result) : $result;
+        }
+
+        if (Arr::accessible($target) && Arr::exists($target, $segment)) {
+            $target = $target[$segment];
+        } elseif (is_object($target) && isset($target->{$segment})) {
+            $target = $target->{$segment};
+        } else {
+            return value($default);
+        }
+    }
+
+    return $target;
+}
+
+/**
+ * Create a collection from the given value.
+ *
+ * @param  mixed  $value
+ * @return Collection
+ */
+function collect($value = null)
+{
+    return new Collection($value);
+}
+
+/**
+ * Get all of the given array except for a specified array of items.
+ *
+ * @param  array  $array
+ * @param  array|string  $keys
+ * @return array
+ */
+function array_except($array, $keys)
+{
+    return Arr::except($array, $keys);
+}
+
+/**
+ * Escape HTML special characters in a string.
+ *
+ * @param  Htmlable|string  $value
+ * @return string
+ */
+function e(& $value)
+{
+    if ($value instanceof Htmlable) {
+        return $value->toHtml();
+    }
+
+    return htmlspecialchars($value, ENT_QUOTES, 'UTF-8', false);
+}
+
+/**
+ * Add a piece of shared data to the environment.
+ *
+ * @param  array|string  $key
+ * @param  mixed  $value
+ * @return mixed
+ */
+function share_var($key, $value = null)
+{
+    return $GLOBALS['CONTAINER']->share($key, $value);
+}
+
+/**
+ * Get the evaluated view contents for the given view.
+ *
+ * @param  string  $view
+ * @param  array   $data
+ * @return \Lxh\Contracts\View\View
+ */
+function view($view, array $data = []) {
+    $view = Util::convertWith($view, true, '-');
+    return $GLOBALS['CONTAINER']->make('view.factory')->make($view, $data);
+}
+
+function display_view($view, array $data = [])
+{
+    $view = Util::convertWith($view, true, '-');
+    echo $GLOBALS['CONTAINER']->make('view.factory')->make(Util::convertWith(__MODULE__, true, '-') . '.' . $view, $data)->render();
 }
 
 /**
@@ -232,7 +374,7 @@ function fetch_view($action = __ACTION__, $controller = __CONTROLLER__, array $v
 {
     $action = Util::convertWith($action, true, '-');
 
-   return $GLOBALS['__container__']->make('view')->fetch("$controller/$action", $vars);
+   return $GLOBALS['CONTAINER']->make('view')->fetch("$controller/$action", $vars);
 }
 
 /**
@@ -244,7 +386,7 @@ function fetch_view($action = __ACTION__, $controller = __CONTROLLER__, array $v
  */
 function component_view($name, array $vars = [])
 {
-    return $GLOBALS['__container__']->make('view')->fetch("component/$name", $vars);
+    return $GLOBALS['CONTAINER']->make('view')->fetch("component/$name", $vars);
 }
 
 /**
@@ -254,7 +396,7 @@ function component_view($name, array $vars = [])
  */
 function call($controller, $action, array $params = [])
 {
-    return $GLOBALS['__container__']->make('controller.manager')->call($controller, $action, $params);
+    return $GLOBALS['CONTAINER']->make('controller.manager')->call($controller, $action, $params);
 }
 
 /**
@@ -267,7 +409,7 @@ function call($controller, $action, array $params = [])
  */
 function assign($key, $value)
 {
-    $GLOBALS['__container__']->make('view')->assign($key, $value);
+    $GLOBALS['CONTAINER']->make('view')->assign($key, $value);
 }
 
 /**
@@ -280,7 +422,7 @@ function assign($key, $value)
  */
 function fetch_complete_view($action = __ACTION__, array $vars = [], $controller = __CONTROLLER__)
 {
-    $view = $GLOBALS['__container__']->make('view');
+    $view = $GLOBALS['CONTAINER']->make('view');
 
     $action = Util::convertWith($action, true, '-');
 
@@ -324,7 +466,7 @@ function is_prod()
  */
 function config($key = null, $default = null)
 {
-    return $GLOBALS['__config__']->get($key, $default);
+    return $GLOBALS['CONFIG']->get($key, $default);
 }
 
 /**
@@ -353,7 +495,7 @@ function query($name = 'primary')
         return $instances[$name];
     }
 
-    $q = $GLOBALS['__container__']->make('query');
+    $q = $GLOBALS['CONTAINER']->make('query');
     // 设置连接类型
     $q->connection($name);
     return $instances[$name] = $q;
@@ -388,7 +530,7 @@ function get_value(array & $data, $key, $default = null)
  */
 function track($name, $options = '', $save = false)
 {
-    return $GLOBALS['__container__']->make('track')->record($name, $options, $save);
+    return $GLOBALS['CONTAINER']->make('track')->record($name, $options, $save);
 }
 
 /**
@@ -410,7 +552,7 @@ function debug_track($name, $options = '', $save = false)
     if (is_prod()) {
         return false;
     }
-    return $GLOBALS['__container__']->make('track')->record($name, $options, $save);
+    return $GLOBALS['CONTAINER']->make('track')->record($name, $options, $save);
 }
 
 // 追踪数据库信息
@@ -419,7 +561,7 @@ function db_track(& $sql, & $time, $type = 'unknown', array & $params = [])
     if (is_prod()) {
         return false;
     }
-    return $GLOBALS['__container__']
+    return $GLOBALS['CONTAINER']
         ->make('track')
         ->record('db', [
             'command' => & $sql,

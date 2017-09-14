@@ -64,6 +64,11 @@ class Response extends PsrResponse
 	 */
 	public $viewManager;
 
+	/**
+	 * @var bool
+	 */
+	protected $hasBeenSent = false;
+
 	public function __construct(Request $request, Container $container)
 	{
 		$this->container = $container;
@@ -158,12 +163,41 @@ class Response extends PsrResponse
 	}
 
 	/**
+	 * 刷新当前界面
+	 *
+	 * @return void
+	 */
+	public function reload($params = '')
+	{
+		$url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/';
+		if (strpos($url, '?')) {
+			$url .= "&$params";
+		} else {
+			$url .= "?$params";
+		}
+
+		$this->withHeader('Location', $url);
+	}
+
+	/**
+	 * 判断是否已经输出过数据到浏览器
+	 *
+	 * @return bool
+	 */
+	public function sent()
+	{
+		return $this->hasBeenSent;
+	}
+
+	/**
 	 * 输出内容到客户端
 	 *
 	 * @return void
 	 */
 	public function send()
 	{
+		$this->hasBeenSent = true;
+
 		$events = $this->container->make('events');
 
 		$events->fire('response.send.before', [$this->request, $this]);
@@ -184,6 +218,7 @@ class Response extends PsrResponse
 		) {
 			echo Console::fetch();
 		}
+
 	}
 
 	/**

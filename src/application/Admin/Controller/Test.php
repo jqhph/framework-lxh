@@ -18,20 +18,7 @@ class Test extends Controller
 {
     public function actionTest(Request $req, Response $resp)
     {
-        $data = [
-            'a' => '123ff',
-            343 => 'yyy',
-            'f' => [
-                'name' => 22,
-                'attr' => [
-                    'ur' => false
-                ]
-            ],
-        ];
-
-        console_log('data', Util::arrayToText($data));
-
-        return debug(Util::arrayToText($data));
+        return $this->render('child', ['content' => 'hehe']);
     }
 
     public function actionHello()

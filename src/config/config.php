@@ -10,6 +10,11 @@ $config = [];
 // 语言包 ===> 已移至可写配置文件
 //$config['language'] = 'zh';
 
+// 模板缓存路径，默认'resource/blade-cache'
+$config['view.compiled'] = 'resource/blade-cache';
+// 模板路径，默认'resource/views'
+$config['view.paths'] = 'resource/views';
+
 // view version模板版本
 $config['view-version'] = 'v1.0';
 

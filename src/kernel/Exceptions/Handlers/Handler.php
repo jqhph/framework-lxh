@@ -153,10 +153,9 @@ class Handler
 		}
 
 		// 非生产环境以及非ajax请求显示错误界面
-		if (! is_prod() && ! $isAjax) {
-			return $this->response->data = fetch_view(
-					'error',
-					'Debug',
+		if (! is_prod() && ! $isAjax && ! $this->request->isCli()) {
+			return $this->response->data = view(
+					'system.debug',
 					[
 						'msg' => $e->getMessage(),
 						'code' => $code,
@@ -167,12 +166,12 @@ class Handler
 				);
 		}
 
-		if ($isAjax) {
+		if (! is_prod() && $isAjax || $this->request->isCli()) {
 			return $this->response->data = $e->getMessage();
 		}
 
 		// 生产环境
-		make('events')->fire('exception.response', ['mag' => 'System Failure']);
+		make('events')->fire('exception.response', ['e' => $e]);
 	}
 
 }

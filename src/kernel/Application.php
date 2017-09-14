@@ -17,6 +17,7 @@ use Lxh\Http\Response;
 use Lxh\Http\Request;
 use Lxh\Helper\Arr;
 use Lxh\Router\Dispatcher as Router;
+use Lxh\View\ViewServiceProvider;
 
 class Application
 {
@@ -60,15 +61,28 @@ class Application
         $this->loadInitConfig();
         $this->loadFunctionFile();
         $this->loadServiceBindConfig();
+
+        $this->events    = events();
+        $this->container = container();
+
+        $this->regist();
         register_shutdown_function([$this, 'shutdown']);
 
         // 记录程序执行开始时间
         debug_track('start');
 
-        $this->container = container();
-        $this->events    = events();
-
         $this->bindRouter();
+    }
+
+    /**
+     * 注册服务
+     *
+     * @return void
+     */
+    public function regist()
+    {
+        // 注册模板
+        $this->container->register(ViewServiceProvider::class);
     }
 
     /**

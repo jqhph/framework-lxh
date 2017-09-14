@@ -52,20 +52,20 @@ class Config extends Entity
         foreach ($this->confFiles as & $f) {
             $file = "{$pre}{$f}.php";
 
-            $this->attrs += (array)include $file;
+            $this->items += (array)include $file;
         }
 
         foreach ((array)$this->get('add-config') as & $filename) {
-            $this->attrs += include "{$pre}{$filename}.php";
+            $this->items += include "{$pre}{$filename}.php";
         }
 
         foreach ((array)$this->get('add-config-name') as $k => & $filename) {
-            $this->attrs[basename($filename)] = include "{$pre}{$filename}.php";
+            $this->items[basename($filename)] = include "{$pre}{$filename}.php";
         }
 
         $this->writableData = include $this->getWritableConfigPath();
 
-        $this->attrs += $this->writableData;
+        $this->items += $this->writableData;
     }
 
     /**
