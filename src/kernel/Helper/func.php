@@ -323,7 +323,7 @@ function array_except($array, $keys)
  * @param  Htmlable|string  $value
  * @return string
  */
-function e(& $value)
+function e($value)
 {
     if ($value instanceof Htmlable) {
         return $value->toHtml();
@@ -356,10 +356,10 @@ function view($view, array $data = []) {
     return $GLOBALS['CONTAINER']->make('view.factory')->make($view, $data);
 }
 
-function display_view($view, array $data = [])
+function render_view($view, array $data = [])
 {
     $view = Util::convertWith($view, true, '-');
-    echo $GLOBALS['CONTAINER']->make('view.factory')->make(Util::convertWith(__MODULE__, true, '-') . '.' . $view, $data)->render();
+    return $GLOBALS['CONTAINER']->make('view.factory')->make(Util::convertWith(__MODULE__, true, '-') . '.' . $view, $data)->render();
 }
 
 /**
