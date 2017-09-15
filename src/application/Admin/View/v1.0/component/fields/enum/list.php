@@ -1,1 +1,0 @@
-<?php echo trans_option($val, $name); ?>
