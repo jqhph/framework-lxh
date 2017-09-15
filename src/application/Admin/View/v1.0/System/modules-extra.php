@@ -71,7 +71,7 @@
     <tr data-name="{fieldName}">
         <td scope="row"><input name="fieldsName[]" class="form-control" readonly value="{fieldName}"/></td>
         <td><input name="rank[]" class="form-control" value="0"/></td>
-        <td><?php echo component_view('fields/enum/edit',
+        <td><?php echo render_view('component.fields/enum/edit',
                 ['name' => 'group[]', 'hideLabe' => true, 'formCol' => '', 'formGroup' => '', 'opts' => & $groups]); ?></td>
         <td><div class="checkbox checkbox-danger"><input value="1" name="sorting[]" type="checkbox" checked /><label></label></div></td>
         <td><div class="checkbox checkbox-danger"><input value="1" name="search[]" type="checkbox" checked /><label></label></div></td>

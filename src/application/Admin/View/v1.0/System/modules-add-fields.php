@@ -48,7 +48,7 @@
         <td><input name="field_name[]" class="form-control" value=""/></td>
         <td><input name="field_en_name[]" class="form-control" value=""/></td>
         <td><input name="field_zh_name[]" class="form-control" value=""/></td>
-        <td><?php echo component_view('fields/enum/layer-edit', [
+        <td><?php echo render_view('component.fields/enum/layer-edit', [
                 'id' => '@',
                 'name' => 'field_type[]',
                 'label' => '',

@@ -49,7 +49,7 @@
     ]);
 </script>
 
-<?php echo component_view('modal/basic');?>
+<?php echo render_view('component.modal.basic');?>
 
 <!-- js 模板 -->
 <script type="text/html" id="row-tpl">

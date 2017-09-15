@@ -20,7 +20,7 @@ class Index extends Controller
 
     public function actionList()
     {
-        return fetch_complete_view();
+        return $this->render('list', [], true);
     }
 
 }

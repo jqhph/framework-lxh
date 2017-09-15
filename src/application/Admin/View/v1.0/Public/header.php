@@ -38,11 +38,11 @@
     <!-- Begin page -->
     <div id="wrapper">
         <!-- Top Bar Start -->
-        <?php echo fetch_view('top-bar', 'Public');?>
+        <?php echo render_view('public.top-bar');?>
         <!-- Top Bar End -->
 
         <!-- ========== Left Sidebar Start ========== -->
-        <?php echo fetch_view('left-sidebar', 'Public');?>
+        <?php echo render_view('public.left-sidebar');?>
         <!-- Left Sidebar End -->
 
         <!-- ============================================================== -->

@@ -6,7 +6,7 @@
 <!-- ============================================================== -->
 
 <!-- Right Sidebar -->
-<?php echo fetch_view('right-bar', 'Public');?>
+<?php echo render_view('public.right-bar');?>
 <!-- /Right-bar -->
 
 </div>
@@ -24,7 +24,7 @@
 
 echo load_js('jquery.min');
 
-echo fetch_view('app-js', 'Public');
+echo render_view('public.app-js');
 // <!-- jQuery  -->
 //echo load_js('jquery.min');
 //echo load_js('bootstrap.min');

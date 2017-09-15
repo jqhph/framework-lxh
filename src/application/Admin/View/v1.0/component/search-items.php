@@ -24,7 +24,7 @@
                     <div class="icon-list-demo row">
                         <?php foreach ($row as & $item) {
                             // 列
-                            echo component_view("fields/{$item['view']}", $item['vars']);
+                            echo render_view("component.fields.{$item['view']}", $item['vars']);
                         } ?>
                     </div>
                     <?php } ?>

@@ -8,5 +8,5 @@
 
 ?>
 
-<?php echo component_view('list/list', ['list' => & $list, 'searchItems' => & $searchItems, 'titles' => & $titles, 'pages' => & $pages]); ?>
+<?php echo render_view('component.list.list', ['list' => & $list, 'searchItems' => & $searchItems, 'titles' => & $titles, 'pages' => & $pages]); ?>
 

@@ -18,7 +18,7 @@ $config['view.paths'] = 'resource/views';
 // 是否使用blade模板引擎，默认false
 $config['use-blade-engine'] = false;
 
-// view version模板版本
+// view version模板版本（如使用blade模板引擎，此参数无效）
 $config['view-version'] = 'v1.0';
 
 // 是否输出控制台调试信息，默认true
@@ -78,8 +78,8 @@ $config['middleware'] = [
     '*' => [
 
     ],
-    'Home' => [
-        Lxh\Home\Middleware\Globals::class,
+    'Admin' => [
+//        Lxh\Admin\Middleware\Globals::class,
     ],
 ];
 

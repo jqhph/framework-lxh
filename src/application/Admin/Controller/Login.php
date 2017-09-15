@@ -20,11 +20,11 @@ class Login extends Controller
 //        console_info(Util::toUnderScore('myAccountTest'));
 
 //        assign('test', $a);
-        return fetch_view();
+        return $this->render('index');
     }
 
     public function actionRegister()
     {
-        return fetch_view();
+        return $this->render('register');
     }
 }

@@ -17,8 +17,8 @@ class PublicEntrance extends Controller
     {
         $navTitle = 'Font awesome';
 
-        assign('navTitle', $navTitle);
+        $this->share('navTitle', $navTitle);
 
-        return fetch_complete_view('FontAwesome');
+        return $this->render('font-awesome', [], true);
     }
 }

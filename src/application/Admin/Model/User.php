@@ -217,7 +217,7 @@ class User extends Model
         return $this->attrs;
     }
 
-    public function toJson()
+    public function toJson($options = 0)
     {
         $id = $this->id;
 

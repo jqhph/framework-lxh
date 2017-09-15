@@ -26,7 +26,7 @@ $createBtnText = "Create $scope";
 
 
 // 搜索项界面
-if (! empty($searchItems))  echo component_view('search-items', $searchItems);
+if (! empty($searchItems))  echo render_view('component.search-items', $searchItems);
 ?>
 <!--col-sm-12-->
 <div class="">
@@ -54,7 +54,7 @@ if (! empty($searchItems))  echo component_view('search-items', $searchItems);
                     <tbody>
                     <?php
                     foreach ($list as $k => & $r) {
-                        echo component_view($rowView, ['r' => $r, 'titles' => & $titles]);
+                        echo render_view('component.' . $rowView, ['r' => $r, 'titles' => & $titles]);
                     } ?>
                     </tbody>
                 </table>

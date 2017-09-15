@@ -65,24 +65,12 @@ class Application
         $this->events    = events();
         $this->container = container();
 
-        $this->regist();
         register_shutdown_function([$this, 'shutdown']);
 
         // 记录程序执行开始时间
         debug_track('start');
 
         $this->bindRouter();
-    }
-
-    /**
-     * 注册服务
-     *
-     * @return void
-     */
-    public function regist()
-    {
-        // 注册模板
-        $this->container->register(ViewServiceProvider::class);
     }
 
     /**

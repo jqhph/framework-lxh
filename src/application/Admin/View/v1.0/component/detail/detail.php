@@ -38,10 +38,10 @@ $loadJs = isset($loadJs) ? $loadJs : '';
                             $v['vars']['id'] = & $id;
                             $v['vars']['value'] = get_value($row, $v['vars']['name']);
 
-                            echo component_view("fields/{$v['view']}", $v['vars']);
+                            echo render_view("component.fields/{$v['view']}", $v['vars']);
                         }
 
-                        echo component_view('detail-button');?>
+                        echo render_view('component.detail-button');?>
                     </div><!-- end col -->
 
                 </form>

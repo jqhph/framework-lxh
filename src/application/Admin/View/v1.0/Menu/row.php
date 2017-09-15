@@ -3,7 +3,7 @@
     <?php foreach ($titles as $name => & $v) { ?>
         <th><?php
             if (! empty($titles[$name]['view'])) {
-                echo component_view($titles[$name]['view'], ['val' => $r[$name], 'name' => $name]);
+                echo render_view('component.' . $titles[$name]['view'], ['val' => $r[$name], 'name' => $name]);
             } else {
                 if ($name == 'name' && $level != 0) {
 //                    for ($i = 0; $i < $level*4; $i ++) {

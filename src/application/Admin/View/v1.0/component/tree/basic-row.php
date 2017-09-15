@@ -13,11 +13,11 @@
                 <ul>
                     <li data-jstree='{"opened":true}'>
                         <?php echo "<span class=\"parent\" data-parent=\"$parentsStr/$dir\">$d</span>";
-                        echo component_view('tree/basic-row', ['list' => $r, 'parentsStr' => "$parentsStr/$dir/$d"]); ?>
+                        echo render_view('component.tree.basic-row', ['list' => $r, 'parentsStr' => "$parentsStr/$dir/$d"]); ?>
                     </li>
                 </ul>
                 <?php   } else {
-                        echo component_view('tree/basic-row', ['list' => $r, 'parentsStr' => "$parentsStr/$dir"]);
+                        echo render_view('component.tree.basic-row', ['list' => $r, 'parentsStr' => "$parentsStr/$dir"]);
                     }
                 } ?>
             </li>

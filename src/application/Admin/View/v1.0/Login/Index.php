@@ -105,7 +105,7 @@
 <!-- end wrapper page -->
 <script>add_js(parse_view_name('Login', 'Index'))</script>
 
-<?php echo fetch_view('app-js', 'Public');?>
+<?php echo render_view('public.app-js');?>
 
 </body>
 </html>

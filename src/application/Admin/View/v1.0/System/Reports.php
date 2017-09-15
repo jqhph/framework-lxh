@@ -3,6 +3,6 @@
 
 use Lxh\Admin\Kernel\Url;
 
-echo fetch_view('top-bar', 'Public', ['nav' => trans('Create reports')]); ?>
+echo render_view('public.top-bar', ['nav' => trans('Create reports')]); ?>
 
 <h4>Reports</h4>

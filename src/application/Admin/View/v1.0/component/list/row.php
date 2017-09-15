@@ -11,7 +11,7 @@ use Lxh\Admin\Kernel\Url;
     <?php foreach ($titles as $name => & $v) { ?>
     <th><?php
         if (! empty($titles[$name]['view'])) {
-            echo component_view('fields/' . $titles[$name]['view'], ['val' => get_value($r, $name), 'name' => $name]);
+            echo render_view('component.fields/' . $titles[$name]['view'], ['val' => get_value($r, $name), 'name' => $name]);
         } else {
             echo get_value($r, $name);
         }

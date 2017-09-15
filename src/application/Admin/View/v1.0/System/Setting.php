@@ -18,22 +18,22 @@
                 <form class="form-horizontal Menu-form" role="form">
                     <div class="col-lg-6">
 
-                        <?php echo component_view('fields/enum/edit', [
+                        <?php echo render_view('component.fields/enum/edit', [
                             'name' => 'language', 'value' => config('language'), 'opts' => & $languageList, 'labelCol' => 4]); ?>
 
-                        <?php echo component_view('fields/varchar/edit', [
+                        <?php echo render_view('component.fields/varchar/edit', [
                             'name' => 'lang-package-expire', 'label' => 'Language package expire after',
                             'value' => config('replica-client-config.lang-package-expire') / 1000, 'labelCol' => 4]); ?>
 
-                        <?php echo component_view('fields/varchar/edit', [
+                        <?php echo render_view('component.fields/varchar/edit', [
                             'name' => 'cache-expire', 'label' => 'Cache expire after',
                             'value' => config('replica-client-config.cache-expire') / 1000, 'labelCol' => 4]); ?>
 
-                        <?php echo component_view('fields/bool/edit', [
+                        <?php echo render_view('component.fields/bool/edit', [
                             'name' => 'use-cache', 'label' => 'Use cache', 'value' => config('replica-client-config.use-cache'), 'labelCol' => 4]); ?>
 
 
-                        <?php echo component_view('detail-button');?>
+                        <?php echo render_view('component.detail-button');?>
                     </div><!-- end col -->
 
                 </form>

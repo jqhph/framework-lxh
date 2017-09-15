@@ -2,20 +2,15 @@
 
 namespace Lxh\View;
 
+use Lxh\Support\ServiceProvider;
 use Lxh\View\Engines\PhpEngine;
 use Lxh\View\Engines\FileEngine;
 use Lxh\View\Engines\CompilerEngine;
 use Lxh\View\Engines\EngineResolver;
 use Lxh\View\Compilers\BladeCompiler;
 
-class ViewServiceProvider
+class ViewServiceProvider extends ServiceProvider
 {
-    protected $app;
-
-    public function __construct()
-    {
-        $this->app = container();
-    }
 
     /**
      * Register the service provider.
@@ -38,7 +33,7 @@ class ViewServiceProvider
      */
     public function registerFactory()
     {
-        $this->app->singleton('view.factory', function ($app) {
+        $this->container->singleton('view.factory', function ($app) {
             // Next we need to grab the engine resolver instance that will be used by the
             // environment. The resolver will be used by an environment to get each of
             // the various engine implementations such as plain PHP or Blade engine.
@@ -66,7 +61,7 @@ class ViewServiceProvider
      */
     public function registerViewFinder()
     {
-        $this->app->bind('view.finder', function ($app) {
+        $this->container->bind('view.finder', function ($app) {
             return new FileViewFinder($app->make('file.manager'), config('view.paths', 'resource/views'));
         });
     }
@@ -78,7 +73,7 @@ class ViewServiceProvider
      */
     public function registerEngineResolver()
     {
-        $this->app->singleton('view.engine.resolver', function () {
+        $this->container->singleton('view.engine.resolver', function () {
             $resolver = new EngineResolver;
 
             // Next, we will register the various view engines with the resolver so that the
@@ -129,14 +124,14 @@ class ViewServiceProvider
         // The Compiler engine requires an instance of the CompilerInterface, which in
         // this case will be the Blade compiler, so we'll first create the compiler
         // instance to pass into the engine so it can compile the views properly.
-        $this->app->singleton('blade.compiler', function () {
+        $this->container->singleton('blade.compiler', function () {
             return new BladeCompiler(
-                $this->app->make('file.manager'), config('view.compiled', 'resource/blade-cache')
+                $this->container->make('file.manager'), config('view.compiled', 'resource/blade-cache')
             );
         });
 
         $resolver->register('blade', function () {
-            return new CompilerEngine($this->app->make('blade.compiler'));
+            return new CompilerEngine($this->container->make('blade.compiler'));
         });
     }
 }

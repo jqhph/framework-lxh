@@ -29,7 +29,7 @@ class System extends Controller
     public function actionCreateReports()
     {
 
-        return fetch_complete_view('Reports');
+        return $this->render('reports', [], true);
     }
 
     /**
@@ -94,13 +94,13 @@ class System extends Controller
 
         $nav = 'Making modules';
 
-        assign('navTitle', $nav);
-        assign('fields', $fields);
-        assign('groups', $groups);
-        assign('moduleOptions', $options);
-        assign('controllerOptions', $controllers);
+        $this->share('navTitle', $nav);
+        $this->share('fields', $fields);
+        $this->share('groups', $groups);
+        $this->share('moduleOptions', $options);
+        $this->share('controllerOptions', $controllers);
 
-        return fetch_complete_view('Modules');
+        return $this->render('modules', [], true);
     }
 
     /**
@@ -115,7 +115,7 @@ class System extends Controller
             $list[] = $lang;
         }
 
-        return fetch_complete_view('Setting', ['languageList' => & $list]);
+        return $this->render('setting', ['languageList' => & $list], true);
     }
 
     // 清除客户端所有缓存接口

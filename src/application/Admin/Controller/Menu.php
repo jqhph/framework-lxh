@@ -69,9 +69,9 @@ class Menu extends Controller
 
         array_unshift($menus, ['id' => 0, 'name' => trans('Top level'), 'required' => 1]);
 
-        assign('navTitle', $currentTitle);
+        $this->share('navTitle', $currentTitle);
 
-        return fetch_complete_view('Detail', ['menus' => & $menus]);
+        return $this->render('detail', ['menus' => & $menus], true);
     }
 
     /**
@@ -94,12 +94,12 @@ class Menu extends Controller
 
         array_unshift($menus, ['id' => 0, 'name' => trans('Top level'), 'required' => 1]);
 
-        assign('navTitle', $currentTitle);
+        $this->share('navTitle', $currentTitle);
 
-        return fetch_complete_view(__ACTION__, [
+        return $this->render('detail', [
             'row' => & $row,
             'menus' => & $menus,
-        ]);
+        ], true);
     }
 
     public function actionList()
@@ -127,9 +127,9 @@ class Menu extends Controller
 
         $list = make('acl-menu')->all();
 
-        assign('titles', $titles);
+        $this->share('titles', $titles);
 
-        return fetch_complete_view('List', ['list' => & $list]);
+        return $this->render('list', ['list' => & $list], true);
     }
 
 }

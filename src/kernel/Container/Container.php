@@ -5,8 +5,10 @@ use Lxh\Exceptions\InternalServerError;
 use Lxh\Contracts\Container\Container AS ContractsContainer;
 use Lxh\Support\Arr;
 
-class Container extends Loader implements ContractsContainer
+class Container implements ContractsContainer
 {
+    use Loader;
+
     /**
      * @var array
      */

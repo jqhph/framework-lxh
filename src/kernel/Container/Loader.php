@@ -3,9 +3,11 @@
 namespace Lxh\Container;
 
 use Lxh\Exceptions\InternalServerError;
+use Lxh\Exceptions\InvalidArgumentException;
+use Lxh\View\ViewServiceProvider;
 
 //加载器
-class Loader 
+trait Loader
 {
 	protected $container;
 	
@@ -126,6 +128,9 @@ class Loader
                 'class' => 'Lxh\Template\View',
                 'dependencies' => 'container'
             ],
+            'view.factory' => [
+                'provider' => ViewServiceProvider::class,
+            ],
             'track' => [
                 'shared' => true,
                 'class' => 'Lxh\Debug\Track',
@@ -136,6 +141,7 @@ class Loader
                 'class' => 'Lxh\Language\Manager',
                 'dependencies' => 'container'
             ],
+
         ];
 	
 	/**
@@ -146,11 +152,15 @@ class Loader
 	 */
     public function load($abstract, $binding) 
     {
-        if (empty($binding['class'])) {
+        if (empty($binding['class']) && empty($binding['provider'])) {
 	       return false;
         }
+
+        if (! empty($binding['provider'])) {
+            return $this->registerWithProvider($abstract, $binding['provider']);
+        }
         
-        $className = $binding['class'];///////////////////////////////////////////////////////////////////////
+        $className = $binding['class'];
         
         $dependencies = isset($binding['dependencies']) ? (array) $binding['dependencies'] : [];
         
@@ -179,7 +189,22 @@ class Loader
         		
         }
     }
-	
+
+    /**
+     * 服务提供者
+     *
+     * @param string $abstract
+     * @param string $provider
+     * @return object
+     */
+    protected function registerWithProvider($abstract, $provider)
+    {
+        $provider = new $provider($this);
+
+        $provider->register();
+
+        return $this->make($abstract);
+    }
 	
     /**
      * 获取依赖类实例

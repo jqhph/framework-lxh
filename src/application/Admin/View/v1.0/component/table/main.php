@@ -30,7 +30,7 @@
                         <?php foreach ($titles as $name => & $v) { ?>
                         <th><?php
                             if (! empty($titles[$name]['view'])) {
-                                echo component_view($titles[$name]['view'], ['val' => $r[$name], 'name' => $name]);
+                                echo render_view('component.' . $titles[$name]['view'], ['val' => $r[$name], 'name' => $name]);
                             } else {
                                 echo $r[$name];
                             }

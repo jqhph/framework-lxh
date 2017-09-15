@@ -3,7 +3,7 @@
 use Lxh\Admin\Kernel\Url;
 ?>
 
-<?php echo component_view('search-items', [
+<?php echo component_view('component.search-items', [
     'opts' => [
         [
             ['view' => 'enum/align-search', 'vars' => ['name' => 'type','options' => [1, 2]]],
@@ -47,7 +47,7 @@ use Lxh\Admin\Kernel\Url;
 
                     <?php
                     foreach ($list as $k => & $r) {
-                        echo fetch_view('row', 'Menu', ['r' => $r, 'level' => 0]);
+                        echo render_view('menu.row', ['r' => $r, 'level' => 0]);
 
                         // 如果有子菜单则展示， 最多展示三层
                         if (! empty($r['subs'])) {
@@ -57,7 +57,7 @@ use Lxh\Admin\Kernel\Url;
                                 if ($k == $secondMenuCount) {
                                     $end = true;
                                 }
-                                echo fetch_view('row', 'Menu', ['r' => $r, 'level' => 1, 'end' => $end]);
+                                echo render_view('menu.row', ['r' => $r, 'level' => 1, 'end' => $end]);
 
                                 if (! empty($r['subs'])) {
                                     $thirdMenuCount = count($r['subs']) - 1;
@@ -68,7 +68,7 @@ use Lxh\Admin\Kernel\Url;
                                         if ($k == $thirdMenuCount) {
                                             $end = true;
                                         }
-                                        echo fetch_view('row', 'Menu', ['r' => $r, 'level' => 2, 'end' => $end]);
+                                        echo render_view('menu.row', ['r' => $r, 'level' => 2, 'end' => $end]);
                                     }
                                 }
                             }

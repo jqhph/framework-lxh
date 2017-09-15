@@ -55,7 +55,11 @@ class Record extends LxhController
         // 获取列表table标题信息
         $titles = $this->makeListTableTitles();
 
-        return fetch_complete_view('List', ['list' => & $list, 'searchItems' => $this->makeSearchItems(), 'titles' => & $titles, 'pages' => & $pageString]);
+        return $this->render(
+            'list',
+            ['list' => & $list, 'searchItems' => $this->makeSearchItems(), 'titles' => & $titles, 'pages' => & $pageString],
+            true
+        );
     }
 
     /**
@@ -90,9 +94,9 @@ class Record extends LxhController
 
         $currentTitle = 'Create ' . __CONTROLLER__;
 
-        assign('navTitle', $currentTitle);
+        $this->share('navTitle', $currentTitle);
 
-        return fetch_complete_view('Detail', ['detailFields' => $this->makeDetailFields()]);
+        return $this->render('Detail', ['detailFields' => $this->makeDetailFields()], true);
     }
 
     /**
@@ -134,11 +138,11 @@ class Record extends LxhController
 
         $currentTitle = 'Modify ' . __CONTROLLER__;
 
-        assign('navTitle', $currentTitle);
+        $this->share('navTitle', $currentTitle);
 
-        return fetch_complete_view('Detail', [
+        return $this->render('detail', [
             'row' => & $row, 'detailFields' => $this->makeDetailFields($id)
-        ]);
+        ], true);
     }
 
 

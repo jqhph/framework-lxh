@@ -40,7 +40,7 @@ class User
     public function handle(array $options, Closure $next)
     {
         if (! user()->id) {
-            return $this->response->redirect('/Lxh/Login');
+            return $this->response->redirect('/lxh/login');
         }
 
         return $next($options);
