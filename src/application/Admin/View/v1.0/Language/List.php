@@ -3,7 +3,7 @@
         <div class="card-box-header m-b-30">
             <span class="card-box-title"><?php echo trans('Catalog');?></span>
         </div>
-        <?php echo component_view('tree/basic', ['class' => 'basic-language', 'list' => & $list]); ?>
+        <?php echo render_view('component.tree.basic', ['class' => 'basic-language', 'list' => & $list]); ?>
     </div>
 </div>
 
@@ -87,15 +87,15 @@
 
 <script type="text/html" id="createCategoryTpl">
     <hr>
-    <?php echo component_view('fields/varchar/edit', ['label' => 'name', 'name' => 'cate_name'])?>
+    <?php echo render_view('component/fields/varchar/edit', ['label' => 'name', 'name' => 'cate_name'])?>
     <hr>
 </script>
 
 <script type="text/html" id="createFileTpl">
     <hr>
-    <?php echo component_view('fields/varchar/edit', ['label' => 'language', 'name' => 'lang_name', 'value' => 'zh'])?>
-    <?php echo component_view('fields/varchar/edit', ['label' => 'module', 'name' => 'module_name', 'value' => 'Admin'])?>
-    <?php echo component_view('fields/varchar/edit', ['label' => 'filename', 'name' => 'filename', 'placeholder' => 'Avoid the suffix'])?>
+    <?php echo render_view('component/fields/varchar/edit', ['label' => 'language', 'name' => 'lang_name', 'value' => 'zh'])?>
+    <?php echo render_view('component/fields/varchar/edit', ['label' => 'module', 'name' => 'module_name', 'value' => 'Admin'])?>
+    <?php echo render_view('component/fields/varchar/edit', ['label' => 'filename', 'name' => 'filename', 'placeholder' => 'Avoid the suffix'])?>
     <hr>
 </script>
 

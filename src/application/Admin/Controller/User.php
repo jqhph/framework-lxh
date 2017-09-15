@@ -17,7 +17,7 @@ class User extends Controller
     /**
      * 用户登录api
      *
-     * @return json
+     * @return string
      */
     public function actionLogin(Request $req, Response $resp)
     {

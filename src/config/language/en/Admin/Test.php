@@ -1,7 +1,7 @@
 <?php 
 return [
     'fields' => [
-        'email' => 'Email',
+        'email3434' => 'Email',
         'nn' => 'nnnnn',
         'tetnn111sdfd' => '测试12366111',
         'f' => 'dfd',
