@@ -44,19 +44,19 @@ use Lxh\Admin\Kernel\Url;
 
                     <div class="tab-pane p-t-10 fade active in" id="module-2">
                         <div class="row">
-                            <?php echo render_view('modules-info');?>
+                            <?php echo render_view('system.modules-info');?>
                         </div>
                     </div>
 
                     <div class="tab-pane p-t-10 fade" id="field-2">
                         <div class="row">
-                            <?php echo render_view('modules-add-fields');?>
+                            <?php echo render_view('system.modules-add-fields');?>
                         </div>
                     </div>
 
                     <div class="tab-pane p-t-10 fade" id="finish-2">
                         <div class="row">
-                            <?php echo render_view('modules-extra');?>
+                            <?php echo render_view('system.modules-extra');?>
                         </div>
                     </div>
                     <ul class="pager m-b-0 wizard">

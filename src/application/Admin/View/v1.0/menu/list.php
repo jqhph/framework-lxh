@@ -3,7 +3,7 @@
 use Lxh\Admin\Kernel\Url;
 ?>
 
-<?php echo component_view('component.search-items', [
+<?php echo render_view('component.search-items', [
     'opts' => [
         [
             ['view' => 'enum/align-search', 'vars' => ['name' => 'type','options' => [1, 2]]],
