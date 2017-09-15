@@ -33,6 +33,7 @@ $GLOBALS['resource-server']  = $GLOBALS['CONFIG']->get('client-config.resource-s
 $GLOBALS['js-version']       = $GLOBALS['CONFIG']->get('js-version');
 $GLOBALS['css-version']      = $GLOBALS['CONFIG']->get('css-version');
 $GLOBALS['resource-version'] = $GLOBALS['CONFIG']->get('client-config.resource-version');
+$GLOBALS['use-blade-engine'] = $GLOBALS['CONFIG']->get('use-blade-engine');
 
 /**
  * 获取容器对象
@@ -349,44 +350,24 @@ function share_var($key, $value = null)
  *
  * @param  string  $view
  * @param  array   $data
+ * @param  bool    $useBlade
  * @return \Lxh\Contracts\View\View
  */
-function view($view, array $data = []) {
-    $view = Util::convertWith($view, true, '-');
-    return $GLOBALS['CONTAINER']->make('view.factory')->make($view, $data);
+function view($view, array $data = [], $useBlade = false) {
+    if ($GLOBALS['use-blade-engine'] || $useBlade) {
+        return $GLOBALS['CONTAINER']->make('view.factory')->make($view, $data);
+    }
+
+    return $GLOBALS['CONTAINER']->make('view')->render($view, $data);
 }
 
 function render_view($view, array $data = [])
 {
-    $view = Util::convertWith($view, true, '-');
-    return $GLOBALS['CONTAINER']->make('view.factory')->make(Util::convertWith(__MODULE__, true, '-') . '.' . $view, $data)->render();
-}
+    if ($GLOBALS['use-blade-engine']) {
+        return $GLOBALS['CONTAINER']->make('view.factory')->make(Util::convertWith(__MODULE__, true, '-') . '.' . $view, $data)->render();
+    }
 
-/**
- * 获取模板内容
- *
- * @param  string $action
- * @param  string $controller
- * @param  array  $vars 要传递到模板的值，只有当前模板可以用
- * @return string
- */
-function fetch_view($action = __ACTION__, $controller = __CONTROLLER__, array $vars = [])
-{
-    $action = Util::convertWith($action, true, '-');
-
-   return $GLOBALS['CONTAINER']->make('view')->fetch("$controller/$action", $vars);
-}
-
-/**
- * 获取组件模板内容
- *
- * @param  string $name 组件模板路径
- * @param  array  $vars 要传递到模板的值，只有当前模板可以用
- * @return void
- */
-function component_view($name, array $vars = [])
-{
-    return $GLOBALS['CONTAINER']->make('view')->fetch("component/$name", $vars);
+    return $GLOBALS['CONTAINER']->make('view')->render($view, $data);
 }
 
 /**
@@ -397,36 +378,6 @@ function component_view($name, array $vars = [])
 function call($controller, $action, array $params = [])
 {
     return $GLOBALS['CONTAINER']->make('controller.manager')->call($controller, $action, $params);
-}
-
-/**
- * 分配变量到模板输出
- * 通过此方法分配的变量所有引入的模板都可用
- *
- * @param  string $key  在模板使用的变量名称
- * @param  mixed $value 变量值，此处使用引用传值，分配时变量必须先定义
- * @return void
- */
-function assign($key, $value)
-{
-    $GLOBALS['CONTAINER']->make('view')->assign($key, $value);
-}
-
-/**
- * 返回完整的模板（包括header和footer）
- *
- * @param  string $action
- * @param  array  $vars 要传递到模板的值，只有当前模板可以用
- * @param  string $controller
- * @return string
- */
-function fetch_complete_view($action = __ACTION__, array $vars = [], $controller = __CONTROLLER__)
-{
-    $view = $GLOBALS['CONTAINER']->make('view');
-
-    $action = Util::convertWith($action, true, '-');
-
-    return $view->fetch('Public/header') . $view->fetch("$controller/$action", $vars) . $view->fetch('Public/footer');
 }
 
 /**

@@ -61,7 +61,7 @@ class Model extends Entity
     {
         $this->modelName = $name;
 
-        $this->tableName = Util::convertWith($name, true);
+        if (! $this->tableName) $this->tableName = Util::convertWith($name, true);
 
         $this->container = $container;
 

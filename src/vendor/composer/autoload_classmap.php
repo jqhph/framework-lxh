@@ -153,6 +153,7 @@ return array(
     'Lxh\\Support\\ServiceProvider' => $baseDir . '/kernel/Support/ServiceProvider.php',
     'Lxh\\Support\\Str' => $baseDir . '/kernel/Support/Str.php',
     'Lxh\\Support\\Traits\\Macroable' => $baseDir . '/kernel/Support/Traits/Macroable.php',
+    'Lxh\\Template\\Facade' => $baseDir . '/kernel/Template/Facade.php',
     'Lxh\\Template\\View' => $baseDir . '/kernel/Template/View.php',
     'Lxh\\View\\Compilers\\BladeCompiler' => $baseDir . '/kernel/View/Compilers/BladeCompiler.php',
     'Lxh\\View\\Compilers\\Compiler' => $baseDir . '/kernel/View/Compilers/Compiler.php',

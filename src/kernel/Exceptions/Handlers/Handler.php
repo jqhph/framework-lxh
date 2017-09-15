@@ -162,7 +162,8 @@ class Handler
 						'file' => $e->getFile(),
 						'line' => $e->getLine(),
 						'trace' => $e->getTraceAsString()
-					]
+					],
+					true
 				);
 		}
 

@@ -8,6 +8,8 @@
 
 namespace Lxh\Template;
 
+use Lxh\Exceptions\Error;
+use Lxh\Exceptions\InvalidArgumentException;
 use Lxh\Helper\Entity;
 
 class View
@@ -28,7 +30,6 @@ class View
 
     public function __construct()
     {
-//        $this->vars = new Entity();
         $this->version = config('view-version', 'v1.0');
         $this->module = make('controller.manager')->moduleName();
     }
@@ -41,10 +42,13 @@ class View
      * @param  mixed $value 变量值，此处使用引用传值，分配时变量必须先定义
      * @return void
      */
-    public function assign($key, & $value = null)
+    public function with($key, & $value = null)
     {
-//        $this->vars->$key = $value;
-        $this->vars[$key] = & $value;
+        if (is_array($key)) {
+            $this->vars = array_merge($this->vars, $key);
+        } else {
+            $this->vars[$key] = $value;
+        }
     }
 
     /**
@@ -54,7 +58,7 @@ class View
      * @param  array  $vars     要传递到模板的值，只有当前模板可以用
      * @return string
      */
-    public function fetch($viewName, array & $vars = [])
+    public function render($viewName, array & $vars = [])
     {
         // 页面缓存
         ob_start();
@@ -64,14 +68,16 @@ class View
         }
 
         foreach ($vars as $k => & $v) {
-//            $this->vars->$k = $v;
             ${$k} = & $v;
         }
 
-//        $args = $this->vars;
-
         // 读取模板
-        include $this->getTemplatePath($viewName);
+        $path = $this->getTemplatePath($viewName);
+        if (! is_file($path)) {
+            throw new InvalidArgumentException("View [$path] not found.");
+        }
+
+        include $path;
 
         // 获取并清空缓存
         return ob_get_clean();
@@ -85,6 +91,8 @@ class View
      */
     public function getTemplatePath($viewName)
     {
+        $viewName = str_replace('.', '/', $viewName);
+
         return "{$this->root}application/" . $this->module . "/View/{$this->version}/$viewName.php";
     }
 
@@ -99,15 +107,4 @@ class View
         return is_file($this->getTemplatePath($name)) ? true : false;
     }
 
-    /**
-     * 输出模板内容
-     *
-     * @param  string $viewName 模板名称
-     * @param  array  $vars     要传递到模板的值
-     * @return void
-     */
-    public function display($viewName, array $vars = [])
-    {
-        echo $this->fetch($viewName, $vars);
-    }
 }

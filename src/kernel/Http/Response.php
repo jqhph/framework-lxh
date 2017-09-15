@@ -118,6 +118,25 @@ class Response extends PsrResponse
 	}
 
 	/**
+	 * WWW-Authenticate
+	 *
+	 * @param string $user
+	 * @param string $pwd
+	 * @return bool
+	 */
+	public function authenticate($user, $pwd)
+	{
+		// 安全验证
+		if ($user != get_value($_SERVER, 'PHP_AUTH_USER') || $pwd != get_value($_SERVER, 'PHP_AUTH_PW')) {
+			$this->withHeader('WWW-Authenticate', 'Basic realm=""');
+			$this->withStatus(401);
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Expires
 	 * @param string $time
 	 * @return static

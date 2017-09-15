@@ -71,7 +71,10 @@ abstract class Controller
      */
     protected function share($key, $value = null)
     {
-        return make('view.factory')->share($key, $value);
+        if (config('use-blade-engine')) {
+            return make('view.factory')->share($key, $value);
+        }
+        return make('view')->with($key, $value);
     }
 
     /**
@@ -84,22 +87,47 @@ abstract class Controller
      */
     protected function render($view, array $data = [], $compalete = false)
     {
-        $factory = make('view.factory');
+        if (config('use-blade-engine')) {
+            // 使用blade模板引擎
+            $factory = make('view.factory');
 
-        $module = Util::convertWith(__MODULE__, true, '-');
+            $module = Util::convertWith(__MODULE__, true, '-');
 
-        $view = Util::convertWith($view, true, '-');
+            $view = $this->normalizeView($view, $module);
 
+            if ($compalete) {
+                return $factory->make($this->normalizeView('public.header', $module))->render()
+                     . $factory->make($view, $data)->render()
+                     . $factory->make($this->normalizeView('public.footer', $module))->render();
+            }
+            return $factory->make($view, $data)->render();
+        }
+
+        $viewHanler = make('view');
+
+        if ($compalete) {
+            return $viewHanler->render($this->normalizeView('public.header'))
+                 . $viewHanler->render($this->normalizeView($view), $data)
+                 . $viewHanler->render($this->normalizeView('public.footer'));
+        }
+        return $viewHanler->render($this->normalizeView($view), $data);
+
+    }
+
+    /**
+     * Normalize the given event name.
+     *
+     * @param string $name
+     * @param string $module
+     * @return string
+     */
+    protected function normalizeView($view, $module = null)
+    {
         if (strpos($view, '.') === false) {
             $view = Util::convertWith(__CONTROLLER__, true, '-') . '.' . $view;
         }
 
-        if ($compalete) {
-            return $factory->make($module . '.public.header')->render()
-                 . $factory->make($module . $view, $data)->render()
-                 . $factory->make($module . '.public.footer')->render();
-        }
-        return $factory->make($module . '.' . $view, $data)->render();
+        return $module ? $module . '.' . $view : $view;
     }
 
     /**

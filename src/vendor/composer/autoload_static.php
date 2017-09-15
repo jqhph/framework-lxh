@@ -230,6 +230,7 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         'Lxh\\Support\\ServiceProvider' => __DIR__ . '/../..' . '/kernel/Support/ServiceProvider.php',
         'Lxh\\Support\\Str' => __DIR__ . '/../..' . '/kernel/Support/Str.php',
         'Lxh\\Support\\Traits\\Macroable' => __DIR__ . '/../..' . '/kernel/Support/Traits/Macroable.php',
+        'Lxh\\Template\\Facade' => __DIR__ . '/../..' . '/kernel/Template/Facade.php',
         'Lxh\\Template\\View' => __DIR__ . '/../..' . '/kernel/Template/View.php',
         'Lxh\\View\\Compilers\\BladeCompiler' => __DIR__ . '/../..' . '/kernel/View/Compilers/BladeCompiler.php',
         'Lxh\\View\\Compilers\\Compiler' => __DIR__ . '/../..' . '/kernel/View/Compilers/Compiler.php',
