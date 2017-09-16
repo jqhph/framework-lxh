@@ -3,11 +3,13 @@
 namespace Lxh\Exceptions\Handlers;
 
 use Lxh\Contracts\Container\Container;
+use Lxh\Events\Dispatcher;
 use Lxh\Exceptions\Exception;
 use Lxh\Logger\Manager;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
 use Lxh\Http\Message\Status;
+use Lxh\ORM\Connect\PDO;
 
 /**
  * 异常处理
@@ -29,9 +31,14 @@ class Handler
 	 */
 	protected $request;
 
+	/**
+	 * @var Dispatcher
+	 */
+	protected $events;
+
 	protected $exceptionClasses = [
-		'PDOException' => 'db',
-		'RedisException' => 'db',
+		'PDOException' => 'pdo',
+		'RedisException' => 'redis',
 		'Lxh\Exceptions\Exception' => 'system'
 	];
 
@@ -46,81 +53,83 @@ class Handler
 		600 => 'emergency',
 	];
 
-	public function __construct(Container $container)
+	public function __construct(Manager $logger, Request $req, Response $resp, Dispatcher $events)
 	{
-		$this->logger = $container->make('logger');
-
-		$this->request = $container->make('http.request');
-
-		$this->response = $container->make('http.response');
-
+		$this->logger = $logger;
+		$this->request = $req;
+		$this->response = $resp;
+		$this->events = $events;
 	}
 
 	/**
 	 * 数据库相关异常
 	 */
-	public function db($e)
+	public function pdo(\Exception $e)
 	{
-		//获取日志处理配置信息
+		$lastSql = &PDO::$lastSql;
+
 		$this->logger
-			->channel('exception')
-			->addError(
-				$e->getMessage() . $this->getTextSuffix($e->getFile(), $e->getLine())
+			->channel('pdo')
+			->error(
+				"{$e->getMessage()} [line({$e->getLine()})] [{$lastSql}]",
+				['params' => & PDO::$lastPrepareData]
 			);
 
 		$this->responseError($e);
 	}
 
+	public function redis(\Exception $e)
+	{
+
+	}
+
 	protected function getLoggerMethod($level)
 	{
-		$addRecordMethod = 'addError';
+		$method = 'error';
 		if (isset($this->levels[$level])) {
-			$addRecordMethod = 'add' . $this->levels[$level];
+			$method = $this->levels[$level];
 		}
-		return $addRecordMethod;
+		return $method;
 	}
 
 	/**
 	 * 普通异常处理
 	 */
-	public function normal($e)
+	public function normal(\Exception $e)
 	{
 		if ($e->getMessage()) {
 			$this->logger
 				->channel('exception')
-				->addError(
-					$e->getMessage() . $this->getTextSuffix($e->getFile(), $e->getLine())
-				);
+				->error($this->normalizeExceptionReportString($e));
 		}
 
 		//返回错误提示
 		$this->responseError($e);
 	}
 
-	protected function getTextSuffix($file, $line)
-	{
-		return " [{$_SERVER['REQUEST_METHOD']}, {$_SERVER['REQUEST_URI']}, $file($line)]";
-	}
-
-
 	/**
 	 * 系统自定义异常处理
 	 *
 	 */
-	public function system($e, $level = false)
+	public function system(\Exception $e, $level = false)
 	{
 		$recordMethod = $this->getLoggerMethod($e->getLevel());
 
 		if ($e->getMessage()) {
 			$this->logger
 				->channel('exception')
-				->$recordMethod(
-					$e->getMessage() . $this->getTextSuffix($e->getFile(), $e->getLine())
-				);
+				->$recordMethod($this->normalizeExceptionReportString($e));
 		}
 
 		// 返回错误提示
 		$this->responseError($e);
+	}
+
+	protected function normalizeExceptionReportString(\Exception $e)
+	{
+		$class = get_class($e);
+
+		return "exception '$class' with message '{$e->getMessage()}' in {$e->getFile()}:{$e->getLine()}";
 	}
 
 	/**
@@ -145,6 +154,8 @@ class Handler
 	 */
 	protected function responseError(\Exception $e)
 	{
+		$this->events->fire('exception.report', ['e' => $e]);
+
 		$code = $e->getCode();
 
 		$isAjax = $this->request->isAjax();
@@ -152,7 +163,6 @@ class Handler
 		if ($code) {
 			if (! Status::vertify($code)) {
 				$code = 500;
-
 			}
 
 			$this->response->withStatus($code);
@@ -176,9 +186,6 @@ class Handler
 		if (! is_prod() && $isAjax || $this->request->isCli()) {
 			return $this->response->data = $e->getMessage();
 		}
-
-		// 生产环境
-		make('events')->fire('exception.report', ['e' => $e]);
 	}
 
 }

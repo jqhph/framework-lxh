@@ -9,31 +9,51 @@ use Monolog\Logger;
 use Lxh\Contracts\Container\Container;
 
 /**
- * 日志处理 
+ * 日志处理
  * */
 class Manager extends Factory
 {
+	/**
+	 * @var string
+	 */
 	protected $channelName;
 
+	/**
+	 * @var array
+	 */
 	protected $config;
 
+	/**
+	 * @var string
+	 */
+	protected $requestMethod;
+
+	/**
+	 * @var string
+	 */
+	protected $requestUri;
+
 	protected $defaultExceptionConfig = [
-			'channel' => 'exception',
-			'path'    => 'data/logs/exception/record.log',
-			'handlers' => [
-				[
-					'handler' 	=> 'DaysFileHandler',
-					'formatter' => 'TextFormatter',
-					'level' 	=> '100'
-				]
-			],
-			'maxFiles' => 180,
-			'filenameDateFormat' => 'Y-m-d'
-		];
+		'channel' => 'exception',
+		'path'    => 'data/logs/exception/record.log',
+		'handlers' => [
+			[
+				'handler' 	=> 'DaysFileHandler',
+				'formatter' => 'TextFormatter',
+				'level' 	=> '100'
+			]
+		],
+		'maxFiles' => 180,
+		'filenameDateFormat' => 'Y-m-d'
+	];
 
 	public function __construct(Container $container)
 	{
 		$this->container = $container;
+
+		$this->requestMethod = get_value($_SERVER, 'REQUEST_METHOD', 'CLI');
+
+		$this->requestUri = get_value($_SERVER, 'REQUEST_URI');
 	}
 
 	# create a log channel 		setFormatter(FormatterInterface $formatter)
@@ -69,57 +89,57 @@ class Manager extends Factory
 	{
 		$defaultConfig = & $this->defaultExceptionConfig;
 		//日志路径
-		$path				= Arr::getValue($config, 'path', $defaultConfig['path']);
+		$path				= get_value($config, 'path', $defaultConfig['path']);
 		//日志handler处理器信息
-		$handlers		    = Arr::getValue($config, 'handlers', $defaultConfig['handlers']);
+		$handlers		    = get_value($config, 'handlers', $defaultConfig['handlers']);
 		//目录下最大文件数
-		$maxFiles			= Arr::getValue($config, 'maxFiles', 180);
+		$maxFiles			= get_value($config, 'maxFiles', 180);
 		//日期格式化
-		$filenameDateFormat = Arr::getValue($config, 'filenameDateFormat', 'Y-m-d');
-		
+		$filenameDateFormat = get_value($config, 'filenameDateFormat', 'Y-m-d');
+
 		if (! $maxFiles) {
 			$maxFiles = 0;
 		}
-		
+
 		if (count($handlers) < 1) {
 			$handlers = & $defaultConfig['handlers'];
 		}
-		
+
 		foreach ($handlers as & $info) {//添加日志处理器
 			if (! $info || count($info) < 1) {
 				continue;
 			}
-		
-			$handler = Arr::getValue($info, 'handler', $defaultConfig['handlers'][0]['handler']);
-				
+
+			$handler = get_value($info, 'handler', $defaultConfig['handlers'][0]['handler']);
+
 			$handelClass = 'Lxh\\Logger\\Handler\\' . $handler;
 			if (! class_exists($handelClass)) {
 				$handelClass = '\\Monolog\\Handler\\' . $handler;
 			}
-		
-			$lowestLevel = Arr::getValue($info, 'level', \Monolog\Logger::DEBUG);
-			$bubble      = Arr::getValue($info, 'bubble', true);
-			$path		 = Arr::getValue($info, 'path', $path);
+
+			$lowestLevel = get_value($info, 'level', \Monolog\Logger::DEBUG);
+			$bubble      = get_value($info, 'bubble', true);
+			$path		 = get_value($info, 'path', $path);
 
 			$handler = new $handelClass($path, $lowestLevel, $bubble);//实例化日志处理器
-				
+
 			if (($maxFiles || $maxFiles === 0) && method_exists($handler, 'setMaxFiles')) {
 				$handler->setMaxFiles($maxFiles);
 			}
-				
+
 			if ($filenameDateFormat && method_exists($handler, 'setDateFormat')) {
 				$handler->setDateFormat($filenameDateFormat);
 			}
-		
+
 			if (! empty($info['formatter'])) {
 				$fomatterClass = 'Lxh\\Logger\\Formatter\\' . $info['formatter'];
 				if (! class_exists($fomatterClass)) {
 					$fomatterClass = '\\Monolog\\Formatter\\' . $info['formatter'];
 				}
-					
+
 				$handler->setFormatter(new $fomatterClass());
 			}
-		
+
 			$channel->pushHandler($handler);//添加handler
 		}
 	}
@@ -127,7 +147,7 @@ class Manager extends Factory
 	/**
 	 * 代理monolog处理日志方法, 使用前请先通过配置文件定义好相应的日志通道信息
 	 * 使用示例:
-	 *  logger()->info('啦啦~'); //此方法会在日志信息后面带上$_SERVER['REQUEST_METHOD']和get_value($_SERVER, 'REQUEST_URI')等信息, info表示日志级别
+	 *  logger()->info('啦啦~'); //此方法会在日志信息后面带上$this->requestMethod和& $this->requestUri等信息, info表示日志级别
 	 * 输出如下:
 	 *  [2016-09-18 18:12:58] INFO: 啦啦~ [GET: /api/Index/index] [] []
 	 *
@@ -146,7 +166,7 @@ class Manager extends Factory
 	 */
 	public function error($msg, $extra = [])
 	{
-		$extra[$_SERVER['REQUEST_METHOD']] = get_value($_SERVER, 'REQUEST_URI');
+		$extra[$this->requestMethod] = & $this->requestUri;
 		return $this->get($this->channelName)->error($msg, $extra);
 	}
 
@@ -157,7 +177,7 @@ class Manager extends Factory
 
 	public function warning($msg, $extra = [])
 	{
-		$extra[$_SERVER['REQUEST_METHOD']] = get_value($_SERVER, 'REQUEST_URI');
+		$extra[$this->requestMethod] = & $this->requestUri;
 		return $this->get($this->channelName)->warning($msg, $extra);
 	}
 
@@ -168,7 +188,7 @@ class Manager extends Factory
 
 	public function notice($msg, $extra = [])
 	{
-		$extra[$_SERVER['REQUEST_METHOD']] = get_value($_SERVER, 'REQUEST_URI');
+		$extra[$this->requestMethod] = & $this->requestUri;
 		return $this->get($this->channelName)->warning($msg, $extra);
 	}
 
@@ -179,7 +199,7 @@ class Manager extends Factory
 
 	public function info($msg, $extra = [])
 	{
-		$extra[$_SERVER['REQUEST_METHOD']] = get_value($_SERVER, 'REQUEST_URI');
+		$extra[$this->requestMethod] = & $this->requestUri;
 		return $this->get($this->channelName)->info($msg, $extra);
 	}
 
@@ -190,7 +210,7 @@ class Manager extends Factory
 
 	public function critica($msg, $extra = [])
 	{
-		$extra[$_SERVER['REQUEST_METHOD']] = get_value($_SERVER, 'REQUEST_URI');
+		$extra[$this->requestMethod] = & $this->requestUri;
 		return $this->get($this->channelName)->critica($msg, $extra);
 	}
 
@@ -201,7 +221,7 @@ class Manager extends Factory
 
 	public function emergency($msg, $extra = [])
 	{
-		$extra[$_SERVER['REQUEST_METHOD']] = get_value($_SERVER, 'REQUEST_URI');
+		$extra[$this->requestMethod] = & $this->requestUri;
 		return $this->get($this->channelName)->emergency($msg, $extra);
 	}
 
@@ -212,7 +232,7 @@ class Manager extends Factory
 
 	public function alert($msg, $extra = [])
 	{
-		$extra[$_SERVER['REQUEST_METHOD']] = get_value($_SERVER, 'REQUEST_URI');
+		$extra[$this->requestMethod] = & $this->requestUri;
 		return $this->get($this->channelName)->alert($msg, $extra);
 	}
 
@@ -228,5 +248,5 @@ class Manager extends Factory
 		}
 		return $this->config;
 	}
-	
+
 }

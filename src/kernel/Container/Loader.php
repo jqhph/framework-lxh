@@ -108,7 +108,7 @@ trait Loader
         'exception.handler' => [
             'shared' => true,
             'class' => 'Lxh\Exceptions\Handlers\Handler',
-            'dependencies' => 'container'
+            'dependencies' => ['logger', 'http.request', 'http.response', 'events']
         ],
         'validator' => [
             'shared' => true,

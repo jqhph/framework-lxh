@@ -32,7 +32,7 @@ class Request extends Message implements RequestInterface
 
     public function __construct(array $headers = array(), StreamInterface $body = null)
     {
-        $this->method = & $_SERVER['REQUEST_METHOD'];
+        $this->method = get_value($_SERVER, 'REQUEST_METHOD');
 
         parent::__construct($headers, $body);
     }

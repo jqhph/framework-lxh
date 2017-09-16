@@ -210,7 +210,7 @@ function http()
  * @param  string $channel 日志通道名称
  * @return LoggerManager
  */
-function logger($channel = 'exception')
+function logger($channel = 'primary')
 {
     return $GLOBALS['CONTAINER']->make('logger')->channel($channel);
 }
@@ -418,6 +418,11 @@ function is_prod()
 function config($key = null, $default = null)
 {
     return $GLOBALS['CONFIG']->get($key, $default);
+}
+
+function is_cli()
+{
+    return PHP_SAPI == 'cli';
 }
 
 /**

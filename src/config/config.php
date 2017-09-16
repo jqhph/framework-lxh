@@ -90,6 +90,7 @@ $config['events'] = [
     'response.send.after' => [
         'track'
     ],
+    // 异常报告
     'exception.report' => [],
     'route.dispatch.before' => [],
     'route.dispatch.after' => [],
@@ -108,7 +109,8 @@ $config['middleware'] = [
 
 // 日志配置
 $config['logger'] = [
-    'exception' => [
+    // 默认日志通道
+    'primary' => [
         'path'     => '../data/logs/record.log',
         'handlers' => [
             [
@@ -121,5 +123,10 @@ $config['logger'] = [
         'filenameDateFormat' => 'Y-m-d'
     ]
 ];
+
+// 定义异常处理日志通道
+$config['logger']['exception'] = & $config['logger']['primary'];
+// 定义redis和pdo异常日志处理通道
+$config['logger']['redis'] = $config['logger']['pdo'] = & $config['logger']['exception'];
 
 return $config;
