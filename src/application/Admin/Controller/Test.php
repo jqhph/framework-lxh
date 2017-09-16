@@ -18,7 +18,9 @@ class Test extends Controller
 {
     public function actionTest(Request $req, Response $resp)
     {
-        return $this->render('child', ['content' => 'hehe']);
+        debug(token_get_all(file_manager()->get(__ROOT__ . 'resource/views/admin/test/child.blade.php')));
+
+//        return $this->render('child', ['content' => 'hehe']);
     }
 
     public function actionHello()

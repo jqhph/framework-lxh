@@ -56,6 +56,25 @@ $config['domain-deploy'] = true;
 //    'dev.lxh.com' => 'Admin',
 //];
 
+// 记录错误日志级别
+$config['record-error-info-level'] = [
+    E_ERROR,
+    E_RECOVERABLE_ERROR,
+    E_WARNING,
+    E_PARSE,
+    E_NOTICE,
+    E_STRICT,
+    E_DEPRECATED,
+    E_CORE_ERROR,
+    E_CORE_WARNING,
+    E_COMPILE_ERROR,
+    E_COMPILE_WARNING,
+    E_USER_ERROR,
+    E_USER_WARNING,
+    E_USER_NOTICE,
+    E_USER_DEPRECATED
+];
+
 /**
  * 事件监听配置
  *
@@ -70,7 +89,11 @@ $config['events'] = [
     ],
     'response.send.after' => [
         'track'
-    ]
+    ],
+    'exception.report' => [],
+    'route.dispatch.before' => [],
+    'route.dispatch.after' => [],
+
 ];
 
 // 公共中间件配置（按顺序执行）

@@ -80,21 +80,7 @@ class Application
      */
     public function shutdown()
     {
-        if ($err = error_get_last()) {
-            // 记录错误日志
-            logger('exception')->addEmergency('', $err);
-        }
-
-        $response = $this->container->make('http.response');
-
-        // 触发程序终结时间
-        $this->events->fire('app.shutdown', [$response, & $err]);
-
-        if ($response->sent()) {
-            return;
-        }
-
-        $response->send();
+        $this->container->make('shutdown')->handle();
     }
 
     /**
@@ -134,7 +120,7 @@ class Application
             $router = $this->container->make('router');
 
             if ($router->handle()) {
-                $this->container->make('controller.manager')->handle($router, $this->request, $this->response);
+                $this->container->make('controller.manager')->handle($router);
             } else {
                 throw new NotFound();
             }

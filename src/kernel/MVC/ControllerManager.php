@@ -19,6 +19,7 @@ use Lxh\Contracts\Pipeline;
 use Lxh\Contracts\Events\Dispatcher;
 use Lxh\MVC\Controller;
 use Symfony\Component\Console\Exception\RuntimeException;
+use Lxh\Events\Dispatcher as Events;
 
 class ControllerManager extends Factory
 {
@@ -97,16 +98,16 @@ class ControllerManager extends Factory
      */
     protected $contrs;
 
-    public function __construct(Container $container)
+    public function __construct(
+        Container $container, Request $request, Response $response, Pipeline $pipeline, Dispatcher $events
+    )
     {
         parent::__construct($container);
 
-        $this->request = $container->make('http.request');
-        $this->response = $container->make('http.response');
-
-        $this->pipeline = $container->make('pipeline');
-
-        $this->events = $container->make('events');
+        $this->request = $request;
+        $this->response = $response;
+        $this->pipeline = $pipeline;
+        $this->events = $events;
     }
 
     /**
