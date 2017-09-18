@@ -134,6 +134,10 @@ class ControllerManager extends Factory
             define('__ACTION__', $this->actionName);
         }
 
+        if (! defined('__MODULE__')) {
+            define('__MODULE__', $this->module);
+        }
+
         $this->response->data = $this->call($this->controllerName, $this->actionName, $this->requestParams);
 
         $this->first = false;
@@ -343,8 +347,6 @@ class ControllerManager extends Factory
     protected function setModule($name)
     {
         $this->module = $name ?: $this->getDefaultModule();
-
-        define('__MODULE__', $this->module);
     }
 
     protected function getDefaultModule()

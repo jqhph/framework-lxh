@@ -8,6 +8,7 @@
 
 namespace Lxh\Language;
 
+use Lxh\File\FileManager;
 use Lxh\Helper\Entity;
 use Lxh\Contracts\Container\Container;
 use Lxh\Helper\Util;
@@ -90,8 +91,8 @@ class Manager
     /**
      * 设置语言包模块
      *
-     * @param
-     * @return void
+     * @param string $name
+     * @return static
      */
     public function scope($name)
     {
@@ -258,9 +259,9 @@ class Manager
     }
 
     /**
-     * @return \Lxh\File\FileManager
+     * @return FileManager
      */
-    protected function fileManager()
+    protected function files()
     {
         return make('file.manager');
     }
@@ -311,7 +312,7 @@ class Manager
      */
     public function save()
     {
-        $file = $this->fileManager();
+        $file = $this->files();
 
         foreach ($this->changedData as $scope => & $data) {
             if (!empty($data)) {

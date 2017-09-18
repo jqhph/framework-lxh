@@ -72,7 +72,7 @@ abstract class FileGenerator extends Creator
     {
         parent::__construct($generator);
 
-        $this->files = file_manager();
+        $this->files = files();
     }
 
     /**

@@ -45,7 +45,7 @@ class Language extends Controller
             throw new Forbidden();
         }
 
-        $file = file_manager();
+        $file = files();
 
         $languagePackDir = language()->getBasePath();
 
@@ -73,7 +73,7 @@ class Language extends Controller
 
 //        print_r($languagePackDir . ltrim($path, '/'));
 
-        $list = file_manager()->getPhpContents($languagePackDir . $path);
+        $list = files()->getPhpContents($languagePackDir . $path);
 
         return $this->success('success', ['content' => & $list]);
 
@@ -96,7 +96,7 @@ class Language extends Controller
 
         $languagePackDir = language()->getBasePath();
 
-        $result = file_manager()->putPhpContents($languagePackDir . $_POST['path'], $_POST['content']);
+        $result = files()->putPhpContents($languagePackDir . $_POST['path'], $_POST['content']);
 
         if ($result) {
             // 更新前端缓存
@@ -118,7 +118,7 @@ class Language extends Controller
         if (empty($_POST['path']) || empty($_POST['name'])) {
             return $this->error();
         }
-        $file = file_manager();
+        $file = files();
         $languagePackDir = language()->getBasePath();
 
         $path = $languagePackDir . $_POST['path'];
@@ -172,7 +172,7 @@ class Language extends Controller
             'fields' => [],
         ];
 
-        if (file_manager()->putPhpContents($path, $data)) {
+        if (files()->putPhpContents($path, $data)) {
             return $this->success();
         }
         return $this->failed();
@@ -195,7 +195,7 @@ class Language extends Controller
         $content = $_POST['content'];
 
         $language = language();
-        $file     = file_manager();
+        $file     = files();
 
         $path = $language->getBasePath() . $path;
 
@@ -225,7 +225,7 @@ class Language extends Controller
         $content = ['options' => & $_POST['content']];
 
         $language = language();
-        $file     = file_manager();
+        $file     = files();
 
         $path = $language->getBasePath() . $path;
 
@@ -253,7 +253,7 @@ class Language extends Controller
 
         $base = language()->getBasePath();
 
-        $file = file_manager();
+        $file = files();
 
         $data = $file->getPhpContents($base . $_POST['path']);
 

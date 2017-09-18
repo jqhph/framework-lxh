@@ -42,7 +42,7 @@ class File extends Cache
 
         $this->root = __DATA_ROOT__ . 'file-cache/';
 
-        $this->file = file_manager();
+        $this->file = files();
     }
 
     /**

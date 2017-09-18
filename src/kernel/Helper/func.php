@@ -23,7 +23,7 @@ use Lxh\Support\Collection;
 use Lxh\Contracts\Support\Htmlable;
 
 // 常用的变量先注册到全局变量中
-$GLOBALS['CONTAINER']     = new Container();
+$GLOBALS['CONTAINER']     = Container::getInstance();
 $GLOBALS['CONFIG']        = $GLOBALS['CONTAINER']->make('config');
 $GLOBALS['LANGUAGE']      = $GLOBALS['CONTAINER']->make('language.manager');
 $GLOBALS['MODEL_FACTORY'] = $GLOBALS['CONTAINER']->make('model.factory');
@@ -119,7 +119,7 @@ function language()
 /**
  * @return FileManager
  */
-function file_manager()
+function files()
 {
     return $GLOBALS['CONTAINER']->make('file.manager');
 }

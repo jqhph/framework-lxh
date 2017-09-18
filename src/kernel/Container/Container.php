@@ -4,8 +4,10 @@ namespace Lxh\Container;
 use Lxh\Exceptions\InternalServerError;
 use Lxh\Contracts\Container\Container AS ContractsContainer;
 use Lxh\Support\Arr;
+use ArrayAccess;
+use Closure;
 
-class Container implements ContractsContainer
+class Container implements ArrayAccess, ContractsContainer
 {
     use Loader;
 
@@ -14,9 +16,25 @@ class Container implements ContractsContainer
      */
     protected $instances = [];
 
-    protected $buildStack;
+    /**
+     * @var static
+     */
+    protected static $instance;
 
-    protected $serviceProviders;
+    /**
+     * @var array
+     */
+    protected $resolved = [];
+
+    /**
+     * @var array
+     */
+    protected $buildStack = [];
+
+    /**
+     * @var array
+     */
+    protected $serviceProviders = [];
     
     public function __construct()
     {
@@ -51,6 +69,9 @@ class Container implements ContractsContainer
         if ($this->isShared($abstract)) {
             $this->instances[get_class($instance)] = $this->instances[$abstract] = $instance;
         }
+
+        $this->resolved[$abstract] = true;
+
         return $instance;
     }
 
@@ -125,6 +146,18 @@ class Container implements ContractsContainer
         array_pop($this->buildStack);
 
         return $reflector->newInstanceArgs($instances);
+    }
+
+    /**
+     * Determine if the given abstract type has been resolved.
+     *
+     * @param  string  $abstract
+     * @return bool
+     */
+    public function resolved($abstract)
+    {
+        return isset($this->resolved[$abstract]) ||
+        isset($this->instances[$abstract]);
     }
 
     /**
@@ -326,17 +359,7 @@ class Container implements ContractsContainer
         };
     }
 
-    /**
-     * 检测服务是否已注入容器
-     *
-     * @return bool
-     * */
-    public function exist($abstract)
-    {
-        return isset($this->instances[$abstract]);
-    }
-
-    public function clear($except = [])
+    public function flush($except = [])
     {
         $new = [];
         foreach ((array) $except as & $e) {
@@ -350,14 +373,69 @@ class Container implements ContractsContainer
         $this->instances = & $new;
     }
 
+    /**
+     * Set the globally available instance of the container.
+     *
+     * @return static
+     */
+    public static function getInstance()
+    {
+        if (is_null(static::$instance)) {
+            static::$instance = new static;
+        }
+
+        return static::$instance;
+    }
+
 // 	public function normalize($service)
 // 	{
 // 		return is_string($service) ? ltrim($service, '\\') : $service;
 // 	}
-	
-	
-    private function __clone() 
+
+    /**
+     * Determine if a given offset exists.
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    public function offsetExists($key)
     {
-    	
+        return isset($this->instances[$key]);
+    }
+
+    /**
+     * Get the value at a given offset.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
+    public function offsetGet($key)
+    {
+        return $this->make($key);
+    }
+
+    /**
+     * Set the value at a given offset.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @return void
+     */
+    public function offsetSet($key, $value)
+    {
+        $this->bind($key, $value instanceof Closure ? $value : function () use ($value) {
+            return $value;
+        });
+    }
+
+    /**
+     * Unset the value at a given offset.
+     *
+     * @param  string  $key
+     * @return void
+     */
+    public function offsetUnset($key)
+    {
+        unset($this->bindings[$key], $this->instances[$key], $this->resolved[$key]);
     }
 }

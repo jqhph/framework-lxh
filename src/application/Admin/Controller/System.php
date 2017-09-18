@@ -108,7 +108,7 @@ class System extends Controller
      */
     public function actionSetting()
     {
-        $languageList = file_manager()->getFileList(language()->getBasePath());
+        $languageList = files()->getFileList(language()->getBasePath());
 
         $list = [];
         foreach ($languageList as & $lang) {
