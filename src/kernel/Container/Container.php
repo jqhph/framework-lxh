@@ -56,10 +56,10 @@ class Container implements ArrayAccess, ContractsContainer
      * @var array
      */
     protected $resolvingCallbacks = [];
-    
+
     public function __construct()
     {
-    	$this->instances[__CLASS__]
+        $this->instances[__CLASS__]
             = $this->instances['container']
             = $this->instances['Lxh\Contracts\Container\Container']
             = $this;
@@ -191,9 +191,13 @@ class Container implements ArrayAccess, ContractsContainer
      */
     protected function resolve($abstract)
     {
-        $binding = $this->getServiceBindings($abstract);
+        $object = '';
 
-        if ($binding && (! $object = $this->resolveWithBindings($abstract, $binding))) {
+        if ($binding = $this->getServiceBindings($abstract)) {
+            $object = $this->resolveWithBindings($abstract, $binding);
+        }
+
+        if (! $object) {
             $object = empty($binding['closure']) ? $this->build($abstract) : $binding['closure']($this);
         }
 
@@ -327,41 +331,41 @@ class Container implements ArrayAccess, ContractsContainer
      * @param  bool  $shared 是否单例
      * @return void
      */
-	public function bind($abstract, $concrete = null, $shared = false)
-	{
-	    // If the given types are actually an array, we will assume an alias is being
-	    // defined and will grab this "real" abstract class name and register this
-	    // alias with the container so that it can be used as a shortcut for it.
-	    if (is_array($abstract)) {
-	        list($abstract, $concrete) = $this->extractAlias($abstract);
-	    }
+    public function bind($abstract, $concrete = null, $shared = false)
+    {
+        // If the given types are actually an array, we will assume an alias is being
+        // defined and will grab this "real" abstract class name and register this
+        // alias with the container so that it can be used as a shortcut for it.
+        if (is_array($abstract)) {
+            list($abstract, $concrete) = $this->extractAlias($abstract);
+        }
 
-	    // If no concrete type was given, we will simply set the concrete type to the
-	    // abstract type. This will allow concrete type to be registered as shared
-	    // without being forced to state their classes in both of the parameter.
-	    $this->dropStaleInstances($abstract);
+        // If no concrete type was given, we will simply set the concrete type to the
+        // abstract type. This will allow concrete type to be registered as shared
+        // without being forced to state their classes in both of the parameter.
+        $this->dropStaleInstances($abstract);
 
-	    if (is_null($concrete)) {
-	        $concrete = $abstract;
-	    }
+        if (is_null($concrete)) {
+            $concrete = $abstract;
+        }
 
-	    if ($concrete instanceof \Closure) {
-	        $concrete = [
-	        	'closure' => $concrete,
-	            'shared'  => $shared
-	        ];
-	    }
+        if ($concrete instanceof \Closure) {
+            $concrete = [
+                'closure' => $concrete,
+                'shared'  => $shared
+            ];
+        }
 
-	    if (is_string($concrete)) {
-	    	$concrete = [
-	    		'class'  => $concrete,
-	    	    'shared' => $shared
-	    	];
-	    } else {
-	    	$concrete['shared'] = $shared;
-	    }
+        if (is_string($concrete)) {
+            $concrete = [
+                'class'  => $concrete,
+                'shared' => $shared
+            ];
+        } else {
+            $concrete['shared'] = $shared;
+        }
 
-	    $this->bindings[$abstract] = $concrete;
+        $this->bindings[$abstract] = $concrete;
 
         // If the abstract type was already resolved in this container we'll fire the
         // rebound listener so that any objects which have already gotten resolved
@@ -369,7 +373,7 @@ class Container implements ArrayAccess, ContractsContainer
         if ($this->resolved($abstract)) {
             $this->rebound($abstract);
         }
-	}
+    }
 
     /**
      * Bind a new callback to an abstract's rebind event.
@@ -447,20 +451,20 @@ class Container implements ArrayAccess, ContractsContainer
         return [];
     }
 
-	/**
-	 * Determine if a given type is shared.
-	 *
-	 * @param  string  $abstract
-	 * @return bool
-	 */
-	public function isShared($abstract)
-	{
-	    if (isset($this->instances[$abstract])) {
-	        return true;
-	    }
+    /**
+     * Determine if a given type is shared.
+     *
+     * @param  string  $abstract
+     * @return bool
+     */
+    public function isShared($abstract)
+    {
+        if (isset($this->instances[$abstract])) {
+            return true;
+        }
 
-	    return empty($this->bindings[$abstract]['shared']) ? false : true;
-	}
+        return empty($this->bindings[$abstract]['shared']) ? false : true;
+    }
 
     /**
      * Determine if the given abstract type has been bound.
@@ -474,16 +478,16 @@ class Container implements ArrayAccess, ContractsContainer
         isset($this->instances[$abstract]);
     }
 
-	/**
-	 * Extract the type and alias from a given definition.
-	 *
-	 * @param  array  $definition
-	 * @return array
-	 */
-	protected function extractAlias(array $definition)
-	{
-	    return [key($definition), current($definition)];
-	}
+    /**
+     * Extract the type and alias from a given definition.
+     *
+     * @param  array  $definition
+     * @return array
+     */
+    protected function extractAlias(array $definition)
+    {
+        return [key($definition), current($definition)];
+    }
 
     /**
      * Drop all of the stale instances and aliases.
