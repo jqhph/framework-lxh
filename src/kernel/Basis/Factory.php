@@ -3,8 +3,9 @@
 namespace Lxh\Basis;
 
 use Lxh\Contracts\Container\Container;
+use ArrayAccess;
 
-abstract class Factory
+abstract class Factory implements ArrayAccess
 {
     protected $container;
 
@@ -43,9 +44,65 @@ abstract class Factory
         return $this->container;
     }
 
-    public function getInstancesKeys()
+    public function keys()
     {
         return array_keys($this->instances);
+    }
+
+    public function __get($name)
+    {
+        if (! isset($this->instances[$name])) {
+            $this->instances[$name] = $this->create($name);
+        }
+        return $this->instances[$name];
+    }
+
+    /**
+     * Determine if a given offset exists.
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    public function offsetExists($key)
+    {
+        return isset($this->instances[$key]);
+    }
+
+    /**
+     * Get the value at a given offset.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
+    public function offsetGet($key)
+    {
+        if (! isset($this->instances[$key])) {
+            $this->instances[$key] = $this->create($key);
+        }
+        return $this->instances[$key];
+    }
+
+    /**
+     * Set the value at a given offset.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @return void
+     */
+    public function offsetSet($key, $value)
+    {
+        $this->instances[$key] = $value;
+    }
+
+    /**
+     * Unset the value at a given offset.
+     *
+     * @param  string  $key
+     * @return void
+     */
+    public function offsetUnset($key)
+    {
+        unset($this->instances[$key]);
     }
 
 }

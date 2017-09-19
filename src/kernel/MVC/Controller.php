@@ -29,6 +29,13 @@ abstract class Controller
     protected $name;
 
     /**
+     * 模块名称
+     *
+     * @var string
+     */
+    protected $module;
+
+    /**
      * @var ControllerManager
      */
     protected $manager;
@@ -43,7 +50,7 @@ abstract class Controller
     /**
      * @var mixed
      */
-    protected $currentMiddleware;
+    private $currentMiddleware;
 
     /**
      * @var Container;
@@ -72,6 +79,8 @@ abstract class Controller
         $this->name = $name;
         $this->container = $container;
         $this->manager = $manager;
+        
+        $this->module = __MODULE__;
 
         $this->config = $container['config'];
         $this->events = $container['events'];
@@ -126,7 +135,7 @@ abstract class Controller
      */
     protected function render($view, array $data = [], $compalete = false)
     {
-        if (config('use-blade-engine')) {
+        if ($this->useBladeEngine) {
             // 使用blade模板引擎
             $factory = $this->container['view.factory'];
 
@@ -216,7 +225,7 @@ abstract class Controller
      */
     protected function getModel($name = __CONTROLLER__)
     {
-        return $this->container['model.factory']->get($name);
+        return $this->container['model.factory'][$name];
     }
 
     /**

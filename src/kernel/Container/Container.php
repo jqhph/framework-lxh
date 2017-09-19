@@ -140,13 +140,9 @@ class Container implements ArrayAccess, ContractsContainer
             return new $concrete;
         }
 
-        $dependencies = $constructor->getParameters();
-
-        $instances = $this->getDependencies($dependencies);
-
         array_pop($this->buildStack);
 
-        return $reflector->newInstanceArgs($instances);
+        return $reflector->newInstanceArgs($this->resolveDependencies($constructor->getParameters()));
     }
 
     /**
@@ -244,11 +240,11 @@ class Container implements ArrayAccess, ContractsContainer
      * @param  array  $parameters
      * @return array
      */
-    protected function getDependencies(array $parameters)
+    protected function resolveDependencies(array $parameters)
     {
         $dependencies = [];
 
-        foreach ($parameters as $parameter) {
+        foreach ($parameters as &$parameter) {
             // If the class is null, it means the dependency is a string or some other
             // primitive type which we can not resolve since it is not a class and
             // we will just bomb out with an error since we have no-where to go.
@@ -556,7 +552,7 @@ class Container implements ArrayAccess, ContractsContainer
      */
     public function offsetExists($key)
     {
-        return isset($this->instances[$key]);
+        return $this->bound($key);
     }
 
     /**

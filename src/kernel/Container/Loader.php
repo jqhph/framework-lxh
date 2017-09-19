@@ -6,7 +6,6 @@ use Lxh\Exceptions\InternalServerError;
 use Lxh\Exceptions\InvalidArgumentException;
 use Lxh\View\ViewServiceProvider;
 
-//加载器
 trait Loader
 {
     protected $container;
@@ -164,14 +163,14 @@ trait Loader
         }
 
         if (! empty($binding['provider']) && empty($binding['class']) && ! $this->resolved($abstract)) {
-            return $this->registerWithProvider($abstract, $binding['provider']);
+            return $this->resolveWithProvider($abstract, $binding['provider']);
         }
 
         $className = $binding['class'];
 
         $dependencies = isset($binding['dependencies']) ? (array) $binding['dependencies'] : [];
 
-        return $dependencies ? $this->getServiceInstance($className, $dependencies) : new $className();
+        return $dependencies ? $this->resolveService($className, $dependencies) : new $className();
     }
 
     /**
@@ -181,24 +180,13 @@ trait Loader
      * @param string $provider
      * @return object
      */
-    protected function registerWithProvider($abstract, $provider)
+    protected function resolveWithProvider($abstract, $provider)
     {
         $provider = new $provider($this);
 
         $provider->register();
 
         return $this->make($abstract);
-    }
-
-    /**
-     * 获取依赖类实例
-     *
-     * @param string $alias 别名
-     * @return object
-     */
-    protected function getDependencyInstance($alias)
-    {
-        return $this->make($alias);
     }
 
 
@@ -210,12 +198,12 @@ trait Loader
      *
      * @return object
      */
-    protected function getServiceInstance($className, array & $dependencies = [])
+    protected function resolveService($className, array & $dependencies = [])
     {
         $class = new \ReflectionClass($className);
 
         foreach ($dependencies as & $abstract) {
-            $abstract = $this->getDependencyInstance($abstract);
+            $abstract = $this->make($abstract);
         }
 
         return $class->newInstanceArgs($dependencies);

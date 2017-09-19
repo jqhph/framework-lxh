@@ -348,7 +348,7 @@ class ControllerManager extends Factory
 
     protected function getDefaultModule()
     {
-        $modules = config('modules');
+        $modules = (array) config('modules');
         if (count($modules) < 1) {
             throw new RuntimeException('Get the default module failed');
         }
