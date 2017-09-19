@@ -28,7 +28,7 @@ class Js extends Controller
      */
     protected $tplPrefix;
 
-    public function __construct()
+    protected function initialize()
     {
         $this->rootPrefix = __PUBLIC_ROOT__ . 'static/' . $GLOBALS['resource-version'] . '/';
         $this->tplPrefix = $this->rootPrefix . 'tpl/' . __MODULE__ . '/';

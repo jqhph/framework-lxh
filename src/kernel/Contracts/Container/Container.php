@@ -5,16 +5,13 @@ use Closure;
 
 interface Container
 {
-
 	/**
-	 * Register a binding with the container.
+	 * Determine if the given abstract type has been bound.
 	 *
-	 * @param  string|array  $abstract
-	 * @param  \Closure|string|null  $concrete
-	 * @param  bool  $shared
-	 * @return void
-	*/
-// 	public function bind($abstract, $concrete, $dependencies = '');
+	 * @param  string  $abstract
+	 * @return bool
+	 */
+	public function bound($abstract);
 
 	/**
 	 * Register an existing instance as shared in the container.
@@ -25,6 +22,16 @@ interface Container
 	*/
 	public function instance($abstract, $instance);
 
+	/**
+	 * "Extend" an abstract type in the container.
+	 *
+	 * @param  string    $abstract
+	 * @param  \Closure  $closure
+	 * @return void
+	 *
+	 * @throws \InvalidArgumentException
+	 */
+	public function extend($abstract, Closure $closure);
 
 	/**
 	 * Resolve the given type from the container.
@@ -71,4 +78,21 @@ interface Container
 	 * @return bool
 	 */
 	public function isShared($abstract);
+
+	/**
+	 * Determine if the given abstract type has been resolved.
+	 *
+	 * @param  string $abstract
+	 * @return bool
+	 */
+	public function resolved($abstract);
+
+	/**
+	 * Register a new resolving callback.
+	 *
+	 * @param  string    $abstract
+	 * @param  \Closure|null  $callback
+	 * @return void
+	 */
+	public function resolving($abstract, Closure $callback = null);
 }

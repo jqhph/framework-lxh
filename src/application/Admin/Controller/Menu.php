@@ -16,7 +16,7 @@ use Lxh\Helper\Valitron\Validator;
 
 class Menu extends Controller
 {
-    public function __construct()
+    protected function initialize()
     {
     }
 

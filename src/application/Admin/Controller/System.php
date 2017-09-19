@@ -18,7 +18,7 @@ use Lxh\Helper\Util;
 
 class System extends Controller
 {
-    public function __construct()
+    public function initialize()
     {
 
     }

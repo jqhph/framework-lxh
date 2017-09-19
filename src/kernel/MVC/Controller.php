@@ -8,7 +8,9 @@
 
 namespace Lxh\MVC;
 
+use Lxh\Config\Config;
 use Lxh\Contracts\Container\Container;
+use Lxh\Events\Dispatcher;
 use Lxh\Helper\Util;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
@@ -48,7 +50,44 @@ abstract class Controller
      */
     protected $container;
 
-    public function __construct()
+    /**
+     * @var Config
+     */
+    protected $config;
+
+    /**
+     * @var Dispatcher
+     */
+    protected $events;
+
+    /**
+     * 是否使用blade模板引擎
+     *
+     * @var bool
+     */
+    protected $useBladeEngine = false;
+
+    public function __construct($name, Container $container, ControllerManager $manager)
+    {
+        $this->name = $name;
+        $this->container = $container;
+        $this->manager = $manager;
+
+        $this->config = $container['config'];
+        $this->events = $container['events'];
+
+        $this->useBladeEngine = $this->config['use-blade-engine'];
+
+        // 初始化
+        $this->initialize();
+    }
+
+    /**
+     * 初始化操作
+     *
+     * @return void
+     */
+    protected function initialize()
     {
     }
 
@@ -59,7 +98,7 @@ abstract class Controller
      */
     protected function viewFactory()
     {
-        return make('view.factory');
+        return $this->container['view.factory'];
     }
 
     /**
@@ -71,10 +110,10 @@ abstract class Controller
      */
     protected function share($key, $value = null)
     {
-        if (config('use-blade-engine')) {
-            return make('view.factory')->share($key, $value);
+        if ($this->useBladeEngine) {
+            return $this->container['view.factory']->share($key, $value);
         }
-        return make('view')->with($key, $value);
+        return $this->container['view']->with($key, $value);
     }
 
     /**
@@ -89,7 +128,7 @@ abstract class Controller
     {
         if (config('use-blade-engine')) {
             // 使用blade模板引擎
-            $factory = make('view.factory');
+            $factory = $this->container['view.factory'];
 
             $module = Util::convertWith(__MODULE__, true, '-');
 
@@ -103,7 +142,7 @@ abstract class Controller
             return $factory->make($view, $data)->render();
         }
 
-        $viewHanler = make('view');
+        $viewHanler = $this->container['view'];
 
         if ($compalete) {
             return $viewHanler->render($this->normalizeView('public.header'))
@@ -135,7 +174,7 @@ abstract class Controller
      */
     public function request()
     {
-        return make('http.request');
+        return $this->container['http.request'];
     }
 
     /**
@@ -143,7 +182,7 @@ abstract class Controller
      */
     public function response()
     {
-        return make('http.response');
+        return $this->container['http.response'];
     }
 
     /**
@@ -166,7 +205,7 @@ abstract class Controller
      */
     protected function createModel($name = __CONTROLLER__)
     {
-        return make('model.factory')->create($name);
+        return $this->container['model.factory']->create($name);
     }
 
     /**
@@ -177,7 +216,7 @@ abstract class Controller
      */
     protected function getModel($name = __CONTROLLER__)
     {
-        return make('model.factory')->get($name);
+        return $this->container['model.factory']->get($name);
     }
 
     /**
@@ -245,20 +284,5 @@ abstract class Controller
     public function getMiddleware()
     {
         return $this->middleware;
-    }
-
-    public function setContainer(Container $container)
-    {
-        $this->container = $container;
-    }
-
-    public function setControllerName($name)
-    {
-        $this->name = $name;
-    }
-
-    public function setManager(ControllerManager $manager)
-    {
-        $this->manager = $manager;
     }
 }

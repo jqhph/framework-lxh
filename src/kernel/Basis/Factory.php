@@ -34,7 +34,7 @@ abstract class Factory
     /**
      * 生产一个实例
      *
-     * @return instance
+     * @return object
      * */
     abstract public function create($name);
 

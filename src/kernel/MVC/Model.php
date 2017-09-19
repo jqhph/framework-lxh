@@ -65,9 +65,7 @@ class Model extends Entity
 
         $this->container = $container;
 
-        $this->events = events();
-
-        parent::__construct([]);
+        $this->events = $container['events'];
     }
 
     // 查找数据

@@ -249,10 +249,7 @@ class ControllerManager extends Factory
         $className .= $name;
 
         if (class_exists($className)) {
-            $instance = new $className();
-            $instance->setContainer($this->container);
-            $instance->setControllerName($name);
-            $instance->setManager($this);
+            $instance = new $className($name, $this->container, $this);
 
             return $instance;
         }

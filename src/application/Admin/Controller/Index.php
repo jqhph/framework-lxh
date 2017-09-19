@@ -13,10 +13,10 @@ use Lxh\Http\Response;
 
 class Index extends Controller
 {
-    public function __construct()
+    protected function initialize()
     {
+        
     }
-
 
     public function actionList()
     {

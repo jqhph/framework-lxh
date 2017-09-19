@@ -13,8 +13,10 @@ trait Loader
 
     /**
      * 是否载入配置文件
+     *
+     * @var bool
      */
-    protected $isLoadConfig;
+    protected $resolvedConfig = false;
 
     /**
      * 服务注册数组
@@ -149,18 +151,19 @@ trait Loader
     ];
 
     /**
-     * 载入服务实例并注册到服务容器上
+     * Resolve the given type with array.
      *
-     * @param $abstract string 载入类实例的别名
+     * @param string $abstract
+     * @param array $binding
      * @return object
      */
-    public function load($abstract, $binding)
+    protected function resolveWithBindings($abstract, array & $binding)
     {
         if (empty($binding['class']) && empty($binding['provider'])) {
             return false;
         }
 
-        if (! empty($binding['provider'])) {
+        if (! empty($binding['provider']) && empty($binding['class']) && ! $this->resolved($abstract)) {
             return $this->registerWithProvider($abstract, $binding['provider']);
         }
 
@@ -168,30 +171,7 @@ trait Loader
 
         $dependencies = isset($binding['dependencies']) ? (array) $binding['dependencies'] : [];
 
-        switch (count($dependencies)) {
-            case 0:
-                return new $className();
-
-            case 1:
-                return new $className($this->getDependencyInstance($dependencies[0]));
-
-            case 2:
-                return new $className(
-                    $this->getDependencyInstance($dependencies[0]),
-                    $this->getDependencyInstance($dependencies[1])
-                );
-
-            case 3:
-                return new $className(
-                    $this->getDependencyInstance($dependencies[0]),
-                    $this->getDependencyInstance($dependencies[1]),
-                    $this->getDependencyInstance($dependencies[2])
-                );
-
-            default:
-                return $this->getServiceInstance($className, $dependencies);
-
-        }
+        return $dependencies ? $this->getServiceInstance($className, $dependencies) : new $className();
     }
 
     /**
@@ -221,26 +201,14 @@ trait Loader
         return $this->make($alias);
     }
 
-    /**
-     * 根据别名获取类名
-     *
-     * @param string $alias
-     * @return string
-     */
-    protected function getDependencyClass($alias)
-    {
-        $loadRules = $this->getAllBindings();
-        if (! isset($loadRules[$alias])) {
-            throw new InternalServerError('找不到依赖类信息');
-        }
-
-        return $loadRules[$alias]['class'];
-    }
 
     /**
      * 利用反射获取服务实例
+     *
      * @param $className string 要载入的类名
      * @param $params array $className类依赖的参数
+     *
+     * @return object
      */
     protected function getServiceInstance($className, array & $dependencies = [])
     {
@@ -254,7 +222,9 @@ trait Loader
     }
 
     /**
-     * 获取注入详情
+     * Get the container's bindings.
+     *
+     * @return array
      */
     protected function getServiceBindings($abstract)
     {
@@ -265,31 +235,22 @@ trait Loader
         $bindings = $this->getAllBindings();
 
         if (! isset($bindings[$abstract])) {
-            return false;
+            return [];
         }
 
         return $bindings[$abstract];
     }
 
     /**
-     * 检查别名是否存在
-     *
-     * @return bool
-     */
-    public function loadAliasExists($alias)
-    {
-        $loadRules = $this->getAllBindings();
-        return isset($loadRules[$alias]);
-    }
-
-    /**
      * 获取服务注册配置数组
+     *
+     * @return array
      */
-    public function getAllBindings()
+    public function &getAllBindings()
     {
-        if (! $this->isLoadConfig) {
-            $this->bindings += $this->make('config')->getContainerConfig();
-            $this->isLoadConfig = true;
+        if (! $this->resolvedConfig) {
+            $this->bindings += (array) $this->make('config')->getContainerConfig();
+            $this->resolvedConfig = true;
         }
         return $this->bindings;
     }

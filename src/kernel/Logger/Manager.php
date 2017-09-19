@@ -56,7 +56,12 @@ class Manager extends Factory
 		$this->requestUri = get_value($_SERVER, 'REQUEST_URI');
 	}
 
-	# create a log channel 		setFormatter(FormatterInterface $formatter)
+	/**
+	 * Create a logger with channel name
+	 *
+	 * @param  string $name
+	 * @return Logger
+	 */
 	public function create($name)
 	{
 		$logger = new Logger($name);
@@ -74,7 +79,10 @@ class Manager extends Factory
 
 	/**
 	 * 获取一个日志处理通道（对象）
-	 * */
+	 *
+	 * @param string $channelName
+	 * @return static
+	 */
 	public function channel($channelName)
 	{
 		$this->get($channelName);//获取一个channel
@@ -84,7 +92,7 @@ class Manager extends Factory
 
 	/**
 	 * 给logger channel添加handler
-	 * */
+	 */
 	protected function pushHandlers(Logger $channel, array $config)
 	{
 		$defaultConfig = & $this->defaultExceptionConfig;
