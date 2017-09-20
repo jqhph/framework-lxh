@@ -1,20 +1,3 @@
 *.idea
 
-.*
-
 data/logs/*
-
-data/file-cache/*
-
-data/resource/*
-
-test/*
-
-src/application/Home/*
-src/application/Kernel/Spiders/*
-src/vendor/*
-
-public/static/v1.0/Home/*
-
-src/application/Ucenter/*
-public/static/v1.0/Ucenter/*

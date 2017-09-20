@@ -222,7 +222,7 @@ class Response extends PsrResponse
 	{
 		$this->hasBeenSent = true;
 
-		$events = $this->container->make('events');
+		$events = $this->container['events'];
 
 		$events->fire('response.send.before', [$this->request, $this]);
 

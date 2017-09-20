@@ -80,7 +80,7 @@ class Application
      */
     public function shutdown()
     {
-        $this->container->make('shutdown')->handle();
+        $this->container['shutdown']->handle();
     }
 
     /**
@@ -107,9 +107,9 @@ class Application
     public function handle()
     {
         try {
-            $this->response = $this->container->make('http.response');
+            $this->response = $this->container['http.response'];
 
-            $this->request = $this->container->make('http.request');
+            $this->request = $this->container['http.request'];
 
             // 添加事件监听
             $this->addListeners();
@@ -117,10 +117,10 @@ class Application
             // 触发路由匹配前置事件
             $this->events->fire('route.dispatch.before', [$this->request, $this->response]);
 
-            $router = $this->container->make('router');
+            $router = $this->container['router'];
 
             if ($router->handle()) {
-                $this->container->make('controller.manager')->handle($router);
+                $this->container['controller.manager']->handle($router);
             } else {
                 throw new NotFound();
             }
@@ -165,7 +165,7 @@ class Application
     protected function bindRouter()
     {
         $this->container->singleton('router', function (Container $container) {
-            $request = $container->make('http.request');
+            $request = $container['http.request'];
 
             $configPath = $this->root . 'config/route/route.php';
 
@@ -201,9 +201,6 @@ class Application
     {
         define('CONSOLE_START', microtime(true));
 
-        $this->container['http.response']->withConsoleOutput(false);
-
         $this->container['console']->handle();
-
     }
 }
