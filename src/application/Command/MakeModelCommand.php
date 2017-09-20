@@ -9,12 +9,13 @@
 namespace Lxh\Command;
 
 use Lxh\Console\Command;
+use Lxh\Console\ModuleGeneratorCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Lxh\Contracts\Container\Container;
 use Lxh\Console\GeneratorCommand;
 
-class MakeModelCommand extends GeneratorCommand
+class MakeModelCommand extends ModuleGeneratorCommand
 {
     /**
      * The console command name.
@@ -61,6 +62,7 @@ class MakeModelCommand extends GeneratorCommand
     {
         return [
             ['name', InputArgument::REQUIRED, 'The name of the model.'],
+            ['module', InputArgument::OPTIONAL, 'The name of the module.'],
         ];
     }
 

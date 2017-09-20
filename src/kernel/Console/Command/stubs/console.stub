@@ -8,10 +8,10 @@
 
 namespace {namespace};
 
-use Gets\Console\Command;
+use {root-namespace}Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use Gets\Contracts\Container\Container;
+use {root-namespace}Contracts\Container\Container;
 
 class {class} extends Command
 {

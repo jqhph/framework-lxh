@@ -92,6 +92,8 @@ class Response extends PsrResponse
 	//发送header头及返回消息
 	public function sendHeader()
 	{
+		if (is_cli()) return;
+
 		//Send status
 		if (strpos(PHP_SAPI, 'cgi') === 0) {
 			header(sprintf('Status: %s', $this->getReasonPhrase()));

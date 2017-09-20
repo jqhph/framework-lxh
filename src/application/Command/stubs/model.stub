@@ -5,9 +5,9 @@
  * @date   {date}
  */
 
-namespace Gets\Model;
+namespace {root-namespace}{module}\Model;
 
-use Gets\MVC\Model;
+use {root-namespace}MVC\Model;
 
 class {class} extends Model
 {

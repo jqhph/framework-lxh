@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use RuntimeException;
-use Lxh\Helper\Arr;
+use Lxh\Support\Arr;
 use Symfony\Component\Console\Input\ArgvInput;
 
 //use \\Exception;

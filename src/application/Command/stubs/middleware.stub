@@ -5,7 +5,7 @@
  * @date   {date}
  */
 
-namespace {namespace};
+namespace {root-namespace}{module}\Middleware;
 
 use Closure;
 
@@ -16,11 +16,11 @@ class {class}
      *
      * @param  mixed   $params 上游传递的参数
      * @param  Closure $next   下级中间件
-     * @return void
+     * @return mixed
      */
     public function handle($params, Closure $next)
     {
-        // TODO
 
+        return $next($params);
     }
 }

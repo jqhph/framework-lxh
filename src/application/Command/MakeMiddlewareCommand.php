@@ -10,10 +10,11 @@ namespace Lxh\Command;
 
 use Lxh\Console\Command;
 use Lxh\Console\GeneratorCommand;
+use Lxh\Console\ModuleGeneratorCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
-class MakeMiddlewareCommand extends GeneratorCommand
+class MakeMiddlewareCommand extends ModuleGeneratorCommand
 {
     /**
      * The console command name.
@@ -59,6 +60,7 @@ class MakeMiddlewareCommand extends GeneratorCommand
     {
         return [
             ['name', InputArgument::REQUIRED, 'The name of the middleware.'],
+            ['module', InputArgument::OPTIONAL, 'The name of the module.'],
         ];
     }
 

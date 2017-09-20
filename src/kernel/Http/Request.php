@@ -97,7 +97,7 @@ class Request extends Message\ServerRequest
 	 */
 	public function protocol()
 	{
-		return $_SERVER['SERVER_PROTOCOL'];
+		return get_value($_SERVER, 'SERVER_PROTOCOL');
 	}
 
 	/**

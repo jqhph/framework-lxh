@@ -49,6 +49,8 @@ abstract class GeneratorCommand extends Command
      */
     protected $type;
 
+    protected $container;
+
     /**
      * Create a new controller creator command instance.
      *
@@ -59,7 +61,9 @@ abstract class GeneratorCommand extends Command
     {
         parent::__construct();
 
-        $this->files = $container->make('file.manager');
+        $this->container = $container;
+
+        $this->files = $container['file.manager'];
     }
 
     /**
@@ -177,9 +181,9 @@ abstract class GeneratorCommand extends Command
             [
                 '{namespace}'      => $this->getNamespace($name),
                 '{root-namespace}' => $this->getApplication()->getNamespace(),
-                '{class}'          => str_replace($this->getNamespace($name).'\\', '', $name),
+                '{class}'          => ucfirst(str_replace($this->getNamespace($name).'\\', '', $name)),
                 '{date}'           => date('Y-m-d H:i:s'),
-                '{author}'         => $this->author
+                '{author}'         => $this->author,
             ]
         );
     }

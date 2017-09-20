@@ -201,7 +201,9 @@ class Application
     {
         define('CONSOLE_START', microtime(true));
 
-        $this->container->make('console')->handle();
+        $this->container['http.response']->withConsoleOutput(false);
+
+        $this->container['console']->handle();
 
     }
 }

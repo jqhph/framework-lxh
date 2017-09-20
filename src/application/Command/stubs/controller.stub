@@ -5,21 +5,21 @@
  * @date   {date}
  */
 
-namespace Gets\Controller;
+namespace {root-namespace}{module}\Controller;
 
-use Gets\MVC\Controller;
-use Gets\Http\Request;
-use Gets\Http\Response;
+use {root-namespace}MVC\Controller;
+use {root-namespace}Http\Request;
+use {root-namespace}Http\Response;
 
 class {class} extends Controller
 {
-    public function __construct()
+    public function initialize()
     {
     }
 
     public function action{method}(Request $req, Response $resp, $params)
     {
-        // TODO
+
     }
 
 
