@@ -2,6 +2,7 @@
 
 namespace Lxh\Container;
 
+use Lxh\Exceptions\BindingResolutionException;
 use Lxh\Exceptions\InternalServerError;
 use Lxh\Exceptions\InvalidArgumentException;
 use Lxh\View\ViewServiceProvider;
@@ -182,9 +183,12 @@ trait Loader
      */
     protected function resolveWithProvider($abstract, $provider)
     {
-        $provider = new $provider($this);
+        if (! empty($this->serviceProviders[$abstract])) {
+            throw new BindingResolutionException("Cant't resolve the targe [$abstract] with provider [$provider]");
+        }
+        $this->serviceProviders[$abstract] = new $provider($this);
 
-        $provider->register();
+        $this->serviceProviders[$abstract]->register();
 
         return $this->make($abstract);
     }

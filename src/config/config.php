@@ -34,8 +34,6 @@ $config['add-config'] = [
     // 数据库配置文件
     __ENV__ . '/db/config',
     __ENV__ . '/app',
-    __ENV__ . '/home',
-    __ENV__ . '/ucenter',
 ];
 
 // 增加配置文件，并使用文件名作为key

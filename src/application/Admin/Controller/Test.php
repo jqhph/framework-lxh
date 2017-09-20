@@ -18,7 +18,16 @@ class Test extends Controller
 {
     public function actionTest(Request $req, Response $resp)
     {
-        return get_class($this->container['http.request']);
+        $data = 'fjjJ';
+        $data2 = 'dfdg ';
+
+        $r1 = preg_match('/^[a-z\-]+$/', $data);
+        $r2 = preg_match('/^[a-z\-]+$/', $data2);
+
+        var_dump($r1);
+        var_dump($r2);
+
+        return $this->render('test', ['title' => 'Hello Lxh!', 'list' => ['m', 'v', 'c']]);
 
     }
 

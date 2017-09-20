@@ -286,7 +286,7 @@ class Container implements ArrayAccess, ContractsContainer
     {
         $results = [];
 
-        foreach ($callbacksPerType as $type => $callbacks) {
+        foreach ($callbacksPerType as $type => & $callbacks) {
             if ($type === $abstract || $object instanceof $type) {
                 $results = array_merge($results, $callbacks);
             }

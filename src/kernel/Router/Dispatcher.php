@@ -127,6 +127,17 @@ class Dispatcher implements Router
     protected $regResultData = [];
 
     /**
+     * 特殊字符串匹配规则
+     *
+     * @var array
+     */
+    protected $patternStrings = [
+        '#numbers' => '/^[0-9]+$/',
+        '#letters' => '/^[a-z\-_]+$/i',
+        '#lowercase' => '/^[a-z\-]+$/',
+    ];
+
+    /**
      * Dispatcher constructor.
      * @param array $config
      */
@@ -335,6 +346,14 @@ class Dispatcher implements Router
     protected function compareString(& $rule, & $patharr)
     {
         foreach ($rule['pattern'] as $k => & $p) {
+            // 特殊意义字符匹配
+            if (isset($this->patternStrings[$p])) {
+                if (! preg_match($this->patternStrings[$p], $patharr[$k])) {
+                    return false;
+                }
+                continue;
+            }
+
             if (strpos($p, $this->signOfAny) === false && $p != $patharr[$k]) {
                 return false;
             }

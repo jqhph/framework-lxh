@@ -118,7 +118,10 @@ class Response extends PsrResponse
 	}
 
 	/**
-	 * WWW-Authenticate
+	 * WWW-Authenticate鉴权方法
+	 * 传入账号密码验证请求是否合法
+	 * 合法返回true，不合法返回false
+	 * 如不合法会返回401状态码给客户端，并提示客户端输入账号密码
 	 *
 	 * @param string $user
 	 * @param string $pwd

@@ -179,7 +179,12 @@ class ControllerManager extends Factory
         return $this->pipeline
             ->send(['req' => $this->request, 'resp' => $this->response, 'params' => & $params])
             ->through($middleware)
-            ->then(function () use ($contr, $action, $params) {
+            ->then(function ($middlewareParams) use ($contr, $action, $params) {
+                unset($middlewareParams['req'], $middlewareParams['resp'], $middlewareParams['params']);
+                // 存储路由参数
+                $this->request->withAttribute('route.params', $params);
+                // 存储中间件参数
+                $this->request->withAttribute('middleware.params', $middlewareParams);
 
                 if ($this->first) {
                     $this->events->fire('route.auth.success', [$this->request, $this->response, $this->requestParams]);
