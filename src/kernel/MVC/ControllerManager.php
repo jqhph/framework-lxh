@@ -184,7 +184,7 @@ class ControllerManager extends Factory
                 // 存储路由参数
                 $this->request->withAttribute('route.params', $params);
                 // 存储中间件参数
-                $this->request->withAttribute('middleware.params', $middlewareParams);
+                $this->request->withAttribute('mid.params', $middlewareParams);
 
                 if ($this->first) {
                     $this->events->fire('route.auth.success', [$this->request, $this->response, $this->requestParams]);
@@ -293,7 +293,8 @@ class ControllerManager extends Factory
     // 把方法名转化为小写
     protected function getMidMethods(& $data)
     {
-        foreach ((array) $data as & $method) {
+        $data = (array) $data;
+        foreach ($data as & $method) {
             $method = strtolower($method);
         }
         return $data;

@@ -47,4 +47,26 @@ class Test extends Controller
 
         return ['result' => '', 'a' => explode(',', $a)];
     }
+
+    protected function table($data, array $titles = [])
+    {
+        if (! $titles) {
+            $titles = array_keys($data[0]);
+        }
+
+        $table = '<table border="1" style="margin-left:10px;border-collapse: collapse;text-align:center;"><tr>';
+        foreach ($titles as &$title) {
+            $table .= "<th>$title</th>";
+        }
+        $table .= "</tr>";
+
+        foreach ($data as & $row) {
+            $table .= '<tr>';
+            foreach ($titles as & $title) {
+                $table .= "<td>{$row[$title]}</td>";
+            }
+            $table .= '</tr>';
+        }
+        return $table . '</table>';
+    }
 }
