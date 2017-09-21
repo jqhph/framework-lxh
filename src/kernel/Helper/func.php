@@ -190,7 +190,7 @@ function user()
 
     if ($instance) return $instance;
 
-    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->get('User');
+    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->create('User');
 
 }
 

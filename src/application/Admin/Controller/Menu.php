@@ -91,7 +91,7 @@ class Menu extends Controller
         $model->id = $id;
 
         $row = $model->find();
-console_info($row);
+
         $menus = make('acl-menu')->all();
 
         $currentTitle = 'Modify menu';
