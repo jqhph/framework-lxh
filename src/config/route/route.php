@@ -10,7 +10,7 @@ $config = [];
 
 $config[] = [
     'pattern' => '/',
-    'method' => '*',
+    'method' => 'GET',
     'params' => [
         'controller' => 'Index',
         'action' => 'List'
@@ -73,46 +73,46 @@ $config[] = [
 ];
 
 $config[] = [
-    'pattern' => '/api/:lowercase[controller]/view/:numbers[id]',
+    'pattern' => '/api/:lc[controller]/view/:int[id]',
     'method' => 'PUT',
     'params' => [
         'module' => 'Admin',
-        'controller' => ':lowercase[controller]',
+        'controller' => ':lc[controller]',
         'action' => 'Update',
-        'id' => ':numbers[id]'
+        'id' => ':int[id]'
     ]
 ];
 
 $config[] = [
-    'pattern' => '/api/:lowercase[controller]/view/:numbers[id]',
+    'pattern' => '/api/:lc[controller]/view/:int[id]',
     'method' => 'DELETE',
     'params' => [
         'module' => 'Admin',
-        'controller' => ':lowercase[controller]',
+        'controller' => ':lc[controller]',
         'action' => 'Delete',
-        'id' => ':numbers[id]'
+        'id' => ':int[id]'
     ]
 ];
 
 $config[] = [
-    'pattern' => '/api/:lowercase[controller]/:numbers[id]',
+    'pattern' => '/api/:lc[controller]/:int[id]',
     'method' => 'POST',
     'params' => [
         'module' => 'Admin',
-        'controller' => ':lowercase[controller]',
+        'controller' => ':lc[controller]',
         'action' => 'Add',
-        'id' => ':numbers[id]'
+        'id' => ':int[id]'
     ]
 ];
 
 $config[] = [
-    'pattern' => '/api/:lowercase[controller]/:lowercase[action]',
+    'pattern' => '/api/:lc[controller]/:lc[action]',
     'method' => '*',
     'params' => [
         'auth' => false,
         'module' => 'Admin',
-        'controller' => ':lowercase[controller]',
-        'action' => ':lowercase[action]',
+        'controller' => ':lc[controller]',
+        'action' => ':lc[action]',
     ]
 ];
 
@@ -129,23 +129,35 @@ $config[] = [
 
 
 $config[] = [
-    'pattern' => 'admin/:lowercase[controller]/:lowercase[action]',
+    'pattern' => 'admin/:lc[controller]/:lc[action]',
     'method' => '*',
     'params' => [
         'module' => 'Admin',
-        'controller' => ':lowercase[controller]',
-        'action' => ':lowercase[action]'
+        'controller' => ':lc[controller]',
+        'action' => ':lc[action]'
     ]
 ];
 
 $config[] = [
-    'pattern' => 'admin/:lowercase[controller]/view/:numbers',
+    'pattern' => 'admin/:lc[controller]/view/:int',
     'method' => 'GET',
     'params' => [
         'module' => 'Admin',
-        'controller' => ':lowercase[controller]',
+        'controller' => ':lc[controller]',
         'action' => 'Detail',
-        'id' => ':numbers',
+        'id' => ':int',
+    ]
+];
+
+// 匹配任意路由
+$config[] = [
+    'pattern' => '*',
+    'method' => '*',
+    'params' => [
+        'auth' => false,
+        'module' => 'Admin',
+        'controller' => 'App',
+        'action' => 'NotFound'
     ]
 ];
 

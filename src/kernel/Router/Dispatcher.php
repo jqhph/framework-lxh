@@ -132,9 +132,12 @@ class Dispatcher implements Router
      * @var array
      */
     protected $placeholderPatterns = [
-        ':numbers' => '/^[0-9]+$/',
-        ':letters' => '/^[a-z\-_]+$/i',
-        ':lowercase' => '/^[a-z\-]+$/',
+        // 数字
+        ':int' => '/^[0-9]+$/',
+        // 字母（包含大小写）
+        ':word' => '/^[a-z\-_0-9]+$/i',
+        // 小写字母
+        ':lc' => '/^[a-z\-_0-9]+$/',
     ];
 
     /**
