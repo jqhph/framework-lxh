@@ -132,9 +132,9 @@ class Dispatcher implements Router
      * @var array
      */
     protected $patternStrings = [
-        '#numbers' => '/^[0-9]+$/',
-        '#letters' => '/^[a-z\-_]+$/i',
-        '#lowercase' => '/^[a-z\-]+$/',
+        ':numbers' => '/^[0-9]+$/',
+        ':letters' => '/^[a-z\-_]+$/i',
+        ':lowercase' => '/^[a-z\-]+$/',
     ];
 
     /**
@@ -347,8 +347,9 @@ class Dispatcher implements Router
     {
         foreach ($rule['pattern'] as $k => & $p) {
             // 特殊意义字符匹配
-            if (isset($this->patternStrings[$p])) {
-                if (! preg_match($this->patternStrings[$p], $patharr[$k])) {
+            $t = explode('[', $p);
+            if (isset($this->patternStrings[$t[0]])) {
+                if (! preg_match($this->patternStrings[$t[0]], $patharr[$k])) {
                     return false;
                 }
                 continue;
