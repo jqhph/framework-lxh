@@ -61,7 +61,7 @@ $config[] = [
 ];
 
 $config[] = [
-    'pattern' => '/api/Js/:type',
+    'pattern' => '/api/js/:type',
     'method' => 'GET',
     'params' => [
         'auth' => false,
@@ -73,46 +73,46 @@ $config[] = [
 ];
 
 $config[] = [
-    'pattern' => '/api/:controller/view/:id',
+    'pattern' => '/api/:lowercase[controller]/view/:numbers[id]',
     'method' => 'PUT',
     'params' => [
         'module' => 'Admin',
-        'controller' => ':controller',
+        'controller' => ':lowercase[controller]',
         'action' => 'Update',
-        'id' => ':id'
+        'id' => ':numbers[id]'
     ]
 ];
 
 $config[] = [
-    'pattern' => '/api/:controller/view/:id',
+    'pattern' => '/api/:lowercase[controller]/view/:numbers[id]',
     'method' => 'DELETE',
     'params' => [
         'module' => 'Admin',
-        'controller' => ':controller',
+        'controller' => ':lowercase[controller]',
         'action' => 'Delete',
-        'id' => ':id'
+        'id' => ':numbers[id]'
     ]
 ];
 
 $config[] = [
-    'pattern' => '/api/:controller',
+    'pattern' => '/api/:lowercase[controller]/:numbers[id]',
     'method' => 'POST',
     'params' => [
         'module' => 'Admin',
-        'controller' => ':controller',
+        'controller' => ':lowercase[controller]',
         'action' => 'Add',
-        'id' => ':id'
+        'id' => ':numbers[id]'
     ]
 ];
 
 $config[] = [
-    'pattern' => '/api/:controller/:action',
+    'pattern' => '/api/:lowercase[controller]/:lowercase[action]',
     'method' => '*',
     'params' => [
         'auth' => false,
         'module' => 'Admin',
-        'controller' => ':controller',
-        'action' => ':action',
+        'controller' => ':lowercase[controller]',
+        'action' => ':lowercase[action]',
     ]
 ];
 
@@ -129,23 +129,23 @@ $config[] = [
 
 
 $config[] = [
-    'pattern' => 'admin/:controller/:action',
+    'pattern' => 'admin/:lowercase[controller]/:lowercase[action]',
     'method' => '*',
     'params' => [
         'module' => 'Admin',
-        'controller' => ':controller',
-        'action' => ':action'
+        'controller' => ':lowercase[controller]',
+        'action' => ':lowercase[action]'
     ]
 ];
 
 $config[] = [
-    'pattern' => 'admin/:controller/view/:id',
+    'pattern' => 'admin/:lowercase[controller]/view/:numbers',
     'method' => 'GET',
     'params' => [
         'module' => 'Admin',
-        'controller' => ':controller',
+        'controller' => ':lowercase[controller]',
         'action' => 'Detail',
-        'id' => ':id',
+        'id' => ':numbers',
     ]
 ];
 

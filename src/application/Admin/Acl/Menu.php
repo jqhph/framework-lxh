@@ -35,7 +35,7 @@ class Menu
 
     public function __construct()
     {
-        $this->model = model('Menu');
+        $this->model = create_model('Menu');
 
         $this->get();
     }

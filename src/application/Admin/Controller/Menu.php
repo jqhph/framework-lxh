@@ -86,8 +86,12 @@ class Menu extends Controller
         }
         $id = $params['id'];
 
-        $row = query()->from('menu')->where('id', $id)->findOne();
+        $model = $this->getModel();
 
+        $model->id = $id;
+
+        $row = $model->find();
+console_info($row);
         $menus = make('acl-menu')->all();
 
         $currentTitle = 'Modify menu';

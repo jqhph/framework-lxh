@@ -1,6 +1,7 @@
 <?php
 namespace Lxh\File;
 
+use Dotenv\Exception\InvalidFileException;
 use Lxh\Config\Config;
 use Lxh\Exceptions\Error;
 use Lxh\Helper\Util;
@@ -258,7 +259,7 @@ class FileManager
         $fullPath = $this->concatPaths($path); //todo remove after changing the params
 
         if ($this->checkCreateFile($fullPath) === false) {
-            throw new Error('Permission denied for ' . $fullPath);
+            throw new InvalidFileException('Permission denied for ' . $fullPath);
         }
 
         $res = (file_put_contents($fullPath, $data, $lock ? LOCK_EX : 0, $context) !== false);
@@ -329,7 +330,7 @@ class FileManager
 
         $currentDataArray = &$currentData;
 
-        $unsettedData = Util::unsetInArray($currentDataArray, $unsets, true);
+        $unsettedData = Util::unsetInArray($currentDataArray, $unsets);
 
         if (is_null($unsettedData) || (is_array($unsettedData) && empty($unsettedData))) {
             $fullPath = $this->concatPaths($path);
@@ -478,7 +479,7 @@ class FileManager
 
         if (!empty($permissionDeniedList)) {
             $betterPermissionList = $this->permission->arrangePermissionList($permissionDeniedList);
-            throw new Error("Permission denied for " . implode(", ", $betterPermissionList));
+            throw new InvalidFileException("Permission denied for " . implode(", ", $betterPermissionList));
         }
 
         $res = true;
@@ -557,7 +558,7 @@ class FileManager
             $dirPermission = is_string($dirPermission) ? base_convert($dirPermission, 8, 10) : $dirPermission;
 
             if (!$this->mkdir($pathParts['dirname'], $dirPermission, true)) {
-                throw new Error('Permission denied: unable to create a folder on the server - ' . $pathParts['dirname']);
+                throw new InvalidFileException('Permission denied: unable to create a folder on the server - ' . $pathParts['dirname']);
             }
         }
 
@@ -667,7 +668,7 @@ class FileManager
 
         if (!empty($permissionDeniedList)) {
             $betterPermissionList = $this->permission->arrangePermissionList($permissionDeniedList);
-            throw new Error('Permission denied for <br>' . implode(', <br>', $betterPermissionList));
+            throw new InvalidFileException('Permission denied for <br>' . implode(', <br>', $betterPermissionList));
         }
 
         $result = true;
