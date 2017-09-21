@@ -117,13 +117,13 @@ class Response extends PsrResponse
 	public function authenticate($user, $pwd)
 	{
 		// 安全验证
-		if ($user != get_value($_SERVER, 'PHP_AUTH_USER') || $pwd != get_value($_SERVER, 'PHP_AUTH_PW')) {
-			$this->withHeader('WWW-Authenticate', 'Basic realm=""');
-			$this->withStatus(401);
-			return false;
+		if ("$user:$pwd" == $this->request->getUri()->getUserInfo()) {
+			return true;
 		}
 
-		return true;
+		$this->withHeader('WWW-Authenticate', 'Basic realm=""');
+		$this->withStatus(401);
+		return false;
 	}
 
 	/**
@@ -174,12 +174,18 @@ class Response extends PsrResponse
 	/**
 	 * 刷新当前界面
 	 *
+	 * @param string | array $params url参数
 	 * @return void
 	 */
 	public function reload($params = '')
 	{
 		$url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/';
-		if (strpos($url, '?')) {
+
+		if (is_array($params)) {
+			$params = http_build_query($params);
+		}
+
+		if (strpos($url, '?') !== false) {
 			$url .= "&$params";
 		} else {
 			$url .= "?$params";
@@ -272,9 +278,22 @@ class Response extends PsrResponse
 	 *
 	 * @param string $url    The redirect destination
 	 * @param int    $status The redirect HTTP status code
+	 * @param string | array $params query params
+	 * @return void
 	 */
-	public function redirect($url, $status = 302)
+	public function redirect($url, $status = 302, $params = '')
 	{
+
+		if (is_array($params)) {
+			$params = http_build_query($params);
+		}
+
+		if (strpos($url, '?') !== false) {
+			$url .= "&$params";
+		} else {
+			$url .= "?$params";
+		}
+
 		$this->withStatus($status);
 		$this->withHeader('Location', $url);
 	}

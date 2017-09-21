@@ -28,8 +28,6 @@ class Request extends Message implements RequestInterface
     private $method;
     private $target;
 
-    private $firstTimeReadUri = true;
-
     public function __construct(array $headers = array(), StreamInterface $body = null)
     {
         $this->method = get_value($_SERVER, 'REQUEST_METHOD');
@@ -42,14 +40,14 @@ class Request extends Message implements RequestInterface
      */
     protected function initServerUri()
     {
-        if (! $this->firstTimeReadUri) {
+        if ($this->uri) {
             return;
         }
-        $uri = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}:{$_SERVER['SERVER_PORT']}{$_SERVER['REQUEST_URI']}";
+        $user = get_value($_SERVER, 'PHP_AUTH_USER');
+        $pwd = get_value($_SERVER, 'PHP_AUTH_PW');
+        $uri = "{$_SERVER['REQUEST_SCHEME']}://{$user}:{$pwd}@{$_SERVER['HTTP_HOST']}:{$_SERVER['SERVER_PORT']}{$_SERVER['REQUEST_URI']}";
 
         $this->uri = new Uri($uri);
-
-        $this->firstTimeReadUri = false;
     }
 
     /**
