@@ -94,7 +94,7 @@ class Application extends SymfonyApplication
 
     public function __construct(Container $container)
     {
-        parent::__construct('Gets Console', $this->version);
+        parent::__construct('Lxh Console', $this->version);
 
         $this->setAutoExit(false);
         $this->setCatchExceptions(false);

@@ -17,7 +17,7 @@ class ServerRequest extends Request implements ServerRequestInterface
 
     private $queryParams = [];
 
-    private $serverParams;
+    protected $serverParams;
 
     protected $uploadedFiles = [];
 

@@ -60,11 +60,6 @@ class Response extends PsrResponse
 	protected $outputConsoleMsg = true;
 
 	/**
-	 * @var View
-	 */
-	public $viewManager;
-
-	/**
 	 * @var bool
 	 */
 	protected $hasBeenSent = false;
@@ -79,20 +74,10 @@ class Response extends PsrResponse
 
 	}
 
-	/**
-	 * 获取模板管理器
-	 *
-	 * @return View
-	 */
-	public function view()
+	// 发送header头及返回消息
+	protected function sendHeader()
 	{
-		return $this->viewManager ?: ($this->viewManager = $this->container->make('view'));
-	}
-
-	//发送header头及返回消息
-	public function sendHeader()
-	{
-		if (is_cli()) return;
+		if ($this->request->isCli()) return;
 
 		//Send status
 		if (strpos(PHP_SAPI, 'cgi') === 0) {
@@ -148,7 +133,7 @@ class Response extends PsrResponse
 	 */
 	public function expires($time)
 	{
-		$this->heade->set('Expires', $time);
+		$this->withHeader('Expires', $time);
 		return $this;
 	}
 
@@ -222,7 +207,7 @@ class Response extends PsrResponse
 	{
 		$this->hasBeenSent = true;
 
-		$events = $this->container['events'];
+		$events = events();
 
 		$events->fire('response.send.before', [$this->request, $this]);
 

@@ -1,3 +1,7 @@
 *.idea
 
 data/logs/*
+data/cache/*
+data/file-cache/*
+data/resource/*
+test/*

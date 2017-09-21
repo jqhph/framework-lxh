@@ -18,6 +18,8 @@ class Test extends Controller
 {
     public function actionTest(Request $req, Response $resp)
     {
+        console_log(123, 'hello', ['name' => 'lxh']);
+        console_error('您的程序出错啦！');
         $data = 'fjjJ';
         $data2 = 'dfdg ';
 

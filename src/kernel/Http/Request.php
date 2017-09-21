@@ -47,6 +47,18 @@ class Request extends Message\ServerRequest
 
 	}
 
+	/**
+	 * 获取server参数
+	 *
+	 * @param string $key
+	 * @param $mixed $value
+	 * @return string
+	 */
+	public function server($key, $value = null)
+	{
+		return get_value($this->serverParams, $key, $value);
+	}
+
 	protected function initUploadFiles()
 	{
 		foreach ($_FILES as $k => & $file) {
