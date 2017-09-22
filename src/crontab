@@ -1,0 +1,11 @@
+<?php
+/**
+ * 定时任务入口
+ *
+ * @author Jqh
+ * @date   2017/9/22 15:52
+ */
+
+require __DIR__ . '/vendor/autoload.php';
+
+(new Lxh\Application(__DIR__))->crontab();

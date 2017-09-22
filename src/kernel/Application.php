@@ -18,6 +18,7 @@ use Lxh\Http\Request;
 use Lxh\Helper\Arr;
 use Lxh\Router\Dispatcher as Router;
 use Lxh\View\ViewServiceProvider;
+use Symfony\Component\Console\Input\ArgvInput;
 
 class Application
 {
@@ -202,5 +203,10 @@ class Application
         define('CONSOLE_START', microtime(true));
 
         $this->container['console']->handle();
+    }
+
+    public function crontab()
+    {
+        (new \Lxh\Crontab\Application($this->container))->handle();
     }
 }
