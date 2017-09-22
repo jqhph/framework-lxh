@@ -30,6 +30,7 @@ class Test extends Controller
 //
 //        files()->putPhpContents(__ROOT__ . 'test/readable', $data, true);
 //        files()->putPhpContents(__ROOT__ . 'test/test', $data, false);
+        return $data;
     }
 
 

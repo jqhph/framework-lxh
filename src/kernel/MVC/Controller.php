@@ -74,6 +74,11 @@ abstract class Controller
      */
     protected $useBladeEngine = false;
 
+    /**
+     * @var string
+     */
+    protected $viewVersion;
+
     public function __construct($name, Container $container, ControllerManager $manager)
     {
         $this->name = $name;
@@ -86,6 +91,7 @@ abstract class Controller
         $this->events = $container['events'];
 
         $this->useBladeEngine = $this->config['use-blade-engine'];
+        $this->viewVersion = $this->config->get('view-version', 'v1.0');
 
         // 初始化
         $this->initialize();
@@ -139,14 +145,14 @@ abstract class Controller
             // 使用blade模板引擎
             $factory = $this->container['view.factory'];
 
-            $module = Util::convertWith(__MODULE__, true, '-');
+            $prefix = Util::convertWith(__MODULE__, true, '-') . '.' . $this->viewVersion;
 
-            $view = $this->normalizeView($view, $module);
+            $view = $this->normalizeView($view, $prefix);
 
             if ($compalete) {
-                return $factory->make($this->normalizeView('public.header', $module))->render()
+                return $factory->make($this->normalizeView('public.header', $prefix))->render()
                      . $factory->make($view, $data)->render()
-                     . $factory->make($this->normalizeView('public.footer', $module))->render();
+                     . $factory->make($this->normalizeView('public.footer', $prefix))->render();
             }
             return $factory->make($view, $data)->render();
         }
@@ -166,16 +172,16 @@ abstract class Controller
      * Normalize the given event name.
      *
      * @param string $name
-     * @param string $module
+     * @param string $prefix
      * @return string
      */
-    protected function normalizeView($view, $module = null)
+    protected function normalizeView($view, $prefix = null)
     {
         if (strpos($view, '.') === false) {
             $view = Util::convertWith(__CONTROLLER__, true, '-') . '.' . $view;
         }
 
-        return $module ? $module . '.' . $view : $view;
+        return $prefix ? $prefix . '.' . $view : $view;
     }
 
     /**

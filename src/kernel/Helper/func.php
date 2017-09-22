@@ -34,6 +34,7 @@ $GLOBALS['js-version']       = $GLOBALS['CONFIG']->get('js-version');
 $GLOBALS['css-version']      = $GLOBALS['CONFIG']->get('css-version');
 $GLOBALS['resource-version'] = $GLOBALS['CONFIG']->get('client-config.resource-version');
 $GLOBALS['use-blade-engine'] = $GLOBALS['CONFIG']->get('use-blade-engine');
+$GLOBALS['view-version']     = $GLOBALS['CONFIG']->get('view-version', 'v1.0');
 
 /**
  * 获取容器对象
@@ -364,7 +365,9 @@ function view($view, array $data = [], $useBlade = false) {
 function render_view($view, array $data = [])
 {
     if ($GLOBALS['use-blade-engine']) {
-        return $GLOBALS['CONTAINER']->make('view.factory')->make(Util::convertWith(__MODULE__, true, '-') . '.' . $view, $data)->render();
+        return $GLOBALS['CONTAINER']->make('view.factory')->make(
+            Util::convertWith(__MODULE__, true, '-') . ".{$GLOBALS['view-version']}.$view", $data
+        )->render();
     }
 
     return $GLOBALS['CONTAINER']->make('view')->render($view, $data);

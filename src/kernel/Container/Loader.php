@@ -79,10 +79,6 @@ trait Loader
                 'http.request', 'container'
             ]
         ],
-//            'http.header' => [
-//                'shared' => true,
-//                'class' => 'Lxh\\Http\\Header',
-//            ],
         'http.request' => [
             'shared' => true,
             'class' => 'Lxh\\Http\\Request'
@@ -128,7 +124,7 @@ trait Loader
         'view' => [
             'shared' => true,
             'class' => 'Lxh\Template\View',
-            'dependencies' => 'container'
+            'dependencies' => 'controller.manager'
         ],
         'view.factory' => [
             'provider' => ViewServiceProvider::class,

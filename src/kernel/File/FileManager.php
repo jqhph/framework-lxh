@@ -235,10 +235,7 @@ class FileManager
         $fullPath = $this->concatPaths($path);
 
         if (is_file($fullPath)) {
-            $phpContents = include($fullPath);
-            if (is_array($phpContents)) {
-                return $phpContents;
-            }
+            return (array) include($fullPath);
         }
 
         return [];
