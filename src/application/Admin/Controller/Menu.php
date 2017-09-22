@@ -100,10 +100,11 @@ class Menu extends Controller
 
         $this->share('navTitle', $currentTitle);
 
-        return $this->render('detail', [
-            'row' => & $row,
-            'menus' => & $menus,
-        ], true);
+        return $this->render(
+            'detail',
+            ['row' => & $row, 'menus' => & $menus, ],
+            true
+        );
     }
 
     public function actionList()

@@ -20,8 +20,10 @@ class Test extends Controller
 {
     public function actionTest(Request $req, Response $resp, & $params)
     {
-        return $params;
+
     }
+
+
 
     public function actionHello()
     {

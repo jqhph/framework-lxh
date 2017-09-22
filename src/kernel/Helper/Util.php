@@ -177,7 +177,7 @@ class Util
                     $pre = is_string($k) ? "'$k' => " : '';
                 }
 
-                $txt .= static::makeBlank($level) . $pre . static::arrayToText($v, $numericKey, $level + 1) . ",\n";
+                $txt .= str_repeat(' ', $level * 4) . $pre . static::arrayToText($v, $numericKey, $level + 1) . ",\n";
 
                 continue;
             }
@@ -200,20 +200,10 @@ class Util
                 $pre = is_string($k) ? "'$k' => " : '';
             }
 
-            $txt .= static::makeBlank($level) . "{$pre}{$t},\n";
+            $txt .= str_repeat(' ', $level * 4). "{$pre}{$t},\n";
         }
 
-        return $txt . static::makeBlank($level - 1) . $end;
-    }
-
-    // 输出空格（4个空格缩进）
-    public static function makeBlank($level)
-    {
-        $txt = '';
-        for ($i = 0; $i < $level; $i ++) {
-            $txt .= '    ';
-        }
-        return $txt;
+        return $txt . str_repeat(' ', ($level - 1) * 4) . $end;
     }
 
     /**
