@@ -20,7 +20,16 @@ class Test extends Controller
 {
     public function actionTest(Request $req, Response $resp, & $params)
     {
+        $data = [
+            ['name'],
+            ['name'],
+            ['name'],
+            ['name'],
+        ];
 
+//
+//        files()->putPhpContents(__ROOT__ . 'test/readable', $data, true);
+//        files()->putPhpContents(__ROOT__ . 'test/test', $data, false);
     }
 
 

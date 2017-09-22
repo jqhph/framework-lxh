@@ -278,12 +278,16 @@ class FileManager
      * @param string | array $path
      * @param bool $numericKey Output the numeric key
      * @param string $data
-     *
+     * @param bool $readable 是否写入易读的数组格式（使用易读模式效率较低）
      * @return bool
      */
-    public function putPhpContents($path, array & $data, $numericKey = true)
+    public function putPhpContents($path, array & $data, $readable = false)
     {
-        $txt = Util::arrayToReturnText($data, $numericKey);
+        if ($readable) {
+            $txt = "<?php \nreturn " . Util::arrayToText($data) . ";\n";
+        } else {
+            $txt = "<?php \nreturn " . var_export($data, true) . ";\n";
+        }
 
         return $this->putContents($path, $txt, LOCK_EX);
     }

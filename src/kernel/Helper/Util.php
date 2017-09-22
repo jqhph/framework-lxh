@@ -149,9 +149,9 @@ class Util
      * @param bool  $numericKey 是否输出数字键值，默认true
      * @return string
      */
-    public static function arrayToReturnText(array & $array, $numericKey = true)
+    public static function arrayToReturnText(array & $array)
     {
-        return "<?php \nreturn " . static::arrayToText($array, $numericKey) . ";\n";
+        return "<?php \nreturn " . static::arrayToText($array) . ";\n";
     }
 
     /**
@@ -162,7 +162,7 @@ class Util
      * @param int   $level
      * @return string
      */
-    public static function arrayToText(array & $array, $numericKey = true, $level = 1)
+    public static function arrayToText(array & $array, $level = 1)
     {
         $start = '[';
         $end   = ']';
@@ -171,13 +171,9 @@ class Util
 
         foreach ($array as $k => & $v) {
             if (is_array($v)) {
-                if ($numericKey) {
-                    $pre = is_string($k) ? "'$k' => " : "$k => ";
-                } else {
-                    $pre = is_string($k) ? "'$k' => " : '';
-                }
+                $pre = is_string($k) ? "'$k' => " : "$k => ";
 
-                $txt .= str_repeat(' ', $level * 4) . $pre . static::arrayToText($v, $numericKey, $level + 1) . ",\n";
+                $txt .= str_repeat(' ', $level * 4) . $pre . static::arrayToText($v, $level + 1) . ",\n";
 
                 continue;
             }
@@ -194,11 +190,7 @@ class Util
                 $t = "'$v'";
             }
 
-            if ($numericKey) {
-                $pre = is_string($k) ? "'$k' => " : "$k => ";
-            } else {
-                $pre = is_string($k) ? "'$k' => " : '';
-            }
+            $pre = is_string($k) ? "'$k' => " : "$k => ";
 
             $txt .= str_repeat(' ', $level * 4). "{$pre}{$t},\n";
         }
