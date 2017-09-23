@@ -86,7 +86,11 @@ class Menu extends Controller
         }
         $id = $params['id'];
 
-        $row = query()->from('menu')->where('id', $id)->findOne();
+        $model = $this->getModel();
+
+        $model->id = $id;
+
+        $row = $model->find();
 
         $menus = make('acl-menu')->all();
 
@@ -96,10 +100,11 @@ class Menu extends Controller
 
         $this->share('navTitle', $currentTitle);
 
-        return $this->render('detail', [
-            'row' => & $row,
-            'menus' => & $menus,
-        ], true);
+        return $this->render(
+            'detail',
+            ['row' => & $row, 'menus' => & $menus, ],
+            true
+        );
     }
 
     public function actionList()

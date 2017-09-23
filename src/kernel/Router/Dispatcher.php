@@ -127,14 +127,17 @@ class Dispatcher implements Router
     protected $regResultData = [];
 
     /**
-     * 特殊字符串匹配规则
+     * 特殊占位符匹配规则
      *
      * @var array
      */
-    protected $patternStrings = [
-        '#numbers' => '/^[0-9]+$/',
-        '#letters' => '/^[a-z\-_]+$/i',
-        '#lowercase' => '/^[a-z\-]+$/',
+    protected $placeholderPatterns = [
+        // 数字
+        ':int' => '/^[0-9]+$/',
+        // 字母（包含大小写）
+        ':word' => '/^[a-z\-_0-9]+$/i',
+        // 小写字母
+        ':lc' => '/^[a-z\-_0-9]+$/',
     ];
 
     /**
@@ -346,9 +349,10 @@ class Dispatcher implements Router
     protected function compareString(& $rule, & $patharr)
     {
         foreach ($rule['pattern'] as $k => & $p) {
-            // 特殊意义字符匹配
-            if (isset($this->patternStrings[$p])) {
-                if (! preg_match($this->patternStrings[$p], $patharr[$k])) {
+            // 特殊占位符匹配
+            $t = explode('[', $p);
+            if (isset($this->placeholderPatterns[$t[0]])) {
+                if (! preg_match($this->placeholderPatterns[$t[0]], $patharr[$k])) {
                     return false;
                 }
                 continue;

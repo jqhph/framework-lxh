@@ -13,14 +13,14 @@ use Lxh\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
-class MakeConsoleCommand extends GeneratorCommand
+class MakeCommandCommand extends GeneratorCommand
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'make:console';
+    protected $name = 'make:command';
 
     /**
      * The type of class being generated.

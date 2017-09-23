@@ -121,33 +121,7 @@ class Message implements MessageInterface
      */
     public function getHeaders()
     {
-        // TODO: Implement getHeaders() method.
-        $this->initServerHeader();
-
         return $this->headers;
-    }
-
-    /**
-     * 初始化header头信息
-     *
-     * @return void
-     */
-    protected function initServerHeader()
-    {
-        if (! $this->firstTimeReadHeader) {
-            return;
-        }
-
-        foreach ($_SERVER as $key => & $value) {
-            if ('HTTP_' == substr($key, 0, 5)) {
-                $this->headers[substr($key, 5)] = explode(',', $value);
-            }
-            if (strpos($key, 'X_') === 0) {
-                $this->headers[$key] = explode(',', $value);
-            }
-        }
-       
-        $this->firstTimeReadHeader = false;
     }
 
     /**
@@ -158,9 +132,6 @@ class Message implements MessageInterface
      */
     public function hasHeader($name)
     {
-        // TODO: Implement hasHeader() method.
-        $this->initServerHeader();
-
         return isset($this->headers[strtoupper($name)]);
     }
 
@@ -178,9 +149,6 @@ class Message implements MessageInterface
      */
     public function getHeader($name)
     {
-        // TODO: Implement getHeader() method.
-        $this->initServerHeader();
-
         $name = strtoupper($name);
         return isset($this->headers[$name]) ? $this->headers[$name] : array();
     }
@@ -201,8 +169,6 @@ class Message implements MessageInterface
      */
     public function getHeaderLine($name)
     {
-        // TODO: Implement getHeaderLine() method.
-        $this->initServerHeader();
         $name = strtoupper($name);
         return isset($this->headers[$name]) ? implode("; ", $this->headers[$name]) : '';
     }
@@ -321,8 +287,5 @@ class Message implements MessageInterface
 
     protected function __clone()
     {
-        // TODO: Implement __clone() method.
-        $this->initServerHeader();
-
     }
 }

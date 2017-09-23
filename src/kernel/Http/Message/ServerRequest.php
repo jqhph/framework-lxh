@@ -17,7 +17,7 @@ class ServerRequest extends Request implements ServerRequestInterface
 
     private $queryParams = [];
 
-    private $serverParams;
+    protected $serverParams;
 
     protected $uploadedFiles = [];
 
@@ -31,25 +31,42 @@ class ServerRequest extends Request implements ServerRequestInterface
 
         $this->cookieParams = & $_COOKIE;
 
+        $this->initServerHeader();
+
         parent::__construct([], $body);
     }
 
+    /**
+     * 初始化header头信息
+     *
+     * @return void
+     */
+    protected function initServerHeader()
+    {
+        foreach ($this->serverParams as $key => & $value) {
+            if ('HTTP_' == substr($key, 0, 5)) {
+                $this->headers[substr($key, 5)] = explode(',', $value);
+            }
+            if (strpos($key, 'X_') === 0) {
+                $this->headers[$key] = explode(',', $value);
+            }
+        }
+    }
+
+
     public function getServerParams()
     {
-        // TODO: Implement getServerParams() method.
         return $this->serverParams;
     }
 
     public function getCookieParams()
     {
-        // TODO: Implement getCookieParams() method.
         return $this->cookieParams;
 
     }
 
     public function withCookieParams(array $cookies)
     {
-        // TODO: Implement withCookieParams() method.
         $this->backupsOriginServer();
 
         $this->cookieParams = $cookies;
@@ -58,13 +75,11 @@ class ServerRequest extends Request implements ServerRequestInterface
 
     public function getQueryParams()
     {
-        // TODO: Implement getQueryParams() method.
         return $this->queryParams;
     }
 
     public function withQueryParams(array $query)
     {
-        // TODO: Implement withQueryParams() method.
         $this->backupsOriginServer();
 
         $this->queryParams = $query;
@@ -73,7 +88,6 @@ class ServerRequest extends Request implements ServerRequestInterface
 
     public function getUploadedFiles()
     {
-        // TODO: Implement getUploadedFiles() method.
         return $this->uploadedFiles;
     }
 
@@ -82,7 +96,6 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function getUploadedFile($name)
     {
-        // TODO: Implement getUploadedFiles() method.
         return isset($this->uploadedFiles[$name]) ? $this->uploadedFiles[$name] : null;
     }
 
@@ -92,7 +105,6 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function withUploadedFiles(array $uploadedFiles)
     {
-        // TODO: Implement withUploadedFiles() method.
         $this->backupsOriginServer();
 
         $this->uploadedFiles = $uploadedFiles;
@@ -101,16 +113,14 @@ class ServerRequest extends Request implements ServerRequestInterface
 
     public function getParsedBody()
     {
-        // TODO: Implement getParsedBody() method.
         return $this->parsedBody;
     }
 
     public function withParsedBody($data)
     {
-        // TODO: Implement withParsedBody() method.
         $this->backupsOriginServer();
 
-        $this->parsedBody = $data;
+        $this->parsedBody = &$data;
         return $this;
     }
 

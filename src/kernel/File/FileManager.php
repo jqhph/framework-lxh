@@ -1,6 +1,7 @@
 <?php
 namespace Lxh\File;
 
+use Dotenv\Exception\InvalidFileException;
 use Lxh\Config\Config;
 use Lxh\Exceptions\Error;
 use Lxh\Helper\Util;
@@ -234,10 +235,7 @@ class FileManager
         $fullPath = $this->concatPaths($path);
 
         if (is_file($fullPath)) {
-            $phpContents = include($fullPath);
-            if (is_array($phpContents)) {
-                return $phpContents;
-            }
+            return (array) include($fullPath);
         }
 
         return [];
@@ -258,7 +256,7 @@ class FileManager
         $fullPath = $this->concatPaths($path); //todo remove after changing the params
 
         if ($this->checkCreateFile($fullPath) === false) {
-            throw new Error('Permission denied for ' . $fullPath);
+            throw new InvalidFileException('Permission denied for ' . $fullPath);
         }
 
         $res = (file_put_contents($fullPath, $data, $lock ? LOCK_EX : 0, $context) !== false);
@@ -277,12 +275,16 @@ class FileManager
      * @param string | array $path
      * @param bool $numericKey Output the numeric key
      * @param string $data
-     *
+     * @param bool $readable 是否写入易读的数组格式（使用易读模式效率较低）
      * @return bool
      */
-    public function putPhpContents($path, array & $data, $numericKey = true)
+    public function putPhpContents($path, array & $data, $readable = false)
     {
-        $txt = Util::arrayToReturnText($data, $numericKey);
+        if ($readable) {
+            $txt = "<?php \nreturn " . Util::arrayToText($data) . ";\n";
+        } else {
+            $txt = "<?php \nreturn " . var_export($data, true) . ";\n";
+        }
 
         return $this->putContents($path, $txt, LOCK_EX);
     }
@@ -329,7 +331,7 @@ class FileManager
 
         $currentDataArray = &$currentData;
 
-        $unsettedData = Util::unsetInArray($currentDataArray, $unsets, true);
+        $unsettedData = Util::unsetInArray($currentDataArray, $unsets);
 
         if (is_null($unsettedData) || (is_array($unsettedData) && empty($unsettedData))) {
             $fullPath = $this->concatPaths($path);
@@ -478,7 +480,7 @@ class FileManager
 
         if (!empty($permissionDeniedList)) {
             $betterPermissionList = $this->permission->arrangePermissionList($permissionDeniedList);
-            throw new Error("Permission denied for " . implode(", ", $betterPermissionList));
+            throw new InvalidFileException("Permission denied for " . implode(", ", $betterPermissionList));
         }
 
         $res = true;
@@ -557,7 +559,7 @@ class FileManager
             $dirPermission = is_string($dirPermission) ? base_convert($dirPermission, 8, 10) : $dirPermission;
 
             if (!$this->mkdir($pathParts['dirname'], $dirPermission, true)) {
-                throw new Error('Permission denied: unable to create a folder on the server - ' . $pathParts['dirname']);
+                throw new InvalidFileException('Permission denied: unable to create a folder on the server - ' . $pathParts['dirname']);
             }
         }
 
@@ -667,7 +669,7 @@ class FileManager
 
         if (!empty($permissionDeniedList)) {
             $betterPermissionList = $this->permission->arrangePermissionList($permissionDeniedList);
-            throw new Error('Permission denied for <br>' . implode(', <br>', $betterPermissionList));
+            throw new InvalidFileException('Permission denied for <br>' . implode(', <br>', $betterPermissionList));
         }
 
         $result = true;

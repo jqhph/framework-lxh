@@ -47,6 +47,18 @@ class Request extends Message\ServerRequest
 
 	}
 
+	/**
+	 * 获取server参数
+	 *
+	 * @param string $key
+	 * @param $mixed $value
+	 * @return string
+	 */
+	public function server($key, $value = null)
+	{
+		return get_value($this->serverParams, $key, $value);
+	}
+
 	protected function initUploadFiles()
 	{
 		foreach ($_FILES as $k => & $file) {
@@ -97,7 +109,7 @@ class Request extends Message\ServerRequest
 	 */
 	public function protocol()
 	{
-		return get_value($_SERVER, 'SERVER_PROTOCOL');
+		return $this->server('SERVER_PROTOCOL');
 	}
 
 	/**
@@ -117,13 +129,16 @@ class Request extends Message\ServerRequest
 	 */
 	public function isMobile()
 	{
-		if (isset($_SERVER['HTTP_VIA']) && stristr($_SERVER['HTTP_VIA'], "wap")) {
+		if (stristr($this->server('HTTP_VIA'), 'wap')) {
 			return true;
-		} elseif (isset($_SERVER['HTTP_ACCEPT']) && strpos(strtoupper($_SERVER['HTTP_ACCEPT']), "VND.WAP.WML")) {
+		} elseif (strpos(strtoupper($this->server('HTTP_ACCEPT')), 'VND.WAP.WML')) {
 			return true;
 		} elseif (isset($_SERVER['HTTP_X_WAP_PROFILE']) || isset($_SERVER['HTTP_PROFILE'])) {
 			return true;
-		} elseif (isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/(blackberry|configuration\/cldc|hp |hp-|htc |htc_|htc-|iemobile|kindle|midp|mmp|motorola|mobile|nokia|opera mini|opera |Googlebot-Mobile|YahooSeeker\/M1A1-R2D2|android|iphone|ipod|mobi|palm|palmos|pocket|portalmmm|ppc;|smartphone|sonyericsson|sqh|spv|symbian|treo|up.browser|up.link|vodafone|windows ce|xda |xda_)/i', $_SERVER['HTTP_USER_AGENT'])) {
+		} elseif (
+			preg_match('/(blackberry|configuration\/cldc|hp |hp-|htc |htc_|htc-|iemobile|kindle|midp|mmp|motorola|mobile|nokia|opera mini|opera |Googlebot-Mobile|YahooSeeker\/M1A1-R2D2|android|iphone|ipod|mobi|palm|palmos|pocket|portalmmm|ppc;|smartphone|sonyericsson|sqh|spv|symbian|treo|up.browser|up.link|vodafone|windows ce|xda |xda_)/i',
+			$this->server('HTTP_USER_AGENT')
+		)) {
 			return true;
 		} else {
 			return false;
@@ -152,37 +167,37 @@ class Request extends Message\ServerRequest
 	
 	public function isPOST() 
 	{
-		return $_SERVER['REQUEST_METHOD'] === self::METHOD_POST;
+		return $this->getMethod() === static::METHOD_POST;
 	}
 
 	public function isGET()
 	{
-		return $_SERVER['REQUEST_METHOD'] === self::METHOD_GET;
+		return $this->getMethod() === static::METHOD_GET;
 	}
 
 	public function isPATCH()
 	{
-		return $_SERVER['REQUEST_METHOD'] === self::METHOD_PATCH;
+		return $this->getMethod() === static::METHOD_PATCH;
 	}
 
 	public function isPUT()
 	{
-		return $_SERVER['REQUEST_METHOD'] === self::METHOD_PUT;
+		return $this->getMethod() === static::METHOD_PUT;
 	}
 
 	public function isDELETE()
 	{
-		return $_SERVER['REQUEST_METHOD'] === self::METHOD_DELETE;
+		return $this->getMethod() === static::METHOD_DELETE;
 	}
 
 	public function isHead()
 	{
-		return $_SERVER['REQUEST_METHOD'] === self::METHOD_HEAD;
+		return $this->getMethod() === static::METHOD_HEAD;
 	}
 
 	public function isOptions()
 	{
-		return $_SERVER['REQUEST_METHOD'] === self::METHOD_OPTIONS;
+		return $this->getMethod() === static::METHOD_OPTIONS;
 	}
 	
 	public function isAjax() 
@@ -194,7 +209,7 @@ class Request extends Message\ServerRequest
 	{
 		if (isset($_SERVER['HTTPS']) && ('1' == $_SERVER['HTTPS'] || 'on' == strtolower($_SERVER['HTTPS']))) {
 			return true;
-		} elseif (isset($_SERVER['SERVER_PORT']) && ('443' == $_SERVER['SERVER_PORT'])) {
+		} elseif (443 == $this->host()) {
 			return true;
 		}
 		return false;
@@ -243,7 +258,7 @@ class Request extends Message\ServerRequest
 	 */
 	public function host()
 	{
-		return $_SERVER['HTTP_HOST'];
+		return $this->server('HTTP_HOST');
 	}
 
 	/**
@@ -253,7 +268,7 @@ class Request extends Message\ServerRequest
 	 */
 	public function port()
 	{
-		return $_SERVER['SERVER_PORT'];
+		return $this->server('SERVER_PORT');
 	}
 
 	public function client()
