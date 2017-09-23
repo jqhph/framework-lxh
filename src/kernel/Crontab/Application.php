@@ -150,7 +150,7 @@ class Application
      * @param Handler $cron
      * @param bool $output
      */
-    protected function terminate(Handler $cron, $output)
+    public function terminate(Handler $cron, $output = false)
     {
         $useTime = $this->usetime();
         $date = date('Y-m-d H:i:s');
