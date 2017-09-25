@@ -21,7 +21,7 @@ class Test extends Handler
     {
         return [
             ['name', InputArgument::REQUIRED, 'The name of the controller.'],
-            ['age', InputArgument::OPTIONAL, 'The name of the controller.'],
+            ['age', InputArgument::OPTIONAL, 'The name of the controller.', 99],
         ];
     }
 }

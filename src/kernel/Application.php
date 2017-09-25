@@ -121,11 +121,11 @@ class Application
 
             $router = $this->container['router'];
 
-            if ($router->handle()) {
-                $this->container['controller.manager']->handle($router);
-            } else {
+            if (! $router->handle()) {
                 throw new NotFound();
             }
+
+            $this->container['controller.manager']->handle($router);
 
             return $this->response;
         } catch (\Exception $e) {

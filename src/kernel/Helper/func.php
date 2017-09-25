@@ -25,9 +25,11 @@ use Lxh\Contracts\Support\Htmlable;
 // 常用的变量先注册到全局变量中
 $GLOBALS['CONTAINER']     = Container::getInstance();
 $GLOBALS['CONFIG']        = $GLOBALS['CONTAINER']->make('config');
-$GLOBALS['LANGUAGE']      = $GLOBALS['CONTAINER']->make('language.manager');
 $GLOBALS['MODEL_FACTORY'] = $GLOBALS['CONTAINER']->make('model.factory');
 $GLOBALS['EVENTS']        = $GLOBALS['CONTAINER']->make('events');
+if ($GLOBALS['CONFIG']->get('use-language')) {
+    $GLOBALS['LANGUAGE'] = $GLOBALS['CONTAINER']->make('language.manager');
+}
 
 $GLOBALS['resource-server']  = $GLOBALS['CONFIG']->get('client-config.resource-server');
 $GLOBALS['js-version']       = $GLOBALS['CONFIG']->get('js-version');
@@ -87,6 +89,17 @@ function create_model($name = __CONTROLLER__)
 function events()
 {
     return $GLOBALS['EVENTS'];
+}
+
+/**
+ * Get the resolve controller with name
+ *
+ * @param string $name
+ * @return \Lxh\MVC\Controller
+ */
+function controller($name)
+{
+    return $GLOBALS['CONTAINER']['controller.manager']->get($name);
 }
 
 // 加载js

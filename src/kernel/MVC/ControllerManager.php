@@ -123,8 +123,11 @@ class ControllerManager extends Factory
         $this->setFolder($router->folder);
 
         // 初始化语言包
-        language()->loadPackage('Global');
-        language()->scope($this->controllerName);
+        if (config('use-language')) {
+            $language = language();
+            $language->loadPackage('Global');
+            $language->scope($this->controllerName);
+        }
 
         if (! defined('__CONTROLLER__')) {
             define('__CONTROLLER__', $this->controllerName);
