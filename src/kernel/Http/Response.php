@@ -64,6 +64,11 @@ class Response extends PsrResponse
 	 */
 	protected $sent = false;
 
+	/**
+	 * @var bool
+	 */
+	protected $headerSent = false;
+
 	protected $events;
 
 	public function __construct(Request $request, Container $container)
@@ -81,7 +86,7 @@ class Response extends PsrResponse
 	// 发送header头及返回消息
 	protected function sendHeader()
 	{
-		if ($this->request->isCli()) return;
+		if ($this->request->isCli() || $this->headerSent) return;
 
 		//Send status
 		if (strpos(PHP_SAPI, 'cgi') === 0) {
@@ -95,6 +100,8 @@ class Response extends PsrResponse
 		foreach ($this->getHeaders() as $name => & $value) {
 			header($name . ': ' . implode('; ', $value), false);
 		}
+
+		$this->headerSent = true;
 	}
 
 	/**
@@ -225,17 +232,32 @@ class Response extends PsrResponse
 
 		$this->sendHeader();
 
-		if (is_array($this->data)) {
-			echo json_encode($this->data);
-		} else {
-			echo $this->data;
-		}
+		$this->render();
 
 		$this->events->fire('response.send.after', [$this->request, $this]);
 
 		$this->sendConsole();
+	}
 
-		$this->sent = true;
+	protected function render()
+	{
+		try {
+			if (is_array($this->data)) {
+				$data = json_encode($this->data);
+
+				if ($data === false) {
+					throw new \InvalidArgumentException(json_last_error_msg());
+				}
+
+				echo $data;
+			} else {
+				echo $this->data;
+			}
+
+			$this->sent = true;
+		} catch (\Exception $e) {
+			$this->events->fire('exception', [$e]);
+		}
 	}
 
 	public function clear()
