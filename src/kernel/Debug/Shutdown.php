@@ -58,8 +58,6 @@ class Shutdown
 
     protected function response()
     {
-        if (! $this->response->sent()) {
-            $this->response->send();
-        }
+        $this->response->send();
     }
 }

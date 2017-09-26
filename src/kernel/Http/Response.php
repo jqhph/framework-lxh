@@ -217,11 +217,13 @@ class Response extends PsrResponse
 	 */
 	public function send()
 	{
-		if (! $this->sent) {
-			$this->events->fire('response.send.before', [$this->request, $this]);
-
-			$this->sendHeader();
+		if ($this->sent) {
+			return;
 		}
+
+		$this->events->fire('response.send.before', [$this->request, $this]);
+
+		$this->sendHeader();
 
 		if (is_array($this->data)) {
 			echo json_encode($this->data);
@@ -229,13 +231,9 @@ class Response extends PsrResponse
 			echo $this->data;
 		}
 
-		if (! $this->sent) {
-			$this->events->fire('response.send.after', [$this->request, $this]);
+		$this->events->fire('response.send.after', [$this->request, $this]);
 
-			$this->sendConsole();
-		}
-
-		$this->clear();
+		$this->sendConsole();
 
 		$this->sent = true;
 	}
