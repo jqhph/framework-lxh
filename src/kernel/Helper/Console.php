@@ -34,6 +34,16 @@ class Console
         self::$records[] = ['args' => func_get_args(), 'type' => 'info'];
     }
 
+    public static function group()
+    {
+        self::$records[] = ['args' => func_get_args(), 'type' => 'group'];
+    }
+
+    public static function groupCollapsed()
+    {
+        self::$records[] = ['args' => func_get_args(), 'type' => 'groupCollapsed'];
+    }
+
     /**
      * console.warn
      *
@@ -64,6 +74,11 @@ class Console
         self::$records[] = ['args' => func_get_args(), 'type' => 'table'];
     }
 
+    public static function __callStatic($name, $arguments)
+    {
+        self::$records[] = ['args' => & $arguments, 'type' => $name];
+    }
+
     /**
      * 获取console字符串
      *
@@ -71,13 +86,13 @@ class Console
      */
     public static function fetch()
     {
-        $txt = 'console.log("%c-------------------------------------------------- FROM SERVER -----------------------------------------------------------", "color:red;font-weight:bold"); ';
+        $txt = 'console.group("%c FROM SERVER ", "color:red;font-weight:bold"); ';
 
         foreach (self::$records as & $content) {
            $txt .= static::fetchRow($content);
         }
 
-        $txt .= 'console.log("%c-------------------------------------------------- END -------------------------------------------------------------------", "color:red;font-weight:bold"); ';
+        $txt .= 'console.log("%cEND", "color:red;font-weight:bold");console.groupEnd();';
         return "<script type='text/javascript'>$txt</script>";
     }
 

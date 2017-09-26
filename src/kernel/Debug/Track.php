@@ -82,7 +82,7 @@ class Track
     protected function checkResponseAccess(Request $request)
     {
         // 生产环境，不记录任何信息
-        return (! is_prod() && config('response-trace-log', true) == true && ! $request->isCli()) ? true : false;
+        return (! is_prod() && config('response-trace-log', true) == true) ? true : false;
     }
 
     /**
@@ -129,6 +129,8 @@ class Track
                         . $request->date() . ' ' . $request->protocol(). ' ' . $request->getMethod() . ': '
                         . $request->getUri()->getPath() . ' ' . $request->getUri()->getQuery();
 
+        $allFiles = get_included_files();
+
         $base = [
             '请求信息'     => & $requestInfo,
             '运行时间'     => $this->getRunTime(),
@@ -139,10 +141,12 @@ class Track
             '数据库操作详情' => $db->all(),
             '自定义追踪'     => $this->getAllRecords(),
             '缓存信息'       => ' gets ' . ' writes ' . ' connected',
-            '文件加载数量'   => count(get_included_files()),
-            '文件加载详情'   => get_included_files(),
+            '文件加载数量'   => count($allFiles),
+            '文件加载详情'   => & $allFiles,
             '会话信息'       => 'SESSION_ID='.session_id(),
-            'SERVER'         => & $_SERVER
+            'SERVER'         => & $_SERVER,
+            '配置参数'       => $this->container['config']->all(),
+            '路由配置'       => $this->container['router']->config(),
         ];
 
         Console::info('%c[Trace Information]', 'color:chocolate;font-weight:bold', $base);

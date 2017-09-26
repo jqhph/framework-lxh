@@ -162,6 +162,11 @@ class Dispatcher implements Router
         $this->config = & $config;
     }
 
+    public function config()
+    {
+        return $this->config;
+    }
+
     /**
      * 开始匹配路由
      *
