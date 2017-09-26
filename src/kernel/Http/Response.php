@@ -57,16 +57,20 @@ class Response extends PsrResponse
 	 *
 	 * @var bool
 	 */
-	protected $outputConsoleMsg = true;
+	protected $outputConsoleLog = true;
 
 	/**
 	 * @var bool
 	 */
-	protected $hasBeenSent = false;
+	protected $sent = false;
+
+	protected $events;
 
 	public function __construct(Request $request, Container $container)
 	{
 		$this->container = $container;
+
+		$this->events = events();
 
 		$this->request = $request;
 
@@ -185,10 +189,12 @@ class Response extends PsrResponse
 			$params = http_build_query($params);
 		}
 
-		if (strpos($url, '?') !== false) {
-			$url .= "&$params";
-		} else {
-			$url .= "?$params";
+		if ($params) {
+			if (strpos($url, '?') !== false) {
+				$url .= "&$params";
+			} else {
+				$url .= "?$params";
+			}
 		}
 
 		$this->withHeader('Location', $url);
@@ -201,7 +207,7 @@ class Response extends PsrResponse
 	 */
 	public function sent()
 	{
-		return $this->hasBeenSent;
+		return $this->sent;
 	}
 
 	/**
@@ -211,13 +217,11 @@ class Response extends PsrResponse
 	 */
 	public function send()
 	{
-		$this->hasBeenSent = true;
+		if (! $this->sent) {
+			$this->events->fire('response.send.before', [$this->request, $this]);
 
-		$events = events();
-
-		$events->fire('response.send.before', [$this->request, $this]);
-
-		$this->sendHeader();
+			$this->sendHeader();
+		}
 
 		if (is_array($this->data)) {
 			echo json_encode($this->data);
@@ -225,15 +229,31 @@ class Response extends PsrResponse
 			echo $this->data;
 		}
 
-		$events->fire('response.send.after', [$this->request, $this]);
+		if (! $this->sent) {
+			$this->events->fire('response.send.after', [$this->request, $this]);
 
+			$this->sendConsole();
+		}
+
+		$this->clear();
+
+		$this->sent = true;
+	}
+
+	public function clear()
+	{
+		$this->data = '';
+	}
+
+	protected function sendConsole()
+	{
 		// 非生产环境和非命令行环境则输出控制台调试日志
 		if (
-			$this->outputConsoleMsg && ! is_prod() && ! $this->request->isCli() && config('response-console-log', true) && ! $this->request->isAjax()
+			$this->outputConsoleLog && (! is_prod() || config('response-console-with-prod'))
+			&& ! $this->request->isCli() && config('response-console-log', true) && ! $this->request->isAjax()
 		) {
 			echo Console::fetch();
 		}
-
 	}
 
 	/**
@@ -244,7 +264,7 @@ class Response extends PsrResponse
 	 */
 	public function withConsoleOutput($flag = true)
 	{
-		$this->outputConsoleMsg = $flag;
+		$this->outputConsoleLog = $flag;
 		return $this;
 	}
 
@@ -283,15 +303,16 @@ class Response extends PsrResponse
 	 */
 	public function redirect($url, $status = 302, $params = '')
 	{
-
 		if (is_array($params)) {
 			$params = http_build_query($params);
 		}
 
-		if (strpos($url, '?') !== false) {
-			$url .= "&$params";
-		} else {
-			$url .= "?$params";
+		if ($params) {
+			if (strpos($url, '?') !== false) {
+				$url .= "&$params";
+			} else {
+				$url .= "?$params";
+			}
 		}
 
 		$this->withStatus($status);
