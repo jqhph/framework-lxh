@@ -132,12 +132,12 @@ class Track
         $allFiles = get_included_files();
 
         $base = [
-            '请求信息'     => & $requestInfo,
-            '运行时间'     => $this->getRunTime(),
+            '请求信息'      => & $requestInfo,
+            '运行时间'      => $this->usetime(),
 //            '吞吐率'	    => number_format(1 / $this->getRunTime(), 2) . 'req/s',
-            '内存开销'     => number_format((memory_get_usage()) / 1024, 2) . 'kb',
+            '内存开销'      => number_format((memory_get_usage()) / 1024, 2) . 'kb',
             '最后执行SQL' 	=> $db->last(),
-            '查询信息'       => $db->computeTypeTimes('r') . ' queries ' . $db->computeTypeTimes('w') . ' writes ' . $db->computeTypeTimes('c') . ' connected',
+            '数据库信息'     => $db->computeTypeTimes('r') . ' queries ' . $db->computeTypeTimes('w') . ' writes ' . $db->computeTypeTimes('c') . ' connected',
             '数据库操作详情' => $db->all(),
             '自定义追踪'     => $this->getAllRecords(),
             '缓存信息'       => ' gets ' . ' writes ' . ' connected',
@@ -176,7 +176,7 @@ class Track
     /**
      * 项目运行时间
      */
-    public function getRunTime()
+    public function usetime()
     {
         if (! $this->runTime) {
             $this->runTime = microtime(true) - $this->startTime;
