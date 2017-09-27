@@ -48,6 +48,20 @@ class Request extends Message\ServerRequest
 	}
 
 	/**
+	 * 获取浏览器header请求头中的国家语言代码
+	 *
+	 * @return string
+	 */
+	public function getCountryCode()
+	{
+		$current = substr($this->server('HTTP_ACCEPT_LANGUAGE'), 0, 5);
+
+		$current = explode('-', $current);
+
+		return isset($current[1]) ? $current[1] : 'US';
+	}
+
+	/**
 	 * 获取server参数
 	 *
 	 * @param string $key
