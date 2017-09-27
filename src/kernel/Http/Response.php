@@ -232,14 +232,14 @@ class Response extends PsrResponse
 
 		$this->sendHeader();
 
-		$this->render();
+		$this->printContent();
 
 		$this->events->fire('response.send.after', [$this->request, $this]);
 
 		$this->sendConsole();
 	}
 
-	protected function render()
+	protected function printContent()
 	{
 		try {
 			if (is_array($this->data)) {
