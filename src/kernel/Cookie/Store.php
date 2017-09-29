@@ -62,6 +62,19 @@ class Store extends Entity
         return $this;
     }
 
+    public function useSetcookie($flag = true)
+    {
+        $this->config['setcookie'] = $flag;
+        return $this;
+    }
+
+    public function option(array $config)
+    {
+        $this->config = array_merge($this->config, $config);
+
+        return $this;
+    }
+
     public function config()
     {
         return $this->config;
@@ -152,6 +165,21 @@ class Store extends Entity
 
         // 删除指定cookie
         unset($_COOKIE[$name]);
+    }
+
+    /**
+     * 获取并删除
+     *
+     * @param string $name 名称
+     * @return mixed
+     */
+    public function pull($name)
+    {
+        $result = $this->get($name);
+
+        if ($result) {
+            $this->delete($name);
+        }
     }
 
     /**

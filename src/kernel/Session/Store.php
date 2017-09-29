@@ -240,19 +240,13 @@ class Store extends Entity
 
     /**
      * 清空session数据
-     * @param string|null   $prefix 作用域（前缀）
      * @return void
      */
-    public function clear($prefix = null)
+    public function clear()
     {
         empty($this->init) && $this->boot();
 
-        $prefix = !is_null($prefix) ? $prefix :$this->prefix;
-        if ($prefix) {
-            unset($_SESSION[$prefix]);
-        } else {
-            $_SESSION = [];
-        }
+        $_SESSION = [];
     }
 
     /**
