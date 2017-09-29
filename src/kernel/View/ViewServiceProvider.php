@@ -62,7 +62,7 @@ class ViewServiceProvider extends ServiceProvider
     public function registerViewFinder()
     {
         $this->container->bind('view.finder', function ($app) {
-            return new FileViewFinder($app->make('file.manager'), config('view.paths', 'resource/views'));
+            return new FileViewFinder($app->make('files'), config('view.paths', 'resource/views'));
         });
     }
 
@@ -126,7 +126,7 @@ class ViewServiceProvider extends ServiceProvider
         // instance to pass into the engine so it can compile the views properly.
         $this->container->singleton('blade.compiler', function () {
             return new BladeCompiler(
-                $this->container->make('file.manager'), config('view.compiled', 'resource/blade-cache')
+                $this->container->make('files'), config('view.compiled', 'resource/blade-cache')
             );
         });
 

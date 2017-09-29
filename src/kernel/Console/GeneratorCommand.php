@@ -63,7 +63,7 @@ abstract class GeneratorCommand extends Command
 
         $this->container = $container;
 
-        $this->files = $container['file.manager'];
+        $this->files = $container['files'];
     }
 
     /**

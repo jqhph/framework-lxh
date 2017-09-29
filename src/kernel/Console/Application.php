@@ -110,7 +110,7 @@ class Application extends SymfonyApplication
             return;
         }
 
-        $files = $this->container->make('file.manager');
+        $files = $this->container->make('files');
 
         foreach ($this->commandDir as & $dir) {
             foreach ($files->getFileList($this->basePath . $dir, false, 'php', true) as & $f) {

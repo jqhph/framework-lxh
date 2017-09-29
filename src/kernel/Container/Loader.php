@@ -59,7 +59,7 @@ trait Loader
             'class' => 'Lxh\MVC\ControllerManager',
             'dependencies' => ['container', 'http.request', 'http.response', 'pipeline', 'events']
         ],
-        'file.manager' => [
+        'files' => [
             'shared' => true,
             'class' => 'Lxh\File\FileManager',
             'dependencies' => 'config'

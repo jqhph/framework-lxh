@@ -146,7 +146,7 @@ function language()
  */
 function files()
 {
-    return $GLOBALS['CONTAINER']->make('file.manager');
+    return $GLOBALS['CONTAINER']->make('files');
 }
 
 

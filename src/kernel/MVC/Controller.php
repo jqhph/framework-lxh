@@ -60,16 +60,6 @@ abstract class Controller
     protected $container;
 
     /**
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * @var Dispatcher
-     */
-    protected $events;
-
-    /**
      * 是否使用blade模板引擎
      *
      * @var bool
@@ -86,11 +76,8 @@ abstract class Controller
         $this->name = $name;
         $this->container = $container;
         $this->manager = $manager;
-        
-        $this->module = __MODULE__;
 
-        $this->config = $container['config'];
-        $this->events = $container['events'];
+        $this->module = __MODULE__;
 
         $this->useBladeEngine = $this->config['use-blade-engine'];
         $this->viewVersion = $this->config->get('view-version', 'v1.0');
@@ -109,34 +96,6 @@ abstract class Controller
     }
 
     /**
-     *
-     * @return Session
-     */
-    public function session()
-    {
-        return $this->container['session'];
-    }
-
-    /**
-     *
-     * @return Cookie
-     */
-    public function cookie()
-    {
-        return $this->container['cookie'];
-    }
-
-    /**
-     * View
-     *
-     * @return Factory
-     */
-    protected function viewFactory()
-    {
-        return $this->container['view.factory'];
-    }
-
-    /**
      * Add a piece of shared data to the environment.
      *
      * @param  array|string  $key
@@ -146,9 +105,9 @@ abstract class Controller
     protected function share($key, $value = null)
     {
         if ($this->useBladeEngine) {
-            return $this->container['view.factory']->share($key, $value);
+            return $this->viewFactory->share($key, $value);
         }
-        return $this->container['view']->with($key, $value);
+        return $this->view->with($key, $value);
     }
 
     /**
@@ -163,28 +122,24 @@ abstract class Controller
     {
         if ($this->useBladeEngine) {
             // 使用blade模板引擎
-            $factory = $this->container['view.factory'];
-
             $prefix = Util::convertWith(__MODULE__, true, '-') . '.' . $this->viewVersion;
 
             $view = $this->normalizeView($view, $prefix);
 
             if ($compalete) {
-                return $factory->make($this->normalizeView('public.header', $prefix))->render()
-                     . $factory->make($view, $data)->render()
-                     . $factory->make($this->normalizeView('public.footer', $prefix))->render();
+                return $this->viewFactory->make($this->normalizeView('public.header', $prefix))->render()
+                     . $this->viewFactory->make($view, $data)->render()
+                     . $this->viewFactory->make($this->normalizeView('public.footer', $prefix))->render();
             }
-            return $factory->make($view, $data)->render();
+            return $this->viewFactory->make($view, $data)->render();
         }
-
-        $viewHanler = $this->container['view'];
 
         if ($compalete) {
-            return $viewHanler->render($this->normalizeView('public.header'))
-                 . $viewHanler->render($this->normalizeView($view), $data)
-                 . $viewHanler->render($this->normalizeView('public.footer'));
+            return $this->view->render($this->normalizeView('public.header'))
+                 . $this->view->render($this->normalizeView($view), $data)
+                 . $this->view->render($this->normalizeView('public.footer'));
         }
-        return $viewHanler->render($this->normalizeView($view), $data);
+        return $this->view->render($this->normalizeView($view), $data);
 
     }
 
@@ -209,7 +164,7 @@ abstract class Controller
      */
     public function request()
     {
-        return $this->container['http.request'];
+        return $this->httpRequest;
     }
 
     /**
@@ -217,7 +172,7 @@ abstract class Controller
      */
     public function response()
     {
-        return $this->container['http.response'];
+        return $this->httpResponse;
     }
 
     /**
@@ -240,7 +195,7 @@ abstract class Controller
      */
     protected function createModel($name = __CONTROLLER__)
     {
-        return $this->container['model.factory']->create($name);
+        return $this->modelFactory->create($name);
     }
 
     /**
@@ -251,7 +206,7 @@ abstract class Controller
      */
     protected function getModel($name = __CONTROLLER__)
     {
-        return $this->container['model.factory'][$name];
+        return $this->modelFactory->$name;
     }
 
     /**
@@ -319,5 +274,19 @@ abstract class Controller
     public function getMiddleware()
     {
         return $this->middleware;
+    }
+
+    /**
+     * 从服务容器中获取服务实例
+     * 并设置为控制器属性
+     *
+     * @param string $name 小驼峰写法会自动转化为“.”格式，如：
+     *               httpRequest => http.request
+     *
+     * @return object
+     */
+    public function __get($name)
+    {
+        return $this->$name = $this->container[$name];
     }
 }

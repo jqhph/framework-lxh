@@ -1,9 +1,4 @@
 <?php
-/**
- *
- * @author {author}
- * @date   {date}
- */
 
 namespace Lxh\Admin\Controller;
 
@@ -20,23 +15,20 @@ class Test extends Controller
     public function actionTest(Request $req, Response $resp, & $params)
     {
         $data = [
-            ['name������ᶫ�ɷݵ�'],
+            ['name������ᶫ�ɷݵ�?'],
             ['name'],
             ['name'],
             ['name'],
         ];
-        
 
-        return $data;
+
     }
 
 
 
     public function actionHello()
     {
-        
+
     }
-
-
 
 }

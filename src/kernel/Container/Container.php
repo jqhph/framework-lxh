@@ -4,6 +4,7 @@ namespace Lxh\Container;
 use Lxh\Exceptions\BindingResolutionException;
 use Lxh\Exceptions\InternalServerError;
 use Lxh\Contracts\Container\Container AS ContractsContainer;
+use Lxh\Helper\Util;
 use Lxh\Support\Arr;
 use ArrayAccess;
 use Closure;
@@ -181,15 +182,25 @@ class Container implements ArrayAccess, ContractsContainer
     /**
      * Resolve the given type from the container.
      *
-     * @param  string  $abstract
+     * @param  string  $name
      * @param  array  $parameters
      * @return mixed
      */
-    protected function resolve($abstract)
+    protected function resolve($name)
     {
         $object = '';
 
-        if ($binding = $this->getServiceBindings($abstract)) {
+        if ($binding = $this->getServiceBindings($name)) {
+            $abstract = & $name;
+        } else {
+            $abstract = $this->normalize($name);
+
+            if (isset($this->instances[$abstract])) return $this->instances[$abstract];
+
+            $binding = $this->getServiceBindings($abstract);
+        }
+
+        if ($binding) {
             $object = $this->resolveWithBindings($abstract, $binding);
         }
 
@@ -205,7 +216,7 @@ class Container implements ArrayAccess, ContractsContainer
         }
 
         if ($this->isShared($abstract)) {
-            $this->instances[get_class($object)] = $this->instances[$abstract] = $object;
+            $this->instances[get_class($object)] = $this->instances[$abstract] = $this->instances[$name] = $object;
         }
 
         $this->fireResolvingCallbacks($abstract, $object);
@@ -402,6 +413,16 @@ class Container implements ArrayAccess, ContractsContainer
         });
     }
 
+    protected function normalize(& $name)
+    {
+        return preg_replace_callback('/([A-Z])/', [$this, 'convert'], $name);
+    }
+
+    protected function convert(& $text)
+    {
+        return '.' . strtolower($text[1]);
+    }
+
     /**
      * Fire the "rebound" callbacks for the given abstract type.
      *
@@ -470,8 +491,7 @@ class Container implements ArrayAccess, ContractsContainer
      */
     public function bound($abstract)
     {
-        return isset($this->bindings[$abstract]) ||
-        isset($this->instances[$abstract]);
+        return isset($this->bindings[$abstract]) || isset($this->instances[$abstract]);
     }
 
     /**
@@ -587,5 +607,18 @@ class Container implements ArrayAccess, ContractsContainer
     public function offsetUnset($key)
     {
         unset($this->bindings[$key], $this->instances[$key], $this->resolved[$key]);
+    }
+
+    /**
+     * 从服务容器中获取服务实例
+     *
+     * @param string $key 小驼峰写法会自动转化为“.”格式，如：
+     *               httpRequest => http.request
+     *
+     * @return object
+     */
+    public function __get($key)
+    {
+        return isset($this->instances[$key]) ? $this->instances[$key] : $this->resolve($key);
     }
 }

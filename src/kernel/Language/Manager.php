@@ -263,7 +263,7 @@ class Manager
      */
     protected function files()
     {
-        return make('file.manager');
+        return make('files');
     }
 
     /**
