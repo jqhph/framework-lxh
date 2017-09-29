@@ -3,6 +3,7 @@
 namespace Lxh\Session;
 
 use Lxh\Helper\Entity;
+use Lxh\Helper\Util;
 
 class Store extends Entity
 {
@@ -24,13 +25,19 @@ class Store extends Entity
         if (is_null($this->init)) {
             $this->init();
         } elseif (false === $this->init) {
-            if (PHP_SESSION_ACTIVE != session_status()) {
-                session_start();
-            }
+            $this->start();
+
             $this->init = true;
         }
 
         return $this;
+    }
+
+    public function start()
+    {
+        if (PHP_SESSION_ACTIVE != session_status()) {
+            session_start();
+        }
     }
 
     public function setUseTransSid($val)
@@ -113,9 +120,6 @@ class Store extends Entity
     protected function init()
     {
         $isDoStart = false;
-        if (isset($this->config['use-trans-sid'])) {
-            ini_set('session.use_trans_sid', $this->config['use-trans-sid'] ? 1 : 0);
-        }
 
         // 启动session
         if (get_value($this->config, 'auto-start') !== false && PHP_SESSION_ACTIVE != session_status()) {
@@ -123,53 +127,52 @@ class Store extends Entity
             $isDoStart = true;
         }
 
-        if (isset($this->config['var-session-id']) && isset($_REQUEST[$this->config['var_session_id']])) {
-            session_id($_REQUEST[$this->config['var-session-id']]);
-        } elseif (isset($this->config['id']) && !empty($this->config['id'])) {
-            session_id($this->config['id']);
-        }
-        if (isset($this->config['name'])) {
-            session_name($this->config['name']);
-        }
-        if (isset($this->config['path'])) {
-            session_save_path($this->config['path']);
-        }
-        if (isset($this->config['domain'])) {
-            ini_set('session.cookie_domain', $this->config['domain']);
-        }
+        !empty($this->config['id']) && session_id($this->config['id']);
+
+        isset($this->config['use-trans-sid']) && ini_set('session.use_trans_sid', $this->config['use-trans-sid'] ? 1 : 0);
+
+        isset($this->config['name']) && session_name($this->config['name']);
+
+        isset($this->config['path']) && session_save_path($this->config['path']);
+
+        isset($this->config['domain']) && ini_set('session.cookie_domain', $this->config['domain']);
+
+        isset($this->config['secure']) && ini_set('session.cookie_secure', $this->config['secure']);
+
+        isset($this->config['httponly']) && ini_set('session.cookie_httponly', $this->config['httponly']);
+
+        isset($this->config['use-cookies']) && ini_set('session.use_cookies', $this->config['use_cookies'] ? 1 : 0);
+
+        isset($this->config['cache-limiter']) && session_cache_limiter($this->config['cache_limiter']);
+
+        isset($this->config['cache-expire']) && session_cache_expire($this->config['cache_expire']);
+
         if (isset($this->config['expire'])) {
             ini_set('session.gc_maxlifetime', $this->config['expire']);
             ini_set('session.cookie_lifetime', $this->config['expire']);
         }
-        if (isset($this->config['secure'])) {
-            ini_set('session.cookie_secure', $this->config['secure']);
-        }
-        if (isset($this->config['httponly'])) {
-            ini_set('session.cookie_httponly', $this->config['httponly']);
-        }
-        if (isset($this->config['use-cookies'])) {
-            ini_set('session.use_cookies', $this->config['use_cookies'] ? 1 : 0);
-        }
-        if (isset($this->config['cache-limiter'])) {
-            session_cache_limiter($this->config['cache_limiter']);
-        }
-        if (isset($this->config['cache-expire'])) {
-            session_cache_expire($this->config['cache_expire']);
-        }
-        if (!empty($this->config['driver'])) {
-            // 读取session驱动
-            $class = false !== strpos($this->config['driver'], '\\') ? $this->config['driver'] : '\\Lxh\\Session\\Driver\\' . ucwords($this->config['driver']);
 
-            // 检查驱动类
-            if (!class_exists($class) || !session_set_save_handler(new $class($this->config))) {
-                throw new \Exception('error session handler:' . $class, $class);
-            }
+        if (!empty($this->config['driver'])) {
+            $this->driver();
         }
+
         if ($isDoStart) {
             session_start();
            $this->init = true;
         } else {
            $this->init = false;
+        }
+    }
+
+    protected function driver()
+    {
+        // 读取session驱动
+        $class = false !== strpos($this->config['driver'], '\\') ?
+            $this->config['driver'] : '\\Lxh\\Session\\Driver\\' . ucwords($this->config['driver']);
+
+        // 检查驱动类
+        if (!class_exists($class) || !session_set_save_handler(new $class($this->config))) {
+            throw new \Exception('error session handler:' . $class, $class);
         }
     }
 
@@ -201,50 +204,21 @@ class Store extends Entity
 
         if ($name) {
             $this->$name = $value;
-        }
 
-        foreach ($this->toArray() as $k => & $item) {
-            $_SESSION[$k] = $item;
+            $_SESSION[$name] = $value;
+        } else {
+            foreach ($this->toArray() as $k => & $item) {
+                $_SESSION[$k] = $item;
+            }
         }
 
         return true;
     }
 
     /**
-     * session设置 下一次请求有效
-     * @param string        $name session名称
-     * @param mixed         $value session值
-     * @return void
-     */
-    public function flash($name, $value)
-    {
-        $this->set($name, $value);
-        if (!$this->has('__flash__.__time__')) {
-            $this->set('__flash__.__time__', get_value($_SERVER, 'REQUEST_TIME_FLOAT'));
-        }
-        $this->push('__flash__', $name);
-    }
-
-    /**
-     * 清空当前请求的session数据
-     * @return void
-     */
-    public function flush()
-    {
-        $item = $this->get('__flash__');
-
-        if (!empty($item)) {
-            $time = $item['__time__'];
-            if ($_SERVER['REQUEST_TIME_FLOAT'] > $time) {
-                unset($item['__time__']);
-                $this->delete($item);
-                $this->set('__flash__', []);
-            }
-        }
-    }
-
-    /**
      * 删除session数据
+     * 支持删除多维模式："users.email"
+     *
      * @param string|array  $name session名称
      * @param string|null   $prefix 作用域（前缀）
      * @return void
@@ -253,14 +227,14 @@ class Store extends Entity
     {
         empty($this->init) && $this->boot();
 
-        $this->remove($name);
-
         if (is_array($name)) {
             foreach ($name as & $key) {
                 $this->delete($key);
             }
         } else {
-            unset($_SESSION[$name]);
+            $this->remove($name);
+
+            $_SESSION = Util::unsetInArray($_SESSION, $name);
         }
     }
 
@@ -340,6 +314,6 @@ class Store extends Entity
 
         // 暂停session
         session_write_close();
-       $this->init = false;
+        $this->init = false;
     }
 }

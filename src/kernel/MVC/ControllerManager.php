@@ -218,14 +218,15 @@ class ControllerManager extends Factory
      */
     protected function addMiddleware(array & $middleware)
     {
-        if ($this->authParams) {
-            $middleware[] = $this->getAuth();
-        }
-
+        // 优先执行公共中间件
         foreach ((array) config('middleware') as $module => & $mid) {
             if ($module == '*' || $module == $this->module) {
                 $middleware = array_merge($middleware, (array) $mid);
             }
+        }
+
+        if ($this->authParams) {
+            $middleware[] = $this->getAuth();
         }
     }
 
@@ -304,13 +305,13 @@ class ControllerManager extends Factory
     }
 
     /**
-     * 获取登录验证类实例
-     * */
+     * 获取身份鉴权类实例
+     *
+     */
     public function getAuth()
     {
         if (! $this->auth) {
-            $class = & $this->authParams;
-            $className = '\\Lxh\\' . $this->module . '\\Auth\\' . $class;
+            $className = strpos($this->authParams, '\\') !== false ? $this->authParams : "\\Lxh\\{$this->module}\\Auth\\{$this->authParams}";
 
             $this->auth = new $className($this->container, $this->request, $this->response);
 

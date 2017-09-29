@@ -318,7 +318,8 @@ class Util
      */
     public static function unsetInArray(array & $content, $unsets)
     {
-        if (empty($unsets)) {
+        if (is_string($unsets) && isset($content[$unsets])) {
+            unset($content[$unsets]);
             return $content;
         }
 
@@ -328,12 +329,15 @@ class Util
             }
 
             foreach ($unsetItem as $k => & $v) {
-                if (is_array($v) && isset($content[$k]) && is_array($content[$k])) {
+                $isArray = is_array($v);
+                if ($isArray && isset($content[$k]) && is_array($content[$k])) {
                     $content[$k] = static::unsetInArray($content[$k], $unsetItem);
 
                     continue;
+                } elseif (! $isArray) {
+                    unset($content[$v]);
                 }
-                unset($content[$v]);
+
             }
         }
 

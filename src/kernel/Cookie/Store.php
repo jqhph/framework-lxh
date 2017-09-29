@@ -135,6 +135,8 @@ class Store extends Entity
 
     /**
      * Cookie删除
+     * 不支持多维删除
+     *
      * @param string $name cookie名称
      * @return mixed
      */
@@ -145,6 +147,9 @@ class Store extends Entity
         if ($config['setcookie']) {
             setcookie($name, '', $_SERVER['REQUEST_TIME'] - 3600, $config['path'], $config['domain'], $config['secure'], $config['httponly']);
         }
+
+        $this->remove($name);
+
         // 删除指定cookie
         unset($_COOKIE[$name]);
     }

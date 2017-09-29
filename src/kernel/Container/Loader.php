@@ -33,6 +33,7 @@ trait Loader
             'shared' => true,
         ],
         'config' => [
+            'shared' => true,
             'class' => 'Lxh\Config\Config'
         ],
         'events' => [
@@ -144,7 +145,6 @@ trait Loader
             'class' => 'Lxh\Debug\Shutdown',
             'dependencies' => ['container', 'events', 'http.response']
         ],
-
         'session' => [
             'shared' => true,
             'class' => 'Lxh\Session\Store',

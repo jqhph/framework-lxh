@@ -49,11 +49,13 @@ class Entity implements ArrayAccess, Arrayable, Jsonable
      * 删除数据
      *
      * @param string $name
-     * @return void
+     * @return bool
      */
     public function remove($name)
     {
-        unset($this->items[$name]);
+        Util::unsetInArray($this->items, $name);
+
+        return true;
     }
 
     /**
@@ -65,11 +67,13 @@ class Entity implements ArrayAccess, Arrayable, Jsonable
      */
     public function has($name)
     {
-        if (isset($this->items[$name])) return $this->items[$name];
+        if (isset($this->items[$name])) return true;
 
         $lastItem = & $this->items;
         foreach (explode('.', $name) as & $keyName) {
-            if (! isset($lastItem[$keyName])) {
+            if (isset($lastItem[$keyName])) {
+                $lastItem = & $lastItem[$keyName];
+            } else {
                 return false;
             }
         }

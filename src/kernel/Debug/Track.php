@@ -147,10 +147,10 @@ class Track
             '文件加载数量'   => count($allFiles),
             '文件加载详情'   => & $allFiles,
             'SERVER'         => & $_SERVER,
-            '配置参数'       => $this->container['config']->all(),
+            '配置参数'       => $this->container['config']->toArray(),
             '路由配置'       => $this->container['router']->config(),
-            'SESSION'       => ['items' => $session->toArray(), 'config' => $session->config()],
-            'COOKIE'       => ['items' => $cookie->toArray(), 'config' => $cookie->config()],
+            'SESSION'        => ['items' => $session->toArray(), 'config' => $session->config()],
+            'COOKIE'         => ['items' => $cookie->toArray(), 'config' => $cookie->config()],
         ];
 
         Console::info('%c[Trace Information]', 'color:chocolate;font-weight:bold', $base);
