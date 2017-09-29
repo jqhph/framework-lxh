@@ -160,22 +160,6 @@ abstract class Controller
     }
 
     /**
-     * @return Request
-     */
-    public function request()
-    {
-        return $this->httpRequest;
-    }
-
-    /**
-     * @return Response
-     */
-    public function response()
-    {
-        return $this->httpResponse;
-    }
-
-    /**
      * 是否输出控制台调试信息
      *
      * @param  bool $flag
@@ -183,7 +167,7 @@ abstract class Controller
      */
     public function withConsoleOutput($flag = true)
     {
-        $this->response()->withConsoleOutput($flag);
+        $this->httpResponse->withConsoleOutput($flag);
         return $this;
     }
 

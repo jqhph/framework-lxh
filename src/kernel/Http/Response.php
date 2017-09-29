@@ -232,13 +232,18 @@ class Response extends PsrResponse
 
 		$this->sendHeader();
 
-		$this->printContent();
+		if ($this->printContent()) {
+			$this->events->fire('response.send.after', [$this->request, $this]);
 
-		$this->events->fire('response.send.after', [$this->request, $this]);
-
-		$this->sendConsole();
+			$this->sendConsole();
+		}
 	}
 
+	/**
+	 * 打印数据到客户端
+	 *
+	 * @return bool 成功返回true，失败返回false
+	 */
 	protected function printContent()
 	{
 		try {
@@ -254,9 +259,10 @@ class Response extends PsrResponse
 				echo $this->data;
 			}
 
-			$this->sent = true;
+			return $this->sent = true;
 		} catch (\Exception $e) {
 			$this->events->fire('exception', [$e]);
+			return false;
 		}
 	}
 

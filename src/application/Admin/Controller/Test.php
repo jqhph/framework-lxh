@@ -15,16 +15,14 @@ class Test extends Controller
     public function actionTest(Request $req, Response $resp, & $params)
     {
         $data = [
-            ['name������ᶫ�ɷݵ�?'],
+            ['name '],
             ['name'],
             ['name'],
             ['name'],
         ];
 
-
+        return 123;
     }
-
-
 
     public function actionHello()
     {

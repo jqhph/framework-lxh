@@ -86,13 +86,18 @@ class Console
      */
     public static function fetch()
     {
+        if (empty(static::$records)) return '';
+
         $txt = 'console.group("%c FROM SERVER ", "color:red;font-weight:bold"); ';
 
-        foreach (self::$records as & $content) {
+        foreach (static::$records as & $content) {
            $txt .= static::fetchRow($content);
         }
 
         $txt .= 'console.log("%cEND", "color:red;font-weight:bold");console.groupEnd();';
+
+        static::$records = [];
+
         return "<script type='text/javascript'>$txt</script>";
     }
 
