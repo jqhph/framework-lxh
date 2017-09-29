@@ -29,6 +29,39 @@ $config['response-console-log'] = true;
 // 是否输出追踪信息到控制台，默认true
 $config['response-trace-log'] = true;
 
+// session配置
+$config['session'] = [
+    'auto-start' => true, // 实例化Session类时开启session_start
+//    'use-trans-sid' => '',
+//    'name' => '', // session id
+//    'path' => '/', // session path
+//    'domain' => '',
+//    'expire' => '1440', // 有效期
+//    'secure' => '',
+//    'httponly' => true,
+//    'use-cookies' => true,
+//    'cache-limiter' => '',
+//    'cache-expire' => '',
+//    'driver' => '', // 自定义session处理器
+];
+
+// cookie配置
+$config['cookie'] = [
+    // cookie 保存时间
+    'expire' => 0,
+    // cookie 保存路径
+    'path' => '/',
+    // cookie 有效域名
+    'domain' => '',
+    //  cookie 启用安全传输
+    'secure' => false,
+    // httponly设置
+    'httponly' => '',
+    // 是否使用 setcookie
+    'setcookie' => true,
+];
+
+
 // 设置默认模型类，默认“Lxh\MVC\Model”
 //$config['default-model'] = Lxh\MVC\Model::class;
 

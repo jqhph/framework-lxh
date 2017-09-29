@@ -49,7 +49,18 @@ function container()
 }
 
 /**
- * 获取一个服务
+ * 从容器中获取一个服务
+ *
+ * @param  string $abstract 服务名称
+ * @return object
+ */
+function ioc($abstract)
+{
+    return $GLOBALS['CONTAINER']->make($abstract);
+}
+
+/**
+ * 从容器中获取一个服务
  *
  * @param  string $abstract 服务名称
  * @return object

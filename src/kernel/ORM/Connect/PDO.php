@@ -106,9 +106,9 @@ class PDO
     {
         self::$lastSql = & $command;
 
-        if (! $this->check($command)) {
-            throw new \Exception('It is not safe to do this query', 0);
-        }
+//        if (! $this->check($command)) {
+//            throw new \Exception('It is not safe to do this query', 0);
+//        }
 
         $s = microtime(true);
 

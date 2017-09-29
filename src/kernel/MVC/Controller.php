@@ -18,6 +18,8 @@ use Lxh\MVC\ControllerManager;
 use Lxh\MVC\Model;
 use Lxh\Template\View;
 use Lxh\View\Factory;
+use Lxh\Session\Store as Session;
+use Lxh\Cookie\Store as Cookie;
 
 abstract class Controller
 {
@@ -104,6 +106,24 @@ abstract class Controller
      */
     protected function initialize()
     {
+    }
+
+    /**
+     *
+     * @return Session
+     */
+    public function session()
+    {
+        return $this->container['session'];
+    }
+
+    /**
+     *
+     * @return Cookie
+     */
+    public function cookie()
+    {
+        return $this->container['cookie'];
     }
 
     /**

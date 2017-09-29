@@ -58,24 +58,36 @@ class Entity implements ArrayAccess, Arrayable, Jsonable
 
     /**
      * 判断属性是否存在
+     * 支持使用 “attrs.name”判断多维数组key是否存在
      *
      * @param string $name
      * @return bool
      */
     public function has($name)
     {
-        return isset($this->items[$name]);
+        if (isset($this->items[$name])) return $this->items[$name];
+
+        $lastItem = & $this->items;
+        foreach (explode('.', $name) as & $keyName) {
+            if (! isset($lastItem[$keyName])) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
      * 注入属性
      *
      * @param array $data
-     * @return void
+     * @return static
      */
     public function fill(array $data)
     {
         $this->items = array_merge($this->items, $data);
+
+        return $this;
     }
 
     /**
@@ -110,7 +122,7 @@ class Entity implements ArrayAccess, Arrayable, Jsonable
      */
     public function set($name, $value)
     {
-        $this->items[$name] = $value;
+        $this->items[$name] = & $value;
         return $this;
     }
 
@@ -119,11 +131,20 @@ class Entity implements ArrayAccess, Arrayable, Jsonable
      *
      * @param string $name
      * @param mixed $value
-     * @return void
+     * @return static
      */
     public function append($name, $value)
     {
         $this->items[$name][] = &$value;
+
+        return $this;
+    }
+
+    public function setWithArray($name, $k, $v)
+    {
+        $this->items[$name][$k] = & $v;
+
+        return $this;
     }
 
     /**

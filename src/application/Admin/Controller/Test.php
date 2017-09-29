@@ -25,7 +25,7 @@ class Test extends Controller
             ['name'],
             ['name'],
         ];
-
+        
 
         return $data;
     }

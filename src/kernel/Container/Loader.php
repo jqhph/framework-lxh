@@ -53,11 +53,6 @@ trait Loader
             'class' => 'Lxh\ORM\Query',
             'dependencies' => ['builder.manager', 'container']
         ],
-//            'router' => [
-//                'shared' => true,
-//                'class' => 'Lxh\Router\Dispatcher',
-//                'dependencies' => 'container'
-//            ],
         'controller.manager' => [
             'shared' => true,
             'class' => 'Lxh\MVC\ControllerManager',
@@ -148,6 +143,15 @@ trait Loader
             'shared' => true,
             'class' => 'Lxh\Debug\Shutdown',
             'dependencies' => ['container', 'events', 'http.response']
+        ],
+
+        'session' => [
+            'shared' => true,
+            'class' => 'Lxh\Session\Store',
+        ],
+        'cookie' => [
+            'shared' => true,
+            'class' => 'Lxh\Cookie\Store',
         ],
     ];
 

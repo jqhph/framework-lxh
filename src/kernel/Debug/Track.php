@@ -131,6 +131,9 @@ class Track
 
         $allFiles = get_included_files();
 
+        $session = $this->container['session'];
+        $cookie = $this->container['cookie'];
+
         $base = [
             '请求信息'      => & $requestInfo,
             '运行时间'      => $this->usetime(),
@@ -143,10 +146,11 @@ class Track
             '缓存信息'       => ' gets ' . ' writes ' . ' connected',
             '文件加载数量'   => count($allFiles),
             '文件加载详情'   => & $allFiles,
-            '会话信息'       => 'SESSION_ID='.session_id(),
             'SERVER'         => & $_SERVER,
             '配置参数'       => $this->container['config']->all(),
             '路由配置'       => $this->container['router']->config(),
+            'SESSION'       => ['items' => $session->toArray(), 'config' => $session->config()],
+            'COOKIE'       => ['items' => $cookie->toArray(), 'config' => $cookie->config()],
         ];
 
         Console::info('%c[Trace Information]', 'color:chocolate;font-weight:bold', $base);

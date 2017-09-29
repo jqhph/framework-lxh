@@ -100,7 +100,7 @@ class Language extends Controller
 
         if ($result) {
             // 更新前端缓存
-            make('front.client')->updateCache();
+            ioc('front.client')->updateCache();
             return $this->success();
         }
         return $this->error();
@@ -133,7 +133,7 @@ class Language extends Controller
 
         if ($file->putPhpContents($path, $package)) {
             // 更新前端缓存
-            make('front.client')->updateCache();
+            ioc('front.client')->updateCache();
             return $this->success('success', ['content' => & $package]);
         }
 
