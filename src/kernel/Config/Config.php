@@ -69,6 +69,35 @@ class Config extends Entity
     }
 
     /**
+     * 手动载入配置文件
+     *
+     * @param string $path
+     * @return static
+     */
+    public function load($path)
+    {
+        if (! isset($this->loaded[$path])) {
+            $this->fill(include $this->getBasePath() . $path);
+            $this->loaded[$path] = true;
+        }
+
+        return $this;
+    }
+
+    /**
+     * 载入环境文件夹配置文件
+     *
+     * @param string $path
+     * @return static
+     */
+    public function loadEnv($path)
+    {
+        $path = __ENV__ . '/' . $path;
+
+        return $this->load($path);
+    }
+
+    /**
      * 获取可变动数据
      *
      * @return array
