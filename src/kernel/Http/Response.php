@@ -277,6 +277,7 @@ class Response extends PsrResponse
 		if (
 			$this->outputConsoleLog && (! is_prod() || config('response-console-with-prod'))
 			&& ! $this->request->isCli() && config('response-console-log', true) && ! $this->request->isAjax()
+			&& ! $this->request->isMobile()
 		) {
 			echo Console::fetch();
 		}

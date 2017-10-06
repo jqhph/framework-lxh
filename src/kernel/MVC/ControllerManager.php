@@ -108,6 +108,12 @@ class ControllerManager extends Factory
         $this->response = $response;
         $this->pipeline = $pipeline;
         $this->events = $events;
+
+        if (! is_prod()) {
+            // 开发和测试环境主动开启session_start
+            // 防止提前输出数据到浏览器
+            $container->session->boot();
+        }
     }
 
     /**

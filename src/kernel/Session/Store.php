@@ -26,8 +26,6 @@ class Store extends Entity
             $this->init();
         } elseif (false === $this->init) {
             $this->start();
-
-            $this->init = true;
         }
 
         return $this;
@@ -37,6 +35,8 @@ class Store extends Entity
     {
         if (PHP_SESSION_ACTIVE != session_status()) {
             session_start();
+
+            $this->init = true;
         }
     }
 
@@ -157,10 +157,7 @@ class Store extends Entity
         }
 
         if ($isDoStart) {
-            session_start();
-           $this->init = true;
-        } else {
-           $this->init = false;
+            $this->start();
         }
     }
 
@@ -288,7 +285,7 @@ class Store extends Entity
         }
         session_unset();
         session_destroy();
-       $this->init = null;
+        $this->init = null;
     }
 
     public function __get($name)
