@@ -8,6 +8,7 @@
 
 namespace Lxh\Config;
 
+use Lxh\Exceptions\InvalidArgumentException;
 use Lxh\Helper\Entity;
 
 class Config extends Entity
@@ -77,7 +78,11 @@ class Config extends Entity
     public function load($path)
     {
         if (! isset($this->loaded[$path])) {
-            $this->fill(include $this->getBasePath() . $path);
+            $file = $this->getBasePath() . $path;
+            if (is_file($file)) {
+                throw new InvalidArgumentException('The config file is not exist! [' . $path . ']');
+            }
+            $this->fill(include $file);
             $this->loaded[$path] = true;
         }
 
