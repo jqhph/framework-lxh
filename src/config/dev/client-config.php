@@ -50,7 +50,7 @@ $config['sea-config'] = [
 
 // 引入默认css
 $config['public-css'] = [
-    'lib/plugins/toastr/toastr.min.css',
+//    'lib/plugins/toastr/toastr.min.css',
 //    's/css/core.css',
 //    's/css/components.css',
 //    's/css/icons.css',
@@ -63,7 +63,7 @@ $config['public-js'] = [
 //    'lib/js/detect',
 //    'lib/js/fastclick',
     'validate',
-    'toastr',
+//    'toastr',
     'container',
     'core',
 //    'lib/js/bootstrap.min',

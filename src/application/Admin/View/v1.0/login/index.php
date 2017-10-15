@@ -46,7 +46,7 @@
             <h4 class="text-uppercase font-bold m-b-0"><?php echo $language->translate('sign in')?></h4>
         </div>
         <div class="panel-body">
-            <form class="form-horizontal m-t-20 User-form" onsubmit="return false">
+            <form class="form-horizontal m-t-20 Admin-form" onsubmit="return false">
 
                 <div class="form-group ">
                     <div class="col-xs-12">
@@ -103,7 +103,7 @@
 
 </div>
 <!-- end wrapper page -->
-<script>add_js(parse_view_name('Login', 'Index'))</script>
+<script>add_js(parse_view_name('login', 'index'))</script>
 
 <?php echo render_view('public.app-js');?>
 

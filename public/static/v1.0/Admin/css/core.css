@@ -105,7 +105,7 @@ a:focus {
   text-decoration: none;
 }
 .container {
-  width: auto;
+  /*width: auto;*/width:99%;
 }
 .container-alt {
   margin-left: auto;
@@ -360,6 +360,7 @@ a:focus {
   background-clip: padding-box;
   margin-bottom: 20px;
   background-color: #ffffff;
+  /*background: url(../images/sidle-repeat-bg.png) left top repeat-x;*/
 }
 .card-box .card-drop {
   color: #98a6ad;
@@ -1221,3 +1222,13 @@ pre {
 .card-box-line{border-bottom: 1px solid #DBDDDE;margin-top: 13px;}
 .card-box-title{font-size: 1.2em;color: #333}
 .form-group span, .form-group label{color:#505458;font-weight: normal}
+iframe{
+  width: 100%;
+  height: 100%;
+  border-top-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 0px;
+  border-left-width: 0px;min-height:435px;
+}
+div.menu-btn{margin-top:12px;color:#545454;font-size:12px;float: left;margin-left:5px;}
+span.btn-menu{font-size:12px !important;}

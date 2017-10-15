@@ -9,9 +9,9 @@ add_action(function (plugIns) {
             rules: 'required|length_between[4-30]'
         },
 
-    ], submit, '.User-form')
+    ], submit, '.Admin-form')
 
-    var model = $lxh.createModel('User')
+    var model = $lxh.createModel('Admin')
     var notify = $lxh.ui().notify()
 
     function submit(e) {

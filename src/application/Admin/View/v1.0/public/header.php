@@ -1,55 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc.">
-    <meta name="author" content="Coderthemes">
-
-    <link rel="shortcut icon" href="assets/images/favicon.ico">
-
-    <title><?php echo trans('web-title'); ?></title>
-
-    <!--Morris Chart CSS -->
-
-    <?php
-    // <!--Morris Chart CSS -->
-//        echo load_css('morris', 'lib/plugins/morris');
-
-    // App css
-    echo load_css('bootstrap.min');
-    echo load_css('menu');
-    
-    echo load_js('util');
-    ?>
-
-    <!-- HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
-
-</head>
 <script>
+    (typeof $lxh == 'undefined') && ($lxh = parent.$lxh);
+    (typeof add_action == 'undefined') && (add_action = parent.add_action);
+    (typeof add_js == 'undefined') && (add_js = parent.add_js);
+    (typeof add_css == 'undefined') && (add_css = parent.add_css);
+    (typeof to_under_score == 'undefined') && (to_under_score = parent.to_under_score);
+    (typeof parse_view_name == 'undefined') && (parse_view_name = parent.parse_view_name);
+    (typeof build_http_params == 'undefined') && (build_http_params = parent.build_http_params);
 
 </script>
-<body class="fixed-left">
-    <!-- Begin page -->
-    <div id="wrapper">
-        <!-- Top Bar Start -->
-        <?php echo render_view('public.top-bar');?>
-        <!-- Top Bar End -->
+<?php
+echo load_js('util');
+echo load_css('bootstrap.min');
 
-        <!-- ========== Left Sidebar Start ========== -->
-        <?php echo render_view('public.left-sidebar');?>
-        <!-- Left Sidebar End -->
-
-        <!-- ============================================================== -->
-        <!-- Start right Content here -->
-        <!-- ============================================================== -->
-        <div class="content-page">
-            <!-- Start content -->
-            <div class="content">
-                <div class="container">
-<!--                    <div style="height:8px;"></div>-->
+//echo load_css('core');
+//echo load_css('components');
+?>
