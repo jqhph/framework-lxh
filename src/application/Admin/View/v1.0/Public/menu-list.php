@@ -1,6 +1,6 @@
 <?php
 $menu = make('acl-menu');
-$admin = model('admin');
+$admin = admin();
 $name = $admin->first_name . $admin->last_name;
 ?>
 

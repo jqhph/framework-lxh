@@ -26,10 +26,17 @@
             return $this
         }
 
+        // 重新加载iframe
+        this.reload = function (name, url) {
+            delete store[name]
+            iframe.removeStore(name)
+            this.open(name, url)
+        }
+
         // 打开一个新的tab页
         this.open = function (name, url, label) {
             url = url || name
-            label = label || trans(name, 'tab')
+            label = label || name
 
             if (typeof store[name] != 'undefined') {
                 this.switch(name)
@@ -48,9 +55,12 @@
                 this.close(name)
             }.bind(this))
             // 点击tab切换显示iframe
-            $tabBtn.click(function () {
+            $tabBtn.find('span.tab-label').click(function () {
                 this.switch(name)
             }.bind(this))
+            // $tabBtn.find('.reload').click(function () {
+            //      self.reload(name, url)
+            // })
         }
 
         // 关闭tab窗
@@ -80,6 +90,9 @@
 
         // 穿件tab按钮
         function create_btn(name, label) {
+            if ($menu.find('[data-action="tab-' +name+ '"]').length > 0) {
+                return false;
+            }
             var html = tpl.replace('{name}', name).replace('{label}', label)
 
             $menu.append(html)
@@ -87,6 +100,12 @@
 
         // 初始化首页tab页和iframe
         function init() {
+            var $reloadHome =  $('[data-action="tab-home"] .reload')
+            $reloadHome.click(reload_home)
+
+            function reload_home() {
+                self.reload('home', '/admin/index/index')
+            }
         }
 
         init()
@@ -105,6 +124,10 @@
             // 显示当前iframe
             $iframe.show()
             current = name
+        }
+
+        this.removeStore = function (name) {
+            delete store[name]
         }
 
         this.current = function () {

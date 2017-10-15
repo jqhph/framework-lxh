@@ -1232,3 +1232,4 @@ iframe{
 }
 div.menu-btn{margin-top:12px;color:#545454;font-size:12px;float: left;margin-left:5px;}
 span.btn-menu{font-size:12px !important;}
+.reload,.tab-close{cursor:pointer}

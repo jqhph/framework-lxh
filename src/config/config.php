@@ -7,6 +7,9 @@
  */
 $config = [];
 
+// 时区配置
+$config['timezone'] = 'PRC';
+
 // 语言包 ===> 已移至可写配置文件
 //$config['language'] = 'zh';
 
@@ -87,6 +90,7 @@ $config['domain-deploy'] = true;
 $config['domain-deploy-config'] = [
     'dev.lxh.com' => 'Admin',
     'www.lxh.com' => 'Client',
+    '119.23.229.90' => 'Admin',
 ];
 
 // 记录错误日志级别

@@ -37,7 +37,7 @@ class Permit
 
     public function __construct()
     {
-        $this->user = model('admin');
+        $this->user = admin();
     }
 
     /**

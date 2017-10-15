@@ -556,8 +556,9 @@ window.Lxh = function (options) {
                 //     showMethod: 'slideDown',
                 //     hideMethod: 'fadeOut',
                 //     //timeOut: 3000,
-                parent.toastr.options = options
-                return parent.toastr
+                var toastr = window.toastr || parent.toastr
+                toastr.options = options
+                return toastr
             },
 
             // 弹窗

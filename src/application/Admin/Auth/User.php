@@ -39,7 +39,7 @@ class User
 
     public function handle(array $options, Closure $next)
     {
-        if (! model('admin')->id) {
+        if (! admin()->id) {
             return $this->response->redirect('/lxh/login');
         }
 

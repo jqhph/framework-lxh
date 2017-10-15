@@ -75,6 +75,7 @@
                         <a class="">
                             <span class="tab-label">
                                 <?php echo trans('Home')?></span>&nbsp;
+                            <span class="reload waves-effect waves-success"><i class="zmdi zmdi-refresh"></i></span>
                         </a>
                     </li>
 

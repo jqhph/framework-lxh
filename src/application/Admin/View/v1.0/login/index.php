@@ -105,7 +105,12 @@
 <!-- end wrapper page -->
 <script>add_js(parse_view_name('login', 'index'))</script>
 
-<?php echo render_view('public.app-js');?>
+<?php
+echo load_css('toastr', 'lib/plugins/toastr');
+echo render_view('public.app-js');
+
+echo load_js('toastr.min', 'plugins/toastr');
+?>
 
 </body>
 </html>

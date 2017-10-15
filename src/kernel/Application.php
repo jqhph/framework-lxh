@@ -67,6 +67,10 @@ class Application
         $this->events    = events();
         $this->container = container();
 
+        if ($timezone = config('timezone')) {
+            date_default_timezone_set($timezone);
+        }
+
         register_shutdown_function([$this, 'shutdown']);
 
         // 记录程序执行开始时间
