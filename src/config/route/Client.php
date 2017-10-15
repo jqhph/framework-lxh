@@ -23,6 +23,28 @@ $config[] = [
     ]
 ];
 
+$config[] = [
+    'pattern' => '/api/app/wechat-auth',
+    'method' => '*',
+    'params' => [
+        'module' => & $moduel,
+        'auth' => false,
+        'controller' => 'App',
+        'action' => 'WechatAuth'
+    ]
+];
+
+$config[] = [
+    'pattern' => '/api/:lc[controller]/:lc[action]',
+    'method' => '*',
+    'params' => [
+        'module' => & $moduel,
+//        'auth' => false,
+        'controller' => ':lc[controller]',
+        'action' => ':lc[action]'
+    ]
+];
+
 // 匹配任意路由
 $config[] = [
     'pattern' => '*',

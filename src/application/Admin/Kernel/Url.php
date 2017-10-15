@@ -16,6 +16,26 @@ class Url
 {
     protected static $prefix = 'admin';
 
+    public function __construct()
+    {
+    }
+
+    public function home()
+    {
+        return "/admin";
+    }
+
+    public function action($action = __ACTION__, $controller = __CONTROLLER__)
+    {
+        $pre = static::$prefix;
+
+        $action = Util::convertWith($action, true, '-');
+
+        $controller = Util::convertWith($controller, true, '-');
+
+        return "/{$pre}/$controller/$action";
+    }
+
     // 生成普通的url
     public static function makeAction($action = __ACTION__, $controller = __CONTROLLER__)
     {

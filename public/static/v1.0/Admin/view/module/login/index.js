@@ -29,7 +29,7 @@ add_action(function (plugIns) {
             notify.success(trans('login success'))
 
             // 500豪秒后跳转到首页
-            $lxh.redirect('/', 500)
+            $lxh.redirect('/admin', 500)
         })
         // 发起登录请求
         model.touchAction('login', 'POST')

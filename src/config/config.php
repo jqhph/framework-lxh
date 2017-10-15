@@ -90,7 +90,7 @@ $config['domain-deploy'] = true;
 $config['domain-deploy-config'] = [
     'dev.lxh.com' => 'Admin',
     'www.lxh.com' => 'Client',
-    '119.23.229.90' => 'Admin',
+    '119.23.229.90' => 'Client',
 ];
 
 // 记录错误日志级别
