@@ -28,6 +28,10 @@ class Admin extends Model
      */
     protected $sessionKey = '$admin';
 
+    protected $session;
+
+    protected $cookie;
+
     public function __construct($name, Container $container)
     {
         parent::__construct($name, $container);

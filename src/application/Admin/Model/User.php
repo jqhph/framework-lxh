@@ -28,6 +28,10 @@ class User extends Model
      */
     protected $sessionKey = 'user';
 
+    protected $session;
+
+    protected $cookie;
+
     public function __construct($name, Container $container)
     {
         parent::__construct($name, $container);
