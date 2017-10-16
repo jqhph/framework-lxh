@@ -17,7 +17,7 @@ class {class} extends Controller
     {
     }
 
-    public function action{method}(Request $req, Response $resp, $params)
+    public function action{method}(Request $req, Response $resp, array & $params)
     {
 
     }

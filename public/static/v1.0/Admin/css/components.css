@@ -1131,12 +1131,13 @@ File: Components
   border-bottom: 2px solid #ebeff2;
 }
 tbody {
-  color: #797979;
+  color: #333;
 }
 th {
-  color: #666666;
-  font-weight: 600;
+  color: #333;
+  font-weight: 500;font-size:14px;
 }
+td{font-size:13px;}
 .table-bordered {
   border: 1px solid #ebeff2;
 }
@@ -1152,7 +1153,7 @@ table.focus-on tbody tr.focused td {
   border: none !important;
 }
 .table-rep-plugin tbody th {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: normal;
 }
 .table-rep-plugin .checkbox-row {

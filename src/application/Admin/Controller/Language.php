@@ -39,7 +39,7 @@ class Language extends Controller
      *
      * @return string
      */
-    public function actionList()
+    public function actionList(Request $req, Response $resp, array & $params)
     {
         if (! acl()->isAdmin()) {
             throw new Forbidden();

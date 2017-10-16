@@ -79,7 +79,7 @@ class Menu extends Controller
      *
      * @return array
      */
-    public function actionDetail(Request $req, Response $resp, & $params)
+    public function actionDetail(Request $req, Response $resp, array & $params)
     {
         if (empty($params['id'])) {
             throw new Forbidden();
@@ -107,7 +107,7 @@ class Menu extends Controller
         );
     }
 
-    public function actionList()
+    public function actionList(Request $req, Response $resp, array & $params)
     {
         $titles = [
             'id' => ['priority' => 0,],

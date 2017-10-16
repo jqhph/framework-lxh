@@ -68,6 +68,41 @@ class Model extends Entity
         $this->events = $container['events'];
     }
 
+    /**
+     * 获取记录总数
+     *
+     * @param array $where
+     * @return int
+     */
+    public function count(array $where)
+    {
+        $q = $this->query();
+
+        if ($where) $q->where($where);
+
+        return $q->count();
+    }
+
+    /**
+     * 查找记录列表
+     *
+     * @param array $where
+     * @param string $order
+     * @param int $offset
+     * @param int $limit
+     */
+    public function findList(array $where, $order = 'id DESC', $offset = 0, $limit = 20)
+    {
+        $q = $this->query()->select($this->selectFields)->where($where);
+
+        if ($order) $q->sort($order);
+
+        if ($limit) {
+            $q->limit($offset, $limit);
+        }
+        return $q->find();
+    }
+
     // 查找数据
     public function find()
     {

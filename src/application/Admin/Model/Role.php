@@ -114,12 +114,12 @@ class Role extends Record
      * @param  string $orderString
      * @return array
      */
-    public function records($where, $page, $maxSize, $orderString = 'id Desc')
+    public function findList(array $where, $orderString = 'id Desc', $offset = 0, $maxSize = 20)
     {
         $q = $this->query()
             ->select($this->selectFields)
             ->leftJoin('user', 'user.id', 'created_by_id')
-            ->limit(($page - 1) * $maxSize, $maxSize);
+            ->limit($offset, $maxSize);
 
         if ($where) {
             $q->where($where);

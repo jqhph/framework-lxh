@@ -19,12 +19,16 @@ class Record extends LxhController
 {
     protected $maxSize = 20;
 
+    protected $btns = [
+        'create' => 'Create'
+    ];
+
     /**
      * list页
      *
      * @return string
      */
-    public function actionList()
+    public function actionList(Request $req, Response $resp, array & $params)
     {
         // 判断是否有权限访问
         if (! acl()->access()) {
@@ -49,7 +53,7 @@ class Record extends LxhController
         $list = [];
 
         if ($total) {
-            $list = $model->records($wheres, $currentPage, $this->maxSize, $this->makeOrderContent($_REQUEST));
+            $list = $model->findList($wheres, $this->makeOrderContent($_REQUEST), ($currentPage - 1) * $this->maxSize, $this->maxSize);
         }
 
         // 获取列表table标题信息
@@ -57,7 +61,7 @@ class Record extends LxhController
 
         return $this->render(
             'list',
-            ['list' => & $list, 'searchItems' => $this->makeSearchItems(), 'titles' => & $titles, 'pages' => & $pageString],
+            ['list' => & $list, 'searchItems' => $this->makeSearchItems(), 'titles' => & $titles, 'pages' => & $pageString, 'btns' => & $this->btns],
             true
         );
     }
@@ -96,7 +100,7 @@ class Record extends LxhController
 
         $this->share('navTitle', $currentTitle);
 
-        return $this->render('Detail', ['detailFields' => $this->makeDetailFields()], true);
+        return $this->render('detail', ['detailFields' => $this->makeDetailFields()], true);
     }
 
     /**
@@ -118,7 +122,7 @@ class Record extends LxhController
      * @return string
      * @throws Forbidden
      */
-    public function actionDetail(Request $req, Response $resp, & $params)
+    public function actionDetail(Request $req, Response $resp, array & $params)
     {
         // 判断是否有权限访问
         if (! acl()->access()) {
@@ -178,7 +182,7 @@ class Record extends LxhController
      *
      * @return array
      */
-    public function actionDelete(Request $req, Response $resp, & $params)
+    public function actionDelete(Request $req, Response $resp, array & $params)
     {
         // 判断是否有权限访问
         if (! acl()->access()) {

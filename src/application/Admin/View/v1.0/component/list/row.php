@@ -19,6 +19,6 @@ use Lxh\Admin\Kernel\Url;
     </th>
     <?php } ?>
     <th><a href="<?php echo Url::makeDetail($r['id']);?>">
-            <?php echo trans('DETAIL')?></a>&nbsp;&nbsp;
+            <?php echo trans('detail')?></a>&nbsp;&nbsp;
         <a style="color:#ff5b5b" data-model="<?php echo empty($model) ? __CONTROLLER__ : $model;?>" data-action="delete-row" data-id="<?php echo $r['id'];?>" href="javascript:"><i class="zmdi zmdi-close"></i></a></th>
 </tr>
