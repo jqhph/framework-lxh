@@ -9,13 +9,10 @@ return array(
     'Symfony\\Polyfill\\Php70\\' => array($vendorDir . '/symfony/polyfill-php70'),
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Symfony\\Component\\Yaml\\' => array($vendorDir . '/symfony/yaml'),
-<<<<<<< HEAD
     'Symfony\\Component\\PropertyAccess\\' => array($vendorDir . '/symfony/property-access'),
     'Symfony\\Component\\OptionsResolver\\' => array($vendorDir . '/symfony/options-resolver'),
     'Symfony\\Component\\Inflector\\' => array($vendorDir . '/symfony/inflector'),
-=======
     'Symfony\\Component\\HttpFoundation\\' => array($vendorDir . '/symfony/http-foundation'),
->>>>>>> 91c82a726f9558eba1e9eea34136baf2330bcaa0
     'Symfony\\Component\\Debug\\' => array($vendorDir . '/symfony/debug'),
     'Symfony\\Component\\Console\\' => array($vendorDir . '/symfony/console'),
     'Symfony\\Bridge\\PsrHttpMessage\\' => array($vendorDir . '/symfony/psr-http-message-bridge'),
@@ -23,20 +20,15 @@ return array(
     'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-message/src'),
     'Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
     'Psr\\Cache\\' => array($vendorDir . '/psr/cache/src'),
-<<<<<<< HEAD
-    'MyCLabs\\Enum\\' => array($vendorDir . '/myclabs/php-enum/src'),
-    'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
-    'Lxh\\' => array($baseDir . '/kernel', $baseDir . '/application'),
-    'Endroid\\QrCode\\' => array($vendorDir . '/endroid/qrcode/src'),
-=======
     'Overtrue\\Socialite\\' => array($vendorDir . '/overtrue/socialite/src'),
+    'MyCLabs\\Enum\\' => array($vendorDir . '/myclabs/php-enum/src'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'Lxh\\' => array($baseDir . '/kernel', $baseDir . '/application'),
     'GuzzleHttp\\Psr7\\' => array($vendorDir . '/guzzlehttp/psr7/src'),
     'GuzzleHttp\\Promise\\' => array($vendorDir . '/guzzlehttp/promises/src'),
     'GuzzleHttp\\' => array($vendorDir . '/guzzlehttp/guzzle/src'),
+    'Endroid\\QrCode\\' => array($vendorDir . '/endroid/qrcode/src'),
     'EasyWeChat\\' => array($vendorDir . '/overtrue/wechat/src'),
->>>>>>> 91c82a726f9558eba1e9eea34136baf2330bcaa0
     'Dotenv\\' => array($vendorDir . '/vlucas/phpdotenv/src'),
     'Doctrine\\Common\\Cache\\' => array($vendorDir . '/doctrine/cache/lib/Doctrine/Common/Cache'),
 );

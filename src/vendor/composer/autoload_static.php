@@ -7,17 +7,14 @@ namespace Composer\Autoload;
 class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
 {
     public static $files = array (
-        '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
-        '023d27dca8066ef29e6739335ea73bad' => __DIR__ . '/..' . '/symfony/polyfill-php70/bootstrap.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
-<<<<<<< HEAD
-        '626dcc41390ebdaa619faa02d99943b0' => __DIR__ . '/..' . '/khanamiryan/qrcode-detector-decoder/lib/common/customFunctions.php',
-=======
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
+        '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
+        '023d27dca8066ef29e6739335ea73bad' => __DIR__ . '/..' . '/symfony/polyfill-php70/bootstrap.php',
+        '626dcc41390ebdaa619faa02d99943b0' => __DIR__ . '/..' . '/khanamiryan/qrcode-detector-decoder/lib/common/customFunctions.php',
         '9e090711773bfc38738f5dbaee5a7f14' => __DIR__ . '/..' . '/overtrue/wechat/src/Payment/helpers.php',
->>>>>>> 91c82a726f9558eba1e9eea34136baf2330bcaa0
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -26,13 +23,10 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
             'Symfony\\Polyfill\\Php70\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Component\\Yaml\\' => 23,
-<<<<<<< HEAD
             'Symfony\\Component\\PropertyAccess\\' => 33,
             'Symfony\\Component\\OptionsResolver\\' => 34,
             'Symfony\\Component\\Inflector\\' => 28,
-=======
             'Symfony\\Component\\HttpFoundation\\' => 33,
->>>>>>> 91c82a726f9558eba1e9eea34136baf2330bcaa0
             'Symfony\\Component\\Debug\\' => 24,
             'Symfony\\Component\\Console\\' => 26,
             'Symfony\\Bridge\\PsrHttpMessage\\' => 30,
@@ -57,11 +51,6 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         array (
             'Lxh\\' => 4,
         ),
-<<<<<<< HEAD
-        'E' => 
-        array (
-            'Endroid\\QrCode\\' => 15,
-=======
         'G' => 
         array (
             'GuzzleHttp\\Psr7\\' => 16,
@@ -70,8 +59,8 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         ),
         'E' => 
         array (
+            'Endroid\\QrCode\\' => 15,
             'EasyWeChat\\' => 11,
->>>>>>> 91c82a726f9558eba1e9eea34136baf2330bcaa0
         ),
         'D' => 
         array (
@@ -93,7 +82,6 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         array (
             0 => __DIR__ . '/..' . '/symfony/yaml',
         ),
-<<<<<<< HEAD
         'Symfony\\Component\\PropertyAccess\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/property-access',
@@ -105,11 +93,10 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         'Symfony\\Component\\Inflector\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/inflector',
-=======
+        ),
         'Symfony\\Component\\HttpFoundation\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/http-foundation',
->>>>>>> 91c82a726f9558eba1e9eea34136baf2330bcaa0
         ),
         'Symfony\\Component\\Debug\\' => 
         array (
@@ -139,15 +126,13 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         array (
             0 => __DIR__ . '/..' . '/psr/cache/src',
         ),
-<<<<<<< HEAD
-        'MyCLabs\\Enum\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/myclabs/php-enum/src',
-=======
         'Overtrue\\Socialite\\' => 
         array (
             0 => __DIR__ . '/..' . '/overtrue/socialite/src',
->>>>>>> 91c82a726f9558eba1e9eea34136baf2330bcaa0
+        ),
+        'MyCLabs\\Enum\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/myclabs/php-enum/src',
         ),
         'Monolog\\' => 
         array (
@@ -158,11 +143,6 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
             0 => __DIR__ . '/../..' . '/kernel',
             1 => __DIR__ . '/../..' . '/application',
         ),
-<<<<<<< HEAD
-        'Endroid\\QrCode\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/endroid/qrcode/src',
-=======
         'GuzzleHttp\\Psr7\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
@@ -175,10 +155,13 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
         ),
+        'Endroid\\QrCode\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/endroid/qrcode/src',
+        ),
         'EasyWeChat\\' => 
         array (
             0 => __DIR__ . '/..' . '/overtrue/wechat/src',
->>>>>>> 91c82a726f9558eba1e9eea34136baf2330bcaa0
         ),
         'Dotenv\\' => 
         array (
@@ -198,9 +181,6 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
                 0 => __DIR__ . '/..' . '/pimple/pimple/src',
             ),
         ),
-    );
-
-    public static $prefixesPsr0 = array (
         'B' => 
         array (
             'BaconQrCode' => 
@@ -211,15 +191,48 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
     );
 
     public static $classMap = array (
-<<<<<<< HEAD
         'ArithmeticError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/ArithmeticError.php',
         'AssertionError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/AssertionError.php',
+        'BaconQrCode\\Common\\AbstractEnum' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Common/AbstractEnum.php',
+        'BaconQrCode\\Common\\BitArray' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Common/BitArray.php',
+        'BaconQrCode\\Common\\BitMatrix' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Common/BitMatrix.php',
+        'BaconQrCode\\Common\\BitUtils' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Common/BitUtils.php',
+        'BaconQrCode\\Common\\CharacterSetEci' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Common/CharacterSetEci.php',
+        'BaconQrCode\\Common\\EcBlock' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Common/EcBlock.php',
+        'BaconQrCode\\Common\\EcBlocks' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Common/EcBlocks.php',
+        'BaconQrCode\\Common\\ErrorCorrectionLevel' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Common/ErrorCorrectionLevel.php',
+        'BaconQrCode\\Common\\FormatInformation' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Common/FormatInformation.php',
+        'BaconQrCode\\Common\\Mode' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Common/Mode.php',
+        'BaconQrCode\\Common\\ReedSolomonCodec' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Common/ReedSolomonCodec.php',
+        'BaconQrCode\\Common\\Version' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Common/Version.php',
+        'BaconQrCode\\Encoder\\BlockPair' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Encoder/BlockPair.php',
+        'BaconQrCode\\Encoder\\ByteMatrix' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Encoder/ByteMatrix.php',
+        'BaconQrCode\\Encoder\\Encoder' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Encoder/Encoder.php',
+        'BaconQrCode\\Encoder\\MaskUtil' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Encoder/MaskUtil.php',
+        'BaconQrCode\\Encoder\\MatrixUtil' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Encoder/MatrixUtil.php',
+        'BaconQrCode\\Encoder\\QrCode' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Encoder/QrCode.php',
+        'BaconQrCode\\Exception\\ExceptionInterface' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Exception/ExceptionInterface.php',
+        'BaconQrCode\\Exception\\InvalidArgumentException' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Exception/InvalidArgumentException.php',
+        'BaconQrCode\\Exception\\OutOfBoundsException' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Exception/OutOfBoundsException.php',
+        'BaconQrCode\\Exception\\RuntimeException' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Exception/RuntimeException.php',
+        'BaconQrCode\\Exception\\UnexpectedValueException' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Exception/UnexpectedValueException.php',
+        'BaconQrCode\\Exception\\WriterException' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Exception/WriterException.php',
+        'BaconQrCode\\Renderer\\Color\\Cmyk' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Renderer/Color/Cmyk.php',
+        'BaconQrCode\\Renderer\\Color\\ColorInterface' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Renderer/Color/ColorInterface.php',
+        'BaconQrCode\\Renderer\\Color\\Gray' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Renderer/Color/Gray.php',
+        'BaconQrCode\\Renderer\\Color\\Rgb' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Renderer/Color/Rgb.php',
+        'BaconQrCode\\Renderer\\Image\\AbstractRenderer' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Renderer/Image/AbstractRenderer.php',
+        'BaconQrCode\\Renderer\\Image\\Decorator\\DecoratorInterface' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Renderer/Image/Decorator/DecoratorInterface.php',
+        'BaconQrCode\\Renderer\\Image\\Decorator\\FinderPattern' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Renderer/Image/Decorator/FinderPattern.php',
+        'BaconQrCode\\Renderer\\Image\\Eps' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Renderer/Image/Eps.php',
+        'BaconQrCode\\Renderer\\Image\\Png' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Renderer/Image/Png.php',
+        'BaconQrCode\\Renderer\\Image\\RendererInterface' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Renderer/Image/RendererInterface.php',
+        'BaconQrCode\\Renderer\\Image\\Svg' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Renderer/Image/Svg.php',
+        'BaconQrCode\\Renderer\\RendererInterface' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Renderer/RendererInterface.php',
+        'BaconQrCode\\Renderer\\Text\\Html' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Renderer/Text/Html.php',
+        'BaconQrCode\\Renderer\\Text\\Plain' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Renderer/Text/Plain.php',
+        'BaconQrCode\\Writer' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/BaconQrCode/Writer.php',
         'DivisionByZeroError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/DivisionByZeroError.php',
-        'Error' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/Error.php',
-        'File_Iterator' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Iterator.php',
-        'File_Iterator_Facade' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Facade.php',
-        'File_Iterator_Factory' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Factory.php',
-=======
         'Doctrine\\Common\\Cache\\ApcCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/ApcCache.php',
         'Doctrine\\Common\\Cache\\ApcuCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/ApcuCache.php',
         'Doctrine\\Common\\Cache\\ArrayCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/ArrayCache.php',
@@ -391,6 +404,35 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         'EasyWeChat\\User\\Group' => __DIR__ . '/..' . '/overtrue/wechat/src/User/Group.php',
         'EasyWeChat\\User\\Tag' => __DIR__ . '/..' . '/overtrue/wechat/src/User/Tag.php',
         'EasyWeChat\\User\\User' => __DIR__ . '/..' . '/overtrue/wechat/src/User/User.php',
+        'Endroid\\QrCode\\Bundle\\QrCodeBundle\\Controller\\QrCodeController' => __DIR__ . '/..' . '/endroid/qrcode/src/Bundle/QrCodeBundle/Controller/QrCodeController.php',
+        'Endroid\\QrCode\\Bundle\\QrCodeBundle\\DependencyInjection\\Compiler\\WriterRegistryCompilerPass' => __DIR__ . '/..' . '/endroid/qrcode/src/Bundle/QrCodeBundle/DependencyInjection/Compiler/WriterRegistryCompilerPass.php',
+        'Endroid\\QrCode\\Bundle\\QrCodeBundle\\DependencyInjection\\Configuration' => __DIR__ . '/..' . '/endroid/qrcode/src/Bundle/QrCodeBundle/DependencyInjection/Configuration.php',
+        'Endroid\\QrCode\\Bundle\\QrCodeBundle\\DependencyInjection\\EndroidQrCodeExtension' => __DIR__ . '/..' . '/endroid/qrcode/src/Bundle/QrCodeBundle/DependencyInjection/EndroidQrCodeExtension.php',
+        'Endroid\\QrCode\\Bundle\\QrCodeBundle\\EndroidQrCodeBundle' => __DIR__ . '/..' . '/endroid/qrcode/src/Bundle/QrCodeBundle/EndroidQrCodeBundle.php',
+        'Endroid\\QrCode\\ErrorCorrectionLevel' => __DIR__ . '/..' . '/endroid/qrcode/src/ErrorCorrectionLevel.php',
+        'Endroid\\QrCode\\Exception\\InvalidPathException' => __DIR__ . '/..' . '/endroid/qrcode/src/Exception/InvalidPathException.php',
+        'Endroid\\QrCode\\Exception\\InvalidWriterException' => __DIR__ . '/..' . '/endroid/qrcode/src/Exception/InvalidWriterException.php',
+        'Endroid\\QrCode\\Exception\\MissingFunctionException' => __DIR__ . '/..' . '/endroid/qrcode/src/Exception/MissingFunctionException.php',
+        'Endroid\\QrCode\\Exception\\QrCodeException' => __DIR__ . '/..' . '/endroid/qrcode/src/Exception/QrCodeException.php',
+        'Endroid\\QrCode\\Exception\\UnsupportedExtensionException' => __DIR__ . '/..' . '/endroid/qrcode/src/Exception/UnsupportedExtensionException.php',
+        'Endroid\\QrCode\\Exception\\ValidationException' => __DIR__ . '/..' . '/endroid/qrcode/src/Exception/ValidationException.php',
+        'Endroid\\QrCode\\Factory\\QrCodeFactory' => __DIR__ . '/..' . '/endroid/qrcode/src/Factory/QrCodeFactory.php',
+        'Endroid\\QrCode\\LabelAlignment' => __DIR__ . '/..' . '/endroid/qrcode/src/LabelAlignment.php',
+        'Endroid\\QrCode\\QrCode' => __DIR__ . '/..' . '/endroid/qrcode/src/QrCode.php',
+        'Endroid\\QrCode\\QrCodeInterface' => __DIR__ . '/..' . '/endroid/qrcode/src/QrCodeInterface.php',
+        'Endroid\\QrCode\\StaticWriterRegistry' => __DIR__ . '/..' . '/endroid/qrcode/src/StaticWriterRegistry.php',
+        'Endroid\\QrCode\\Twig\\Extension\\QrCodeExtension' => __DIR__ . '/..' . '/endroid/qrcode/src/Twig/Extension/QrCodeExtension.php',
+        'Endroid\\QrCode\\WriterRegistry' => __DIR__ . '/..' . '/endroid/qrcode/src/WriterRegistry.php',
+        'Endroid\\QrCode\\WriterRegistryInterface' => __DIR__ . '/..' . '/endroid/qrcode/src/WriterRegistryInterface.php',
+        'Endroid\\QrCode\\Writer\\AbstractBaconWriter' => __DIR__ . '/..' . '/endroid/qrcode/src/Writer/AbstractBaconWriter.php',
+        'Endroid\\QrCode\\Writer\\AbstractWriter' => __DIR__ . '/..' . '/endroid/qrcode/src/Writer/AbstractWriter.php',
+        'Endroid\\QrCode\\Writer\\BinaryWriter' => __DIR__ . '/..' . '/endroid/qrcode/src/Writer/BinaryWriter.php',
+        'Endroid\\QrCode\\Writer\\DebugWriter' => __DIR__ . '/..' . '/endroid/qrcode/src/Writer/DebugWriter.php',
+        'Endroid\\QrCode\\Writer\\EpsWriter' => __DIR__ . '/..' . '/endroid/qrcode/src/Writer/EpsWriter.php',
+        'Endroid\\QrCode\\Writer\\PngWriter' => __DIR__ . '/..' . '/endroid/qrcode/src/Writer/PngWriter.php',
+        'Endroid\\QrCode\\Writer\\SvgWriter' => __DIR__ . '/..' . '/endroid/qrcode/src/Writer/SvgWriter.php',
+        'Endroid\\QrCode\\Writer\\WriterInterface' => __DIR__ . '/..' . '/endroid/qrcode/src/Writer/WriterInterface.php',
+        'Error' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/Error.php',
         'File_Iterator' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Iterator.php',
         'File_Iterator_Facade' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Facade.php',
         'File_Iterator_Factory' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Factory.php',
@@ -492,10 +534,6 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         'Lxh\\Cache\\Item' => __DIR__ . '/../..' . '/kernel/Cache/Item.php',
         'Lxh\\Cache\\ItemPool' => __DIR__ . '/../..' . '/kernel/Cache/ItemPool.php',
         'Lxh\\Cache\\Item\\File' => __DIR__ . '/../..' . '/kernel/Cache/Item/File.php',
-        'Lxh\\Client\\Auth\\User' => __DIR__ . '/../..' . '/application/Client/Auth/User.php',
-        'Lxh\\Client\\Controller\\Controller' => __DIR__ . '/../..' . '/application/Client/Controller/Controller.php',
-        'Lxh\\Client\\Controller\\Index' => __DIR__ . '/../..' . '/application/Client/Controller/Index.php',
-        'Lxh\\Client\\Kernel\\Url' => __DIR__ . '/../..' . '/application/Client/Kernel/Url.php',
         'Lxh\\Command\\MakeControllerCommand' => __DIR__ . '/../..' . '/application/Command/MakeControllerCommand.php',
         'Lxh\\Command\\MakeMiddlewareCommand' => __DIR__ . '/../..' . '/application/Command/MakeMiddlewareCommand.php',
         'Lxh\\Command\\MakeModelCommand' => __DIR__ . '/../..' . '/application/Command/MakeModelCommand.php',
@@ -735,6 +773,7 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         'Monolog\\Processor\\UidProcessor' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Processor/UidProcessor.php',
         'Monolog\\Processor\\WebProcessor' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Processor/WebProcessor.php',
         'Monolog\\Registry' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Registry.php',
+        'MyCLabs\\Enum\\Enum' => __DIR__ . '/..' . '/myclabs/php-enum/src/Enum.php',
         'Overtrue\\Socialite\\AccessToken' => __DIR__ . '/..' . '/overtrue/socialite/src/AccessToken.php',
         'Overtrue\\Socialite\\AccessTokenInterface' => __DIR__ . '/..' . '/overtrue/socialite/src/AccessTokenInterface.php',
         'Overtrue\\Socialite\\AuthorizeFailedException' => __DIR__ . '/..' . '/overtrue/socialite/src/AuthorizeFailedException.php',
@@ -759,7 +798,6 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         'Overtrue\\Socialite\\User' => __DIR__ . '/..' . '/overtrue/socialite/src/User.php',
         'Overtrue\\Socialite\\UserInterface' => __DIR__ . '/..' . '/overtrue/socialite/src/UserInterface.php',
         'Overtrue\\Socialite\\WeChatComponentInterface' => __DIR__ . '/..' . '/overtrue/socialite/src/WeChatComponentInterface.php',
->>>>>>> 91c82a726f9558eba1e9eea34136baf2330bcaa0
         'PHPUnit_Extensions_GroupTestSuite' => __DIR__ . '/..' . '/phpunit/phpunit/PHPUnit/Extensions/GroupTestSuite.php',
         'PHPUnit_Extensions_PhptTestCase' => __DIR__ . '/..' . '/phpunit/phpunit/PHPUnit/Extensions/PhptTestCase.php',
         'PHPUnit_Extensions_PhptTestCase_Logger' => __DIR__ . '/..' . '/phpunit/phpunit/PHPUnit/Extensions/PhptTestCase/Logger.php',
@@ -1102,10 +1140,7 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         'PHP_Token_WHITESPACE' => __DIR__ . '/..' . '/phpunit/php-token-stream/PHP/Token.php',
         'PHP_Token_XOR_EQUAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/PHP/Token.php',
         'PHP_Token_YIELD' => __DIR__ . '/..' . '/phpunit/php-token-stream/PHP/Token.php',
-<<<<<<< HEAD
         'ParseError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/ParseError.php',
-        'QrReader' => __DIR__ . '/..' . '/khanamiryan/qrcode-detector-decoder/lib/QrReader.php',
-=======
         'Pimple\\Container' => __DIR__ . '/..' . '/pimple/pimple/src/Pimple/Container.php',
         'Pimple\\Exception\\ExpectedInvokableException' => __DIR__ . '/..' . '/pimple/pimple/src/Pimple/Exception/ExpectedInvokableException.php',
         'Pimple\\Exception\\FrozenServiceException' => __DIR__ . '/..' . '/pimple/pimple/src/Pimple/Exception/FrozenServiceException.php',
@@ -1148,6 +1183,7 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         'Psr\\Log\\NullLogger' => __DIR__ . '/..' . '/psr/log/Psr/Log/NullLogger.php',
         'Psr\\Log\\Test\\DummyTest' => __DIR__ . '/..' . '/psr/log/Psr/Log/Test/LoggerInterfaceTest.php',
         'Psr\\Log\\Test\\LoggerInterfaceTest' => __DIR__ . '/..' . '/psr/log/Psr/Log/Test/LoggerInterfaceTest.php',
+        'QrReader' => __DIR__ . '/..' . '/khanamiryan/qrcode-detector-decoder/lib/QrReader.php',
         'Symfony\\Bridge\\PsrHttpMessage\\Factory\\DiactorosFactory' => __DIR__ . '/..' . '/symfony/psr-http-message-bridge/Factory/DiactorosFactory.php',
         'Symfony\\Bridge\\PsrHttpMessage\\Factory\\HttpFoundationFactory' => __DIR__ . '/..' . '/symfony/psr-http-message-bridge/Factory/HttpFoundationFactory.php',
         'Symfony\\Bridge\\PsrHttpMessage\\HttpFoundationFactoryInterface' => __DIR__ . '/..' . '/symfony/psr-http-message-bridge/HttpFoundationFactoryInterface.php',
@@ -1313,6 +1349,36 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         'Symfony\\Component\\HttpFoundation\\Session\\Storage\\Proxy\\SessionHandlerProxy' => __DIR__ . '/..' . '/symfony/http-foundation/Session/Storage/Proxy/SessionHandlerProxy.php',
         'Symfony\\Component\\HttpFoundation\\Session\\Storage\\SessionStorageInterface' => __DIR__ . '/..' . '/symfony/http-foundation/Session/Storage/SessionStorageInterface.php',
         'Symfony\\Component\\HttpFoundation\\StreamedResponse' => __DIR__ . '/..' . '/symfony/http-foundation/StreamedResponse.php',
+        'Symfony\\Component\\Inflector\\Inflector' => __DIR__ . '/..' . '/symfony/inflector/Inflector.php',
+        'Symfony\\Component\\OptionsResolver\\Exception\\AccessException' => __DIR__ . '/..' . '/symfony/options-resolver/Exception/AccessException.php',
+        'Symfony\\Component\\OptionsResolver\\Exception\\ExceptionInterface' => __DIR__ . '/..' . '/symfony/options-resolver/Exception/ExceptionInterface.php',
+        'Symfony\\Component\\OptionsResolver\\Exception\\InvalidArgumentException' => __DIR__ . '/..' . '/symfony/options-resolver/Exception/InvalidArgumentException.php',
+        'Symfony\\Component\\OptionsResolver\\Exception\\InvalidOptionsException' => __DIR__ . '/..' . '/symfony/options-resolver/Exception/InvalidOptionsException.php',
+        'Symfony\\Component\\OptionsResolver\\Exception\\MissingOptionsException' => __DIR__ . '/..' . '/symfony/options-resolver/Exception/MissingOptionsException.php',
+        'Symfony\\Component\\OptionsResolver\\Exception\\NoSuchOptionException' => __DIR__ . '/..' . '/symfony/options-resolver/Exception/NoSuchOptionException.php',
+        'Symfony\\Component\\OptionsResolver\\Exception\\OptionDefinitionException' => __DIR__ . '/..' . '/symfony/options-resolver/Exception/OptionDefinitionException.php',
+        'Symfony\\Component\\OptionsResolver\\Exception\\UndefinedOptionsException' => __DIR__ . '/..' . '/symfony/options-resolver/Exception/UndefinedOptionsException.php',
+        'Symfony\\Component\\OptionsResolver\\Options' => __DIR__ . '/..' . '/symfony/options-resolver/Options.php',
+        'Symfony\\Component\\OptionsResolver\\OptionsResolver' => __DIR__ . '/..' . '/symfony/options-resolver/OptionsResolver.php',
+        'Symfony\\Component\\PropertyAccess\\Exception\\AccessException' => __DIR__ . '/..' . '/symfony/property-access/Exception/AccessException.php',
+        'Symfony\\Component\\PropertyAccess\\Exception\\ExceptionInterface' => __DIR__ . '/..' . '/symfony/property-access/Exception/ExceptionInterface.php',
+        'Symfony\\Component\\PropertyAccess\\Exception\\InvalidArgumentException' => __DIR__ . '/..' . '/symfony/property-access/Exception/InvalidArgumentException.php',
+        'Symfony\\Component\\PropertyAccess\\Exception\\InvalidPropertyPathException' => __DIR__ . '/..' . '/symfony/property-access/Exception/InvalidPropertyPathException.php',
+        'Symfony\\Component\\PropertyAccess\\Exception\\NoSuchIndexException' => __DIR__ . '/..' . '/symfony/property-access/Exception/NoSuchIndexException.php',
+        'Symfony\\Component\\PropertyAccess\\Exception\\NoSuchPropertyException' => __DIR__ . '/..' . '/symfony/property-access/Exception/NoSuchPropertyException.php',
+        'Symfony\\Component\\PropertyAccess\\Exception\\OutOfBoundsException' => __DIR__ . '/..' . '/symfony/property-access/Exception/OutOfBoundsException.php',
+        'Symfony\\Component\\PropertyAccess\\Exception\\RuntimeException' => __DIR__ . '/..' . '/symfony/property-access/Exception/RuntimeException.php',
+        'Symfony\\Component\\PropertyAccess\\Exception\\UnexpectedTypeException' => __DIR__ . '/..' . '/symfony/property-access/Exception/UnexpectedTypeException.php',
+        'Symfony\\Component\\PropertyAccess\\PropertyAccess' => __DIR__ . '/..' . '/symfony/property-access/PropertyAccess.php',
+        'Symfony\\Component\\PropertyAccess\\PropertyAccessor' => __DIR__ . '/..' . '/symfony/property-access/PropertyAccessor.php',
+        'Symfony\\Component\\PropertyAccess\\PropertyAccessorBuilder' => __DIR__ . '/..' . '/symfony/property-access/PropertyAccessorBuilder.php',
+        'Symfony\\Component\\PropertyAccess\\PropertyAccessorInterface' => __DIR__ . '/..' . '/symfony/property-access/PropertyAccessorInterface.php',
+        'Symfony\\Component\\PropertyAccess\\PropertyPath' => __DIR__ . '/..' . '/symfony/property-access/PropertyPath.php',
+        'Symfony\\Component\\PropertyAccess\\PropertyPathBuilder' => __DIR__ . '/..' . '/symfony/property-access/PropertyPathBuilder.php',
+        'Symfony\\Component\\PropertyAccess\\PropertyPathInterface' => __DIR__ . '/..' . '/symfony/property-access/PropertyPathInterface.php',
+        'Symfony\\Component\\PropertyAccess\\PropertyPathIterator' => __DIR__ . '/..' . '/symfony/property-access/PropertyPathIterator.php',
+        'Symfony\\Component\\PropertyAccess\\PropertyPathIteratorInterface' => __DIR__ . '/..' . '/symfony/property-access/PropertyPathIteratorInterface.php',
+        'Symfony\\Component\\PropertyAccess\\StringUtil' => __DIR__ . '/..' . '/symfony/property-access/StringUtil.php',
         'Symfony\\Component\\Yaml\\Dumper' => __DIR__ . '/..' . '/symfony/yaml/Dumper.php',
         'Symfony\\Component\\Yaml\\Escaper' => __DIR__ . '/..' . '/symfony/yaml/Escaper.php',
         'Symfony\\Component\\Yaml\\Exception\\DumpException' => __DIR__ . '/..' . '/symfony/yaml/Exception/DumpException.php',
@@ -1324,7 +1390,7 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         'Symfony\\Component\\Yaml\\Unescaper' => __DIR__ . '/..' . '/symfony/yaml/Unescaper.php',
         'Symfony\\Component\\Yaml\\Yaml' => __DIR__ . '/..' . '/symfony/yaml/Yaml.php',
         'Symfony\\Polyfill\\Mbstring\\Mbstring' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/Mbstring.php',
->>>>>>> 91c82a726f9558eba1e9eea34136baf2330bcaa0
+        'Symfony\\Polyfill\\Php70\\Php70' => __DIR__ . '/..' . '/symfony/polyfill-php70/Php70.php',
         'Text_Template' => __DIR__ . '/..' . '/phpunit/php-text-template/src/Template.php',
         'TypeError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/TypeError.php',
         'Zxing\\Binarizer' => __DIR__ . '/..' . '/khanamiryan/qrcode-detector-decoder/lib/Binarizer.php',
