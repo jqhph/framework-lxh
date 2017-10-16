@@ -66,8 +66,4 @@
 </div><!-- end col -->
 
 <script>
-    add_action(function () {
-
-
-    })
 </script>

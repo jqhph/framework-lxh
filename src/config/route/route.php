@@ -95,7 +95,7 @@ $config[] = [
 ];
 
 $config[] = [
-    'pattern' => '/api/:lc[controller]/:int[id]',
+    'pattern' => '/api/:lc[controller]',
     'method' => 'POST',
     'params' => [
         'module' => 'Admin',

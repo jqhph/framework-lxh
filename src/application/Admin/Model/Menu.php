@@ -28,7 +28,7 @@ class Menu extends Model
     {
         $data['created_at'] = $_SERVER['REQUEST_TIME'];
 
-        $data['created_by_id'] = user()->id;
+        $data['created_by_id'] = admin()->id;
 
         if (empty($data['show'])) {
             $data['show'] = 0;

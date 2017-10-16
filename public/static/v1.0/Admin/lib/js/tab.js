@@ -97,18 +97,6 @@
 
             $menu.append(html)
         }
-
-        // 初始化首页tab页和iframe
-        function init() {
-            var $reloadHome =  $('[data-action="tab-home"] .reload')
-            $reloadHome.click(reload_home)
-
-            function reload_home() {
-                self.reload('home', '/admin/index/index')
-            }
-        }
-
-        init()
     }
 
     function Iframe() {

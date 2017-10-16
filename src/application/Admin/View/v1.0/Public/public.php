@@ -60,7 +60,7 @@
             <div class="content">
                 <div class="container">
 
-                <iframe src="/admin/index/index" scrolling="no" ></iframe>
+                <iframe src="/admin/index/index" scrolling="no" id="home-iframe"></iframe>
 
                 <script id="iframe-tpl" type="text/html">
                     <div id="wrapper-{$name}" class="wrapper lxh-wrapper">

@@ -331,6 +331,8 @@ window.Lxh = function (options) {
                     url = $this.data('url'),
                     label = $this.data('name')
 
+                if (! url) return false;
+
                 $top && $top.tab.open(id, url, label)
             })
         }
@@ -483,7 +485,7 @@ window.Lxh = function (options) {
                 a = a || container.actionName()
                 c = c || container.controllerName()
 
-                return store.prefix + '/' + c + '/' + a
+                return store.prefix + '/' + to_under_score(c) + '/' + to_under_score(a)
             },
 
             makeHome: function () {

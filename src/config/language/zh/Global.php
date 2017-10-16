@@ -83,5 +83,7 @@ return array (
     'Delete Role' => '删除角色',
     'Create Role' => '创建角色',
     'Modify Role' => '修改角色',
+    'Products' => '产品',
+    'Products system' => '产品系统',
   ),
 );

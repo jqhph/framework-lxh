@@ -205,7 +205,7 @@ class Container implements ArrayAccess, ContractsContainer
         }
 
         if (! $object) {
-            $object = empty($binding['closure']) ? $this->build($abstract) : $binding['closure']($this);
+            $object = empty($binding['closure']) ? $this->build($name) : $binding['closure']($this);
         }
 
         // If we defined any extenders for this type, we'll need to spin through them
