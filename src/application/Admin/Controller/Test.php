@@ -9,19 +9,18 @@ use Lxh\MVC\Controller;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
 use Lxh\Status;
+use Endroid\QrCode\QrCode;
 
 class Test extends Controller
 {
     public function actionTest(Request $req, Response $resp, & $params)
     {
-        $data = [
-            ['name '],
-            ['name'],
-            ['name'],
-            ['name'],
-        ];
 
-        return 123;
+        $qrCode = new QrCode('10013');
+
+        $resp->withHeader('Content-Type', $qrCode->getContentType());
+
+        return $qrCode->writeString();
     }
 
     public function actionHello()
