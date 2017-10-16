@@ -219,6 +219,22 @@ function user()
 
 }
 
+
+/**
+ * 获取用户信息管理对象
+ *
+ * @return Model
+ */
+function admin()
+{
+    static $instance = null;
+
+    if ($instance) return $instance;
+
+    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->create('Admin');
+
+}
+
 /**
  * Http客户端
  *

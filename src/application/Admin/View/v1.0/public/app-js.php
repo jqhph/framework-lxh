@@ -8,15 +8,16 @@
 
 echo load_css('pages');
 //echo load_css('responsive');
-
+echo load_css('core');
 echo load_css('components');
 echo load_css('icons');
-echo load_css('core');
-
+echo load_js('jquery.min');
 echo load_js('bootstrap.min');
 echo load_js('fastclick');
 echo load_js('detect');
 echo load_js('jquery.slimscroll');
+
+echo load_js('waves');
 
 ?>
 

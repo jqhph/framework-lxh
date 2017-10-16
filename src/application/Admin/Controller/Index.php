@@ -20,7 +20,14 @@ class Index extends Controller
 
     public function actionList()
     {
-        return $this->render('list', [], true);
+        $this->withConsoleOutput(false);
+
+        return $this->render('public.public');
+    }
+
+    public function actionIndex()
+    {
+        return $this->render('index', [], true);
     }
 
 }

@@ -6,5 +6,9 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+<<<<<<< HEAD
     'BaconQrCode' => array($vendorDir . '/bacon/bacon-qr-code/src'),
+=======
+    'Pimple' => array($vendorDir . '/pimple/pimple/src'),
+>>>>>>> 91c82a726f9558eba1e9eea34136baf2330bcaa0
 );

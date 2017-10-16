@@ -458,6 +458,9 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
 
             this.$languageTable.find('i[data-action="remove-edit-row"]').unbind('click')
             this.$languageTable.find('i[data-action="remove-edit-row"]').click(this.events.removeRow.bind(this))
+
+            // 重新设置iframe高度
+            $lxh.iframe().currentHeight()
         }
     }
 

@@ -18,7 +18,6 @@ class Login extends Controller
     public function actionIndex(Request $request, Response $response, $params)
     {
 //        console_info(Util::toUnderScore('myAccountTest'));
-
 //        assign('test', $a);
         return $this->render('index');
     }

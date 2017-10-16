@@ -382,7 +382,12 @@ class Dispatcher implements Router
             return $this->requestPath;
         }
 
-        $uri = get_value($_SERVER, 'PATH_INFO', '/');
+        $uri = get_value($_SERVER, 'PATH_INFO');
+
+        if (empty($uri)) {
+            $uri = $_SERVER['REQUEST_URI'];
+            $uri = explode('?', $uri)[0];
+        }
 
         return $this->requestPath = & $uri;
     }

@@ -10,7 +10,7 @@ window.Lxh = function (options) {
      * @constructor
      */
     function Container(options) {
-        var self = this, config, cache, store, user, language, view, ui, env, tpl, util, urlMaker
+        var self = this, config, cache, store, user, language, view, ui, env, tpl, util, urlMaker, iframe, tab
 
         function init() {
             // 配置文件管理
@@ -43,8 +43,19 @@ window.Lxh = function (options) {
             // 视图管理
             view = new View(self, tpl)
 
+            iframe = new Iframe(self)
+
+            tab = new Tab(iframe)
 
             urlMaker = new UrlMaker(self)
+        }
+
+        // 获取父窗口对象
+        this.parentDocument = function () {
+            if (typeof window.parent != 'undefined' && typeof window.parent.document != 'undefined') {
+                return window.parent.document
+            }
+            return document
         }
 
         /**
@@ -168,6 +179,14 @@ window.Lxh = function (options) {
             return urlMaker
         }
 
+        this.iframe = function () {
+            return iframe
+        }
+
+        this.tab = function () {
+            return tab
+        }
+
         // 初始化
         init()
     }
@@ -263,6 +282,97 @@ window.Lxh = function (options) {
          */
         validator: function (options, call, selector) {
             return validator(options, call, selector)
+        }
+    }
+
+    function Tab(iframe) {
+        var $top = parent.$top || ''
+        // 切换显示tab页
+        this.switch = function (name) {
+            $top.tab.switch(name)
+        }
+
+        this.show = function (name) {
+            $top.tab.show(name)
+        },
+
+        // 打开一个新的tab页
+        this.open = function (name, url, label) {
+            $top.tab.open(name, url, label)
+        }
+
+        // 关闭tab窗
+        this.close = function ($this) {
+            $top.tab.close($this)
+        }
+
+        this.removeActive = function () {
+            $top.tab.removeActive(name)
+        }
+
+        // 初始化首页tab页和iframe
+        function init() {
+            $top && $top.iframe.height($('#wrapper-home iframe', window.parent.document))
+
+            var $thisTab =  $('[data-action="tab-home"]', window.parent.document)
+
+            $thisTab.click(function () {
+                $top && $top.tab.switch('home')
+            })
+
+            $thisTab.find('.tab-close').click(function () {
+                $top && $top.tab.close('home')
+            })
+
+            // 菜单按钮点击事件
+            $('[data-action="switch-menu"]').click(function () {
+                var $this = $(this),
+                    id = $this.data('id'),
+                    url = $this.data('url'),
+                    label = $this.data('name')
+
+                $top && $top.tab.open(id, url, label)
+            })
+        }
+
+        init()
+    }
+
+    function Iframe(container) {
+        var $top = parent.$top || ''
+        // 切换显示iframe
+        this.switch = function (name) {
+            $top.iframe.switch(name)
+        }
+
+        // 当前iframe弹窗编号
+        this.current = function () {
+            return $top.iframe.current()
+        }
+
+        // 移除iframe
+        this.remove = function (name) {
+            $top.iframe.remove(name)
+        }
+
+        // 创建iframe弹窗
+        this.create = function (name, url) {
+            $top.iframe.create(name)
+        }
+
+        // 自动设置高度
+        this.height = function ($this) {
+            $top.iframe.height($this)
+        };
+
+        // 计算当前iframe弹窗高度
+        this.currentHeight = function () {
+            var $this = $('#wrapper-'+ $top.iframe.current() +' iframe', window.parent.document)
+            $top.iframe.height($this)
+        }
+
+        this.hide = function () {
+            $top.iframe.hide(name)
         }
     }
 
@@ -446,6 +556,7 @@ window.Lxh = function (options) {
                 //     showMethod: 'slideDown',
                 //     hideMethod: 'fadeOut',
                 //     //timeOut: 3000,
+                var toastr = window.toastr || parent.toastr
                 toastr.options = options
                 return toastr
             },
@@ -1249,7 +1360,7 @@ window.Lxh = function (options) {
             store.isRequsting = true
 
             var data = util.getData()
-
+console.log('request data', data)
             if (store.method.toLocaleUpperCase() == 'PUT') {
                 data = JSON.stringify(data)
             }

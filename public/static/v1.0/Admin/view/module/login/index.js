@@ -9,9 +9,9 @@ add_action(function (plugIns) {
             rules: 'required|length_between[4-30]'
         },
 
-    ], submit, '.User-form')
+    ], submit, '.Admin-form')
 
-    var model = $lxh.createModel('User')
+    var model = $lxh.createModel('Admin')
     var notify = $lxh.ui().notify()
 
     function submit(e) {
@@ -29,7 +29,7 @@ add_action(function (plugIns) {
             notify.success(trans('login success'))
 
             // 500豪秒后跳转到首页
-            $lxh.redirect('/', 500)
+            $lxh.redirect('/admin', 500)
         })
         // 发起登录请求
         model.touchAction('login', 'POST')

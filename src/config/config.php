@@ -7,6 +7,9 @@
  */
 $config = [];
 
+// 时区配置
+$config['timezone'] = 'PRC';
+
 // 语言包 ===> 已移至可写配置文件
 //$config['language'] = 'zh';
 
@@ -79,16 +82,16 @@ $config['add-config-name'] = [
 
 // 模块设定, 支持多模块, 多个用数组表示
 // 如果设置了多模块, 且没有开启子域名部署, 配置路由的时候默认指向第一个模块, 如需走第二个模块需要在路由配置中使用"module"参数指定
-$config['modules'] = ['Admin', 'Home', 'Ucenter'];
+$config['modules'] = ['Admin', 'Client'];
 
 // 开启子域名部署
 $config['domain-deploy'] = true;
-// 配置子域名指向模块，已移至app.php配置文件
-//$config['domain-deploy-config'] = [
-//    'wo.suitshe.com'   => 'Ucenter',
-//    'new.suitshe.com'   => 'Home',
-//    'dev.lxh.com' => 'Admin',
-//];
+// 配置子域名指向模块
+$config['domain-deploy-config'] = [
+    'dev.lxh.com' => 'Admin',
+    'www.lxh.com' => 'Client',
+    '119.23.229.90' => 'Client',
+];
 
 // 记录错误日志级别
 $config['record-error-info-level'] = [

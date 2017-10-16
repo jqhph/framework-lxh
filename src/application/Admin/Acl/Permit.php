@@ -37,7 +37,7 @@ class Permit
 
     public function __construct()
     {
-        $this->user = user();
+        $this->user = admin();
     }
 
     /**

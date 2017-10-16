@@ -22,7 +22,7 @@ add_action(function () {
     ], submit)
 
     var notify = $lxh.ui().notify()
-    var model = $lxh.createModel('User')
+    var model = $lxh.createModel('Admin')
 
     function submit(e) {
         if (! model.requestEnded()) {
