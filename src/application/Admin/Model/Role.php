@@ -12,7 +12,7 @@ use Lxh\Kernel\Model\Record;
 
 class Role extends Record
 {
-    protected $selectFields = ['id', 'name', 'created_at', 'modify_at', 'user.username AS created_by'];
+    protected $selectFields = ['id', 'name', 'created_at', 'modified_at', 'admin.username AS created_by'];
 
     protected $permissions;
 
@@ -22,7 +22,7 @@ class Role extends Record
         $this->permissions = $data['permissions'];
         unset($data['permissions']);
 
-        $data['modify_at'] = time();
+        $data['modified_at'] = time();
     }
 
     public function afterSave($id, array & $data, $result)
@@ -50,7 +50,7 @@ class Role extends Record
         unset($data['permissions']);
 
         $data['created_at']    = time();
-        $data['created_by_id'] = user()->id;
+        $data['created_by_id'] = admin()->id;
     }
 
     public function afterAdd($insertId, array & $data)
@@ -118,7 +118,7 @@ class Role extends Record
     {
         $q = $this->query()
             ->select($this->selectFields)
-            ->leftJoin('user', 'user.id', 'created_by_id')
+            ->leftJoin('admin', 'admin.id', 'created_by_id')
             ->limit($offset, $maxSize);
 
         if ($where) {
@@ -138,10 +138,10 @@ class Role extends Record
         $id = $this->{$this->idFieldsName};
 
         if ($id) {
-            $data = $this->query()->select($this->selectFields)->leftJoin('user', 'user.id', 'created_by_id')->where($this->idFieldsName, $id)->findOne();
+            $data = $this->query()->select($this->selectFields)->leftJoin('admin', 'admin.id', 'created_by_id')->where($this->idFieldsName, $id)->findOne();
             $this->fill($data);
             return $data;
         }
-        return $this->query()->select($this->selectFields)->leftJoin('user', 'user.id', 'created_by_id')->where('deleted', 0)->find();
+        return $this->query()->select($this->selectFields)->leftJoin('admin', 'admin.id', 'created_by_id')->where('deleted', 0)->find();
     }
 }

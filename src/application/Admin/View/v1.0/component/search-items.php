@@ -20,7 +20,7 @@
                     <div style="height: 1em"></div>
                     <?php
                     // 循环输出搜索选项视图
-                    foreach ($opts as & $row) { ?>
+                    foreach ($items as & $row) { ?>
                     <div class="icon-list-demo row">
                         <?php foreach ($row as & $item) {
                             // 列

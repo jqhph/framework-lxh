@@ -34,7 +34,7 @@ $loadJs = isset($loadJs) ? $loadJs : '';
                             <input type="hidden" name="id" value="<?php echo $id;?>" />
                         <?php  }
 
-                        foreach ($opts as & $v) {
+                        foreach ($items as & $v) {
                             $v['vars']['id'] = & $id;
                             $v['vars']['value'] = get_value($row, $v['vars']['name']);
 
@@ -50,8 +50,13 @@ $loadJs = isset($loadJs) ? $loadJs : '';
         </div>
     </div><!-- end col -->
 </div>
-<?php
-// 加载js
-if ($loadJs) { ?>
-<script>add_js(parse_view_name('<?php echo __CONTROLLER__;?>', 'detail'));</script>
-<?php }?>
+
+
+<script>
+    window.validatorRules = <?php echo json_encode(empty($validatorRules) ? [] : $validatorRules);?>;
+    <?php if ($loadJs) { ?>
+    add_js(parse_view_name('<?php echo __CONTROLLER__;?>', 'detail'));
+    <?php } else { ?>
+    add_js('module/detail');
+    <?php }?>
+</script>

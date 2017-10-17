@@ -83,9 +83,10 @@ define([], function () {
             // 搜索
             search: function (e) {
                 var url = location.origin + location.pathname
-                var data = $lxh.form().get(this.el)
-                console.log('data', data)
-                console.log(build_http_params(data))
+                var data = $lxh.form().get(this.el), query = build_http_params(data)
+                console.log('search data', data, query)
+
+                window.location = url + '?' + query
             },
         }
     }

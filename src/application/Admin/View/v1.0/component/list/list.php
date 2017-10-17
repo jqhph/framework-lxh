@@ -17,16 +17,15 @@ $loadPublicJs = isset($loadPublicJs) ? $loadPublicJs : true;
 $useRWD = isset($useRWD) ? $useRWD : true;
 
 // 模块名
-$scope = isset($scope) ? $scope : __CONTROLLER__;
+$scope = isset($scope) ? ' ' . $scope : __CONTROLLER__;
 
 $createUrl = Url::makeAction('create');
 
-$createBtnText = "Create $scope";
-
+$createBtnText = "Create";
 
 
 // 搜索项界面
-if (! empty($searchItems))  echo render_view('component.search-items', $searchItems);
+if (! empty($searchItems))  echo render_view('component.search-items', ['items' => & $searchItems]);
 ?>
 <!--col-sm-12-->
 <div class="">
@@ -44,7 +43,7 @@ if (! empty($searchItems))  echo render_view('component.search-items', $searchIt
                     <thead>
                     <tr>
                         <?php
-                        foreach ($titles as $k => & $v) {?>
+                        foreach ($items as $k => & $v) {?>
                             <th class="<?php echo get_value($v, 'class');?>"
                                 data-priority="<?php echo get_value($v, 'priority', 1);?>"><?php echo trans($k, 'fields'); ?></th>
                         <?php } ?>
@@ -54,7 +53,7 @@ if (! empty($searchItems))  echo render_view('component.search-items', $searchIt
                     <tbody>
                     <?php
                     foreach ($list as $k => & $r) {
-                        echo render_view('component.' . $rowView, ['r' => $r, 'titles' => & $titles]);
+                        echo render_view('component.' . $rowView, ['r' => $r, 'items' => & $items]);
                     } ?>
                     </tbody>
                 </table>

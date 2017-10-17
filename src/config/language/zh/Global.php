@@ -43,13 +43,15 @@ return array (
     'Total' => '总数',
     'Showing' => '显示',
     'Home' => '主页',
+    'desc' => '描述',
   ),
   'fields' => 
   array (
     'name' => '名称',
     'created_at' => '创建时间',
     'created_by' => '创建人',
-    'modify_at' => '修改时间',
+    'modified_at' => '修改时间',
+    'desc' => '描述',
   ),
   'tip' => 
   array (
@@ -85,5 +87,6 @@ return array (
     'Modify Role' => '修改角色',
     'Products' => '产品',
     'Products system' => '产品系统',
+    'Category' => '产品分类',
   ),
 );

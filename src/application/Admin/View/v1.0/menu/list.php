@@ -4,7 +4,7 @@ use Lxh\Admin\Kernel\Url;
 ?>
 
 <?php echo render_view('component.search-items', [
-    'opts' => [
+    'items' => [
         [
             ['view' => 'enum/align-search', 'vars' => ['name' => 'type','options' => [1, 2]]],
         ],

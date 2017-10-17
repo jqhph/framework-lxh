@@ -8,10 +8,10 @@
 use Lxh\Admin\Kernel\Url;
 ?>
 <tr>
-    <?php foreach ($titles as $name => & $v) { ?>
+    <?php foreach ($items as $name => & $v) { ?>
     <th><?php
-        if (! empty($titles[$name]['view'])) {
-            echo render_view('component.fields/' . $titles[$name]['view'], ['val' => get_value($r, $name), 'name' => $name]);
+        if (! empty($v['view'])) {
+            echo render_view('component.fields/' . $v['view'], ['val' => get_value($r, $name), 'name' => $name]);
         } else {
             echo get_value($r, $name);
         }
