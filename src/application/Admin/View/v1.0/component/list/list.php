@@ -33,7 +33,7 @@ if (! empty($searchItems))  echo render_view('component.search-items', ['items' 
         <div class="table-rep-plugin">
             <div class="btn-toolbar" >
                 <div class="btn-group dropdown-btn-group pull-right">
-                    <a href="<?php echo $createUrl; ?>" data-action="create-row" class="btn btn-success"><?php echo trans($createBtnText); ?></a>
+                    <a href="<?php echo $createUrl; ?>" data-action="create-row" class="btn btn-success  waves-effect waves-float"><?php echo trans($createBtnText); ?></a>
                 </div>
             </div>
             <div class="dt-buttons btn-group"></div>

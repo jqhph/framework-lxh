@@ -9,6 +9,19 @@ define([], function () {
             this.$items = this.$fields.find('a.btn')
 
             this.$items.click(this.events.select.bind(this))
+
+            this.$input = $('#align-search')
+
+            var values = this.$input.val()
+
+            if (values) {
+                // 默认选中已搜索选项
+                var $box = this.$input.parent()
+                values = values.split(',')
+                for (var i in values) {
+                    $box.find('[data-value="'+ values[i] +'"]').removeClass('btn-trans')
+                }
+            }
         },
 
         events: {

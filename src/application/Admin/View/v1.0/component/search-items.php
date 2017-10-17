@@ -13,7 +13,7 @@
             <div class="card-box search-form">
                 <div class="card-box-header">
                     <span class="card-box-title"><?php echo trans_with_global('Search Items')?></span>
-                    <div class="pull-right"><a data-action="toggle-search-content" class="btn btn-purple btn-trans"><?php echo trans_with_global('Hidden')?></a></div>
+                    <div class="pull-right"><a data-action="toggle-search-content" class="btn btn-purple btn-trans waves-effect waves-float"><?php echo trans_with_global('Hidden')?></a></div>
                 </div>
                 <div class="card-box-line"></div>
                 <div class="search-card-box-content">
@@ -30,8 +30,8 @@
                     <?php } ?>
                     <div style="height: 1em"></div>
                     <div class="pull-left">
-                        <a data-action="page-search" class="btn btn-primary "><?php echo trans_with_global('Search')?>&nbsp; <i class="fa fa-search"></i></a>&nbsp;
-                        <a data-action="page-search-reset" class="btn btn-default"><?php echo trans_with_global('Reset'); ?></a>
+                        <a data-action="page-search" class="btn btn-primary waves-effect waves-float"><?php echo trans_with_global('Search')?>&nbsp; <i class="fa fa-search"></i></a>&nbsp;
+                        <a data-action="page-search-reset" class="btn btn-default waves-effect waves-float"><?php echo trans_with_global('Reset'); ?></a>
                     </div>
                     <div class="clearfix"></div>
                 </div>

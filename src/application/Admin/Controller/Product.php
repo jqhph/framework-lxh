@@ -14,7 +14,7 @@ use Lxh\Http\Response;
 class Product extends Controller
 {
     protected $btns = [
-        'create' => 'Create Product'
+        'create' => 'Create'
     ];
 
     public function initialize()
@@ -28,7 +28,7 @@ class Product extends Controller
      *
      * @return array
      */
-    protected function makeListTableTitles()
+    protected function makeListItems()
     {
         return [
             'id' => ['priority' => 0,],
@@ -45,8 +45,23 @@ class Product extends Controller
             'desc' => [],
             'category_id' => ['view' => ''],
             'created_at' => ['view' => 'varchar/date-list'],
-            'modify_at' => ['view' => 'varchar/date-list'],
+            'modified_at' => ['view' => 'varchar/date-list'],
             'created_by' => [],
+        ];
+    }
+
+    protected function makeSearchItems()
+    {
+        return [
+            [
+                ['view' => 'varchar/search', 'vars' => ['name' => 'name']],
+                ['view' => 'varchar/date-search', 'vars' => ['name' => 'created_at']],
+
+            ],
+            [
+                ['view' => 'enum/align-search', 'vars' => ['name' => 'level', 'options' => [1, 2, 3, 4, 5]]],
+                ['view' => 'enum/fliter-search', 'vars' => ['name' => 'created_by_id', 'options' => [1, 2, 3, 4]]],
+            ],
         ];
     }
 
@@ -55,19 +70,19 @@ class Product extends Controller
      *
      * @return array
      */
-    protected function makeDetailFields($id = null)
+    protected function makeDetailItems($id = null)
     {
         return [
-            ['view' => 'varchar/edit', 'vars' => ['name' => 'name', 'labelCol' => 1, 'formCol' => 9]],
-            ['view' => 'varchar/edit', 'vars' => ['name' => 'price', 'labelCol' => 1, 'formCol' => 9]],
-            ['view' => 'varchar/edit', 'vars' => ['name' => 'counter_price', 'labelCol' => 1, 'formCol' => 9]],
-            ['view' => 'varchar/edit', 'vars' => ['name' => 'share_price', 'labelCol' => 1, 'formCol' => 9]],
-            ['view' => 'varchar/edit', 'vars' => ['name' => 'stock', 'labelCol' => 1, 'formCol' => 9]],
-            ['view' => 'varchar/edit', 'vars' => ['name' => 'desc', 'labelCol' => 1, 'formCol' => 9]],
-            ['view' => 'enum/edit', 'vars' => ['name' => 'level', 'labelCol' => 1, 'formCol' => 9]],
-            ['view' => 'bool/edit', 'vars' => ['name' => 'is_new', 'labelCol' => 1, 'formCol' => 9]],
-            ['view' => 'bool/edit', 'vars' => ['name' => 'is_hot', 'labelCol' => 1, 'formCol' => 9]],
-            ['view' => 'date/edit', 'vars' => ['name' => 'calendar', 'labelCol' => 1, 'formCol' => 9]],
+            ['view' => 'varchar/edit', 'vars' => ['name' => 'name', 'labelCol' => 2, 'formCol' => 9]],
+            ['view' => 'varchar/edit', 'vars' => ['name' => 'price', 'labelCol' => 2, 'formCol' => 9]],
+            ['view' => 'varchar/edit', 'vars' => ['name' => 'counter_price', 'labelCol' => 2, 'formCol' => 9]],
+            ['view' => 'varchar/edit', 'vars' => ['name' => 'share_price', 'labelCol' => 2, 'formCol' => 9]],
+            ['view' => 'varchar/edit', 'vars' => ['name' => 'stock', 'labelCol' => 2, 'formCol' => 9]],
+            ['view' => 'varchar/edit', 'vars' => ['name' => 'desc', 'labelCol' => 2, 'formCol' => 9]],
+            ['view' => 'enum/edit', 'vars' => ['name' => 'level', 'labelCol' => 2, 'formCol' => 9]],
+            ['view' => 'bool/edit', 'vars' => ['name' => 'is_new', 'labelCol' => 2, 'formCol' => 9]],
+            ['view' => 'bool/edit', 'vars' => ['name' => 'is_hot', 'labelCol' => 2, 'formCol' => 9]],
+            ['view' => 'date/edit', 'vars' => ['name' => 'calendar', 'labelCol' => 2, 'formCol' => 9]],
 
         ];
     }

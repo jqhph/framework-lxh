@@ -122,7 +122,7 @@
         this.$btnToolbar = $('.btn-toolbar')//$('<div class="btn-toolbar" />');
 
         this.$dropdownGroup = $('<div class="btn-group dropdown-btn-group pull-right" />');
-        this.$dropdownBtn = $('<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">' + trans('Display') + ' <span class="caret"></span></button>');
+        this.$dropdownBtn = $('<button class="btn btn-default dropdown-toggle  waves-effect waves-float" data-toggle="dropdown">' + trans('Display') + ' <span class="caret"></span></button>');
         this.$dropdownContainer = $('<ul class="dropdown-menu"/>');
 
         // Focus btn
@@ -131,7 +131,7 @@
          // Display-all btn
         if(this.options.addDisplayAllBtn) {
             // Create display-all btn
-            this.$displayAllBtn = $('<button class="btn btn-default">' + trans('Display all') + '</button>');
+            this.$displayAllBtn = $('<button class="btn btn-default  waves-effect waves-float">' + trans('Display all') + '</button>');
             // Add display-all btn to dropdown-btn-group
             this.$dropdownGroup.append(this.$displayAllBtn);
 

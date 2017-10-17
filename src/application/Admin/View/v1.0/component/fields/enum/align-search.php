@@ -5,8 +5,14 @@
  * @author Jqh
  * @date   2017/7/31 14:43
  */
-$btnColors = ['success ', 'custom ', 'purple ', 'danger ', 'primary ', 'warning ', 'info ', 'pink '];
-$i = 0;
+$btnColors = ['success ', 'danger', 'custom ', 'purple', 'primary ', 'info ', ]; // 'pink '
+//$btnColors = ['success', 'custom','success','danger','success','purple','success','success'];
+//$btnColors = ['info', 'info','info','info','info','info','info','info'];
+if (empty($GLOBALS['__i__'])) $GLOBALS['__i__'] = 0;
+
+$GLOBALS['__i__'] ++;
+
+$i = $GLOBALS['__i__'] - 1;
 
 $value = isset($value) ? $value : get_value($_REQUEST, $name, false);
 
@@ -18,10 +24,18 @@ $value = isset($value) ? $value : get_value($_REQUEST, $name, false);
             <p class="form-control-static"><span><?php echo trans($name, 'fields') . trans_with_global(':');?> </span></p>
         </div>
         <div class="form-group fields-radio" style="width: 85%">
-            <input type="hidden" name="<?php echo $name;?>" value="" />
-            <?php $i++; foreach ($options as & $o) { ?>
-                <a data-value="<?php echo $o;?>" class="btn btn-<?php echo $btnColors[$i]; if ($value != $o) echo ' btn-trans';?> "><?php echo trans_option($o, $name);?></a>
-            <?php $i++; if ($i > 8) $i = 0; } ?>
+            <input type="hidden" name="<?php echo $name;?>" value="<?php echo $value?>" id="align-search"/>
+            <?php foreach ($options as & $o) { ?>
+                <?php if (is_array($o)) {?>
+                    <a data-value="<?php echo $o['value'];?>" class=" waves-effect waves-float btn btn-<?php echo $btnColors[$i]; if ($value != $o) echo ' btn-trans';?> ">
+                        <?php echo $o['name'];?>
+                    </a>
+                <?php } else { ?>
+                <a data-value="<?php echo $o;?>" class=" waves-effect waves-float btn btn-<?php echo $btnColors[$i]; if ($value != $o) echo ' btn-trans';?> ">
+                    <?php echo trans_option($o, $name);?>
+                </a>
+                <?php } ?>
+                    <?php  } ?>
         </div>
 
     </form>
