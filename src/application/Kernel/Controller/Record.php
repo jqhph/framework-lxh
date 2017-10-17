@@ -17,7 +17,16 @@ use Lxh\Http\Response;
 
 class Record extends LxhController
 {
+    // 是否加载自身js，否则加载公共js
+    protected $loadJs = false;
+
     protected $maxSize = 20;
+
+    protected $detailTemplate = 'component.detail.detail';
+
+    protected $createTemplate = 'component.detail.detail';
+
+    protected $listTemplate = 'component.list.list';
 
     protected $btns = [
         'create' => 'Create'
@@ -57,11 +66,17 @@ class Record extends LxhController
         }
 
         // 获取列表table标题信息
-        $titles = $this->makeListTableTitles();
+        $titles = $this->makeListItems();
 
         return $this->render(
-            'list',
-            ['list' => & $list, 'searchItems' => $this->makeSearchItems(), 'titles' => & $titles, 'pages' => & $pageString, 'btns' => & $this->btns],
+            $this->listTemplate,
+            [
+                'list' => & $list,
+                'searchItems' => $this->makeSearchItems(),
+                'items' => & $titles,
+                'pages' => & $pageString,
+                'btns' => & $this->btns
+            ],
             true
         );
     }
@@ -71,7 +86,7 @@ class Record extends LxhController
      *
      * @return array
      */
-    protected function makeListTableTitles()
+    protected function makeListItems()
     {
         return [];
     }
@@ -100,7 +115,15 @@ class Record extends LxhController
 
         $this->share('navTitle', $currentTitle);
 
-        return $this->render('detail', ['detailFields' => $this->makeDetailFields()], true);
+        return $this->render(
+            $this->createTemplate,
+            [
+                'items' => $this->makeDetailItems(),
+                'loadJs' => $this->loadJs,
+                'validatorRules' => $this->makeClientValidatorRules()
+            ]
+            , true
+        );
     }
 
     /**
@@ -108,7 +131,7 @@ class Record extends LxhController
      *
      * @return array
      */
-    protected function makeDetailFields($id = null)
+    protected function makeDetailItems($id = null)
     {
         return [];
     }
@@ -144,11 +167,23 @@ class Record extends LxhController
 
         $this->share('navTitle', $currentTitle);
 
-        return $this->render('detail', [
-            'row' => & $row, 'detailFields' => $this->makeDetailFields($id)
-        ], true);
+        return $this->render(
+            $this->detailTemplate,
+            [
+                'row' => & $row,
+                'items' => $this->makeDetailItems($id),
+                'loadJs' => $this->loadJs,
+                'validatorRules' => $this->makeClientValidatorRules()
+            ],
+            true
+        );
     }
 
+    // 前端字段验证规则
+    protected function makeClientValidatorRules()
+    {
+        return [];
+    }
 
     /**
      * 生成where条件内容

@@ -44,11 +44,11 @@ class Controller extends FileGenerator
                 '{updateValidate}' => $this->makeUpdateValidate(),
                 '{deleteValidate}' => $this->makeDeleteValidate(),
                 '{controllerEnName}' => $this->options('en_name'),
-                '{listTableTitles}' => $this->makeListTableTitles(),
+                '{listTableTitles}' => $this->makeListItems(),
                 '{maxSize}' => $this->options('limit', 20),
                 '{whereContent}' => $this->makePhpWhereContent(),
                 '{searchItems}' => $this->makePhpSearchItems(),
-                '{detailFields}' => $this->makeDetailFields(),
+                '{detailFields}' => $this->makeDetailItems(),
             ]
         );
     }
@@ -79,7 +79,7 @@ class Controller extends FileGenerator
      *
      * @return string
      */
-    protected function makeDetailFields()
+    protected function makeDetailItems()
     {
         return '[]';
     }
@@ -123,7 +123,7 @@ class Controller extends FileGenerator
         
     }
 
-    protected function makeListTableTitles()
+    protected function makeListItems()
     {
         return '[]';
     }

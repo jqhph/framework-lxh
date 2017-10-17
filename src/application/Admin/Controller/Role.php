@@ -21,14 +21,14 @@ class Role extends Controller
      *
      * @return array
      */
-    protected function makeListTableTitles()
+    protected function makeListItems()
     {
         return [
             'id' => ['priority' => 0,],
             'name' => [],
             'permissions' => ['view' => 'permit/btn'],
             'created_at' => ['view' => 'varchar/date-list'],
-            'modify_at' => ['view' => 'varchar/date-list'],
+            'modified_at' => ['view' => 'varchar/date-list'],
             'created_by' => [],
         ];
     }
@@ -48,7 +48,7 @@ class Role extends Controller
      *
      * @return array
      */
-    protected function makeDetailFields($id = null)
+    protected function makeDetailItems($id = null)
     {
         $permissions = ['menus' => [], 'custom' => []];
         if ($id) {
@@ -78,6 +78,14 @@ class Role extends Controller
         if (empty($fields['permissions'])) {
             return 'The permissions fields is required';
         }
+    }
+
+    // 前端字段验证规则
+    protected function makeClientValidatorRules()
+    {
+        return [
+            ['name' => 'name', 'rules' => 'required|length_between[2-30]']
+        ];
     }
 
 }
