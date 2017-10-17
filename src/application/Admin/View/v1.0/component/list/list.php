@@ -17,11 +17,11 @@ $loadPublicJs = isset($loadPublicJs) ? $loadPublicJs : true;
 $useRWD = isset($useRWD) ? $useRWD : true;
 
 // 模块名
-$scope = isset($scope) ? $scope : __CONTROLLER__;
+$scope = isset($scope) ? ' ' . $scope : __CONTROLLER__;
 
 $createUrl = Url::makeAction('create');
 
-$createBtnText = "Create $scope";
+$createBtnText = "Create";
 
 
 // 搜索项界面
