@@ -186,26 +186,16 @@ class Container implements ArrayAccess, ContractsContainer
      * @param  array  $parameters
      * @return mixed
      */
-    protected function resolve($name)
+    protected function resolve($abstract)
     {
         $object = '';
 
-        if ($binding = $this->getServiceBindings($name)) {
-            $abstract = & $name;
-        } else {
-            $abstract = $this->normalize($name);
-
-            if (isset($this->instances[$abstract])) return $this->instances[$abstract];
-
-            $binding = $this->getServiceBindings($abstract);
-        }
-
-        if ($binding) {
+        if ($binding = $this->getServiceBindings($abstract)) {
             $object = $this->resolveWithBindings($abstract, $binding);
         }
 
         if (! $object) {
-            $object = empty($binding['closure']) ? $this->build($name) : $binding['closure']($this);
+            $object = empty($binding['closure']) ? $this->build($abstract) : $binding['closure']($this);
         }
 
         // If we defined any extenders for this type, we'll need to spin through them
@@ -216,7 +206,7 @@ class Container implements ArrayAccess, ContractsContainer
         }
 
         if ($this->isShared($abstract)) {
-            $this->instances[get_class($object)] = $this->instances[$abstract] = $this->instances[$name] = $object;
+            $this->instances[get_class($object)] = $this->instances[$abstract] = $object;
         }
 
         $this->fireResolvingCallbacks($abstract, $object);
