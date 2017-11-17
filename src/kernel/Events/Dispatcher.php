@@ -152,8 +152,8 @@ class Dispatcher implements \Lxh\Contracts\Events\Dispatcher
 		// object and use the class as the event name and this event itself as the
 		// payload to the handler, which makes object based events quite simple.
 		if (is_object($event)) {
-			$event   = get_class($event);
 			$payload = [$event];
+			$event   = get_class($event);
 		}
 		
 		$responses = [];
