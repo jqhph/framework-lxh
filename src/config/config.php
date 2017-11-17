@@ -78,6 +78,7 @@ $config['add-config'] = [
 // 增加配置文件，并使用文件名作为key
 $config['add-config-name'] = [
     __ENV__ . '/client-config',
+    'mail'
 ];
 
 // 模块设定, 支持多模块, 多个用数组表示

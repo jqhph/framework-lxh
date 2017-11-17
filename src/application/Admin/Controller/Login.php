@@ -9,6 +9,7 @@
 namespace Lxh\Admin\Controller;
 
 use Lxh\Helper\Util;
+use Lxh\Mails\Test;
 use Lxh\MVC\Controller;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
@@ -19,7 +20,13 @@ class Login extends Controller
     {
 //        console_info(Util::toUnderScore('myAccountTest'));
 //        assign('test', $a);
-        return $this->render('index');
+//        return $this->render('index');
+
+        $test = new Test();
+
+//        $this->container['mailer']->to('841324345@qq.com')->send($test);
+
+        return $test->render();
     }
 
     public function actionRegister()

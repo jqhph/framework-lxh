@@ -5,6 +5,7 @@ namespace Lxh\Container;
 use Lxh\Exceptions\BindingResolutionException;
 use Lxh\Exceptions\InternalServerError;
 use Lxh\Exceptions\InvalidArgumentException;
+use Lxh\Mail\MailServiceProvider;
 use Lxh\View\ViewServiceProvider;
 
 trait Loader
@@ -129,6 +130,9 @@ trait Loader
         ],
         'view.factory' => [
             'provider' => ViewServiceProvider::class,
+        ],
+        'mailer' => [
+            'provider' => MailServiceProvider::class
         ],
         'track' => [
             'shared' => true,

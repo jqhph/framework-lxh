@@ -360,6 +360,19 @@ function array_except($array, $keys)
 }
 
 /**
+ * Get the class "basename" of the given object / class.
+ *
+ * @param  string|object  $class
+ * @return string
+ */
+function class_basename($class)
+{
+    $class = is_object($class) ? get_class($class) : $class;
+
+    return basename(str_replace('\\', '/', $class));
+}
+
+/**
  * Escape HTML special characters in a string.
  *
  * @param  Htmlable|string  $value
@@ -511,6 +524,16 @@ function query($name = 'primary')
 function get_value(array & $data, $key, $default = null)
 {
     return isset($data[$key]) ? $data[$key] : $default;
+}
+
+function get_isset(& $data, $key, $default = null)
+{
+    return isset($data[$key]) ? $data[$key] : $default;
+}
+
+function get_not_empty(& $data, $key, $default = null)
+{
+    return !empty($data[$key]) ? $data[$key] : $default;
 }
 
 /**

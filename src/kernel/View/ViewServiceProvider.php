@@ -50,6 +50,8 @@ class ViewServiceProvider extends ServiceProvider
 
             $env->share('app', $app);
 
+            $app->instance(\Lxh\Contracts\View\Factory::class, $env);
+
             return $env;
         });
     }

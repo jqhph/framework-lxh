@@ -78,7 +78,7 @@ class Container implements ArrayAccess, ContractsContainer
     }
 
     /**
-     * 保存一个实例到容器
+     * 保存数据到容器
      *
      * @param string $abstract 别名、类名
      * @param object $instance 对象
@@ -86,12 +86,6 @@ class Container implements ArrayAccess, ContractsContainer
      */
     public function instance($abstract, $instance)
     {
-        if (! $abstract) {
-            throw new InternalServerError('Name is empty, save the instance failure');
-        }
-        if (! is_object($instance)) {
-            throw new InternalServerError('Variable type error');
-        }
         $this->instances[$abstract] = $instance;
     }
 
