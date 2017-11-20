@@ -107,6 +107,11 @@ class Mailable implements MailableContract, Renderable
     public $callbacks = [];
 
     /**
+     * @var bool
+     */
+    protected $renderWithBrowser = false;
+
+    /**
      * Send the message using the given mailer.
      *
      * @param  \Lxh\Contracts\Mail\Mailer  $mailer
@@ -114,6 +119,7 @@ class Mailable implements MailableContract, Renderable
      */
     public function send(MailerContract $mailer)
     {
+        $this->renderWithBrowser = false;
 //        Container::getInstance()->call([$this, 'build']);
         $this->build();
 
@@ -124,6 +130,16 @@ class Mailable implements MailableContract, Renderable
                  ->buildAttachments($message)
                  ->runCallbacks($message);
         });
+    }
+
+    // 获取网站目录路径
+    // 用户浏览器预览图片
+    public function normalizePublicPath($path)
+    {
+        if ($this->renderWithBrowser) {
+            return $path;
+        }
+        return rtrim(__PUBLIC_ROOT__, '/') . $path;
     }
 
     /**
@@ -172,6 +188,7 @@ class Mailable implements MailableContract, Renderable
      */
     public function render()
     {
+        $this->renderWithBrowser = true;
 //        Container::getInstance()->call([$this, 'build']);
         $this->build();
 

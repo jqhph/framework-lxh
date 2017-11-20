@@ -8,9 +8,9 @@ class Test extends Mailable
 {
     public function build()
     {
-        $this->from('example@example.com')
-            ->subject('测试邮件')
-            ->with('test', 'hehe')
-            ->view('emails.test');
+        $icon = $this->normalizePublicPath(load_img('favicon.ico'));
+
+        $this->subject('测试邮件')
+             ->view('emails.test', ['test' => 'haha', 'icon' => $icon]);
     }
 }

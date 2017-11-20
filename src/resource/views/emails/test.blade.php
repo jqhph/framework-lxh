@@ -1,7 +1,8 @@
-<h3>{{$test}} test emial</h3>
+@component('mail.message', ['url' => ''])
+    @component('mail.button', ['url' => ''])
+    View Order
+    @endcomponent
 
-@component('mail.button', ['url' => ''])
-View Order
+ <img src="{{ $mailer->embed($icon) }}">
 @endcomponent
 
-<img src="{{ $mailer->embed(load_img('favicon.ico')) }}">

@@ -24,7 +24,7 @@ class Login extends Controller
 
         $test = new Test();
 
-//        $this->container['mailer']->to('841324345@qq.com')->send($test);
+        $this->container['mailer']->to('841324345@qq.com')->send($test);
 
         return $test->render();
     }

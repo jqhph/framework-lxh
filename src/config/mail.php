@@ -29,7 +29,7 @@ return [
     |
     */
 
-    'host' => '50.23.125.205',
+    'host' => 'smtp.qq.com',
 
     /*
     |--------------------------------------------------------------------------
@@ -42,7 +42,7 @@ return [
     |
     */
 
-    'port' => '25',
+    'port' => 587,
 
     /*
     |--------------------------------------------------------------------------
@@ -56,8 +56,8 @@ return [
     */
 
     'from' => [
-        'address' => 'hello@example.com',
-        'name' => 'Example',
+        'address' => '841324345@qq.com',
+        'name' => '江',
     ],
 
     /*
@@ -82,9 +82,9 @@ return [
     | connection. You may also set the "password" value below this one.
     |
     */
-    'username' => 'MAIL_USERNAME',
+    'username' => '841324345@qq.com',
 
-    'password' => 'MAIL_PASSWORD',
+    'password' => 'ucztnsvzapvwbcge',
 
     /*
     |--------------------------------------------------------------------------
