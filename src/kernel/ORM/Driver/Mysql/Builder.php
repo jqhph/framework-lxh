@@ -358,7 +358,7 @@ class Builder
             throw new InternalServerError('Can not found table name.');
         }
 
-        $content = $this->query->connection()->one($this->querySql() . ' LIMIT 1', $this->whereData);
+        $content = $this->query->connection()->one($this->querySql()['sql'] . ' LIMIT 1', $this->whereData);
 
         $this->clear();
 
@@ -374,7 +374,7 @@ class Builder
             throw new InternalServerError('Can not found table name.');
         }
 
-        $content = $this->query->connection()->all($this->querySql(), $this->whereData);
+        $content = $this->query->connection()->all($this->querySql()['sql'], $this->whereData);
 
         $this->clear();
 
