@@ -31,7 +31,7 @@ class Config extends Entity
      *
      * @var array
      */
-    protected $confFiles = ['config'];
+    protected $confFiles = ['config', 'app'];
 
     /**
      * 可写配置参数
@@ -53,15 +53,20 @@ class Config extends Entity
         foreach ($this->confFiles as & $f) {
             $file = "{$pre}{$f}.php";
 
-            $this->items += (array) include $file;
+            if (is_file($file)) {
+                $this->items += include $file;
+            }
+        }
+        if (count($this->items) < 1) {
+            throw new InvalidArgumentException('初始配置文件不存在或文件内容为空！');
         }
 
         foreach ((array)$this->get('add-config') as & $filename) {
-            $this->items += (array) include "{$pre}{$filename}.php";
+            $this->items += include "{$pre}{$filename}.php";
         }
 
         foreach ((array)$this->get('add-config-name') as $k => & $filename) {
-            $this->items[basename($filename)] = (array) include "{$pre}{$filename}.php";
+            $this->items[basename($filename)] = include "{$pre}{$filename}.php";
         }
 
         $this->writableData = include $this->getWritableConfigPath();

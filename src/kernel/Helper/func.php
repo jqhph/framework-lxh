@@ -39,6 +39,48 @@ $GLOBALS['use-blade-engine'] = $GLOBALS['CONFIG']->get('use-blade-engine');
 $GLOBALS['view-version']     = $GLOBALS['CONFIG']->get('view-version', 'v1.0');
 
 /**
+ * 获取项目根目录路径
+ *
+ * @param string $path
+ * @return string
+ */
+function base_path($path = null)
+{
+    if ($path) {
+        return __ROOT__ . $path;
+    }
+    return __ROOT__;
+}
+
+/**
+ * 获取data目录路径
+ *
+ * @param string $path
+ * @return string
+ */
+function data_path($path = null)
+{
+    if ($path) {
+        return __DATA_ROOT__ . $path;
+    }
+    return __DATA_ROOT__;
+}
+
+/**
+ * 获取配置文件路径
+ *
+ * @param string $path
+ * @return string
+ */
+function config_path($path = null)
+{
+    if ($path) {
+        return __ROOT__ . 'config/' . $path;
+    }
+    return  __ROOT__ . 'config/';
+}
+
+/**
  * 获取容器对象
  *
  * @return Container
