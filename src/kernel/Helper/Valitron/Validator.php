@@ -1038,13 +1038,55 @@ class Validator
     /**
      * Convenience method to add multiple validation rules with an array
      *
+     * $this->rules(['name' =>'required|max:400|between:1,5']);
+     *
+     * $this->rules(
+            [
+              'name' => ['required', 'max' => 400, 'between' => [1, 5]]
+           ]
+     * );
+     *
      * @param array $rules
      */
-    public function rules(& $rules)
+    public function rules($rules)
     {
-    	foreach ($rules as & $rule) {
-    		call_user_func_array([$this, 'rule'], $rule);
-    	}
-    	return $this;
+        foreach ((array) $rules as $field => &$rows) {
+            if (is_string($rows)) {
+                $rows = explode('|', $rows);
+            }
+
+            foreach ($rows as $k => & $item) {
+                $params = [];
+
+                if (is_string($k)) {
+                    $params[] = $k;
+                    $params[] = $field;
+
+                    $params = array_merge($params, $item);
+                } else {
+                    if (is_string($item)) {
+                        $item = explode(':', $item);
+                    }
+                    $params[] = $item[0];
+                    $params[] = $field;
+
+                    if (isset($item[1])) {
+                        $item[1] = explode(',', $item[1]);
+
+                        $params = array_merge($params, $item[1]);
+                    }
+                }
+
+                call_user_func_array([$this, 'rule'], $params);
+            }
+        }
+
+        return $this;
+
+        //    	foreach ($rules as & $rule) {
+        //    		call_user_func_array([$this, 'rule'], $rule);
+        //    	}
+        //    	return $this;
+
     }
 }

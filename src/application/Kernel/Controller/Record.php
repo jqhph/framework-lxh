@@ -261,17 +261,18 @@ class Record extends LxhController
             return $this->error();
         }
 
-        $validator = $this->validator();
-
-        $validator->fill($_POST);
+        if ($rules = $this->rules()) {
+            $validator = $this->validator();
+            $validator->fill($_POST);
+        }
 
         // 验证表单数据
-        if ($msg = $this->updateValidate(null, $_POST, $validator)) {
+        if ($msg = $this->updateValidate(null, $_POST)) {
             return $this->error($msg);
         }
 
         // 验证并获取结果
-        if (! $validator->validate()) {
+        if ($rules && ! $validator->validate()) {
             return $this->error($validator->errors());
         }
 
@@ -307,17 +308,20 @@ class Record extends LxhController
             return $this->error();
         }
 
-        $validator = $this->validator();
+        if ($rules = $this->rules()) {
+            $validator = $this->validator();
 
-        $validator->fill($data);
+            $validator->fill($data);
+            $validator->rules($rules);
+        }
 
         // 验证表单数据
-        if ($msg = $this->updateValidate($params['id'], $data, $validator)) {
+        if ($msg = $this->updateValidate($params['id'], $data)) {
             return $this->error($msg);
         }
 
         // 验证并获取结果
-        if (! $validator->validate()) {
+        if ($rules && ! $validator->validate()) {
             return $this->error($validator->errors());
         }
 
@@ -336,9 +340,17 @@ class Record extends LxhController
      * @param  array
      * @return array
      */
-    protected function updateValidate($id, array & $fields, Validator $validator)
+    protected function updateValidate($id, array & $fields)
     {
+    }
 
+    /**
+     * 表单字段验证规则
+     *
+     * @return void|array
+     */
+    protected function rules()
+    {
     }
 
     /**

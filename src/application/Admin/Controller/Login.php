@@ -19,12 +19,6 @@ class Login extends Controller
     public function actionIndex(Request $request, Response $response, $params)
     {
         return $this->render('index');
-
-//        $test = new Test();
-
-//        $this->container['mailer']->to('841324345@qq.com')->send($test);
-
-//        return $test->render();
     }
 
     public function actionRegister()

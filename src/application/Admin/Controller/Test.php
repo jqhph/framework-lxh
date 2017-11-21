@@ -16,11 +16,31 @@ class Test extends Controller
     public function actionTest(Request $req, Response $resp, & $params)
     {
 
-        $qrCode = new QrCode('10013');
+        $post = [
+            'name' => '1231234',
+            'email' => 'd@qq.com'
+        ];
 
-        $resp->withHeader('Content-Type', $qrCode->getContentType());
+        $rules = [
+            'name' => 'required|lengthBetween:3,7',
+            'email' => 'required|email'
+        ];
 
-        return $qrCode->writeString();
+        $v = resolve('validator');
+
+        $v->fill($post)->rules($rules);
+
+        // 验证并获取结果
+        if (! $v->validate()) {
+            return $v->errors();
+        }
+
+        return 'success';
+//        $qrCode = new QrCode('10013');
+//
+//        $resp->withHeader('Content-Type', $qrCode->getContentType());
+//
+//        return $qrCode->writeString();
     }
 
     public function actionHello()

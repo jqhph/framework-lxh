@@ -26,25 +26,28 @@ class Menu extends Controller
      * @param  array
      * @return mixed
      */
-    protected function updateValidate($id, array & $fields, Validator $validator)
+    protected function updateValidate($id, array & $fields)
     {
         if ($fields['parent_id'] == $id) {
             return 'Can\'t put self as a parent';
         }
+    }
 
-        $validator->rule('required', ['name', 'priority']);
-
-        $validator->rule('lengthBetween', 'icon', 4, 30);
-
-        $validator->rule('lengthBetween', 'name', 4, 30);
-
-        $validator->rule('lengthBetween', 'controller', 1, 15);
-
-        $validator->rule('lengthBetween', 'action', 1, 15);
-
-        $validator->rule('required', 'parent_id');
-
-        $validator->rule('integer', 'priority');
+    /**
+     * 表单字段验证规则
+     *
+     * @return void|array
+     */
+    protected function rules()
+    {
+        return [
+            'name' => 'required',
+            'priority' => 'required|integer',
+            'icon' => 'lengthBetween:4,30',
+            'controller' => 'lengthBetween:1,15',
+            'action' => 'lengthBetween:1,15',
+            'parent_id' => 'required'
+        ];
     }
 
     // 删除操作验证方法
