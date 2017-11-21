@@ -70,13 +70,16 @@ class Category extends Controller
         ];
     }
 
-    protected function updateValidate($id, array & $fields, Validator $validator)
+    protected function rules()
+    {
+        return [
+            'name' => 'required|lengthBetween:2,30'
+        ];
+    }
+
+    protected function updateValidate($id, array & $fields)
     {
         unset($fields['created_at'], $fields['modified_at'], $fields['created_by_id'], $fields['created_by']);
-
-        $validator->rule('required', 'name');
-
-        $validator->rule('lengthBetween', 'name', 2, 30);
     }
 
 

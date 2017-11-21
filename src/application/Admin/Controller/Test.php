@@ -18,11 +18,11 @@ class Test extends Controller
 
         $post = [
             'name' => '1231234',
-            'email' => 'd@qq.com'
+            'email' => '123@qq.com'
         ];
 
         $rules = [
-            'name' => 'required|lengthBetween:3,7',
+            'name' => 'required|lengthBetween:3,6',
             'email' => 'required|email'
         ];
 

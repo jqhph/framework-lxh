@@ -38,7 +38,7 @@ class System extends Controller
      */
     public function actionCreateModule()
     {
-        $code = make('code.generator');
+        $code = resolve('code.generator');
 
         $fields = $code->make($_REQUEST);
 
@@ -121,11 +121,11 @@ class System extends Controller
     // 清除客户端所有缓存接口
     public function actionClearAllClientCache()
     {
-        if (! user()->isAdmin()) {
+        if (! admin()->isAdmin()) {
             return $this->failed('Forbidden');
         }
 
-        if (make('front.client')->clearCache()) {
+        if (resolve('front.client')->clearCache()) {
             return $this->success();
         }
 
@@ -135,11 +135,11 @@ class System extends Controller
     // 清除客户端js缓存接口
     public function actionClearClientCache()
     {
-        if (! user()->isAdmin()) {
+        if (! admin()->isAdmin()) {
             return $this->failed('Forbidden');
         }
 
-        if (make('front.client')->updateCache()) {
+        if (resolve('front.client')->updateCache()) {
             return $this->success();
         }
 

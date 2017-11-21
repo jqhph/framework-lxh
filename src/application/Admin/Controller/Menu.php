@@ -68,7 +68,7 @@ class Menu extends Controller
     {
         $currentTitle = 'Create Menu';
 
-        $menus = make('acl-menu')->all();
+        $menus = resolve('acl-menu')->all();
 
         array_unshift($menus, ['id' => 0, 'name' => trans('Top level'), 'required' => 1]);
 
@@ -95,7 +95,7 @@ class Menu extends Controller
 
         $row = $model->find();
 
-        $menus = make('acl-menu')->all();
+        $menus = resolve('acl-menu')->all();
 
         $currentTitle = 'Modify menu';
 
@@ -133,7 +133,7 @@ class Menu extends Controller
             ],
         ];
 
-        $list = make('acl-menu')->all();
+        $list = resolve('acl-menu')->all();
 
         $this->share('titles', $titles);
 

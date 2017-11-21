@@ -117,7 +117,7 @@ class Validator
     	self::$_lang = $lang;
     	return $this;
     }
-    
+
     /**
      * 设置语言包路径
      * */
@@ -806,9 +806,14 @@ class Validator
      * @param  string $msg
      * @return $this
      */
-    public function message($msg)
+    public function message($rule, $msg = null)
     {
-        $this->_validations[count($this->_validations) - 1]['message'] = $msg;
+//        $this->_validations[count($this->_validations) - 1]['message'] = $msg;
+        if (is_array($rule)) {
+            static::$_ruleMessages = array_merge(static::$_ruleMessages, $rule);
+        } else {
+            static::$_ruleMessages[$rule] = &$msg;
+        }
 
         return $this;
     }
@@ -873,40 +878,42 @@ class Validator
     public function validate()
     {
         foreach ($this->_validations as & $v) {
-            foreach ($v['fields'] as & $field) {
-                 list($values, $multiple) = $this->getPart($this->_fields, explode('.', $field));
-                 
-                // Don't validate if the field is not required and the value is empty
+            $field = &$v['fields'];
+
+             list($values, $multiple) = $this->getPart($this->_fields, explode('.', $field));
+
+            // Don't validate if the field is not required and the value is empty
 //                 if ($this->hasRule('optional', $field) && isset($values)) {
 //                     //Continue with execution below if statement
 //                 } else
-                if ($v['rule'] !== 'required' && !$this->hasRule('required', $field) 
-                		&& (empty($values) || ($multiple && count($values) == 0))) {
-                    continue;
-                }
+            if ($v['rule'] !== 'required' && !$this->hasRule('required', $field)
+                    && (empty($values) || ($multiple && count($values) == 0))) {
+                continue;
+            }
 
-                // Callback is user-specified or assumed method on class
-                if (isset(static::$_rules[$v['rule']])) {
-                    $callback = static::$_rules[$v['rule']];
-                } else {
-                    $callback = array($this, 'validate' . $v['rule']);
-                }
-                
-                if (!$multiple) {
-                    $values = array($values);
-                }
+            // Callback is user-specified or assumed method on class
+            if (isset(static::$_rules[$v['rule']])) {
+                $callback = static::$_rules[$v['rule']];
+            } else {
+                $callback = array($this, 'validate' . $v['rule']);
+            }
 
-//                $result = true;
-     
-                foreach ($values as & $value) {
-                    $result = call_user_func($callback, $field, $value, $v['params']);
-                    
-                    if (! $result) {
-                    	$this->error($field, $v['message'], $v['params']);
-                    	return false;
-                    }
-                }
+            if (!$multiple) {
+                $values = array($values);
+            }
 
+            foreach ($values as & $value) {
+                $result = call_user_func($callback, $field, $value, $v['params']);
+
+                if (! $result) {
+                    $this->error(
+                        $field,
+                        // Ensure rule has an accompanying message
+                        $message = '{field} ' .  (isset(static::$_ruleMessages[$v['rule']]) ? static::$_ruleMessages[$v['rule']] : self::ERROR_DEFAULT),
+                        $v['params']
+                    );
+                    return false;
+                }
             }
         }
 
@@ -924,7 +931,7 @@ class Validator
     {
         foreach ($this->_validations as & $validation) {
             if ($validation['rule'] == $name) {
-                if (in_array($field, $validation['fields'])) {
+                if ($field == $validation['fields']) {
                     return true;
                 }
             }
@@ -968,17 +975,13 @@ class Validator
             }
         }
 
-        // Ensure rule has an accompanying message
-        $message = isset(static::$_ruleMessages[$rule]) ? static::$_ruleMessages[$rule] : self::ERROR_DEFAULT;
-
         // Get any other arguments passed to function
         $params = array_slice(func_get_args(), 2);
 
         $this->_validations[] = array(
-            'rule' => & $rule,
-            'fields' => (array) $fields,
-            'params' => (array) $params,
-            'message' => '{field} ' . $message
+            'rule' => &$rule,
+            'fields' => &$fields,
+            'params' => (array) $params
         );
 
         return $this;
