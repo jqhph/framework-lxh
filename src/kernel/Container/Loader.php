@@ -53,7 +53,7 @@ trait Loader
         'query' => [
             'shared' => false,
             'class' => 'Lxh\ORM\Query',
-            'dependencies' => ['builder.manager', 'container']
+            'dependencies' => ['container']
         ],
         'controller.manager' => [
             'shared' => true,

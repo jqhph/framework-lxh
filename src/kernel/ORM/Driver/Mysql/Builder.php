@@ -66,11 +66,18 @@ class Builder
      */
     protected $varPattern = '/^[\w0-9_]+$/i';
 
+    /**
+     * @var Where
+     */
+    protected $where;
+
     public function __construct(Container $container, Query $query)
     {
         $this->container = $container;
 
         $this->query = $query;
+
+        $this->where = new Where();
     }
 
     public function from(& $table)
@@ -84,7 +91,12 @@ class Builder
     {
         $tb = $table ? $table : $this->tableName;
 
-        $this->whereHandler($this->wheres, $tb, $p1, $p2, $p3, $this->whereData);
+//        $this->whereHandler($this->wheres, $tb, $p1, $p2, $p3, $this->whereData);
+        $content = $this->where->table($tb)->build($p1, $p2, $p3)->pull();
+
+        $this->wheres = &$content['where'];
+        $this->orWheres = &$content['orWhere'];
+        $this->whereData = array_merge($this->whereData, $content['params']);
 
         return $this;
     }
@@ -224,138 +236,15 @@ class Builder
         return $this->leftJoin($left, "`$table2`.id", "$as.{$this->tableName}_id");
     }
 
-
-    /**
-     * 解析where条件字句
-     *
-     * @param array $data 保存where字句的数组
-     * @param string $TB where字句条件字段所属的表
-     * @param string|array $p1 where字句字段
-     * @param string|array|null $p2 操作符或条件值
-     * @param string|array $p3条件值
-     * @param array $prepareData 用于保存pdo预处理数据
-     * @param bool $autoAddTable 是否给字段加表名
-     */
-    protected function whereHandler(& $data, & $TB, & $p1, $p2 = null, $p3 = null, & $prepareData, $autoAddTable = true)
-    {
-        $table = '';
-        if ($autoAddTable) {
-            $table = "`$TB`.";
-        }
-        //  ---------------------------------------------------------------
-        //  | 第一个参数是数组
-        // ----------------------------------------------------------------
-        if (is_array($p1)) {
-            foreach ($p1 as $field => & $val) {
-                if (is_array($val)) {
-                    if ($field == 'or' || $field == 'OR') {
-                        $ors = [];
-                        $this->whereHandler($ors, $TB, $val, null, null, $prepareData, $autoAddTable);
-                        $data[] = '(' . implode(' OR ', $ors)  . ')';
-                    } elseif($field == 'ors' || $field == 'ORS') {
-                        $ors = [];
-                        $this->whereHandler($ors, $TB, $val, null, null, $prepareData, $autoAddTable);
-                        $this->orWheres[] = '(' . implode(' OR ', $ors)  . ')';
-                    } else {
-                        $this->whereHandler($data, $TB, $field, $val[0], $val[1], $prepareData, $autoAddTable);
-                    }
-
-                } else {
-                    $this->normalizeWhereField($table, $field);
-
-                    switch (strtolower($val)) {
-                        case 'is not null':
-                            $data[] = "$field IS NOT NULL";
-                            break;
-                        case 'is null':
-                            $data[] = "$field IS NULL";
-                            break;
-                        default:
-                            // where字句
-                            $data[] 	   = "$field = ?";
-                            // 预处理绑定参数
-                            $prepareData[] = $val;
-                            break;
-                    }
-                }
-            }
-
-        } elseif($p3 === null) {
-            if ($p1 == 'or' || $p1 == 'OR') {
-                $ors = [];
-                $this->whereHandler($ors, $TB, $p2, null, null, $prepareData, $autoAddTable);
-                $data[] = '(' . implode(' OR ', $ors)  . ')';
-
-            } else {
-                $this->normalizeWhereField($table, $p1);
-                switch (strtolower($p2)) {
-                    case 'is not null':
-                        $data[] = "$p1 IS NOT NULL";
-                        break;
-                    case 'is null':
-                        $data[] = "$p1 IS NULL";
-                        break;
-                    default:
-                        // where字句
-                        $data[] 	   = "$p1 = ?";
-                        // 预处理绑定参数
-                        $prepareData[] = $p2;
-                        break;
-                }
-            }
-
-        } else {
-            $this->normalizeWhereField($table, $p1);
-
-            switch (strtolower($p2)) {
-                case '%like':
-                case '%*':
-                    $data[] 	   = "$p1 LIKE ?";
-                    $prepareData[] = "%{$p3}";
-                    break;
-                case 'like%':
-                case '*%':
-                    $data[] 	   = "$p1 LIKE ?";
-                    $prepareData[] = "{$p3}%";
-                    break;
-                case '%like%':
-                case '%*%':
-                    $data[] 	   = "$p1 LIKE ?";
-                    $prepareData[] = "%{$p3}%";
-                    break;
-                case 'between':
-                    $data[] = "$p1 BETWEEN ? AND ?";
-                    $prepareData[] = $p3[0];
-                    $prepareData[] = $p3[1];
-                    break;
-                case 'in':
-                    foreach ($p3 as & $v) {
-                        $prepareData[] = $v;
-
-                        $v = '?';
-                    }
-                    $data[] = $p1 . ' IN (' . implode(',', $p3) . ')';
-                    break;
-                default:
-                    $data[] 	   = "$p1 $p2 ?";
-                    $prepareData[] = $p3;
-                    break;
-            }
-        }
-    }
-
-    protected function normalizeWhereField(& $table, & $field)
-    {
-        if (preg_match($this->varPattern, $field)) {
-            $field = $table . '`' . $field . '`';
-        }
-    }
-
     public function orWhere(& $p1, $p2 = '=', $p3 = null, $table = null)
     {
         $tb = $table ? $table : $this->tableName;
 
-        $this->whereHandler($this->orWheres, $tb, $p1, $p2, $p3, $this->whereData);
+        $content = $this->where->table($tb)->build($p1, $p2, $p3)->pull();
+
+        $this->orWheres = &$content['where'];
+        $this->whereData = array_merge($this->whereData, $content['params']);
+
         return $this;
     }
 
@@ -363,7 +252,10 @@ class Builder
     {
         $tb = $table ? $table : $this->tableName;
 
-        $this->whereHandler($this->having, $tb, $p1, $p2, $p3, $this->havingData, false);
+        $content = $this->where->table($tb)->build($p1, $p2, $p3)->pull();
+
+        $this->having = &$content['where'];
+        $this->havingData = array_merge($this->havingData, $content['params']);
         return $this;
     }
 
@@ -371,10 +263,12 @@ class Builder
     {
         $tb = $table ? $table : $this->tableName;
 
-        $this->whereHandler($this->orHaving, $tb, $p1, $p2, $p3, $this->havingData, false);
+        $content = $this->where->table($tb)->build($p1, $p2, $p3)->pull();
+
+        $this->orHaving = &$content['where'];
+        $this->havingData = array_merge($this->havingData, $content['params']);
         return $this;
     }
-
 
     /**
      *  传入：
@@ -449,7 +343,10 @@ class Builder
             $this->whereData = array_merge($this->whereData, $this->havingData);
         }
 
-        return "SELECT $fields FROM {$table}{$leftJoin}{$where}{$groupBy}{$orderBy}{$having}{$limit}";
+        return [
+            'sql' => "SELECT $fields FROM {$table}{$leftJoin}{$where}{$groupBy}{$orderBy}{$having}{$limit}",
+            'params' => &$this->whereData
+        ];
     }
 
     /**
@@ -660,9 +557,12 @@ class Builder
         return $this->update($field, '-', $step);
     }
 
-    public function insertBulk()
+    // 批量新增
+    public function batchInsert(&$data)
     {
-
+        $res = $this->query->connection()->batchAdd($this->tableName, $data);
+        $this->clear();
+        return $res;
     }
 
     protected function getOrderBySql()

@@ -24,9 +24,22 @@ class Login extends Controller
 
         $test = new Test();
 
-        $this->container['mailer']->to('841324345@qq.com')->send($test);
+//        $this->container['mailer']->to('841324345@qq.com')->send($test);
 
-        return $test->render();
+        $sql2 = query()
+            ->from('test')
+            ->where([
+                'id' => ['in', [1, 2, 3]],
+                'del' => 'IS NULL',
+                'or' => ['del' => 4, 'base' => 9],
+                'status' => 5,
+                'name' => ['%*%', 'haha'],
+            ])
+            ->querySql();
+
+        ddd($sql2);
+
+//        return $test->render();
     }
 
     public function actionRegister()

@@ -91,14 +91,13 @@ function container()
 }
 
 /**
- * 从容器中获取一个服务
+ * 获取容器实例
  *
- * @param  string $abstract 服务名称
  * @return object
  */
-function ioc($abstract)
+function ioc()
 {
-    return $GLOBALS['CONTAINER']->make($abstract);
+    return $GLOBALS['CONTAINER'];
 }
 
 /**
@@ -107,10 +106,17 @@ function ioc($abstract)
  * @param  string $abstract 服务名称
  * @return object
  */
+function resolve($abstract)
+{
+    return $GLOBALS['CONTAINER']->make($abstract);
+}
+
 function make($abstract)
 {
     return $GLOBALS['CONTAINER']->make($abstract);
 }
+
+
 
 /**
  * 获取单例模型
@@ -231,21 +237,6 @@ function trans_option($value, $field)
     return $GLOBALS['LANGUAGE']->translateOption($value, $field);
 }
 
-function ucfirst_trans($label, $category = 'labels')
-{
-    return ucfirst($GLOBALS['LANGUAGE']->translate($label, $category));
-}
-
-function ucfirst_trans_with_global($label, $category = 'labels')
-{
-    return ucfirst($GLOBALS['LANGUAGE']->translateWithGolobal($label, $category));
-}
-
-function ucfirst_trans_option($value, $label)
-{
-    return ucfirst($GLOBALS['LANGUAGE']->translateOption($value, $label));
-}
-
 /**
  * 获取用户信息管理对象
  *
@@ -301,7 +292,7 @@ function logger($channel = 'primary')
 // 获取request参数
 function I($name = null, $default = null, $isEmpty = false)
 {
-    if (! $name) return file_get_contents('php://input');
+    if ($name === null) return file_get_contents('php://input');
 
     if ($isEmpty) return empty($_REQUEST[$name]) ? $default : $_REQUEST[$name];
 
@@ -543,16 +534,9 @@ function pdo($name = 'primary')
  */
 function query($name = 'primary')
 {
-    static $instances = [];
-
-    if (isset($instances[$name])) {
-        return $instances[$name];
-    }
-
     $q = $GLOBALS['CONTAINER']->make('query');
     // 设置连接类型
-    $q->connection($name);
-    return $instances[$name] = $q;
+    return $q->connect($name);
 }
 
 /**
@@ -563,7 +547,7 @@ function query($name = 'primary')
  * @param  mixed $default
  * @return mixed
  */
-function get_value(array & $data, $key, $default = null)
+function get_value(& $data, $key, $default = null)
 {
     return isset($data[$key]) ? $data[$key] : $default;
 }
@@ -576,6 +560,38 @@ function get_isset(& $data, $key, $default = null)
 function get_not_empty(& $data, $key, $default = null)
 {
     return !empty($data[$key]) ? $data[$key] : $default;
+}
+
+/**
+ * Retry an operation a given number of times.
+ *
+ * @param  int  $times
+ * @param  callable  $callback
+ * @param  int  $sleep
+ * @return mixed
+ *
+ * @throws \Exception
+ */
+function retry($times, callable $callback, $sleep = 0)
+{
+    $times--;
+
+    beginning:
+    try {
+        return $callback();
+    } catch (Exception $e) {
+        if (! $times) {
+            throw $e;
+        }
+
+        $times--;
+
+        if ($sleep) {
+            usleep($sleep * 1000);
+        }
+
+        goto beginning;
+    }
 }
 
 /**
@@ -690,7 +706,7 @@ function console_table()
 function debug($data, $print = true, $json = false)
 {
     echo '<pre>';
-    $s  = '<span style="color:#66ccff">';
+    $s  = '<span style="color:#e07c79">';
     $se = '</span>';
     if (is_string($data) || is_bool($data) || is_float($data) || is_integer($data)) {
         echo $s . date('[H:i:s]') . $se .  " $data<br/>";
@@ -705,5 +721,17 @@ function debug($data, $print = true, $json = false)
     } else {
         var_dump($data);
     }
-    echo "<br/><br/>";
+    echo "</pre><br/>";
+}
+
+function dd(...$args)
+{
+    foreach ($args as $x) {
+        debug($x);
+    }
+}
+
+function ddd(...$args) {
+    dd(...$args);
+    die;
 }

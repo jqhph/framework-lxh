@@ -4,6 +4,7 @@ namespace Lxh\ORM;
 use Lxh\ORM\Connect\PDO;
 use Lxh\ORM\Driver\BuilderManager;
 use Lxh\Contracts\Container\Container;
+use Lxh\ORM\Driver\Mysql\Builder;
 
 
 /**
@@ -33,18 +34,22 @@ class Query
 	 */
 	protected $connection;
 
+	protected $connectionName = 'primary';
+
 	protected $defaultConnectionType = 'primary';
 
-	public function __construct(BuilderManager $builderManager, Container $container)
+	public function __construct(Container $container)
 	{
-		$this->builderManager = $builderManager;
-
-		$builderManager->setQuery($this);
-
-		$this->builder = $builderManager->get();
+		$this->builder = new Builder($container, $this);
 
 		$this->container = $container;
+	}
 
+	public function connect($name)
+	{
+		$this->connectionName = $name;
+
+		return $this;
 	}
 
 	/**
@@ -54,8 +59,9 @@ class Query
 	 */
 	public function connection($name = null)
 	{
-		if ($name && ! $this->connection) {
-			$this->connection = pdo($name);
+		$this->connectionName = $name ?: $this->connectionName;
+		if ($this->connectionName && ! $this->connection) {
+			$this->connection = pdo($this->connectionName);
 		}
 		if ($this->connection) {
 			return $this->connection;
@@ -382,6 +388,16 @@ class Query
 		return $this->builder->readRow();
 	}
 
+	public function one()
+	{
+		return $this->builder->readRow();
+	}
+
+	public function all()
+	{
+		return $this->builder->read();
+	}
+
 	/**
 	 *
 	 * @return static
@@ -457,14 +473,9 @@ class Query
 		return $this->builder->insert($data);
 	}
 
-	public function insertBulk()
+	public function batchInsert(array & $data)
 	{
-		return $this->builder->insertBulk();
-	}
-
-	public function addBulk()
-	{
-		return $this->builder->insertBulk();
+		return $this->builder->batchInsert($data);
 	}
 
 	public function remove($id = null)
