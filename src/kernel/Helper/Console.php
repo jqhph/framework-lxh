@@ -14,6 +14,11 @@ class Console
 {
     protected static $records = [];
 
+    protected static $replaces = [
+        'search' => ["'", "\n", "\r", "\\"],
+        'replace' => ["\\'", '', '', "\\\\"]
+    ];
+
     /**
      * console.log
      *
@@ -113,7 +118,7 @@ class Console
                 $txt .= "$log,";
             } else {
                 // 转义单引号，换行符
-                $log = str_replace(["'", "\n", "\r"], ["\\'", '', ''], (string) $log);
+                $log = str_replace(static::$replaces['search'], static::$replaces['replace'], (string) $log);
                 $txt .= "'$log',";
             }
         }
