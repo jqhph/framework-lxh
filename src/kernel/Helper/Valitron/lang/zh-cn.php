@@ -8,6 +8,7 @@ return array(
     'numeric'       => "只能是数字",
     'integer'       => "只能是整数(0-9)",
     'length'        => "长度必须大于 %d",
+    'lengthBetween' => '长度必须在 %d 和 %d 之间',
     'min'           => "必须大于 %s",
     'max'           => "必须小于 %s",
     'in'            => "无效的值",

@@ -194,6 +194,60 @@ class Validator
         return $this->validateRequired($field, $value) && in_array($value, $acceptable, true);
     }
 
+    /////////////////////////////////////////
+
+    /**
+     * 验证输入字段中是否含有该字段
+     *
+     * @return bool
+     */
+    protected function validatePresent($field, $value)
+    {
+        return isset($this->_fields[$field]);
+    }
+
+    protected function validateSize($field, $value, $param)
+    {
+        return $this->getSize($field, $value) == $param[0];
+    }
+
+    // 验证的字段必须是有效的时区标识符，会根据 PHP 函数 timezone_identifiers_list 来判断。
+    protected function validateTimezone($field, $value, $param)
+    {
+        try {
+            new \DateTimeZone($value);
+        } catch (\Exception $e) {
+            return false;
+        } catch (\Throwable $e) {
+            return false;
+        }
+        return true;
+    }
+
+    /////////////////////////////////////////////
+
+    /**
+     * Get the size of an attribute.
+     *
+     * @param  string  $attribute
+     * @param  mixed   $value
+     * @return mixed
+     */
+    protected function getSize($attribute, $value)
+    {
+        // This method will determine if the attribute is a number, string, or file and
+        // return the proper size accordingly. If it is a number, then number itself
+        // is the size. If it is a file, we take kilobytes, and for a string the
+        // entire length of the string will be considered the attribute size.
+        if (is_numeric($value)) {
+            return $value;
+        } elseif (is_array($value)) {
+            return count($value);
+        }
+
+        return mb_strlen($value);
+    }
+
     /**
      * Validate that a field is an array
      *
@@ -847,7 +901,7 @@ class Validator
         // Glob match
         if ($identifier === '*') {
             $values = array();
-            foreach ($data as & $row) {
+            foreach ($data as &$row) {
                 list($value, $multiple) = $this->getPart($row, $identifiers);
                 if ($multiple) {
                     $values = array_merge($values, $value);
@@ -882,7 +936,7 @@ class Validator
      */
     public function validate()
     {
-        foreach ($this->_validations as & $v) {
+        foreach ($this->_validations as &$v) {
             $field = &$v['fields'];
 
              list($values, $multiple) = $this->getPart($this->_fields, explode('.', $field));

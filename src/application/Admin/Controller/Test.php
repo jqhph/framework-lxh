@@ -26,15 +26,14 @@ class Test extends Controller
         ];
 
         $rules = [
-            'name' => 'required|lengthBetween:3,7',
+            'name' => 'required|lengthBetween:3,6',
             'email' => 'required|email'
         ];
 
         $v = resolve('validator');
 
-        $v->fill($post)->rules($rules);
+        $v->fill($post)->rules($rules)->labels(['name' => '濮撳悕']);
 
-        // 验证并获取结果
         if (! $v->validate()) {
             return $v->errors();
         }
