@@ -133,7 +133,7 @@ class Language extends Controller
 
         if ($file->putPhpContents($path, $package)) {
             // 更新前端缓存
-            ioc('front.client')->updateCache();
+            resolve('front.client')->updateCache();
             return $this->success('success', ['content' => & $package]);
         }
 
@@ -231,7 +231,7 @@ class Language extends Controller
 
         if ($file->mergePhpContents($path, $content)) {
             // 更新前端缓存
-            make('front.client')->updateCache();
+            resolve('front.client')->updateCache();
             return $this->success('Success', ['content' => $file->getPhpContents($path)]);
         }
 

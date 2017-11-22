@@ -19,6 +19,12 @@ class Test extends Controller
 //        $data = 'sdfsd:dfd  {dfdf} 53454';
 //
 //        ddd(preg_replace($reg, ['[hahah]', '[hehe]'], $data));
+        $test = new \Lxh\Mails\Test();
+
+        $this->mailer->to('juezhi93@outlook.com')->send($test);
+
+        return $test;
+
 
         $post = [
             'name' => '1231234',

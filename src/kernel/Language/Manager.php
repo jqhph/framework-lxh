@@ -49,7 +49,7 @@ class Manager
      *
      * @var string
      */
-    private $dir = 'config/language';
+    private $dir = 'resource/language';
 
     /**
      * 语言包类型数组
@@ -84,7 +84,7 @@ class Manager
 
         $c = $container->make('controller.manager');
 
-        $this->moduleName = $c->moduleName();
+        $this->moduleName = Util::convertWith($c->moduleName(), true, '-');
 
     }
 
@@ -203,9 +203,9 @@ class Manager
     public function getPackagePath($scope, $lang = null)
     {
         $lang = $lang ?: $this->language;
-        if ($scope == 'Global') {
-            return "{$this->root}{$this->dir}/{$lang}/$scope.php";
-        }
+
+        $scope = Util::convertWith($scope, true, '-');
+
         return "{$this->root}{$this->dir}/{$lang}/{$this->moduleName}/$scope.php";
     }
 
