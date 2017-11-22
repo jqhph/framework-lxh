@@ -73,7 +73,7 @@ class Role extends Controller
         ];
     }
 
-    protected function updateValidate($id, array & $fields, Validator $validator)
+    protected function updateValidate($id, array & $fields)
     {
         if (empty($fields['permissions'])) {
             return 'The permissions fields is required';

@@ -21,10 +21,10 @@ $config = [];
 $config['resource-server'] = '';
 
 // resource version静态资源版本
-$config['resource-version'] = 'v1.0';
+$config['resource-version'] = 'primary';
 
 // seajs配置
-$base = "{$config['resource-server']}/static/{$config['resource-version']}/Admin";
+$base = "{$config['resource-server']}/assets/{$config['resource-version']}/Admin";
 $config['sea-config'] = [
     // 设置路径，方便跨目录调用
     'paths' => [

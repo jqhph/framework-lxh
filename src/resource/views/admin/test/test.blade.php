@@ -1,1 +1,0 @@
-<p>test.blade.php</p>

@@ -11,6 +11,7 @@ namespace Lxh\Template;
 use Lxh\Exceptions\Error;
 use Lxh\Exceptions\InvalidArgumentException;
 use Lxh\Helper\Entity;
+use \Lxh\Helper\Util;
 use Lxh\MVC\ControllerManager;
 
 class View
@@ -33,10 +34,10 @@ class View
 
     public function __construct(ControllerManager $manager)
     {
-        $this->version = config('view-version', 'v1.0');
-        $this->module = $manager->moduleName();
+        $this->version = config('view-version', 'primary');
+        $this->module = Util::convertWith($manager->moduleName(), true, '-');
 
-        $this->dir = "{$this->root}application/{$this->module}/View/{$this->version}/";
+        $this->dir = "{$this->root}resource/views/{$this->module}/{$this->version}/";
     }
 
     /**

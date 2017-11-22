@@ -80,7 +80,7 @@ abstract class Controller
         $this->module = __MODULE__;
 
         $this->useBladeEngine = $this->config['use-blade-engine'];
-        $this->viewVersion = $this->config->get('view-version', 'v1.0');
+        $this->viewVersion = $this->config->get('view-version', 'primary');
 
         // 初始化
         $this->initialize();
@@ -126,14 +126,12 @@ abstract class Controller
             // 使用blade模板引擎
             $prefix = Util::convertWith(__MODULE__, true, '-') . '.' . $this->viewVersion;
 
-            $view = $this->normalizeView($view, $prefix);
-
             if ($compalete) {
                 return $factory->make($this->normalizeView('public.header', $prefix))->render()
-                     . $factory->make($view, $data)->render()
+                     . $factory->make($this->normalizeView($view, $prefix), $data)->render()
                      . $factory->make($this->normalizeView('public.footer', $prefix))->render();
             }
-            return $factory->make($view, $data)->render();
+            return $factory->make($this->normalizeView($view, $prefix), $data)->render();
         }
 
         if ($compalete) {

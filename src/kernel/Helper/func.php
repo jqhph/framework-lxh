@@ -164,19 +164,19 @@ function controller($name)
 // 加载js
 function load_js($name, $dir = 'js', $module = __MODULE__)
 {
-    return "<script src=\"{$GLOBALS['resource-server']}/static/{$GLOBALS['resource-version']}/{$module}/lib/$dir/$name.js?v={$GLOBALS['js-version']}\"></script>";
+    return "<script src=\"{$GLOBALS['resource-server']}/assets/{$GLOBALS['resource-version']}/{$module}/lib/$dir/$name.js?v={$GLOBALS['js-version']}\"></script>";
 }
 
 // 加载css
 function load_css($name, $dir = 'css', $module = __MODULE__)
 {
-    return "<link href=\"{$GLOBALS['resource-server']}/static/{$GLOBALS['resource-version']}/{$module}/$dir/$name.css?v={$GLOBALS['css-version']}\" rel=\"stylesheet\" type=\"text/css\" />";
+    return "<link href=\"{$GLOBALS['resource-server']}/assets/{$GLOBALS['resource-version']}/{$module}/$dir/$name.css?v={$GLOBALS['css-version']}\" rel=\"stylesheet\" type=\"text/css\" />";
 }
 
 // 加载图片
 function load_img($name, $dir = 'images', $module = __MODULE__)
 {
-    return "{$GLOBALS['resource-server']}/static/{$GLOBALS['resource-version']}/{$module}/$dir/$name";
+    return "{$GLOBALS['resource-server']}/assets/{$GLOBALS['resource-version']}/{$module}/$dir/$name";
 }
 
 /**

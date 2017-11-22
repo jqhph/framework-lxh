@@ -25,7 +25,7 @@ $config['view.paths'] = 'resource/views';
 $config['use-blade-engine'] = false;
 
 // view version模板版本（如使用blade模板引擎，此参数无效）
-$config['view-version'] = 'v1.0';
+$config['view-version'] = 'primary';
 
 // 是否输出控制台调试信息，默认true
 $config['response-console-log'] = true;
