@@ -374,9 +374,9 @@ class Query
 	 *
 	 * @return string
 	 */
-	public function querySql()
+	public function querySql($clear = false)
 	{
-		return $this->builder->querySql();
+		return $this->builder->querySql($clear);
 	}
 
 	/**
@@ -486,6 +486,12 @@ class Query
 	public function delete($id = null)
 	{
 		return $this->builder->remove($id);
+	}
+
+	public function __call($name, $arguments)
+	{
+		call_user_func_array([$this->builder, $name], $arguments);
+		return $this;
 	}
 
 }

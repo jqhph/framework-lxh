@@ -323,7 +323,7 @@ class Builder
         }
     }
 
-    public function querySql()
+    public function querySql($clear = false)
     {
         $table  = "`$this->tableName`";
 
@@ -343,9 +343,13 @@ class Builder
             $this->whereData = array_merge($this->whereData, $this->havingData);
         }
 
+        $params = $this->whereData;
+
+        if ($clear) $this->clear();
+
         return [
             'sql' => "SELECT $fields FROM {$table}{$leftJoin}{$where}{$groupBy}{$orderBy}{$having}{$limit}",
-            'params' => &$this->whereData
+            'params' => &$params
         ];
     }
 

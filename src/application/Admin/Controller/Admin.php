@@ -28,9 +28,9 @@ class Admin extends Controller
 
         $v->fill($_POST);
 
-        $v->rule('lengthBetween', 'username', 4, 20);
+        $v->rule('username', 'lengthBetween', 4, 20);
 
-        $v->rule('lengthBetween', 'password', 4, 30);
+        $v->rule('password', 'lengthBetween', 4, 30);
 
         if (! $v->validate()) {
             return $this->error($v->errors());
@@ -53,11 +53,11 @@ class Admin extends Controller
 
         $v->fill($_POST);
 
-        $v->rule('lengthBetween', 'username', 4, 20);
+        $v->rule('username', 'lengthBetween', 4, 20);
 
-        $v->rule('lengthBetween', 'password', 4, 30);
+        $v->rule('password', 'lengthBetween', 4, 30);
 
-        $v->rule('equals', 'password', 'repassword');
+        $v->rule('password', 'equals', 'repassword');
 
         if (! $v->validate()) {
             return $this->error($v->errors());
