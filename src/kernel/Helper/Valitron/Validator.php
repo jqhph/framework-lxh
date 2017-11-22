@@ -10,8 +10,8 @@ use InvalidArgumentException;
  * Validates input against certain criteria
  * $v = new Validator();
     $v->fill(['name' => '张三', 'email' => 'jqh@163.com'])
-    ->rule('required', array('name', 'email'))
-    ->rule('email', 'email');
+    ->rule('name', 'required')
+    ->rule('myemail', 'email');
 
     if ($v->validate()) {
         echo "Yay! We're all good!<br>";
@@ -171,7 +171,7 @@ class Validator
      * @internal param array $fields
      * @return bool
      */
-    protected function validateDifferent($field, $value, array & $params)
+    protected function validateDifferent($field, $value, array $params)
     {
         $field2 = $params[0];
 
@@ -239,7 +239,7 @@ class Validator
      * @internal param array $fields
      * @return bool
      */
-    protected function validateLength($field, $value, & $params)
+    protected function validateLength($field, $value, array $params)
     {
         $length = $this->stringLength($value);
         // Length between
@@ -258,11 +258,16 @@ class Validator
      * @param  array   $params
      * @return boolean
      */
-    protected function validateLengthBetween($field, $value, $params)
+    protected function validateLengthBetween($field, $value, array $params)
     {
         $length = $this->stringLength($value);
 
         return ($length !== false) && $length >= $params[0] && $length <= $params[1];
+    }
+
+    protected function validateBetween($field, $value, array $params)
+    {
+        return $value >= $params[0] && $value <= $params[1];
     }
 
     /**
@@ -274,7 +279,7 @@ class Validator
      *
      * @return boolean
      */
-    protected function validateLengthMin($field, $value, & $params)
+    protected function validateLengthMin($field, $value, $params)
     {
         $length = $this->stringLength($value);
 
@@ -290,7 +295,7 @@ class Validator
      *
      * @return boolean
      */
-    protected function validateLengthMax($field, $value, & $params)
+    protected function validateLengthMax($field, $value, $params)
     {
         $length = $this->stringLength($value);
 
@@ -323,7 +328,7 @@ class Validator
      * @internal param array $fields
      * @return bool
      */
-    protected function validateMin($field, $value, & $params)
+    protected function validateMin($field, $value, $params)
     {
         if (!is_numeric($value)) {
             return false;
@@ -387,7 +392,7 @@ class Validator
      * @internal param array $fields
      * @return bool
      */
-    protected function validateNotIn($field, $value, & $params)
+    protected function validateNotIn($field, $value, $params)
     {
         return !$this->validateIn($field, $value, $params);
     }
@@ -400,7 +405,7 @@ class Validator
      * @param  array  $params
      * @return bool
      */
-    protected function validateContains($field, $value, & $params)
+    protected function validateContains($field, $value, $params)
     {
         if (!isset($params[0])) {
             return false;
@@ -772,7 +777,7 @@ class Validator
      * @param string $msg
      * @param array  $params
      */
-    public function error($field, $msg, array & $params = array())
+    public function error($field, $msg, array &$params = array())
     {
         $msg = $this->checkAndSetLabel($field, $msg, $params);
         $values = array();
@@ -830,7 +835,7 @@ class Validator
         return $this;
     }
 
-    protected function getPart(& $data, $identifiers)
+    protected function getPart(&$data, $identifiers)
     {
         // Catches the case where the field is an array of discrete values
         if (count($identifiers) === 0) {
@@ -902,7 +907,7 @@ class Validator
                 $values = array($values);
             }
 
-            foreach ($values as & $value) {
+            foreach ($values as &$value) {
                 $result = call_user_func($callback, $field, $value, $v['params']);
 
                 if (! $result) {
@@ -929,7 +934,7 @@ class Validator
      */
     protected function hasRule($name, $field)
     {
-        foreach ($this->_validations as & $validation) {
+        foreach ($this->_validations as &$validation) {
             if ($validation['rule'] == $name) {
                 if ($field == $validation['fields']) {
                     return true;
@@ -966,7 +971,7 @@ class Validator
      * @return $this
      * @throws \InvalidArgumentException
      */
-    public function rule($rule, $fields)
+    public function rule($fields, $rule)
     {
         if (!isset(static::$_rules[$rule])) {
             $ruleMethod = 'validate' . $rule;
@@ -1017,14 +1022,14 @@ class Validator
      * @param  array  $params
      * @return array
      */
-    protected function checkAndSetLabel($field, $msg, $params)
+    protected function checkAndSetLabel(&$field, &$msg, &$params)
     {
         if (isset($this->_labels[$field])) {
             $msg = str_replace('{field}', $this->_labels[$field], $msg);
 
             if (is_array($params)) {
                 $i = 1;
-                foreach ($params as $k => $v) {
+                foreach ($params as $k => &$v) {
                     $tag = '{field'. $i .'}';
                     $label = isset($params[$k]) && (is_numeric($params[$k]) || is_string($params[$k])) && isset($this->_labels[$params[$k]]) ? $this->_labels[$params[$k]] : $tag;
                     $msg = str_replace($tag, $label, $msg);
@@ -1050,28 +1055,29 @@ class Validator
      * );
      *
      * @param array $rules
+     * @return static
      */
-    public function rules($rules)
+    public function rules(array $rules)
     {
-        foreach ((array) $rules as $field => &$rows) {
+        foreach ($rules as $field => &$rows) {
             if (is_string($rows)) {
                 $rows = explode('|', $rows);
             }
 
-            foreach ($rows as $k => & $item) {
+            foreach ($rows as $k => &$item) {
                 $params = [];
 
                 if (is_string($k)) {
-                    $params[] = $k;
                     $params[] = $field;
+                    $params[] = $k;
 
                     $params = array_merge($params, $item);
                 } else {
                     if (is_string($item)) {
                         $item = explode(':', $item);
                     }
-                    $params[] = $item[0];
                     $params[] = $field;
+                    $params[] = $item[0];
 
                     if (isset($item[1])) {
                         $item[1] = explode(',', $item[1]);

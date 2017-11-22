@@ -15,6 +15,10 @@ class Test extends Controller
 {
     public function actionTest(Request $req, Response $resp, & $params)
     {
+//        $reg = '({[\w0-9_]+}|\s*:[\w0-9_]+\s)';
+//        $data = 'sdfsd:dfd  {dfdf} 53454';
+//
+//        ddd(preg_replace($reg, ['[hahah]', '[hehe]'], $data));
 
         $post = [
             'name' => '1231234',
@@ -22,7 +26,7 @@ class Test extends Controller
         ];
 
         $rules = [
-            'name' => 'required|lengthBetween:3,6',
+            'name' => 'required|lengthBetween:3,7',
             'email' => 'required|email'
         ];
 
