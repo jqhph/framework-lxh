@@ -429,7 +429,7 @@ function e($value)
  */
 function share_var($key, $value = null)
 {
-    return $GLOBALS['CONTAINER']->share($key, $value);
+    return $GLOBALS['CONTAINER']['view.adaptor']->share($key, $value);
 }
 
 /**
@@ -437,26 +437,15 @@ function share_var($key, $value = null)
  *
  * @param  string  $view
  * @param  array   $data
- * @param  bool    $useBlade
  * @return \Lxh\Contracts\View\View
  */
-function view($view, array $data = [], $useBlade = false) {
-    if ($GLOBALS['use-blade-engine'] || $useBlade) {
-        return $GLOBALS['CONTAINER']->make('view.factory')->make($view, $data);
-    }
-
-    return $GLOBALS['CONTAINER']->make('view')->render($view, $data);
+function view($view, array $data = []) {
+    return $GLOBALS['CONTAINER']['view.adaptor']->make($view, $data);
 }
 
 function render_view($view, array $data = [])
 {
-    if ($GLOBALS['use-blade-engine']) {
-        return $GLOBALS['CONTAINER']->make('view.factory')->make(
-            Util::convertWith(__MODULE__, true, '-') . ".{$GLOBALS['view-version']}.$view", $data
-        )->render();
-    }
-
-    return $GLOBALS['CONTAINER']->make('view')->render($view, $data);
+    return $GLOBALS['CONTAINER']['view.adaptor']->make($view, $data)->render();
 }
 
 /**

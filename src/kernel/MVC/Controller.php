@@ -59,18 +59,6 @@ abstract class Controller
      */
     protected $container;
 
-    /**
-     * 是否使用blade模板引擎
-     *
-     * @var bool
-     */
-    protected $useBladeEngine = false;
-
-    /**
-     * @var string
-     */
-    protected $viewVersion;
-
     public function __construct($name, Container $container, ControllerManager $manager)
     {
         $this->name = $name;
@@ -78,9 +66,6 @@ abstract class Controller
         $this->manager = $manager;
 
         $this->module = __MODULE__;
-
-        $this->useBladeEngine = $this->config['use-blade-engine'];
-        $this->viewVersion = $this->config->get('view-version', 'primary');
 
         // 初始化
         $this->initialize();
@@ -104,10 +89,7 @@ abstract class Controller
      */
     protected function share($key, $value = null)
     {
-        if ($this->useBladeEngine) {
-            return $this->container['view.factory']->share($key, $value);
-        }
-        return $this->view->with($key, $value);
+        return $this->container['view.adaptor']->share($key, $value);
     }
 
     /**
@@ -120,43 +102,15 @@ abstract class Controller
      */
     protected function render($view, array $data = [], $compalete = false)
     {
-        if ($this->useBladeEngine) {
-            $factory = $this->container['view.factory'];
-
-            // 使用blade模板引擎
-            $prefix = Util::convertWith(__MODULE__, true, '-') . '.' . $this->viewVersion;
-
-            if ($compalete) {
-                return $factory->make($this->normalizeView('public.header', $prefix))->render()
-                     . $factory->make($this->normalizeView($view, $prefix), $data)->render()
-                     . $factory->make($this->normalizeView('public.footer', $prefix))->render();
-            }
-            return $factory->make($this->normalizeView($view, $prefix), $data)->render();
-        }
+        $factory = $this->container['view.adaptor'];
 
         if ($compalete) {
-            return $this->view->render($this->normalizeView('public.header'))
-                 . $this->view->render($this->normalizeView($view), $data)
-                 . $this->view->render($this->normalizeView('public.footer'));
+            return $factory->make('public.header')->render()
+                 . $factory->make($view, $data)->render()
+                 . $factory->make('public.footer')->render();
         }
-        return $this->view->render($this->normalizeView($view), $data);
+        return $factory->make($view, $data)->render();
 
-    }
-
-    /**
-     * Normalize the given event name.
-     *
-     * @param string $name
-     * @param string $prefix
-     * @return string
-     */
-    protected function normalizeView($view, $prefix = null)
-    {
-        if (strpos($view, '.') === false) {
-            $view = Util::convertWith(__CONTROLLER__, true, '-') . '.' . $view;
-        }
-
-        return $prefix ? $prefix . '.' . $view : $view;
     }
 
     /**

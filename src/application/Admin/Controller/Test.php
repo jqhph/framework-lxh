@@ -2,6 +2,7 @@
 
 namespace Lxh\Admin\Controller;
 
+use Lxh\Exceptions\Exception;
 use Lxh\Exceptions\NotFound;
 use Lxh\Helper\Console;
 use Lxh\Helper\Util;
@@ -19,6 +20,7 @@ class Test extends Controller
 //        $data = 'sdfsd:dfd  {dfdf} 53454';
 //
 //        ddd(preg_replace($reg, ['[hahah]', '[hehe]'], $data));
+        return [];
         $test = new \Lxh\Mails\Test();
 
         $this->mailer->to('juezhi93@outlook.com')->send($test);

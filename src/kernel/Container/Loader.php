@@ -123,6 +123,11 @@ trait Loader
             'class' => 'Lxh\Crontab\Application',
             'dependencies' => 'container'
         ],
+        'view.adaptor' => [
+            'shared' => true,
+            'class' => 'Lxh\Template\Factory',
+            'dependencies' => 'container'
+        ],
         'view' => [
             'shared' => true,
             'class' => 'Lxh\Template\View',

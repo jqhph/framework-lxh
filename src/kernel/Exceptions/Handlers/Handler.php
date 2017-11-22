@@ -158,8 +158,6 @@ class Handler
 
 		$code = $e->getCode();
 
-		$isAjax = $this->request->isAjax();
-
 		if ($code) {
 			if (! Status::vertify($code)) {
 				$code = 500;
@@ -168,23 +166,24 @@ class Handler
 			$this->response->withStatus($code);
 		}
 
+		$isAjax = $this->request->isAjax();
+
+		$vars = [
+			'msg' => $e->getMessage(),
+			'code' => $e->getCode(),
+			'file' => $e->getFile(),
+			'line' => $e->getLine(),
+			'trace' => $e->getTraceAsString()
+		];
+
 		// 非生产环境以及非ajax请求显示错误界面
 		if (! is_prod() && ! $isAjax && ! $this->request->isCli()) {
-			return $this->response->data = view(
-				'system.debug',
-				[
-					'msg' => $e->getMessage(),
-					'code' => $code,
-					'file' => $e->getFile(),
-					'line' => $e->getLine(),
-					'trace' => $e->getTraceAsString()
-				],
-				true
-			);
+			$view = resolve('view.adaptor')->get();
+			return $this->response->data = $view->make('system.debug', $vars)->render();
 		}
 
 		if (! is_prod() && $isAjax || $this->request->isCli()) {
-			return $this->response->data = $e->getMessage();
+			return $this->response->data = $vars;
 		}
 	}
 

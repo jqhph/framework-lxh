@@ -32,12 +32,17 @@ class View
 
     protected $dir = '';
 
+    protected $currentView;
+    protected $currentVars = [];
+
     public function __construct(ControllerManager $manager)
     {
         $this->version = config('view-version', 'primary');
         $this->module = Util::convertWith($manager->moduleName(), true, '-');
 
-        $this->dir = "{$this->root}resource/views/{$this->module}/{$this->version}/";
+        $p = config('view.paths', 'resource/views');
+
+        $this->dir = "{$this->root}{$p}/";
     }
 
     /**
@@ -46,15 +51,29 @@ class View
      *
      * @param  string $key  在模板使用的变量名称
      * @param  mixed $value 变量值，此处使用引用传值，分配时变量必须先定义
-     * @return void
+     * @return static
      */
-    public function with($key, & $value = null)
+    public function share(&$key, & $value = null)
     {
         if (is_array($key)) {
             $this->vars = array_merge($this->vars, $key);
         } else {
             $this->vars[$key] = $value;
         }
+
+        return $this;
+    }
+
+    /**
+     *
+     * @return static
+     */
+    public function make($view, array &$vars = [])
+    {
+        $this->currentView = $view;
+        $this->currentVars = &$vars;
+
+        return $this;
     }
 
     /**
@@ -64,7 +83,7 @@ class View
      * @param  array  $vars     要传递到模板的值，只有当前模板可以用
      * @return string
      */
-    public function render($viewName, array & $vars = [])
+    public function render($view = null, array & $vars = [])
     {
         // 页面缓存
         ob_start();
@@ -73,12 +92,15 @@ class View
             ${$k} = & $v;
         }
 
+        $view = $view ?: $this->currentView;
+        $vars = $vars ?: $this->currentVars;
+
         foreach ($vars as $k => & $v) {
             ${$k} = & $v;
         }
 
         // 读取模板
-        $path = $this->getTemplatePath($viewName);
+        $path = $this->getTemplatePath($view);
         if (! is_file($path)) {
             throw new InvalidArgumentException("View [$path] not found.");
         }

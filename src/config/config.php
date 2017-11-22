@@ -21,8 +21,9 @@ $config['view.compiled'] = 'resource/blade-cache';
 // blade模板路径，默认'resource/views'
 $config['view.paths'] = 'resource/views';
 
-// 是否使用blade模板引擎，默认false
-$config['use-blade-engine'] = false;
+// 模板引擎类型
+// 支持 php、blade
+$config['view-driver'] = 'php';
 
 // view version模板版本（如使用blade模板引擎，此参数无效）
 $config['view-version'] = 'primary';
