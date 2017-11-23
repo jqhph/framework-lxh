@@ -85,7 +85,7 @@ class Config extends Entity
             return false;
         }
         $cache = include $cachePath;
-        if (count($cache) < 1) {
+        if (!is_array($cache) || count($cache) < 1) {
             return false;
         }
         $this->items = &$cache;
