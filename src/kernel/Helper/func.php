@@ -525,7 +525,7 @@ function query($name = 'primary')
 {
     $q = $GLOBALS['CONTAINER']->make('query');
     // 设置连接类型
-    return $q->connect($name);
+    return $q->setConnectionName($name);
 }
 
 /**

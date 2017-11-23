@@ -18,11 +18,6 @@ class Query
 	protected $container;
 
 	/**
-	 * @var BuilderManager
-	 */
-	protected $builderManager;
-
-	/**
 	 * 构造器
 	 *
 	 * @var mixed
@@ -45,7 +40,7 @@ class Query
 		$this->container = $container;
 	}
 
-	public function connect($name)
+	public function setConnectionName($name)
 	{
 		$this->connectionName = $name;
 
@@ -486,6 +481,12 @@ class Query
 	public function delete($id = null)
 	{
 		return $this->builder->remove($id);
+	}
+
+	public function reset()
+	{
+		$this->builder->clear();
+		return $this;
 	}
 
 	public function __call($name, $arguments)

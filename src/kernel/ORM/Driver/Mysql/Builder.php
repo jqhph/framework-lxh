@@ -4,6 +4,7 @@ namespace Lxh\ORM\Driver\Mysql;
 
 use Lxh\Exceptions\InternalServerError;
 use Lxh\Contracts\Container\Container;
+use Lxh\Exceptions\InvalidArgumentException;
 use Lxh\ORM\Query;
 
 class Builder
@@ -90,6 +91,9 @@ class Builder
     public function where(& $p1, & $p2 = '=', $p3 = null, $table = null)
     {
         $tb = $table ? $table : $this->tableName;
+        if (! $tb) {
+            throw new InvalidArgumentException('表名不能为空');
+        }
 
 //        $this->whereHandler($this->wheres, $tb, $p1, $p2, $p3, $this->whereData);
         $content = $this->where->table($tb)->build($p1, $p2, $p3)->pull();
@@ -632,9 +636,9 @@ class Builder
         return $this->limit;
     }
 
-    protected function clear()
+    public function clear()
     {
-        $this->tableName = null;
+//        $this->tableName = null;
         $this->field     = null;
         $this->limit 	 = null;
         $this->orderBy	 = null;

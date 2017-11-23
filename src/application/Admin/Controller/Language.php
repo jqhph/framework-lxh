@@ -160,8 +160,7 @@ class Language extends Controller
             return $this->error();
         }
 
-        $languagePackDir = language()->getBasePath();
-        $path = "{$languagePackDir}{$lang}/{$module}/{$file}.php";
+        $path = language()->getPackagePath($file, $lang);
 
         if (is_file($path)) {
             return $this->error('File already exists');

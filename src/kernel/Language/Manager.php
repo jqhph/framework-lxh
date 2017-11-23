@@ -206,6 +206,9 @@ class Manager
 
         $scope = Util::convertWith($scope, true, '-');
 
+//        if ($scope == 'Global') {
+//            return "{$this->root}{$this->dir}/{$lang}/$scope.php";
+//        }
         return "{$this->root}{$this->dir}/{$lang}/{$this->moduleName}/$scope.php";
     }
 

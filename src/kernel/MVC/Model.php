@@ -57,6 +57,8 @@ class Model extends Entity
      */
     protected $events;
 
+    protected $queries = [];
+
     public function __construct($name, Container $container)
     {
         $this->modelName = $name;
@@ -66,6 +68,17 @@ class Model extends Entity
         $this->container = $container;
 
         $this->events = $container['events'];
+
+        $this->initialize();
+    }
+
+    /**
+     * 初始化操作
+     *
+     * @return void
+     */
+    protected function initialize()
+    {
     }
 
     /**
@@ -103,6 +116,26 @@ class Model extends Entity
         return $q->find();
     }
 
+    /**
+     * where
+     *
+     * @return Query
+     */
+    public function where(...$argv)
+    {
+        return $this->query()->where(...$argv);
+    }
+
+    /**
+     * 查询的字段
+     *
+     * @return Query
+     */
+    public function select(...$argv)
+    {
+        return $this->query()->select(...$argv);
+    }
+
     // 查找数据
     public function find()
     {
@@ -113,7 +146,7 @@ class Model extends Entity
             $this->fill($data);
             return $data;
         }
-        return $this->query()->select($this->selectFields)->where('deleted', 0)->find();
+        return $this->query()->select($this->selectFields)->find();
     }
 
     /**
@@ -242,7 +275,11 @@ class Model extends Entity
      */
     protected function query($name = null)
     {
-        return query($name ?: $this->connectionType)->from($this->tableName);
+        if (isset($this->queries[$name])) {
+            return $this->queries[$name];
+        }
+
+        return $this->queries[$name] = query($name ?: $this->connectionType)->from($this->tableName);
     }
 
 }
