@@ -150,7 +150,7 @@ class BladeCompiler extends Compiler implements CompilerInterface
      * @param  string  $value
      * @return string
      */
-    public function compileString($value)
+    public function &compileString($value)
     {
         $result = '';
 
@@ -163,7 +163,7 @@ class BladeCompiler extends Compiler implements CompilerInterface
         // Here we will loop through all of the tokens returned by the Zend lexer and
         // parse each one into the corresponding valid PHP. We will then have this
         // template as the correctly rendered PHP that can be rendered natively.
-        foreach (token_get_all($value) as $token) {
+        foreach (token_get_all($value) as &$token) {
             $result .= is_array($token) ? $this->parseToken($token) : $token;
         }
 
@@ -219,7 +219,7 @@ class BladeCompiler extends Compiler implements CompilerInterface
      * @param  string  $result
      * @return string
      */
-    protected function addFooters($result)
+    protected function addFooters(&$result)
     {
         return ltrim($result, PHP_EOL)
                 .PHP_EOL.implode(PHP_EOL, array_reverse($this->footer));
@@ -236,7 +236,7 @@ class BladeCompiler extends Compiler implements CompilerInterface
         list($id, $content) = $token;
 
         if ($id == T_INLINE_HTML) {
-            foreach ($this->compilers as $type) {
+            foreach ($this->compilers as &$type) {
                 $content = $this->{"compile{$type}"}($content);
             }
         }
@@ -250,9 +250,9 @@ class BladeCompiler extends Compiler implements CompilerInterface
      * @param  string  $value
      * @return string
      */
-    protected function compileExtensions($value)
+    protected function compileExtensions(&$value)
     {
-        foreach ($this->extensions as $compiler) {
+        foreach ($this->extensions as &$compiler) {
             $value = call_user_func($compiler, $value, $this);
         }
 
@@ -265,10 +265,10 @@ class BladeCompiler extends Compiler implements CompilerInterface
      * @param  string  $value
      * @return string
      */
-    protected function compileStatements($value)
+    protected function compileStatements(&$value)
     {
         return preg_replace_callback(
-            '/\B@(@?\w+(?:::\w+)?)([ \t]*)(\( ( (?>[^()]+) | (?3) )* \))?/x', function ($match) {
+            '/\B@(@?\w+(?:::\w+)?)([ \t]*)(\( ( (?>[^()]+) | (?3) )* \))?/x', function (&$match) {
                 return $this->compileStatement($match);
             }, $value
         );
@@ -280,14 +280,14 @@ class BladeCompiler extends Compiler implements CompilerInterface
      * @param  array  $match
      * @return string
      */
-    protected function compileStatement($match)
+    protected function compileStatement(&$match)
     {
         if (Str::contains($match[1], '@')) {
             $match[0] = isset($match[3]) ? $match[1].$match[3] : $match[1];
         } elseif (isset($this->customDirectives[$match[1]])) {
-            $match[0] = $this->callCustomDirective($match[1], Arr::get($match, 3));
+            $match[0] = $this->callCustomDirective($match[1], get_value($match, 3));
         } elseif (method_exists($this, $method = 'compile'.ucfirst($match[1]))) {
-            $match[0] = $this->$method(Arr::get($match, 3));
+            $match[0] = $this->$method(get_value($match, 3));
         }
 
         return isset($match[3]) ? $match[0] : $match[0].$match[2];

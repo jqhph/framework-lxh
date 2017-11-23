@@ -23,7 +23,7 @@ $config['view.paths'] = 'resource/views';
 
 // 模板引擎类型
 // 支持 php、blade
-$config['view-driver'] = 'php';
+$config['view-driver'] = 'blade';
 
 // view version模板版本（如使用blade模板引擎，此参数无效）
 $config['view-version'] = 'primary';

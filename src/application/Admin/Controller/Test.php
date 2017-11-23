@@ -16,7 +16,7 @@ class Test extends Controller
 {
     public function actionTest(Request $req, Response $resp, & $params)
     {
-        return [];
+        return $this->render('test', ['title' => 'HELLO']);
 //        $test = new \Lxh\Mails\Test();
 //
 //        $this->mailer->to('841324345@qq.com')->send($test);

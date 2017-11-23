@@ -27,14 +27,14 @@ class PhpEngine implements EngineInterface
      * @param  array   $__data
      * @return string
      */
-    protected function evaluatePath($__path, $__data)
+    protected function evaluatePath($__path, &$__data)
     {
         $obLevel = ob_get_level();
 
         ob_start();
 
 //        extract($__data, EXTR_SKIP);
-        foreach ($__data as $k => & $v) {
+        foreach ($__data as $k => &$v) {
             ${$k} = $v;
         }
 
@@ -49,7 +49,7 @@ class PhpEngine implements EngineInterface
             $this->handleViewException(new FatalThrowableError($e), $obLevel);
         }
 
-        return ltrim(ob_get_clean());
+        return ob_get_clean();
     }
 
     /**
