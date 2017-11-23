@@ -67,6 +67,8 @@ class Application
         $this->events    = events();
         $this->container = container();
 
+        $this->container->instance('app', $this);
+
         if ($timezone = config('timezone')) {
             date_default_timezone_set($timezone);
         }
@@ -77,6 +79,15 @@ class Application
         debug_track('start');
 
         $this->bindRouter();
+    }
+
+    public function getPublicPath()
+    {
+        if (defined('__PUBLIC_ROOT__')) {
+            return __PUBLIC_ROOT__;
+        }
+
+        return dirname($this->root) . '/public/';
     }
 
     /**

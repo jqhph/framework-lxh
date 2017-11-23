@@ -143,7 +143,7 @@ class FileViewFinder implements ViewFinderInterface
         throw new InvalidArgumentException("View [$name] not found.");
     }
 
-    protected function normalizePath($path)
+    protected function normalizePath(&$path)
     {
         return "{$this->root}{$path}";
     }

@@ -110,9 +110,7 @@ class Factory implements FactoryContract
     {
         $data = array_merge($mergeData, $this->parseData($data));
 
-        return tap($this->viewInstance($path, $path, $data), function ($view) {
-            $this->callCreator($view);
-        });
+        return tap($this->viewInstance($path, $path, $data), [$this, 'callCreator']);
     }
 
     /**
@@ -133,9 +131,7 @@ class Factory implements FactoryContract
         // the caller for rendering or performing other view manipulations on this.
 //        $data = array_merge($mergeData, $this->parseData($data));
 
-        return tap($this->viewInstance($view, $path, $data), function ($view) {
-            $this->callCreator($view);
-        });
+        return tap($this->viewInstance($view, $path, $data), [$this, 'callCreator']);
     }
 
     /**
@@ -173,7 +169,7 @@ class Factory implements FactoryContract
         // an instance of the partial view to the final result HTML passing in the
         // iterated value of this data array, allowing the views to access them.
         if (count($data) > 0) {
-            foreach ($data as $key => $value) {
+            foreach ($data as $key => &$value) {
                 $result .= $this->make(
                     $view, ['key' => $key, $iterator => $value]
                 )->render();
@@ -289,9 +285,11 @@ class Factory implements FactoryContract
      */
     public function share($key, $value = null)
     {
-        $keys = is_array($key) ? $key : [$key => $value];
-
-        foreach ($keys as $key => &$value) {
+        if (is_array($key)) {
+            foreach ($key as $k => &$value) {
+                $this->shared[$k] = $value;
+            }
+        } else {
             $this->shared[$key] = $value;
         }
 

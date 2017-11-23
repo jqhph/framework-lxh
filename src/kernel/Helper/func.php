@@ -308,10 +308,6 @@ function I($name = null, $default = null, $isEmpty = false)
  */
 function tap($value, $callback = null)
 {
-    if (is_null($callback)) {
-        return new Lxh\Support\HigherOrderTapProxy($value);
-    }
-
     $callback($value);
 
     return $value;
