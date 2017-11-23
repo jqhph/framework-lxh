@@ -137,7 +137,7 @@ $config['events'] = [
 ];
 
 // 公共中间件配置（按顺序执行）
-$config['middleware'] = [
+$config['middlewares'] = [
     '*' => [
 
     ],

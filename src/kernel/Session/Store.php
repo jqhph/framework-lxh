@@ -122,7 +122,8 @@ class Store extends Entity
         $isDoStart = false;
 
         // 启动session
-        if (get_value($this->config, 'auto-start') !== false && PHP_SESSION_ACTIVE != session_status()) {
+        if (PHP_SESSION_ACTIVE != session_status()) {
+            // get_value($this->config, 'auto-start') !== false &&
             ini_set('session.auto_start', 0);
             $isDoStart = true;
         }

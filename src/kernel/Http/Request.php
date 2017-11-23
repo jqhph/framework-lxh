@@ -285,8 +285,4 @@ class Request extends Message\ServerRequest
 		return $this->server('SERVER_PORT');
 	}
 
-	public function client()
-	{
-		return make('http.client');
-	}
 }
