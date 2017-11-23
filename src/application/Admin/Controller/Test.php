@@ -16,42 +16,13 @@ class Test extends Controller
 {
     public function actionTest(Request $req, Response $resp, & $params)
     {
-//        $reg = '({[\w0-9_]+}|\s*:[\w0-9_]+\s)';
-//        $data = 'sdfsd:dfd  {dfdf} 53454';
-//
-//        ddd(preg_replace($reg, ['[hahah]', '[hehe]'], $data));
         return [];
-        $test = new \Lxh\Mails\Test();
-
-        $this->mailer->to('juezhi93@outlook.com')->send($test);
-
-        return $test;
-
-
-        $post = [
-            'name' => '1231234',
-            'email' => '123@qq.com'
-        ];
-
-        $rules = [
-            'name' => 'required|lengthBetween:3,6',
-            'email' => 'required|email'
-        ];
-
-        $v = resolve('validator');
-
-        $v->fill($post)->rules($rules)->labels(['name' => '姓名']);
-
-        if (! $v->validate()) {
-            return $v->errors();
-        }
-
-        return 'success';
-//        $qrCode = new QrCode('10013');
+//        $test = new \Lxh\Mails\Test();
 //
-//        $resp->withHeader('Content-Type', $qrCode->getContentType());
+//        $this->mailer->to('841324345@qq.com')->send($test);
 //
-//        return $qrCode->writeString();
+//        return $test;
+
     }
 
     public function actionHello()
