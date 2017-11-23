@@ -44,9 +44,9 @@ class Permission
 	);
 	
 	
-	public function __construct(FileManager $fileManager, array $params = null)
+	public function __construct(FileManager $files, array $params = null)
 	{
-		$this->fileManager = $fileManager;
+		$this->files = $files;
 // 		if( isset( $params)) {
 // 			$this->params = $params;
 // 		}
@@ -54,7 +54,7 @@ class Permission
 	
 	protected function getFileManager()
 	{
-		return $this->fileManager;
+		return $this->files;
 	}
 	
 	protected function getParams()

@@ -63,7 +63,6 @@ trait Loader
         'files' => [
             'shared' => true,
             'class' => 'Lxh\File\FileManager',
-            'dependencies' => 'config'
         ],
         'http.client' => [
             'shared' => false,

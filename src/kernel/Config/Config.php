@@ -17,7 +17,11 @@ class Config extends Entity
 
     protected $prefix = 'config';
 
+    protected $cachePath = 'resource/config/';
+
     protected static $instance;
+
+    protected $env = __ENV__;
 
     /**
      * 可写配置文件路径
@@ -45,12 +49,80 @@ class Config extends Entity
         $this->fillConfig();
     }
 
-    // 加载配置文件
-    public function fillConfig()
+    /**
+     * 重新加载配置文件
+     *
+     * @return static
+     */
+    public function refetch()
     {
+        $this->items = [];
+
+        $this->fillConfig(true);
+
+        return $this;
+    }
+
+    /**
+     * 获取缓存文件夹路径
+     *
+     * @return string
+     */
+    public function getCachePath()
+    {
+        return __ROOT__ . $this->cachePath . $this->env . '.php';
+    }
+
+    /**
+     * 读取缓存数据
+     *
+     * @return boolean
+     */
+    protected function readCache()
+    {
+        // 如果存在缓存，则直接加载缓存中的文件
+        if (! is_file($cachePath = $this->getCachePath())) {
+            return false;
+        }
+        $cache = include $cachePath;
+        if (count($cache) < 1) {
+            return false;
+        }
+        $this->items = &$cache;
+        return true;
+    }
+
+    /**
+     * 设置环境
+     *
+     * @param string $env
+     * @return static
+     */
+    public function env($env)
+    {
+        if (! in_array($env, [ENV_PROD, ENV_TEST, ENV_DEV])) {
+            return $this;
+        }
+        $this->env = $env;
+
+        return $this;
+    }
+
+    /**
+     * 加载配置文件
+     *
+     * @param bool $useCurrentEnv 是否加载指定环境配置文件
+     * @return void
+     */
+    public function fillConfig($useCurrentEnv = false)
+    {
+        if ($this->readCache()) {
+            return;
+        }
+
         $pre = $this->getBasePath();
 
-        foreach ($this->confFiles as & $f) {
+        foreach ($this->confFiles as &$f) {
             $file = "{$pre}{$f}.php";
 
             if (is_file($file)) {
@@ -58,20 +130,54 @@ class Config extends Entity
             }
         }
         if (count($this->items) < 1) {
-            throw new InvalidArgumentException('初始配置文件不存在或文件内容为空！');
+            throw new InvalidArgumentException("Config file[$file] not found!");
         }
 
-        foreach ((array)$this->get('add-config') as & $filename) {
-            $this->items += include "{$pre}{$filename}.php";
-        }
+        $this->fillWithFiles($this->get('add-config'), false, $useCurrentEnv);
 
-        foreach ((array)$this->get('add-config-name') as $k => & $filename) {
-            $this->items[basename($filename)] = include "{$pre}{$filename}.php";
-        }
+        $this->fillWithFiles($this->get('add-config-name'), true, $useCurrentEnv);
 
         $this->writableData = include $this->getWritableConfigPath();
-
         $this->items += $this->writableData;
+
+        $this->saveCache();
+    }
+
+    protected function fillWithFiles($files, $useKey = false, $useCurrentEnv = false)
+    {
+        $pre = $this->getBasePath();
+
+        if ($useCurrentEnv) {
+            $envpre = '/' . __ENV__ . '/';
+            $currentEnvpre = '/' . $this->env . '/';
+        }
+        foreach ((array) $files as $k => &$filename) {
+            $path = "{$pre}{$filename}.php";
+            if (isset($envpre)) {
+                $path = str_replace($envpre, $currentEnvpre, $path);
+            }
+            if (! is_file($path)) {
+                throw new InvalidArgumentException("Config file[$path] not found!");
+            }
+
+            if ($useKey) {
+                $this->items[basename($filename)] = include $path;
+            } else {
+                $this->items += include $path;
+            }
+        }
+    }
+
+    // 保存缓存
+    public function saveCache()
+    {
+        files()->putPhpContents($this->getCachePath(), $this->items);
+    }
+
+    // 清除缓存
+    public function removeCache()
+    {
+        return files()->remove($this->getCachePath());
     }
 
     /**
@@ -102,7 +208,7 @@ class Config extends Entity
      */
     public function loadEnv($path)
     {
-        $path = __ENV__ . '/' . $path;
+        $path = $this->env . '/' . $path;
 
         return $this->load($path);
     }
@@ -135,7 +241,7 @@ class Config extends Entity
      */
     protected function getEnvConfigPath($filename)
     {
-        return $this->getBasePath() . __ENV__ . "/$filename.php";
+        return $this->getBasePath() . $this->env . "/$filename.php";
     }
 
     protected function getWritableConfigPath()
