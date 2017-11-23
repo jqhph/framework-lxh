@@ -19,7 +19,7 @@ class ServeCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Runs PHP built-in web server.';
 
     protected $host = 'localhost';
 
@@ -59,9 +59,9 @@ class ServeCommand extends Command
     protected function getOptions()
     {
         return [
-            ['host', '', InputOption::VALUE_OPTIONAL, 'Server host.', $this->host],
-            ['port', 'p', InputOption::VALUE_OPTIONAL, 'Server port.', $this->port],
-            ['route', 'r', InputOption::VALUE_OPTIONAL, 'Server route.', $this->router],
+            ['host', '', InputOption::VALUE_OPTIONAL, 'Web server host.', $this->host],
+            ['port', 'p', InputOption::VALUE_OPTIONAL, 'Web server port.', $this->port],
+            ['route', 'r', InputOption::VALUE_OPTIONAL, 'Web server route.', $this->router],
         ];
     }
 }
