@@ -104,17 +104,17 @@ class Application extends SymfonyApplication
     }
 
     // 注册所有命令
-    public function registAllCommands()
+    public function resolveAllCommands()
     {
         if ($this->isRegistedAllCommands) {
             return;
         }
 
-        $files = $this->container->make('files');
+        $files = $this->container->files;
 
         foreach ($this->commandDir as & $dir) {
             foreach ($files->getFileList($this->basePath . $dir, false, 'php', true) as & $f) {
-                $this->regist(rtrim($f, 'Command.php'));
+                $this->resolveCommand(str_replace('Command.php', '', $f));
             }
         }
 
@@ -145,7 +145,7 @@ class Application extends SymfonyApplication
      */
     public function all($namespace = null)
     {
-        $this->registAllCommands();
+        $this->resolveAllCommands();
 
         return parent::all($namespace);
     }
@@ -185,13 +185,13 @@ class Application extends SymfonyApplication
     {
         if (! $this->has($name)) {
             // 如果找不到命令类，则注册相应的命令类进去
-            $this->regist($name);
+            $this->resolveCommand($name);
         }
         return parent::find($name);
     }
 
     // 注册命令类
-    public function regist($name)
+    public function resolveCommand($name)
     {
         foreach ($this->commandNamespaces as & $namespace) {
             $class = $namespace . $this->normalizeCommandClass(
