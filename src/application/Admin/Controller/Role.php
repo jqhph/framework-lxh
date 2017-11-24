@@ -52,7 +52,7 @@ class Role extends Controller
     {
         $permissions = ['menus' => [], 'custom' => []];
         if ($id) {
-            $permissions = $this->getModel('Role')->getPermissions($id);
+            $permissions = $this->model('Role')->getPermissions($id);
         }
 
         $menuList = make('acl-menu')->permissionsList($permissions['menus']);

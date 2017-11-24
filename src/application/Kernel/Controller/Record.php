@@ -49,7 +49,7 @@ class Record extends LxhController
         // 生成where条件数组
         $wheres = $this->makeListWhereContent($_REQUEST);
 
-        $model = $this->getModel();
+        $model = $this->model();
 
         // 获取记录总条数
         $total = $model->count($wheres);
@@ -157,7 +157,7 @@ class Record extends LxhController
         }
         $id = $params['id'];
 
-        $model = $this->getModel();
+        $model = $this->model();
 
         $model->id = $id;
 
@@ -232,7 +232,7 @@ class Record extends LxhController
             return $this->error($msg);
         }
 
-        $model = $this->getModel();
+        $model = $this->model();
 
         $model->id = $params['id'];
 
@@ -277,7 +277,7 @@ class Record extends LxhController
         }
 
         // 获取模型
-        $model = $this->getModel();
+        $model = $this->model();
 
         // 注入表单数据
         $model->fill($_POST);
@@ -326,7 +326,7 @@ class Record extends LxhController
         }
 
         // 获取模型
-        $model = $this->getModel();
+        $model = $this->model();
 
         // 注入表单数据
         $model->fill($data);

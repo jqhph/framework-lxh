@@ -36,7 +36,7 @@ class Admin extends Controller
             return $this->error($v->errors());
         }
 
-        if (! $this->getModel()->login($_POST['username'], $_POST['password'], I('remember'))) {
+        if (! $this->model()->login($_POST['username'], $_POST['password'], I('remember'))) {
             return $this->failed();
         }
 
@@ -63,7 +63,7 @@ class Admin extends Controller
             return $this->error($v->errors());
         }
 
-        $admin = $this->getModel();
+        $admin = $this->model();
 
         if ($admin->userExists($_POST['username'])) {
             return $this->error('The username exists.');

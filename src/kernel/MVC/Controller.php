@@ -142,7 +142,7 @@ abstract class Controller
      * @param  string $name 模型名称
      * @return Model
      */
-    protected function getModel($name = __CONTROLLER__)
+    protected function model($name = __CONTROLLER__)
     {
         return $this->container['model.factory']->$name;
     }

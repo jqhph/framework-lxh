@@ -54,7 +54,7 @@ class Menu extends Controller
     public function deleteValidate($id)
     {
         // 判断是否是系统菜单，如果是则不允许删除
-        if ($this->getModel()->isSystem($id)) {
+        if ($this->model()->isSystem($id)) {
             return 'Can\'t delete the system menu!';
         }
     }
@@ -89,7 +89,7 @@ class Menu extends Controller
         }
         $id = $params['id'];
 
-        $model = $this->getModel();
+        $model = $this->model();
 
         $model->id = $id;
 

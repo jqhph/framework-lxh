@@ -525,6 +525,17 @@ function query($name = 'primary')
 }
 
 /**
+ * 是否为ajax请求
+ *
+ * @access public
+ * @return bool
+ */
+function is_ajax()
+{
+    return resolve('http.requrest')->isAjax();
+}
+
+/**
  * 从数组中获取一个参数
  *
  * @param  array $data
@@ -687,14 +698,25 @@ function console_table()
     return call_user_func_array([Console::class, 'table'], func_get_args());
 }
 
-// 输出调试内容到浏览器
+// 输出调试内容
 function debug($data, $print = true, $json = false)
 {
-    echo '<pre>';
-    $s  = '<span style="color:#e07c79">';
-    $se = '</span>';
+    // 生产环境不输出内容
+    if (is_prod()) return;
+
+    $isCli = is_cli();
+    $n = "\n";
+    if (! $isCli) {
+        echo '<pre>';
+    }
+
+    $s = $se = '';
+    if (! $isCli) {
+        $s  = '<span style="color:#e07c79">';
+        $se = '</span>';
+    }
     if (is_string($data) || is_bool($data) || is_float($data) || is_integer($data)) {
-        echo $s . date('[H:i:s]') . $se .  " $data<br/>";
+        echo $s . date('[H:i:s]') . $se .  " $data{$n}";
         return;
     }
 
@@ -706,7 +728,11 @@ function debug($data, $print = true, $json = false)
     } else {
         var_dump($data);
     }
-    echo "</pre><br/>";
+
+    echo $n;
+    if (! $isCli) {
+        echo '</pre>';
+    }
 }
 
 function dd(...$args)
