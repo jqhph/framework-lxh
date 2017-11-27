@@ -113,7 +113,7 @@ class Console
 
         foreach ($content['args'] as & $log) {
             if (is_array($log)) {
-                $txt .= json_encode($log) . ', ';
+                $txt .= json_encode($log) . ',';
             } else if (is_int($log) || is_float($log) || is_bool($log)) {
                 $txt .= "$log,";
             } else {
@@ -122,6 +122,6 @@ class Console
                 $txt .= "'$log',";
             }
         }
-        return rtrim($txt, ', ') . '); ';
+        return rtrim($txt, ',') . '); ';
     }
 }

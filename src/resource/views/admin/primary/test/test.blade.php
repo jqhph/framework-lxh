@@ -1,7 +1,7 @@
 <h1>{{ $title }}</h1>
 <div>
     @if ($title)
-        world
+        Blade
     @else
         z
     @endif

@@ -4,7 +4,7 @@ return array (
   'use-language' => true,
   'view.compiled' => 'resource/blade-cache',
   'view.paths' => 'resource/views',
-  'view-driver' => 'blade',
+  'view-driver' => 'php',
   'view-version' => 'primary',
   'response-console-log' => true,
   'response-trace-log' => true,

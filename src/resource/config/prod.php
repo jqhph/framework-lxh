@@ -187,7 +187,36 @@ return array (
   ),
   'easy-wechat' => 
   array (
-    0 => 5465465,
+    'debug' => true,
+    'app_id' => 'your-app-id',
+    'secret' => 'your-app-secret',
+    'token' => 'your-token',
+    'aes_key' => '',
+    'log' => 
+    array (
+      'level' => 'debug',
+      'permission' => 511,
+      'file' => '/tmp/easywechat.log',
+    ),
+    'oauth' => 
+    array (
+      'scopes' => 
+      array (
+        0 => 'snsapi_userinfo',
+      ),
+      'callback' => '/examples/oauth_callback.php',
+    ),
+    'payment' => 
+    array (
+      'merchant_id' => 'your-mch-id',
+      'key' => 'key-for-signature',
+      'cert_path' => 'path/to/your/cert.pem',
+      'key_path' => 'path/to/your/key',
+    ),
+    'guzzle' => 
+    array (
+      'timeout' => 3,
+    ),
   ),
   'client-config' => 
   array (
