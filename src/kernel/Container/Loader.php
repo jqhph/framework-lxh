@@ -237,27 +237,26 @@ trait Loader
             return $this->bindings[$abstract];
         }
 
-        $bindings = $this->getAllBindings();
+        $this->getAllBindings();
 
-        if (! isset($bindings[$abstract])) {
+        if (! isset($this->bindings[$abstract])) {
             return [];
         }
 
-        return $bindings[$abstract];
+        return $this->bindings[$abstract];
     }
 
     /**
      * 获取服务注册配置数组
      *
-     * @return array
+     * @return void
      */
-    public function &getAllBindings()
+    public function getAllBindings()
     {
         if (! $this->resolvedConfig) {
             $this->bindings += (array) $this->make('config')->getContainerConfig();
             $this->resolvedConfig = true;
         }
-        return $this->bindings;
     }
 
 }

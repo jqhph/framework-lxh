@@ -532,7 +532,7 @@ function query($name = 'primary')
  */
 function is_ajax()
 {
-    return resolve('http.requrest')->isAjax();
+    return $GLOBALS['CONTAINER']['http.requrest']->isAjax();
 }
 
 /**

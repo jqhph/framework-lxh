@@ -375,7 +375,7 @@ class Container implements ArrayAccess, ContractsContainer
      */
     public function rebinding($abstract, Closure $callback)
     {
-        $this->reboundCallbacks[$abstract = $this->getAlias($abstract)][] = $callback;
+        $this->reboundCallbacks[$abstract][] = $callback;
 
         if ($this->bound($abstract)) {
             return $this->make($abstract);

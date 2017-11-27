@@ -88,11 +88,11 @@ $config['modules'] = ['Admin', 'Client'];
 
 // 开启子域名部署
 $config['domain-deploy'] = true;
-// 配置子域名指向模块
+// 配置子域名指向的路由配置文件
 $config['domain-deploy-config'] = [
-    'dev.lxh.com' => 'Admin',
-    'www.lxh.com' => 'Client',
-    '119.23.229.90' => 'Client',
+    'dev.lxh.com' => 'admin',
+    'www.lxh.com' => 'client',
+    '119.23.229.90' => 'client',
 ];
 
 // 记录错误日志级别
