@@ -232,8 +232,12 @@ class Response extends PsrResponse
 
 		$this->sendHeader();
 
-		if ($this->printContent()) {
+		if (($data = $this->normalizeContent()) !== false) {
 			$this->events->fire('response.send.after', [$this->request, $this]);
+
+			$this->sent = true;
+
+			echo $data;
 
 			$this->sendConsole();
 		}
@@ -244,7 +248,7 @@ class Response extends PsrResponse
 	 *
 	 * @return bool 成功返回true，失败返回false
 	 */
-	protected function printContent()
+	protected function &normalizeContent()
 	{
 		try {
 			if (is_array($this->data)) {
@@ -254,12 +258,11 @@ class Response extends PsrResponse
 					throw new \InvalidArgumentException(json_last_error_msg());
 				}
 
-				echo $data;
+				return $data;
 			} else {
-				echo $this->data;
-			}
 
-			return $this->sent = true;
+				return $this->data;
+			}
 		} catch (\Exception $e) {
 			$this->events->fire('exception', [$e]);
 			return false;

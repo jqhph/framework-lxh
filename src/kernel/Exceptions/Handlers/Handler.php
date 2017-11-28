@@ -3,6 +3,7 @@
 namespace Lxh\Exceptions\Handlers;
 
 use Lxh\Contracts\Container\Container;
+use Lxh\Debug\Code;
 use Lxh\Events\Dispatcher;
 use Lxh\Exceptions\Exception;
 use Lxh\Logger\Manager;
@@ -173,7 +174,8 @@ class Handler
 			'code' => $e->getCode(),
 			'file' => $e->getFile(),
 			'line' => $e->getLine(),
-			'trace' => $e->getTraceAsString()
+			'trace' => $e->getTraceAsString(),
+			'preview' => Code::source($e->getFile(), $e->getLine(), 8)
 		];
 
 		// 非生产环境以及非ajax请求显示错误界面

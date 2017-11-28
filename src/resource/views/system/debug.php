@@ -61,7 +61,8 @@
             box-shadow: 0 0 8px #D0D0D0;
         }
         #container p span{font-size: 15px}
-        .danger{color: #a94442}
+        .number, .danger{color: #a94442}
+
     </style>
 </head>
 <body>
@@ -76,9 +77,9 @@
 
         <p><b>FILE:</b> <span class="danger"><?php echo $file;?>(<?php echo $line;?>)</span></p>
 
-        <code><?php echo str_replace("\n", '<br/>', $trace);?></code>
-
+        <?php echo isset($preview) ? $preview : '';?>
         <p></p>
+        <code><?php echo str_replace("\n", '<br/>', $trace);?></code>
     </div>
 
     <p class="footer"></p>

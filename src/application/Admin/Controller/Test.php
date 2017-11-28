@@ -2,6 +2,7 @@
 
 namespace Lxh\Admin\Controller;
 
+use Lxh\Debug\Code;
 use Lxh\Exceptions\Exception;
 use Lxh\Exceptions\NotFound;
 use Lxh\Helper\Console;
@@ -16,6 +17,7 @@ class Test extends Controller
 {
     public function actionTest(Request $req, Response $resp, & $params)
     {
+        $this->t();
         return $this->render('test', ['title' => 'HELLO']);
 //        $test = new \Lxh\Mails\Test();
 //
