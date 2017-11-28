@@ -74,6 +74,7 @@ class Container implements ArrayAccess, ContractsContainer
      */
     public function make($abstract)
     {
+        $abstract = $this->getAlias($abstract);
         return isset($this->instances[$abstract]) ? $this->instances[$abstract] : $this->resolve($abstract);
     }
 
@@ -151,6 +152,7 @@ class Container implements ArrayAccess, ContractsContainer
      */
     public function extend($abstract, Closure $closure)
     {
+        $abstract = $this->getAlias($abstract);
         if (isset($this->instances[$abstract])) {
             $this->instances[$abstract] = $closure($this->instances[$abstract], $this);
 
@@ -169,8 +171,8 @@ class Container implements ArrayAccess, ContractsContainer
      */
     public function resolved($abstract)
     {
-        return isset($this->resolved[$abstract]) ||
-        isset($this->instances[$abstract]);
+        $abstract = $this->getAlias($abstract);
+        return isset($this->resolved[$abstract]) || isset($this->instances[$abstract]);
     }
 
     /**
@@ -222,6 +224,9 @@ class Container implements ArrayAccess, ContractsContainer
      */
     public function resolving($abstract, Closure $callback = null)
     {
+        if (is_string($abstract)) {
+            $abstract = $this->getAlias($abstract);
+        }
         if ($abstract instanceof Closure) {
             $this->globalResolvingCallbacks[] = $abstract;
         } else {
@@ -243,7 +248,7 @@ class Container implements ArrayAccess, ContractsContainer
             // If the class is null, it means the dependency is a string or some other
             // primitive type which we can not resolve since it is not a class and
             // we will just bomb out with an error since we have no-where to go.
-            $dependencies[] = $this->resolveClass($parameter);
+            $dependencies[] = $this->make($parameter->getClass()->name);
         }
 
         return $dependencies;
@@ -292,14 +297,30 @@ class Container implements ArrayAccess, ContractsContainer
 
 
     /**
-     * Resolve a class based dependency from the container.
+     * Get the alias for an abstract if available.
      *
-     * @param  \ReflectionParameter  $parameter
-     * @return mixed
+     * @param  string  $abstract
+     * @return string
+     *
+     * @throws \LogicException
      */
-    protected function resolveClass(\ReflectionParameter $parameter)
+    public function getAlias($abstract)
     {
-        return $this->make($parameter->getClass()->name);
+        return isset($this->aliases[$abstract]) ? $this->aliases[$abstract] : $abstract;
+    }
+
+    /**
+     * Alias a type to a different name.
+     *
+     * @param  string  $abstract
+     * @param  string  $alias
+     * @return void
+     */
+    public function alias($abstract, $aliases)
+    {
+        foreach ((array) $aliases as &$alias) {
+            $this->aliases[$alias] = $abstract;
+        }
     }
 
     /**
@@ -328,7 +349,9 @@ class Container implements ArrayAccess, ContractsContainer
         // defined and will grab this "real" abstract class name and register this
         // alias with the container so that it can be used as a shortcut for it.
         if (is_array($abstract)) {
-            list($abstract, $concrete) = $this->extractAlias($abstract);
+            $aliases  = current($abstract);
+            $abstract = key($abstract);
+            $this->alias($abstract, $aliases);
         }
 
         // If no concrete type was given, we will simply set the concrete type to the
@@ -356,7 +379,7 @@ class Container implements ArrayAccess, ContractsContainer
             $concrete['shared'] = $shared;
         }
 
-        $this->bindings[$abstract] = $concrete;
+        $this->bindings[$abstract] = &$concrete;
 
         // If the abstract type was already resolved in this container we'll fire the
         // rebound listener so that any objects which have already gotten resolved
@@ -395,16 +418,6 @@ class Container implements ArrayAccess, ContractsContainer
         return $this->rebinding($abstract, function ($app, $instance) use ($target, $method) {
             $target->{$method}($instance);
         });
-    }
-
-    protected function normalize(& $name)
-    {
-        return preg_replace_callback('/([A-Z])/', [$this, 'convert'], $name);
-    }
-
-    protected function convert(& $text)
-    {
-        return '.' . strtolower($text[1]);
     }
 
     /**
@@ -460,6 +473,7 @@ class Container implements ArrayAccess, ContractsContainer
      */
     public function isShared($abstract)
     {
+        $abstract = $this->getAlias($abstract);
         if (isset($this->instances[$abstract])) {
             return true;
         }
@@ -475,18 +489,7 @@ class Container implements ArrayAccess, ContractsContainer
      */
     public function bound($abstract)
     {
-        return isset($this->bindings[$abstract]) || isset($this->instances[$abstract]);
-    }
-
-    /**
-     * Extract the type and alias from a given definition.
-     *
-     * @param  array  $definition
-     * @return array
-     */
-    protected function extractAlias(array $definition)
-    {
-        return [key($definition), current($definition)];
+        return isset($this->bindings[$abstract]) || isset($this->instances[$abstract]) || isset($this->aliases[$abstract]);
     }
 
     /**
@@ -501,7 +504,7 @@ class Container implements ArrayAccess, ContractsContainer
             $class = get_class($this->instances[$abstract]);
             unset($this->instances[$class]);
         }
-        unset($this->instances[$abstract]);
+        unset($this->instances[$abstract], $this->aliases[$abstract]);
     }
 
     /**
@@ -531,7 +534,7 @@ class Container implements ArrayAccess, ContractsContainer
             }
         }
         $this->instances = [];
-        $this->instances = & $new;
+        $this->instances = &$new;
     }
 
     /**
@@ -567,6 +570,7 @@ class Container implements ArrayAccess, ContractsContainer
      */
     public function offsetGet($key)
     {
+        $key = $this->getAlias($key);
         return isset($this->instances[$key]) ? $this->instances[$key] : $this->resolve($key);
     }
 
@@ -603,6 +607,7 @@ class Container implements ArrayAccess, ContractsContainer
      */
     public function __get($key)
     {
+        $key = $this->getAlias($key);
         return isset($this->instances[$key]) ? $this->instances[$key] : $this->resolve($key);
     }
 }

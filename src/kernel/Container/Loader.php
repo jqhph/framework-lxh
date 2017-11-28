@@ -7,6 +7,7 @@ use Lxh\Exceptions\InternalServerError;
 use Lxh\Exceptions\InvalidArgumentException;
 use Lxh\Mail\MailServiceProvider;
 use Lxh\View\ViewServiceProvider;
+use Lxh\Contracts\Events\Dispatcher as  EventsDispatcher;
 
 trait Loader
 {
@@ -41,6 +42,9 @@ trait Loader
             'class' => 'Lxh\Events\Dispatcher',
             'dependencies' => 'container',
             'shared' => true,
+            'aliases' => [
+                EventsDispatcher::class,
+            ]
         ],
         'http.input' => [
             'shared' => true,
@@ -53,7 +57,7 @@ trait Loader
         'query' => [
             'shared' => false,
             'class' => 'Lxh\ORM\Query',
-            'dependencies' => ['container']
+            'dependencies' => ['container'],
         ],
         'controller.manager' => [
             'shared' => true,
@@ -73,20 +77,17 @@ trait Loader
             'class' => 'Lxh\\Http\\Response',
             'dependencies' => [
                 'http.request', 'container'
-            ]
+            ],
+            'aliases' => \Psr\Http\Message\ResponseInterface::class
         ],
         'http.request' => [
             'shared' => true,
-            'class' => 'Lxh\\Http\\Request'
+            'class' => 'Lxh\\Http\\Request',
+            'aliases' => \Psr\Http\Message\RequestInterface::class
         ],
         'pipeline' => [
             'shared' => false,
             'class' => 'Lxh\Pipeline\Pipeline',
-            'dependencies' => 'container'
-        ],
-        'builder.manager' => [
-            'shared' => true,
-            'class' => 'Lxh\ORM\Driver\BuilderManager',
             'dependencies' => 'container'
         ],
         'logger' => [
@@ -164,6 +165,13 @@ trait Loader
     ];
 
     /**
+     * The registered type aliases.
+     *
+     * @var array
+     */
+    protected $aliases = [];
+
+    /**
      * Resolve the given type with array.
      *
      * @param string $abstract
@@ -233,29 +241,31 @@ trait Loader
      */
     protected function getServiceBindings($abstract)
     {
-        if (isset($this->bindings[$abstract])) {
-            return $this->bindings[$abstract];
+        if (! $this->resolvedConfig) {
+            $this->mergeAllBindings();
+            $this->resolvedConfig = true;
         }
 
-        $this->getAllBindings();
-
-        if (! isset($this->bindings[$abstract])) {
-            return [];
-        }
-
-        return $this->bindings[$abstract];
+        return isset($this->bindings[$abstract]) ? $this->bindings[$abstract] : [];
     }
 
     /**
-     * 获取服务注册配置数组
+     * 合并容器注册配置数组
      *
      * @return void
      */
-    public function getAllBindings()
+    public function mergeAllBindings()
     {
-        if (! $this->resolvedConfig) {
-            $this->bindings += (array) $this->make('config')->getContainerConfig();
-            $this->resolvedConfig = true;
+        $this->bindings += (array) include __ROOT__ . 'config/container/container.php';
+
+        foreach ($this->bindings as $abstract => &$conf) {
+            if (!isset($conf['aliases'])) {
+                continue;
+            }
+            foreach ((array) $conf['aliases'] as &$alias) {
+                if ($alias == $abstract) continue;
+                $this->aliases[$alias] = $abstract;
+            }
         }
     }
 

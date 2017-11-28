@@ -16,7 +16,6 @@ class Test extends Controller
 {
     public function actionTest(Request $req, Response $resp, & $params)
     {
-
         return $this->render('test', ['title' => 'HELLO']);
 //        $test = new \Lxh\Mails\Test();
 //
