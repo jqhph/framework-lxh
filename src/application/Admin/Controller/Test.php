@@ -17,6 +17,7 @@ class Test extends Controller
 {
     public function actionTest(Request $req, Response $resp, & $params)
     {
+        
 //        query()->from('test1')->find();
         return $this->render('test', ['title' => 'HELLO']);
 //        $test = new \Lxh\Mails\Test();
