@@ -69,11 +69,13 @@ class Handler
 	{
 		$lastSql = &PDO::$lastSql;
 
+		$trace = $e->getTrace();
+
 		$this->logger
 			->channel('pdo')
 			->error(
 				"{$e->getMessage()} [line({$e->getLine()})] [{$lastSql}]",
-				['params' => & PDO::$lastPrepareData]
+				['params' => & PDO::$lastPrepareData, 'trace' => array_splice($trace, 1, 6)]
 			);
 
 		$this->responseError($e);
@@ -98,11 +100,11 @@ class Handler
 	 */
 	public function normal(\Exception $e)
 	{
-		if ($e->getMessage()) {
-			$this->logger
-				->channel('exception')
-				->error($this->normalizeExceptionReportString($e));
-		}
+		$trace = $e->getTrace();
+
+		$this->logger
+			->channel('exception')
+			->error($this->normalizeExceptionReportString($e), array_splice($trace, 0, 4));
 
 		//返回错误提示
 		$this->responseError($e);
@@ -116,11 +118,11 @@ class Handler
 	{
 		$recordMethod = $this->getLoggerMethod($e->getLevel());
 
-		if ($e->getMessage()) {
-			$this->logger
-				->channel('exception')
-				->$recordMethod($this->normalizeExceptionReportString($e));
-		}
+		$trace = $e->getTrace();
+
+		$this->logger
+			->channel('exception')
+			->$recordMethod($this->normalizeExceptionReportString($e), array_splice($trace, 0, 4));
 
 		// 返回错误提示
 		$this->responseError($e);
@@ -130,7 +132,7 @@ class Handler
 	{
 		$class = get_class($e);
 
-		return "exception '$class' with message '{$e->getMessage()}' in {$e->getFile()}:{$e->getLine()}";
+		return "Exception '$class' with message '{$e->getMessage()}' in {$e->getFile()}:{$e->getLine()}";
 	}
 
 	/**
@@ -180,11 +182,11 @@ class Handler
 
 		// 非生产环境以及非ajax请求显示错误界面
 		if (! is_prod() && ! $isAjax && ! $this->request->isCli()) {
-			$view = resolve('view.adaptor')->get();
-			return $this->response->data = $view->make('system.debug', $vars)->render();
+			return $this->response->data = resolve('view.adaptor')->get()->make('system.debug', $vars)->render();
 		}
 
 		if (! is_prod() && $isAjax || $this->request->isCli()) {
+			unset($vars['preview']);
 			return $this->response->data = $vars;
 		}
 	}

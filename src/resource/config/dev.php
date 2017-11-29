@@ -39,9 +39,9 @@ return array (
   'domain-deploy' => true,
   'domain-deploy-config' => 
   array (
-    'dev.lxh.com' => 'Admin',
-    'www.lxh.com' => 'Client',
-    '119.23.229.90' => 'Client',
+    'dev.lxh.com' => 'admin',
+    'www.lxh.com' => 'client',
+    '119.23.229.90' => 'client',
   ),
   'record-error-info-level' => 
   array (

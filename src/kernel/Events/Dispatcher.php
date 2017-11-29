@@ -52,22 +52,21 @@ class Dispatcher implements \Lxh\Contracts\Events\Dispatcher
 	/**
 	 * 监听一个事件
 	 *
-	 * @param string|array $events   事件名称，多个事件用数组
+	 * @param string $event   事件名称，多个事件用数组
 	 * @param callable	   $listener 事件
 	 * @param int		   $priority 优先级权重
 	 * @return void
 	 * */
-	public function listen($events, $listener, $priority = 0) 
+	public function listen($event, $listener, $priority = 0)
 	{
-		foreach ((array) $events as & $event) {
-			if (strpos($event, '*') !== false) {
-				$this->wildcards[$events][] = $listener;
-			} else {
-				$this->listeners[$event][$priority][] = $listener;
-				
-				unset($this->sorted[$event]);
-			}
-		}		
+		if (strpos($event, '*') !== false) {
+			$this->wildcards[$event][] = $listener;
+		} else {
+			$this->listeners[$event][$priority][] = $listener;
+
+			unset($this->sorted[$event]);
+		}
+
 	}
 	
 	/**
