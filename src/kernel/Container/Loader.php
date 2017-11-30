@@ -154,6 +154,10 @@ trait Loader
             'class' => 'Lxh\Debug\Shutdown',
             'dependencies' => ['container', 'events', 'http.response']
         ],
+        'error.handler' => [
+            'shared' => true,
+            'class' => 'Lxh\Debug\Error',
+        ],
         'session' => [
             'shared' => true,
             'class' => 'Lxh\Session\Store',

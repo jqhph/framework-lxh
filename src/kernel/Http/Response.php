@@ -237,9 +237,23 @@ class Response extends PsrResponse
 
 			$this->sent = true;
 
+			echo ob_get_clean();
+
 			echo $data;
 
 			$this->sendConsole();
+		}
+
+		$this->reportError();
+	}
+
+	protected function reportError()
+	{
+		if (! ($error = error_get_last())) {
+			return;
+		}
+		if (in_array($error['type'], config('record-error-info-level'))) {
+			$this->container['error.handler']->handle($error);
 		}
 	}
 

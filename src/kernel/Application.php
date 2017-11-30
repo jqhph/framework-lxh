@@ -58,6 +58,8 @@ class Application
     {
         define('__ROOT__', $rootDir . '/');
 
+        ob_start();
+
         $this->root = __ROOT__;
 
         $this->loadInitConfig();
@@ -97,7 +99,10 @@ class Application
      */
     public function shutdown()
     {
-        $this->container['shutdown']->handle();
+        // 触发程序终结事件
+        $this->events->fire('app.shutdown', [$this->response]);
+
+        $this->container['http.response']->send();
     }
 
     /**
@@ -145,6 +150,7 @@ class Application
             return $this->response;
         } catch (\Exception $e) {
             $this->events->fire('exception', [$e]);
+            return $this->response;
         }
     }
 
