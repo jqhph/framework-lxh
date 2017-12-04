@@ -6,7 +6,7 @@
  * @date   2017/8/1 18:12
  */
 
-namespace Lxh\Admin\Controller;
+namespace Lxh\Admin\Controllers;
 
 use Lxh\MVC\Controller;
 

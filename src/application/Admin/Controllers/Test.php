@@ -1,6 +1,6 @@
 <?php
 
-namespace Lxh\Admin\Controller;
+namespace Lxh\Admin\Controllers;
 
 use Lxh\Debug\Code;
 use Lxh\Exceptions\Exception;

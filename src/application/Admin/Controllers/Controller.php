@@ -6,7 +6,7 @@
  * @date   2017/6/28 21:37
  */
 
-namespace Lxh\Admin\Controller;
+namespace Lxh\Admin\Controllers;
 
 use Lxh\Kernel\Controller\Record;
 

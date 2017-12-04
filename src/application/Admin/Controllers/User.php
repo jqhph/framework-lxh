@@ -6,13 +6,13 @@
  * @date   2017/6/28 21:34
  */
 
-namespace Lxh\Admin\Controller;
+namespace Lxh\Admin\Controllers;
 
 use Lxh\Helper\Arr;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
 
-class Admin extends Controller
+class User extends Controller
 {
     /**
      * 用户登录api
@@ -25,12 +25,12 @@ class Admin extends Controller
             return $this->error();
         }
         $v = $this->validator();
-
+        
         $v->fill($_POST);
 
-        $v->rule('username', 'lengthBetween', 4, 20);
+        $v->rule('lengthBetween', 'username', 4, 20);
 
-        $v->rule('password', 'lengthBetween', 4, 30);
+        $v->rule('lengthBetween', 'password', 4, 30);
 
         if (! $v->validate()) {
             return $this->error($v->errors());
@@ -42,39 +42,39 @@ class Admin extends Controller
 
         return $this->success();
     }
-
-
+    
+    
     public function actionRegister(Request $req, Response $resp)
     {
         if (empty($_POST)) {
             return $this->error();
         }
         $v = $this->validator();
-
+        
         $v->fill($_POST);
+        
+        $v->rule('lengthBetween', 'username', 4, 20);
+        
+        $v->rule('lengthBetween', 'password', 4, 30);
 
-        $v->rule('username', 'lengthBetween', 4, 20);
-
-        $v->rule('password', 'lengthBetween', 4, 30);
-
-        $v->rule('password', 'equals', 'repassword');
+        $v->rule('equals', 'password', 'repassword');
 
         if (! $v->validate()) {
             return $this->error($v->errors());
         }
 
-        $admin = $this->model();
+        $user = $this->model();
 
-        if ($admin->userExists($_POST['username'])) {
+        if ($user->userExists($_POST['username'])) {
             return $this->error('The username exists.');
         }
 
-        if (! $admin->register($_POST, $req->ip())) {
+        if (! $user->register($_POST, $req->ip())) {
             return $this->failed();
         }
 
-        $admin->login($_POST['username'], $_POST['password'], true, true);
-
+        $user->login($_POST['username'], $_POST['password'], true, true);
+        
         return $this->success();
     }
 }

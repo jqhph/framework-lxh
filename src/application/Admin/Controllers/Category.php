@@ -5,7 +5,7 @@
  * @date   2017-10-17 19:37:31
  */
 
-namespace Lxh\Admin\Controller;
+namespace Lxh\Admin\Controllers;
 
 use Lxh\Helper\Valitron\Validator;
 use Lxh\Http\Request;

@@ -6,7 +6,7 @@
  * Time: 20:58
  */
 
-namespace Lxh\Admin\Model;
+namespace Lxh\Admin\Models;
 
 use Lxh\Kernel\Model\Record;
 

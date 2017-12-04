@@ -6,7 +6,7 @@
  * @date   2017/6/27 16:37
  */
 
-namespace Lxh\Admin\Model;
+namespace Lxh\Admin\Models;
 
 use Lxh\Contracts\Container\Container;
 use Lxh\Helper\Entity;

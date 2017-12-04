@@ -1,6 +1,6 @@
 <?php
 
-namespace Lxh\Admin\Middleware;
+namespace Lxh\Admin\Middlewares;
 
 use Closure;
 

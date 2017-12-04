@@ -5,7 +5,7 @@
  * @date   2017-10-16 21:10:55
  */
 
-namespace Lxh\Admin\Controller;
+namespace Lxh\Admin\Controllers;
 
 //use Lxh\MVC\Controller;
 use Lxh\Http\Request;

@@ -5,7 +5,7 @@
  * @date   2017-10-17 19:37:45
  */
 
-namespace Lxh\Admin\Model;
+namespace Lxh\Admin\Models;
 
 use Lxh\MVC\Model;
 use Lxh\Contracts\Container\Container;

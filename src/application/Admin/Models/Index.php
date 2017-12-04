@@ -5,7 +5,7 @@
  * @date   2017-06-14 11:28:04
  */
 
-namespace Lxh\Admin\Model;
+namespace Lxh\Admin\Models;
 
 use Lxh\MVC\Model;
 

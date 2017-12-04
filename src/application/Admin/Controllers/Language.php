@@ -6,7 +6,7 @@
  * Time: 23:28
  */
 
-namespace Lxh\Admin\Controller;
+namespace Lxh\Admin\Controllers;
 
 use Lxh\Exceptions\Forbidden;
 use Lxh\Http\Request;

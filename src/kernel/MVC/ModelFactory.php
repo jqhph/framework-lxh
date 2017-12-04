@@ -11,7 +11,7 @@ class ModelFactory extends Factory
 {
 	public function create($name)
 	{
-		$className = 'Lxh\\' . __MODULE__ . '\\Model\\' . $name;
+		$className = 'Lxh\\' . __MODULE__ . '\\Models\\' . $name;
 
 		if (! class_exists($className)) {
 			if ($default = config('default-model')) {

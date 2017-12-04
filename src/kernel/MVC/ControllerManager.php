@@ -251,7 +251,7 @@ class ControllerManager extends Factory
      */
     public function create($name)
     {
-        $className = 'Lxh\\' . $this->module . '\\Controller\\';
+        $className = 'Lxh\\' . $this->module . '\\Controllers\\';
         if ($this->folder) {
             $className .= $this->folder . '\\';
         }

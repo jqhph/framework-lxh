@@ -6,7 +6,7 @@
  * Time: 12:57
  */
 
-namespace Lxh\Admin\Controller;
+namespace Lxh\Admin\Controllers;
 
 use Lxh\Exceptions\Forbidden;
 //use Lxh\MVC\Controller;

@@ -6,7 +6,7 @@
  * @date   2017/7/19 10:51
  */
 
-namespace Lxh\Admin\Model;
+namespace Lxh\Admin\Models;
 
 use Lxh\Helper\Entity;
 use Lxh\MVC\Model;

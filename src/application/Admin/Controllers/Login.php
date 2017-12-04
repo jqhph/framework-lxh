@@ -6,7 +6,7 @@
  * @date   2017/6/27 16:59
  */
 
-namespace Lxh\Admin\Controller;
+namespace Lxh\Admin\Controllers;
 
 use Lxh\Helper\Util;
 use Lxh\Mails\Test;
