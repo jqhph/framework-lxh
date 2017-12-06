@@ -252,7 +252,7 @@ class Response extends PsrResponse
 		if (! ($error = error_get_last())) {
 			return;
 		}
-		if (in_array($error['type'], config('record-error-info-level'))) {
+		if (in_array((int) $error['type'], config('record-error-info-level'), true)) {
 			$this->container['error.handler']->handle($error);
 		}
 	}
@@ -292,9 +292,8 @@ class Response extends PsrResponse
 	{
 		// 非生产环境和非命令行环境则输出控制台调试日志
 		if (
-			$this->outputConsoleLog && (! is_prod() || config('response-console-with-prod'))
+			$this->outputConsoleLog && ! is_prod()
 			&& ! $this->request->isCli() && config('response-console-log', true) && ! $this->request->isAjax()
-			&& ! $this->request->isMobile()
 		) {
 			echo Console::fetch();
 		}

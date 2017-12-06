@@ -23,8 +23,6 @@ class View
      */
     protected $vars = [];
 
-    protected $module;
-
     // 模板版本
     protected $version;
 
@@ -38,7 +36,6 @@ class View
     public function __construct(ControllerManager $manager)
     {
         $this->version = config('view-version', 'primary');
-        $this->module = Util::convertWith($manager->moduleName(), true, '-');
 
         $p = config('view.paths', 'resource/views');
 

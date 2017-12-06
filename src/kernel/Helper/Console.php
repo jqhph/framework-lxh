@@ -93,7 +93,7 @@ class Console
     {
         if (empty(static::$records)) return '';
 
-        $txt = 'console.group("%c FROM SERVER ", "color:red;font-weight:bold"); ';
+        $txt = 'console.group("%c FROM SERVER ", "color:red;font-weight:bold");';
 
         foreach (static::$records as & $content) {
            $txt .= static::fetchRow($content);
@@ -108,8 +108,7 @@ class Console
 
     protected static function fetchRow(array & $content)
     {
-        $type = $content['type'];
-        $txt = "console.$type(";
+        $txt = "console.{$content['type']}(";
 
         foreach ($content['args'] as & $log) {
             if (is_array($log)) {
