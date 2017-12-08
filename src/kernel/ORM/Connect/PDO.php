@@ -19,6 +19,8 @@ class PDO
     private $prefix;	//表前缀
     private $pdo;		//PDO实例化对象
 
+    protected $options = [];
+
     protected $config;
     // 是否启用连接池
     protected $usepool;
@@ -173,7 +175,9 @@ class PDO
 
         $pre = $replace ? 'REPLACE' : 'INSERT';
 
-        $sql = $pre . ' INTO `' . $table . '` (' . $field . ') VALUES ' . $values;
+        $ignore = $this->option('ignore') ? 'IGNORE' : '';
+
+        $sql = "$pre $ignore INTO `$table` ($field) VALUES $values";
 
         self::$lastSql = & $sql;
 
@@ -250,6 +254,11 @@ class PDO
         return $this->stmt;
     }
 
+    public function options(array $options)
+    {
+        $this->options = &$options;
+        return $this;
+    }
 
     /**
      * 查询单条数据操作
@@ -303,6 +312,9 @@ class PDO
         }
 
         $updateStr = substr($updateStr, 0, - 1);
+
+        $ignore = $this->option('ignore') ? 'IGNORE' : '';
+
         $sql = "UPDATE `$table` SET {$updateStr} {$where}";
 
         $data = array_merge($data, $whereData);
@@ -377,12 +389,26 @@ class PDO
         $field  = substr($field,  0, - 1);
         $values = substr($values, 0, - 1);
 
-        $sql = "INSERT INTO `$table` ($field) VALUES ($values)";
+        $ignore = $this->option('ignore') ? 'IGNORE' : '';
+
+        $sql = "INSERT $ignore INTO `$table` ($field) VALUES ($values)";
 
         $res = $this->prepare($sql, $data, false);
         $id = $this->pdo->lastInsertId();
 
         return $id ?: $res;
+    }
+
+    /**
+     *
+     *
+     * @param string $k
+     * @param string $def
+     * @return mixed
+     */
+    public function option($k, $def = '')
+    {
+        return isset($this->options[$k]) ? $this->options[$k] : $def;
     }
 
     public function replace($table, array $data)

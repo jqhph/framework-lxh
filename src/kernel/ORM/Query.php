@@ -95,6 +95,17 @@ class Query
 	}
 
 	/**
+	 * INSERT IGNORE INTO `tb` SET ...
+	 *
+	 * @return static
+	 */
+	public function ignore()
+	{
+		$this->builder->ignore();
+		return $this;
+	}
+
+	/**
 	 *
 	 * @return static
 	 */

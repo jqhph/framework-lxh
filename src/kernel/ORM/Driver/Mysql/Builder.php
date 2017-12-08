@@ -72,6 +72,8 @@ class Builder
      */
     protected $where;
 
+    protected $options = [];
+
     public function __construct(Container $container, Query $query)
     {
         $this->container = $container;
@@ -275,6 +277,17 @@ class Builder
     }
 
     /**
+     * INSERT IGNORE INTO `tb` SET ...
+     *
+     * @return static
+     */
+    public function ignore()
+    {
+        $this->options['ignore'] = 1;
+        return $this;
+    }
+
+    /**
      *  传入：
      * [
     'id', 'parentId', 'name',
@@ -366,7 +379,7 @@ class Builder
             throw new InternalServerError('Can not found table name.');
         }
 
-        $content = $this->query->connection()->one($this->querySql()['sql'] . ' LIMIT 1', $this->whereData);
+        $content = $this->query->connection()->options($this->options)->one($this->querySql()['sql'] . ' LIMIT 1', $this->whereData);
 
         $this->clear();
 
@@ -382,7 +395,7 @@ class Builder
             throw new InternalServerError('Can not found table name.');
         }
 
-        $content = $this->query->connection()->all($this->querySql()['sql'], $this->whereData);
+        $content = $this->query->connection()->options($this->options)->all($this->querySql()['sql'], $this->whereData);
 
         $this->clear();
 
@@ -506,14 +519,14 @@ class Builder
 
     public function insert(array & $p1)
     {
-        $res = $this->query->connection()->add($this->tableName, $p1);
+        $res = $this->query->connection()->options($this->options)->add($this->tableName, $p1);
         $this->clear();
         return $res;
     }
 
     public function replace(array & $p1)
     {
-        $res = $this->query->connection()->replace($this->tableName, $p1);
+        $res = $this->query->connection()->options($this->options)->replace($this->tableName, $p1);
         $this->clear();
         return $res;
     }
@@ -568,7 +581,7 @@ class Builder
     // 批量新增
     public function batchInsert(&$data)
     {
-        $res = $this->query->connection()->batchAdd($this->tableName, $data);
+        $res = $this->query->connection()->options($this->options)->batchAdd($this->tableName, $data);
         $this->clear();
         return $res;
     }
@@ -651,6 +664,8 @@ class Builder
         $this->orWheres   = [];
         $this->having	  = [];
         $this->orHaving   = [];
+
+        $this->options = [];
     }
 
     protected function getGroupBySql()
