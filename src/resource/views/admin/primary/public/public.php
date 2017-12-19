@@ -18,14 +18,14 @@
 
     // App css
     echo load_css('bootstrap.min');
-    echo load_css('menu');
+    echo load_css('menu-light');
 
     echo load_css('components');
     echo load_css('icons');
     echo load_css('core');
 
     echo load_js('util');
-
+    echo load_js('jquery.min');
     ?>
 
     <!-- HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -39,18 +39,19 @@
 <script>
 
 </script>
-<body class="fixed-left">
-<?php echo render_view('public.top-header');?>
+<body class="fixed-left" id="lxh-body">
+<?php //echo render_view('public.top-header');?>
 <!-- Begin page -->
 <div id="lxh-app">
-    <div id="wrapper-home" class="wrapper lxh-wrapper">
-        <!-- Top Bar Start -->
-        <?php //echo render_view('public.top-bar');?>
-        <!-- Top Bar End -->
+    <!-- Top Bar Start -->
+    <?php echo render_view('public.top-bar');?>
+    <!-- Top Bar End -->
 
-        <!-- ========== Left Sidebar Start ========== -->
-        <?php //echo render_view('public.left-sidebar');?>
-        <!-- Left Sidebar End -->
+    <!-- ========== Left Sidebar Start ========== -->
+    <?php echo render_view('public.left-sidebar');?>
+    <!-- Left Sidebar End -->
+
+    <div id="wrapper-home" class="wrapper lxh-wrapper">
 
         <!-- ============================================================== -->
         <!-- Start right Content here -->
@@ -60,7 +61,7 @@
             <div class="content">
                 <div class="container">
 
-                <iframe src="/admin/index/index" scrolling="no" id="home-iframe"></iframe>
+                <iframe src="<?php echo $homeUrl?>" scrolling="no" id="home-iframe"></iframe>
 
                 <script id="iframe-tpl" type="text/html">
                     <div id="wrapper-{$name}" class="wrapper lxh-wrapper">
@@ -82,11 +83,13 @@
         <!-- ============================================================== -->
 
         <!-- Right Sidebar -->
-        <?php echo render_view('public.right-bar');?>
+<!--        --><?php //echo render_view('public.right-bar');?>
         <!-- /Right-bar -->
 
     </div>
     <!-- END wrapper -->
+
+    <div id="imchat"><?php echo $imview;?></div>
 </div>
 
 <footer class="footer text-right">
@@ -98,28 +101,22 @@
 </script>
 
 <?php
-
-echo load_js('jquery.min');
 echo load_js('tab');
 //echo load_css('pages');
 //echo load_css('responsive');
 echo load_css('toastr', 'lib/plugins/toastr');
 echo load_js('toastr.min', 'plugins/toastr');
 
-//echo render_view('public.app-js');
 // <!-- jQuery  -->
 //echo load_js('jquery.min');
 //echo load_js('bootstrap.min');
 //echo load_js('detect');
-//echo load_js('fastclick');
+echo load_js('fastclick');
 //echo load_js('jquery.blockUI');
 echo load_js('waves');
 //echo load_js('jquery.nicescroll');
-//echo load_js('jquery.slimscroll');
+echo load_js('jquery.slimscroll');
 //echo load_js('jquery.scrollTo.min');
-
-// <!-- KNOB JS -->
-//
 
 ?>
 
@@ -132,15 +129,15 @@ echo load_js('waves');
 //echo load_js('jquery.knob', 'plugins/jquery-knob');
 
 // <!--Morris Chart-->
-//echo load_js('morris.min', 'plugins/morris');
-//echo load_js('raphael-min', 'plugins/raphael');
+echo load_js('morris.min', 'plugins/morris');
+echo load_js('raphael-min', 'plugins/raphael');
 
 // <!-- Dashboard init -->
 //echo load_js('jquery.dashboard', 'pages');
 
 // <!-- App js -->
-//echo load_js('jquery.core');
-//echo load_js('jquery.app');
+echo load_js('jquery.core');
+echo load_js('jquery.app');
 ?>
 
 </body>

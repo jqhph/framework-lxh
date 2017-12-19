@@ -36,7 +36,7 @@ $GLOBALS['js-version']       = $GLOBALS['CONFIG']->get('js-version');
 $GLOBALS['css-version']      = $GLOBALS['CONFIG']->get('css-version');
 $GLOBALS['resource-version'] = $GLOBALS['CONFIG']->get('client-config.resource-version');
 $GLOBALS['use-blade-engine'] = $GLOBALS['CONFIG']->get('use-blade-engine');
-$GLOBALS['view-version']     = $GLOBALS['CONFIG']->get('view-version', 'v1.0');
+$GLOBALS['view.version']     = $GLOBALS['CONFIG']->get('view.version', 'v1.0');
 
 /**
  * 获取项目根目录路径

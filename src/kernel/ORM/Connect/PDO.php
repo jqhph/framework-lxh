@@ -313,7 +313,7 @@ class PDO
 
         $updateStr = substr($updateStr, 0, - 1);
 
-        $ignore = $this->option('ignore') ? 'IGNORE' : '';
+//        $ignore = $this->option('ignore') ? 'IGNORE' : '';
 
         $sql = "UPDATE `$table` SET {$updateStr} {$where}";
 

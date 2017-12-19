@@ -5,7 +5,7 @@ return array (
   'view.compiled' => 'resource/blade-cache',
   'view.paths' => 'resource/views',
   'view-driver' => 'blade',
-  'view-version' => 'primary',
+  'view.version' => 'primary',
   'response-console-log' => true,
   'response-trace-log' => true,
   'session' => 

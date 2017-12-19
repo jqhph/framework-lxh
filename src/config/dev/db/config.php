@@ -12,10 +12,10 @@ $config['db'] = [
     'primary' => [
         'usepool' => false,
         'type' => 'mysql',
-        'host' => '119.23.229.90',
+        'host' => 'localhost',
         'port' => 3306,
         'user' => 'root',
-        'pwd' => 'admin2017',
+        'pwd' => '',
         'charset' => 'utf8',
         'name' => 'lxh',
     ],

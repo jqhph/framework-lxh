@@ -50,6 +50,8 @@ class Application
      */
     protected $events;
 
+    protected $commands = [];
+
     /**
      * Application constructor.
      * @param string $rootDir 项目根目录
@@ -213,6 +215,11 @@ class Application
 
             return new Router((array) include $configPath);
         });
+    }
+
+    public function addCommands(array $commands)
+    {
+        $this->commands = array_merge($this->commands, $commands);
     }
 
     /**

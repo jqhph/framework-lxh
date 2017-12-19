@@ -638,3 +638,160 @@ input.app-search-input::-moz-placeholder {
 input.app-search-input:-ms-input-placeholder {
   color: rgba(255, 255, 255, 0.7);
 }
+/**custom**/
+.topbar{max-height:65px;}
+.navbar-default{background-color:#435966;color:#fff;padding:0px 0px}
+.topbar .topbar-left{height:53px;}
+.side-menu{top:53px;box-shadow:0 0px 24px 0 #fff, 0 1px 0px 0 #fff;z-index: 999}
+.notification-box ul li a{color:#fff;line-height:50px;}
+.lxh-wrapper{}
+.navbar-white{border-top:3px solid #fff}
+.navbar-white .container{background: #fff;margin-right: 0px;z-index:0;border:0}
+.navbar-white .navbar-left{padding-left:20px;}
+.navbar-white .page-title h5{font-size:18px;}
+
+.header-tag-list .active, .header-tag-list .active:hover {
+  background: #fff;
+}
+.header-tag-list li:hover {
+  background: rgba(255,255,255,.3);
+  padding-right: 16px;min-width: 140px;
+}
+.header-tag-list li{min-width: 120px;}
+.header-tag-list {
+  display: flex;list-style: none;
+}
+.header-flex-box {
+  display: flex;float:left;
+  -webkit-box-pack: justify;
+  -moz-box-pack: justify;
+  -ms-flex-pack: justify;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  -webkit-box-align: end;
+  -moz-box-align: end;
+  -webkit-align-items: flex-end;
+  -ms-flex-align: end;
+  align-items: flex-end;
+  box-sizing: border-box;
+  margin-top:30px;
+}
+.header-flex-box .header-tag {
+  -webkit-flex-shrink: 1;
+  flex-shrink: 1;margin-left:-10px;
+  -webkit-flex-grow: 1;
+  flex-grow: 1;height:32px;
+}
+.header-flex-box .add-tag {
+  -webkit-box-flex: none;
+  -moz-box-flex: none;
+  -webkit-flex: none;
+  -ms-flex: none;
+  flex: none;
+  max-width: 60px;
+}
+.header-tag-list>li.active .icon-close, .header-tag-list>li.active .icon-refresh{opacity:0}
+.header-tag-list>li {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  max-width: 125px;
+  background: rgba(255,255,255,.3);
+  position: relative;
+  margin-right: 9px;cursor: pointer;
+  transition: all ease .4s;
+}
+.header-tag-list li:hover .icon-close,.header-tag-list li:hover .icon-refresh {
+  opacity: 1;
+}
+.header-tag-list li.active:hover .icon-close,.header-tag-list li.active:hover .icon-refresh{color:#777}
+.header-tag-list .icon-close {
+  display: inline-block;
+  text-align: center;
+  color: #fff;
+  position: absolute;
+  right: 0;
+  opacity: 1;top:8px;
+  cursor: pointer;
+  height: 18px;
+  width: 18px;
+  border-radius: 100%;
+  line-height: 18px;
+  -webkit-transition: all ease .2s;
+  -moz-transition: all ease .2s;
+  -o-transition: all ease .2s;
+  transition: all ease .2s;
+}
+.header-tag-list .icon-refresh{
+  display: inline-block;
+  text-align: center;
+  color: #fff;
+  position: absolute;
+  opacity: 1;top:8px;
+  cursor: pointer;
+  height: 18px;
+  width: 18px;
+  border-radius: 100%;
+  line-height: 18px;
+  -webkit-transition: all ease .2s;
+  -moz-transition: all ease .2s;
+  -o-transition: all ease .2s;
+  transition: all ease .2s;
+  right: 20px;
+}
+.header-tag-list .icon-close:hover {
+  color: #fff !important;
+  background: #FF595F;
+}
+.header-tag-list .icon-refresh:hover {
+  color: #fff !important;
+  background: #10c469;
+}
+#logo>a, .header-tag-list>li {
+  -webkit-transition: all ease .4s;
+  -moz-transition: all ease .4s;
+  -o-transition: all ease .4s;
+}
+.hover-dropdown {
+  position: relative;
+  padding-right: 0;
+}
+.header-tag-list .active a {
+  color: #333;background:#fff;
+}
+.header-tag-list li>a {
+  display: block;
+  height: 32px;
+  overflow: hidden;
+  line-height: 32px;
+  padding: 0 0 0 6px;
+  font-size: 12px;
+  color: #fff;
+}
+.header-tag-list>li a {
+  box-sizing: border-box;
+}
+.app-box-title, .drop-box, .drop-box li>a, .header-tag-list li>a, .nav-list a, .tree-child, .tree-father, .tree-root {
+  text-overflow: ellipsis;
+}
+.header-tag-list .active:after, .header-tag-list .active:hover:after {
+  border-bottom-color: #fff;
+}
+.header-tag-list li:after {
+  content: "";
+  width: 0;
+  height: 0;
+  border-bottom: 32px solid rgba(255,255,255,.3);
+  border-right: 18px solid transparent;
+  position: absolute;
+  right: -18px;
+  top: 0;
+  -webkit-transition: all ease .4s;
+  -moz-transition: all ease .4s;
+  -o-transition: all ease .4s;
+  transition: all ease .4s;
+}
+.notification-box{margin-right: 10px;}
+.notification-box .noti-dot{top:-36px}

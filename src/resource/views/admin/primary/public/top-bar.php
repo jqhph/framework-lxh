@@ -11,17 +11,17 @@
     <!-- Button mobile view to collapse sidebar menu -->
     <div class="navbar navbar-default" role="navigation">
         <div class="container">
-            <!-- Page title -->
-            <ul class="nav navbar-nav navbar-left">
-                <li>
-                    <button class="button-menu-mobile open-left"><i class="zmdi zmdi-menu"></i></button>
-                </li>
-                <li>
-                    <h5 class="page-title"><?php echo empty($navTitle) ? make('acl-menu')->makeNav() : trans($navTitle);?></h5>
-                </li>
-            </ul>
+            <div class="header-flex-box">
+                <nav class="header-tag">
+                    <ul class="header-tag-list a tab-menu">
+                        <li class="ticket-tab active tab"  data-action="tab-home" data-name="home" style="min-width:100px;">
+                            <a><?php echo trans('Home')?></a>
+                            <i class="zmdi zmdi-refresh icon-refresh" onclick='document.getElementById("home-iframe").contentWindow.location.reload(true)' style="right:0;"></i>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
 
-            <!-- Right(Notification and Searchbox -->
             <ul class="nav navbar-nav navbar-right">
                 <li>
                     <!-- Notification -->
@@ -41,16 +41,24 @@
                     <!-- End Notification bar -->
                 </li>
                 <li class="hidden-xs">
-                    <form role="search" class="app-search">
-                        <input type="text" placeholder="<?php echo trans_with_global('Search');?>..."
-                               class="form-control">
-                        <a href=""><i class="fa fa-search"></i></a>
-                    </form>
                 </li>
             </ul>
-        </div><!-- end container -->
-    </div><!-- end navbar -->
+        </div>
+
+    </div>
+    <div class="topbar-left">
+        <a></a>
+    </div>
+
 </div>
+
+<script id="header-tab-tpl" type="text/html">
+    <li class="ticket-tab tab active " data-action="tab-{name}" data-name="{name}">
+        <a class="tab-label">{label}</a>
+        <i class="zmdi zmdi-refresh icon-refresh"></i>
+        <i class="zmdi zmdi-close tab-close icon-close" ></i>
+    </li>
+</script>
 <!--<ol class="breadcrumb">-->
 <!--    <li><a href="#">Menu management</a></li><li>Modify menu</li>-->
 <!--</ol>-->

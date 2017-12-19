@@ -15,7 +15,7 @@ use Lxh\Kernel\Cache\Cache;
  */
 function pages()
 {
-    return make('page');
+    return resolve('page');
 }
 
 

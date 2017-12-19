@@ -36,14 +36,14 @@ $name = $user->first_name . $user->last_name;
 <!--                <li class="text-muted menu-title">Navigation</li>-->
 
                 <li>
-                    <a href="<?php echo Lxh\Admin\Kernel\Url::makeHome();?>" class="waves-effect
+                    <a onclick="$top.tab.switch('home', '<?php echo Lxh\Admin\Kernel\Url::makeHome();?>', '<?php echo trans('Home')?>')" class="waves-effect
                     <?php if ($menu->isActive('Index', 'Index')) echo 'active';?> "><i class="zmdi zmdi-home"></i> <span>
                             <?php echo trans('Home', 'menus');?> </span> </a>
                 </li>
 
                 <?php foreach ($menu->get() as & $m) { ?>
                 <li class="has_sub">
-                    <a href="<?php echo empty($m['subs']) ? $m['url'] : 'javascript:void(0);';?>"
+                    <a onclick="<?php echo empty($m['subs']) ? "$top.tab.switch({$m['id']}, '{$m['url']}', '{$m['name']}')" : '';?>"
                        class="waves-effect <?php if ($menu->isActive($m['controller'], $m['action'])) echo 'active';?>">
                         <i class="<?php echo $m['icon'];?>"></i>
                         <span><?php echo $m['name'];?></span>
@@ -56,7 +56,8 @@ $name = $user->first_name . $user->last_name;
                     <ul class="list-unstyled">
                         <?php foreach ($m['subs'] as & $sub) { ?>
                         <li class="<?php if ($menu->isActive($sub['controller'], $sub['action'])) echo 'active';?>">
-                            <a class="<?php if ($menu->isActive($sub['controller'], $sub['action'])) echo 'active';?>" href="<?php echo $sub['url'];?>">
+                            <a class="<?php if ($menu->isActive($sub['controller'], $sub['action'])) echo 'active';?>"
+                               onclick="$top.tab.switch(<?php echo $sub['id'];?>, '<?php echo $sub['url'];?>', '<?php echo $sub['name']?>')">
                                 <?php echo $sub['name'];?></a></li>
                         <?php } ?>
                     </ul>

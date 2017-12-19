@@ -3,16 +3,20 @@
         var self = this,
             tpl = $('#header-tab-tpl').html(),
             $menu = $('ul.tab-menu'),
-            store = {}
+            store = {},
+            firstIndex = 'home'
 
         // 切换显示tab页
-        this.switch = function (name) {
-            iframe.switch(name)
-            this.show(name)
+        this.switch = function (name, url, label) {
+            iframe.switch(name, url)
+            this.show(name, url, label)
         }
 
-        this.show = function (name) {
+        this.show = function (name, url, label) {
             var $this = $('[data-action="tab-'+ name +'"]')
+            if ($this.length < 1) {
+                return this.open(name, url, label)
+            }
             // 移除tab按钮选中效果
             this.removeActive()
             // 添加tab按钮选中效果
@@ -21,7 +25,7 @@
             $this.find('a').removeClass('waves-effect waves-info')
             // $this.removeClass()
             // 隐藏关闭按钮
-            $this.find('.tab-close').hide()
+            // $this.find('.tab-close').hide()
 
             return $this
         }
@@ -42,6 +46,7 @@
                 this.switch(name)
                 return false;
             }
+            firstIndex = firstIndex || name
 
             iframe.create(name, url)
 
@@ -51,16 +56,20 @@
 
             var $tabBtn = this.show(name)
             // 绑定点击事件
+            $tabBtn.find('.tab-close').off('click')
             $tabBtn.find('.tab-close').click(function () {
                 this.close(name)
+                this.switch(firstIndex)
             }.bind(this))
             // 点击tab切换显示iframe
-            $tabBtn.find('span.tab-label').click(function () {
+            $tabBtn.off('click')
+            $tabBtn.click(function () {
                 this.switch(name)
             }.bind(this))
-            // $tabBtn.find('.reload').click(function () {
-            //      self.reload(name, url)
-            // })
+            $tabBtn.find('.icon-refresh').off('click')
+            $tabBtn.find('.icon-refresh').click(function () {
+                 self.reload(name, url)
+            })
         }
 
         // 关闭tab窗
@@ -88,13 +97,12 @@
             $all.find('.tab-close').show(300)
         }
 
-        // 穿件tab按钮
+        // 创建tab按钮
         function create_btn(name, label) {
             if ($menu.find('[data-action="tab-' +name+ '"]').length > 0) {
                 return false;
             }
-            var html = tpl.replace('{name}', name).replace('{label}', label)
-
+            var html = tpl.replace('{name}', name).replace('{name}', name).replace('{label}', label)
             $menu.append(html)
         }
     }
@@ -106,9 +114,14 @@
             current
 
         // 切换显示iframe
-        this.switch = function (name) {
+        this.switch = function (name, url) {
             this.hide()
             var $iframe = $('#wrapper-' + name || document)
+            
+            if ($iframe.length < 1) {
+                return this.create(name, url)
+            }
+            
             // 显示当前iframe
             $iframe.show()
             current = name
@@ -131,6 +144,14 @@
         this.create = function (name, url) {
             if (typeof store[name] != 'undefined') return true;
 
+            var toastr = window.toastr || parent.toastr
+
+            toastr.options = {
+                timeout: 90000
+            }
+
+            toastr.success('loading...')
+
             current = name
 
             url = url || name;
@@ -150,6 +171,7 @@
 
             $iframe.find('iframe').on('load', function (e) {
                 this.height($(e.currentTarget))
+                toastr.remove()
             }.bind(this))
         }
 

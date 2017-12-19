@@ -4,8 +4,11 @@ return array (
   'use-language' => true,
   'view.compiled' => 'resource/blade-cache',
   'view.paths' => 'resource/views',
-  'view-driver' => 'php',
-  'view-version' => 'primary',
+  'view.version' => 'primary',
+  'view.namespaces' => 
+  array (
+    'admin' => 'resource/views/admin/primary/html-creator',
+  ),
   'response-console-log' => true,
   'response-trace-log' => true,
   'session' => 
@@ -215,7 +218,7 @@ return array (
     ),
     'guzzle' => 
     array (
-      'timeout' => 3,
+      'timeout' => 3.0,
     ),
   ),
   'client-config' => 

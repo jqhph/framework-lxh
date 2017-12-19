@@ -8,6 +8,7 @@
 
 namespace Lxh\MVC;
 
+use Lxh\Admin\Admin;
 use Lxh\Config\Config;
 use Lxh\Contracts\Container\Container;
 use Lxh\Events\Dispatcher;
@@ -78,6 +79,15 @@ abstract class Controller
      */
     protected function initialize()
     {
+    }
+
+    /**
+     *
+     * @return Admin
+     */
+    protected function Admin()
+    {
+        return $this->container['admin'];
     }
 
     /**

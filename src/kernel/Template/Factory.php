@@ -22,17 +22,31 @@ class Factory
 
     public function __construct(Container $container)
     {
-        $this->driver = config('view-driver', 'php');
+        $this->driver = config('view.version', 'php');
         $this->controller = Util::convertWith(__CONTROLLER__, true, '-');
 
         $this->module = Util::convertWith(__MODULE__, true, '-');
-        $this->viewVersion = config('view-version', 'primary');
+        $this->viewVersion = config('view.version', 'primary');
 
         // 判断是否使用blade模板引擎
         if ($this->driver == 'blade') {
             $this->factory = $container['view.factory'];
         } else {
             $this->factory = $container['view'];
+        }
+
+        $this->setupNamespaces();
+    }
+
+    /**
+     * 添加模板路径别名
+     *
+     * @return void
+     */
+    protected function setupNamespaces()
+    {
+        foreach ((array) config('view.namespaces') as $alias => &$paths) {
+            $this->addNamespace($alias, $paths);
         }
     }
 
@@ -52,19 +66,34 @@ class Factory
     }
 
     /**
+     * Add a new namespace to the loader.
+     *
+     * @param  string  $namespace
+     * @param  string|array  $hints
+     * @return $this
+     */
+    public function addNamespace($namespace, $hints)
+    {
+        $this->factory->addNamespace($namespace, $hints);
+
+        return $this;
+    }
+
+    /**
      * Normalize the given event name.
      *
      * @param string $name
-     * @param string $prefix
      * @return string
      */
     protected function normalizeView($view, $prefix = null)
     {
-        if ($this->module) {
-            $prefix = $this->module . '.' . $this->viewVersion;
-        }
-        if (strpos($view, '.') === false && strpos($view, '/') === false) {
-            $view = $this->controller . '.' . $view;
+        if (!strpos($view, '::')) {
+            if ($this->module) {
+                $prefix = $this->module . '.' . $this->viewVersion;
+            }
+            if (strpos($view, '.') === false && strpos($view, '/') === false) {
+                $view = $this->controller . '.' . $view;
+            }
         }
 
         return $prefix ? $prefix . '.' . $view : $view;

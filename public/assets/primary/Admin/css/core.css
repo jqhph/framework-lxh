@@ -105,7 +105,7 @@ a:focus {
   text-decoration: none;
 }
 .container {
-  /*width: auto;*/width:99%;
+  width: auto;
 }
 .container-alt {
   margin-left: auto;

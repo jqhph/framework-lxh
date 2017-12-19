@@ -17,11 +17,32 @@ use Lxh\MVC\ControllerManager;
 class View
 {
     /**
+     * Hint path delimiter value.
+     *
+     * @var string
+     */
+    const HINT_PATH_DELIMITER = '::';
+
+    /**
      * 模板变量管理对象
      *
      * @var Entity
      */
     protected $vars = [];
+
+    /**
+     * The array of views that have been located.
+     *
+     * @var array
+     */
+    protected $views = [];
+
+    /**
+     * The namespace to file path hints.
+     *
+     * @var array
+     */
+    protected $hints = [];
 
     // 模板版本
     protected $version;
@@ -35,7 +56,7 @@ class View
 
     public function __construct(ControllerManager $manager)
     {
-        $this->version = config('view-version', 'primary');
+        $this->version = config('view.version', 'primary');
 
         $p = config('view.paths', 'resource/views');
 
@@ -58,6 +79,25 @@ class View
             $this->vars[$key] = $value;
         }
 
+        return $this;
+    }
+
+    /**
+     * Add a new namespace to the loader.
+     *
+     * @param  string  $namespace
+     * @param  string|array  $hints
+     * @return $this
+     */
+    public function addNamespace($namespace, $hints)
+    {
+        $hints = (array) $hints;
+
+        if (isset($this->hints[$namespace])) {
+            $hints = array_merge($this->hints[$namespace], $hints);
+        }
+
+        $this->hints[$namespace] = & $hints;
         return $this;
     }
 
@@ -111,14 +151,87 @@ class View
     /**
      * 获取模板路径
      *
-     * @param  string $viewName 模板名称
+     * @param  string $name 模板名称
      * @return string
      */
-    public function getTemplatePath($viewName)
+    public function getTemplatePath($name)
     {
-        $viewName = str_replace('.', '/', $viewName);
+        if (isset($this->views[$name])) return $this->views[$name];
 
-        return "{$this->dir}/$viewName.php";
+        $name = str_replace('.', '/', $name);
+
+        if ($this->hasHintInformation($name = trim($name))) {
+            return $this->views[$name] = $this->findNamespacedView($name);
+        }
+
+        return $this->views[$name] = "{$this->dir}/$name.php";
+    }
+
+    /**
+     * Returns whether or not the view name has any hint information.
+     *
+     * @param  string  $name
+     * @return bool
+     */
+    public function hasHintInformation($name)
+    {
+        return strpos($name, static::HINT_PATH_DELIMITER) > 0;
+    }
+
+    /**
+     * Get the path to a template with a named path.
+     *
+     * @param  string  $name
+     * @return string
+     */
+    protected function findNamespacedView($name)
+    {
+        list($namespace, $view) = $this->parseNamespaceSegments($name);
+
+        return $this->findInPaths($view, $this->hints[$namespace]);
+    }
+
+    /**
+     * Find the given view in the list of paths.
+     *
+     * @param  string  $name
+     * @param  array   $paths
+     * @return string
+     *
+     * @throws \InvalidArgumentException
+     */
+    protected function findInPaths($name, $paths)
+    {
+        foreach ((array) $paths as & $path) {
+            $file = str_replace('.', '/', $name).'.php';
+
+            if (is_file($viewPath = "{$this->root}{$path}/$file")) {
+                return $viewPath;
+            }
+        }
+        throw new InvalidArgumentException("View [$name] not found.");
+    }
+
+    /**
+     * Get the segments of a template with a named path.
+     *
+     * @param  string  $name
+     * @return array
+     *
+     * @throws \InvalidArgumentException
+     */
+    protected function parseNamespaceSegments($name)
+    {
+        $segments = explode(static::HINT_PATH_DELIMITER, $name);
+
+        if (count($segments) != 2) {
+            throw new InvalidArgumentException("View [$name] has an invalid name.");
+        }
+        if (! isset($this->hints[$segments[0]])) {
+            throw new InvalidArgumentException("No hint path defined for [{$segments[0]}].");
+        }
+
+        return $segments;
     }
 
     /**

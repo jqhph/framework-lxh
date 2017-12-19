@@ -20,13 +20,15 @@ $config['use-language'] = true;
 $config['view.compiled'] = 'resource/blade-cache';
 // blade模板路径，默认'resource/views'
 $config['view.paths'] = 'resource/views';
-
 // 模板引擎类型
 // 支持 php、blade
-$config['view-driver'] = 'php';
-
+$config['view.version'] = 'php';
 // view version模板版本（如使用blade模板引擎，此参数无效）
-$config['view-version'] = 'primary';
+$config['view.version'] = 'primary';
+// 视图模板路径别名
+$config['view.namespaces'] = [
+    'admin' => "resource/views/admin/{$config['view.version']}/html-creator",
+];
 
 // 是否输出控制台调试信息，默认true
 $config['response-console-log'] = true;

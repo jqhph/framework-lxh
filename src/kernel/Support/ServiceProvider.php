@@ -32,4 +32,18 @@ abstract class ServiceProvider
      */
     abstract public function register();
 
+    /**
+     * Register the package's custom Artisan commands.
+     *
+     * @param  array|mixed  $commands
+     * @return void
+     */
+    public function commands($commands)
+    {
+        $this->container['app']->addCommands(
+            is_array($commands) ? $commands : func_get_args()
+        );
+    }
+
+
 }

@@ -166,6 +166,10 @@ trait Loader
             'shared' => true,
             'class' => 'Lxh\Cookie\Store',
         ],
+        'admin' => [
+            'shared' => true,
+            'class' => 'Lxh\Admin\Admin',
+        ]
     ];
 
     /**
