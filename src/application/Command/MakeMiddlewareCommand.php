@@ -32,7 +32,7 @@ class MakeMiddlewareCommand extends ModuleGeneratorCommand
 
     protected $folder = 'application/';
 
-    protected $fileNamespace = '\\Middleware';
+    protected $fileNamespace = '\\Middlewares';
 
     /**
      * The help information description.

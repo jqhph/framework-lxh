@@ -26,7 +26,7 @@ class MakeControllerCommand extends ModuleGeneratorCommand
 
     protected $folder = 'application/';
 
-    protected $fileNamespace = '\\Controller';
+    protected $fileNamespace = '\\Controllers';
 
     /**
      * The console command description.

@@ -65,18 +65,18 @@ class Client
      * Maps handles to request indexes
      */
     private $requestMap = array();
-    
+
     /**
      * 当只有一个请求的时候, http请求返回相关信息会保存在此数组上
-     * output 
+     * output
      * info
      * error
      */
     protected $response = [];
-    
+
     /**
      * 当只有一个请求的时候, http请求返回相关信息会保存在此数组上
-     * output 
+     * output
      * info
      * error
      */
@@ -86,7 +86,7 @@ class Client
 
         return isset($this->response[$key]) ? $this->response[$key] : null;
     }
-    
+
     /**
      * 每个请求设置单独回调函数, 如果通过此方法设置过回调函数, 则then方法设置的回调函数不生效
      * 如果设置了此回调函数, 则回调函数数量和顺序必须和设置请求信息的顺序保持一致
@@ -95,21 +95,21 @@ class Client
      */
     public function on(callable $callback)
     {
-    	$this->callback[] = $callback;
+        $this->callback[] = $callback;
         return $this;
     }
-    
+
     /**
      * 设置并发数
      *
      * @return static
      */
-    public function concurrence($num) 
+    public function concurrence($num)
     {
-    	$this->concurrenceNum = $num;
-    	return $this;
+        $this->concurrenceNum = $num;
+        return $this;
     }
-    
+
     /**
      * set timeout
      * 默认10秒
@@ -213,7 +213,7 @@ class Client
         $this->headers = $this->headers + $headers;
         return $this;
     }
-    
+
     /**
      * 设置Hosts
      *
@@ -249,72 +249,70 @@ class Client
     public function request($url, $method = 'GET', $fields = array(), $headers = array(), $options = array())
     {
         $this->requests[] = array(
-        	'url' => $url, 'method' => $method, 'fields' => $fields, 'headers' => $headers, 'options' => $options
+            'url' => &$url, 'method' => $method, 'fields' => &$fields, 'headers' => &$headers, 'options' => &$options
         );
         return $this;
     }
-    
-    public function getOptions($request)
+
+    public function getOptions(&$request)
     {
-    	$method = $request['method'];
-    	
+        $method = $request['method'];
+
         $options = $this->options;
         $headers = $this->headers;
-        
+
         // append custom options for this specific request
         if ($request['options']) {
-        	$options = $request['options'] + $options;
+            $options = $request['options'] + $options;
         }
-        
+
         if ($request['headers']) {
-        	$headers = $request['headers'] + $headers;
+            $headers = $request['headers'] + $headers;
         }
-        
-        
+
+
         if (ini_get('safe_mode') == 'Off' || !ini_get('safe_mode')) {
             $options[CURLOPT_FOLLOWLOCATION] = 1;
             $options[CURLOPT_MAXREDIRS] = 5;
         }
-        
+
         $options[CURLOPT_CUSTOMREQUEST] = $method;
-        
+
         // 如果是 get 方式，直接拼凑一个 url 出来
         if ($method == 'GET' && !empty($request['fields'])) {
             $url = $request['url'] . "?" . http_build_query($request['fields']);
         }
-        
+
         // 如果是 post 方式
         if ($method == 'POST' || $method == 'PUT' || $method == 'DELETE') {
             //$options[CURLOPT_POST] = 1;
             $options[CURLOPT_POSTFIELDS] = $request['fields'];
         }
-        
+
         // 随机绑定 hosts，做负载均衡
-        //if (self::$hosts) 
+        //if (self::$hosts)
         //{
-            //$parse_url = parse_url($url);
-            //$host = $parse_url['host'];
-            //$key = rand(0, count(self::$hosts)-1);
-            //$ip = self::$hosts[$key];
-            //$url = str_replace($host, $ip, $url);
-            //self::$headers = array_merge( array('Host:'.$host), self::$headers );
+        //$parse_url = parse_url($url);
+        //$host = $parse_url['host'];
+        //$key = rand(0, count(self::$hosts)-1);
+        //$ip = self::$hosts[$key];
+        //$url = str_replace($host, $ip, $url);
+        //self::$headers = array_merge( array('Host:'.$host), self::$headers );
         //}
         // header 要这样拼凑
         $headers_tmp = array();
-        
-        foreach ($headers as $k => $v) {
+
+        foreach ($headers as $k => &$v) {
             $headers_tmp[] = $k . ':' . $v;
         }
-        
-        $headers = $headers_tmp;
-        
+
         $options[CURLOPT_URL] = $request['url'];
-        
-        $options[CURLOPT_HTTPHEADER] = $headers;
-        
+
+        $options[CURLOPT_HTTPHEADER] = &$headers_tmp;
+
         return $options;
     }
-    
+
     /**
      * GET 请求
      *
@@ -327,15 +325,15 @@ class Client
     {
         return $this->request($url, 'GET', array(), $headers, $options);
     }
-    
+
     /**
      * $fields 有三种类型:1、数组；2、http query；3、json
      * 1、array('name'=>'yangzetao') 2、http_build_query(array('name'=>'yangzetao')) 3、json_encode(array('name'=>'yangzetao'))
      * 前两种是普通的post，可以用$_POST方式获取
-     * 第三种是post stream( json rpc，其实就是webservice )，虽然是post方式，但是只能用流方式 http://input 后者 $HTTP_RAW_POST_DATA 获取 
-     * 
-     * @param string $url 
-     * @param array $fields 
+     * 第三种是post stream( json rpc，其实就是webservice )，虽然是post方式，但是只能用流方式 http://input 后者 $HTTP_RAW_POST_DATA 获取
+     *
+     * @param string $url
+     * @param array $fields
      * @param array $headers
      * @param array $options
      * @return static
@@ -345,20 +343,35 @@ class Client
         return $this->request($url, 'POST', $fields, $headers, $options);
     }
 
+    public function postJson($url, $fields = array(), $headers = array(), $options = array())
+    {
+        $fields = is_array($fields) ? json_encode($fields) : $fields;
+        return $this->request(
+            $url,
+            'POST',
+            $fields,
+            array_merge($headers, [
+                'Content-Type' => 'application/json;charset=utf-8',
+                'Content-Length' => strlen($fields),
+            ]),
+            $options
+        );
+    }
+
     /**
      *
      * @return static
      */
     public function put($url, $fields = array(), $headers = array(), $options = array())
     {
-    	return $this->request($url, 'PUT', $fields, $headers, $options);
+        return $this->request($url, 'PUT', $fields, $headers, $options);
     }
-    
+
     public function delete($url, $fields = array(), $headers = array(), $options = array())
     {
-    	return $this->request($url, 'DELETE', $fields, $headers, $options);
+        return $this->request($url, 'DELETE', $fields, $headers, $options);
     }
-    
+
     /**
      * Execute processing
      * 当只有一个请求时不执行回调函数
@@ -366,7 +379,7 @@ class Client
      * @param callable $callback 设置统一的回调函数, 如果调用on方法设置过单独回调函数, 则此回调函数不生效
      * @return string|bool
      */
-    public function then(callable $callback = null) 
+    public function then(callable $callback = null)
     {
         $count = sizeof($this->requests);
         if ($count == 0) {
@@ -381,120 +394,120 @@ class Client
             return $this->rollingCurl($callback);
         }
     }
-    
+
     private function singleCurl(callable $call = null)
     {
         $ch = curl_init();
         // 从请求队列里面弹出一个来
         $request = array_shift($this->requests);
-        
+
         $options = $this->getOptions($request);
-        
+
         curl_setopt_array($ch, $options);
-        
+
         $this->response = [];
-        
+
         $this->response['output'] = curl_exec($ch);
-        
+
         $this->response['info'] = curl_getinfo($ch);
-        
+
         $this->response['error'] = null;
-        
+
         if ($this->response['output'] === false) {
             $this->response['error'] = curl_error( $ch );
         }
-        
+
         curl_close($ch);
         //$output = substr($output, 10);
         //$output = gzinflate($output);
-       
+
         $this->reset();
 
         if ($call) {
             $call($this->response['output'], $this->response['info'], $this->response['error'], $request);
         }
-        
+
         return $this->response['output'];
-        
+
     }
-    
-    private function rollingCurl(callable $call = null) 
+
+    private function rollingCurl(callable $call = null)
     {
-    	if (count($this->callback) < 1 && ! $call) {
-    		throw new \Exception('请设置回调函数！');
-    	}
-    	
-    	$callbackNum = count($this->callback);
-    	$requestNum  = count($this->requests);
-    	
-    	if ($callbackNum > 1 && $callbackNum != $requestNum) {
-    		throw new \Exception('请设置1个回调函数或者设置和http请求相同数量的回调函数！');
-    	}
-    	
+        if (count($this->callback) < 1 && ! $call) {
+            throw new \Exception('请设置回调函数！');
+        }
+
+        $callbackNum = count($this->callback);
+        $requestNum  = count($this->requests);
+
+        if ($callbackNum > 1 && $callbackNum != $requestNum) {
+            throw new \Exception('请设置1个回调函数或者设置和http请求相同数量的回调函数！');
+        }
+
         // 如果请求数 小于 任务数，设置任务数为请求数
         if ($requestNum < $this->concurrenceNum)
             $this->concurrenceNum = $requestNum;
-        
+
         // 如果任务数小于2个，不应该用这个方法的，用上面的single_curl方法就好了
-        if ($this->concurrenceNum < 2) 
+        if ($this->concurrenceNum < 2)
             throw new \Exception('Window size must be greater than 1');
-        
+
         // 初始化任务队列
         $master = curl_multi_init();
-        
+
         // 开始第一批请求
         for ($i = 0; $i < $this->concurrenceNum; $i++) {
             $ch = curl_init();
-            
+
             $options = $this->getOptions($this->requests[$i]);
-            
+
             curl_setopt_array($ch, $options);
-            
+
             curl_multi_add_handle($master, $ch);
-            
+
             // 添加到请求数组
             $key = (string) $ch;
-            
+
             $this->requestMap[$key] = $i;
         }
-        
+
         do {
             while (($execrun = curl_multi_exec($master, $running)) == CURLM_CALL_MULTI_PERFORM) ;
             // 如果
-            if ($execrun != CURLM_OK) { 
-            	break; 
+            if ($execrun != CURLM_OK) {
+                break;
             }
-            
+
             // 一旦有一个请求完成，找出来，因为curl底层是select，所以最大受限于1024
             while ($done = curl_multi_info_read($master)) {
                 // 从请求中获取信息、内容、错误
                 $info   = curl_getinfo($done['handle']);
                 $output = curl_multi_getcontent($done['handle']);
                 $error  = curl_error($done['handle']);
-                
+
                 $key = (string) $done['handle'];
-                
+
                 if ($callbackNum != $requestNum) {
-                	# 如果设置的是统一的回调函数
-                	$callback = $call;
+                    # 如果设置的是统一的回调函数
+                    $callback = $call;
                 } else {
-                	# 每个请求单独设置回调函数
-                	$callback = $this->callback[$this->requestMap[$key]];
+                    # 每个请求单独设置回调函数
+                    $callback = $this->callback[$this->requestMap[$key]];
                 }
 
                 $request = $this->requests[$this->requestMap[$key]];
 
                 call_user_func($callback, $output, $info, $error, $request);
-                
+
                 // 一个请求完了，就加一个进来，一直保证5个任务同时进行
                 if ($i < sizeof($this->requests) && isset($this->requests[$i]) && $i < count($this->requests)) {
                     $ch = curl_init();
-                    
+
                     $options = $this->getOptions($this->requests[$i]);
-                    
+
                     curl_setopt_array($ch, $options);
                     curl_multi_add_handle($master, $ch);
-                    
+
                     // 添加到请求数组
                     $key = (string) $ch;
                     $this->requestMap[$key] = $i;
@@ -502,33 +515,33 @@ class Client
                 }
                 // 把请求已经完成了得 curl handle 删除
                 curl_multi_remove_handle($master, $done['handle']);
-                
+
             }
-            
+
             // 当没有数据的时候进行堵塞，把 CPU 使用权交出来，避免上面 do 死循环空跑数据导致 CPU 100%
             if ($running) {
                 curl_multi_select($master, $this->timeout);
             }
-            
+
         } while ($running);
-        
+
         // 关闭任务
         curl_multi_close($master);
-        
+
         // 把请求清空
         $this->reset();
-        
+
         return true;
     }
-    
+
     public function reset()
     {
-    	$this->requests   = [];
-    	$this->callback   = [];
-    	$this->headers    = [];
-    	$this->requestMap = [];
+        $this->requests   = [];
+        $this->callback   = [];
+        $this->headers    = [];
+        $this->requestMap = [];
 
         $this->timeout = 10;
     }
-    
+
 }

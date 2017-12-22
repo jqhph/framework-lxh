@@ -5,7 +5,7 @@
  * @date   {date}
  */
 
-namespace {root-namespace}{module}\Model;
+namespace {root-namespace}{module}\Models;
 
 use {root-namespace}MVC\Model;
 

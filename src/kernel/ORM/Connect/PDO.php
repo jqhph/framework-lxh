@@ -416,7 +416,7 @@ class PDO
         $field = '';
         $values = '';
 
-        foreach ($data as $k => & $v) {
+        foreach ($data as $k => $v) {
             $field  .= "`$k`,";
             $values .= '?,';
 

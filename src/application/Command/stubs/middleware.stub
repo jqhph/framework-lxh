@@ -5,7 +5,7 @@
  * @date   {date}
  */
 
-namespace {root-namespace}{module}\Middleware;
+namespace {root-namespace}{module}\Middlewares;
 
 use Closure;
 

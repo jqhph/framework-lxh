@@ -32,7 +32,7 @@ class Where
         $this->table = "`{$tb}`.";
         return $this;
     }
-    
+
     public function reset()
     {
         $this->where = [];
@@ -162,6 +162,21 @@ class Where
             if ($field == 'or' || $field == 'OR') {
                 $ors = $this->handle($val, null, null, $autoAddTable);
                 $data[] = '(' . implode(' OR ', $ors)  . ')';
+            } elseif ($field == 'or+' || $field == 'OR+') {
+                //$where = [
+                //    'OR+' => [
+                //        ['f1' => $f1, 'f2' => $f2],
+                //        ['f3' => $f3, f4 => $f4]
+                //    ]
+                //];
+                // ((`tb`.`f1` = ? AND `tb`.`f2` = ?) OR (`tb`.`f3` = ? AND `tb`.`f4` = ?))
+                $and = [];
+                foreach ($val as &$p) {
+                    $and[] = '(' . implode(' AND ', $this->handle($p, null, null, $autoAddTable)) . ')';
+                }
+
+                $data[] = '(' . implode(' OR ', $and)  . ')';
+
             } elseif($field == 'ors' || $field == 'ORS') {
                 $ors = $this->handle($val, null, null, $autoAddTable);
                 $this->orWhere[] = '(' . implode(' OR ', $ors)  . ')';

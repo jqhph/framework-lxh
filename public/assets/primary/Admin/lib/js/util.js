@@ -1,4 +1,6 @@
 (function (o) {
+    o.dataStore = {}
+
     // 数组去重
     o.array_unique = function ($this) {
         var res = [], json = {}, i
@@ -81,4 +83,249 @@
         }
         return paramStr.substr(1);
     }
-})(window)
+
+    // loading效果
+    o.loading = function (el, circle, timeout) {
+        function loading() {
+            var $el = typeof el == 'object' ? el : $(el)
+            if (circle) {
+                $el.append('<div class=" loading loading-circle"></div>')
+            } else {
+                $el.append('<div class=" loading"><div class="loading1"></div><div class="loading2"></div><div class="loading3"></div></div>')
+            }
+            this.close = function () {
+                $el.find('.loading').remove()
+            }
+            if (timeout) setTimeout(this.close, timeout)
+        }
+        return new loading()
+    }
+
+    // 格式化php时间戳
+    o.format_php_timestamp = function (time, format) {
+        if (! time || parseInt(time) < 1) return ''
+        return new Date(parseInt(time + '000')).format(format || 'yyyy-mm-dd hh:ii:ss')
+    }
+
+    // new Date(1458692752478).format('yyyy-mm-dd hh:ii:ss')
+    Date.prototype.format = function(format) {
+        var date = {
+            "m+": this.getMonth() + 1,
+            "d+": this.getDate(),
+            "h+": this.getHours(),
+            "i+": this.getMinutes(),
+            "s+": this.getSeconds(),
+            "q+": Math.floor((this.getMonth() + 3) / 3),
+            "S+": this.getMilliseconds()
+        };
+        if (/(y+)/i.test(format)) {
+            format = format.replace(RegExp.$1, (this.getFullYear() + '').substr(4 - RegExp.$1.length));
+        }
+        for (var k in date) {
+            if (new RegExp("(" + k + ")").test(format)) {
+                format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? date[k] : ("00" + date[k]).substr(("" + date[k]).length));
+            }
+        }
+        return format;
+    }
+})(window);
+
+(function (w) {
+    function Tab(iframe) {
+        var self = this,
+            tpl = $('#header-tab-tpl').html(),
+            $menu = $('ul.tab-menu'),
+            store = {},
+            firstIndex = 'home'
+
+        // 切换显示tab页
+        this.switch = function (name, url, label) {
+            iframe.switch(name, url)
+            this.show(name, url, label)
+        }
+
+        this.show = function (name, url, label) {
+            var $this = $('[data-action="tab-'+ name +'"]')
+            if ($this.length < 1) {
+                return this.open(name, url, label)
+            }
+            // 移除tab按钮选中效果
+            this.removeActive()
+            // 添加tab按钮选中效果
+            $this.addClass('active')
+            // 去除按钮点击特效
+            $this.find('a').removeClass('waves-effect waves-info')
+            // $this.removeClass()
+            // 隐藏关闭按钮
+            // $this.find('.tab-close').hide()
+
+            return $this
+        }
+
+        // 重新加载iframe
+        this.reload = function (name, url) {
+            delete store[name]
+            iframe.removeStore(name)
+            this.open(name, url)
+        }
+
+        // 打开一个新的tab页
+        this.open = function (name, url, label) {
+            url = url || name
+            label = label || name
+
+            if (typeof store[name] != 'undefined') {
+                this.switch(name)
+                return false;
+            }
+            firstIndex = firstIndex || name
+
+            iframe.create(name, url)
+
+            store[name] = true
+
+            create_btn(name, label)
+
+            var $tabBtn = this.show(name)
+            // 绑定点击事件
+            $tabBtn.find('.tab-close').off('click')
+            $tabBtn.find('.tab-close').click(function () {
+                this.close(name)
+                this.switch(firstIndex)
+            }.bind(this))
+            // 点击tab切换显示iframe
+            $tabBtn.off('click')
+            $tabBtn.click(function () {
+                this.switch(name)
+            }.bind(this))
+            $tabBtn.find('.icon-refresh').off('click')
+            $tabBtn.find('.icon-refresh').click(function () {
+                self.reload(name, url)
+            })
+        }
+
+        // 关闭tab窗
+        this.close = function ($this) {
+            var name
+            if (typeof $this != 'object') {
+                name = $this
+                $this = $('[data-action="tab-'+ $this +'"]')
+            } else {
+                name = $this.data('action').replace('tab-', '')
+            }
+            // 移除按钮
+            $this.remove()
+            // 移除iframe
+            iframe.remove(name)
+
+            delete store[name]
+        }
+
+        this.removeActive = function () {
+            var $all = $('li.tab')
+            // 移除所有tab按钮选中特效
+            $all.removeClass('active')
+            $all.find('a').addClass('waves-effect waves-info')
+            $all.find('.tab-close').show(300)
+        }
+
+        // 创建tab按钮
+        function create_btn(name, label) {
+            if ($menu.find('[data-action="tab-' +name+ '"]').length > 0) {
+                return false;
+            }
+            var html = tpl.replace('{name}', name).replace('{name}', name).replace('{label}', label)
+            $menu.append(html)
+        }
+    }
+
+    function Iframe() {
+        var tpl = $('#iframe-tpl').html(),
+            store = {},
+            $app = $('#lxh-app'),
+            current
+
+        // 切换显示iframe
+        this.switch = function (name, url) {
+            this.hide()
+            var $iframe = $('#wrapper-' + name || document)
+
+            if ($iframe.length < 1) {
+                return this.create(name, url)
+            }
+
+            // 显示当前iframe
+            $iframe.show()
+            current = name
+        }
+
+        this.removeStore = function (name) {
+            delete store[name]
+        }
+
+        this.current = function () {
+            return current
+        }
+
+        this.remove = function (name) {
+            delete store[name]
+            $('#wrapper-' + name).remove()
+        }
+
+        // 创建iframe弹窗
+        this.create = function (name, url) {
+            if (typeof store[name] != 'undefined') return true;
+
+            var toastr = window.toastr || parent.toastr
+
+            toastr.options = {
+                timeout: 90000
+            }
+
+            toastr.success('loading...')
+
+            current = name
+
+            url = url || name;
+
+            store[name] = true;
+
+            var html = tpl.replace('{$name}', name).replace('{$url}', url);
+
+            // 隐藏所有iframe
+            this.hide()
+
+            $app.append(html)
+
+            var $iframe = $('#wrapper-' + name)
+            // 显示当前iframe
+            $iframe.show(220)
+
+            $iframe.find('iframe').on('load', function (e) {
+                this.height($(e.currentTarget))
+                toastr.remove()
+            }.bind(this))
+        }
+
+        // 自动设置高度
+        this.height = function ($this) {
+            if (typeof $this[0] == 'undefined') return;
+
+            var iframe = $this[0],
+                iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow,
+                height;
+            if (iframeWin.document.body) {
+                height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight;
+                // iframe.height = height
+                $this.css('height', height + 'px')
+            }
+        };
+
+        this.hide = function () {
+            $('.lxh-wrapper').hide()
+        }
+    }
+
+    w.Tab = Tab
+    w.Iframe = Iframe
+})(window);

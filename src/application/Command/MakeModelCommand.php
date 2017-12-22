@@ -26,7 +26,7 @@ class MakeModelCommand extends ModuleGeneratorCommand
 
     protected $folder = 'application/';
 
-    protected $fileNamespace = '\\Model';
+    protected $fileNamespace = '\\Models';
 
     /**
      * The console command description.

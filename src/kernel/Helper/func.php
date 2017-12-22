@@ -532,7 +532,7 @@ function query($name = 'primary')
  */
 function is_ajax()
 {
-    return $GLOBALS['CONTAINER']['http.requrest']->isAjax();
+    return $GLOBALS['CONTAINER']['http.request']->isAjax();
 }
 
 /**
@@ -644,7 +644,7 @@ function db_track(& $sql, & $time, $type = 'unknown', array & $params = [])
             'type' => $type,
             'start' => & $time,
             'params' => & $params
-    ]);
+        ]);
 }
 
 /**

@@ -5,7 +5,7 @@
  * @date   {date}
  */
 
-namespace {root-namespace}{module}\Controller;
+namespace {root-namespace}{module}\Controllers;
 
 use {root-namespace}MVC\Controller;
 use {root-namespace}Http\Request;

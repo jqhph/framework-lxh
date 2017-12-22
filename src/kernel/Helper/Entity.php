@@ -21,28 +21,9 @@ class Entity implements ArrayAccess, Arrayable, Jsonable
      */
     protected $items = [];
 
-    /**
-     * 属性回收站
-     *
-     * @var array
-     */
-    protected $recycled = [];
-
     public function __construct(array $data = [])
     {
         $this->items = &$data;
-    }
-
-    /**
-     * 回收数据
-     *
-     * @param string $name
-     * @return void
-     */
-    public function recycle($name)
-    {
-        $this->recycled[$name] = $this->items[$name];
-        unset($this->items[$name]);
     }
 
     /**
@@ -94,6 +75,13 @@ class Entity implements ArrayAccess, Arrayable, Jsonable
         return $this;
     }
 
+    public function attach(array $data)
+    {
+        $this->items = array_merge($this->items, $data);
+
+        return $this;
+    }
+
     /**
      * 获取属性值，可获取多维属性值
      *
@@ -133,20 +121,15 @@ class Entity implements ArrayAccess, Arrayable, Jsonable
     /**
      * 追加值到某一属性中
      *
-     * @param string $name
-     * @param mixed $value
      * @return static
      */
-    public function append($name, $value)
+    public function append($name, $k, $v = null)
     {
-        $this->items[$name][] = &$value;
-
-        return $this;
-    }
-
-    public function setWithArray($name, $k, $v)
-    {
-        $this->items[$name][$k] = & $v;
+        if ($v === null) {
+            $this->items[$name][] = &$k;
+        } else {
+            $this->items[$name][$k] = &$v;
+        }
 
         return $this;
     }
@@ -228,7 +211,7 @@ class Entity implements ArrayAccess, Arrayable, Jsonable
      */
     public function offsetExists($key)
     {
-        return isset($this->instances[$key]);
+        return $this->has($key);
     }
 
     /**

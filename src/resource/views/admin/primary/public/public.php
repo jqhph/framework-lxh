@@ -10,12 +10,7 @@
 
     <title><?php echo trans('web-title'); ?></title>
 
-    <!--Morris Chart CSS -->
-
     <?php
-    // <!--Morris Chart CSS -->
-    //        echo load_css('morris', 'lib/plugins/morris');
-
     // App css
     echo load_css('bootstrap.min');
     echo load_css('menu-light');
@@ -34,7 +29,7 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
-
+    <style>.loading{position:absolute;top:50%;left:48.5%;margin-top:-30px;z-index:999999;width:100px;text-align:center}.loading>div{width:20px;height:20px;background-color:#36d5ac;border-radius:100%;display:inline-block;-webkit-animation:bouncedelay 1.4s infinite ease-in-out;animation:bouncedelay 1.4s infinite ease-in-out;-webkit-animation-fill-mode:both;animation-fill-mode:both}.loading .loading1{-webkit-animation-delay:-.32s;animation-delay:-.32s}.loading .loading2{-webkit-animation-delay:-.16s;animation-delay:-.16s}.loading-circle{position:relative;display:inline-block;line-height:0;vertical-align:middle;box-sizing:border-box}.loading-circle::after{content:"";display:inline-block;border:3px solid rgba(0,0,0,.1);border-radius:50%;height:32px;width:32px;box-sizing:border-box}.loading-circle:after{position:absolute;left:0;top:0;border-color:#21d376 transparent transparent;animation:loading .6s linear infinite}.loading-circle-sm::after,.loading-circle-sm::before{height:18px;width:18px;border-width:2px}.loading-circle-xs::after,.loading-circle-xs::before{height:12px;width:12px;border-width:2px}@keyframes loading{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}</style>
 </head>
 <script>
 
@@ -61,19 +56,19 @@
             <div class="content">
                 <div class="container">
 
-                <iframe src="<?php echo $homeUrl?>" scrolling="no" id="home-iframe"></iframe>
+                    <iframe src="<?php echo $homeUrl?>" scrolling="no" id="home-iframe"></iframe>
 
-                <script id="iframe-tpl" type="text/html">
-                    <div id="wrapper-{$name}" class="wrapper lxh-wrapper">
-                        <div class="content-page">
-                            <div class="content">
-                                <div class="container">
-                                    <iframe src="{$url}" scrolling="no"></iframe>
+                    <script id="iframe-tpl" type="text/html">
+                        <div id="wrapper-{$name}" class="wrapper lxh-wrapper">
+                            <div class="content-page">
+                                <div class="content">
+                                    <div class="container">
+                                        <iframe src="{$url}" scrolling="no"></iframe>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </script>
+                    </script>
 
                 </div> <!-- container -->
             </div> <!-- content -->
@@ -82,33 +77,22 @@
         <!-- End Right content here -->
         <!-- ============================================================== -->
 
-        <!-- Right Sidebar -->
-<!--        --><?php //echo render_view('public.right-bar');?>
-        <!-- /Right-bar -->
-
     </div>
     <!-- END wrapper -->
-
-    <div id="imchat"><?php echo $imview;?></div>
+    <?php
+    echo load_css('toastr', 'lib/plugins/toastr');
+    echo load_js('toastr.min', 'plugins/toastr');
+    ?>
 </div>
 
 <footer class="footer text-right">
     2016 © Adminto.
 </footer>
 
-<script>
-    var resizefunc = [];
-</script>
-
 <?php
-echo load_js('tab');
 //echo load_css('pages');
 //echo load_css('responsive');
-echo load_css('toastr', 'lib/plugins/toastr');
-echo load_js('toastr.min', 'plugins/toastr');
 
-// <!-- jQuery  -->
-//echo load_js('jquery.min');
 //echo load_js('bootstrap.min');
 //echo load_js('detect');
 echo load_js('fastclick');
@@ -119,6 +103,18 @@ echo load_js('jquery.slimscroll');
 //echo load_js('jquery.scrollTo.min');
 
 ?>
+
+<script>
+    var resizefunc = [];
+
+    var $iframe = new Iframe(),
+        $tab = new Tab($iframe)
+
+    var $top = {
+        tab: $tab,
+        iframe: $iframe
+    }
+</script>
 
 <!-- KNOB JS -->
 <!--[if IE]>

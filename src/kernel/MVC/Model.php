@@ -123,17 +123,7 @@ class Model extends Entity
      */
     public function where(...$argv)
     {
-        return $this->query()->where(...$argv);
-    }
-
-    /**
-     * 查询的字段
-     *
-     * @return Query
-     */
-    public function select(...$argv)
-    {
-        return $this->query()->select(...$argv);
+        return $this->query()->select($this->selectFields)->where(...$argv);
     }
 
     // 查找数据
@@ -180,6 +170,19 @@ class Model extends Entity
         $this->beforeAdd($data);
 
         $this->insertId = $this->query()->add($data);
+
+        $this->afterAdd($this->insertId, $data);
+
+        return $this->insertId;
+    }
+
+    public function replace()
+    {
+        $data = $this->all();
+
+        $this->beforeAdd($data);
+
+        $this->insertId = $this->query()->replace($data);
 
         $this->afterAdd($this->insertId, $data);
 
@@ -276,7 +279,7 @@ class Model extends Entity
     protected function query($name = null)
     {
         if (isset($this->queries[$name])) {
-            return $this->queries[$name];
+            return $this->queries[$name]->from($this->tableName);
         }
 
         return $this->queries[$name] = query($name ?: $this->connectionType)->from($this->tableName);

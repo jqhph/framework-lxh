@@ -12,6 +12,10 @@ use Lxh\File\FileManager;
 class File extends Cache
 {
     /**
+     * @var array
+     */
+    protected static $instances = [];
+    /**
      * 缓存根目录
      *
      * @var string
@@ -43,6 +47,16 @@ class File extends Cache
         $this->root = __DATA_ROOT__ . 'file-cache/';
 
         $this->file = files();
+    }
+
+    /**
+     *
+     * @param string $name 缓存目录
+     * @return static
+     */
+    public static function create($name = '')
+    {
+        return isset(static::$instances[$name]) ? static::$instances[$name] : (static::$instances[$name] = new static($name));
     }
 
     /**
@@ -270,6 +284,13 @@ class File extends Cache
         $data['timeout'] = time() + ((int) $timeout);
 
         return $this->file->putPhpContents($path, $data);
+    }
+
+    public function setBasePath($path)
+    {
+        $this->root = $path;
+
+        return $this;
     }
 
     /**
