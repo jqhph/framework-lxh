@@ -1,6 +1,6 @@
 <?php
 $menu = make('acl-menu');
-$user = user();
+$user = admin();
 $name = $user->first_name . $user->last_name;
 ?>
 
@@ -43,7 +43,7 @@ $name = $user->first_name . $user->last_name;
 
                 <?php foreach ($menu->get() as & $m) { ?>
                 <li class="has_sub">
-                    <a onclick="<?php echo empty($m['subs']) ? "$top.tab.switch({$m['id']}, '{$m['url']}', '{$m['name']}')" : '';?>"
+                    <a onclick="<?php echo empty($m['subs']) ? "\$top.tab.switch({$m['id']}, '{$m['url']}', '{$m['name']}')" : '';?>"
                        class="waves-effect <?php if ($menu->isActive($m['controller'], $m['action'])) echo 'active';?>">
                         <i class="<?php echo $m['icon'];?>"></i>
                         <span><?php echo $m['name'];?></span>

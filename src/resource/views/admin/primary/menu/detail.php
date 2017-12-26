@@ -4,7 +4,7 @@ if (empty($row)) {
     $row = [];
 }
 use Lxh\Admin\Kernel\Url;
- ?>
+?>
 
 
 
@@ -21,7 +21,7 @@ use Lxh\Admin\Kernel\Url;
                 <form class="form-horizontal Menu-form" role="form">
                     <div class="col-lg-6">
                         <?php if (! empty($row['id'])) { ?>
-                        <input type="hidden" name="id" value="<?php echo $row['id'];?>" />
+                            <input type="hidden" name="id" value="<?php echo $row['id'];?>" />
                         <?php } ?>
 
                         <?php echo render_view('component/fields/enum/tree-edit', [
@@ -33,9 +33,9 @@ use Lxh\Admin\Kernel\Url;
                         ]); ?>
 
                         <?php echo render_view('component.fields.varchar.edit', [
-                                'name' => 'icon', 'label' => 'icon', 'value' => get_value($row, 'icon'),
-                                'help' => '<a target="_blank" href="' . Url::makeAction('font-awesome', 'public-entrance')
-                                    . '">' . trans_with_global('fontawesome icon CSS') . '</a>'
+                            'name' => 'icon', 'label' => 'icon', 'value' => get_value($row, 'icon'),
+                            'help' => '<a target="_blank" href="' . Url::makeAction('font-awesome', 'public-entrance')
+                                . '">' . trans_with_global('fontawesome icon CSS') . '</a>'
                         ]); ?>
 
                         <?php echo render_view('component.fields.varchar.edit', ['name' => 'name', 'label' => 'name', 'value' => get_value($row, 'name')]); ?>
@@ -48,7 +48,7 @@ use Lxh\Admin\Kernel\Url;
 
                         <?php echo render_view('component.fields.bool.edit', ['name' => 'show', 'label' => 'show', 'value' => get_value($row, 'show', 1)]); ?>
 
-                        <?php echo render_view('component.detail-button');?>
+                        <?php echo render_view('component.detail-button', ['id' => get_value($row, 'id')]);?>
                     </div><!-- end col -->
 
                 </form>

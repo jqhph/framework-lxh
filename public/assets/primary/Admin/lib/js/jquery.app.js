@@ -172,7 +172,7 @@ function($) {
 
      //on doc load
     App.prototype.onDocReady = function(e) {
-      FastClick.attach(document.body);
+      // FastClick.attach(document.body);
         if (typeof resizefunc == 'undefined') {
             window.resizefunc = []
         }

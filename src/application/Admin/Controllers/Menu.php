@@ -8,11 +8,14 @@
 
 namespace Lxh\Admin\Controllers;
 
+use Lxh\Admin\Grid;
+use Lxh\Admin\Views\Table\Table;
 use Lxh\Exceptions\Forbidden;
 //use Lxh\MVC\Controller;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
 use Lxh\Helper\Valitron\Validator;
+use Lxh\Admin\Layout\Row;
 
 class Menu extends Controller
 {
@@ -112,32 +115,35 @@ class Menu extends Controller
 
     public function actionList(Request $req, Response $resp, array & $params)
     {
-        $titles = [
-            'id' => ['priority' => 0,],
-            'icon' => [
-                'view' => 'fields/icon/list'
-            ],
-            'name' => [
-            ],
-            'controller' => [
-            ],
-            'action' => [
-            ],
-            'show' => [
-                'view' => 'fields/bool/list'
-            ],
-            'type' => [
-                'view' => 'fields/enum/list'
-            ],
-            'priority' => [
-            ],
-        ];
+        $content = $this->admin()->content();
 
-        $list = resolve('acl-menu')->all();
+        $content->row(function (Row $row) {
+            $row->column(12, $this->buildGrid());
+        });
 
-        $this->share('titles', $titles);
+        return $content->render();
+    }
 
-        return $this->render('list', ['list' => & $list], true);
+    protected function buildGrid()
+    {
+//        ddd(resolve('acl-menu')->all());
+        $grid = new Grid([
+            'id' => [
+                'priority' => 0,
+            ],
+            'icon' => ['view' => 'Icon'],
+            'name' => [],
+            'controller' => [],
+            'action' => [],
+            'show' => ['view' => 'Boolean'],
+            'type' => ['view' => 'Enum'],
+            'priority' => [],
+        ],  resolve('acl-menu')->all());
+
+        $grid->table()->useTree('subs');
+        $grid->usePagination(false);
+
+        return $grid;
     }
 
 }

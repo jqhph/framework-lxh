@@ -163,10 +163,10 @@
         }
 
         // 重新加载iframe
-        this.reload = function (name, url) {
+        this.reload = function (name, url, label) {
             delete store[name]
-            iframe.removeStore(name)
-            this.open(name, url)
+            iframe.remove(name)
+            this.open(name, url, label)
         }
 
         // 打开一个新的tab页
@@ -191,7 +191,6 @@
             $tabBtn.find('.tab-close').off('click')
             $tabBtn.find('.tab-close').click(function () {
                 this.close(name)
-                this.switch(firstIndex)
             }.bind(this))
             // 点击tab切换显示iframe
             $tabBtn.off('click')
@@ -219,6 +218,8 @@
             iframe.remove(name)
 
             delete store[name]
+
+            this.switch(firstIndex)
         }
 
         this.removeActive = function () {
@@ -276,13 +277,7 @@
         this.create = function (name, url) {
             if (typeof store[name] != 'undefined') return true;
 
-            var toastr = window.toastr || parent.toastr
-
-            toastr.options = {
-                timeout: 90000
-            }
-
-            toastr.success('loading...')
+            var $loading = w.loading($app)
 
             current = name
 
@@ -301,9 +296,9 @@
             // 显示当前iframe
             $iframe.show(220)
 
-            $iframe.find('iframe').on('load', function (e) {
+            $iframe.find('iframe').load(function (e) {
                 this.height($(e.currentTarget))
-                toastr.remove()
+                $loading.close()
             }.bind(this))
         }
 

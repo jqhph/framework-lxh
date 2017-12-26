@@ -31,7 +31,7 @@ class HigherOrderTapProxy
      */
     public function __call($method, $parameters)
     {
-        $this->target->{$method}(...$parameters);
+        call_user_func_array([$this->target, $method], $parameters);
 
         return $this->target;
     }

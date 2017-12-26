@@ -121,9 +121,9 @@ class Model extends Entity
      *
      * @return Query
      */
-    public function where(...$argv)
+    public function where()
     {
-        return $this->query()->select($this->selectFields)->where(...$argv);
+        return call_user_func_array([$this->query()->select($this->selectFields), 'where'], func_get_args());
     }
 
     // 查找数据

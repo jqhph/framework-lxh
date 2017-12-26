@@ -5,7 +5,6 @@
 <title></title>
 <!-- Tell the browser to be responsive to screen width -->
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-<style>.loading{position:absolute;top:50%;left:48.5%;margin-top:-30px;z-index:999999;width:100px;text-align:center}.loading>div{width:20px;height:20px;background-color:#36d5ac;border-radius:100%;display:inline-block;-webkit-animation:bouncedelay 1.4s infinite ease-in-out;animation:bouncedelay 1.4s infinite ease-in-out;-webkit-animation-fill-mode:both;animation-fill-mode:both}.loading .loading1{-webkit-animation-delay:-.32s;animation-delay:-.32s}.loading .loading2{-webkit-animation-delay:-.16s;animation-delay:-.16s}.loading-circle{position:relative;display:inline-block;line-height:0;vertical-align:middle;box-sizing:border-box}.loading-circle::after{content:"";display:inline-block;border:3px solid rgba(0,0,0,.1);border-radius:50%;height:32px;width:32px;box-sizing:border-box}.loading-circle:after{position:absolute;left:0;top:0;border-color:#21d376 transparent transparent;animation:loading .6s linear infinite}.loading-circle-sm::after,.loading-circle-sm::before{height:18px;width:18px;border-width:2px}.loading-circle-xs::after,.loading-circle-xs::before{height:12px;width:12px;border-width:2px}@keyframes loading{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}</style>
 
 <body>
 <script>
@@ -53,9 +52,11 @@ echo render_view('public.app-js');
             var $top = w.$top || w.top.$top
             return $top.tab
         }
-
         w.open_tab = function (id, url, label) {
             tab().switch(id, url, label)
+        }
+        w.close_tab = function (id) {
+            tab().close(id)
         }
     })(window)
 </script>

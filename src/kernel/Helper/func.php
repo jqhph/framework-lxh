@@ -717,6 +717,9 @@ function debug($data, $print = true, $json = false)
     }
     if (is_string($data) || is_bool($data) || is_float($data) || is_integer($data)) {
         echo $s . date('[H:i:s]') . $se .  " $data{$n}";
+        if (! $isCli) {
+            echo '</pre>';
+        }
         return;
     }
 
@@ -735,14 +738,14 @@ function debug($data, $print = true, $json = false)
     }
 }
 
-function dd(...$args)
+function dd()
 {
-    foreach ($args as $x) {
+    foreach (func_get_args() as $x) {
         debug($x);
     }
 }
 
-function ddd(...$args) {
-    dd(...$args);
+function ddd() {
+    call_user_func_array('dd', func_get_args());
     die;
 }

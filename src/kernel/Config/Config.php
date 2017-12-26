@@ -257,7 +257,13 @@ class Config extends Entity
      */
     public function save(array $opts)
     {
-        return files()->mergeContents($this->getWritableConfigPath(), $opts);
+        $res = files()->mergeContents($this->getWritableConfigPath(), $opts);
+
+        $this->removeCache();
+        $this->refetch();
+        $this->saveCache();
+
+        return $res;
     }
 
 }

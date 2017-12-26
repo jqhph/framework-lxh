@@ -55,9 +55,9 @@ class Factory
         return $this->factory->make($this->normalizeView($view), $vars);
     }
 
-    public function render(...$argv)
+    public function render()
     {
-        return $this->factory->render(...$argv);
+        return $this->factory->render();
     }
 
     public function share($k, &$v = null)

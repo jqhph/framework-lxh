@@ -8,8 +8,8 @@
             <div class="card-box-header">
                 <span class="card-box-title"><?php echo trans('Config');?></span>
                 <div class="pull-right">
-                    <a data-action="clear-client-cache" class="btn btn-purple "><?php echo trans('Clear client cache')?></a>
-                    <a data-action="clear-js-css-cache" class="btn btn-custom "><?php echo trans('Clear all client cache')?></a>
+<!--                    <a data-action="clear-client-cache" class="btn btn-purple ">--><?php //echo trans('Clear client cache')?><!--</a>-->
+                    <a data-action="clear-js-css-cache" class="btn btn-purple "><?php echo trans('Clear cache')?></a>
                 </div>
             </div>
             <div class="card-box-line m-b-30"></div>

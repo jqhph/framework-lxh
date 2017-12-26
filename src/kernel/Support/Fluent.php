@@ -66,6 +66,20 @@ class Fluent implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
     }
 
     /**
+     *
+     * @return static
+     */
+    public function attach($k, $v = null)
+    {
+        if (is_array($k)) {
+            $this->attributes = array_merge($this->attributes, $k);
+        } else {
+            $this->attributes[$k] = &$v;
+        }
+        return $this;
+    }
+
+    /**
      * Convert the object into something JSON serializable.
      *
      * @return array

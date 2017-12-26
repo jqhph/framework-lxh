@@ -17,6 +17,11 @@ class Test extends Controller
 {
     public function actionTest(Request $req, Response $resp, & $params)
     {
+        ddd(123, 456);
+        $client = resolve('http.client');
+        $client->post('https://graph.facebook.com/v2.6/me/messages?access_token=')->then();
+
+        ddd($client->response());
 //        query()->from('test1')->find();
         return $this->render('test', ['title' => 'HELLO']);
 //        $test = new \Lxh\Mails\Test();

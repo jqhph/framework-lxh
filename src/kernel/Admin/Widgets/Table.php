@@ -52,7 +52,7 @@ class Table extends Widget implements Renderable
      */
     public function setHeaders($headers = [])
     {
-        $this->headers = $headers;
+        $this->headers = &$headers;
 
         return $this;
     }
@@ -67,14 +67,14 @@ class Table extends Widget implements Renderable
     public function setRows($rows = [])
     {
         if (Arr::isAssoc($rows)) {
-            foreach ($rows as $key => $item) {
+            foreach ($rows as $key => &$item) {
                 $this->rows[] = [$key, $item];
             }
 
             return $this;
         }
 
-        $this->rows = $rows;
+        $this->rows = &$rows;
 
         return $this;
     }
@@ -101,9 +101,9 @@ class Table extends Widget implements Renderable
     public function render()
     {
         $vars = [
-            'headers'    => $this->headers,
-            'rows'       => $this->rows,
-            'style'      => $this->style,
+            'headers'    => &$this->headers,
+            'rows'       => &$this->rows,
+            'style'      => &$this->style,
             'attributes' => $this->formatAttributes(),
         ];
 
