@@ -2,7 +2,7 @@
 
 namespace Lxh\Admin\Form;
 
-use Lxh\Admin\Facades\Admin;
+use Lxh\Admin\Admin;
 use Lxh\Admin\Form;
 use Lxh\Contracts\Support\Htmlable;
 use Lxh\Contracts\Support\Renderable;
@@ -27,7 +27,6 @@ class Tools implements Renderable
      * @var array
      */
     protected $options = [
-        'enableListButton' => true,
         'enableBackButton' => true,
     ];
 
@@ -50,14 +49,13 @@ class Tools implements Renderable
     {
         $script = <<<'EOT'
 $('.form-history-back').on('click', function (event) {
-    event.preventDefault();
-    history.back(1);
+    event.preventDefault();back_tab();
 });
 EOT;
 
         Admin::script($script);
 
-        $text = trans('admin::lang.back');
+        $text = trans('Back');
 
         return <<<EOT
 <div class="btn-group pull-right" style="margin-right: 10px">
@@ -68,16 +66,7 @@ EOT;
 
     public function listButton()
     {
-        $slice = Str::contains($this->form->getResource(0), '/edit') ? null : -1;
-        $resource = $this->form->getResource($slice);
-
-        $text = trans('admin::lang.list');
-
-        return <<<EOT
-<div class="btn-group pull-right" style="margin-right: 10px">
-    <a href="$resource" class="btn btn-sm btn-default"><i class="fa fa-list"></i>&nbsp;$text</a>
-</div>
-EOT;
+        return '';
     }
 
     /**
@@ -107,29 +96,13 @@ EOT;
     }
 
     /**
-     * Disable list button.
-     *
-     * @return $this
-     */
-    public function disableListButton()
-    {
-        $this->options['enableListButton'] = false;
-
-        return $this;
-    }
-
-    /**
      * Render header tools bar.
      *
      * @return string
      */
     public function render()
     {
-        if ($this->options['enableListButton']) {
-            $this->add($this->listButton());
-        }
-
-        if ($this->options['enableBackButton']) {
+              if ($this->options['enableBackButton']) {
             $this->add($this->backButton());
         }
 

@@ -136,12 +136,23 @@
             tpl = $('#header-tab-tpl').html(),
             $menu = $('ul.tab-menu'),
             store = {},
-            firstIndex = 'home'
+            firstIndex = 'home',
+            def = {name: firstIndex, url: '', label: ''},
+            histories = [def]
 
         // 切换显示tab页
         this.switch = function (name, url, label) {
             iframe.switch(name, url)
             this.show(name, url, label)
+            this.addHistory(name, url, label)
+        }
+
+        // 返回上一级tab
+        this.back = function (step) {
+            step = (parseInt(step) || 1)
+            var data = histories[step] || def
+            histories.splice(step - 1, 1)
+            this.switch(data.name, data.url, data.label)
         }
 
         this.show = function (name, url, label) {
@@ -158,8 +169,12 @@
             // $this.removeClass()
             // 隐藏关闭按钮
             // $this.find('.tab-close').hide()
-
             return $this
+        }
+
+        this.addHistory = function (name, url, label) {
+            histories = unset(histories, 'name', name)
+            histories.unshift({name: name, url: url, label: label})
         }
 
         // 重新加载iframe
@@ -167,6 +182,7 @@
             delete store[name]
             iframe.remove(name)
             this.open(name, url, label)
+            this.addHistory(name, url, label)
         }
 
         // 打开一个新的tab页
@@ -218,8 +234,8 @@
             iframe.remove(name)
 
             delete store[name]
-
-            this.switch(firstIndex)
+            // 返回上一页
+            this.back()
         }
 
         this.removeActive = function () {
@@ -228,6 +244,16 @@
             $all.removeClass('active')
             $all.find('a').addClass('waves-effect waves-info')
             $all.find('.tab-close').show(300)
+        }
+
+        // 删除数组元素
+        function unset(arr, k, value) {
+            var i, res = []
+            for (i in arr) {
+                if (arr[i][k] == value) continue;
+                res.push(arr[i])
+            }
+            return res
         }
 
         // 创建tab按钮

@@ -1,9 +1,7 @@
 <div class="topbar">
     <!-- LOGO -->
     <div class="topbar-left">
-        <a href="<?php echo Lxh\Admin\Kernel\Url::makeHome();?>" class="logo">
-            <span><?php echo trans_with_global('first-logo-text', 'labels'); ?><span>
-                    <?php echo trans_with_global('last-logo-text', 'labels'); ?></span></span><i class="zmdi zmdi-layers"></i></a>
+        <a href="javascript:$top.tab.switch('home')" class="logo"><?php echo config('admin.logo')?><i class="zmdi zmdi-layers"></i></a>
     </div>
     <style>
         .page-title a{color:#505458}
@@ -16,7 +14,7 @@
                     <ul class="header-tag-list a tab-menu">
                         <li class="ticket-tab active tab"  data-action="tab-home" data-name="home" style="min-width:100px;">
                             <a><?php echo trans('Home')?></a>
-                            <i class="zmdi zmdi-refresh icon-refresh" onclick='document.getElementById("home-iframe").contentWindow.location.reload(true)' style="right:0;"></i>
+                            <i class="zmdi zmdi-refresh icon-refresh" onclick='$top.tab.reload("home", $top.homeUrl, "<?php echo trans('Home')?>");' style="right:0;"></i>
                         </li>
                     </ul>
                 </nav>
@@ -59,6 +57,3 @@
         <i class="zmdi zmdi-close tab-close icon-close" ></i>
     </li>
 </script>
-<!--<ol class="breadcrumb">-->
-<!--    <li><a href="#">Menu management</a></li><li>Modify menu</li>-->
-<!--</ol>-->

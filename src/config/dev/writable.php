@@ -1,11 +1,12 @@
 <?php 
-return [
-    'js-version' => 1504001755,
-    'css-version' => 1501549539,
-    'language' => 'zh',
-    'replica-client-config' => [
-        'use-cache' => false,
-        'cache-expire' => 259200000,
-        'lang-package-expire' => 259200000,
-    ],
-];
+return array (
+  'js-version' => 1514291849,
+  'css-version' => 1514291849,
+  'language' => 'zh',
+  'replica-client-config' => 
+  array (
+    'use-cache' => false,
+    'cache-expire' => 259200000,
+    'lang-package-expire' => 259200000,
+  ),
+);

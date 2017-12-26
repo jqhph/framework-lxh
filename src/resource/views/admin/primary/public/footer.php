@@ -10,6 +10,9 @@
         w.close_tab = function (id) {
             tab().close(id)
         }
+        w.back_tab = function (step) {
+            tab().back(step)
+        }
     })(window)
 </script>
 <?php

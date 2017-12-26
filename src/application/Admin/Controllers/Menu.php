@@ -9,7 +9,6 @@
 namespace Lxh\Admin\Controllers;
 
 use Lxh\Admin\Grid;
-use Lxh\Admin\Views\Table\Table;
 use Lxh\Exceptions\Forbidden;
 //use Lxh\MVC\Controller;
 use Lxh\Http\Request;

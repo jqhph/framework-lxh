@@ -1,5 +1,13 @@
 <?php 
 return array (
+  'admin' => 
+  array (
+    'title' => 'Facebook站内信客服系统',
+    'desc' => '',
+    'logo' => '<span>L<span >xh</span></span>',
+    'favicon' => '',
+    'copyright' => '2017 @copyright JQH',
+  ),
   'timezone' => 'PRC',
   'use-language' => true,
   'view.compiled' => 'resource/blade-cache',
@@ -218,7 +226,7 @@ return array (
     ),
     'guzzle' => 
     array (
-      'timeout' => 3.0,
+      'timeout' => 3,
     ),
   ),
   'client-config' => 
@@ -255,8 +263,6 @@ return array (
     array (
       0 => 'validate',
       1 => 'container',
-      2 => 'core',
-      3 => 'lib/js/jquery.app',
     ),
   ),
   'mail' => 
@@ -282,8 +288,8 @@ return array (
       ),
     ),
   ),
-  'js-version' => 1504001755,
-  'css-version' => 1501549539,
+  'js-version' => 1514291849,
+  'css-version' => 1514291849,
   'language' => 'zh',
   'replica-client-config' => 
   array (

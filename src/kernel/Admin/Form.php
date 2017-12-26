@@ -69,18 +69,6 @@ use Symfony\Component\HttpFoundation\Response;
 class Form
 {
     /**
-     * Eloquent model of the form.
-     *
-     * @var
-     */
-    protected $model;
-
-    /**
-     * @var \Lxh\Validation\Validator
-     */
-    protected $validator;
-
-    /**
      * @var Builder
      */
     protected $builder;
@@ -163,10 +151,8 @@ class Form
      *
      * @param $model
      */
-    public function __construct($model)
+    public function __construct()
     {
-        $this->model = $model;
-
         $this->builder = new Builder($this);
     }
 
@@ -182,14 +168,6 @@ class Form
         $this->builder->fields()->push($field);
 
         return $this;
-    }
-
-    /**
-     * @return Model
-     */
-    public function model()
-    {
-        return $this->model;
     }
 
     /**
@@ -277,7 +255,6 @@ class Form
                 continue;
             }
             $this->deleteFilesAndImages($id);
-            $this->model->find($id)->delete();
         }
 
         return true;
@@ -290,118 +267,24 @@ class Form
      */
     protected function deleteFilesAndImages($id)
     {
-        $data = $this->model->with($this->getRelations())
-            ->findOrFail($id)->toArray();
-
-        $this->builder->fields()->filter(function ($field) {
-            return $field instanceof Field\File;
-        })->each(function (File $file) use ($data) {
-            $file->setOriginal($data);
-
-            $file->destroy();
-        });
+//        $this->builder->fields()->filter(function ($field) {
+//            return $field instanceof Field\File;
+//        })->each(function (File $file) use ($data) {
+//            $file->setOriginal($data);
+//
+//            $file->destroy();
+//        });
     }
 
     /**
      * Store a new record.
      *
-     * @return \Lxh\Http\RedirectResponse|\Lxh\Routing\Redirector|\Lxh\Http\JsonResponse
+     * @return
      */
     public function store()
     {
-        $data = Input::all();
-
-        // Handle validation errors.
-        if ($validationMessages = $this->validationMessages($data)) {
-            return back()->withInput()->withErrors($validationMessages);
-        }
-
-        if (($response = $this->prepare($data)) instanceof Response) {
-            return $response;
-        }
-
-        DB::transaction(function () {
-            $inserts = $this->prepareInsert($this->updates);
-
-            foreach ($inserts as $column => $value) {
-                $this->model->setAttribute($column, $value);
-            }
-
-            $this->model->save();
-
-            $this->updateRelation($this->relations);
-        });
-
-        if (($response = $this->complete($this->saved)) instanceof Response) {
-            return $response;
-        }
-
-        if ($response = $this->ajaxResponse(trans('admin::lang.save_succeeded'))) {
-            return $response;
-        }
-
-        return $this->redirectAfterStore();
     }
 
-    /**
-     * Get RedirectResponse after store.
-     *
-     * @return \Lxh\Http\RedirectResponse
-     */
-    protected function redirectAfterStore()
-    {
-        admin_toastr(trans('admin::lang.save_succeeded'));
-
-        $url = Input::get(Builder::PREVIOUS_URL_KEY) ?: $this->resource(0);
-
-        return redirect($url);
-    }
-
-    /**
-     * Get ajax response.
-     *
-     * @param string $message
-     *
-     * @return bool|\Lxh\Http\JsonResponse
-     */
-    protected function ajaxResponse($message)
-    {
-        $request = Request::capture();
-
-        // ajax but not pjax
-        if ($request->ajax() && !$request->pjax()) {
-            return response()->json([
-                'status'  => true,
-                'message' => $message,
-            ]);
-        }
-
-        return false;
-    }
-
-    /**
-     * Prepare input data for insert or update.
-     *
-     * @param array $data
-     *
-     * @return mixed
-     */
-    protected function prepare($data = [])
-    {
-        if (($response = $this->callSubmitted()) instanceof Response) {
-            return $response;
-        }
-
-        $this->inputs = $this->removeIgnoredFields($data);
-
-        if (($response = $this->callSaving()) instanceof Response) {
-            return $response;
-        }
-
-        $this->relations = $this->getRelationInputs($this->inputs);
-
-        $this->updates = array_except($this->inputs, array_keys($this->relations));
-    }
 
     /**
      * Remove ignored fields from input.
@@ -412,335 +295,11 @@ class Form
      */
     protected function removeIgnoredFields($input)
     {
-        array_forget($input, $this->ignored);
+        Arr::forget($input, $this->ignored);
 
         return $input;
     }
 
-    /**
-     * Get inputs for relations.
-     *
-     * @param array $inputs
-     *
-     * @return array
-     */
-    protected function getRelationInputs($inputs = [])
-    {
-        $relations = [];
-
-        foreach ($inputs as $column => $value) {
-            if (method_exists($this->model, $column)) {
-                $relation = call_user_func([$this->model, $column]);
-
-                if ($relation instanceof Relation) {
-                    $relations[$column] = $value;
-                }
-            }
-        }
-
-        return $relations;
-    }
-
-    /**
-     * Call submitted callback.
-     *
-     * @return mixed
-     */
-    protected function callSubmitted()
-    {
-        if ($this->submitted instanceof Closure) {
-            return call_user_func($this->submitted, $this);
-        }
-    }
-
-    /**
-     * Call saving callback.
-     *
-     * @return mixed
-     */
-    protected function callSaving()
-    {
-        if ($this->saving instanceof Closure) {
-            return call_user_func($this->saving, $this);
-        }
-    }
-
-    /**
-     * Callback after saving a Model.
-     *
-     * @param Closure|null $callback
-     *
-     * @return mixed|null
-     */
-    protected function complete(Closure $callback = null)
-    {
-        if ($callback instanceof Closure) {
-            return $callback($this);
-        }
-    }
-
-    /**
-     * Handle update.
-     *
-     * @param int $id
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function update($id)
-    {
-        $data = Input::all();
-
-        $data = $this->handleEditable($data);
-
-        $data = $this->handleFileDelete($data);
-
-        if ($this->handleOrderable($id, $data)) {
-            return response([
-                'status'  => true,
-                'message' => trans('admin::lang.update_succeeded'),
-            ]);
-        }
-
-        /* @var Model $this->model */
-        $this->model = $this->model->with($this->getRelations())->findOrFail($id);
-
-        $this->setFieldOriginalValue();
-
-        // Handle validation errors.
-        if ($validationMessages = $this->validationMessages($data)) {
-            return back()->withInput()->withErrors($validationMessages);
-        }
-
-        if (($response = $this->prepare($data)) instanceof Response) {
-            return $response;
-        }
-
-        DB::transaction(function () {
-            $updates = $this->prepareUpdate($this->updates);
-
-            foreach ($updates as $column => $value) {
-                /* @var Model $this->model */
-                $this->model->setAttribute($column, $value);
-            }
-
-            $this->model->save();
-
-            $this->updateRelation($this->relations);
-        });
-
-        if (($result = $this->complete($this->saved)) instanceof Response) {
-            return $result;
-        }
-
-        if ($response = $this->ajaxResponse(trans('admin::lang.update_succeeded'))) {
-            return $response;
-        }
-
-        return $this->redirectAfterUpdate();
-    }
-
-    /**
-     * Get RedirectResponse after update.
-     *
-     * @return \Lxh\Http\RedirectResponse
-     */
-    protected function redirectAfterUpdate()
-    {
-        admin_toastr(trans('admin::lang.update_succeeded'));
-
-        $url = Input::get(Builder::PREVIOUS_URL_KEY) ?: $this->resource(-1);
-
-        return redirect($url);
-    }
-
-    /**
-     * Handle editable update.
-     *
-     * @param array $input
-     *
-     * @return array
-     */
-    protected function handleEditable(array $input = [])
-    {
-        if (array_key_exists('_editable', $input)) {
-            $name = $input['name'];
-            $value = $input['value'];
-
-            array_forget($input, ['pk', 'value', 'name']);
-            array_set($input, $name, $value);
-        }
-
-        return $input;
-    }
-
-    /**
-     * @param array $input
-     *
-     * @return array
-     */
-    protected function handleFileDelete(array $input = [])
-    {
-        if (array_key_exists(Field::FILE_DELETE_FLAG, $input)) {
-            $input[Field::FILE_DELETE_FLAG] = $input['key'];
-            unset($input['key']);
-        }
-
-        Input::replace($input);
-
-        return $input;
-    }
-
-    /**
-     * Handle orderable update.
-     *
-     * @param int   $id
-     * @param array $input
-     *
-     * @return bool
-     */
-    protected function handleOrderable($id, array $input = [])
-    {
-        if (array_key_exists('_orderable', $input)) {
-            $model = $this->model->find($id);
-
-            if ($model instanceof Sortable) {
-                $input['_orderable'] == 1 ? $model->moveOrderUp() : $model->moveOrderDown();
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Update relation data.
-     *
-     * @param array $relationsData
-     *
-     * @return void
-     */
-    protected function updateRelation($relationsData)
-    {
-        foreach ($relationsData as $name => $values) {
-            if (!method_exists($this->model, $name)) {
-                continue;
-            }
-
-            $relation = $this->model->$name();
-
-            $hasDot = $relation instanceof \Lxh\Database\Eloquent\Relations\HasOne
-                || $relation instanceof \Lxh\Database\Eloquent\Relations\MorphOne;
-
-            $prepared = $this->prepareUpdate([$name => $values], $hasDot);
-
-            if (empty($prepared)) {
-                continue;
-            }
-
-            switch (get_class($relation)) {
-                case \Lxh\Database\Eloquent\Relations\BelongsToMany::class:
-                case \Lxh\Database\Eloquent\Relations\MorphToMany::class:
-                    if (isset($prepared[$name])) {
-                        $relation->sync($prepared[$name]);
-                    }
-                    break;
-                case \Lxh\Database\Eloquent\Relations\HasOne::class:
-
-                    $related = $this->model->$name;
-
-                    // if related is empty
-                    if (is_null($related)) {
-                        $related = $relation->getRelated();
-                        $related->{$relation->getForeignKeyName()} = $this->model->{$this->model->getKeyName()};
-                    }
-
-                    foreach ($prepared[$name] as $column => $value) {
-                        $related->setAttribute($column, $value);
-                    }
-
-                    $related->save();
-                    break;
-                case \Lxh\Database\Eloquent\Relations\MorphOne::class:
-                    $related = $this->model->$name;
-                    if (is_null($related)) {
-                        $related = $relation->make();
-                    }
-                    foreach ($prepared[$name] as $column => $value) {
-                        $related->setAttribute($column, $value);
-                    }
-                    $related->save();
-                    break;
-                case \Lxh\Database\Eloquent\Relations\HasMany::class:
-                case \Lxh\Database\Eloquent\Relations\MorphMany::class:
-
-                    foreach ($prepared[$name] as $related) {
-                        $relation = $this->model()->$name();
-
-                        $keyName = $relation->getRelated()->getKeyName();
-
-                        $instance = $relation->findOrNew(get_value($related, $keyName));
-
-                        if ($related[static::REMOVE_FLAG_NAME] == 1) {
-                            $instance->delete();
-
-                            continue;
-                        }
-
-                        array_forget($related, static::REMOVE_FLAG_NAME);
-
-                        $instance->fill($related);
-
-                        $instance->save();
-                    }
-
-                    break;
-            }
-        }
-    }
-
-    /**
-     * Prepare input data for update.
-     *
-     * @param array $updates
-     * @param bool  $hasDot  If column name contains a 'dot', only has-one relation column use this.
-     *
-     * @return array
-     */
-    protected function prepareUpdate(array $updates, $hasDot = false)
-    {
-        $prepared = [];
-
-        foreach ($this->builder->fields() as $field) {
-            $columns = $field->column();
-
-            if ($this->invalidColumn($columns, $hasDot)) {
-                continue;
-            }
-
-            $value = $this->getDataByColumn($updates, $columns);
-
-            if ($value !== '' && $value !== '0' && empty($value)) {
-                continue;
-            }
-
-            if (method_exists($field, 'prepare')) {
-                $value = $field->prepare($value);
-            }
-
-            if ($value != $field->original()) {
-                if (is_array($columns)) {
-                    foreach ($columns as $name => $column) {
-                        array_set($prepared, $column, $value[$name]);
-                    }
-                } elseif (is_string($columns)) {
-                    array_set($prepared, $columns, $value);
-                }
-            }
-        }
-
-        return $prepared;
-    }
 
     /**
      * @param string|array $columns
@@ -758,97 +317,6 @@ class Form
         }
 
         return false;
-    }
-
-    /**
-     * Prepare input data for insert.
-     *
-     * @param $inserts
-     *
-     * @return array
-     */
-    protected function prepareInsert($inserts)
-    {
-        if ($this->isHasOneRelation($inserts)) {
-            $inserts = array_dot($inserts);
-        }
-
-        foreach ($inserts as $column => $value) {
-            if (is_null($field = $this->getFieldByColumn($column))) {
-                unset($inserts[$column]);
-                continue;
-            }
-
-            if (method_exists($field, 'prepare')) {
-                $inserts[$column] = $field->prepare($value);
-            }
-        }
-
-        $prepared = [];
-
-        foreach ($inserts as $key => $value) {
-            array_set($prepared, $key, $value);
-        }
-
-        return $prepared;
-    }
-
-    /**
-     * Is input data is has-one relation.
-     *
-     * @param array $inserts
-     *
-     * @return bool
-     */
-    protected function isHasOneRelation($inserts)
-    {
-        $first = current($inserts);
-
-        if (!is_array($first)) {
-            return false;
-        }
-
-        if (is_array(current($first))) {
-            return false;
-        }
-
-        return Arr::isAssoc($first);
-    }
-
-    /**
-     * Set submitted callback.
-     *
-     * @param Closure $callback
-     *
-     * @return void
-     */
-    public function submitted(Closure $callback)
-    {
-        $this->submitted = $callback;
-    }
-
-    /**
-     * Set saving callback.
-     *
-     * @param Closure $callback
-     *
-     * @return void
-     */
-    public function saving(Closure $callback)
-    {
-        $this->saving = $callback;
-    }
-
-    /**
-     * Set saved callback.
-     *
-     * @param callable $callback
-     *
-     * @return void
-     */
-    public function saved(Closure $callback)
-    {
-        $this->saved = $callback;
     }
 
     /**
@@ -879,8 +347,8 @@ class Form
 
         if (is_array($columns)) {
             $value = [];
-            foreach ($columns as $name => $column) {
-                if (!array_has($data, $column)) {
+            foreach ($columns as $name => &$column) {
+                if (!Arr::has($data, $column)) {
                     continue;
                 }
                 $value[$name] = get_value($data, $column);
@@ -942,80 +410,6 @@ class Form
         $this->builder->fields()->each(function (Field $field) use ($data) {
             $field->fill($data);
         });
-    }
-
-    /**
-     * Get validation messages.
-     *
-     * @param array $input
-     *
-     * @return MessageBag|bool
-     */
-    protected function validationMessages($input)
-    {
-        $failedValidators = [];
-
-        foreach ($this->builder->fields() as $field) {
-            if (!$validator = $field->getValidator($input)) {
-                continue;
-            }
-
-            if (($validator instanceof Validator) && !$validator->passes()) {
-                $failedValidators[] = $validator;
-            }
-        }
-
-        $message = $this->mergeValidationMessages($failedValidators);
-
-        return $message->any() ? $message : false;
-    }
-
-    /**
-     * Merge validation messages from input validators.
-     *
-     * @param \Lxh\Validation\Validator[] $validators
-     *
-     * @return MessageBag
-     */
-    protected function mergeValidationMessages($validators)
-    {
-        $messageBag = new MessageBag();
-
-        foreach ($validators as $validator) {
-            $messageBag = $messageBag->merge($validator->messages());
-        }
-
-        return $messageBag;
-    }
-
-    /**
-     * Get all relations of model from callable.
-     *
-     * @return array
-     */
-    public function getRelations()
-    {
-        $relations = $columns = [];
-
-        foreach ($this->builder->fields() as $field) {
-            $columns[] = $field->column();
-        }
-
-        foreach (array_flatten($columns) as $column) {
-            if (str_contains($column, '.')) {
-                list($relation) = explode('.', $column);
-
-                if (method_exists($this->model, $relation) &&
-                    $this->model->$relation() instanceof Relation
-                ) {
-                    $relations[] = $relation;
-                }
-            } elseif (method_exists($this->model, $column)) {
-                $relations[] = $column;
-            }
-        }
-
-        return array_unique($relations);
     }
 
     /**
@@ -1127,11 +521,7 @@ class Form
      */
     public function render()
     {
-        try {
-            return $this->builder->render();
-        } catch (\Exception $e) {
-            return Handle::renderException($e);
-        }
+        return $this->builder->render();
     }
 
     /**
@@ -1266,7 +656,7 @@ class Form
         $css = collect();
         $js = collect();
 
-        foreach (static::$availableFields as $field) {
+        foreach (static::$availableFields as &$field) {
             if (!method_exists($field, 'getAssets')) {
                 continue;
             }

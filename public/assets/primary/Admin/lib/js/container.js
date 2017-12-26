@@ -558,7 +558,7 @@ window.Lxh = function (options) {
                 //     showMethod: 'slideDown',
                 //     hideMethod: 'fadeOut',
                 //     //timeOut: 3000,
-                var toastr = window.toastr || parent.toastr
+                var toastr = window.toastr || window.top.toastr
                 toastr.options = options
                 return toastr
             },

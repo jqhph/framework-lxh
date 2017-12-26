@@ -16,15 +16,13 @@ echo load_js('bootstrap.min');
 echo load_js('fastclick');
 echo load_js('detect');
 echo load_js('jquery.slimscroll');
-
 echo load_js('waves');
 
 ?>
 
 <script>
     // 配置
-    function get_config()
-    {
+    function get_config() {
         var data = {}
         // 容器配置
         data.options = <?php
@@ -39,7 +37,7 @@ echo load_js('waves');
                 'module' => __MODULE__,
                 'action' => __ACTION__,
                 'config' => & $config,
-                'users' => user()->all()
+                'users' => admin()->all()
             ]);
             ?>
             

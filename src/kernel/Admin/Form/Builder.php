@@ -125,7 +125,7 @@ class Builder
      *
      * @return void
      */
-    public function setMode($mode = 'create')
+    public function setMode($mode = self::MODE_CREATE)
     {
         $this->mode = $mode;
     }
@@ -313,7 +313,7 @@ class Builder
      */
     public function title()
     {
-        return trans('admin::lang.' . $this->mode);
+        return trans($this->mode);
     }
 
     /**
@@ -333,24 +333,6 @@ class Builder
     }
 
     /**
-     * Add field for store redirect url after update or store.
-     *
-     * @return void
-     */
-    protected function addRedirectUrlField()
-    {
-        $previous = URL::previous();
-
-        if (!$previous || $previous == URL::current()) {
-            return;
-        }
-
-        if (Str::contains($previous, url($this->getResource()))) {
-            $this->addHiddenField((new Form\Field\Hidden(static::PREVIOUS_URL_KEY))->value($previous));
-        }
-    }
-
-    /**
      * Open up a new HTML form.
      *
      * @param array $options
@@ -365,8 +347,6 @@ class Builder
             $this->addHiddenField((new Form\Field\Hidden('_method'))->value('PUT'));
         }
 
-        $this->addRedirectUrlField();
-
         $attributes['action'] = $this->getAction();
         $attributes['method'] = get_value($options, 'method', 'post');
         $attributes['accept-charset'] = 'UTF-8';
@@ -378,7 +358,7 @@ class Builder
         }
 
         $html = [];
-        foreach ($attributes as $name => $value) {
+        foreach ($attributes as $name => &$value) {
             $html[] = "$name=\"$value\"";
         }
 
@@ -413,7 +393,7 @@ class Builder
             return '';
         }
 
-        $text = trans('admin::lang.submit');
+        $text = trans('Submit');
 
         return <<<EOT
 <div class="btn-group pull-right">
@@ -433,7 +413,7 @@ EOT;
             return '';
         }
 
-        $text = trans('admin::lang.reset');
+        $text = trans('Reset');
 
         return <<<EOT
 <div class="btn-group pull-left">
@@ -452,16 +432,6 @@ EOT;
         if (!$this->isMode(static::MODE_CREATE)) {
             return;
         }
-
-        $reservedColumns = [
-            $this->form->model()->getKeyName(),
-            $this->form->model()->getCreatedAtColumn(),
-            $this->form->model()->getUpdatedAtColumn(),
-        ];
-
-        $this->fields = $this->fields()->reject(function (Field $field) use ($reservedColumns) {
-            return in_array($field->column(), $reservedColumns);
-        });
     }
 
     /**
@@ -477,27 +447,22 @@ EOT;
 
         if (!$tabObj->isEmpty()) {
             $script = <<<'SCRIPT'
-
 var hash = document.location.hash;
 if (hash) {
     $('.nav-tabs a[href="' + hash + '"]').tab('show');
 }
-
 // Change hash for page-reload
 $('.nav-tabs a').on('shown.bs.tab', function (e) {
     history.pushState(null,null, e.target.hash);
 });
-
 if ($('.has-error').length) {
     $('.has-error').each(function () {
         var tabId = '#'+$(this).closest('.tab-pane').attr('id');
         $('li a[href="'+tabId+'"] i').removeClass('hide');
     });
-
     var first = $('.has-error:first').closest('.tab-pane').attr('id');
     $('li a[href="#'+first+'"]').tab('show');
 }
-
 SCRIPT;
             Admin::script($script);
         }

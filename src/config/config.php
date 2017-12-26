@@ -7,6 +7,14 @@
  */
 $config = [];
 
+$config['admin'] = [
+    'title' => 'Facebook站内信客服系统',
+    'desc' => '',
+    'logo' => '<span>L<span >xh</span></span>',
+    'favicon' => '',
+    'copyright' => '2017 @copyright JQH',
+];
+
 // 时区配置
 $config['timezone'] = 'PRC';
 

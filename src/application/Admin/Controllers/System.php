@@ -122,7 +122,7 @@ class System extends Controller
     public function actionClearAllClientCache()
     {
         if (! admin()->isAdmin()) {
-            return $this->failed('Forbidden');
+//            return $this->failed('Forbidden');
         }
 
         if (resolve('front.client')->clearCache()) {
@@ -136,7 +136,7 @@ class System extends Controller
     public function actionClearClientCache()
     {
         if (! admin()->isAdmin()) {
-            return $this->failed('Forbidden');
+//            return $this->failed('Forbidden');
         }
 
         if (resolve('front.client')->updateCache()) {

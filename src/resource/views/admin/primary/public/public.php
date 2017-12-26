@@ -46,29 +46,13 @@
     <!-- ========== Left Sidebar Start ========== -->
     <?php echo render_view('public.left-sidebar');?>
     <!-- Left Sidebar End -->
-
-    <div id="wrapper-home" class="wrapper lxh-wrapper">
-        <div class="content-page">
-            <!-- Start content -->
-            <div class="content">
-                <div class="container">
-                    <iframe src="<?php echo $homeUrl?>" scrolling="no" id="home-iframe"></iframe>
-                    <script id="iframe-tpl" type="text/html">
-                        <div id="wrapper-{$name}" class="wrapper lxh-wrapper">
-                            <div class="content-page">
-                                <div class="content">
-                                    <div class="container">
-                                        <iframe src="{$url}" scrolling="no"></iframe>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </script>
-                </div>
-            </div> <!-- content -->
+    <script id="iframe-tpl" type="text/html">
+        <div id="wrapper-{$name}" class="wrapper lxh-wrapper">
+            <div class="content-page">
+                <div class="content"><div class="container"><iframe src="{$url}" scrolling="no"></iframe></div></div>
+            </div>
         </div>
-
-    </div>
+    </script>
     <!-- END wrapper -->
     <?php
     echo load_css('toastr', 'lib/plugins/toastr');
@@ -77,7 +61,7 @@
 </div>
 
 <footer class="footer text-right">
-    2016 © Adminto.
+    <?php echo config('admin.copyright')?>
 </footer>
 
 <?php
@@ -94,8 +78,12 @@ echo load_js('jquery.slimscroll');
 
     var $top = {
         tab: $tab,
-        iframe: $iframe
+        iframe: $iframe,
+        homeUrl: '<?php echo $homeUrl?>'
     }
+
+    // 加载首页视图
+    $top.iframe.switch('home', '<?php echo $homeUrl?>');
 </script>
 
 <!-- KNOB JS -->

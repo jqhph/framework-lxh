@@ -65,9 +65,9 @@ $config['public-js'] = [
     'validate',
 //    'toastr',
     'container',
-    'core',
+//    'core',
 //    'lib/js/bootstrap.min',
-    'lib/js/jquery.app',
+//    'lib/js/jquery.app',
 //    'lib/js/jquery.slimscroll',
 //    'lib/pages/jquery.dashboard'
 //    'blade',
