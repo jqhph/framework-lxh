@@ -2,7 +2,7 @@
 return array (
   'admin' => 
   array (
-    'title' => 'Facebook站内信客服系统',
+    'title' => 'Lxh',
     'desc' => '',
     'logo' => '<span>L<span >xh</span></span>',
     'favicon' => '',
@@ -15,7 +15,7 @@ return array (
   'view.version' => 'primary',
   'view.namespaces' => 
   array (
-    'admin' => 'resource/views/admin/primary/html-creator',
+    'admin' => 'resource/views/component',
   ),
   'response-console-log' => true,
   'response-trace-log' => true,
@@ -226,7 +226,7 @@ return array (
     ),
     'guzzle' => 
     array (
-      'timeout' => 3,
+      'timeout' => 3.0,
     ),
   ),
   'client-config' => 

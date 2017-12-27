@@ -4,6 +4,7 @@ namespace Lxh\Admin;
 
 use Lxh\Admin\Fields\Button;
 use Lxh\Admin\Table\Table;
+use Lxh\Admin\Widgets\Box;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Admin\Kernel\Url;
 
@@ -136,30 +137,85 @@ class Grid implements Renderable
         return $this->table;
     }
 
-    public function usePagination($bool)
+    public function usePagination()
     {
-        $this->options['usePagination'] = $bool;
+        return $this->options['usePagination'];
+    }
+
+    /**
+     * Get the grid paginator.
+     *
+     * @return mixed
+     */
+    public function paginator()
+    {
+        return new Tools\Paginator($this);
+    }
+
+    /**
+     * Disable grid pagination.
+     *
+     * @return $this
+     */
+    public function disablePagination()
+    {
+        $this->option('usePagination', false);
+
         return $this;
     }
 
-    public function allowEdit($bool)
+    public function allowEdit()
     {
-        $this->options['allowEdit'] = $bool;
+        return $this->options['allowEdit'];
+    }
+    public function disableEdit()
+    {
+        $this->options['allowEdit'] = false;
         return $this;
     }
-    public function allowCreate($bool)
+
+    public function allowCreate()
     {
-        $this->options['allowCreate'] = $bool;
+        return $this->options['allowCreate'];
+    }
+
+    public function disableCreate()
+    {
+        $this->options['allowCreate'] = false;
         return $this;
     }
-    public function allowDelete($bool)
+
+    public function allowDelete()
     {
-        $this->options['allowDelete'] = $bool;
+        return $this->options['allowDelete'];
+    }
+
+    public function disableDelete()
+    {
+        $this->options['allowDelete'] = false;
         return $this;
     }
-    public function useRWD($bool)
+
+
+    /**
+     * Disable row selector.
+     *
+     * @return Grid|mixed
+     */
+    public function disableRowSelector()
     {
-        $this->options['useRWD'] = $bool;
+
+        return $this->option('useRowSelector', false);
+    }
+
+    public function useRWD()
+    {
+        return $this->options['useRWD'];
+    }
+
+    public function disableUseRWD()
+    {
+        $this->options['useRWD'] = false;
         return $this;
     }
 
@@ -187,10 +243,18 @@ class Grid implements Renderable
     {
         $vars = array_merge([
             'table' => $this->table->render(),
-            'createBtn' => $this->buildCreateBtn(),
+//            'createBtn' => $this->buildCreateBtn(),
         ], $this->options);
 
-        return view($this->view, $vars)->render();
+        $box = new Box();
+
+        $box->content(view($this->view, $vars)->render())->style('inverse');
+
+        if ($btn = $this->buildCreateBtn()) {
+            $box->tool($btn);
+        }
+
+        return $box->render();
     }
 
     protected function buildCreateBtn()

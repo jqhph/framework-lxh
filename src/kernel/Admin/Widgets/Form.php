@@ -2,9 +2,11 @@
 
 namespace Lxh\Admin\Widgets;
 
+use Lxh\Admin\Admin;
 use Lxh\Admin\Form\Field;
 use Lxh\Contracts\Support\Arrayable;
 use Lxh\Contracts\Support\Renderable;
+use Lxh\Support\Arr;
 
 /**
  * Class Form.
@@ -49,6 +51,10 @@ use Lxh\Contracts\Support\Renderable;
 class Form implements Renderable
 {
     /**
+     * @var string
+     */
+    protected $name = '';
+    /**
      * @var Field[]
      */
     protected $fields = [];
@@ -64,12 +70,28 @@ class Form implements Renderable
     protected $attributes = [];
 
     /**
+     * 需要异步加载的js
+     * @var array
+     */
+    protected $asyncJs = [];
+
+    /**
+     * @var array
+     */
+    protected $options = [
+        'enableSubmit' => true,
+        'enableReset'  => true,
+    ];
+
+    /**
      * Form constructor.
      *
      * @param array $data
      */
     public function __construct($data = [])
     {
+        $this->name = __CONTROLLER__;
+
         if ($data instanceof Arrayable) {
             $data = $data->toArray();
         }
@@ -81,6 +103,42 @@ class Form implements Renderable
         $this->initFormAttributes();
     }
 
+
+    /**
+     * Add or get options.
+     *
+     * @param array $options
+     *
+     * @return array|null
+     */
+    public function options($options = [])
+    {
+        if (empty($options)) {
+            return $this->options;
+        }
+
+        $this->options = array_merge($this->options, $options);
+    }
+
+    /**
+     * Get or set option.
+     *
+     * @param string $option
+     * @param mixed  $value
+     *
+     * @return $this
+     */
+    public function option($option, $value = null)
+    {
+        if (func_num_args() == 1) {
+            return get_value($this->options, $option);
+        }
+
+        $this->options[$option] = $value;
+
+        return $this;
+    }
+
     /**
      * Initialize the form attributes.
      */
@@ -89,10 +147,15 @@ class Form implements Renderable
         $this->attributes = [
             'method'         => 'POST',
             'action'         => '',
-            'class'          => 'form-horizontal',
+            'class'          => 'form-horizontal ' . $this->getElementClassSelector(),
             'accept-charset' => 'UTF-8',
             'pjax-container' => true,
         ];
+    }
+
+    public function getElementClassSelector()
+    {
+        return ($this->name . '-form');
     }
 
     /**
@@ -141,13 +204,38 @@ class Form implements Renderable
     }
 
     /**
+     * 设置获取模块名
+     *
+     * @param string $name
+     * @return static | string
+     */
+    public function name($name = null)
+    {
+        if ($name) {
+            $this->name = $name;
+            return $this;
+        }
+        return $this->name;
+    }
+
+    /**
+     * 使用编辑模块公共js
+     *
+     * @return static
+     */
+    public function useEditScript()
+    {
+        return $this->asyncJs('view/public-detail');
+    }
+
+    /**
      * Disable Pjax.
      *
      * @return $this
      */
     public function disablePjax()
     {
-        array_forget($this->attributes, 'pjax-container');
+        Arr::forget($this->attributes, 'pjax-container');
 
         return $this;
     }
@@ -179,13 +267,20 @@ class Form implements Renderable
      */
     public static function findFieldClass($method)
     {
-        $class = array_get(\Lxh\Admin\Form::$availableFields, $method);
+        $class = get_value(\Lxh\Admin\Form::$availableFields, $method);
 
         if (class_exists($class)) {
             return $class;
         }
 
         return false;
+    }
+
+    public function asyncJs($js)
+    {
+        $this->asyncJs[] = $js;
+
+        return $this;
     }
 
     /**
@@ -198,6 +293,8 @@ class Form implements Renderable
     protected function pushField(Field &$field)
     {
         array_push($this->fields, $field);
+
+        $field->setForm($this);
 
         return $this;
     }
@@ -216,7 +313,33 @@ class Form implements Renderable
         return [
             'fields'     => $this->fields,
             'attributes' => $this->formatAttribute(),
+            'asyncJs'    => &$this->asyncJs,
+            'formOptions'    => &$this->options
         ];
+    }
+
+    /**
+     * Disable form submit.
+     *
+     * @return $this
+     */
+    public function disableSubmit()
+    {
+        $this->options(['enableSubmit' => false]);
+
+        return $this;
+    }
+
+    /**
+     * Disable form reset.
+     *
+     * @return $this
+     */
+    public function disableReset()
+    {
+        $this->options(['enableReset' => false]);
+
+        return $this;
     }
 
     /**
@@ -269,11 +392,13 @@ class Form implements Renderable
     public function __call($method, $arguments)
     {
         if ($className = static::findFieldClass($method)) {
-            $name = array_get($arguments, 0, '');
+            $name = get_value($arguments, 0, '');
 
             $element = new $className($name, array_slice($arguments, 1));
 
             $this->pushField($element);
+            
+            Admin::addAssetsFieldClass($className);
 
             return $element;
         }
@@ -286,7 +411,7 @@ class Form implements Renderable
      */
     public function render()
     {
-        return view('admin::widgets.form', $this->getVariables())->render();
+        return view('admin::widget.form', $this->getVariables())->render();
     }
 
     /**

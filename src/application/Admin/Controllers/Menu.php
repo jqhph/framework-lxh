@@ -9,6 +9,9 @@
 namespace Lxh\Admin\Controllers;
 
 use Lxh\Admin\Grid;
+use Lxh\Admin\Kernel\Url;
+use Lxh\Admin\Widgets\Box;
+use Lxh\Admin\Widgets\Form;
 use Lxh\Exceptions\Forbidden;
 //use Lxh\MVC\Controller;
 use Lxh\Http\Request;
@@ -66,7 +69,7 @@ class Menu extends Controller
      *
      * @return string
      */
-    public function actionCreate(Request $req, Response $resp, & $params)
+    public function actionCreate1(Request $req, Response $resp, & $params)
     {
         $currentTitle = 'Create Menu';
 
@@ -84,7 +87,7 @@ class Menu extends Controller
      *
      * @return array
      */
-    public function actionDetail(Request $req, Response $resp, array & $params)
+    public function actionDetail1(Request $req, Response $resp, array & $params)
     {
         if (empty($params['id'])) {
             throw new Forbidden();
@@ -112,24 +115,92 @@ class Menu extends Controller
         );
     }
 
-    public function actionList(Request $req, Response $resp, array & $params)
+    public function actionDetail(Request $req, Response $resp, array & $params)
     {
+        if (empty($params['id'])) {
+            throw new Forbidden();
+        }
+        $id = $params['id'];
+
+        $model = $this->model();
+
+        $model->id = $id;
+
+        $row = $model->find();
+
         $content = $this->admin()->content();
+        $content->header(trans('菜单'));
+        $content->description(trans('菜单编辑'));
 
         $content->row(function (Row $row) {
-            $row->column(12, $this->buildGrid());
+            $row->column(12, $this->form($row)->render());
         });
 
         return $content->render();
     }
 
-    protected function buildGrid()
+    /**
+     * 新增操作界面
+     *
+     * @return string
+     */
+    public function actionCreate(Request $req, Response $resp, & $params)
     {
-//        ddd(resolve('acl-menu')->all());
+        $content = $this->admin()->content();
+        $content->header(trans('Menu'));
+        $content->description(trans('Menu form'));
+
+        $content->row(function (Row $row) {
+            $row->column(12, $this->form()->render());
+        });
+
+        return $content->render();
+    }
+
+    protected function form($data = [])
+    {
+        $form = new Form($data);
+        $form->action(Url::makeAction('create'));
+
+        $form->selectTree('parent_id')->options(resolve('acl-menu')->all())->defaultOption(0, '顶级分类');
+        $form->text('title')->rules('required');
+        $form->text('icon')->help($this->iconHelp());
+        $form->text('name')->rules('required');
+        $form->text('controller');
+        $form->text('action');
+        $form->select('show')->options([1, 0])->default(1);
+        $form->select('priority')->options(range(0, 30))->help('值越小排序越靠前');
+
+        $form->useEditScript();
+
+        return (new Box(trans('Create Menu'), $form->render()))->backable();
+    }
+
+    protected function iconHelp()
+    {
+        $url = Url::makeAction('font-awesome', 'public-entrance');
+        $label = trans_with_global('fontawesome icon CSS');
+
+        return "<a onclick=\"open_tab('f-a-h', '{$url}', '$label')\">$label</a>";
+    }
+
+    public function actionList(Request $req, Response $resp, array & $params)
+    {
+        $content = $this->admin()->content();
+        $content->header(trans('Menu'));
+        $content->description(trans('Menu list'));
+
+        $content->row(function (Row $row) {
+            $row->column(12, $this->grid()->render());
+        });
+
+        return $content->render();
+    }
+
+    protected function grid()
+    {
         $grid = new Grid([
-            'id' => [
-                'priority' => 0,
-            ],
+            'id' => ['priority' => 0,],
             'icon' => ['view' => 'Icon'],
             'name' => [],
             'controller' => [],

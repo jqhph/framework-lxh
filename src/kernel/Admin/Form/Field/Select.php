@@ -2,7 +2,7 @@
 
 namespace Lxh\Admin\Form\Field;
 
-use Lxh\Admin\Facades\Admin;
+use Lxh\Admin\Admin;
 use Lxh\Admin\Form\Field;
 use Lxh\Contracts\Support\Arrayable;
 use Lxh\Support\Str;
@@ -10,35 +10,68 @@ use Lxh\Support\Str;
 class Select extends Field
 {
     protected static $css = [
-        '/packages/admin/AdminLTE/plugins/select2/select2.min.css',
+        ['select2.min', 'lib/plugins/select2'],
     ];
 
     protected static $js = [
-        '/packages/admin/AdminLTE/plugins/select2/select2.full.min.js',
+        ['select2/select2.full.min', 'plugins'],
     ];
+
+    /**
+     * 是否允许清除单选框
+     *
+     * @var string
+     */
+    protected $clear = 'false';
+
+    public function allowClear()
+    {
+        $this->clear = 'true';
+        return $this;
+    }
 
     public function render()
     {
         if (empty($this->script)) {
             $this->script = <<<EOF
-$("{$this->getElementClassSelector()}").select2({
-    allowClear: true,
-    placeholder: "{$this->label}"
-});
+$("{$this->getElementClassSelector()}").select2({allowsClear:{$this->clear},placeholder:"{$this->label}"});
 EOF;
         }
 
         if ($this->options instanceof \Closure) {
-            if ($this->form) {
-                $this->options = $this->options->bindTo($this->form->model());
-            }
-
             $this->options(call_user_func($this->options, $this->value));
         }
 
-        $this->options = array_filter($this->options);
+//        $this->options = array_filter($this->options);
 
-        return parent::render()->with(['options' => $this->options]);
+        $this->attachAssets();
+
+        $options = $this->formatOptions();
+
+        return view($this->getView(), $this->variables())->with('options', $options)->render();
+    }
+
+    protected function formatOptions()
+    {
+        foreach ($this->options as $k => &$v) {
+            if (is_array($v) && ! empty($v['label'])) {
+                continue;
+            }
+            $value = $v;
+            if (is_string($k)) {
+                $v = [
+                    'value' => $value,
+                    'label' => $k
+                ];
+                continue;
+            }
+            $v = [
+                'value' => $value,
+                'label' => trans_option($value, $this->column)
+            ];
+        }
+
+        return $this->options;
     }
 
     /**
@@ -88,7 +121,6 @@ EOF;
         }
 
         $script = <<<EOT
-
 $(document).on('change', "{$this->getElementClassSelector()}", function () {
     var target = $(this).closest('.fields-group').find(".$class");
     $.get("$sourceUrl?q="+this.value, function (data) {
@@ -127,7 +159,6 @@ EOT;
         $ajaxOptions = json_encode(array_merge($ajaxOptions, $options));
 
         $this->script = <<<EOT
-
 $.ajax($ajaxOptions).done(function(data) {
   $("{$this->getElementClassSelector()}").select2({data: data});
 });
@@ -149,7 +180,6 @@ EOT;
     public function ajax($url, $idField = 'id', $textField = 'text')
     {
         $this->script = <<<EOT
-
 $("{$this->getElementClassSelector()}").select2({
   ajax: {
     url: "$url",
@@ -182,7 +212,6 @@ $("{$this->getElementClassSelector()}").select2({
       return markup;
   }
 });
-
 EOT;
 
         return $this;

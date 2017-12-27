@@ -25,17 +25,6 @@ class MultipleSelect extends Select
         if ($this->otherKey) {
             return $this->otherKey;
         }
-
-        if (method_exists($this->form->model(), $this->column) &&
-            ($relation = $this->form->model()->{$this->column}()) instanceof BelongsToMany
-        ) {
-            /* @var BelongsToMany $relation */
-            $fullKey = $relation->getQualifiedRelatedKeyName();
-
-            return $this->otherKey = substr($fullKey, strpos($fullKey, '.') + 1);
-        }
-
-        throw new \Exception('Column of this field must be a `BelongsToMany` relation.');
     }
 
     public function fill($data)

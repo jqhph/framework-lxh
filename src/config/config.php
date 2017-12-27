@@ -8,7 +8,7 @@
 $config = [];
 
 $config['admin'] = [
-    'title' => 'Facebook站内信客服系统',
+    'title' => 'Lxh',
     'desc' => '',
     'logo' => '<span>L<span >xh</span></span>',
     'favicon' => '',
@@ -35,7 +35,7 @@ $config['view.version'] = 'php';
 $config['view.version'] = 'primary';
 // 视图模板路径别名
 $config['view.namespaces'] = [
-    'admin' => "resource/views/admin/{$config['view.version']}/html-creator",
+    'admin' => "resource/views/component",
 ];
 
 // 是否输出控制台调试信息，默认true

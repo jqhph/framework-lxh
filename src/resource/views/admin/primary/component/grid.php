@@ -1,11 +1,8 @@
 <?php
 use Lxh\Admin\Kernel\Url;
 ?>
-<div class="card-box">
-    <div class="table-rep-plugin">
-        <div class="btn-toolbar"><div class="btn-group dropdown-btn-group pull-right"><?php echo $createBtn; ?></div></div>
-        <div class="table-responsive" data-pattern="priority-columns"><?php echo $table?></div>
-    </div>
+<div class="table-rep-plugin">
+    <div class="table-responsive" data-pattern="priority-columns"><?php echo $table?></div>
 </div>
 <script>
     <?php if ($useRWD) {?>

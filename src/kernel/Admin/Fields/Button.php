@@ -25,13 +25,13 @@ class Button extends Field
 
     public function render()
     {
-        return "<a href=\"{$this->url()}\" data-action=\"create-row\" class=\"btn btn-{$this->option('color')}\">{$this->label}</a>";
+        return "<button onclick=\"{$this->url()}\" data-action=\"create-row\" class=\"btn btn-{$this->option('color')}\">{$this->label}</button>";
     }
 
     protected function url()
     {
         if ($this->option('useTab')) {
-            return "javascript:open_tab('{$this->option('id')}', '{$this->url}', '{$this->label}')";
+            return "open_tab('{$this->option('id')}', '{$this->url}', '{$this->label}')";
         }
         return $this->url;
     }

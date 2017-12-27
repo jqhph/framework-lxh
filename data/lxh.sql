@@ -10,10 +10,87 @@ Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2017-08-01 18:32:00
+Date: 2017-12-27 21:41:59
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for admin
+-- ----------------------------
+DROP TABLE IF EXISTS `admin`;
+CREATE TABLE `admin` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(20) NOT NULL,
+  `password` varchar(150) NOT NULL,
+  `email` varchar(50) NOT NULL DEFAULT '',
+  `mobile` varchar(30) NOT NULL DEFAULT '',
+  `first_name` varchar(20) NOT NULL DEFAULT '',
+  `last_name` varchar(20) NOT NULL DEFAULT '',
+  `avatar` varchar(100) NOT NULL DEFAULT '',
+  `sex` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0未知，1男，2女',
+  `deleted` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `created_at` int(11) unsigned NOT NULL DEFAULT '0',
+  `update_at` int(11) NOT NULL DEFAULT '0',
+  `last_login_ip` char(15) NOT NULL DEFAULT '',
+  `last_login_time` int(11) unsigned NOT NULL DEFAULT '0',
+  `reg_ip` char(15) NOT NULL DEFAULT '',
+  `is_admin` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `role_ids` varchar(255) NOT NULL DEFAULT '' COMMENT '角色id，如有多个用“,”隔开',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1激活，0禁用',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of admin
+-- ----------------------------
+INSERT INTO `admin` VALUES ('1', 'admin', '$2y$10$IK.HGNDMOV9LYHIG7jMxb.0iEV85SSkf6Lv8GN9aaAuAIFbsVnaSS', '', '', 'J', 'qh', '', '0', '0', '1499568986', '0', '127.0.0.1', '0', '127.0.0.1', '1', '', '1');
+
+-- ----------------------------
+-- Table structure for category
+-- ----------------------------
+DROP TABLE IF EXISTS `category`;
+CREATE TABLE `category` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL DEFAULT '',
+  `desc` varchar(255) NOT NULL DEFAULT '',
+  `created_at` int(11) unsigned NOT NULL DEFAULT '0',
+  `created_by_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `modified_at` int(11) unsigned NOT NULL DEFAULT '0',
+  `deleted` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of category
+-- ----------------------------
+INSERT INTO `category` VALUES ('1', '测试', 'fgfgf', '1508243598', '1', '1508243933', '0');
+
+-- ----------------------------
+-- Table structure for conversation
+-- ----------------------------
+DROP TABLE IF EXISTS `conversation`;
+CREATE TABLE `conversation` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `start` int(11) unsigned NOT NULL COMMENT '会话开始时间',
+  `end` int(11) unsigned NOT NULL COMMENT '会话结束时间，一般结束时间为1小时，如客服把客户转给其他人，也会结束此会话并创建新的会话',
+  `from` varchar(100) NOT NULL DEFAULT '' COMMENT '发起会话者',
+  `to` varchar(100) NOT NULL DEFAULT '' COMMENT '接收会话者',
+  `type` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1普通会话，2转接的会话',
+  `shifted_by` varchar(100) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  KEY `from` (`from`) USING BTREE,
+  KEY `to` (`to`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of conversation
+-- ----------------------------
+INSERT INTO `conversation` VALUES ('1', '1513757867', '0', 'testpsid1', '江清华', '1', '');
+INSERT INTO `conversation` VALUES ('2', '1513759170', '0', 'testpsid1', '江清华', '1', '');
+INSERT INTO `conversation` VALUES ('3', '1513759227', '0', 'testpsid1', '李汉陪', '1', '');
+INSERT INTO `conversation` VALUES ('4', '1513759355', '0', 'testpsid1', '江清华', '1', '');
 
 -- ----------------------------
 -- Table structure for menu
@@ -34,35 +111,129 @@ CREATE TABLE `menu` (
   `type` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1普通菜单，2系统菜单，不能被删除或修改',
   `priority` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '排序权重值，值越小排序越靠前',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of menu
 -- ----------------------------
-INSERT INTO `menu` VALUES ('1', 'Menu management', 'zmdi zmdi-menu', '1', '13', '1', 'Menu', 'Index', '0', '1500180853', '1', '2', '0');
-INSERT INTO `menu` VALUES ('13', 'System', 'zmdi zmdi-settings', '1', '0', '1', 'System', '', '0', '1500466810', '1', '1', '1');
+INSERT INTO `menu` VALUES ('1', 'Menu management', 'zmdi zmdi-menu', '1', '13', '1', 'Menu', 'List', '0', '1500180853', '1', '2', '0');
+INSERT INTO `menu` VALUES ('13', 'System', 'fa fa-gears', '1', '0', '1', '', '', '0', '1500466810', '1', '1', '2');
 INSERT INTO `menu` VALUES ('14', 'Making modules', 'zmdi zmdi-widgets', '1', '13', '1', 'System', 'MakeModules', '0', '1500467096', '1', '1', '0');
 INSERT INTO `menu` VALUES ('15', 'Create reports', 'zmdi zmdi-view-list', '1', '13', '1', 'System', 'CreateReports', '0', '1500467299', '1', '1', '2');
 INSERT INTO `menu` VALUES ('16', 'Language Management', '', '1', '13', '1', 'Language', 'List', '0', '1500644030', '1', '1', '3');
 INSERT INTO `menu` VALUES ('17', 'Setting', '', '1', '13', '1', 'System', 'Setting', '0', '1501244109', '1', '1', '4');
-INSERT INTO `menu` VALUES ('18', 'Permissions', 'fa fa-pencil fa-fw', '1', '0', '1', '', '', '0', '1501583290', '1', '1', '0');
+INSERT INTO `menu` VALUES ('18', 'Permissions', 'fa fa-pencil fa-fw', '1', '0', '1', '', '', '0', '1501583290', '1', '1', '1');
+INSERT INTO `menu` VALUES ('19', 'Role', 'fa fa-user-plus', '1', '18', '1', 'Role', 'List', '0', '1501592174', '1', '1', '0');
+INSERT INTO `menu` VALUES ('34', 'Products system', 'fa fa-opencart', '1', '0', '1', '', '', '0', '1508157506', '1', '1', '0');
+INSERT INTO `menu` VALUES ('22', 'Create Menu', '', '0', '1', '1', 'Menu', 'Create', '0', '1501652345', '1', '1', '0');
+INSERT INTO `menu` VALUES ('23', 'Modify Menu', '', '0', '1', '1', 'Menu', 'Detail', '0', '1501653713', '1', '1', '0');
+INSERT INTO `menu` VALUES ('24', 'Delete Menu', '', '0', '1', '1', 'Menu', 'Delete', '0', '1501653790', '1', '1', '0');
+INSERT INTO `menu` VALUES ('25', 'Create Role', '', '0', '19', '1', 'Role', 'Create', '0', '1501653930', '1', '1', '0');
+INSERT INTO `menu` VALUES ('26', 'Modify Role', '', '0', '19', '1', 'Role', 'Detail', '0', '1501653957', '1', '1', '0');
+INSERT INTO `menu` VALUES ('27', 'Delete Role', '', '0', '19', '1', 'Role', 'Delete', '0', '1501653981', '1', '1', '0');
+INSERT INTO `menu` VALUES ('36', 'Category', '', '1', '34', '1', 'Category', 'List', '0', '1508240328', '1', '1', '1');
+INSERT INTO `menu` VALUES ('35', 'Products', '', '1', '34', '1', 'Product', 'List', '0', '1508157865', '1', '1', '0');
+
+-- ----------------------------
+-- Table structure for order
+-- ----------------------------
+DROP TABLE IF EXISTS `order`;
+CREATE TABLE `order` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `no` varchar(32) NOT NULL DEFAULT '' COMMENT '订单号',
+  `created_at` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '1',
+  `modified_at` int(11) unsigned NOT NULL DEFAULT '0',
+  `modified_by_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `total_price` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '订单总金额，单位厘',
+  `pay_method` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1微信支付，2支付宝支付，3银行卡支付',
+  `pay_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0未付款，1付款中，2付款成功，3付款失败',
+  `total_share_price` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '拉人者可得金额，单位厘',
+  `user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '订单所属用户',
+  `share_user` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '拉人者id，如没有则填写0',
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of order
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for order_product
+-- ----------------------------
+DROP TABLE IF EXISTS `order_product`;
+CREATE TABLE `order_product` (
+  `id` int(11) unsigned NOT NULL,
+  `order_id` int(11) unsigned NOT NULL,
+  `product_name` varchar(11) NOT NULL DEFAULT '' COMMENT '产品名称',
+  `product_num` smallint(6) unsigned NOT NULL DEFAULT '1' COMMENT '产品数量',
+  `product_price` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '产品价格',
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单产品表';
+
+-- ----------------------------
+-- Records of order_product
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for product
+-- ----------------------------
+DROP TABLE IF EXISTS `product`;
+CREATE TABLE `product` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `created_at` int(11) unsigned NOT NULL DEFAULT '0',
+  `modified_at` int(111) unsigned NOT NULL DEFAULT '0',
+  `created_by_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `is_hot` tinyint(1) NOT NULL DEFAULT '0' COMMENT '1热品，0非热品',
+  `is_new` tinyint(1) NOT NULL DEFAULT '0' COMMENT '1新品，0非新品',
+  `priority` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '排序优先级，值越大排序越靠前',
+  `calendar` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '1开启日历显示，0不显示',
+  `desc` varchar(255) NOT NULL DEFAULT '' COMMENT '简介',
+  `order_num` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '月销量',
+  `start_date` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '开始销售时间，0不限制',
+  `end_date` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '结束销售时间，0不限制',
+  `timelimit` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '1开启限时售卖，0关闭',
+  `price` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '现价，单位厘，1000厘等于1元人民币',
+  `counter_price` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '门市价，单位厘，1000厘等于1元人民币',
+  `share_price` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '分享可得价，单位厘',
+  `stock` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '库存量',
+  `imgs` varchar(255) NOT NULL DEFAULT '' COMMENT '产品图片，多个用“,”隔开',
+  `level` tinyint(2) unsigned NOT NULL DEFAULT '1' COMMENT '景区评级，A-AAAAA，1表示A，2表示AA',
+  `category_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '产品分类id',
+  `deleted` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of product
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for role
 -- ----------------------------
 DROP TABLE IF EXISTS `role`;
 CREATE TABLE `role` (
-  `id` int(11) unsigned NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
+  `permissions` varchar(255) NOT NULL DEFAULT '' COMMENT '自定义权限，自定义权限配置id，多个用","隔开',
   `created_at` int(11) unsigned NOT NULL,
   `created_by_id` int(11) unsigned NOT NULL DEFAULT '0',
   `deleted` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `modified_at` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of role
 -- ----------------------------
+INSERT INTO `role` VALUES ('1', '测试角色', '', '1501665012', '1', '0', '1501669890');
+INSERT INTO `role` VALUES ('3', '测试角色2', '', '1501686306', '1', '0', '0');
+INSERT INTO `role` VALUES ('4', '测试角色3', '', '1501686348', '1', '0', '0');
+INSERT INTO `role` VALUES ('5', '测试角色4', '', '1501686369', '1', '0', '0');
+INSERT INTO `role` VALUES ('6', '测试角色5', '', '1501686379', '1', '0', '0');
+INSERT INTO `role` VALUES ('7', '测试角色8', '', '1501686399', '1', '0', '0');
 
 -- ----------------------------
 -- Table structure for role_menu
@@ -72,11 +243,25 @@ CREATE TABLE `role_menu` (
   `role_id` int(11) unsigned NOT NULL,
   `menu_id` int(11) NOT NULL,
   UNIQUE KEY `role_id` (`role_id`,`menu_id`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of role_menu
 -- ----------------------------
+INSERT INTO `role_menu` VALUES ('1', '15');
+INSERT INTO `role_menu` VALUES ('1', '19');
+INSERT INTO `role_menu` VALUES ('1', '26');
+INSERT INTO `role_menu` VALUES ('3', '1');
+INSERT INTO `role_menu` VALUES ('3', '19');
+INSERT INTO `role_menu` VALUES ('3', '22');
+INSERT INTO `role_menu` VALUES ('4', '14');
+INSERT INTO `role_menu` VALUES ('4', '19');
+INSERT INTO `role_menu` VALUES ('5', '1');
+INSERT INTO `role_menu` VALUES ('5', '27');
+INSERT INTO `role_menu` VALUES ('6', '1');
+INSERT INTO `role_menu` VALUES ('6', '22');
+INSERT INTO `role_menu` VALUES ('7', '19');
+INSERT INTO `role_menu` VALUES ('7', '26');
 
 -- ----------------------------
 -- Table structure for user
@@ -98,13 +283,13 @@ CREATE TABLE `user` (
   `last_login_ip` char(15) NOT NULL DEFAULT '',
   `last_login_time` int(11) unsigned NOT NULL DEFAULT '0',
   `reg_ip` char(15) NOT NULL DEFAULT '',
-  `is_admin` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `role_ids` varchar(255) NOT NULL DEFAULT '' COMMENT '角色id，如有多个用“,”隔开',
+  `status` tinyint(11) unsigned NOT NULL DEFAULT '1' COMMENT '1激活，0禁用',
+  `parent_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '分享者id',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'admin', '$2y$10$IK.HGNDMOV9LYHIG7jMxb.0iEV85SSkf6Lv8GN9aaAuAIFbsVnaSS', '', '', '', '', '', '0', '0', '1499568986', '0', '127.0.0.1', '0', '127.0.0.1', '1', '');
+INSERT INTO `user` VALUES ('1', 'admin', '$2y$10$IK.HGNDMOV9LYHIG7jMxb.0iEV85SSkf6Lv8GN9aaAuAIFbsVnaSS', '', '', '', '', '', '0', '0', '1499568986', '0', '127.0.0.1', '0', '127.0.0.1', '1', '0');

@@ -38,6 +38,9 @@ class Admin
      */
     public static $js = [];
 
+    protected static $assetsClass = [];
+    protected static $scriptClass = [];
+
     /**
      * @param $model
      * @param Closure $callable
@@ -125,19 +128,14 @@ class Admin
     {
         if (!is_null($css)) {
             self::$css = array_merge(self::$css, (array) $css);
-
             return;
         }
 
-        $css = get_value(Form::collectFieldAssets(), 'css', []);
-
-        static::$css = array_merge(static::$css, $css);
-
-        $css = '';
+        $script = '';
         foreach (static::$css as &$css) {
-            $css = load_css($css);
+            $script .= call_user_func_array('load_css', (array) $css);
         }
-        return $css;
+        return $script;
     }
 
 
@@ -152,19 +150,14 @@ class Admin
     {
         if (!is_null($js)) {
             self::$js = array_merge(self::$js, (array) $js);
-
             return;
         }
 
-        $js = get_value(Form::collectFieldAssets(), 'js', []);
-
-        static::$js = array_merge(static::$js, $js);
-
-        $js = '';
-        foreach (static::$css as &$js) {
-            $js = load_js($js);
+        $script = '';
+        foreach (static::$js as &$js) {
+            $script .= call_user_func_array('load_js', (array) $js);
         }
-        return $js;
+        return $script;
     }
 
     /**
@@ -180,6 +173,30 @@ class Admin
         }
 
         return implode(';', static::$script);
+    }
+
+    public static function collectFieldAssets()
+    {
+        foreach (static::$assetsClass as $class => &$v) {
+            $assets = $class::getAssets();
+
+            static::js($assets['js']);
+            static::css($assets['css']);
+        }
+
+        foreach (static::$scriptClass as $class => &$v) {
+            static::script($class::$script);
+        }
+    }
+    
+    public static function addAssetsFieldClass($class)
+    {
+        static::$assetsClass[$class] = 1;
+    }
+
+    public static function addScriptClass($class)
+    {
+        static::$scriptClass[$class] = 1;
     }
 
     /**

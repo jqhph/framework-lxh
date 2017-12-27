@@ -1,11 +1,22 @@
 <?php 
 return array (
+  'admin' => 
+  array (
+    'title' => 'Lxh',
+    'desc' => '',
+    'logo' => '<span>L<span >xh</span></span>',
+    'favicon' => '',
+    'copyright' => '2017 @copyright JQH',
+  ),
   'timezone' => 'PRC',
   'use-language' => true,
   'view.compiled' => 'resource/blade-cache',
   'view.paths' => 'resource/views',
-  'view-driver' => 'blade',
   'view.version' => 'primary',
+  'view.namespaces' => 
+  array (
+    'admin' => 'resource/views/component',
+  ),
   'response-console-log' => true,
   'response-trace-log' => true,
   'session' => 
@@ -39,9 +50,9 @@ return array (
   'domain-deploy' => true,
   'domain-deploy-config' => 
   array (
-    'dev.lxh.com' => 'Admin',
-    'www.lxh.com' => 'Client',
-    '119.23.229.90' => 'Client',
+    'dev.lxh.com' => 'admin',
+    'www.lxh.com' => 'client',
+    '119.23.229.90' => 'client',
   ),
   'record-error-info-level' => 
   array (
@@ -215,7 +226,7 @@ return array (
     ),
     'guzzle' => 
     array (
-      'timeout' => 3,
+      'timeout' => 3.0,
     ),
   ),
   'client-config' => 

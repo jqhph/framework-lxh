@@ -85,7 +85,7 @@ abstract class Controller
      *
      * @return Admin
      */
-    protected function Admin()
+    protected function admin()
     {
         return $this->container['admin'];
     }

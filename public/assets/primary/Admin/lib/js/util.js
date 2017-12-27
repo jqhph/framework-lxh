@@ -86,6 +86,7 @@
 
     // loading效果
     o.loading = function (el, circle, timeout) {
+        el = el || '#lxh-app'
         function loading() {
             var $el = typeof el == 'object' ? el : $(el)
             if (circle) {
@@ -221,6 +222,10 @@
 
         // 关闭tab窗
         this.close = function ($this) {
+            if (! $this) {
+                $this = histories.shift().name
+            }
+
             var name
             if (typeof $this != 'object') {
                 name = $this

@@ -52,7 +52,7 @@ class Factory
 
     public function make($view, array &$vars = [])
     {
-        return $this->factory->make($this->normalizeView($view), $vars);
+        return $this->factory->make($this->normalizeView($view))->share($vars);
     }
 
     public function render()

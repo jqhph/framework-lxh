@@ -102,8 +102,8 @@ class MultipleFile extends Field
      */
     public function prepare($files)
     {
-        if (request()->has(static::FILE_DELETE_FLAG)) {
-            return $this->destroy(request(static::FILE_DELETE_FLAG));
+        if ($d = I(static::FILE_DELETE_FLAG)) {
+            return $this->destroy($d);
         }
 
         $targets = array_map([$this, 'prepareForeach'], $files);
@@ -220,7 +220,7 @@ EOT;
     {
         $files = $this->original ?: [];
 
-        $file = array_get($files, $key);
+        $file = get_value($files, $key);
 
         if ($this->storage->exists($file)) {
             $this->storage->delete($file);

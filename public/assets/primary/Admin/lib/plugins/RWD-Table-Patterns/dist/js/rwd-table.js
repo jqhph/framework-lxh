@@ -153,7 +153,9 @@
         this.$btnToolbar.append(this.$dropdownGroup);
 
         // add toolbar above table
-        this.$tableScrollWrapper.before(this.$btnToolbar);
+        if (this.$btnToolbar.length < 1) {
+            this.$tableScrollWrapper.before(this.$btnToolbar);
+        }
     };
 
 

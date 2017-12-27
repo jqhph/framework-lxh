@@ -3,6 +3,7 @@
 namespace Lxh\Admin\Layout;
 
 use Closure;
+use Lxh\Admin\Admin;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Support\MessageBag;
 
@@ -164,10 +165,14 @@ class Content implements Renderable
      */
     public function render()
     {
+        Admin::collectFieldAssets();
         $items = [
             'header'      => $this->header,
             'description' => $this->description,
             'content'     => $this->build(),
+            'js'          => Admin::js(),
+            'css'         => Admin::css(),
+            'script'      => Admin::script(),
         ];
 
         return view('admin::content', $items)->render();

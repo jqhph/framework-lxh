@@ -733,6 +733,7 @@ window.Lxh = function (options) {
                 typeof call != 'function' || call(event)
             }
         }, validate_call);
+        v.selector = selector
 
         // 注册自定义验证规则
         register_rules(v)
@@ -774,10 +775,11 @@ window.Lxh = function (options) {
          * @param msg  错误信息
          */
         function display_error_msg (name, e, msg) {
+            e = e.eq(0)
             name = name.replace('[]', '')
             msg = trans(msg)
             e.addClass('parsley-error')
-            e.parent().append('<ul class="parsley-errors-list filled validator-error-' + name + '" id="parsley-id-4"><li class="parsley-required">' + msg + '</li></ul>')
+            e.parent().parent().prepend('<ul class="parsley-errors-list filled validator-error-' + name + '"><li class="parsley-required">' + msg + '</li></ul>')
         }
 
         /**
@@ -1537,6 +1539,10 @@ console.log('request data', data)
                 }), '-')
             },
 
+        }
+
+        this.selector = function () {
+            return get_form_selector()
         }
 
         /**

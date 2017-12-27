@@ -79,7 +79,7 @@ class Tr extends Widget
                 continue;
             }
             $td .= $this->buildTd(
-                $this->renderFiledView($view, $k, $item, get_value($headers[$k], 'vars')),
+                $this->renderFiledView($view, $k, $item, get_value($headers[$k], 'options')),
                 $headers[$k]
             );
         }

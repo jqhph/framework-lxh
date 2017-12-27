@@ -71,7 +71,26 @@ class View
      * @param  mixed $value 变量值，此处使用引用传值，分配时变量必须先定义
      * @return static
      */
-    public function share(&$key, & $value = null)
+    public function share($key, & $value = null)
+    {
+        if (is_array($key)) {
+            $this->vars = array_merge($this->vars, $key);
+        } else {
+            $this->vars[$key] = $value;
+        }
+
+        return $this;
+    }
+
+    /**
+     * 分配变量到模板输出
+     * 通过此方法分配的变量所有引入的模板都可用
+     *
+     * @param  string $key  在模板使用的变量名称
+     * @param  mixed $value 变量值，此处使用引用传值，分配时变量必须先定义
+     * @return static
+     */
+    public function with($key, & $value = null)
     {
         if (is_array($key)) {
             $this->vars = array_merge($this->vars, $key);

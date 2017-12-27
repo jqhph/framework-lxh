@@ -2,29 +2,39 @@
 
 namespace Lxh\Admin\Widgets;
 
+use Lxh\Admin\Admin;
 use Lxh\Contracts\Support\Renderable;
 
 class Box extends Widget implements Renderable
 {
-    /**
-     * @var string
-     */
-    protected $view = 'admin::widgets.box';
+    public static $script = [];
 
     /**
      * @var string
      */
-    protected $title = 'Box header';
+    protected $view = 'admin::widget.box';
 
     /**
      * @var string
      */
-    protected $content = 'here is the box content.';
+    protected $title = '';
+
+    /**
+     * @var string
+     */
+    protected $content = '';
 
     /**
      * @var array
      */
     protected $tools = [];
+
+    protected $actions = [];
+
+    /**
+     * @var mixed
+     */
+    protected $id;
 
     /**
      * Box constructor.
@@ -42,7 +52,10 @@ class Box extends Widget implements Renderable
             $this->content($content);
         }
 
-        $this->class('box');
+        $this->class('box portlet');
+        $this->style('success');
+
+        Admin::addScriptClass(__CLASS__);
     }
 
     /**
@@ -57,7 +70,7 @@ class Box extends Widget implements Renderable
         if ($content instanceof Renderable) {
             $this->content = $content->render();
         } else {
-            $this->content = (string) $content;
+            $this->content = &$content;
         }
 
         return $this;
@@ -77,6 +90,11 @@ class Box extends Widget implements Renderable
         return $this;
     }
 
+    protected function generateId()
+    {
+        return md5(uniqid(microtime(true)));
+    }
+
     /**
      * Set box as collapsable.
      *
@@ -84,8 +102,9 @@ class Box extends Widget implements Renderable
      */
     public function collapsable()
     {
-        $this->tools[] =
-            '<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>';
+        $this->id = $this->generateId();
+
+        $this->tools[] = "<a data-toggle=\"collapse\" href=\"#{$this->id}\"><i class=\"zmdi zmdi-minus\"></i></a>";
 
         return $this;
     }
@@ -97,9 +116,36 @@ class Box extends Widget implements Renderable
      */
     public function removable()
     {
-        $this->tools[] =
-            '<button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>';
+        $this->tools[] = '<a data-toggle="remove"><i class="zmdi zmdi-close"></i></a>';
 
+        static::$script[0] = <<<EOF
+            $('.portlet [data-toggle="remove"]').click(function (e) {
+                $(this).parent().parent().parent().toggle(100)
+            })
+EOF;
+        return $this;
+    }
+
+    public function tool($tool)
+    {
+        $this->tools[] = &$tool;
+        return $this;
+    }
+
+    public function action($action)
+    {
+        $this->actions[] = &$action;
+        return $this;
+    }
+
+    public function backable()
+    {
+        $this->tools[] = '<button data-toggle="back" type="button" class="btn btn-default waves-effect"><i class="ti-arrow-left"></i>&nbsp;&nbsp;'
+            . trans('back') . '</button>';
+
+        static::$script[1] = <<<EOF
+             $('.portlet [data-toggle="back"]').click(function(){back_tab();})
+EOF;
         return $this;
     }
 
@@ -121,7 +167,7 @@ class Box extends Widget implements Renderable
         }, $styles);
 
         $this->class = $this->class.' '.implode(' ', $styles);
-
+        
         return $this;
     }
 
@@ -147,6 +193,8 @@ class Box extends Widget implements Renderable
             'content'    => $this->content,
             'tools'      => $this->tools,
             'attributes' => $this->formatAttributes(),
+            'id' => $this->id,
+            'actions' => $this->actions,
         ];
     }
 
