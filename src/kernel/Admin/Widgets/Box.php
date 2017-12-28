@@ -29,6 +29,8 @@ class Box extends Widget implements Renderable
      */
     protected $tools = [];
 
+    protected $toolClass = '';
+
     protected $actions = [];
 
     /**
@@ -95,6 +97,20 @@ class Box extends Widget implements Renderable
         return md5(uniqid(microtime(true)));
     }
 
+    public function toolClass($class = null)
+    {
+        if ($class != null) {
+            $this->toolClass = $class;
+            return $this;
+        }
+        return $this->toolClass;
+    }
+
+    public function btnToolbar()
+    {
+        return $this->toolClass('btn-toolbar');
+    }
+
     /**
      * Set box as collapsable.
      *
@@ -104,7 +120,7 @@ class Box extends Widget implements Renderable
     {
         $this->id = $this->generateId();
 
-        $this->tools[] = "<a data-toggle=\"collapse\" href=\"#{$this->id}\"><i class=\"zmdi zmdi-minus\"></i></a>";
+        $this->tools[] = "<a id='collapse-{$this->id}' data-toggle=\"collapse\" href=\"#{$this->id}\"><i class=\"zmdi zmdi-minus\"></i></a>";
 
         return $this;
     }
@@ -122,6 +138,19 @@ class Box extends Widget implements Renderable
             $('.portlet [data-toggle="remove"]').click(function (e) {
                 $(this).parent().parent().parent().toggle(100)
             })
+EOF;
+        return $this;
+    }
+
+    /**
+     * 默认隐藏
+     *
+     * @return static
+     */
+    public function slideUp()
+    {
+        static::$script[0] = <<<EOF
+            $('#collapse-{$this->id}').trigger('click')
 EOF;
         return $this;
     }
@@ -195,6 +224,7 @@ EOF;
             'attributes' => $this->formatAttributes(),
             'id' => $this->id,
             'actions' => $this->actions,
+            'toolClass' => $this->toolClass(),
         ];
     }
 

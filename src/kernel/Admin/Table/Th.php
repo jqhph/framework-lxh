@@ -21,11 +21,18 @@ class Th extends Widget
     protected $sortable = false;
 
     /**
-     * Sort arguments.
+     * 默认是升序排序，所以点击时使用倒序
+     *
+     * @var int
+     */
+    protected $defaultDesc = 1;
+
+    /**
+     * 值为null表示使用默认排序
      *
      * @var array
      */
-    protected $sort;
+    protected $desc = null;
 
     public function __construct(Table $table, $name, $attributes)
     {
@@ -34,6 +41,13 @@ class Th extends Widget
         $this->name = $name;
 
         parent::__construct((array) $attributes);
+    }
+
+    public function desc($desc)
+    {
+        $this->desc = $desc;
+
+        return $this;
     }
 
     /**
@@ -59,21 +73,32 @@ class Th extends Widget
             return;
         }
 
-        $icon = 'fa-sort';
-        $type = 'desc';
+        $icon = 'fa-arrows-v';
 
         if ($this->isSorted()) {
-            $type = $this->sort['type'] == 'desc' ? 'asc' : 'desc';
-            $icon .= "-amount-{$this->sort['type']}";
+            $this->desc = I('desc', $this->desc);
+
+            $icon = $this->desc ? 'fa-sort-amount-desc' : 'fa-sort-amount-asc';
+        }
+        if ($this->desc !== null) {
+            $icon = $this->desc ? 'fa-sort-amount-desc' : 'fa-sort-amount-asc';
         }
 
-//        $query = app('request')->all();
-//        $query = array_merge($query, [$this->grid->model()->getSortName() => ['column' => $this->name, 'type' => $type]]);
-//
-//        $url = URL::current().'?'.http_build_query($query);
-        $url = '';
+        $url = url();
 
-        return "<a class=\"fa fa-fw $icon\" href=\"$url\"></a>";
+        $desc = $this->defaultDesc;// 默认升序排序
+        if ($this->desc !== null) {
+            $desc = !$this->desc;
+        }
+
+        $url->query([
+            'sort' => $this->name,
+            'desc' => $desc
+        ]);
+        
+        $url = $url->string();
+        
+        return "&nbsp;&nbsp;<a class=\"fa $icon\" href=\"$url\" style='color:#fe8f81'></a>";
     }
 
     /**
@@ -83,15 +108,20 @@ class Th extends Widget
      */
     protected function isSorted()
     {
-        $this->sort = I('sort');
+        $sort = I('sort');
 
-        return $this->sort == $this->name;
+        if ($sort) {
+            $this->desc = null;
+        }
+
+        return $sort == $this->name;
     }
 
     public function render()
     {
         $attributes = $this->formatAttributes();
 
-        return "<th $attributes>" . trans($this->name, 'fields') . '</th>';
+        return "<th $attributes>" . trans($this->name, 'fields') . $this->sorter() . '</th>';
     }
+
 }

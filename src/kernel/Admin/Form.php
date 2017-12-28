@@ -542,24 +542,7 @@ class Form
 
         return $this;
     }
-
-    /**
-     * Get current resource route url.
-     *
-     * @param int $slice
-     *
-     * @return string
-     */
-    public function resource($slice = -2)
-    {
-        $segments = explode('/', trim(resolve('request')->getUri(), '/'));
-
-        if ($slice != 0) {
-            $segments = array_slice($segments, 0, $slice);
-        }
-
-        return implode('/', $segments);
-    }
+    
 
     /**
      * Render the form contents.

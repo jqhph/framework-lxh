@@ -883,7 +883,7 @@ File: Components
   background: #ffffff;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
-  padding: 15px;
+  padding: 15px 15px 5px;
 }
 .portlet-default .portlet-title {
   color: #797979 !important;
@@ -1254,9 +1254,7 @@ table.focus-on tbody tr.focused td {
 .paginate_button {
   display: inline-block !important;
 }
-div.dataTables_paginate ul.pagination {
-  margin-top: 30px;
-}
+div.dataTables_paginate ul.pagination {margin-top: 10px;  }
 div.dataTables_info {
   padding-top: 38px;
 }
@@ -1354,3 +1352,4 @@ table.dataTable td.focus {
   right: 7px;
   top: 2px;
 }
+.pagination{margin:10px 0;border-radius:1px}

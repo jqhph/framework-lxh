@@ -15,7 +15,7 @@ class Table extends Widget
     /**
      * @var string
      */
-    protected $view = 'component.table';
+    protected $view = 'admin::table';
 
     /**
      * @var array
@@ -143,12 +143,22 @@ class Table extends Widget
 
         $vars['data-priority'] = $this->getPriorityFromOptions($options);
 
-        return $this->ths[$name] = new Th($this, $name, $vars);
+        $th = $this->ths[$name] = new Th($this, $name, $vars);
+
+        if (get_isset($options, 'sortable')) {
+            $th->sortable();
+        }
+    
+        if (($desc = get_isset($options, 'desc')) !== null) {
+            $th->desc($desc);
+        }
+
+        return $th;
     }
 
     public function getPriorityFromOptions($options)
     {
-        return get_value($options, 'priority', $this->defaultPriority);
+        return get_value($options, 'show', $this->defaultPriority);
     }
 
     protected function buildRows()
@@ -174,11 +184,24 @@ class Table extends Widget
      */
     public function render()
     {
+        $rows = $this->buildRows();
+        $nodata = $rows ? '' : $this->noDataTip();
+
         $vars = [
             'attributes' => $this->formatAttributes(),
             'headers' => $this->buildHeaders(),
-            'rows' => $this->buildRows()
+            'rows' => &$rows,
+            'nodata' => &$nodata
         ];
         return view($this->view, $vars)->render();
+    }
+
+    protected function noDataTip()
+    {
+        $tip = trans('No Data...');
+        return <<<EOF
+            <tr><td></td><td data-priority="1"><span class="help-block" style="margin-bottom:0"><i class="fa fa-info-circle"></i>&nbsp;{$tip}</span></td></tr>
+EOF;
+
     }
 }

@@ -445,6 +445,29 @@ function render_view($view, array $data = [])
 }
 
 /**
+ * @return \Lxh\Http\Request
+ */
+function request() {
+    return $GLOBALS['CONTAINER']['http.request'];
+}
+
+/**
+ * @return \Lxh\Http\Response
+ */
+function response()
+{
+    return $GLOBALS['CONTAINER']['http.response'];
+}
+
+/**
+ * @return \Lxh\Http\Url
+ */
+function url()
+{
+    return $GLOBALS['CONTAINER']['url'];
+}
+
+/**
  * 手动调用控制器接口
  *
  * @return mixed

@@ -200,7 +200,7 @@ class Menu extends Controller
     protected function grid()
     {
         $grid = new Grid([
-            'id' => ['priority' => 0,],
+            'id' => ['show' => 0, 'sortable' => 1, 'desc' => 1],
             'icon' => ['view' => 'Icon'],
             'name' => [],
             'controller' => [],
@@ -211,7 +211,7 @@ class Menu extends Controller
         ],  resolve('acl-menu')->all());
 
         $grid->table()->useTree('subs');
-        $grid->usePagination(false);
+        $grid->disablePagination();
 
         return $grid;
     }

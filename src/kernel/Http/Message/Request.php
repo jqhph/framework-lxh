@@ -45,9 +45,14 @@ class Request extends Message implements RequestInterface
         }
         $user = get_value($_SERVER, 'PHP_AUTH_USER');
         $pwd = get_value($_SERVER, 'PHP_AUTH_PW');
+        $auth = '';
+        if ($user && $pwd) {
+            $auth = "{$user}:{$pwd}@";
+        }
+
         $scheme = get_value($_SERVER, 'REQUEST_SCHEME');
 
-        $uri = "{$scheme}://{$user}:{$pwd}@{$_SERVER['HTTP_HOST']}:{$_SERVER['SERVER_PORT']}{$_SERVER['REQUEST_URI']}";
+        $uri = "{$scheme}://{$auth}{$_SERVER['HTTP_HOST']}:{$_SERVER['SERVER_PORT']}{$_SERVER['REQUEST_URI']}";
 
         $this->uri = new Uri($uri);
     }

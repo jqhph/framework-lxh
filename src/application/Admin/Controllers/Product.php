@@ -8,6 +8,9 @@
 namespace Lxh\Admin\Controllers;
 
 //use Lxh\MVC\Controller;
+use Lxh\Admin\Filter;
+use Lxh\Admin\Grid;
+use Lxh\Admin\Layout\Row;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
 
@@ -49,6 +52,55 @@ class Product extends Controller
             'created_by' => [],
         ];
     }
+
+    public function actionList(Request $req, Response $resp, array & $params)
+    {
+        $content = $this->admin()->content();
+        $content->header(trans(__CONTROLLER__));
+        $content->description(trans(__CONTROLLER__ . ' list'));
+
+        $content->row(function (Row $row) {
+            $row->column(12, $this->filter()->render());
+        });
+
+        $content->row(function (Row $row) {
+            $row->column(12, $this->grid()->render());
+        });
+
+        return $content->render();
+    }
+
+    protected function filter()
+    {
+        $filter = new Filter();
+
+        return $filter;
+    }
+
+    protected function grid()
+    {
+        $grid = new Grid([
+            'id' => ['show' => 0, 'sortable' => 1],
+            'name' => ['sortable' => 1, 'desc' => 0],
+            'price' => ['sortable' => 1,],
+            'counter_price' => [],
+            'share_price' => ['sortable' => 1,],
+            'level' => [],
+            'stock' => [],
+            'is_hot' => ['view' => 'Boolean'],
+            'is_new' => ['view' => 'Boolean'],
+            'calendar' => ['view' => 'Boolean'],
+            'order_num' => [],
+            'desc' => [],
+            'category_id' => [],
+            'created_at' => ['view' => 'Date'],
+            'modified_at' => ['view' => 'Date'],
+            'created_by' => ['view' => 'Date'],
+        ]);
+
+        return $grid;
+    }
+
 
     protected function makeSearchItems()
     {

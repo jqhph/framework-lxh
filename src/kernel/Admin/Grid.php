@@ -7,6 +7,7 @@ use Lxh\Admin\Table\Table;
 use Lxh\Admin\Widgets\Box;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Admin\Kernel\Url;
+use Lxh\MVC\Model;
 
 class Grid implements Renderable
 {
@@ -14,6 +15,8 @@ class Grid implements Renderable
      * @var string
      */
     protected $module = __CONTROLLER__;
+
+    protected $model;
 
     /**
      * Collection of all grid columns.
@@ -63,13 +66,6 @@ class Grid implements Renderable
     protected $filter;
 
     /**
-     * Resource path of the grid.
-     *
-     * @var
-     */
-    protected $resourcePath;
-
-    /**
      * Export driver.
      *
      * @var string
@@ -81,14 +77,14 @@ class Grid implements Renderable
      *
      * @var string
      */
-    protected $view = 'component.grid';
+    protected $view = 'admin::grid';
 
     /**
      * Per-page options.
      *
      * @var array
      */
-    public $perPages = [10, 20, 30, 50];
+    public $perPages = [10, 15, 20, 25, 30, 40, 50, 80, 100];
 
     /**
      * Default items count per-page.
@@ -96,6 +92,8 @@ class Grid implements Renderable
      * @var int
      */
     public $perPage = 20;
+
+    protected $perPageKey = 'maxSize';
 
 
     /**
@@ -117,16 +115,118 @@ class Grid implements Renderable
         'usePublicJs'      => true,
     ];
 
+    protected $pageString = '';
+
+    protected $total = 0;
+
     /**
      * Create a new grid instance.
      *
      * @param array $headers
      * @param array $rows
      */
-    public function __construct(array $headers, array $rows)
+    public function __construct(array $headers, array $rows = [])
     {
         $this->table = new Table($headers, $rows);
         $this->rows = &$rows;
+
+        $this->setupPerPage();
+    }
+
+    protected function setupPerPage()
+    {
+        $maxSize = I($this->perPageKey);
+
+        if (!in_array($maxSize, $this->perPages)) {
+            $maxSize = $this->perPage;
+        }
+
+        $this->perPage = $maxSize;
+    }
+
+    /**
+     *
+     * @param Model $model
+     * @return Model
+     */
+    public function model($model = null)
+    {
+        if ($model) {
+            $this->model = $model;
+        }
+        if (! $this->model) {
+            $this->model = create_model(__CONTROLLER__);
+        }
+        return $this->model;
+    }
+
+    protected function makeWhereContent()
+    {
+        return [];
+    }
+
+    protected function makeOrderContent()
+    {
+        if (! $sort = I('sort')) return '';
+
+        $desc = I('desc');
+
+        return "`$sort`" . ($desc ? 'DESC' : 'ASC');
+    }
+
+
+    public function findList()
+    {
+        if ($this->rows) {
+            return $this->rows;
+        }
+
+        $model = $this->model();
+
+        $where = $this->makeWhereContent();
+        $order = $this->makeOrderContent();
+
+        // 获取记录总条数
+        $total = $model->count($where);
+
+        $this->total($total);
+
+        $pages = $this->paginator();
+
+        if ($total && $this->usePagination()) {
+            $this->pageString($pages->make($total, $this->perPage));
+        }
+
+        // 生成分页字符串后获取当前分页（做过安全判断）
+        $currentPage = $pages->current();
+
+        $list = [];
+
+        if ($total) {
+            $list = $model->findList($where, $order, ($currentPage - 1) * $this->perPage, $this->perPage);
+        }
+
+        return $this->rows = &$list;
+    }
+
+    public function pageString($page = '')
+    {
+        if ($page) {
+            $this->pageString = &$page;
+
+            return $this;
+        }
+        return $this->pageString;
+    }
+
+    public function total($total = null)
+    {
+        if ($total !== null) {
+            $this->total = &$total;
+
+            return $this;
+        }
+        return $this->total;
     }
 
     /**
@@ -149,7 +249,7 @@ class Grid implements Renderable
      */
     public function paginator()
     {
-        return new Tools\Paginator($this);
+        return pages();
     }
 
     /**
@@ -241,20 +341,40 @@ class Grid implements Renderable
 
     public function render()
     {
+        $list = $this->findList();
+
+        if (count($list) < $this->perPage) {
+            $this->perPages = '';
+        }
+
         $vars = array_merge([
-            'table' => $this->table->render(),
-//            'createBtn' => $this->buildCreateBtn(),
+            'table' => $this->table->setRows($list)->render(),
+            'page'  => &$this->pageString,
+            'pages' => &$this->perPages,
+            'url'   => $this->formatUrl(),
+            'perPage' => $this->perPage,
+            'perPageKey' => $this->perPageKey
         ], $this->options);
 
         $box = new Box();
 
-        $box->content(view($this->view, $vars)->render())->style('inverse');
+        $box->content(view($this->view, $vars)->render())->style('inverse')->btnToolbar();
 
         if ($btn = $this->buildCreateBtn()) {
             $box->tool($btn);
         }
 
         return $box->render();
+    }
+
+    protected function formatUrl()
+    {
+        $url = '';
+        if ($this->pageString && $this->total > 0 && $this->usePagination()) {
+            $url = url()->unsetQuery($this->perPageKey)->string();
+        }
+
+        return $url;
     }
 
     protected function buildCreateBtn()
