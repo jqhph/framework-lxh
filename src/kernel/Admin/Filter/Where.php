@@ -12,9 +12,9 @@ class Where extends AbstractFilter
 {
     protected $callback;
 
-    public function __construct($name, Field $field, callable $callback)
+    public function __construct(Field $field, callable $callback)
     {
-        parent::__construct($name, $field);
+        parent::__construct($field);
 
         $this->callback = $callback;
     }

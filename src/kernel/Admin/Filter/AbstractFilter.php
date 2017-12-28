@@ -8,7 +8,7 @@ use Lxh\Admin\Filter\Field\Text;
 use Lxh\Admin\Form\Field;
 use Lxh\Template\View;
 
-class AbstractFilter
+abstract class AbstractFilter
 {
     /**
      * @var Field
@@ -16,13 +16,17 @@ class AbstractFilter
     protected $field;
 
     /**
+     * @var array
+     */
+    protected $fields = [];
+
+    /**
      * @var string
      */
     protected $name = '';
 
-    public function __construct($name, Field $field)
+    public function __construct(Field $field = null)
     {
-        $this->name = $name;
         $this->field = $field;
     }
 
@@ -38,7 +42,7 @@ class AbstractFilter
 
     public function render()
     {
-        return "<input style='width:0;height:0;display:none' type='hidden' name='@{$this->name}[]' value='{$this->value()}' />";
+        return "<input type='hidden' name='{$this->name}[]' value='{$this->value()}' />";
     }
 
     /**
@@ -55,4 +59,30 @@ class AbstractFilter
     {
         return $this->render();
     }
+
+    /**
+     * 构建where条件数组
+     *
+     * @return array
+     */
+    public function buildConditions(array $fields)
+    {
+        $conditions = [];
+        foreach ($fields as &$field) {
+            if (($value = $this->condition($field)) === null) {
+                continue;
+            }
+            $conditions[$field] = $value;
+        }
+
+        return $conditions;
+    }
+
+    /**
+     * 返回null则跳过
+     *
+     * @param $field
+     * @return mixed
+     */
+    abstract protected function condition($field);
 }

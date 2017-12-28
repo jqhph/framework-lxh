@@ -13,49 +13,49 @@ trait Condition
 
     public function between()
     {
-        $this->handler('between');
+        $this->condition('between');
         return $this;
     }
 
     public function gt()
     {
-        $this->handler('gt');
+        $this->condition('gt');
         return $this;
     }
 
     public function lt()
     {
-        $this->handler('lt');
+        $this->condition('lt');
         return $this;
     }
 
     public function like()
     {
-        $this->handler('like');
+        $this->condition('like');
         return $this;
     }
 
     public function rlike()
     {
-        $this->handler('rlike');
+        $this->condition('rlike');
         return $this;
     }
 
     public function ilike()
     {
-        $this->handler('ilike');
+        $this->condition('ilike');
         return $this;
     }
 
     public function equal()
     {
-        $this->handler('equal');
+        $this->condition('equal');
         return $this;
     }
 
     public function where($call)
     {
-        $this->handler('where', $call);
+        $this->condition('where', $call);
         return $this;
     }
 
@@ -64,7 +64,7 @@ trait Condition
      * @param string $type
      * @return static
      */
-    public function handler($type, $call = null)
+    public function condition($type, $call = null)
     {
         $fieldName = $this->name();
         if (isset($this->handler[$fieldName])) {
@@ -74,7 +74,7 @@ trait Condition
 
         $class = "Lxh\\Admin\\Filter\\$class";
 
-        return $this->handler[$fieldName] = new $class($type, $this, $call);
+        return $this->handler[$fieldName] = new $class($this, $call);
     }
 
     /**
@@ -87,7 +87,7 @@ trait Condition
 
         $default = isset($this->defaultHandler) ? $this->defaultHandler : 'equal';
 
-        return isset($this->handler[$name]) ? $this->handler[$name] : ($this->handler($default));
+        return isset($this->handler[$name]) ? $this->handler[$name] : ($this->condition($default));
     }
 
 }
