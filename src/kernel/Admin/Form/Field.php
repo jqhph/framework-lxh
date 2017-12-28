@@ -25,6 +25,11 @@ class Field implements Renderable
     protected $id;
 
     /**
+     * @var string
+     */
+    protected $name;
+
+    /**
      * Element value.
      *
      * @var mixed
@@ -731,7 +736,7 @@ class Field implements Renderable
     {
         return array_merge($this->variables, [
             'id' => $this->id,
-            'name' => $this->elementName ?: $this->formatName($this->column),
+            'name' => $this->name(),
             'help' => &$this->help,
             'class' => $this->getElementClassString(),
             'value' => $this->value(),
@@ -742,6 +747,15 @@ class Field implements Renderable
             'attributes' => $this->formatAttributes(),
             'placeholder' => $this->getPlaceholder(),
         ]);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function name()
+    {
+        return $this->name ?: ($this->name = $this->elementName ?: $this->formatName($this->column));
     }
 
     public function formatRules()
@@ -804,7 +818,7 @@ class Field implements Renderable
      */
     public function __toString()
     {
-        return $this->render()->render();
+        return $this->render();
     }
 
     /**

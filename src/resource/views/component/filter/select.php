@@ -7,3 +7,4 @@
         <?php endforeach; ?>
     </select>
 </div>
+<?php echo $filterInput; ?>

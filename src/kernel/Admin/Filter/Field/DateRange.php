@@ -6,6 +6,8 @@ use Lxh\Admin\Form\Field;
 
 class DateRange extends Field
 {
+    use Condition;
+
     public static $js = [
         'bootstrap-datetimepicker.min'
     ];
@@ -19,6 +21,11 @@ class DateRange extends Field
     protected $width = [
         'field' => 4
     ];
+
+    /**
+     * @var string
+     */
+    protected $defaultHandler = 'between';
 
     protected function setupValue($name)
     {
@@ -37,10 +44,9 @@ class DateRange extends Field
         return $this->value() ?: [];
     }
 
-
     protected function variables()
     {
-        $name = $this->elementName ?: $this->formatName($this->column);
+        $name = $this->name();
 
         $value = $this->setupValue($name);
 
@@ -48,7 +54,8 @@ class DateRange extends Field
             'start' => get_value($value, 'start', ''),
             'end' => get_value($value, 'end', ''),
             'startName' => $name . '-start',
-            'endName' => $name . '-end'
+            'endName' => $name . '-end',
+            'filterInput' => $this->getInputHandler()->render()
         ]);
     }
     

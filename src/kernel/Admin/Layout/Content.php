@@ -112,19 +112,25 @@ class Content implements Renderable
      */
     public function grid($params = null, $width = 12)
     {
+        // 行
         $row = new Row();
 
+        // 网格
         $grid = new Grid();
 
         if (is_array($params)) {
+            // 添加网格配置
             $grid->headers($params);
         }
 
+        // 添加列
         $column = $row->column($width, $grid);
 
+        // 添加行
         $this->addRow($row);
 
         if ($params && is_callable($params)) {
+            // 外部回调
             call_user_func($params, $grid, $column);
         }
 

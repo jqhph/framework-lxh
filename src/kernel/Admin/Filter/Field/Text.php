@@ -6,6 +6,8 @@ use Lxh\Admin\Form\Field;
 
 class Text extends Field
 {
+    use Condition;
+
     protected $view = 'admin::filter.text';
 
     protected $width = [
@@ -16,19 +18,21 @@ class Text extends Field
 
     protected function variables()
     {
-        $name = $this->elementName ?: $this->formatName($this->column);
+        $name = $this->name();
         if ($value = I($name)) {
             $this->value = $value;
         }
 
         $this->defaultAttribute('type', 'text')
             ->defaultAttribute('id', $this->id)
-            ->defaultAttribute('name', $this->elementName ?: $this->formatName($this->column))
+            ->defaultAttribute('name', $name)
             ->defaultAttribute('value', $this->value())
             ->defaultAttribute('class', 'form-control '.$this->getElementClassString())
             ->defaultAttribute('placeholder', $this->getPlaceholder());
 
-        return parent::variables();
+        return array_merge(parent::variables(), [
+            'filterInput' => $this->getInputHandler()->render()
+        ]);
     }
 
     /**

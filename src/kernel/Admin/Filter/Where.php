@@ -2,75 +2,25 @@
 
 namespace Lxh\Admin\Filter;
 
+use Lxh\Admin\Form\Field;
+
+/**
+ * 自定义条件过滤
+ * 
+ */
 class Where extends AbstractFilter
 {
-    /**
-     * Query closure.
-     *
-     * @var \Closure
-     */
-    protected $where;
+    protected $callback;
 
-    /**
-     * Input value from field.
-     *
-     * @var
-     */
-    public $input;
-
-    /**
-     * Where constructor.
-     *
-     * @param \Closure $query
-     * @param string   $label
-     */
-    public function __construct(\Closure $query, $label)
+    public function __construct($name, Field $field, callable $callback)
     {
-        $this->where = $query;
+        parent::__construct($name, $field);
 
-        $this->label = $this->formatLabel($label);
-        $this->column = static::getQueryHash($query, $this->label);
-        $this->id = $this->formatId($this->column);
-
-        $this->setupField();
+        $this->callback = $callback;
     }
 
-    /**
-     * Get the hash string of query closure.
-     *
-     * @param \Closure $closure
-     * @param string   $label
-     *
-     * @return string
-     */
-    public static function getQueryHash(\Closure $closure, $label = '')
+    public function render()
     {
-        $reflection = new \ReflectionFunction($closure);
-
-        return md5($reflection->getFileName().$reflection->getStartLine().$reflection->getEndLine().$label);
-    }
-
-    /**
-     * Get condition of this filter.
-     *
-     * @param array $inputs
-     *
-     * @return array|mixed|void
-     */
-    public function condition($inputs)
-    {
-        $value = get_value($inputs, static::getQueryHash($this->where, $this->label));
-
-        if (is_array($value)) {
-            $value = array_filter($value);
-        }
-
-        if (is_null($value) || empty($value)) {
-            return;
-        }
-
-        $this->input = $this->value = $value;
-
-        return $this->buildCondition($this->where->bindTo($this));
+        return call_user_func($this->callback, $this, $this->field);
     }
 }
