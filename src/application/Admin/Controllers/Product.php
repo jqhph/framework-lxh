@@ -20,101 +20,55 @@ class Product extends Controller
         'create' => 'Create'
     ];
 
+    /**
+     * 网格报表配置
+     *
+     * @var array
+     */
+    protected $grid = [
+        'id' => ['show' => 0, 'sortable' => 1],
+        'name' => ['sortable' => 1, 'desc' => 0],
+        'price' => ['sortable' => 1,],
+        'counter_price' => [],
+        'share_price' => ['sortable' => 1,],
+        'level' => [],
+        'stock' => [],
+        'is_hot' => ['view' => 'Boolean'],
+        'is_new' => ['view' => 'Boolean'],
+        'calendar' => ['view' => 'Boolean'],
+        'order_num' => [],
+        'desc' => ['show' => 0],
+        'category_id' => ['show' => 0],
+        'created_at' => ['view' => 'Date'],
+        'modified_at' => ['view' => 'Date'],
+        'created_by' => ['view' => 'Date'],
+    ];
+
     public function initialize()
     {
-    }
-
-    protected $maxSize = 20;
-
-    /**
-     * 获取list页table标题信息
-     *
-     * @return array
-     */
-    protected function makeListItems()
-    {
-        return [
-            'id' => ['priority' => 0,],
-            'name' => [],
-            'price' => ['view' => 'price/list'],
-            'counter_price' => ['view' => 'price/list'],
-            'share_price' => ['view' => 'price/list'],
-            'level' => [],
-            'stock' => [],
-            'is_hot' => ['view' => 'bool/list'],
-            'is_new' => ['view' => 'bool/list'],
-            'calendar' => ['view' => 'bool/list'],
-            'order_num' => [],
-            'desc' => [],
-            'category_id' => ['view' => ''],
-            'created_at' => ['view' => 'varchar/date-list'],
-            'modified_at' => ['view' => 'varchar/date-list'],
-            'created_by' => [],
-        ];
     }
 
     public function actionList(Request $req, Response $resp, array & $params)
     {
         $content = $this->admin()->content();
+
         $content->header(trans(__CONTROLLER__));
         $content->description(trans(__CONTROLLER__ . ' list'));
 
-        $content->row(function (Row $row) {
-            $row->column(12, $this->filter()->render());
+        // 构建搜索界面
+        $content->filter(function (Filter $filter) {
+            $filter->multipleSelect('status')->options(range(1, 10));
+            $filter->select('level')->options([1, 2]);
+            $filter->text('stock')->number();
+            $filter->text('name');
+            $filter->text('price');
+            $filter->dateRange('created_at');
         });
 
-        $content->row(function (Row $row) {
-            $row->column(12, $this->grid()->render());
-        });
+        // 构建网格报表
+        $content->grid($this->grid);
 
         return $content->render();
-    }
-
-    protected function filter()
-    {
-        $filter = new Filter();
-
-        return $filter;
-    }
-
-    protected function grid()
-    {
-        $grid = new Grid([
-            'id' => ['show' => 0, 'sortable' => 1],
-            'name' => ['sortable' => 1, 'desc' => 0],
-            'price' => ['sortable' => 1,],
-            'counter_price' => [],
-            'share_price' => ['sortable' => 1,],
-            'level' => [],
-            'stock' => [],
-            'is_hot' => ['view' => 'Boolean'],
-            'is_new' => ['view' => 'Boolean'],
-            'calendar' => ['view' => 'Boolean'],
-            'order_num' => [],
-            'desc' => [],
-            'category_id' => [],
-            'created_at' => ['view' => 'Date'],
-            'modified_at' => ['view' => 'Date'],
-            'created_by' => ['view' => 'Date'],
-        ]);
-
-        return $grid;
-    }
-
-
-    protected function makeSearchItems()
-    {
-        return [
-            [
-                ['view' => 'varchar/search', 'vars' => ['name' => 'name']],
-                ['view' => 'varchar/date-search', 'vars' => ['name' => 'created_at']],
-
-            ],
-            [
-                ['view' => 'enum/align-search', 'vars' => ['name' => 'level', 'options' => [1, 2, 3, 4, 5]]],
-                ['view' => 'enum/fliter-search', 'vars' => ['name' => 'created_by_id', 'options' => [1, 2, 3, 4]]],
-            ],
-        ];
     }
 
     /**

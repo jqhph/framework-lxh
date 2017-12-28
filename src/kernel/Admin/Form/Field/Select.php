@@ -34,7 +34,7 @@ class Select extends Field
     {
         if (empty($this->script)) {
             $this->script = <<<EOF
-$("{$this->getElementClassSelector()}").select2({allowsClear:{$this->clear},placeholder:"{$this->label}"});
+$("{$this->getElementClassSelector()}").select2({allowClear:{$this->clear},placeholder:"{$this->getPlaceholder()}"});
 EOF;
         }
 

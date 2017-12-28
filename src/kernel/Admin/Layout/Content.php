@@ -4,6 +4,8 @@ namespace Lxh\Admin\Layout;
 
 use Closure;
 use Lxh\Admin\Admin;
+use Lxh\Admin\Filter;
+use Lxh\Admin\Grid;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Support\MessageBag;
 
@@ -81,14 +83,52 @@ class Content implements Renderable
     }
 
     /**
-     * 搜索模板
+     * 过滤器
      *
-     * @param mixed $content
-     * @return static
+     * @param $callback
+     * @return Filter
      */
-    public function search($content)
+    public function filter(callable $callback = null, $width = 12)
     {
-        return $this;
+        $row = new Row();
+
+        $filter = new Filter();
+
+        $column = $row->column($width, $filter);
+
+        $this->addRow($row);
+
+        if ($callback) {
+            call_user_func($callback, $filter, $column);
+        }
+
+        return $filter;
+    }
+
+    /**
+     * 创建网格报表
+     *
+     * @return Grid
+     */
+    public function grid($params = null, $width = 12)
+    {
+        $row = new Row();
+
+        $grid = new Grid();
+
+        if (is_array($params)) {
+            $grid->headers($params);
+        }
+
+        $column = $row->column($width, $grid);
+
+        $this->addRow($row);
+
+        if ($params && is_callable($params)) {
+            call_user_func($params, $grid, $column);
+        }
+
+        return $grid;
     }
 
     /**
@@ -96,7 +136,7 @@ class Content implements Renderable
      *
      * @param $content
      *
-     * @return $this
+     * @return Row
      */
     public function row($content = '')
     {
@@ -105,10 +145,11 @@ class Content implements Renderable
             call_user_func($content, $row);
             $this->addRow($row);
         } else {
-            $this->addRow(new Row($content));
+            $row = new Row($content);
+            $this->addRow($row);
         }
 
-        return $this;
+        return $row;
     }
 
     /**
@@ -152,8 +193,6 @@ class Content implements Renderable
     public function withError($title = '', $message = '')
     {
         $error = new MessageBag(compact('title', 'message'));
-
-//        session()->flash('error', $error);
 
         return $this;
     }

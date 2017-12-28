@@ -1,11 +1,6 @@
-<div class="form-group <?php //echo !$errors->has($errorKey) ?: 'has-error' ?>">
-
+<div class="form-group ">
     <label for="<?php echo $id ?>" class="col-sm-<?php echo $width['label'] ?> control-label"><?php echo $label ?></label>
-
-    <div class="col-sm-<?php echo $width['field'] ?>">
-        <?php
-//            echo view('admin::form.error')->render();
-        ?>
+    <div class="col-sm-<?php echo $width['field'] ?>">s
         <div class="input-group">
             <?php if ($prepend) {?>
             <span class="input-group-addon"><?php echo $prepend ?></span>

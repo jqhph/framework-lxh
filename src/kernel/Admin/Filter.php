@@ -3,6 +3,10 @@
 namespace Lxh\Admin;
 
 use Lxh\Admin\Fields\Button;
+use Lxh\Admin\Filter\Field\DateRange;
+use Lxh\Admin\Filter\Field\MultipleSelect;
+use Lxh\Admin\Filter\Field\Select;
+use Lxh\Admin\Filter\Field\Text;
 use Lxh\Admin\Form\Field;
 use Lxh\Admin\Table\Table;
 use Lxh\Admin\Widgets\Box;
@@ -11,6 +15,14 @@ use Lxh\Contracts\Support\Renderable;
 use Lxh\Admin\Kernel\Url;
 use Lxh\MVC\Model;
 
+/**
+ * Class Form.
+ *
+ * @method Text           text($name, $label = '')
+ * @method Select         select($name, $label = '')
+ * @method MultipleSelect multipleSelect($name, $label = '')
+ * @method DateRange dateRange($name, $label = '')
+ */
 class Filter extends Widget implements Renderable
 {
     /**
@@ -33,6 +45,12 @@ class Filter extends Widget implements Renderable
      */
     protected $fields = [];
 
+    protected static $availableFields = [
+        'text' => Text::class,
+        'dateRange' => DateRange::class,
+        'select' => Select::class,
+        'multipleSelect' => MultipleSelect::class,
+    ];
 
     public function __construct($title = '', $attrbutes = [])
     {
@@ -45,7 +63,10 @@ class Filter extends Widget implements Renderable
 
     protected function setup()
     {
-        
+        $this->attributes = [
+            'method' => 'post',
+            'action' => ''
+        ];
     }
 
     public function title($title = null)
@@ -70,7 +91,6 @@ class Filter extends Widget implements Renderable
 
         if ($this->options['collapsable']) {
             $box->collapsable();
-//            $box->slideUp();
         }
 
         return $box->render();
@@ -81,7 +101,7 @@ class Filter extends Widget implements Renderable
         return [
             'attributes' => $this->formatAttributes(),
             'fields' => $this->fields,
-            'options' => $this->options,
+            'filterOptions' => &$this->options,
         ];
     }
 
@@ -96,8 +116,6 @@ class Filter extends Widget implements Renderable
     protected function pushField(Field &$field)
     {
         array_push($this->fields, $field);
-
-        $field->setForm($this);
 
         return $this;
     }
@@ -123,6 +141,24 @@ class Filter extends Widget implements Renderable
 
             return $element;
         }
+    }
+
+    /**
+     * Find field class with given name.
+     *
+     * @param string $method
+     *
+     * @return bool|string
+     */
+    public static function findFieldClass($method)
+    {
+        $class = get_value(static::$availableFields, $method);
+
+        if (class_exists($class)) {
+            return $class;
+        }
+
+        return false;
     }
 
 }

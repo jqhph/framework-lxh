@@ -47,7 +47,7 @@ class Table extends Widget
      * @param array $rows
      * @param array $style
      */
-    public function __construct($headers = [], $rows = [], $style = [])
+    public function __construct(&$headers = [], &$rows = [], $style = [])
     {
         $this->setHeaders($headers);
         $this->setRows($rows);

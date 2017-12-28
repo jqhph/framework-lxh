@@ -849,8 +849,7 @@ File: Components
   border-radius: 3px 3px 0px 0px;
   -moz-border-radius: 3px 3px 0px 0px;
   background-clip: padding-box;
-  color: #ffffff;border-bottom: 1px solid #eee;
-  padding: 8px 20px;
+  color: #ffffff;border-bottom: 1px solid #eee;padding: 6px 20px;
 }
 .portlet .portlet-heading .portlet-title {
   color: #ffffff;

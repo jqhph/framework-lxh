@@ -125,12 +125,18 @@ class Grid implements Renderable
      * @param array $headers
      * @param array $rows
      */
-    public function __construct(array $headers, array $rows = [])
+    public function __construct(array $headers = [], array &$rows = [])
     {
         $this->table = new Table($headers, $rows);
         $this->rows = &$rows;
 
         $this->setupPerPage();
+    }
+
+    public function headers(array $headers)
+    {
+        $this->table->setHeaders($headers);
+        return $this;
     }
 
     protected function setupPerPage()

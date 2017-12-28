@@ -25,13 +25,15 @@ class Row implements Buildable
      * Add a column.
      *
      * @param int $width
-     * @param $content
+     * @param Column
      */
     public function column($width, $content)
     {
         $column = new Column($content, $width);
 
         $this->addColumn($column);
+
+        return $column;
     }
 
     /**

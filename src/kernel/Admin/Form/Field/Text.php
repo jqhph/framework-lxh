@@ -14,7 +14,7 @@ class Text extends Field
             ->defaultAttribute('type', 'text')
             ->defaultAttribute('id', $this->id)
             ->defaultAttribute('name', $this->elementName ?: $this->formatName($this->column))
-//            ->defaultAttribute('value', $this->form->value())
+            ->defaultAttribute('value', $this->value())
             ->defaultAttribute('class', 'form-control '.$this->getElementClassString())
             ->defaultAttribute('placeholder', $this->getPlaceholder());
 
@@ -22,6 +22,27 @@ class Text extends Field
         $this->variables['append'] = &$this->append;
 
         return parent::variables();
+    }
+
+    public function number()
+    {
+        return $this->attribute('type', 'number');
+    }
+
+    public function password()
+    {
+        return $this->attribute('type', 'password');
+    }
+
+    /**
+     * 设置表单类型
+     *
+     * @param string $type
+     * @return static
+     */
+    public function type($type = 'text')
+    {
+        return $this->attribute('type', $type);
     }
 
     public function render()

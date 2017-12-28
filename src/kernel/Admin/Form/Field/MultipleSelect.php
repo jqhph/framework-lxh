@@ -2,71 +2,37 @@
 
 namespace Lxh\Admin\Form\Field;
 
-use Lxh\Database\Eloquent\Relations\BelongsToMany;
+use Lxh\Support\Arr;
 
 class MultipleSelect extends Select
 {
+    protected $view = 'admin::form.multiple-select';
+
     /**
-     * Other key for many-to-many relation.
+     * 是否允许清除单选框
      *
      * @var string
      */
-    protected $otherKey;
+    protected $clear = 'true';
 
     /**
-     * Get other key for this many-to-many relation.
+     * Field default value.
      *
-     * @throws \Exception
-     *
-     * @return string
+     * @var mixed
      */
-    protected function getOtherKey()
-    {
-        if ($this->otherKey) {
-            return $this->otherKey;
-        }
-    }
+    protected $default = [];
 
     public function fill($data)
     {
-        $relations = get_value($data, $this->column);
-
-        if (is_string($relations)) {
-            $this->value = explode(',', $relations);
-        }
-
-        if (is_array($relations)) {
-            if (is_string(current($relations))) {
-                $this->value = $relations;
-            } else {
-                foreach ($relations as $relation) {
-                    $this->value[] = get_value($relation, "pivot.{$this->getOtherKey()}");
-                }
+        // Field value is already setted.
+        if (is_array($this->column)) {
+            foreach ($this->column as $key => $column) {
+                $this->value[$key] = get_value($data, $column);
             }
-        }
-    }
 
-    public function setOriginal($data)
-    {
-        $relations = get_value($data, $this->column);
-
-        if (is_string($relations)) {
-            $this->original = explode(',', $relations);
+            return;
         }
 
-        if (is_array($relations)) {
-            if (is_string(current($relations))) {
-                $this->original = $relations;
-            } else {
-                foreach ($relations as $relation) {
-                    $this->original[] = get_value($relation, "pivot.{$this->getOtherKey()}");
-                }
-            }
-        }
-    }
-
-    public function prepare(array $value)
-    {
-        return array_filter($value);
+        $this->value = (array) get_value($data, $this->column);
     }
 }
