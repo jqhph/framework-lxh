@@ -223,9 +223,9 @@ class Form implements Renderable
      *
      * @return static
      */
-    public function useEditScript()
+    public function useEditScript($js = 'view/public-detail')
     {
-        return $this->asyncJs('view/public-detail');
+        return $this->asyncJs($js);
     }
 
     /**

@@ -5,7 +5,6 @@
 <title><?php echo config('admin.title')?></title>
 <!-- Tell the browser to be responsive to screen width -->
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-
 <body>
 <script>
     (typeof add_action == 'undefined') && (add_action = parent.add_action);
@@ -23,10 +22,7 @@
 
 <?php if ($header || $description) {?>
 <section class="content-header">
-    <h1>
-        <?php echo $header; ?>
-        <small><?php echo $description;?></small>
-    </h1>
+    <h1><?php echo $header; ?><small><?php echo $description;?></small></h1>
 </section>
 <?php }?>
 
@@ -48,28 +44,26 @@ echo render_view('public.app-js');
 echo $js;
 echo $css;
 ?>
-
 <script>
     (function (w) {
         w.tab = function () {
             var $top = w.$top || w.top.$top
             return $top.tab
-        }
+        };
         w.open_tab = function (id, url, label) {
             tab().switch(id, url, label)
-        }
+        };
         w.close_tab = function (id) {
             tab().close(id)
-        }
+        };
         w.reload_tab = function (id, url, label) {
             tab().reload(id, url, label)
-        }
+        };
         w.back_tab = function (step) {
             tab().back(step)
-        }
+        };
     })(window);
     <?php echo $script?>
-
 </script>
 </body>
 </html>

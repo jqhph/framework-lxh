@@ -718,7 +718,7 @@ window.Lxh = function (options) {
      * @returns {FormValidator}
      */
     function validator(options, call, selector) {
-        selector = selector || ('.' + $lxh.controllerName() + '-form');
+        selector = selector || ('.' + window.$lxh.controllerName() + '-form');
 
         var self = this;
 
