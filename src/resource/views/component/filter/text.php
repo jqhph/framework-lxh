@@ -4,4 +4,3 @@
         <input <?php echo $attributes ?> />
     </div>
 </div>
-<?php echo $filterInput; ?>

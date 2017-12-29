@@ -41,8 +41,6 @@ class MultipleSelect extends Field\MultipleSelect
         }
         $this->value = (array) $this->value;
 
-        return array_merge(parent::variables(), [
-            'filterInput' => $this->getInputHandler()->render()
-        ]);
+        return parent::variables();
     }
 }

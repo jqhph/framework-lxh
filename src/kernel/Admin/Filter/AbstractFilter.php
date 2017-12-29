@@ -11,13 +11,6 @@ use Lxh\Template\View;
 abstract class AbstractFilter
 {
     /**
-     * 已处理好的查询条件数组
-     *
-     * @var array
-     */
-    protected static $conditionsValue = [];
-
-    /**
      * @var Field
      */
     protected $field;
@@ -35,9 +28,9 @@ abstract class AbstractFilter
     /**
      * @var callable
      */
-    protected static $conditionHandler = [];
+    protected $conditionHandler;
 
-    protected static $fieldFormatHandler = [];
+    protected $fieldFormatHandler;
 
     public function __construct(Field $field = null)
     {
@@ -60,7 +53,7 @@ abstract class AbstractFilter
      */
     public function condition(callable $callable)
     {
-        static::$conditionHandler[$this->field->name()] = $callable;
+        $this->conditionHandler = $callable;
 
         return $this;
     }
@@ -77,7 +70,7 @@ abstract class AbstractFilter
 
     public function render()
     {
-        return "<input type='hidden' name='{$this->name}[]' value='{$this->value()}' />";
+        return '';
     }
 
     /**
@@ -96,60 +89,34 @@ abstract class AbstractFilter
     }
 
     /**
-     * 获取查询条件数据
+     * 构建where条件数组
      *
      * @return mixed
      */
-    protected function normalizeInput()
+    public function build()
     {
-        return I($this->name);
-    }
+        $field = $this->field->name();
 
-    /**
-     * 构建where条件数组
-     *
-     * @return static
-     */
-    public function build(array $fields = [])
-    {
-        $fields = $fields ?: $this->normalizeInput();
+        $key = $this->formatFieldName($field);
 
-        foreach ((array) $fields as &$field) {
-            if (isset(static::$conditionsValue[$field])) {
-                // 已经构建过，不再重新构建
-                continue;
-            }
+        if ($this->conditionHandler) {
+            // 自定义处理器处理
+            $condition = call_user_func($this->conditionHandler, $field, $this);
 
-            $key = $this->formatFieldName($field);
-
-            if (isset(static::$conditionHandler[$field])) {
-                // 自定义处理器处理
-                $value =  call_user_func(static::$conditionHandler[$field], $fields, $this);
-
-                if ($value === null) continue;
-
-                $conditions[$key] = $value;
-                continue;
-            }
-
-            // 使用默认构建查询条件数组方法
-            if (($value = $this->buildCondition($field)) === null) {
-                continue;
-            }
-            static::$conditionsValue[$key] = $value;
+            return $condition === null ? false : [$key => &$condition];
         }
 
-        return $this;
+        // 使用默认构建查询条件数组方法
+        if (($condition = $this->buildCondition($field)) === null) {
+            return false;
+        }
+
+        return [$key => &$condition];
     }
 
-    /**
-     * 获取已处理好的查询条件数组
-     *
-     * @return array
-     */
-    public static function getConditionsValue()
+    protected function getFieldValue($field)
     {
-        return static::$conditionsValue;
+        return I($field);
     }
 
     /**
@@ -160,7 +127,7 @@ abstract class AbstractFilter
      */
     public function formatField(callable $handler)
     {
-        static::$fieldFormatHandler[$this->field->name()] = $handler;
+        $this->fieldFormatHandler = $handler;
 
         return $this;
     }
@@ -173,8 +140,8 @@ abstract class AbstractFilter
      */
     protected function formatFieldName($field)
     {
-        if (isset(static::$fieldFormatHandler[$field])) {
-            return call_user_func(static::$fieldFormatHandler[$field], $field);
+        if ($this->fieldFormatHandler) {
+            return call_user_func($this->fieldFormatHandler, $field);
         }
 
         return $field;

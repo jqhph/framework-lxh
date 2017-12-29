@@ -128,7 +128,7 @@ class Where
                 $this->params[] = "%{$p3}%";
                 break;
             case 'between':
-                $data[] = "$p1 BETWEEN ? AND ?";
+                $data[] = "($p1 BETWEEN ? AND ?)";
                 $this->params[] = $p3[0];
                 $this->params[] = $p3[1];
                 break;

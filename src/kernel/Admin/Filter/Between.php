@@ -19,11 +19,14 @@ class Between extends AbstractFilter
         $start = I($field . '-start');
         $end = I($field . '-end');
 
-        if ($start === '' && $end === '') {
+        $validateStart = ($start !== null && $start !== '');
+        $validateEnd = ($end !== null && $end !== '');
+
+        if (!$validateStart && !$validateEnd) {
             return null;
         }
 
-        if ($start && $end) {
+        if ($validateStart && $validateEnd) {
             if ($this->toTimestamp) {
                 $start = strtotime($start);
                 $end = strtotime($end);
@@ -31,7 +34,7 @@ class Between extends AbstractFilter
             return ['between', [$start, $end]];
         }
 
-        if ($start) {
+        if ($validateStart) {
             if ($this->toTimestamp) {
                 $start = strtotime($start);
             }

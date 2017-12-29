@@ -13,6 +13,6 @@ class Lt extends AbstractFilter
     {
         $value = I($field);
 
-        return $value === '' ? null : ['<', $value];
+        return ($value === '' || $value === null) ? null : ['<', $value];
     }
 }

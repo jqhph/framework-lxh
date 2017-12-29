@@ -71,7 +71,6 @@ class DateRange extends Field
             'end' => get_value($value, 'end', ''),
             'startName' => $name . '-start',
             'endName' => $name . '-end',
-            'filterInput' => $this->getInputHandler()->render()
         ]);
     }
     

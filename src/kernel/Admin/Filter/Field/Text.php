@@ -48,9 +48,7 @@ class Text extends Field
             ->defaultAttribute('class', 'form-control '.$this->getElementClassString())
             ->defaultAttribute('placeholder', $this->getPlaceholder());
 
-        return array_merge(parent::variables(), [
-            'filterInput' => $this->getInputHandler()->render()
-        ]);
+        return parent::variables();
     }
 
     /**

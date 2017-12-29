@@ -139,7 +139,7 @@ class Filter extends Widget implements Renderable
      */
     public function condition(AbstractFilter $condition)
     {
-        $this->conditions[$condition->name()] = $condition;
+        $this->conditions[] = $condition;
 
         return $this;
     }
@@ -156,6 +156,10 @@ class Filter extends Widget implements Renderable
 
     protected function vars()
     {
+        foreach ($this->fields as $field) {
+            $field->condition();
+        }
+
         return [
             'attributes' => $this->formatAttributes(),
             'fields' => $this->fields,

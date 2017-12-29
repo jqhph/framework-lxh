@@ -29,7 +29,7 @@ class Product extends Controller
      */
     protected $grid = [
         'id' => ['show' => 0, 'sortable' => 1],
-        'name' => ['sortable' => 1, 'desc' => 0],
+        'name' => ['sortable' => 1],
         'price' => ['sortable' => 1,],
         'counter_price',
         'share_price' => ['sortable' => 1,],
@@ -69,7 +69,6 @@ class Product extends Controller
         // 构建网格报表
         $grid = $content->grid($this->grid);
         $grid->filter($filter);
-        $grid->disableDelete();
         $grid->field('order_num', '*****');
         $grid->field('price', function (&$value, &$options) {
                 return $value + 100;

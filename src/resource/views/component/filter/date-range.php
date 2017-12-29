@@ -10,5 +10,4 @@
         </div>
     </div>
 </div>
-<?php echo $filterInput; ?>
 <script>add_action(function () {$('.date-search-box input').datetimepicker({format: 'yyyy-mm-dd hh:ii:ss'})})</script>

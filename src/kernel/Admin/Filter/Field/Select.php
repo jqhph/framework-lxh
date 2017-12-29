@@ -47,9 +47,7 @@ class Select extends FormSelect
             $this->value = $value;
         }
 
-        return array_merge(parent::variables(), [
-            'filterInput' => $this->getInputHandler()->render()
-        ]);
+        return parent::variables();
 
     }
 }

@@ -286,16 +286,19 @@ class Grid implements Renderable
         }
 
         // 格式化查询数组
+        $where = [];
         foreach ($this->filter->conditions() as $condition) {
-            $condition->build();
+            if ($value = $condition->build()) {
+                $where = array_merge($where, $value);
+            }
         }
 
-        return AbstractFilter::getConditionsValue();
+        return $where;
     }
 
     protected function makeOrderContent()
     {
-        if (! $sort = I('sort')) return 'id DESC';
+        if (! $sort = I('sort')) return "`{$this->idName}` DESC";
 
         $desc = I('desc');
 

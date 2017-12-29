@@ -9,4 +9,3 @@
         echo view('admin::form.help-block')->render();
     }?>
 </div>
-<?php echo $filterInput; ?>

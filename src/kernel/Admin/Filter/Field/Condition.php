@@ -68,6 +68,10 @@ trait Condition
             return $this->conditions[$fieldName];
         }
 
+        if (! $type) {
+            $type = isset($this->defaultHandler) ? $this->defaultHandler : 'equal';
+        }
+
         $class = ucfirst($type);
 
         $class = "Lxh\\Admin\\Filter\\$class";
@@ -77,19 +81,6 @@ trait Condition
         $this->filter()->condition($this->conditions[$fieldName]);
 
         return $this->conditions[$fieldName];
-    }
-
-    /**
-     *
-     * @return AbstractFilter
-     */
-    protected function getInputHandler()
-    {
-        $name = $this->name();
-
-        $default = isset($this->defaultHandler) ? $this->defaultHandler : 'equal';
-
-        return isset($this->conditions[$name]) ? $this->conditions[$name] : ($this->condition($default));
     }
 
 }
