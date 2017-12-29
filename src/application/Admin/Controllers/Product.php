@@ -61,17 +61,23 @@ class Product extends Controller
             $filter->text('stock')->number();
             $filter->text('name');
             $filter->text('price');
-            $filter->dateRange('created_at');
+            $filter->dateRange('created_at')->between()->toTimestamp();
         });
 
         // 构建网格报表
-        $content->grid($this->grid)
-            ->filter($filter)
-            ->disableDelete()
-            ->value('order_num', '*****')
-            ->value('price', function (&$value, &$options) {
+        $grid = $content->grid($this->grid);
+        $grid->filter($filter);
+        $grid->disableDelete();
+        $grid->value('order_num', '*****');
+        $grid->value('price', function (&$value, &$options) {
                 return $value + 100;
             });
+
+        $grid->column('下班了', '真的嘛？！');
+
+        $grid->column('呵呵', function ($column) {
+            return '#' . $column->row()['id'];
+        });
 
         return $content->render();
     }

@@ -349,7 +349,7 @@ class Grid implements Renderable
     /**
      * Disable grid pagination.
      *
-     * @return $this
+     * @return static
      */
     public function disablePagination()
     {
@@ -358,12 +358,18 @@ class Grid implements Renderable
         return $this;
     }
 
+    /**
+     * @return static
+     */
     public function disableEdit()
     {
         $this->options['allowEdit'] = false;
         return $this;
     }
 
+    /**
+     * @return static
+     */
     public function disableCreate()
     {
         $this->options['allowCreate'] = false;
@@ -380,6 +386,9 @@ class Grid implements Renderable
         return $this->options['allowDelete'] === true;
     }
 
+    /**
+     * @return static
+     */
     public function disableDelete()
     {
         $this->options['allowDelete'] = false;
@@ -390,13 +399,16 @@ class Grid implements Renderable
     /**
      * Disable row selector.
      *
-     * @return Grid|mixed
+     * @return static
      */
     public function disableRowSelector()
     {
         return $this->option('useRowSelector', false);
     }
 
+    /**
+     * @return static
+     */
     public function disableUseRWD()
     {
         $this->options['useRWD'] = false;
