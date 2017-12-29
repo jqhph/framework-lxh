@@ -82,7 +82,7 @@ EOF;
     {
         $name = get_value($this->row, 'name') ?: $id;
 
-        return $name . ' -' . trans('Edit') . ' ' . trans($module);
+        return $name . ' - ' . trans($module) . trans('Edit');
     }
 
     protected function renderDelete($id, $module)
