@@ -92,6 +92,9 @@ class Grid implements Renderable
      */
     public $perPage = 20;
 
+    /**
+     * @var string
+     */
     protected $perPageKey = 'maxSize';
 
 
@@ -114,9 +117,20 @@ class Grid implements Renderable
         'usePublicJs'      => true,
     ];
 
+    /**
+     * @var string
+     */
     protected $pageString = '';
 
+    /**
+     * @var int
+     */
     protected $total = 0;
+
+    /**
+     * @var string
+     */
+    protected $idName = 'id';
 
     /**
      * Create a new grid instance.
@@ -129,14 +143,43 @@ class Grid implements Renderable
         $this->table = new Table($headers, $rows);
         $this->rows = &$rows;
 
+        $this->table->grid($this);
+
         $this->setupPerPage();
     }
 
+    /**
+     * 模块名称
+     *
+     * @return string
+     */
     public function module()
     {
         return $this->module;
     }
 
+    /**
+     * 设置或获取id键名
+     *
+     * @param string $name
+     * @return static|string
+     */
+    public function idName($name = null)
+    {
+        if ($name === null) {
+            return $this->idName;
+        }
+        $this->idName = $name;
+
+        return $this;
+    }
+
+    /**
+     * 设置表格行数据
+     *
+     * @param array $rows
+     * @return static
+     */
     public function rows(array &$rows)
     {
         $this->table()->setRows($rows);
@@ -152,7 +195,7 @@ class Grid implements Renderable
      * @param string|callable $content
      * @return static
      */
-    public function value($field, $content)
+    public function field($field, $content)
     {
         $this->table->value($field, $content);
 

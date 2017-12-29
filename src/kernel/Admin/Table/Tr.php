@@ -61,6 +61,16 @@ class Tr extends Widget
         return $this->columns;
     }
 
+    /**
+     * 获取行层级
+     *
+     * @return int
+     */
+    public function level()
+    {
+        return $this->level;
+    }
+
     public function render()
     {
         $tr = '<tr>' . $this->buildColumns($this->row) . '</tr>';
@@ -96,6 +106,9 @@ class Tr extends Widget
     protected function buildColumns(array &$row)
     {
         $td = '';
+
+        $this->buildBeforeClolumns($td, $row);
+
         $headers = $this->table->headers();
         foreach ($headers as $field => &$options) {
             if (!isset($row[$field])) {
@@ -136,14 +149,32 @@ class Tr extends Widget
             );
         }
 
-        // 新建额外的列
-        foreach ($this->columns as $column) {
+        $this->buildLastColumns($td, $row);
+
+        return $td;
+    }
+
+    protected function buildBeforeClolumns(&$td, &$row)
+    {
+        foreach ($this->columns['before'] as $column) {
             $td .= $this->buildTd(
                 $column->row($row)->render()
             );
         }
+    }
 
-        return $td;
+    /**
+     * 新建额外的列
+     *
+     * @return void
+     */
+    protected function buildLastColumns(&$td, &$row)
+    {
+        foreach ($this->columns['after'] as $column) {
+            $td .= $this->buildTd(
+                $column->row($row)->render()
+            );
+        }
     }
 
 

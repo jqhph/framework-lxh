@@ -49,7 +49,7 @@ class Actions
         $allowEdit = $this->grid->allowEdit();
         $allowDelete = $this->grid->allowDelete();
 
-        $id = get_value($this->row, 'id');
+        $id = get_value($this->row, $this->grid->idName());
         $module = $this->grid->module();
 
         if ($allowEdit && $allowDelete) {

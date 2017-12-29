@@ -3,6 +3,7 @@
 namespace Lxh\Admin\Table;
 
 use Lxh\Admin\Fields\Field;
+use Lxh\Admin\Grid;
 use Lxh\Admin\Table\Th;
 use Lxh\Admin\Table\Tr;
 use Lxh\Admin\Table\Tree;
@@ -12,6 +13,11 @@ use Lxh\Support\Arr;
 
 class Table extends Widget
 {
+    /**
+     * @var Grid
+     */
+    protected $grid;
+
     /**
      * @var string
      */
@@ -66,6 +72,8 @@ class Table extends Widget
      */
     protected $handlers = [];
 
+    protected $rowSelector = null;
+
     /**
      * Table constructor.
      *
@@ -88,6 +96,37 @@ class Table extends Widget
         $this->setHeaders($headers);
         $this->setRows($rows);
         $this->setStyle($style);
+    }
+
+    public function grid(Grid $grid = null)
+    {
+        if ($grid !== null) {
+            $this->grid = $grid;
+            return $this;
+        }
+        return $this->grid;
+    }
+
+    /**
+     * 获取id键名
+     *
+     * @return static|string
+     */
+    public function idName()
+    {
+        return $this->grid->idName();
+    }
+
+    /**
+     * @return RowSelector
+     */
+    protected function selector()
+    {
+        if (! $this->rowSelector) {
+            $this->rowSelector = new RowSelector($this);
+        }
+
+        return $this->rowSelector;
     }
 
     /**
@@ -140,6 +179,11 @@ class Table extends Widget
         $column = new Column($title, $content);
 
         return $this->columns[] = $column;
+    }
+
+    public function allowRowSelector()
+    {
+        return $this->grid->option('useRowSelector');
     }
 
     /**
@@ -223,6 +267,12 @@ class Table extends Widget
     protected function buildHeaders()
     {
         $th = '';
+
+        if ($this->allowRowSelector()) {
+            // 构建行选择器
+            $th .= $this->buildTh($this->selector()->renderHead());
+        }
+
         foreach ($this->headers as $k => &$options) {
             $th .= $this->buildTh($k, $options)->render();
         }
@@ -239,7 +289,7 @@ class Table extends Widget
      * @param array $field 配置参数
      * @return Th
      */
-    protected function buildTh($name, $options)
+    protected function buildTh($name, &$options = [])
     {
         $vars = (array)get_value($options, 'th');
 
@@ -275,7 +325,16 @@ class Table extends Widget
 
     protected function buildTr($k, &$row)
     {
-        return $this->trs[] = new Tr($this, $k, $row, $this->columns, $this->handlers);
+        $columns = [
+            'before' => [],
+            'after' => $this->columns,
+        ];
+
+        if ($this->allowRowSelector()) {
+            $columns['before'][] = $this->selector();
+        }
+
+        return $this->trs[] = new Tr($this, $k, $row, $columns, $this->handlers);
     }
 
 

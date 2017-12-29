@@ -103,7 +103,10 @@
 
 </div>
 <!-- end wrapper page -->
-<script>add_js(parse_view_name('login', 'index'))</script>
+<script>
+    add_js('validate')
+    add_js(parse_view_name('login', 'index'))
+</script>
 
 <?php
 echo load_css('toastr', 'lib/plugins/toastr');

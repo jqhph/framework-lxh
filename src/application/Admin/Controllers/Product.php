@@ -70,8 +70,8 @@ class Product extends Controller
         $grid = $content->grid($this->grid);
         $grid->filter($filter);
         $grid->disableDelete();
-        $grid->value('order_num', '*****');
-        $grid->value('price', function (&$value, &$options) {
+        $grid->field('order_num', '*****');
+        $grid->field('price', function (&$value, &$options) {
                 return $value + 100;
             });
 
