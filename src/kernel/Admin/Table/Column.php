@@ -35,7 +35,7 @@ class Column extends Widget
         if (is_callable($title) && $content === null) {
             $this->th = new Th(null, $this->defaultTitle);
 
-            return $this->content = $content;
+            return $this->content = $title;
         }
 
         $this->th = new Th(null, $title ?: $this->defaultTitle);
@@ -71,7 +71,7 @@ class Column extends Widget
     public function render()
     {
         if (is_callable($this->content)) {
-            return call_user_func($this->content, $this, $this->th);
+            return call_user_func($this->content, $this->row, $this, $this->th);
         }
         return $this->content;
     }

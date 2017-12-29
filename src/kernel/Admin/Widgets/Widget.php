@@ -4,6 +4,9 @@ namespace Lxh\Admin\Widgets;
 
 use Lxh\Support\Fluent;
 
+/**
+ * @method static class($class)
+ */
 abstract class Widget extends Fluent
 {
     /**
@@ -34,7 +37,7 @@ abstract class Widget extends Fluent
     public function formatAttributes()
     {
         $html = [];
-        foreach ($this->getAttributes() as $key => &$value) {
+        foreach ($this->attributes as $key => &$value) {
             $element = $this->attributeElement($key, $value);
             if (!is_null($element)) {
                 $html[] = $element;
@@ -42,6 +45,13 @@ abstract class Widget extends Fluent
         }
 
         return count($html) > 0 ? ' '.implode(' ', $html) : '';
+    }
+
+    public function attribute($k, $v)
+    {
+        $this->attributes[$k] = &$v;
+
+        return $this;
     }
 
     /**

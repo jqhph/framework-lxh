@@ -38,9 +38,20 @@ class Th extends Widget
     {
         $this->table = $table;
 
-        $this->name = $name;
+        $this->value($name);
 
         parent::__construct((array) $attributes);
+    }
+
+    /**
+     * @param string|callable $name
+     * @return static
+     */
+    public function value($name)
+    {
+        $this->name = is_callable($name) ? $name($this) : trans($name, 'fields');
+
+        return $this;
     }
 
     public function desc($desc)
@@ -121,7 +132,7 @@ class Th extends Widget
     {
         $attributes = $this->formatAttributes();
 
-        return "<th $attributes>" . trans($this->name, 'fields') . $this->sorter() . '</th>';
+        return "<th $attributes>" . $this->name . $this->sorter() . '</th>';
     }
 
 }

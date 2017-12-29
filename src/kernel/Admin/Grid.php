@@ -252,7 +252,7 @@ class Grid implements Renderable
 
     protected function makeOrderContent()
     {
-        if (! $sort = I('sort')) return '';
+        if (! $sort = I('sort')) return 'id DESC';
 
         $desc = I('desc');
 
@@ -438,10 +438,7 @@ class Grid implements Renderable
     protected function getTableString()
     {
         $list = $this->findList();
-
-        if (count($list) < $this->perPage) {
-            $this->perPages = '';
-        }
+        
 
         if ($this->options['allowEdit'] || $this->options['allowDelete']) {
             $this->buildActions();
@@ -454,10 +451,9 @@ class Grid implements Renderable
     {
         $action = new Actions($this);
 
-        $this->table->column($action->title(), function (Column $column) use ($action) {
-            $action->row(
-                $column->row()
-            );
+        $this->table->column($action->title(), function (array $row, Column $column) use ($action) {
+            $action->row($row);
+
             return $action->render();
         });
     }

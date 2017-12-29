@@ -11,6 +11,8 @@ namespace Lxh\Admin\Controllers;
 use Lxh\Admin\Filter;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Layout\Row;
+use Lxh\Admin\Table\Column;
+use Lxh\Admin\Table\Th;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
 
@@ -73,10 +75,20 @@ class Product extends Controller
                 return $value + 100;
             });
 
+        // 增加额外的行
         $grid->column('下班了', '真的嘛？！');
 
-        $grid->column('呵呵', function ($column) {
-            return '#' . $column->row()['id'];
+        $grid->column('呵呵', function (array $row, Column $column, Th $th) {
+            // 设置标题样式
+            $th->attribute('style', 'color:red;font-weight:600');
+            $th->class('test-class');
+
+            return '#' . $row['id'];
+        });
+
+        $grid->column(function (array $row, Column $column, Th $th) {
+            $th->value('叫什么好呢？');
+            return '演示一下而已~';
         });
 
         return $content->render();

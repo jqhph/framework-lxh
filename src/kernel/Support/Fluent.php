@@ -80,6 +80,21 @@ class Fluent implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
     }
 
     /**
+     * 追加值到某一属性中
+     *
+     * @return static
+     */
+    public function append($name, $k, $v = null)
+    {
+        if ($v === null) {
+            $this->attributes[$name][] = &$k;
+        } else {
+            $this->attributes[$name][$k] = &$v;
+        }
+
+        return $this;
+    }
+    /**
      * Convert the object into something JSON serializable.
      *
      * @return array

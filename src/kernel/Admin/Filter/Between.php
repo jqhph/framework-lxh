@@ -41,7 +41,6 @@ class Between extends AbstractFilter
         if ($this->toTimestamp) {
             $end = strtotime($end);
         }
-
         return ['<', $end];
     }
 
