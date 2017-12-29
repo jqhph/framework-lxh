@@ -29,19 +29,18 @@ class Product extends Controller
         'id' => ['show' => 0, 'sortable' => 1],
         'name' => ['sortable' => 1, 'desc' => 0],
         'price' => ['sortable' => 1,],
-        'counter_price' => [],
+        'counter_price',
         'share_price' => ['sortable' => 1,],
-        'level' => [],
-        'stock' => [],
+        'level',
+        'stock',
         'is_hot' => ['view' => 'Boolean'],
         'is_new' => ['view' => 'Boolean'],
         'calendar' => ['view' => 'Boolean'],
-        'order_num' => [],
+        'order_num',
         'desc' => ['show' => 0],
         'category_id' => ['show' => 0],
         'created_at' => ['view' => 'Date'],
         'modified_at' => ['view' => 'Date'],
-        'created_by' => ['view' => 'Date'],
     ];
 
     public function initialize()
@@ -66,7 +65,13 @@ class Product extends Controller
         });
 
         // 构建网格报表
-        $content->grid($this->grid)->filter($filter);
+        $content->grid($this->grid)
+            ->filter($filter)
+            ->disableDelete()
+            ->value('order_num', '*****')
+            ->value('price', function (&$value, &$options) {
+                return $value + 100;
+            });
 
         return $content->render();
     }

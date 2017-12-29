@@ -34,7 +34,7 @@ class Th extends Widget
      */
     protected $desc = null;
 
-    public function __construct(Table $table, $name, $attributes)
+    public function __construct(Table $table = null, $name = null, $attributes = null)
     {
         $this->table = $table;
 

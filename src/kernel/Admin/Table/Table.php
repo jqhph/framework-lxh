@@ -32,13 +32,39 @@ class Table extends Widget
      */
     protected $style = [];
 
+    /**
+     * @var array
+     */
     protected $ths = [];
 
+    /**
+     * @var array
+     */
     protected $trs = [];
 
+    /**
+     * @var int
+     */
     protected $defaultPriority = 1;
 
+    /**
+     * @var string
+     */
     protected $treeName = '';
+
+    /**
+     * 额外增加的列
+     *
+     * @var array
+     */
+    protected $columns = [];
+
+    /**
+     * 字段渲染处理器
+     *
+     * @var array
+     */
+    protected $handlers = [];
 
     /**
      * Table constructor.
@@ -49,12 +75,10 @@ class Table extends Widget
                         'view' => '处理值显示方法参数',
                         'th' => '头部属性配置',
                         'options' => ['view的配置参数'],
-                        'handler' => '使用自定义处理器，此参数需要传递一个可回调变量',
                         'sortable' => '是否支持排序',
                         'desc' => '默认显示倒序，注意只有当sortable设置为true才有效，且不能多个字段同时设置为true',
                         'show' => '默认是显示，传0或false则隐藏字段，注意当使用RWD-table插件时此值才有效'
                     ],
-                    '字段名' => 使用自定义处理器，此参数需要传递一个可回调变量
                 ]
      * @param array $rows
      * @param array $style
@@ -66,7 +90,27 @@ class Table extends Widget
         $this->setStyle($style);
     }
 
-    // 使用层级树结构
+    /**
+     * 设置自定义处理字段渲染方法
+     *
+     * @param string $field
+     * @param string|callable $content
+     * @return static
+     */
+    public function value($field, $content)
+    {
+        $this->handlers[$field] = $content;
+
+        return $this;
+    }
+
+
+    /**
+     * 使用层级树结构
+     *
+     * @param string $name 字段名
+     * @return static
+     */
     public function useTree($name)
     {
         $this->treeName = $name;
@@ -74,9 +118,28 @@ class Table extends Widget
         return $this;
     }
 
+    /**
+     * 树状字段键名
+     *
+     * @return string
+     */
     public function treeName()
     {
         return $this->treeName;
+    }
+
+    /**
+     * 增加额外的列
+     *
+     * @param string|callable $title 标题或回调函数
+     * @param string|callable $content 内容或回调函数
+     * @return Column
+     */
+    public function column($title, $content = null)
+    {
+        $column = new Column($title, $content);
+
+        return $this->columns[] = $column;
     }
 
     /**
@@ -90,7 +153,30 @@ class Table extends Widget
     {
         $this->headers = &$headers;
 
+        if ($this->headers) {
+            $this->normalizeHeaders();
+        }
+
         return $this;
+    }
+
+    /**
+     * 格式化数组
+     *
+     * @return array
+     */
+    protected function normalizeHeaders()
+    {
+        $new = [];
+        foreach ($this->headers as $k => &$v) {
+            if (is_int($k) && is_string($v)) {
+                if (! $v) continue;
+                $new[$v] = '';
+            } else {
+                $new[$k] = $v;
+            }
+        }
+        $this->headers = &$new;
     }
 
     public function headers()
@@ -140,6 +226,10 @@ class Table extends Widget
         foreach ($this->headers as $k => &$options) {
             $th .= $this->buildTh($k, $options)->render();
         }
+
+        foreach ($this->columns as $column) {
+            $th .= $column->title();
+        }
         return $th;
     }
 
@@ -185,7 +275,7 @@ class Table extends Widget
 
     protected function buildTr($k, &$row)
     {
-        return $this->trs[] = new Tr($this, $k, $row);
+        return $this->trs[] = new Tr($this, $k, $row, $this->columns, $this->handlers);
     }
 
 

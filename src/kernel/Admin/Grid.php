@@ -4,6 +4,8 @@ namespace Lxh\Admin;
 
 use Lxh\Admin\Fields\Button;
 use Lxh\Admin\Filter\AbstractFilter;
+use Lxh\Admin\Table\Actions;
+use Lxh\Admin\Table\Column;
 use Lxh\Admin\Table\Table;
 use Lxh\Admin\Widgets\Box;
 use Lxh\Contracts\Support\Renderable;
@@ -21,13 +23,6 @@ class Grid implements Renderable
      * @var Model
      */
     protected $model;
-
-    /**
-     * Collection of all grid columns.
-     *
-     * @var array
-     */
-    protected $columns;
 
     /**
      * @var Table
@@ -137,10 +132,43 @@ class Grid implements Renderable
         $this->setupPerPage();
     }
 
+    public function module()
+    {
+        return $this->module;
+    }
+
     public function rows(array &$rows)
     {
         $this->table()->setRows($rows);
         $this->rows = &$rows;
+
+        return $this;
+    }
+
+    /**
+     * 设置自定义处理字段渲染方法
+     *
+     * @param string $field
+     * @param string|callable $content
+     * @return static
+     */
+    public function value($field, $content)
+    {
+        $this->table->value($field, $content);
+
+        return $this;
+    }
+
+    /**
+     * 增加额外的列
+     *
+     * @param string|callable $title 标题或回调函数
+     * @param string|callable $content 内容或回调函数
+     * @return static
+     */
+    public function column($title, $content = null)
+    {
+        $this->table->column($title, $content);
 
         return $this;
     }
@@ -153,12 +181,10 @@ class Grid implements Renderable
             'view' => '处理值显示方法参数',
             'th' => '头部属性配置',
             'options' => ['view的配置参数'],
-            'handler' => '使用自定义处理器，此参数需要传递一个可回调变量',
             'sortable' => '是否支持排序',
             'desc' => '默认显示倒序，注意只有当sortable设置为true才有效，且不能多个字段同时设置为true',
             'show' => '默认是显示，传0或false则隐藏字段，注意当使用RWD-table插件时此值才有效'
         ],
-        '字段名' => 使用自定义处理器，此参数需要传递一个可回调变量
     ]
     */
     public function headers(array $headers)
@@ -332,19 +358,10 @@ class Grid implements Renderable
         return $this;
     }
 
-    public function allowEdit()
-    {
-        return $this->options['allowEdit'];
-    }
     public function disableEdit()
     {
         $this->options['allowEdit'] = false;
         return $this;
-    }
-
-    public function allowCreate()
-    {
-        return $this->options['allowCreate'];
     }
 
     public function disableCreate()
@@ -353,9 +370,14 @@ class Grid implements Renderable
         return $this;
     }
 
+    public function allowEdit()
+    {
+        return $this->options['allowEdit'] === true;
+    }
+
     public function allowDelete()
     {
-        return $this->options['allowDelete'];
+        return $this->options['allowDelete'] === true;
     }
 
     public function disableDelete()
@@ -372,13 +394,7 @@ class Grid implements Renderable
      */
     public function disableRowSelector()
     {
-
         return $this->option('useRowSelector', false);
-    }
-
-    public function useRWD()
-    {
-        return $this->options['useRWD'];
     }
 
     public function disableUseRWD()
@@ -407,7 +423,7 @@ class Grid implements Renderable
         return $this;
     }
 
-    public function render()
+    protected function getTableString()
     {
         $list = $this->findList();
 
@@ -415,8 +431,31 @@ class Grid implements Renderable
             $this->perPages = '';
         }
 
+        if ($this->options['allowEdit'] || $this->options['allowDelete']) {
+            $this->buildActions();
+        }
+
+        return $this->table->setRows($list)->render();
+    }
+
+    protected function buildActions()
+    {
+        $action = new Actions($this);
+
+        $this->table->column($action->title(), function (Column $column) use ($action) {
+            $action->row(
+                $column->row()
+            );
+            return $action->render();
+        });
+    }
+
+    public function render()
+    {
+        $table = $this->getTableString();
+
         $vars = array_merge([
-            'table' => $this->table->setRows($list)->render(),
+            'table' => &$table,
             'page'  => &$this->pageString,
             'pages' => &$this->perPages,
             'url'   => $this->formatUrl(),

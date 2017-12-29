@@ -14,19 +14,51 @@ class Tr extends Widget
 {
     use Builder;
 
+    /**
+     * @var \Lxh\Admin\Table\Table
+     */
     protected $table;
 
+    /**
+     * 层级
+     *
+     * @var int
+     */
     protected $level = 1;
 
+    /**
+     * 行数据
+     *
+     * @var array
+     */
     protected $row;
 
-    public function __construct(Table $table, $level, &$row, $attributes = [])
+    /**
+     * 额外的字段
+     *
+     * @var array
+     */
+    protected $columns = [];
+
+    /**
+     * 字段渲染处理器
+     *
+     * @var array
+     */
+    protected $handlers = [];
+
+    public function __construct(Table $table, $level, &$row, array $columns = [], array $handlers = [])
     {
         $this->table = $table;
         $this->level = $level;
         $this->row = &$row;
+        $this->columns = &$columns;
+        $this->handlers = &$handlers;
+    }
 
-        parent::__construct((array) $attributes);
+    public function columns()
+    {
+        return $this->columns;
     }
 
     public function render()
@@ -72,19 +104,23 @@ class Tr extends Widget
 
             $item = &$row[$field];
 
-            if (is_callable($options)) {
-                // 自定义处理
-                $td .= $this->buildTd(call_user_func($options, $field, $item));
+            if (isset($this->handlers[$field])) {
+                // 自定义处理器
+                if (is_callable($this->handlers[$field])) {
+                    $td .= $this->buildTd(
+                        call_user_func($this->handlers[$field], $item, get_value($options, 'options')),
+                        $options
+                    );
+                } else {
+                    $td .= $this->buildTd(
+                        $this->handlers[$field],
+                        $options
+                    );
+                }
                 continue;
             }
 
-            if (isset($options['handler']) && is_callable($options['handler'])) {
-                // 自定义处理
-                $td .= $this->buildTd(call_user_func($options['handler'], $field, $item));
-                continue;
-            }
-
-            if (!is_array($options)) {
+            if (! $options || ! is_array($options)) {
                 $td .= $this->buildTd($item);
                 continue;
             }
@@ -99,6 +135,14 @@ class Tr extends Widget
                 $options
             );
         }
+
+        // 新建额外的列
+        foreach ($this->columns as $column) {
+            $td .= $this->buildTd(
+                $column->row($row)->render()
+            );
+        }
+
         return $td;
     }
 

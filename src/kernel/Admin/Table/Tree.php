@@ -66,7 +66,7 @@ class Tree
 
     protected function buildTr($k, &$row)
     {
-        return new Tr($this->tr->table(), $k, $row);
+        return new Tr($this->tr->table(), $k, $row, $this->tr->columns());
     }
 
     public function render()
