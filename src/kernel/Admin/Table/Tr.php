@@ -35,8 +35,9 @@ class Tr extends Widget
 
         $name = $this->table->treeName();
 
-        if (!$name) return $tr;
-        if (empty($this->row[$name]) || !is_array($this->row[$name])) return $tr;
+        if (!$name || empty($this->row[$name]) || !is_array($this->row[$name])) {
+            return $tr;
+        }
 
         $tr .= $this->buildTree($name, $this->row[$name])->render();
 
@@ -64,23 +65,38 @@ class Tr extends Widget
     {
         $td = '';
         $headers = $this->table->headers();
-        foreach ($headers as $k => &$options) {
-            if (!isset($row[$k])) continue;
-
-            $item = &$row[$k];
-
-            if (!is_array($headers[$k])) {
-                $td .= $this->buildTd($item, []);
+        foreach ($headers as $field => &$options) {
+            if (!isset($row[$field])) {
                 continue;
             }
-            $view = get_value($headers[$k], 'view');
+
+            $item = &$row[$field];
+
+            if (is_callable($options)) {
+                // 自定义处理
+                $td .= $this->buildTd(call_user_func($options, $field, $item));
+                continue;
+            }
+
+            if (isset($options['handler']) && is_callable($options['handler'])) {
+                // 自定义处理
+                $td .= $this->buildTd(call_user_func($options['handler'], $field, $item));
+                continue;
+            }
+
+            if (!is_array($options)) {
+                $td .= $this->buildTd($item);
+                continue;
+            }
+
+            $view = get_value($options, 'view');
             if (! $view) {
-                $td .= $this->buildTd($item, $headers[$k]);
+                $td .= $this->buildTd($item, $options);
                 continue;
             }
             $td .= $this->buildTd(
-                $this->renderFiledView($view, $k, $item, get_value($headers[$k], 'options')),
-                $headers[$k]
+                $this->renderFiledView($view, $field, $item, get_value($options, 'options')),
+                $options
             );
         }
         return $td;
@@ -91,21 +107,21 @@ class Tr extends Widget
      *
      * @return Field
      */
-    protected function renderFiledView($view, $name, $value, $vars)
+    protected function renderFiledView($view, $field, $value, $vars)
     {
         $method = 'build' . $view;
         if (method_exists($this, $method)) {
-            return $this->$method($name, $value, $vars);
+            return $this->$method($field, $value, $vars);
         }
 
         $view = str_replace('.', '\\', $view);
 
         $class  = "Lxh\\Admin\\Fields\\{$view}";
 
-        return (new $class($name, $value, $vars))->render();
+        return (new $class($field, $value, $vars))->render();
     }
 
-    protected function buildTd($value, $options)
+    protected function buildTd($value, &$options = [])
     {
         $priority = $this->table->getPriorityFromOptions($options);
 

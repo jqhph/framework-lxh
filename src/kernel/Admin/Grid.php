@@ -145,6 +145,22 @@ class Grid implements Renderable
         return $this;
     }
 
+    /**
+     *
+     * @param array $headers 支持参数说明
+    [
+        '字段名' => [
+            'view' => '处理值显示方法参数',
+            'th' => '头部属性配置',
+            'options' => ['view的配置参数'],
+            'handler' => '使用自定义处理器，此参数需要传递一个可回调变量',
+            'sortable' => '是否支持排序',
+            'desc' => '默认显示倒序，注意只有当sortable设置为true才有效，且不能多个字段同时设置为true',
+            'show' => '默认是显示，传0或false则隐藏字段，注意当使用RWD-table插件时此值才有效'
+        ],
+        '字段名' => 使用自定义处理器，此参数需要传递一个可回调变量
+    ]
+    */
     public function headers(array $headers)
     {
         $this->table->setHeaders($headers);

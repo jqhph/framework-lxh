@@ -219,8 +219,9 @@ class Form implements Renderable
     }
 
     /**
-     * 使用编辑模块公共js
+     * 使用编辑模块js
      *
+     * @param string $js 需要异步加载的js
      * @return static
      */
     public function useEditScript($js = 'view/public-detail')
