@@ -190,16 +190,7 @@ class Menu extends Controller
         $content->header(trans('Menu'));
         $content->description(trans('Menu list'));
 
-        $content->row(function (Row $row) {
-            $row->column(12, $this->grid()->render());
-        });
-
-        return $content->render();
-    }
-
-    protected function grid()
-    {
-        $grid = new Grid([
+        $grid = $content->grid([
             'id' => ['show' => 0, 'sortable' => 1, 'desc' => 1],
             'icon' => ['view' => 'Icon'],
             'name' => [],
@@ -208,12 +199,14 @@ class Menu extends Controller
             'show' => ['view' => 'Boolean'],
             'type' => ['view' => 'Enum'],
             'priority' => [],
-        ],  resolve('acl-menu')->all());
+        ]);
 
-        $grid->table()->useTree('subs');
-        $grid->disablePagination();
+        $rows = resolve('acl-menu')->all();
 
-        return $grid;
+        $grid->rows($rows)->disablePagination()->table()->useTree('subs');
+
+        return $content->render();
     }
+
 
 }

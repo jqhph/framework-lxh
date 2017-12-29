@@ -19,4 +19,9 @@ trait Builder
         return trans_option($value, $name);
     }
 
+    protected function buildSelect($name, $value, $vars)
+    {
+        return trans_option($value, $name);
+    }
+
 }

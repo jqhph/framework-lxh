@@ -13,11 +13,11 @@
     <?php
     // App css
     echo load_css('bootstrap.min');
-    echo load_css('menu-light');
+    echo load_css('menu-light.min');
 
 //    echo load_css('components');
-    echo load_css('icons');
-    echo load_css('core');
+    echo load_css('icon.min');
+    echo load_css('core.min');
 
     echo load_js('util');
     echo load_js('jquery.min');
@@ -55,7 +55,7 @@
     </script>
     <!-- END wrapper -->
     <?php
-    echo load_css('toastr', 'lib/plugins/toastr');
+    echo load_css('toastr.min', 'lib/plugins/toastr');
     echo load_js('toastr.min', 'plugins/toastr');
     ?>
 </div>
@@ -66,8 +66,8 @@
 
 <?php
 //echo load_js('fastclick');
-echo load_js('waves');
-echo load_js('jquery.slimscroll');
+echo load_js('waves.min');
+echo load_js('jquery.slimscroll.min');
 ?>
 
 <script>

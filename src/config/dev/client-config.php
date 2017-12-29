@@ -37,40 +37,24 @@ $config['sea-config'] = [
     ],
     // 设置别名，方便调用
     'alias' => [
-//        'jquery' => 'lib/js/jquery.min',
         'parsley' => 'lib/plugins/parsleyjs/dist/parsley.min',
-        'container' => 'lib/js/container',
+        'container' => 'lib/js/container.min',
         'toastr' => 'lib/plugins/toastr/toastr.min',
-        'core' => 'lib/js/jquery.core',
+        'core' => 'lib/js/jquery.core.min',
         'blade' => 'lib/js/blade',
-        'validate' => 'lib/js/validate',
+        'validate' => 'lib/js/validate.min',
         'router' => 'lib/js/router',
     ]
 ];
 
 // 引入默认css
 $config['public-css'] = [
-//    'lib/plugins/toastr/toastr.min.css',
-//    's/css/core.css',
-//    's/css/components.css',
-//    's/css/icons.css',
-//    's/css/pages.css',
-    's/css/responsive.css'
+    's/css/responsive.min.css'
 ];
 
 // 引入默认js
 $config['public-js'] = [
-//    'lib/js/detect',
-//    'lib/js/fastclick',
-    'validate',
-//    'toastr',
     'container',
-//    'core',
-//    'lib/js/bootstrap.min',
-//    'lib/js/jquery.app',
-//    'lib/js/jquery.slimscroll',
-//    'lib/pages/jquery.dashboard'
-//    'blade',
 ];
 
 return $config;

@@ -137,6 +137,14 @@ class Grid implements Renderable
         $this->setupPerPage();
     }
 
+    public function rows(array &$rows)
+    {
+        $this->table()->setRows($rows);
+        $this->rows = &$rows;
+
+        return $this;
+    }
+
     public function headers(array $headers)
     {
         $this->table->setHeaders($headers);

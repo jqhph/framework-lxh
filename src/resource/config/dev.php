@@ -226,7 +226,7 @@ return array (
     ),
     'guzzle' => 
     array (
-      'timeout' => 3.0,
+      'timeout' => 3,
     ),
   ),
   'client-config' => 
@@ -247,22 +247,21 @@ return array (
       'alias' => 
       array (
         'parsley' => 'lib/plugins/parsleyjs/dist/parsley.min',
-        'container' => 'lib/js/container',
+        'container' => 'lib/js/container.min',
         'toastr' => 'lib/plugins/toastr/toastr.min',
-        'core' => 'lib/js/jquery.core',
+        'core' => 'lib/js/jquery.core.min',
         'blade' => 'lib/js/blade',
-        'validate' => 'lib/js/validate',
+        'validate' => 'lib/js/validate.min',
         'router' => 'lib/js/router',
       ),
     ),
     'public-css' => 
     array (
-      0 => 's/css/responsive.css',
+      0 => 's/css/responsive.min.css',
     ),
     'public-js' => 
     array (
-      0 => 'validate',
-      1 => 'container',
+      0 => 'container',
     ),
   ),
   'mail' => 
@@ -288,8 +287,8 @@ return array (
       ),
     ),
   ),
-  'js-version' => 1514291849,
-  'css-version' => 1514291849,
+  'js-version' => 1514519758,
+  'css-version' => 1514519758,
   'language' => 'zh',
   'replica-client-config' => 
   array (

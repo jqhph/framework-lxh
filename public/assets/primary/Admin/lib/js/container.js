@@ -10,42 +10,42 @@ window.Lxh = function (options) {
      * @constructor
      */
     function Container(options) {
-        var self = this, config, cache, store, user, language, view, ui, env, tpl, util, urlMaker, iframe, tab
+        var self = this, config, cache, store, user, language, view, ui, env, tpl, util, urlMaker, iframe, tab;
 
         function init() {
             // 配置文件管理
-            config = new Store(options.config || {})
+            config = new Store(options.config || {});
 
             // 工具函数管理
-            util = new Util()
+            util = new Util();
 
             // 缓存管理
-            cache = options.cache
+            cache = options.cache;
 
             // 存储仓库
-            store = new Store()
+            store = new Store();
 
             // 登陆用户信息管理
-            user = new Store(options.users || {})
+            user = new Store(options.users || {});
 
             // 语言包管理
-            language = new Language(self, cache, config)
+            language = new Language(self, cache, config);
 
             // ui组件
-            ui = new UI()
+            ui = new UI();
 
             // 环境管理
-            env = new Env()
+            env = new Env();
 
             // 模板管理器
-            tpl = new Tpl(self, cache, config)
+            tpl = new Tpl(self, cache, config);
 
             // 视图管理
-            view = new View(self, tpl)
+            view = new View(self, tpl);
 
-            iframe = new Iframe(self)
+            iframe = new Iframe(self);
 
-            tab = new Tab(iframe)
+            tab = new Tab(iframe);
 
             urlMaker = new UrlMaker(self)
         }
@@ -56,7 +56,7 @@ window.Lxh = function (options) {
                 return window.parent.document
             }
             return document
-        }
+        };
 
         /**
          * 获取控制器名称
@@ -64,8 +64,8 @@ window.Lxh = function (options) {
          * @returns {null|*|Chart.Controller}
          */
         this.controllerName = function () {
-            return options.controller
-        }
+            return options.controller;
+        };
 
         /**
          * 获取项目模块名称
@@ -74,7 +74,7 @@ window.Lxh = function (options) {
          */
         this.moduleName = function () {
             return options.module
-        }
+        };
 
         /**
          * 获取动作名称
@@ -83,7 +83,7 @@ window.Lxh = function (options) {
          */
         this.actionName = function () {
             return options.action
-        }
+        };
 
         /**
          * 获取请求参数
@@ -92,7 +92,7 @@ window.Lxh = function (options) {
          */
         this.requestParams = function () {
             return options.params
-        }
+        };
 
         /**
          *
@@ -100,7 +100,7 @@ window.Lxh = function (options) {
          */
         this.config = function () {
             return config
-        }
+        };
 
         /**
          *
@@ -108,7 +108,7 @@ window.Lxh = function (options) {
          */
         this.cache = function () {
             return cache
-        }
+        };
 
         /**
          *
@@ -116,7 +116,7 @@ window.Lxh = function (options) {
          */
         this.store = function () {
             return store
-        }
+        };
 
         /**
          *
@@ -124,7 +124,7 @@ window.Lxh = function (options) {
          */
         this.user = function () {
             return user
-        }
+        };
 
         /**
          *
@@ -132,7 +132,7 @@ window.Lxh = function (options) {
          */
         this.language = function () {
             return language
-        }
+        };
 
         /**
          *
@@ -140,7 +140,7 @@ window.Lxh = function (options) {
          */
         this.view = function () {
             return view
-        }
+        };
 
         /**
          * 
@@ -148,7 +148,7 @@ window.Lxh = function (options) {
          */
         this.ui = function () {
             return ui
-        }
+        };
 
         /**
          *
@@ -156,7 +156,7 @@ window.Lxh = function (options) {
          */
         this.env = function () {
             return env
-        }
+        };
 
         /**
          *
@@ -164,11 +164,11 @@ window.Lxh = function (options) {
          */
         this.tpl = function () {
             return tpl
-        }
+        };
 
         this.util = function () {
             return util
-        }
+        };
 
         /**
          * url管理
@@ -177,18 +177,18 @@ window.Lxh = function (options) {
          */
         this.url = function () {
             return urlMaker
-        }
+        };
 
         this.iframe = function () {
             return iframe
-        }
+        };
 
         this.tab = function () {
             return tab
-        }
+        };
 
         // 初始化
-        init()
+        init();
     }
 
     Container.prototype = {
@@ -196,7 +196,7 @@ window.Lxh = function (options) {
         statusCode: {
             success: 10001,
             failed: 10002,
-            invalid_arguments: 10003,
+            invalid_arguments: 10003
         },
 
         // 设置状态码
@@ -212,7 +212,7 @@ window.Lxh = function (options) {
          * @returns {Container}
          */
         set: function (name, val) {
-            this.store().set(name, val)
+            this.store().set(name, val);
             return this
         },
 
@@ -223,7 +223,7 @@ window.Lxh = function (options) {
          * @param {*}
          */
         get: function (name, $def) {
-            return this.store().get(name, $def)
+            return this.store().get(name, $def);
         },
 
         /**
@@ -234,7 +234,7 @@ window.Lxh = function (options) {
          */
         redirect: function (routePath, timeout) {
             if (! timeout) {
-                return window.location = routePath
+                return window.location = routePath;
             }
             setTimeout(function () {
                 window.location = routePath
@@ -249,8 +249,8 @@ window.Lxh = function (options) {
          * @returns {Model}
          */
         createModel: function (name, module) {
-            name = name || this.controllerName()
-            return new Model(name, module, this)
+            name = name || this.controllerName();
+            return new Model(name, module, this);
         },
 
         /**
@@ -283,57 +283,57 @@ window.Lxh = function (options) {
         validator: function (options, call, selector) {
             return validator(options, call, selector)
         }
-    }
+    };
 
     function Tab(iframe) {
-        var $top = parent.$top || ''
+        var $top = parent.$top || '';
         // 切换显示tab页
         this.switch = function (name) {
             $top.tab.switch(name)
-        }
+        };
 
         this.show = function (name) {
             $top.tab.show(name)
-        },
+        };
 
         // 打开一个新的tab页
         this.open = function (name, url, label) {
             $top.tab.open(name, url, label)
-        }
+        };
 
         // 关闭tab窗
         this.close = function ($this) {
             $top.tab.close($this)
-        }
+        };
 
         this.removeActive = function () {
             $top.tab.removeActive(name)
-        }
+        };
 
         // 初始化首页tab页和iframe
         function init() {
-            $top && $top.iframe.height($('#wrapper-home iframe', window.parent.document))
+            $top && $top.iframe.height($('#wrapper-home iframe', window.parent.document));
 
-            var $thisTab =  $('[data-action="tab-home"]', window.parent.document)
+            var $thisTab =  $('[data-action="tab-home"]', window.parent.document);
 
             $thisTab.click(function () {
                 $top && $top.tab.switch('home')
-            })
+            });
 
             $thisTab.find('.tab-close').click(function () {
                 $top && $top.tab.close('home')
-            })
+            });
 
             // 菜单按钮点击事件
             $('[data-action="switch-menu"]').click(function () {
                 var $this = $(this),
                     id = $this.data('id'),
                     url = $this.data('url'),
-                    label = $this.data('name')
+                    label = $this.data('name');
 
                 if (! url) return false;
 
-                $top && $top.tab.open(id, url, label)
+                $top && $top.tab.open(id, url, label);
             })
         }
 
@@ -341,26 +341,26 @@ window.Lxh = function (options) {
     }
 
     function Iframe(container) {
-        var $top = parent.$top || ''
+        var $top = parent.$top || '';
         // 切换显示iframe
         this.switch = function (name) {
             $top.iframe.switch(name)
-        }
+        };
 
         // 当前iframe弹窗编号
         this.current = function () {
             return $top.iframe.current()
-        }
+        };
 
         // 移除iframe
         this.remove = function (name) {
             $top.iframe.remove(name)
-        }
+        };
 
         // 创建iframe弹窗
         this.create = function (name, url) {
             $top.iframe.create(name)
-        }
+        };
 
         // 自动设置高度
         this.height = function ($this) {
@@ -369,13 +369,13 @@ window.Lxh = function (options) {
 
         // 计算当前iframe弹窗高度
         this.currentHeight = function () {
-            var $this = $('#wrapper-'+ $top.iframe.current() +' iframe', window.parent.document)
-            $top.iframe.height($this)
-        }
+            var $this = $('#wrapper-'+ $top.iframe.current() +' iframe', window.parent.document);
+            $top.iframe.height($this);
+        };
 
         this.hide = function () {
             $top.iframe.hide(name)
-        }
+        };
     }
 
     /*
@@ -396,11 +396,11 @@ window.Lxh = function (options) {
         return {
             // 去除左右两边的字符串，默认去除空格
             trim: function (str, symbol) {
-                symbol = symbol || "\\s"
+                symbol = symbol || "\\s";
 
-                var reg = new RegExp('(^' + symbol + '*)|(' + symbol + '*$)', 'g')
+                var reg = new RegExp('(^' + symbol + '*)|(' + symbol + '*$)', 'g');
 
-                return str.replace(reg, "")
+                return str.replace(reg, "");
             },
 
             /**
@@ -478,14 +478,14 @@ window.Lxh = function (options) {
     function UrlMaker(container) {
         var store = {
             prefix: '/admin'
-        }
+        };
 
         return {
             makeAction: function (a, c) {
-                a = a || container.actionName()
-                c = c || container.controllerName()
+                a = a || container.actionName();
+                c = c || container.controllerName();
 
-                return store.prefix + '/' + to_under_score(c) + '/' + to_under_score(a)
+                return store.prefix + '/' + to_under_score(c) + '/' + to_under_score(a);
             },
 
             makeHome: function () {
@@ -513,16 +513,16 @@ window.Lxh = function (options) {
              * @returns {*}
              */
             loading: function (selector, timeout) {
-                selector = selector || '.loading'
+                selector = selector || '.loading';
                 if (timeout === false) {
-                    return close(selector)
+                    return close(selector);
                 }
-                return show(selector, timeout)
+                return show(selector, timeout);
                 function show(selector, timeout) {
                     var $portlet = $(selector).closest(selector);
                     // This is just a simulation, nothing is going to be reloaded
-                    $portlet.append('<div class="panel-disabled"><div class="loader-1"></div></div>')
-                    if (!timeout) return
+                    $portlet.append('<div class="panel-disabled"><div class="loader-1"></div></div>');
+                    if (!timeout) return;
                     setTimeout(function () {
                         close(selector)
                     }, timeout)
@@ -542,10 +542,10 @@ window.Lxh = function (options) {
              * @returns {*}
              */
             notify: function (options) {
-                options = options || {}
-                options.closeButton = options.closeButton || true
-                options.positionClass = options.positionClass || 'toast-top-right'
-                options.showMethod = options.showMethod || 'slideDown'
+                options = options || {};
+                options.closeButton = options.closeButton || true;
+                options.positionClass = options.positionClass || 'toast-top-right';
+                options.showMethod = options.showMethod || 'slideDown';
                 //     closeButton: true,
                 //     debug: false,
                 //     newestOnTop: true,
@@ -558,59 +558,59 @@ window.Lxh = function (options) {
                 //     showMethod: 'slideDown',
                 //     hideMethod: 'fadeOut',
                 //     //timeOut: 3000,
-                var toastr = window.toastr || window.top.toastr
-                toastr.options = options
-                return toastr
+                var toastr = window.toastr || window.top.toastr;
+                toastr.options = options;
+                return toastr;
             },
 
             // 弹窗
             modal: function (options, call) {
-                options = options || {}
-                options.closeButton = options.closeButton || true
-                options.class = options.class || 'modal-container'
+                options = options || {};
+                options.closeButton = options.closeButton || true;
+                options.class = options.class || 'modal-container';
 
-                options.title = trans(options.title) || ''
-                options.content = options.content || ''
-                options.saveButton = options.saveButton || true
-                options.saveButtonClass = options.saveButtonClass || 'btn-primary'
-                options.buttons = options.buttons || {}
-                options.closeButtonLabel = trans(options.closeButtonLabel) || trans('Close')
-                options.saveButtonLabel = trans(options.saveButtonLabel) || trans('Save')
-                options.tpl = options.tpl || $('#modal-basic').text()
+                options.title = trans(options.title) || '';
+                options.content = options.content || '';
+                options.saveButton = options.saveButton || true;
+                options.saveButtonClass = options.saveButtonClass || 'btn-primary';
+                options.buttons = options.buttons || {};
+                options.closeButtonLabel = trans(options.closeButtonLabel) || trans('Close');
+                options.saveButtonLabel = trans(options.saveButtonLabel) || trans('Save');
+                options.tpl = options.tpl || $('#modal-basic').text();
 
-                var blade = new Blade(options.tpl, options)
+                var blade = new Blade(options.tpl, options);
 
-                var $container = $('div.' + options.class)
+                var $container = $('div.' + options.class);
 
                 if ($container.length > 0) {
-                    return $container.modal()
+                    return $container.modal();
                 }
 
-                $('body').append(blade.fetch())
+                $('body').append(blade.fetch());
 
-                $container = $('div.' + options.class)
+                $container = $('div.' + options.class);
 
-                $container.find('button[data-action="modal-basic-close"]').click(close)
+                $container.find('button[data-action="modal-basic-close"]').click(close);
 
-                var modal = $container.modal()
+                var modal = $container.modal();
 
                 if (call) {
                     $container.find('button[data-action="modal-basic-save"]').click(function () {
-                        call(modal)
-                    })
+                        call(modal);
+                    });
                 }
 
                 // 添加close事件
-                modal.close = close
+                modal.close = close;
 
-                return modal
+                return modal;
 
                 function close() {
-                    $('.modal-backdrop').remove()
-                    $container.remove()
-                    $('body').removeClass('modal-open')
+                    $('.modal-backdrop').remove();
+                    $container.remove();
+                    $('body').removeClass('modal-open');
                 }
-            },
+            }
         }
     }
     // --------------------------------------UI END-----------------------------------------------
@@ -627,7 +627,7 @@ window.Lxh = function (options) {
     {
         var store = {
             tpl: tpl
-        }
+        };
 
         /**
          * 创建一个视图
@@ -636,7 +636,7 @@ window.Lxh = function (options) {
         this.create = function (viewname, options) {
 
             return this
-        }
+        };
 
         /**
          * 加载视图并初始化
@@ -645,7 +645,7 @@ window.Lxh = function (options) {
          */
         this.then = function (callback) {
 
-        }
+        };
 
         /**
          *
@@ -657,7 +657,7 @@ window.Lxh = function (options) {
 
                 var view = callback.call(arguments)
             })
-        }
+        };
     }
     // --------------------------------------View END-----------------------------------------------
 
@@ -718,39 +718,38 @@ window.Lxh = function (options) {
      * @returns {FormValidator}
      */
     function validator(options, call, selector) {
-        selector = selector || ('.' + $lxh.controllerName() + '-form')
+        selector = selector || ('.' + $lxh.controllerName() + '-form');
 
-        var self = this
+        var self = this;
 
         $(selector).submit(function () {
             return false;
-        })
+        });
 
-        var $form = document.querySelector(selector)
+        var $form = document.querySelector(selector);
         var v = new FormValidator($form, options, function (errors, event) {
             if (errors.length < 1 && (event === 'submit' || event.type == 'submit')) {
                 // 验证成功后回调
-                typeof call != 'function' || call(event)
+                typeof call != 'function' || call(event);
             }
         }, validate_call);
-        v.selector = selector
+        v.selector = selector;
 
         // 注册自定义验证规则
-        register_rules(v)
+        register_rules(v);
 
-        add_events(options)
+        add_events(options);
 
         // 给表单元素添加focus和keyup事件
         function add_events(options) {
             for (var key in options) {
                 if (options.hasOwnProperty(key)) {
                     var field = options[key] || {},
-                        element = $form[field.name]
+                        element = $form[field.name];
 
                     if (element && element !== undefined) {
                         element.onfocus = element.onkeyup = function (e) {
-
-                            v._validateForm(e)
+                            v._validateForm(e);
                         }
                     }
                 }
@@ -759,11 +758,11 @@ window.Lxh = function (options) {
 
         // 显示错误信息
         function validate_call(field, errorObject) {
-            var $e = $(field.element)
+            var $e = $(field.element);
             // 移除表单错误
-            remove_error($e, field.name)
+            remove_error($e, field.name);
             if (errorObject) {
-                display_error_msg(field.name, $e, errorObject.message)
+                display_error_msg(field.name, $e, errorObject.message);
             }
         }
 
@@ -775,10 +774,10 @@ window.Lxh = function (options) {
          * @param msg  错误信息
          */
         function display_error_msg (name, e, msg) {
-            e = e.eq(0)
-            name = name.replace('[]', '')
-            msg = trans(msg)
-            e.addClass('parsley-error')
+            e = e.eq(0);
+            name = name.replace('[]', '');
+            msg = trans(msg);
+            e.addClass('parsley-error');
             e.parent().parent().prepend('<ul class="parsley-errors-list filled validator-error-' + name + '"><li class="parsley-required">' + msg + '</li></ul>')
         }
 
@@ -789,9 +788,9 @@ window.Lxh = function (options) {
          * @param name 表单name属性
          */
         function remove_error($e, name) {
-            name = name.replace('[]', '')
-            $e.removeClass('parsley-error')
-            $('.validator-error-' + name).remove()
+            name = name.replace('[]', '');
+            $e.removeClass('parsley-error');
+            $('.validator-error-' + name).remove();
         }
 
         /**
@@ -823,7 +822,7 @@ window.Lxh = function (options) {
             expireTime = config.get('cache-expire'),
             cacheKey = 'tpls',
             useCache = config.get('use-cache'),
-            defaultScope = container.controllerName()
+            defaultScope = container.controllerName();
 
         /**
          * 注入数据
@@ -837,16 +836,16 @@ window.Lxh = function (options) {
         var fill = this.fill = function (packages, save) {
             if (! packages) {
                 // 如果没有数据，则从缓存中获取并注入
-                packages = cache.get(cacheKey, {})
-                save = false
+                packages = cache.get(cacheKey, {});
+                save = false;
             }
             for (var tplname in packages) {
-                store[tplname] = packages[tplname]
+                store[tplname] = packages[tplname];
             }
             if (save) {
-                this.save(packages)
+                this.save(packages);
             }
-        }
+        };
 
         /**
          * 缓存语言包
@@ -855,16 +854,16 @@ window.Lxh = function (options) {
          */
         this.save = function (packages) {
             if (! useCache) {
-                return
+                return;
             }
-            var cachePackage = {}, i
-            cachePackage = cache.get(cacheKey, {})
+            var cachePackage = {}, i;
+            cachePackage = cache.get(cacheKey, {});
             for (var tplname in packages) {
-                cachePackage[tplname] = packages[tplname]
+                cachePackage[tplname] = packages[tplname];
             }
-            cache.set(cacheKey, cachePackage)
-            cache.expire(cacheKey, expireTime)
-        }
+            cache.set(cacheKey, cachePackage);
+            cache.expire(cacheKey, expireTime);
+        };
 
         /**
          * 获取模板，如果缓存中没有会从服务器中获取，如果缓存中有则直接从缓存中获取
@@ -874,44 +873,44 @@ window.Lxh = function (options) {
          * @returns void
          */
         this.fetch = function (names, call) {
-            names = typeof names == 'string' ? [names] : names
+            names = typeof names == 'string' ? [names] : names;
             if (useCache) {
-                var packages = {}
-                packages = cache.get(cacheKey)
-                fill(packages)
+                var packages = {};
+                packages = cache.get(cacheKey);
+                fill(packages);
             }
 
             // 取出缓存中没有的语言包模块
-            var missingNames = []
+            var missingNames = [];
             for (var i in names) {
                 if (! store[names[i]]) {
-                    missingNames.push(names[i])
+                    missingNames.push(names[i]);
                 }
             }
 
             if (missingNames.length < 1) {
                 // 缓存中有需要的语言包
-                return call(store)
+                return call(store);
             }
 
             // 缓存中没有需要的语言包
-            var model = container.createModel('Tpl')
+            var model = container.createModel('Tpl');
 
-            model.data({names: missingNames.join(',')})
+            model.data({names: missingNames.join(',')});
 
             model.on('success', function (data) {
                 // 注入并缓存
-                fill(data.list, true)
+                fill(data.list, true);
 
-                call(store)
-            })
-            model.touchAction('get', 'POST')
+                call(store);
+            });
+            model.touchAction('get', 'POST');
 
-        }
+        };
 
         this.all = function () {
-            return store
-        }
+            return store;
+        };
 
         /**
          * 获取模板内容
@@ -919,15 +918,15 @@ window.Lxh = function (options) {
          * @param name
          */
         this.get = function (name) {
-            return store[name] || null
-        }
+            return store[name] || null;
+        };
 
         /**
          * 获取普通模块组件
          */
         this.module = function (name) {
             return store[defaultScope + '.' + name] || null
-        }
+        };
 
         /**
          * 获取组件模板
@@ -936,8 +935,8 @@ window.Lxh = function (options) {
          * @returns {*}
          */
         this.component = function (name) {
-            return store['component.' + name] || null
-        }
+            return store['component.' + name] || null;
+        };
 
         /**
          * 获取字段组件模板
@@ -945,8 +944,8 @@ window.Lxh = function (options) {
          * @param name
          */
         this.fields = function (name) {
-            return store['component.fields.' + name] || null
-        }
+            return store['component.fields.' + name] || null;
+        };
     }
     // --------------------------------------Tpl END-----------------------------------------------
 
@@ -959,19 +958,17 @@ window.Lxh = function (options) {
      * @param config    {Store}
      * @constructor
      */
-    function Language(container, cache, config)
-    {
+    function Language(container, cache, config) {
         var store = {},
-            cache = cache,
             lang = config.get('language'),
             defaultScope = container.controllerName(),
             self = this,
             cacheKeyPrefix = 'language_',
             cacheKey = cacheKeyPrefix + lang,
             useCache = config.get('use-cache'),
-            expireTime = config.get('lang-package-expire')
+            expireTime = config.get('lang-package-expire');
 
-        store[lang] = new Store()
+        store[lang] = new Store();
 
         /**
          * 注入语言包数据
@@ -985,22 +982,22 @@ window.Lxh = function (options) {
         var fill = this.fill = function (packages, save) {
             if (! packages) {
                 // 如果没有数据，则从缓存中获取并注入
-                packages = {}
-                packages[lang] = cache.get(cacheKey)
-                save = false
+                packages = {};
+                packages[lang] = cache.get(cacheKey);
+                save = false;
             }
             for (var language in packages) {
                 if (! store[language]) {
-                    store[language] = new Store()
+                    store[language] = new Store();
                 }
                 for (var scope in packages[language]) {
-                    store[language].set(scope, packages[language][scope])
+                    store[language].set(scope, packages[language][scope]);
                 }
             }
             if (save) {
-                this.save(packages)
+                this.save(packages);
             }
-        }
+        };
 
         /**
          * 缓存语言包
@@ -1009,19 +1006,19 @@ window.Lxh = function (options) {
          */
         this.save = function (packages) {
             if (! useCache) {
-                return
+                return;
             }
-            var cachePackage = {}, i, key
+            var cachePackage = {}, i, key;
             for (var lang in packages) {
-                key = cacheKeyPrefix + lang
-                cachePackage = cache.get(key, {})
+                key = cacheKeyPrefix + lang;
+                cachePackage = cache.get(key, {});
                 for (i in packages[lang]) {
-                    cachePackage[i] = packages[lang][i]
+                    cachePackage[i] = packages[lang][i];
                 }
-                cache.set(key, cachePackage)
-                cache.expire(key, expireTime)
+                cache.set(key, cachePackage);
+                cache.expire(key, expireTime);
             }
-        }
+        };
 
         /**
          * 获取语言包数据，此函数如果缓存中没有会从服务器中获取，如果缓存中有则直接从缓存中获取
@@ -1031,40 +1028,40 @@ window.Lxh = function (options) {
          * @returns void
          */
         this.fetch = function (scopes, call) {
-            scopes = typeof scopes == 'string' ? [scopes] : scopes
+            scopes = typeof scopes == 'string' ? [scopes] : scopes;
             if (useCache) {
-                var packages = {}
-                packages[lang] = cache.get(cacheKey)
-                fill(packages)
+                var packages = {};
+                packages[lang] = cache.get(cacheKey);
+                fill(packages);
             }
 
             // 取出缓存中没有的语言包模块
-            var missingScopes = []
+            var missingScopes = [];
             for (var i in scopes) {
                 if (! store[lang].get(scopes[i])) {
-                    missingScopes.push(scopes[i])
+                    missingScopes.push(scopes[i]);
                 }
             }
 
             if (missingScopes.length < 1) {
                 // 缓存中有需要的语言包
-                return call()
+                return call();
             }
 
             // 缓存中没有需要的语言包
-            var model = container.createModel('Language')
+            var model = container.createModel('Language');
 
-            model.data({lang: lang, scopes: missingScopes.join(',')})
+            model.data({lang: lang, scopes: missingScopes.join(',')});
 
             model.on('success', function (data) {
                 // 注入并缓存
-                fill(data.list, true)
+                fill(data.list, true);
 
-                call()
-            })
-            model.touchAction('get', 'POST')
+                call();
+            });
+            model.touchAction('get', 'POST');
 
-        }
+        };
 
         /**
          * 翻译，先从选中的模块语言包中查找，找不到则从全局语言包中查找
@@ -1075,10 +1072,10 @@ window.Lxh = function (options) {
          * @type {Language.trans}
          */
         window.trans = this.trans = function (label, category, scope) {
-            category = category || 'labels', scope = scope || defaultScope
-            var res = store[lang].get(scope + '.' + category + '.' + label)
-            return res || store[lang].get('Global.' + category + '.' + label, label)
-        }
+            category = category || 'labels'; scope = scope || defaultScope;
+            var res = store[lang].get(scope + '.' + category + '.' + label);
+            return res || store[lang].get('Global.' + category + '.' + label, label);
+        };
 
         /**
          * 翻译字段选项
@@ -1089,10 +1086,10 @@ window.Lxh = function (options) {
          * @type {Language.transOption}
          */
         window.trans_option = this.transOption = function (value, label, scope) {
-            scope = scope || defaultScope
-            var res = store[lang].get(scope + '.options.' + label + '.' + value)
-            return res || store[lang].get('Global.options.' + label + '.' + value, value)
-        }
+            scope = scope || defaultScope;
+            var res = store[lang].get(scope + '.options.' + label + '.' + value);
+            return res || store[lang].get('Global.options.' + label + '.' + value, value);
+        };
 
         /**
          * 设置语言，默认语言为“en”
@@ -1100,9 +1097,9 @@ window.Lxh = function (options) {
          * @param type
          */
         this.type = function (type) {
-            lang = type
-            store[lang] || (store[lang] = new Store())
-        }
+            lang = type;
+            store[lang] || (store[lang] = new Store());
+        };
 
         /**
          * 获取某一语言的语言包数据
@@ -1111,8 +1108,8 @@ window.Lxh = function (options) {
          * @returns {*}
          */
         this.all = function (language) {
-            return store[language || lang].all()
-        }
+            return store[language || lang].all();
+        };
 
     }
     // --------------------------------------Language END-----------------------------------------------
@@ -1122,7 +1119,7 @@ window.Lxh = function (options) {
      * Created by Jqh on 2017/6/27.
      */
     function Model(name, module, container) {
-        var notify = container.ui().notify(), globalUtil = container.util()
+        var notify = container.ui().notify(), globalUtil = container.util();
 
         var store = {
             /**
@@ -1230,9 +1227,9 @@ window.Lxh = function (options) {
                  * @param data
                  */
                 failed: function (data) {
-                    if (typeof swal != 'undefined') swal.close() // 关闭提示窗
-                    notify.remove()
-                    notify.error(trans(data.msg, 'tip'))
+                    if (typeof swal != 'undefined') swal.close(); // 关闭提示窗
+                    notify.remove();
+                    notify.error(trans(data.msg, 'tip'));
                 },
 
                 /**
@@ -1244,8 +1241,8 @@ window.Lxh = function (options) {
                  * @param e
                  */
                 error: function (req, msg, e) {
-                    notify.remove()
-                    notify.error(req.status + ' ' + trans(req.statusText) + ' ' + trans(req.responseText))
+                    notify.remove();
+                    notify.error(req.status + ' ' + trans(req.statusText) + ' ' + trans(req.responseText));
                     // store.call.error(req, msg, e)
                 },
 
@@ -1256,12 +1253,12 @@ window.Lxh = function (options) {
 
                 }
             }
-        }
+        };
 
-        store.formHandler = container.form()
-        store.name = name
+        store.formHandler = container.form();
+        store.name = name;
         // 保存初始数据
-        store.initialData = store.formHandler.get(get_form_selector())
+        store.initialData = store.formHandler.get(get_form_selector());
 
         /**
          * 设置模型属性值
@@ -1272,12 +1269,12 @@ window.Lxh = function (options) {
          */
         this.set = function (k, v) {
             if (typeof k == 'object') {
-                store.attrs = k
+                store.attrs = k;
             } else {
-                store.attrs[k] = v
+                store.attrs[k] = v;
             }
             return this
-        }
+        };
 
         /**
          * 删除属性
@@ -1286,31 +1283,31 @@ window.Lxh = function (options) {
          * @returns {Model}
          */
         this.unset = function (k) {
-            delete store.attrs[k]
+            delete store.attrs[k];
             return this
-        }
+        };
 
         // 设置请求超时时间，单位毫秒
         this.timeout = function (m) {
-            store.timeout = m
+            store.timeout = m;
             return this
-        }
+        };
 
         // 重置属性
         this.reset = function () {
-            store.attrs = {}
+            store.attrs = {};
             return this
-        }
+        };
 
         // 获取属性
         this.get = function(k, def) {
             return store.attrs[k] || def
-        }
+        };
 
         // 获取所有属性
         this.all = function () {
             return store.attrs
-        }
+        };
 
         /**
          * 设置请求发送给服务器的数据，如果设置了此值则不会从表单中获取数据
@@ -1319,9 +1316,9 @@ window.Lxh = function (options) {
          * @returns {Model}
          */
         this.data = function (data) {
-            store.data = data
+            store.data = data;
             return this
-        }
+        };
 
         /**
          * 设置事件
@@ -1331,10 +1328,10 @@ window.Lxh = function (options) {
          * @returns {Model}
          */
         this.on = function (name, call) {
-            if (typeof call != 'function') throw new Error('Invalid arguments.')
-            store.call[name] = call || store.call[name]
+            if (typeof call != 'function') throw new Error('Invalid arguments.');
+            store.call[name] = call || store.call[name];
             return this
-        }
+        };
 
         /**
          * 请求是否已结束，是返回true，否则返回false
@@ -1342,8 +1339,8 @@ window.Lxh = function (options) {
          * @returns {boolean}
          */
         this.requestEnded = function () {
-            return (! store.isRequsting)
-        }
+            return (! store.isRequsting);
+        };
 
         /**
          * 发起一个ajax请求
@@ -1352,8 +1349,8 @@ window.Lxh = function (options) {
          * @param method
          */
         this.request = function (api, method) {
-            store.method = method || store.method
-            store.api = api || store.api
+            store.method = method || store.method;
+            store.api = api || store.api;
 
             // 判断是否已经在发起请求中
             if (! this.requestEnded()) {
@@ -1361,12 +1358,12 @@ window.Lxh = function (options) {
             }
 
             // 标记请求开始
-            store.isRequsting = true
+            store.isRequsting = true;
 
-            var data = util.getData()
-console.log('request data', data)
+            var data = util.getData();
+console.log('request data', data);
             if (store.method.toLocaleUpperCase() == 'PUT') {
-                data = JSON.stringify(data)
+                data = JSON.stringify(data);
             }
 
             $.ajax({
@@ -1379,27 +1376,27 @@ console.log('request data', data)
                 timeout: store.timeout,
                 success: function(data) {
                     // 标记请求结束
-                    store.isRequsting = false
-                    if (typeof data != 'object' && data.indexOf('{') == 0) data = JSON.parse(data)
-                    store.responseContent[store.method + store.api] = data
+                    store.isRequsting = false;
+                    if (typeof data != 'object' && data.indexOf('{') == 0) data = JSON.parse(data);
+                    store.responseContent[store.method + store.api] = data;
                     if (data.status) {
                         if (data.status == container.statusCode.success) {
-                            store.call.success(data)
+                            store.call.success(data);
                         } else {
-                            store.call.failed(data)
+                            store.call.failed(data);
                         }
                     } else {
-                        store.call.success(data)
+                        store.call.success(data);
                     }
-                    store.call.any(data)
+                    store.call.any(data);
                 },
                 error: function (req, msg, e) {
                     // 标记请求结束
-                    store.isRequsting = false
-                    store.call.error(req, msg, e)
+                    store.isRequsting = false;
+                    store.call.error(req, msg, e);
                 }
             });
-        }
+        };
 
         /**
          * 执行动作（发起一个ajax请求）
@@ -1408,8 +1405,8 @@ console.log('request data', data)
          * @param method
          */
         this.touchAction = function (action, method) {
-            return this.request(util.parseApi('action', {action: action}), method)
-        }
+            return this.request(util.parseApi('action', {action: action}), method);
+        };
 
         /**
          * 发起添加操作请求
@@ -1417,7 +1414,7 @@ console.log('request data', data)
          */
         this.add = function () {
             return this.request(util.parseApi('add'), 'POST')
-        }
+        };
 
         /**
          * 发起修改操作请求
@@ -1426,57 +1423,57 @@ console.log('request data', data)
         this.edit = function () {
             // 判断是否有修改过表单内容
             if (container.util().cmp(store.initialData, store.formHandler.get(get_form_selector())) === true) {
-                notify.remove()
-                return notify.info(trans('Nothing has been change.'))
+                notify.remove();
+                return notify.info(trans('Nothing has been change.'));
             }
 
-            return this.request(util.parseApi('edit'), 'PUT')
-        }
+            return this.request(util.parseApi('edit'), 'PUT');
+        };
 
         /**
          * 保存数据，根据是否存在id判断是新增操作还是修改操作
          */
         this.save = function () {
-            var data = store.formHandler.get(get_form_selector())
+            var data = store.formHandler.get(get_form_selector());
 
             if (data.id) {
-                return this.edit()
+                return this.edit();
             }
-            return this.add()
-        }
+            return this.add();
+        };
 
         /**
          * 发起删除一行或多行数据请求
          *
          */
         this.delete = function () {
-            return this.request(util.parseApi('delete'), 'DELETE')
-        }
+            return this.request(util.parseApi('delete'), 'DELETE');
+        };
 
         /**
          * 获取列表数据
          *
          */
         this.fetchList = function () {
-            return this.request(util.parseApi('list'), 'GET')
-        }
+            return this.request(util.parseApi('list'), 'GET');
+        };
 
         /**
          * 获取单行数据
          *
          */
         this.fetchRow = function () {
-            return this.request(util.parseApi('detail'), 'GET')
-        }
+            return this.request(util.parseApi('detail'), 'GET');
+        };
 
         /**
          * 获取表单数据
          */
         this.getFormData = function () {
-            return store.formHandler.get(get_form_selector())
-        }
+            return store.formHandler.get(get_form_selector());
+        };
 
-        var self = this
+        var self = this;
 
         /**
          * 工具类
@@ -1490,19 +1487,19 @@ console.log('request data', data)
              * @returns {Object|null}
              */
             getData: function () {
-                var data = store.data
+                var data = store.data;
                 if (data) {
-                    store.data = null
-                    return data
+                    store.data = null;
+                    return data;
                 }
 
-                data = store.formHandler.get(get_form_selector())
+                data = store.formHandler.get(get_form_selector());
 
                 for (var i in data) {
-                    self.set(i, data[i])
+                    self.set(i, data[i]);
                 }
 
-                return self.all()
+                return self.all();
             },
 
             /**
@@ -1513,20 +1510,20 @@ console.log('request data', data)
              * @returns {string}
              */
             parseApi: function (type, options) {
-                var scopeName = this.normalizeRequestName(store.name)
+                var scopeName = this.normalizeRequestName(store.name);
                 switch (type) {
                     case 'add':
-                        return store.apiPrefix + scopeName
+                        return store.apiPrefix + scopeName;
                     case 'edit':
-                        var id = self.get('id') || store.formHandler.get(get_form_selector()).id
-                        return store.apiPrefix + scopeName + '/view/' + id
+                        var id = self.get('id') || store.formHandler.get(get_form_selector()).id;
+                        return store.apiPrefix + scopeName + '/view/' + id;
                     case 'delete':
-                        var id = self.get('id')
-                        return store.apiPrefix + scopeName + '/view/' + id
+                        var id = self.get('id');
+                        return store.apiPrefix + scopeName + '/view/' + id;
                     case 'list':
-                        return store.apiPrefix + scopeName + '/list'
+                        return store.apiPrefix + scopeName + '/list';
                     case 'detail':
-                        return store.apiPrefix + scopeName + '/view/' + self.get('id')
+                        return store.apiPrefix + scopeName + '/view/' + self.get('id');
                     case 'action':
                         return store.apiPrefix + scopeName + '/' + this.normalizeRequestName(options.action)
                 }
@@ -1535,15 +1532,15 @@ console.log('request data', data)
             // 驼峰转化为中划线小写形式
             normalizeRequestName: function (name) {
                 return globalUtil.trim(name.replace(/([A-Z])/g, function (full, $match) {
-                    return '-' + $match.toLocaleLowerCase()
+                    return '-' + $match.toLocaleLowerCase();
                 }), '-')
-            },
+            }
 
-        }
+        };
 
         this.selector = function () {
-            return get_form_selector()
-        }
+            return get_form_selector();
+        };
 
         /**
          * 获取表单选择器
@@ -1563,13 +1560,13 @@ console.log('request data', data)
      * @constructor
      */
     function Form() {
-        var formEles = ['input', 'textarea', 'select']
+        var formEles = ['input', 'textarea', 'select'];
 
         // 获取指定form中的所有的<input>对象
         function get_elements(selector) {
-            var form = document.querySelector(selector)// || document.querySelector('form');
-            if (! form) return []
-            var elements = [], tagElements
+            var form = document.querySelector(selector);// || document.querySelector('form');
+            if (! form) return [];
+            var elements = [], tagElements;
             for (var i in formEles) {
                 tagElements = form.getElementsByTagName(formEles[i]);
                 for (var j = 0; j < tagElements.length; j++) {
@@ -1615,15 +1612,15 @@ console.log('request data', data)
             var data = {};
             for (var i = 0; i < elements.length; i++) {
                 var component = serialize_element(elements[i]);
-                if (!component || typeof component[1] == 'undefined') continue
+                if (!component || typeof component[1] == 'undefined') continue;
                 if (component[0].indexOf('[') !== -1 && component[0].indexOf(']') !== -1 ) {
-                    component[0] = component[0].replace('[]', '')
+                    component[0] = component[0].replace('[]', '');
                     if (typeof data[component[0]] == 'undefined') {
-                        data[component[0]] = []
+                        data[component[0]] = [];
                     }
-                    data[component[0]].push(component[1])
+                    data[component[0]].push(component[1]);
                 } else {
-                    data[component[0]] = component[1]
+                    data[component[0]] = component[1];
                 }
             }
             return data;
@@ -1640,7 +1637,7 @@ console.log('request data', data)
      */
     function Store(data)
     {
-        data = data || {}
+        data = data || {};
 
         /**
          * 获取所有已存入的数据
@@ -1649,7 +1646,7 @@ console.log('request data', data)
          */
         this.all = function () {
             return data
-        }
+        };
 
         /**
          * 把已存在数据转化成json返回
@@ -1657,8 +1654,8 @@ console.log('request data', data)
          * @returns {json}
          */
         this.toJson = function () {
-            return JSON.stringify(data)
-        }
+            return JSON.stringify(data);
+        };
 
         /**
          * 获取数据，支持获取多维数值：“list.rows.name”
@@ -1669,19 +1666,19 @@ console.log('request data', data)
          */
         this.get = function ($key, $default) {
             if (! $key) {
-                return data
+                return data;
             }
-            $default = $default || null
-            var $lastItem = data, keys = $key.split('.')
+            $default = $default || null;
+            var $lastItem = data, keys = $key.split('.');
             for (var i = 0; i < keys.length; i ++) {
                 if (typeof $lastItem[keys[i]] != 'undefined') {
-                    $lastItem = $lastItem[keys[i]]
+                    $lastItem = $lastItem[keys[i]];
                 } else {
-                    return $default
+                    return $default;
                 }
             }
             return $lastItem;
-        }
+        };
 
         /**
          * 保存值
@@ -1691,11 +1688,11 @@ console.log('request data', data)
          */
         this.set = function (key, val) {
             if (typeof key == 'object') {
-                data = key
+                data = key;
             } else {
-                data[key] = val
+                data[key] = val;
             }
-        }
+        };
 
         /**
          * 保存一个值到一个已存在对象
@@ -1705,10 +1702,10 @@ console.log('request data', data)
          * @param val
          */
         this.add = function (key, name, val) {
-            data[key] = data[key] || {}
+            data[key] = data[key] || {};
 
             data[key][name] = val
-        }
+        };
 
         /**
          * push一个值到一个已存在数组
@@ -1717,10 +1714,10 @@ console.log('request data', data)
          * @param val
          */
         this.push = function (key, val) {
-            data[key] = data[key] || []
+            data[key] = data[key] || [];
 
             data[key].push(val)
-        }
+        };
 
         /**
          * push一个值到一个已存在的第二维数组上
@@ -1730,15 +1727,15 @@ console.log('request data', data)
          * @param val
          */
         this.pushSub = function (key, name, val) {
-            data[key] = data[key] || {}
+            data[key] = data[key] || {};
 
-            data[key][name] = data[key][name] || []
+            data[key][name] = data[key][name] || [];
 
-            data[key][name].push(val)
+            data[key][name].push(val);
         }
     }
     // --------------------------------------Store END-----------------------------------------------
     
     return new Container(options)
-}
+};
 

@@ -26,14 +26,6 @@ class DateRange extends Field
 {
     use Condition;
 
-    public static $js = [
-        'bootstrap-datetimepicker.min'
-    ];
-
-    public static $css = [
-        'bootstrap-datetimepicker.min'
-    ];
-
     protected $view = 'admin::filter.date-range';
 
     protected $width = [
@@ -44,6 +36,12 @@ class DateRange extends Field
      * @var string
      */
     protected $defaultHandler = 'between';
+
+    protected function setup()
+    {
+        $this->js('date-range', 'bootstrap-datetimepicker.min');
+        $this->css('date-range',  'bootstrap-datetimepicker.min');
+    }
 
     protected function setupValue($name)
     {

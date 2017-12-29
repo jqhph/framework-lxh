@@ -191,6 +191,38 @@ class Field implements Renderable
         $this->column = $column;
         $this->label = $this->formatLabel($label);
         $this->id = $this->formatId($column);
+
+        $this->setup();
+    }
+
+    // 初始化
+    protected function setup()
+    {
+
+    }
+
+    /**
+     * 加载js（同个key只加载一次）
+     *
+     * @return static
+     */
+    public function js($key, $js)
+    {
+        static::$js[$key] = &$js;
+
+        return $this;
+    }
+
+    /**
+     * 加载css（同个key只加载一次）
+     *
+     * @return static
+     */
+    public function css($key, $css)
+    {
+        static::$css[$key] = &$css;
+
+        return $this;
     }
 
     /**

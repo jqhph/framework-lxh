@@ -93,7 +93,7 @@ class Table extends Widget
      *
      * @return $this
      */
-    public function setRows($rows = [])
+    public function setRows(&$rows = [])
     {
         if (Arr::isAssoc($rows)) {
             foreach ($rows as $key => &$item) {

@@ -85,7 +85,7 @@
 
     var FormValidator = function(formNameOrNode, fields, callback, validateCall) {
             this.callback = callback || defaults.callback;
-            this.validateCall = validateCall || null
+            this.validateCall = validateCall || null;
             this.errors = [];
             this.fields = {};
             this.form = this._formByNameOrNode(formNameOrNode) || {};
@@ -241,7 +241,7 @@
                      * If the field has a depends conditional, only validate the field
                      * if it passes the custom function
                      */
-                    var errorObject
+                    var errorObject;
                     if (field.depends && typeof field.depends === "function") {
                         if (field.depends.call(this, field)) {
                             errorObject = this._validateField(field);
@@ -463,7 +463,7 @@
         },
 
         length_between: function(field, param) {
-            param = param.split('-')
+            param = param.split('-');
             if (param.length != 2) {
                 return false;
             }

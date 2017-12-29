@@ -4,7 +4,7 @@
  * Created by Jqh on 2017/7/19.
  */
 
-define(['css/sweet-alert.css', 'lib/js/sweet-alert.min'], function () {
+define(['css/sweet-alert.min.css', 'lib/js/sweet-alert.min'], function () {
     var model = null
     var public = {
         delete: function (e) {

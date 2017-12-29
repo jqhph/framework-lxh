@@ -105,6 +105,11 @@ class Content implements Renderable
         return $filter;
     }
 
+    public function modal()
+    {
+        
+    }
+
     /**
      * 创建网格报表
      *

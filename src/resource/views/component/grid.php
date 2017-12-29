@@ -18,7 +18,7 @@
 <script>
     <?php if ($useRWD) {?>
     add_css('lib/plugins/RWD-Table-Patterns/dist/css/rwd-table.min.css');
-    add_js('lib/plugins/RWD-Table-Patterns/dist/js/rwd-table');
+    add_js('lib/plugins/RWD-Table-Patterns/dist/js/rwd-table.min');
     <?php }?>
     <?php if ($usePublicJs) {?>
     add_js('view/public-index');
