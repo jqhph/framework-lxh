@@ -35,9 +35,9 @@ abstract class AbstractFilter
     /**
      * @var callable
      */
-    protected $conditionHandler = null;
+    protected static $conditionHandler = [];
 
-    protected $fieldFormatHandler = null;
+    protected static $fieldFormatHandler = [];
 
     public function __construct(Field $field = null)
     {
@@ -60,7 +60,7 @@ abstract class AbstractFilter
      */
     public function condition(callable $callable)
     {
-        $this->conditionHandler = $callable;
+        static::$conditionHandler[$this->field->name()] = $callable;
 
         return $this;
     }
@@ -122,9 +122,9 @@ abstract class AbstractFilter
 
             $key = $this->formatFieldName($field);
 
-            if ($this->conditionHandler) {
+            if (isset(static::$conditionHandler[$field])) {
                 // 自定义处理器处理
-                $value =  call_user_func($this->conditionHandler, $fields, $this);
+                $value =  call_user_func(static::$conditionHandler[$field], $fields, $this);
 
                 if ($value === null) continue;
 
@@ -160,7 +160,7 @@ abstract class AbstractFilter
      */
     public function formatField(callable $handler)
     {
-        $this->fieldFormatHandler = $handler;
+        static::$fieldFormatHandler[$this->field->name()] = $handler;
 
         return $this;
     }
@@ -173,8 +173,8 @@ abstract class AbstractFilter
      */
     protected function formatFieldName($field)
     {
-        if ($this->fieldFormatHandler) {
-            return call_user_func($this->fieldFormatHandler, $field);
+        if (isset(static::$fieldFormatHandler[$field])) {
+            return call_user_func(static::$fieldFormatHandler[$field], $field);
         }
 
         return $field;

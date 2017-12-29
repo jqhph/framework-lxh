@@ -8,35 +8,33 @@
 !function(){function a(a){return function(b){return{}.toString.call(b)=="[object "+a+"]"}}function b(a){return"[object Function]"=={}.toString.call(a)}function c(a,c,e,f){var g=u.test(a),h=r.createElement(g?"link":"script");if(e){var i=b(e)?e(a):e;i&&(h.charset=i)}void 0!==f&&h.setAttribute("crossorigin",f),d(h,c,g,a),g?(h.rel="stylesheet",h.href=a):(h.async=!0,h.src=a),p=h,t?s.insertBefore(h,t):s.appendChild(h),p=null}function d(a,b,c,d){function f(){a.onload=a.onerror=a.onreadystatechange=null,c||seajs.data.debug||s.removeChild(a),a=null,b()}var g="onload"in a;return!c||!v&&g?(g?(a.onload=f,a.onerror=function(){seajs.emit("error",{uri:d,node:a}),f()}):a.onreadystatechange=function(){/loaded|complete/.test(a.readyState)&&f()},void 0):(setTimeout(function(){e(a,b)},1),void 0)}function e(a,b){var c,d=a.sheet;if(v)d&&(c=!0);else if(d)try{d.cssRules&&(c=!0)}catch(f){"NS_ERROR_DOM_SECURITY_ERR"===f.name&&(c=!0)}setTimeout(function(){c?b():e(a,b)},20)}function f(a){return a.match(x)[0]}function g(a){for(a=a.replace(y,"/"),a=a.replace(A,"$1/");a.match(z);)a=a.replace(z,"/");return a}function h(a){var b=a.length-1,c=a.charAt(b);return"#"===c?a.substring(0,b):".js"===a.substring(b-2)||a.indexOf("?")>0||".css"===a.substring(b-3)||"/"===c?a:a+".js"}function i(a){var b=w.alias;return b&&q(b[a])?b[a]:a}function j(a){var b,c=w.paths;return c&&(b=a.match(B))&&q(c[b[1]])&&(a=c[b[1]]+b[2]),a}function k(a){var b=w.vars;return b&&a.indexOf("{")>-1&&(a=a.replace(C,function(a,c){return q(b[c])?b[c]:a})),a}function l(a){var c=w.map,d=a;if(c)for(var e=0,f=c.length;f>e;e++){var g=c[e];if(d=b(g)?g(a)||a:a.replace(g[0],g[1]),d!==a)break}return d}function m(a,b){var c,d=a.charAt(0);if(D.test(a))c=a;else if("."===d)c=g((b?f(b):w.cwd)+a);else if("/"===d){var e=w.cwd.match(E);c=e?e[0]+a.substring(1):a}else c=w.base+a;return 0===c.indexOf("//")&&(c=location.protocol+c),c}function n(a,b){if(!a)return"";a=i(a),a=j(a),a=k(a),a=h(a);var c=m(a,b);return c=l(c)}function o(a){return a.hasAttribute?a.src:a.getAttribute("src",4)}var p,q=a("String"),r=document,s=r.head||r.getElementsByTagName("head")[0]||r.documentElement,t=s.getElementsByTagName("base")[0],u=/\.css(?:\?|$)/i,v=+navigator.userAgent.replace(/.*(?:AppleWebKit|AndroidWebKit)\/?(\d+).*/i,"$1")<536;seajs.request=c;var w=seajs.data,x=/[^?#]*\//,y=/\/\.\//g,z=/\/[^/]+\/\.\.\//,A=/([^:/])\/+\//g,B=/^([^/:]+)(\/.+)$/,C=/{([^{]+)}/g,D=/^\/\/.|:\//,E=/^.*?\/\/.*?\//,r=document,F=location.href&&0!==location.href.indexOf("about:")?f(location.href):"",G=r.scripts,H=r.getElementById("seajsnode")||G[G.length-1];f(o(H)||F),seajs.resolve=n,define("seajs/seajs-css/1.0.5/seajs-css",[],{})}();
 
 (function (window) {
-    var config = get_config()
+    var config = get_config(), $cache = new Cache();
 
-    var $cache = new Cache()
-
-    dispatcher()
+    dispatcher();
 
     function dispatcher() {
         // 设置缓存token
-        $cache.setToken(config.options.config['js-version'])
+        $cache.setToken(config.options.config['js-version']);
 
-        config.options.cache = $cache
+        config.options.cache = $cache;
         // 处理需要加载的js数组
-        config.publicJs = get_public_js(config.publicJs, config.options.config['js-version'])
+        config.publicJs = get_public_js(config.publicJs, config.options.config['js-version']);
         // 处理需要加载的js数组
-        config.publicCss = get_public_css(config.publicCss, config.options.config['js-version'])
+        config.publicCss = get_public_css(config.publicCss, config.options.config['js-version']);
 
-        config.seaConfig = get_sea_config(config.seaConfig, config.options.config['js-version'])
+        config.seaConfig = get_sea_config(config.seaConfig, config.options.config['js-version']);
 
-        seajs.config(config.seaConfig)
+        seajs.config(config.seaConfig);
         // 加载css
-        seajs.use(config.publicCss)
+        seajs.use(config.publicCss);
 
         // 优先加载jquery
         // seajs.use('jquery', function (q) {
         seajs.use(config.publicJs, function () {
-            var plugIns = arguments // 所有加载进来的js插件变量数组
+            var plugIns = arguments; // 所有加载进来的js插件变量数组
             init(function () {
                 $(function () {
-                    call_actions(plugIns)
+                    call_actions(plugIns);
                 })
             })
 
@@ -47,7 +45,7 @@
     function call_actions(plugIns) {
         for (var i in lxhActions) {
             if (typeof lxhActions[i] == 'function') {
-                lxhActions[i].apply(this, plugIns)
+                lxhActions[i].apply(this, plugIns);
             }
         }
     }
@@ -58,21 +56,21 @@
      * @param call
      */
     function init(call) {
-        window.$lxh = new Lxh(config.options)
+        window.$lxh = new Lxh(config.options);
 
-        var lang = $lxh.config().get('language')
+        var lang = $lxh.config().get('language');
 
-        var serverOptions = $lxh.createStore({})
+        var serverOptions = $lxh.createStore({});
         if (typeof load_data == 'function') {
-            serverOptions.set(load_data())
+            serverOptions.set(load_data());
         }
 
         // 语言包设置
-        $lxh.language().type(lang)
+        $lxh.language().type(lang);
         // 注入语言包数据
-        $lxh.language().fill(serverOptions.get('language') || null, true)
+        $lxh.language().fill(serverOptions.get('language') || null, true);
         // 注入模板数据
-        $lxh.tpl().fill(serverOptions.get('tpl') || null, true)
+        $lxh.tpl().fill(serverOptions.get('tpl') || null, true);
 
         // 生成table 展示隐藏字段功能按键
         $('[data-pattern]').each(function () {
@@ -98,20 +96,20 @@
      * @returns {*}
      */
     function check_cache_language(lang, scopes, useCache) {
-        var cacheKey = get_lang_cache_key(lang), package = $cache.get(cacheKey), t = [], i
+        var cacheKey = get_lang_cache_key(lang), package = $cache.get(cacheKey), t = [], i;
 
         if (typeof add_lang_scopes == 'function') {
-            var addScopes = add_lang_scopes()
+            var addScopes = add_lang_scopes();
             for (i in addScopes) {
-                scopes.push(addScopes[i])
+                scopes.push(addScopes[i]);
             }
         }
 
-        if (! package || ! useCache) return scopes || []
+        if (! package || ! useCache) return scopes || [];
         for (i in scopes) {
-            if (! package[scopes[i]]) t.push(scopes[i])
+            if (! package[scopes[i]]) t.push(scopes[i]);
         }
-        return t || []
+        return t || [];
     }
 
     /**
@@ -123,16 +121,16 @@
      */
     function get_public_css(publicCss, v) {
         if (typeof cssLibArr != 'undefined') {
-            cssLibArr = array_unique(cssLibArr)
+            cssLibArr = array_unique(cssLibArr);
             for (var i in cssLibArr) {
-                publicCss.push(cssLibArr[i])
+                publicCss.push(cssLibArr[i]);
             }
         }
 
         for (i in publicCss) {
-            publicCss[i] = publicCss[i] + '?v=' + v
+            publicCss[i] = publicCss[i] + '?v=' + v;
         }
-        return publicCss
+        return publicCss;
     }
 
     /**
@@ -144,39 +142,39 @@
      */
     function get_public_js(publicJs, version) {
         if (typeof jsLibArr != 'undefined') {
-            jsLibArr = array_unique(jsLibArr)
+            jsLibArr = array_unique(jsLibArr);
             for (var i in jsLibArr) {
-                publicJs.push(jsLibArr[i] + '.js?v=' + version)
+                publicJs.push(jsLibArr[i] + '.js?v=' + version);
             }
         }
 
-        var scopes = check_cache_language(config.options.config.language, config.langScopes, config.options.config['use-cache'])
-        var loads = {}
+        var scopes = check_cache_language(config.options.config.language, config.langScopes, config.options.config['use-cache']);
+        var loads = {};
 
         // 判断是否需要载入语言包
         if (scopes.length > 0) {
             // publicJs.push('api/language?scopes=' + scopes.join(',') + '&lang=' + config.options.config.language)
-            loads.language = scopes.join(',')
+            loads.language = scopes.join(',');
         }
 
-        var jsApi = get_load_data_js_api(loads)
+        var jsApi = get_load_data_js_api(loads);
 
         if (jsApi) {
-            publicJs.unshift(jsApi)
+            publicJs.unshift(jsApi);
         }
 
-        return publicJs
+        return publicJs;
         
         function get_load_data_js_api(data) {
-            var api = 'api/data'
+            var api = config.options.dataApi;
 
-            var p = ''
+            var p = '';
             for (var i in data) {
-                p += '&n[]=' + i + ':' + data[i]
+                p += '&n[]=' + i + ':' + data[i];
             }
 
             if (p) {
-                return api + '?' + p
+                return api + '?' + p;
             }
             return ''
         }
@@ -189,12 +187,11 @@
      * @param version
      * @returns {*}
      */
-    function get_sea_config(config, version)
-    {
+    function get_sea_config(config, version) {
         for (var i in config.alias) {
-            config.alias[i] = config.alias[i] + '.js?v=' + version
+            config.alias[i] = config.alias[i] + '.js?v=' + version;
         }
-        return config
+        return config;
     }
 
     /**
@@ -203,14 +200,14 @@
      * @constructor
      */
     function Cache() {
-        this.storage = window.localStorage || {}
+        this.storage = window.localStorage || {};
 
         /**
          * token值，用于跟服务器的token进行对比，如两值不同则刷新缓存
          *
          * @type {null|int|string}
          */
-        this.token = null
+        this.token = null;
 
         /**
          * 缓存前缀
@@ -220,7 +217,7 @@
         this.prefix = {
             general: "$lxh_",
             timeout: "@lxh_"
-        }
+        };
 
         /**
          * 设置token
@@ -229,7 +226,7 @@
          */
         this.setToken = function (token) {
             this.token = token
-        }
+        };
 
         /**
          * 缓存token
@@ -237,8 +234,8 @@
          * @param token
          */
         this.saveToken = function (token) {
-            this.set('$$token', token || this.token)
-        }
+            this.set('$$token', token || this.token);
+        };
 
         /**
          * 设置缓存
@@ -248,10 +245,10 @@
          */
         this.set = function (key, val) {
             if (val instanceof Object) {
-                val = JSON.stringify(val)
+                val = JSON.stringify(val);
             }
-            this.storage.setItem(this.prefix.general + key, val)
-        }
+            this.storage.setItem(this.prefix.general + key, val);
+        };
 
         /**
          * 获取缓存
@@ -262,20 +259,20 @@
          */
         this.get = function (key, def) {
             if (! this.checkTokenValid(key)) {
-                return def || null
+                return def || null;
             }
             //检测是否过期
-            if (this.clearTimeout(key)) return null
-            var val = this.storage.getItem(this.prefix.general + key)
+            if (this.clearTimeout(key)) return null;
+            var val = this.storage.getItem(this.prefix.general + key);
 
             if (val) {
                 if (val.indexOf("{") === 0 || val.indexOf("[") === 0) {
-                    return JSON.parse(val)
+                    return JSON.parse(val);
                 }
-                return val
+                return val;
             }
-            return (def || null)
-        }
+            return (def || null);
+        };
 
         /**
          * 检查是否应该更新缓存，是则返回false，否则返回true
@@ -285,15 +282,15 @@
          */
         this.checkTokenValid = function (key) {
             if (key == '$$token') {
-                return true
+                return true;
             }
             if (this.token != this.get('$$token')) {
-                this.clearAll()
-                this.saveToken()
-                return false
+                this.clearAll();
+                this.saveToken();
+                return false;
             }
-            return true
-        }
+            return true;
+        };
 
         /**
          * 清除所有过期的key
@@ -302,11 +299,11 @@
         this.clearPastDueKey = function () {
             for (var key in this.storage) {
                 if (key.indexOf(this.prefix.timeout) == -1) {
-                    continue
+                    continue;
                 }
-                this.clearTimeout(key.replace(this.prefix.timeout, ""))
+                this.clearTimeout(key.replace(this.prefix.timeout, ""));
             }
-        }
+        };
 
         /**
          * 检查key是否过期，是则清除并返回true，否则返回false
@@ -315,18 +312,18 @@
          * @returns {boolean}
          */
         this.clearTimeout = function (key) {
-            var d, timeoutKey = this.prefix.timeout + key, timeout = this.storage.getItem(timeoutKey)
+            var d, timeoutKey = this.prefix.timeout + key, timeout = this.storage.getItem(timeoutKey);
 
             if (timeout) {
-                d = new Date().getTime()
+                d = new Date().getTime();
                 if (timeout < d) {//已过期
-                    delete this.storage[this.prefix.general + key]
-                    delete this.storage[timeoutKey]
-                    return true
+                    delete this.storage[this.prefix.general + key];
+                    delete this.storage[timeoutKey];
+                    return true;
                 }
             }
             return false
-        }
+        };
 
         /**
          * 设置缓存时间，tiemeout毫秒后过期
@@ -335,9 +332,9 @@
          * @param timeout
          */
         this.expire = function (key, timeout) {
-            var d = new Date().getTime() + (parseInt(timeout))
-            this.storage.setItem(this.prefix.timeout + key, d)
-        }
+            var d = new Date().getTime() + (parseInt(timeout));
+            this.storage.setItem(this.prefix.timeout + key, d);
+        };
 
         /**
          * 具体某一时间点过期
@@ -346,8 +343,8 @@
          * @param timeout
          */
         this.expireAt = function (key, timeout) {
-            this.storage.setItem(this.prefix.timeout + key, timeout)
-        }
+            this.storage.setItem(this.prefix.timeout + key, timeout);
+        };
 
         /**
          * 清除所有缓存
@@ -355,10 +352,10 @@
          */
         this.clearAll = function () {
             for (var i in this.storage) {
-                delete this.storage[i]
+                delete this.storage[i];
             }
-        }
+        };
 
         this.clearPastDueKey()
     }
-})(window)
+})(window);

@@ -30,13 +30,13 @@ echo load_js('waves.min');
             $config['js-version'] = & $GLOBALS['js-version'];
             $config['css-version'] = & $GLOBALS['css-version'];
 //            $config['language-packages'] = language()->getPackages(['Global', __CONTROLLER__]);
-
             echo json_encode([
                 'controller' => __CONTROLLER__,
                 'module' => __MODULE__,
                 'action' => __ACTION__,
                 'config' => & $config,
-                'users' => admin()->all()
+                'users' => admin()->all(),
+                'dataApi' => 'api/data'
             ]);
             ?>
             
@@ -49,11 +49,9 @@ echo load_js('waves.min');
         // 需要载入的语言包模块
         data.langScopes = <?php echo json_encode(['Global', __CONTROLLER__]);?>
 
-//        config.tplnames = <?php //echo json_encode(['component.fields.int.int', 'component.fields.string.string']);?>
-
         return data
     }
 </script>
 <?php
-echo load_js('app');
+echo load_js('app.min');
 ?>

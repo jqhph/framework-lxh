@@ -108,7 +108,7 @@ EOF;
      * 加载语言包
      *
      * @param  array $scopes
-     * @return void
+     * @return array
      */
     protected function loadDataLanguage(array $scopes)
     {
