@@ -484,7 +484,6 @@ class Grid implements Renderable
     protected function getTableString()
     {
         $list = $this->findList();
-        
 
         if ($this->options['allowEdit'] || $this->options['allowDelete']) {
             $this->buildActions();
@@ -512,7 +511,6 @@ class Grid implements Renderable
             'table' => &$table,
             'page'  => &$this->pageString,
             'pages' => &$this->perPages,
-            'url'   => $this->formatUrl(),
             'perPage' => $this->perPage,
             'perPageKey' => $this->perPageKey
         ], $this->options);
