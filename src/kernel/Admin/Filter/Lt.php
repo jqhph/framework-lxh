@@ -9,7 +9,7 @@ class Lt extends AbstractFilter
      */
     protected $name = '@lt';
 
-    protected function condition($field)
+    protected function buildCondition($field)
     {
         $value = I($field);
 

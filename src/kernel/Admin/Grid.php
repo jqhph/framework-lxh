@@ -3,6 +3,7 @@
 namespace Lxh\Admin;
 
 use Lxh\Admin\Fields\Button;
+use Lxh\Admin\Filter\AbstractFilter;
 use Lxh\Admin\Table\Table;
 use Lxh\Admin\Widgets\Box;
 use Lxh\Contracts\Support\Renderable;
@@ -16,6 +17,9 @@ class Grid implements Renderable
      */
     protected $module = __CONTROLLER__;
 
+    /**
+     * @var Model
+     */
     protected $model;
 
     /**
@@ -61,7 +65,7 @@ class Grid implements Renderable
     /**
      * The grid Filter.
      *
-     * @var \Lxh\Admin\Grid\Filter
+     * @var \Lxh\Admin\Filter
      */
     protected $filter;
 
@@ -151,6 +155,22 @@ class Grid implements Renderable
     }
 
     /**
+     * 设置或获取过滤器
+     *
+     * @return static | Filter
+     */
+    public function filter(Filter $filter = null)
+    {
+        if (! $this->filter) {
+            $this->filter = $filter;
+
+            return $this;
+        }
+
+        return $this->filter;
+    }
+
+    /**
      *
      * @param Model $model
      * @return Model
@@ -168,7 +188,16 @@ class Grid implements Renderable
 
     protected function makeWhereContent()
     {
-        return [];
+        if (! $this->filter) {
+            return [];
+        }
+
+        // 格式化查询数组
+        foreach ($this->filter->conditions() as $condition) {
+            $condition->build();
+        }
+
+        return AbstractFilter::getConditionsValue();
     }
 
     protected function makeOrderContent()
@@ -177,10 +206,18 @@ class Grid implements Renderable
 
         $desc = I('desc');
 
-        return "`$sort`" . ($desc ? 'DESC' : 'ASC');
+        $sort = addslashes($sort);
+
+        return "`{$sort}`" . ($desc ? 'DESC' : 'ASC');
     }
 
 
+    /**
+     * 查询网格报表数据
+     * model需要实现一个count方法和一个findList方法
+     *
+     * @return array
+     */
     public function findList()
     {
         if ($this->rows) {
@@ -197,6 +234,7 @@ class Grid implements Renderable
 
         $this->total($total);
 
+        // 分页管理
         $pages = $this->paginator();
 
         if ($total && $this->usePagination()) {

@@ -101,7 +101,7 @@ class Content implements Renderable
         if ($callback) {
             call_user_func($callback, $filter, $column);
         }
-
+        
         return $filter;
     }
 

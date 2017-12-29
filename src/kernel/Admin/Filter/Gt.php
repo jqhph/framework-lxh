@@ -9,10 +9,10 @@ class Gt extends AbstractFilter
      */
     protected $name = '@gt';
 
-    protected function condition($field)
+    protected function buildCondition($field)
     {
         $value = I($field);
 
-        return $value === '' ? null : ['>', $value];
+        return ($value === '' || $value === null) ? null : ['>', $value];
     }
 }

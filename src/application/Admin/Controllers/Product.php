@@ -56,7 +56,7 @@ class Product extends Controller
         $content->description(trans(__CONTROLLER__ . ' list'));
 
         // 构建搜索界面
-        $content->filter(function (Filter $filter) {
+        $filter = $content->filter(function (Filter $filter) {
             $filter->multipleSelect('status')->options(range(1, 10));
             $filter->select('level')->options([1, 2]);
             $filter->text('stock')->number();
@@ -66,7 +66,7 @@ class Product extends Controller
         });
 
         // 构建网格报表
-        $content->grid($this->grid);
+        $content->grid($this->grid)->filter($filter);
 
         return $content->render();
     }

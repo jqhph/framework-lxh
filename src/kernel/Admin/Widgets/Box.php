@@ -7,7 +7,7 @@ use Lxh\Contracts\Support\Renderable;
 
 class Box extends Widget implements Renderable
 {
-    public static $script = [];
+    public static $scripts = [];
 
     /**
      * @var string
@@ -134,7 +134,7 @@ class Box extends Widget implements Renderable
     {
         $this->tools[] = '<a data-toggle="remove"><i class="zmdi zmdi-close"></i></a>';
 
-        static::$script[0] = <<<EOF
+        static::$scripts[0] = <<<EOF
             $('.portlet [data-toggle="remove"]').click(function (e) {
                 $(this).parent().parent().parent().toggle(100)
             })
@@ -149,7 +149,7 @@ EOF;
      */
     public function slideUp()
     {
-        static::$script[0] = <<<EOF
+        static::$scripts[1] = <<<EOF
             $('#collapse-{$this->id}').trigger('click')
 EOF;
         return $this;
@@ -172,7 +172,7 @@ EOF;
         $this->tools[] = '<button data-toggle="back" type="button" class="btn btn-default waves-effect"><i class="ti-arrow-left"></i>&nbsp;&nbsp;'
             . trans('back') . '</button>';
 
-        static::$script[1] = <<<EOF
+        static::$scripts[2] = <<<EOF
              $('.portlet [data-toggle="back"]').click(function(){back_tab();})
 EOF;
         return $this;

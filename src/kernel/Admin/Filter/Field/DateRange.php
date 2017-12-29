@@ -3,7 +3,25 @@
 namespace Lxh\Admin\Filter\Field;
 
 use Lxh\Admin\Form\Field;
+use Lxh\Admin\Filter\Equal;
+use Lxh\Admin\Filter\Gt;
+use Lxh\Admin\Filter\Lt;
+use Lxh\Admin\Filter\Between;
+use Lxh\Admin\Filter\Where;
+use Lxh\Admin\Filter\Like;
+use Lxh\Admin\Filter\Ilike;
 
+/**
+ * Class DateRange.
+ *
+ * @method Equal equal()
+ * @method Gt gt()
+ * @method Lt lt()
+ * @method Ilike ilike()
+ * @method Like like()
+ * @method Between between()
+ * @method Where where(callable $callable)
+ */
 class DateRange extends Field
 {
     use Condition;

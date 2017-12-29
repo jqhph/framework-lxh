@@ -3,6 +3,7 @@
 namespace Lxh\Admin\Form;
 
 use Lxh\Admin\Admin;
+use Lxh\Admin\Filter;
 use Lxh\Admin\Widgets\Form;
 use Lxh\Contracts\Support\Arrayable;
 use Lxh\Contracts\Support\Renderable;
@@ -113,6 +114,8 @@ class Field implements Renderable
      */
     protected static $js = [];
 
+    public static $scripts = [];
+
     /**
      * Script for field.
      *
@@ -163,6 +166,11 @@ class Field implements Renderable
     protected $placeholder;
 
     /**
+     * @var Filter
+     */
+    protected $filter;
+
+    /**
      * Width for label and field.
      *
      * @var array
@@ -208,6 +216,21 @@ class Field implements Renderable
     protected function formatId($column)
     {
         return str_replace('.', '_', $column);
+    }
+
+    public function setFilter($filter)
+    {
+        $this->filter = $filter;
+
+        return $this;
+    }
+
+    /**
+     * @return Filter
+     */
+    public function filter()
+    {
+        return $this->filter;
     }
 
     /**

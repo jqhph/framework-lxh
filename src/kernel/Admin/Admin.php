@@ -185,7 +185,7 @@ class Admin
         }
 
         foreach (static::$scriptClass as $class => &$v) {
-            static::script($class::$script);
+            static::script($class::$scripts);
         }
     }
     

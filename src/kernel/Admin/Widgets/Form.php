@@ -290,11 +290,16 @@ class Form implements Renderable
      *
      * @return $this
      */
-    protected function pushField(Field &$field)
+    protected function pushField(Field $field, $className = null)
     {
         array_push($this->fields, $field);
 
         $field->setForm($this);
+
+        $className = $className ?: get_class($field);
+
+        Admin::addAssetsFieldClass($className);
+        Admin::addScriptClass($className);
 
         return $this;
     }
@@ -397,8 +402,6 @@ class Form implements Renderable
             $element = new $className($name, array_slice($arguments, 1));
 
             $this->pushField($element);
-            
-            Admin::addAssetsFieldClass($className);
 
             return $element;
         }

@@ -12,7 +12,7 @@ class Between extends AbstractFilter
      */
     protected $name = '@between';
 
-    protected function condition($field)
+    protected function buildCondition($field)
     {
         $start = I($field . '-start');
         $end = I($field . '-end');

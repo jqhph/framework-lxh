@@ -3,6 +3,7 @@
 namespace Lxh\Admin;
 
 use Lxh\Admin\Fields\Button;
+use Lxh\Admin\Filter\AbstractFilter;
 use Lxh\Admin\Filter\Field\DateRange;
 use Lxh\Admin\Filter\Field\MultipleSelect;
 use Lxh\Admin\Filter\Field\Select;
@@ -16,7 +17,7 @@ use Lxh\Admin\Kernel\Url;
 use Lxh\MVC\Model;
 
 /**
- * Class Form.
+ * Class Filter.
  *
  * @method Text           text($name, $label = '')
  * @method Select         select($name, $label = '')
@@ -38,12 +39,21 @@ class Filter extends Widget implements Renderable
     protected $options = [
         'collapsable' => true,
         'enableReset' => true,
+        'useBox'      => true,
+        'useModal'    => false
     ];
 
     /**
      * @var array
      */
     protected $fields = [];
+
+    /**
+     * 条件查询处理器
+     *
+     * @var array
+     */
+    protected $conditions = [];
 
     protected static $availableFields = [
         'text' => Text::class,
@@ -69,6 +79,18 @@ class Filter extends Widget implements Renderable
         ];
     }
 
+    /**
+     * 禁止使用盒子包含过滤器表单
+     *
+     * @return static
+     */
+    public function disableBox()
+    {
+        $this->options['useBox'] = false;
+
+        return $this;
+    }
+
     public function title($title = null)
     {
         if ($title !== null) {
@@ -85,6 +107,10 @@ class Filter extends Widget implements Renderable
 
     public function render()
     {
+        if (! $this->options['useBox']) {
+            return view($this->view, $this->vars())->render();
+        }
+
         $box = new Box($this->title);
 
         $box->content(view($this->view, $this->vars())->render())->style('primary');
@@ -94,6 +120,38 @@ class Filter extends Widget implements Renderable
         }
 
         return $box->render();
+    }
+
+    /**
+     * 获取字段数组
+     *
+     * @return array
+     */
+    public function fields()
+    {
+        return $this->fields;
+    }
+
+    /**
+     * 存储条件处理器
+     *
+     * @return static
+     */
+    public function condition(AbstractFilter $condition)
+    {
+        $this->conditions[$condition->name()] = $condition;
+
+        return $this;
+    }
+
+    /**
+     * 获取条件查询处理器数组
+     *
+     * @return array
+     */
+    public function conditions()
+    {
+        return $this->conditions;
     }
 
     protected function vars()
@@ -113,9 +171,16 @@ class Filter extends Widget implements Renderable
      *
      * @return $this
      */
-    protected function pushField(Field &$field)
+    protected function pushField(Field $field, $className = null)
     {
         array_push($this->fields, $field);
+
+        $field->setFilter($this);
+
+        $className = $className ?: get_class($field);
+
+        Admin::addAssetsFieldClass($className);
+        Admin::addScriptClass($className);
 
         return $this;
     }
@@ -136,8 +201,6 @@ class Filter extends Widget implements Renderable
             $element = new $className($name, array_slice($arguments, 1));
 
             $this->pushField($element);
-
-            Admin::addAssetsFieldClass($className);
 
             return $element;
         }

@@ -7,13 +7,25 @@ class Equal extends AbstractFilter
     /**
      * @var string
      */
-    protected $name = '@equal';
+    protected $name = '@eq';
 
-    protected function condition($field)
+    protected function buildCondition($field)
     {
         $value = I($field);
 
-        return $value === '' ? null : $value;
+        if ($value === '' || $value === null) {
+            return null;
+        }
+
+        if (is_array($value)) {
+            $count = count($value);
+
+            if ($count < 1) return null;
+
+            return count($value) > 1 ? ['IN', &$value] : $value[0];
+        }
+
+        return $value;
     }
 
 }

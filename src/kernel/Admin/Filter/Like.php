@@ -9,10 +9,39 @@ class Like extends AbstractFilter
      */
     protected $name = '@like';
 
-    protected function condition($field)
+    protected $right = false;
+
+    protected $left = false;
+
+    protected function buildCondition($field)
     {
         $value = I($field);
 
-        return $value === '' ? null : ['like', "%$value%"];
+        if ($this->left) {
+            $p = $this->left ? "%$value" : "%$value%";
+        } else {
+            $p = $this->right ? "$value%" : "%$value%";
+        }
+        
+        return ($value === '' || $value === null) ? null : ['like', &$p];
+    }
+
+    public function left()
+    {
+        $this->left = true;
+
+        return $this;
+    }
+
+    /**
+     * 右边like
+     *
+     * @return static
+     */
+    public function right()
+    {
+        $this->right = true;
+
+        return $this;
     }
 }

@@ -3,60 +3,57 @@
 namespace Lxh\Admin\Filter\Field;
 
 use Lxh\Admin\Filter\AbstractFilter;
+use Lxh\Admin\Filter\Where;
 
 trait Condition
 {
     /**
      * @var AbstractFilter
      */
-    protected $handler = [];
+    protected $conditions = [];
 
     public function between()
     {
-        $this->condition('between');
-        return $this;
+        return $this->condition('between');
     }
 
     public function gt()
     {
-        $this->condition('gt');
-        return $this;
+        return $this->condition('gt');
     }
 
     public function lt()
     {
-        $this->condition('lt');
-        return $this;
+        return $this->condition('lt');
     }
 
     public function like()
     {
-        $this->condition('like');
-        return $this;
+        return $this->condition('like');
     }
 
     public function rlike()
     {
-        $this->condition('rlike');
-        return $this;
+        return $this->condition('rlike');
     }
 
     public function ilike()
     {
-        $this->condition('ilike');
-        return $this;
+        return $this->condition('ilike');
     }
 
     public function equal()
     {
-        $this->condition('equal');
-        return $this;
+        return $this->condition('equal');
     }
 
-    public function where($call)
+    /**
+     * @param $call
+     * @return Where
+     */
+    public function where(callable $call)
     {
-        $this->condition('where', $call);
-        return $this;
+        return $this->condition('where', $call);
     }
 
     /**
@@ -64,17 +61,22 @@ trait Condition
      * @param string $type
      * @return static
      */
-    public function condition($type, $call = null)
+    public function condition($type = null, $call = null)
     {
         $fieldName = $this->name();
-        if (isset($this->handler[$fieldName])) {
-            return $this;
+        if (isset($this->conditions[$fieldName])) {
+            return $this->conditions[$fieldName];
         }
+
         $class = ucfirst($type);
 
         $class = "Lxh\\Admin\\Filter\\$class";
 
-        return $this->handler[$fieldName] = new $class($this, $call);
+        $this->conditions[$fieldName] = new $class($this, $call);
+        
+        $this->filter()->condition($this->conditions[$fieldName]);
+
+        return $this->conditions[$fieldName];
     }
 
     /**
@@ -87,7 +89,7 @@ trait Condition
 
         $default = isset($this->defaultHandler) ? $this->defaultHandler : 'equal';
 
-        return isset($this->handler[$name]) ? $this->handler[$name] : ($this->condition($default));
+        return isset($this->conditions[$name]) ? $this->conditions[$name] : ($this->condition($default));
     }
 
 }
