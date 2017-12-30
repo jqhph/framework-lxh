@@ -171,7 +171,7 @@ trait Loader
             'class' => 'Lxh\Admin\Admin',
         ],
         'url' => [
-            'shared' => true,
+            'shared' => false,
             'class' => 'Lxh\Http\Url',
         ]
     ];

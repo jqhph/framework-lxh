@@ -86,9 +86,7 @@ class Th extends Widget
 
         $icon = 'fa-arrows-v';
 
-        $sorted = $this->isSorted();
-
-        if ($sorted) {
+        if ($this->isSorted()) {
             $this->desc = I('desc', $this->desc);
 
             $icon = $this->desc ? 'fa-sort-amount-desc' : 'fa-sort-amount-asc';
@@ -104,12 +102,10 @@ class Th extends Widget
             $desc = !$this->desc;
         }
 
-        if ($sorted) {
-            $url->query([
-                'sort' => $this->name,
-                'desc' => $desc
-            ]);
-        }
+        $url->query([
+            'sort' => $this->name,
+            'desc' => $desc
+        ]);
 
         $url = $url->string();
         

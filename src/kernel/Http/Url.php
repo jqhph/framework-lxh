@@ -3,9 +3,15 @@
 namespace Lxh\Http;
 
 use Lxh\Http\Message\Uri;
+use Psr\Http\Message\UriInterface;
 
 class Url
 {
+    /**
+     * @var static
+     */
+    protected static $current;
+
     /**
      * @var Request
      */
@@ -20,15 +26,50 @@ class Url
 
     protected $path;
 
-    public function __construct()
+    public function __construct(Uri $uri = null)
     {
         $this->request = request();
-        $this->uri = $this->request->getUri();
+    }
 
-        if ($q = $this->uri->getQuery()) {
-            parse_str($q, $this->query);
+    /**
+     * 获取当前url
+     *
+     * @return Url|static
+     */
+    public static function current()
+    {
+        if (static::$current) {
+            return static::$current;
         }
-        $this->path = $this->uri->getPath();
+
+        static::$current = new static();
+
+        return static::$current->setUri(request()->getUri());
+    }
+
+    public function setUri(UriInterface $uri)
+    {
+        $this->uri = $uri;
+
+        return $this;
+    }
+
+    /**
+     * @param null $uri
+     * @return static
+     */
+    public function create($uri = null)
+    {
+        if (! $this->uri) {
+            $this->uri = $this->request->createUri();
+
+            if ($q = $this->uri->getQuery()) {
+                parse_str($q, $this->query);
+            }
+            $this->path = $this->uri->getPath();
+        }
+
+        return $this;
     }
 
     /**
@@ -36,6 +77,8 @@ class Url
      */
     public function uri()
     {
+        if (! $this->uri) $this->create();
+
         return $this->uri;
     }
 
@@ -46,6 +89,8 @@ class Url
      */
     public function query($k = null, $v = null)
     {
+        if (! $this->uri) $this->create();
+
         if (! $k === null) {
             return $this->query;
         }
@@ -65,6 +110,7 @@ class Url
      */
     public function unsetQuery($keys)
     {
+        if (! $this->uri) $this->create();
         foreach ((array) $keys as &$k) {
             unset($this->query[$k]);
         }
@@ -92,6 +138,8 @@ class Url
      */
     public function string()
     {
+        if (! $this->uri) $this->create();
+
         $this->uri->withPath($this->path);
         $this->uri->withQuery(http_build_query($this->query));
 
@@ -105,6 +153,8 @@ class Url
 
     public function __call($name, $arguments)
     {
+        if (! $this->uri) $this->create();
+
         return call_user_func_array([$this->uri, $name], $arguments);
     }
 }

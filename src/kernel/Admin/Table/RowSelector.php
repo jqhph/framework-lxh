@@ -119,6 +119,9 @@ function active(input, close) {
     {
         $attr = $this->formatAttributes();
 
+//        return <<<EOF
+//<div style="padding:0;margin:0 0 0 20px;" class="checkbox checkbox-custom"><input type="checkbox"><label style="padding:0;min-height:15px"></label></div>
+//EOF;
         return "<input type='checkbox' data-action='select-all' {$attr} /><input type='hidden' id='select-all' value=''>";
     }
 }

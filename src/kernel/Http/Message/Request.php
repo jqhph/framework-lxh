@@ -43,18 +43,28 @@ class Request extends Message implements RequestInterface
         if ($this->uri) {
             return;
         }
-        $user = get_value($_SERVER, 'PHP_AUTH_USER');
-        $pwd = get_value($_SERVER, 'PHP_AUTH_PW');
-        $auth = '';
-        if ($user && $pwd) {
-            $auth = "{$user}:{$pwd}@";
+
+        $this->uri = $this->createUri();
+    }
+
+    /**
+     * @param null $uri
+     * @return Uri
+     */
+    public function createUri($uri = null)
+    {
+        if (! $uri) {
+            $user = get_value($_SERVER, 'PHP_AUTH_USER');
+            $pwd = get_value($_SERVER, 'PHP_AUTH_PW');
+            $auth = '';
+            if ($user && $pwd) {
+                $auth = "{$user}:{$pwd}@";
+            }
+            $scheme = get_value($_SERVER, 'REQUEST_SCHEME');
+            $uri = "{$scheme}://{$auth}{$_SERVER['HTTP_HOST']}:{$_SERVER['SERVER_PORT']}{$_SERVER['REQUEST_URI']}";
         }
 
-        $scheme = get_value($_SERVER, 'REQUEST_SCHEME');
-
-        $uri = "{$scheme}://{$auth}{$_SERVER['HTTP_HOST']}:{$_SERVER['SERVER_PORT']}{$_SERVER['REQUEST_URI']}";
-
-        $this->uri = new Uri($uri);
+        return new Uri($uri);
     }
 
     /**

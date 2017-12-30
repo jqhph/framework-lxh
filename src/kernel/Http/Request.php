@@ -47,6 +47,16 @@ class Request extends Message\ServerRequest
 
 	}
 
+    /**
+     * 当前访问的url
+     *
+     * @return Url
+     */
+	public function url()
+    {
+        return Url::current();
+    }
+
 	/**
 	 * 获取浏览器header请求头中的国家语言代码
 	 *
