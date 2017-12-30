@@ -68,7 +68,15 @@ class Product extends Controller
 
         // 构建网格报表
         $grid = $content->grid($this->grid);
+        // 添加过滤器
         $grid->filter($filter);
+
+        // 修改标题颜色
+        $grid->th('name', function (Th $th) {
+            $th->attribute('style', 'color:blue;');
+        });
+
+        // 字段设置
         $grid->field('order_num', '*****');
         $grid->field('price', function (&$value, &$options) {
                 return $value + 100;

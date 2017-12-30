@@ -32,9 +32,11 @@ abstract class AbstractFilter
 
     protected $fieldFormatHandler;
 
-    public function __construct(Field $field = null)
+    public function __construct(Field $field = null, callable $conditionHandler = null)
     {
         $this->field = $field;
+
+        $this->conditionHandler = $conditionHandler;
     }
 
     /**
@@ -68,11 +70,6 @@ abstract class AbstractFilter
         return $this->name;
     }
 
-    public function render()
-    {
-        return '';
-    }
-
     /**
      * 过滤器值
      *
@@ -81,11 +78,6 @@ abstract class AbstractFilter
     public function value()
     {
         return $this->field->name();
-    }
-
-    public function __toString()
-    {
-        return $this->render();
     }
 
     /**

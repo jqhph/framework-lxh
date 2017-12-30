@@ -9,6 +9,7 @@ use Lxh\Admin\Table\Tr;
 use Lxh\Admin\Table\Tree;
 use Lxh\Admin\Widgets\Widget;
 use Lxh\Contracts\Support\Renderable;
+use Lxh\Exceptions\InvalidArgumentException;
 use Lxh\Support\Arr;
 
 class Table extends Widget
@@ -66,12 +67,16 @@ class Table extends Widget
     protected $columns = [];
 
     /**
-     * 字段渲染处理器
-     *
      * @var array
      */
-    protected $handlers = [];
+    protected $handlers = [
+        'field' => [],
+        'th' => [],
+    ];
 
+    /**
+     * @var RowSelector
+     */
     protected $rowSelector = null;
 
     /**
@@ -110,7 +115,7 @@ class Table extends Widget
     /**
      * 获取id键名
      *
-     * @return static|string
+     * @return string
      */
     public function idName()
     {
@@ -136,13 +141,10 @@ class Table extends Widget
      * @param string|callable $content
      * @return static
      */
-    public function value($field, $content)
+    public function field($field, $content)
     {
-        $this->handlers[$field] = $content;
-
-        return $this;
+        return $this->setHandler('field', $field, $content);
     }
-
 
     /**
      * 使用层级树结构
@@ -229,6 +231,35 @@ class Table extends Widget
     }
 
     /**
+     * @param string $field
+     * @param mixed $content
+     * @return static
+     */
+    public function th($field, $content = null)
+    {
+        return $this->setHandler('th', $field, $content);
+    }
+
+    protected function setHandler($name, $key, $handler)
+    {
+        $this->handlers[$name][$key] = $handler;
+
+        return $this;
+    }
+
+    /**
+     * @param $name
+     * @param $k
+     * @return mixed
+     */
+    public function handler($name, $k)
+    {
+        if (! isset($this->handlers[$name])) return null;
+
+        return isset($this->handlers[$name][$k]) ? $this->handlers[$name][$k] : null;
+    }
+
+    /**
      * Set table rows.
      *
      * @param array $rows
@@ -273,8 +304,8 @@ class Table extends Widget
             $th .= $this->buildTh($this->selector()->renderHead());
         }
 
-        foreach ($this->headers as $k => &$options) {
-            $th .= $this->buildTh($k, $options)->render();
+        foreach ($this->headers as $field => &$options) {
+            $th .= $this->buildTh($field, $options)->render();
         }
 
         foreach ($this->columns as $column) {
@@ -285,17 +316,17 @@ class Table extends Widget
 
     /**
      *
-     * @param string $name 字段名称
+     * @param string $field 字段名称
      * @param array $field 配置参数
      * @return Th
      */
-    protected function buildTh($name, &$options = [])
+    protected function buildTh($field, &$options = [])
     {
         $vars = (array)get_value($options, 'th');
 
         $vars['data-priority'] = $this->getPriorityFromOptions($options);
 
-        $th = $this->ths[$name] = new Th($this, $name, $vars);
+        $th = $this->ths[$field] = new Th($this, $field, $vars);
 
         if (get_isset($options, 'sortable')) {
             $th->sortable();
@@ -303,6 +334,15 @@ class Table extends Widget
     
         if (($desc = get_isset($options, 'desc')) !== null) {
             $th->desc($desc);
+        }
+
+        if ($handler = $this->handler('th', $field)) {
+            // 自定义处理器
+            if (is_callable($handler)) {
+                call_user_func($handler, $th);
+            } else {
+                $th->value($handler);
+            }
         }
 
         return $th;

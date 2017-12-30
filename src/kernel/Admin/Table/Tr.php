@@ -40,20 +40,12 @@ class Tr extends Widget
      */
     protected $columns = [];
 
-    /**
-     * 字段渲染处理器
-     *
-     * @var array
-     */
-    protected $handlers = [];
-
-    public function __construct(Table $table, $level, &$row, array $columns = [], array $handlers = [])
+    public function __construct(Table $table, $level, &$row, array $columns = [])
     {
         $this->table = $table;
         $this->level = $level;
         $this->row = &$row;
         $this->columns = &$columns;
-        $this->handlers = &$handlers;
     }
 
     public function columns()
@@ -117,16 +109,16 @@ class Tr extends Widget
 
             $item = &$row[$field];
 
-            if (isset($this->handlers[$field])) {
+            if ($handler = $this->table->handler('field', $field)) {
                 // 自定义处理器
-                if (is_callable($this->handlers[$field])) {
+                if (is_callable($handler)) {
                     $td .= $this->buildTd(
-                        call_user_func($this->handlers[$field], $item, get_value($options, 'options')),
+                        call_user_func($handler, $item, get_value($options, 'options')),
                         $options
                     );
                 } else {
                     $td .= $this->buildTd(
-                        $this->handlers[$field],
+                        $handler,
                         $options
                     );
                 }

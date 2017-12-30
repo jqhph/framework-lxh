@@ -7,6 +7,7 @@ use Lxh\Admin\Filter\AbstractFilter;
 use Lxh\Admin\Table\Actions;
 use Lxh\Admin\Table\Column;
 use Lxh\Admin\Table\Table;
+use Lxh\Admin\Table\Th;
 use Lxh\Admin\Widgets\Box;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Admin\Kernel\Url;
@@ -197,7 +198,7 @@ class Grid implements Renderable
      */
     public function field($field, $content)
     {
-        $this->table->value($field, $content);
+        $this->table->field($field, $content);
 
         return $this;
     }
@@ -524,6 +525,18 @@ class Grid implements Renderable
         }
 
         return $box->render();
+    }
+
+    /**
+     * @param string $field
+     * @param $content
+     * @return static
+     */
+    public function th($field, $content = null)
+    {
+        $this->table->th($field, $content);
+
+        return $this;
     }
 
     protected function formatUrl()
