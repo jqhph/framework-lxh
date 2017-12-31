@@ -64,7 +64,10 @@ class Table extends Widget
      *
      * @var array
      */
-    protected $columns = [];
+    protected $columns = [
+        'front' => [],
+        'last' => [],
+    ];
 
     /**
      * @var array
@@ -170,17 +173,31 @@ class Table extends Widget
     }
 
     /**
-     * 增加额外的列
+     * 追加列到最前面
      *
      * @param string|callable $title 标题或回调函数
      * @param string|callable $content 内容或回调函数
      * @return Column
      */
-    public function column($title, $content = null)
+    public function prepend($title, $content = null)
     {
         $column = new Column($title, $content);
 
-        return $this->columns[] = $column;
+        return $this->columns['front'][] = $column;
+    }
+
+    /**
+     * 追加列到最后面
+     *
+     * @param string|callable $title 标题或回调函数
+     * @param string|callable $content 内容或回调函数
+     * @return Column
+     */
+    public function append($title, $content = null)
+    {
+        $column = new Column($title, $content);
+
+        return $this->columns['last'][] = $column;
     }
 
     public function allowRowSelector()
@@ -299,16 +316,15 @@ class Table extends Widget
     {
         $th = '';
 
-        if ($this->allowRowSelector()) {
-            // 构建行选择器
-            $th .= $this->buildTh($this->selector()->renderHead());
+        foreach ($this->columns['front'] as &$column) {
+            $th .= $column->title();
         }
 
         foreach ($this->headers as $field => &$options) {
             $th .= $this->buildTh($field, $options)->render();
         }
 
-        foreach ($this->columns as $column) {
+        foreach ($this->columns['last'] as &$column) {
             $th .= $column->title();
         }
         return $th;
@@ -338,7 +354,7 @@ class Table extends Widget
 
         if ($handler = $this->handler('th', $field)) {
             // 自定义处理器
-            if (is_callable($handler)) {
+            if (!is_string($handler) && is_callable($handler)) {
                 call_user_func($handler, $th);
             } else {
                 $th->value($handler);
@@ -365,18 +381,8 @@ class Table extends Widget
 
     protected function buildTr($k, &$row)
     {
-        $columns = [
-            'before' => [],
-            'after' => $this->columns,
-        ];
-
-        if ($this->allowRowSelector()) {
-            $columns['before'][] = $this->selector();
-        }
-
-        return $this->trs[] = new Tr($this, $k, $row, $columns, $this->handlers);
+        return $this->trs[] = new Tr($this, $k, $row, $this->columns, $this->handlers);
     }
-
 
     /**
      * Render the table.
@@ -385,6 +391,17 @@ class Table extends Widget
      */
     public function render()
     {
+        if ($this->allowRowSelector()) {
+            // 添加行选择器到列最前面
+            array_unshift($this->columns['front'], new Column(function (array $row, Td $td, Th $th) {
+                $selector = $this->selector();
+                $selector->row($row);
+
+                $th->value($selector->renderHead());
+                return $selector->render();
+            }));
+        }
+
         $rows = $this->buildRows();
         $nodata = $rows ? '' : $this->noDataTip();
 

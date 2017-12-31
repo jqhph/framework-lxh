@@ -204,7 +204,7 @@ class Grid implements Renderable
     }
 
     /**
-     * 增加额外的列
+     * 追加额外的列到最后面
      *
      * @param string|callable $title 标题或回调函数
      * @param string|callable $content 内容或回调函数
@@ -212,7 +212,35 @@ class Grid implements Renderable
      */
     public function column($title, $content = null)
     {
-        $this->table->column($title, $content);
+        $this->table->append($title, $content);
+
+        return $this;
+    }
+
+    /**
+     * 追加额外的列到最后面
+     *
+     * @param string|callable $title 标题或回调函数
+     * @param string|callable $content 内容或回调函数
+     * @return static
+     */
+    public function append($title, $content = null)
+    {
+        $this->table->append($title, $content);
+
+        return $this;
+    }
+
+    /**
+     * 追加额外的列到最前
+     *
+     * @param string|callable $title 标题或回调函数
+     * @param string|callable $content 内容或回调函数
+     * @return static
+     */
+    public function prepend($title, $content = null)
+    {
+        $this->table->prepend($title, $content);
 
         return $this;
     }

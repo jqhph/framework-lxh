@@ -209,7 +209,7 @@ function files()
  */
 function trans($label, $category = 'labels', array $sprints = [])
 {
-    return $GLOBALS['LANGUAGE']->translate($label, $category, $sprints);
+    return ($label !== '' && $label !== null) ? $GLOBALS['LANGUAGE']->translate($label, $category, $sprints) : '';
 }
 
 /**

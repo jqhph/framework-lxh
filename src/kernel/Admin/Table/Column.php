@@ -9,7 +9,15 @@ use Lxh\Support\Arr;
 
 class Column extends Widget
 {
+    /**
+     * @var string
+     */
     protected $defaultTitle = '&nbsp;';
+
+    /**
+     * @var Tr
+     */
+    protected $tr;
 
     /**
      * @var Th|mixed
@@ -32,7 +40,7 @@ class Column extends Widget
     
     public function __construct($title, $content = null)
     {
-        if (is_callable($title) && $content === null) {
+        if (is_callable($title) && $content === null && !is_string($title)) {
             $this->th = new Th(null, $this->defaultTitle);
 
             return $this->content = $title;
@@ -40,6 +48,12 @@ class Column extends Widget
 
         $this->th = new Th(null, $title ?: $this->defaultTitle);
         $this->content = $content;
+    }
+
+    public function tr(Tr $tr)
+    {
+        $this->tr = $tr;
+        return $this;
     }
 
     /**
@@ -70,9 +84,13 @@ class Column extends Widget
 
     public function render()
     {
-        if (is_callable($this->content)) {
-            return call_user_func($this->content, $this->row, $this, $this->th);
+        $td = new Td();
+
+        if (!is_string($this->content) && is_callable($this->content)) {
+            $td->value(call_user_func($this->content, $this->row, $td, $this->th, $this->tr));
+            return $td->render();
         }
-        return $this->content;
+        $td->value($this->content);
+        return $td->render();
     }
 }

@@ -20,11 +20,14 @@ class Tr extends Widget
     protected $table;
 
     /**
-     * 层级
-     *
+     * @var array
+     */
+    protected $tds = [];
+
+    /**
      * @var int
      */
-    protected $level = 1;
+    protected $offset = 0;
 
     /**
      * 行数据
@@ -40,10 +43,17 @@ class Tr extends Widget
      */
     protected $columns = [];
 
-    public function __construct(Table $table, $level, &$row, array $columns = [])
+    /**
+     * 字段自定义配置键值
+     *
+     * @var string
+     */
+    protected $fieldOptionsKey = 'options';
+
+    public function __construct(Table $table, $offset, &$row, array $columns = [])
     {
         $this->table = $table;
-        $this->level = $level;
+        $this->offset = $offset;
         $this->row = &$row;
         $this->columns = &$columns;
     }
@@ -54,18 +64,20 @@ class Tr extends Widget
     }
 
     /**
-     * 获取行层级
+     * 获取行号
      *
      * @return int
      */
-    public function level()
+    public function line()
     {
-        return $this->level;
+        return $this->offset + 1;
     }
 
     public function render()
     {
-        $tr = '<tr>' . $this->buildColumns($this->row) . '</tr>';
+        $columns = $this->buildColumns($this->row);
+
+        $tr = "<tr {$this->formatAttributes()}>{$columns}</tr>";
 
         $name = $this->table->treeName();
 
@@ -92,14 +104,14 @@ class Tr extends Widget
      */
     protected function buildTree($name, &$rows)
     {
-        return new Tree($this, $name, $this->level + 1, $rows);
+        return new Tree($this, $name, $this->offset + 1, $rows);
     }
 
     protected function buildColumns(array &$row)
     {
-        $td = '';
+        $tdString = '';
 
-        $this->buildBeforeClolumns($td, $row);
+        $this->prependClolumns($tdString, $row);
 
         $headers = $this->table->headers();
         foreach ($headers as $field => &$options) {
@@ -107,51 +119,56 @@ class Tr extends Widget
                 continue;
             }
 
-            $item = &$row[$field];
+            $td = $this->buildTd($field, $row[$field]);
 
             if ($handler = $this->table->handler('field', $field)) {
                 // 自定义处理器
-                if (is_callable($handler)) {
-                    $td .= $this->buildTd(
-                        call_user_func($handler, $item, get_value($options, 'options')),
-                        $options
+                if (!is_string($handler) && is_callable($handler)) {
+                    $this->setupTdWithOptions($td, $options);
+                    $td->value(
+                        $handler($row[$field], get_value($options, $this->fieldOptionsKey), $td)
                     );
+                    $tdString .= $td->render();
                 } else {
-                    $td .= $this->buildTd(
-                        $handler,
-                        $options
-                    );
+                    $tdString .=  $this->setupTdWithOptions($td, $options)->value($handler)->render();
                 }
                 continue;
             }
 
             if (! $options || ! is_array($options)) {
-                $td .= $this->buildTd($item);
+                $tdString .= $td->render();
                 continue;
             }
 
             $view = get_value($options, 'view');
             if (! $view) {
-                $td .= $this->buildTd($item, $options);
+                $tdString .= $this->setupTdWithOptions($td, $options)->render();
                 continue;
             }
-            $td .= $this->buildTd(
-                $this->renderFiledView($view, $field, $item, get_value($options, 'options')),
-                $options
-            );
+            $tdString .= $this->renderFiledView($view, $field, $row[$field], $td, $options);
         }
 
-        $this->buildLastColumns($td, $row);
+        $this->appendColumns($tdString, $row);
 
+        return $tdString;
+    }
+
+    /**
+     * 设置td配置
+     *
+     * @param Td $td
+     * @param $options
+     * @return Td
+     */
+    protected function setupTdWithOptions(Td $td, &$options)
+    {
         return $td;
     }
 
-    protected function buildBeforeClolumns(&$td, &$row)
+    protected function prependClolumns(&$tdString, &$row)
     {
-        foreach ($this->columns['before'] as $column) {
-            $td .= $this->buildTd(
-                $column->row($row)->render()
-            );
+        foreach ($this->columns['front'] as $column) {
+            $tdString .= $column->tr($this)->row($row)->render();
         }
     }
 
@@ -160,38 +177,40 @@ class Tr extends Widget
      *
      * @return void
      */
-    protected function buildLastColumns(&$td, &$row)
+    protected function appendColumns(&$tdString, &$row)
     {
-        foreach ($this->columns['after'] as $column) {
-            $td .= $this->buildTd(
-                $column->row($row)->render()
-            );
+        foreach ($this->columns['last'] as $column) {
+            $tdString .= $column->tr($this)->row($row)->render();
         }
     }
 
 
     /**
      *
-     * @return Field
+     * @return string
      */
-    protected function renderFiledView($view, $field, $value, $vars)
+    protected function renderFiledView($view, $field, $value, Td $td, $vars)
     {
         $method = 'build' . $view;
         if (method_exists($this, $method)) {
-            return $this->$method($field, $value, $vars);
+            return $td->value($this->$method($field, $value, get_value($vars, $this->fieldOptionsKey)))->render();
         }
 
         $view = str_replace('.', '\\', $view);
 
         $class  = "Lxh\\Admin\\Fields\\{$view}";
 
-        return (new $class($field, $value, $vars))->render();
+        return $td->value((new $class($field, $value, get_value($vars, $this->fieldOptionsKey)))->render())->render();
     }
 
-    protected function buildTd($value, &$options = [])
+    /**
+     * @param $field
+     * @param $value
+     * @param array $options
+     * @return Td
+     */
+    protected function buildTd($field, $value)
     {
-        $priority = $this->table->getPriorityFromOptions($options);
-
-        return "<td data-priority='$priority'>$value</td>";
+        return $this->tds[$field] = new Td($value);
     }
 }

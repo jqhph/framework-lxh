@@ -58,6 +58,18 @@ class Th extends Widget
     }
 
     /**
+     * 默认隐藏列
+     *
+     * @return static
+     */
+    public function hide()
+    {
+        $this->attributes['data-priority'] = 0;
+
+        return $this;
+    }
+
+    /**
      * @param string|callable $value
      * @return string|static
      */
@@ -67,7 +79,7 @@ class Th extends Widget
             return $this->value;
         }
 
-        $this->value = is_callable($value) ? $value($this) : trans($value, 'fields');
+        $this->value = $value instanceof \Closure ? $value($this) : trans($value, 'fields');
 
         return $this;
     }
@@ -163,9 +175,7 @@ class Th extends Widget
 
     public function render()
     {
-        $attributes = $this->formatAttributes();
-
-        return "<th $attributes>" . $this->value . $this->sorter() . '</th>';
+        return "<th {$this->formatAttributes()}>{$this->value}{$this->sorter()}</th>";
     }
 
 }

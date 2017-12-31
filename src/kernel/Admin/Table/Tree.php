@@ -32,18 +32,18 @@ class Tree
      *
      * @var int
      */
-    protected $level = 1;
+    protected $tier = 1;
     
     protected $rows = [];
     
-    public function __construct(Tr $tr, $name, $level, array &$rows)
+    public function __construct(Tr $tr, $name, $tier, array &$rows)
     {
         $this->tr = $tr;
         $this->name = $name;
-        $this->level = $level;
+        $this->tier = $tier;
         $this->rows = &$rows;
 
-        $this->spacing = $this->level * 3;
+        $this->spacing = $this->tier * 3;
     }
 
     /**
@@ -77,7 +77,7 @@ class Tree
             if (isset($row[$this->indentField])) {
                 $row[$this->indentField] = $this->formatIndent($row[$this->indentField], $endPos == $k);
             }
-            $tr .= $this->buildTr($k + $this->level + 1, $row)->render();
+            $tr .= $this->buildTr($k + $this->tier + 1, $row)->render();
         }
         return $tr;
     }

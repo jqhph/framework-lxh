@@ -12,7 +12,9 @@ use Lxh\Admin\Filter;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Layout\Row;
 use Lxh\Admin\Table\Column;
+use Lxh\Admin\Table\Td;
 use Lxh\Admin\Table\Th;
+use Lxh\Admin\Table\Tr;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
 
@@ -78,22 +80,34 @@ class Product extends Controller
 
         // 字段设置
         $grid->field('order_num', '*****');
-        $grid->field('price', function (&$value, &$options) {
+        $grid->field('price', function ($value, $options) {
                 return $value + 100;
             });
+
+        // 追加额外的列到最前面
+        $grid->prepend('序号', function (array $row, Td $td, Th $th, Tr $tr) {
+            if ($tr->line() == 3) {
+                // 给第三行添加active样式
+                $tr->class('active');
+            }
+
+            return $tr->line();
+        });
 
         // 增加额外的行
         $grid->column('下班了', '真的嘛？！');
 
-        $grid->column('呵呵', function (array $row, Column $column, Th $th) {
+        $grid->column('呵呵', function (array $row, Td $td, Th $th, Tr $tr) {
             // 设置标题样式
             $th->attribute('style', 'color:red;font-weight:600');
             $th->class('test-class');
+            // 默认隐藏
+            $th->hide();
 
-            return '#' . $row['id'];
+            return '#' . $tr->line();
         });
 
-        $grid->column(function (array $row, Column $column, Th $th) {
+        $grid->column(function (array $row, Td $td, Th $th) {
             $th->value('叫什么好呢？');
             return '演示一下而已~';
         });
