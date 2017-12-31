@@ -126,7 +126,7 @@ class Tr extends Widget
                 if (!is_string($handler) && is_callable($handler)) {
                     $this->setupTdWithOptions($td, $options);
                     $td->value(
-                        $handler($row[$field], get_value($options, $this->fieldOptionsKey), $td)
+                        $handler($row[$field], $td)
                     );
                     $tdString .= $td->render();
                 } else {

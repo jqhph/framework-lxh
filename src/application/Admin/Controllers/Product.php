@@ -12,6 +12,7 @@ use Lxh\Admin\Filter;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Layout\Row;
 use Lxh\Admin\Table\Column;
+use Lxh\Admin\Table\Table;
 use Lxh\Admin\Table\Td;
 use Lxh\Admin\Table\Th;
 use Lxh\Admin\Table\Tr;
@@ -70,30 +71,63 @@ class Product extends Controller
 
         // 构建网格报表
         $grid = $content->grid($this->grid);
-        // 添加过滤器
+
+        // 添加过滤器，会根据搜索表单内容构建Sql where过滤语句
+        // 当然，你也可以自定定义where语句内容
         $grid->filter($filter);
 
-        $table = $grid->table();
+        // 设置表格
+        // 可以自定义行、列、表头的内容和样式等，也可以追加列
+        $this->setupTable($grid->table());
 
-        // 修改标题颜色
+        // 渲染模板
+        return $content->render();
+    }
+
+    protected function setupTable(Table $table)
+    {
+        /**
+         * 自定义字段标题内容
+         *
+         * @param Th $th 标题对象
+         */
         $table->th('name', function (Th $th) {
-            $th->attribute('style', 'color:blue;');
+            // 设置标题颜色
+            $th->attribute('style', 'color:green;');
+            // 设置标题显示内容
+            $th->value('<b>名称</b>');
         });
 
-        // 字段设置
+        // 字段显示内容自定义：直接设置内容
+        // 如果一个字段调用了field自定义处理之后，初始配置的字段渲染方法将不再执行
         $table->field('order_num', '*****');
-        $table->field('price', function ($value, $options, Td $td) {
-                return $value + 100;
-            });
 
-        // 追加额外的列到最前面
+        /**
+         * 字段显示内容自定义：使用匿名函数可以更灵活的定义想要的内容
+         * 匿名函数接受2个参数
+         *
+         * @param mixed $value 原始字段值
+         * @param Td $td 表格列字段管理对象（Table > Tr > Th, Td）
+         */
+        $table->field('price', function ($value, Td $td) {
+            return $value + 100;
+        });
+
+        /**
+         * 追加额外的列到最前面
+         *
+         * @param array $row 当前行数据
+         * @param Td $td 追加的列Td对象
+         * @param Th $th 追加的列Th对象
+         * @paran Tr $tr 追加的列Tr对象
+         */
         $table->prepend('序号', function (array $row, Td $td, Th $th, Tr $tr) {
-            if ($tr->line() == 3) {
+            if (($line = $tr->line()) == 3) {
                 // 给第三行添加active样式
                 $tr->class('active');
             }
 
-            return $tr->line();
+            return $line;
         });
 
         // 增加额外的行
@@ -113,8 +147,6 @@ class Product extends Controller
             $th->value('叫什么好呢？');
             return '演示一下而已~';
         });
-
-        return $content->render();
     }
 
     /**
