@@ -7,7 +7,9 @@ use Lxh\Admin\Filter\AbstractFilter;
 use Lxh\Admin\Table\Actions;
 use Lxh\Admin\Table\Column;
 use Lxh\Admin\Table\Table;
+use Lxh\Admin\Table\Td;
 use Lxh\Admin\Table\Th;
+use Lxh\Admin\Table\Tr;
 use Lxh\Admin\Widgets\Box;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Admin\Kernel\Url;
@@ -514,7 +516,7 @@ class Grid implements Renderable
     {
         $list = $this->findList();
 
-        if ($this->options['allowEdit'] || $this->options['allowDelete']) {
+        if ($list && $this->options['allowEdit'] || $this->options['allowDelete']) {
             $this->buildActions();
         }
 
@@ -523,12 +525,14 @@ class Grid implements Renderable
 
     protected function buildActions()
     {
-        $action = new Actions($this);
+        $action = null;
 
-        $this->table->column($action->title(), function (array $row, Column $column) use ($action) {
-            $action->row($row);
+        $this->table->append(function (array $row, Td $td, Th $th, Tr $tr) use($action) {
+            if (! $action) $action = new Actions($this);
 
-            return $action->render();
+            $th->value($action->title());
+
+            return $action->row($row)->render();
         });
     }
 

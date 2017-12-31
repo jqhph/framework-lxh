@@ -80,7 +80,7 @@ class Product extends Controller
 
         // 字段设置
         $grid->field('order_num', '*****');
-        $grid->field('price', function ($value, $options) {
+        $grid->field('price', function ($value, $options, Td $td) {
                 return $value + 100;
             });
 

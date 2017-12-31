@@ -39,6 +39,8 @@ class Actions
     public function row(array $row)
     {
         $this->row = &$row;
+
+        return $this;
     }
 
     /**
