@@ -75,7 +75,7 @@ class Content implements Renderable
      *
      * @param mixed $content
      *
-     * @return Content
+     * @return Row
      */
     public function body($content)
     {
