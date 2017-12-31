@@ -73,19 +73,21 @@ class Product extends Controller
         // 添加过滤器
         $grid->filter($filter);
 
+        $table = $grid->table();
+
         // 修改标题颜色
-        $grid->th('name', function (Th $th) {
+        $table->th('name', function (Th $th) {
             $th->attribute('style', 'color:blue;');
         });
 
         // 字段设置
-        $grid->field('order_num', '*****');
-        $grid->field('price', function ($value, $options, Td $td) {
+        $table->field('order_num', '*****');
+        $table->field('price', function ($value, $options, Td $td) {
                 return $value + 100;
             });
 
         // 追加额外的列到最前面
-        $grid->prepend('序号', function (array $row, Td $td, Th $th, Tr $tr) {
+        $table->prepend('序号', function (array $row, Td $td, Th $th, Tr $tr) {
             if ($tr->line() == 3) {
                 // 给第三行添加active样式
                 $tr->class('active');
@@ -95,9 +97,9 @@ class Product extends Controller
         });
 
         // 增加额外的行
-        $grid->column('下班了', '真的嘛？！');
+        $table->append('下班了', '真的嘛？！');
 
-        $grid->column('呵呵', function (array $row, Td $td, Th $th, Tr $tr) {
+        $table->append('呵呵', function (array $row, Td $td, Th $th, Tr $tr) {
             // 设置标题样式
             $th->attribute('style', 'color:red;font-weight:600');
             $th->class('test-class');
@@ -107,7 +109,7 @@ class Product extends Controller
             return '#' . $tr->line();
         });
 
-        $grid->column(function (array $row, Td $td, Th $th) {
+        $table->append(function (array $row, Td $td, Th $th) {
             $th->value('叫什么好呢？');
             return '演示一下而已~';
         });

@@ -143,7 +143,7 @@ class Grid implements Renderable
      */
     public function __construct(array $headers = [], array &$rows = [])
     {
-        $this->table = new Table($headers, $rows);
+        $this->table = new Table($headers);
         $this->rows = &$rows;
 
         $this->table->grid($this);
@@ -187,62 +187,6 @@ class Grid implements Renderable
     {
         $this->table()->setRows($rows);
         $this->rows = &$rows;
-
-        return $this;
-    }
-
-    /**
-     * 设置自定义处理字段渲染方法
-     *
-     * @param string $field
-     * @param string|callable $content
-     * @return static
-     */
-    public function field($field, $content)
-    {
-        $this->table->field($field, $content);
-
-        return $this;
-    }
-
-    /**
-     * 追加额外的列到最后面
-     *
-     * @param string|callable $title 标题或回调函数
-     * @param string|callable $content 内容或回调函数
-     * @return static
-     */
-    public function column($title, $content = null)
-    {
-        $this->table->append($title, $content);
-
-        return $this;
-    }
-
-    /**
-     * 追加额外的列到最后面
-     *
-     * @param string|callable $title 标题或回调函数
-     * @param string|callable $content 内容或回调函数
-     * @return static
-     */
-    public function append($title, $content = null)
-    {
-        $this->table->append($title, $content);
-
-        return $this;
-    }
-
-    /**
-     * 追加额外的列到最前
-     *
-     * @param string|callable $title 标题或回调函数
-     * @param string|callable $content 内容或回调函数
-     * @return static
-     */
-    public function prepend($title, $content = null)
-    {
-        $this->table->prepend($title, $content);
 
         return $this;
     }
@@ -354,7 +298,6 @@ class Grid implements Renderable
         $model = $this->model();
 
         $where = $this->makeWhereContent();
-        $order = $this->makeOrderContent();
 
         // 获取记录总条数
         $total = $model->count($where);
@@ -374,7 +317,9 @@ class Grid implements Renderable
         $list = [];
 
         if ($total) {
-            $list = $model->findList($where, $order, ($currentPage - 1) * $this->perPage, $this->perPage);
+            $list = $model->findList(
+                $where, $this->makeOrderContent(), ($currentPage - 1) * $this->perPage, $this->perPage
+            );
         }
 
         return $this->rows = &$list;
@@ -557,28 +502,6 @@ class Grid implements Renderable
         }
 
         return $box->render();
-    }
-
-    /**
-     * @param string $field
-     * @param $content
-     * @return static
-     */
-    public function th($field, $content = null)
-    {
-        $this->table->th($field, $content);
-
-        return $this;
-    }
-
-    protected function formatUrl()
-    {
-        $url = '';
-        if ($this->pageString && $this->total > 0 && $this->usePagination()) {
-            $url = url()->unsetQuery($this->perPageKey)->string();
-        }
-
-        return $url;
     }
 
     protected function buildCreateBtn()

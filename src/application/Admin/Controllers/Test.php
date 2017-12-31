@@ -28,6 +28,16 @@ class Test extends Controller
         $card->qrcode(__DATA_ROOT__.'qrcode.png');
         $card->banner('C:\Users\hasee\Desktop\work\zl/banner2.png');
         $card->head('C:\Users\hasee\Desktop\work\zl/wxtoux.jpg');
+        $card->userText(
+            "微信昵称：远行歌\n推荐人ID：18887"
+        );
+        $card->title('广州长隆野生动物园');
+        $card->subTitle('探索发现 求证分享，空中缆车720度观赏');
+        $card->desc('AAAAA景区');
+        $card->price(164);
+        $card->discount(250);
+        $card->tagText('广州人 来哈哈哈');
+        $card->qrcodeText('长按识别二维码');
 
         return $card->build()->getByteStream();
 
