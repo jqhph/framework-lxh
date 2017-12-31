@@ -9,9 +9,22 @@ use Lxh\Support\Arr;
 
 class Th extends Widget
 {
+    /**
+     * @var \Lxh\Admin\Table\Table
+     */
     protected $table;
 
-    protected $name;
+    /**
+     * 字段名称
+     *
+     * @var string
+     */
+    protected $field;
+
+    /**
+     * @var string
+     */
+    protected $value;
 
     /**
      * Is column sortable.
@@ -38,19 +51,39 @@ class Th extends Widget
     {
         $this->table = $table;
 
+        $this->field = &$name;
         $this->value($name);
 
         parent::__construct((array) $attributes);
     }
 
     /**
-     * @param string|callable $name
-     * @return static
+     * @param string|callable $value
+     * @return string|static
      */
-    public function value($name)
+    public function value($value = null)
     {
-        $this->name = is_callable($name) ? $name($this) : trans($name, 'fields');
+        if ($value === null) {
+            return $this->value;
+        }
 
+        $this->value = is_callable($value) ? $value($this) : trans($value, 'fields');
+
+        return $this;
+    }
+
+    /**
+     * 设置或获取字段名称
+     *
+     * @param string $field
+     * @return string|static
+     */
+    public function field($field = null)
+    {
+        if ($field === null) {
+            return $this->field;
+        }
+        $this->field = &$field;
         return $this;
     }
 
@@ -103,7 +136,7 @@ class Th extends Widget
         }
 
         $url->query([
-            'sort' => $this->name,
+            'sort' => $this->field,
             'desc' => $desc
         ]);
 
@@ -125,14 +158,14 @@ class Th extends Widget
             $this->desc = null;
         }
 
-        return $sort == $this->name;
+        return $sort == $this->field;
     }
 
     public function render()
     {
         $attributes = $this->formatAttributes();
 
-        return "<th $attributes>" . $this->name . $this->sorter() . '</th>';
+        return "<th $attributes>" . $this->value . $this->sorter() . '</th>';
     }
 
 }
