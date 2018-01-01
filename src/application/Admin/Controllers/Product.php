@@ -93,9 +93,12 @@ class Product extends Controller
          */
         $table->th('name', function (Th $th) {
             // 设置标题颜色
-            $th->attribute('style', 'color:green;');
+            $th->style('color:green;font-weight:600');
+            // 设置属性
+            $th->attribute('data-test', 123);
+
             // 设置标题显示内容
-            $th->value('<b>NAME</b>');
+            $th->value('<span>NAME</span>');
         });
 
         // 字段显示内容自定义：直接设置内容
@@ -139,7 +142,7 @@ class Product extends Controller
 
         $table->append('呵呵', function (array $row, Td $td, Th $th, Tr $tr) {
             // 设置标题样式
-            $th->attribute('style', 'color:red;font-weight:600');
+            $th->style('color:red;font-weight:600');
             $th->class('test-class');
             // 默认隐藏
             $th->hide();
@@ -163,7 +166,7 @@ class Product extends Controller
 
         // 定义行内容
         $table->tr(function (Tr $tr, $row) {
-           $tr->attribute('style', 'color:green');
+           $tr->style('color:green');
         });
     }
 

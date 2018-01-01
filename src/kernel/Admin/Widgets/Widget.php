@@ -47,6 +47,51 @@ abstract class Widget extends Fluent
         return count($html) > 0 ? ' '.implode(' ', $html) : '';
     }
 
+    /**
+     * 设置样式
+     *
+     * @param $style
+     * @return $this
+     */
+    public function setStyle($style)
+    {
+        $this->attributes['style'] = &$style;
+        return $this;
+    }
+
+    /**
+     * 设置css class
+     *
+     * @param $class
+     * @return $this
+     */
+    public function setClass($class)
+    {
+        $this->attributes['class'] = &$class;
+        return $this;
+    }
+
+    /**
+     * 追加样式
+     *
+     * @param $style
+     * @return $this
+     */
+    public function style($style)
+    {
+        if (isset($this->attributes['style'])) {
+            $this->attributes['style'] = "{$this->attributes['style']};$style";
+        } else {
+            $this->attributes['style'] = &$style;
+        }
+        return $this;
+    }
+
+    /**
+     * @param $k
+     * @param $v
+     * @return $this
+     */
     public function attribute($k, $v)
     {
         $this->attributes[$k] = &$v;
@@ -98,7 +143,6 @@ abstract class Widget extends Fluent
             }
             return $this;
         }
-
         $this->attributes[$method] = &$p;
 
         return $this;
