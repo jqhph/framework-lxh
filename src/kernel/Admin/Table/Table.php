@@ -448,7 +448,7 @@ class Table extends Widget
         foreach ($this->rows as $k => &$row) {
             $tr = $this->buildTr($k, $row);
             if ($this->handlers['tr']) {
-                call_user_func($this->handlers['tr'], $tr);
+                call_user_func($this->handlers['tr'], $tr, $row);
             }
 
             $trString .= $tr->render();

@@ -162,7 +162,7 @@ class Product extends Controller
         $table->column(100, '王者荣耀', '大乔');
 
         // 定义行内容
-        $table->tr(function (Tr $tr) {
+        $table->tr(function (Tr $tr, $row) {
            $tr->attribute('style', 'color:green');
         });
     }
