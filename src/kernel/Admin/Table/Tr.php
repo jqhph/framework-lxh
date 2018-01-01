@@ -89,6 +89,14 @@ class Tr extends Widget
     }
 
     /**
+     * @return array
+     */
+    public function row()
+    {
+        return $this->row;
+    }
+
+    /**
      * @return \Lxh\Admin\Table\Table
      */
     public function table()
@@ -162,7 +170,7 @@ class Tr extends Widget
             if (!is_string($handler) && is_callable($handler)) {
                 $this->setupTdWithOptions($td, $options);
                 $td->value(
-                    $handler($row[$field], $td)
+                    $handler($row[$field], $td, $this)
                 );
                 $tdString .= $td->render();
             } else {

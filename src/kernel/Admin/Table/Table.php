@@ -76,6 +76,7 @@ class Table extends Widget
     protected $handlers = [
         'field' => [],
         'th' => [],
+        'tr' => null,
     ];
 
     /**
@@ -285,6 +286,24 @@ class Table extends Widget
         return $this->setHandler('th', $field, $content);
     }
 
+    /**
+     * 自定义行处理器
+     *
+     * @param callable $callback
+     * @return static
+     */
+    public function tr(callable $callback)
+    {
+        $this->handlers['tr'] = $callback;
+        return $this;
+    }
+
+    /**
+     * @param $name
+     * @param $key
+     * @param $handler
+     * @return $this
+     */
     protected function setHandler($name, $key, &$handler)
     {
         $this->handlers[$name][$key] = &$handler;
@@ -425,11 +444,16 @@ class Table extends Widget
      */
     protected function buildRows()
     {
-        $tr = '';
+        $trString = '';
         foreach ($this->rows as $k => &$row) {
-            $tr .= $this->buildTr($k, $row)->render();
+            $tr = $this->buildTr($k, $row);
+            if ($this->handlers['tr']) {
+                call_user_func($this->handlers['tr'], $tr);
+            }
+
+            $trString .= $tr->render();
         }
-        return $tr;
+        return $trString;
     }
 
     /**

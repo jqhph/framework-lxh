@@ -79,4 +79,28 @@ abstract class Widget extends Fluent
     {
         return $this->render();
     }
+
+    /**
+     * Handle dynamic calls to the container to set attributes.
+     *
+     * @param  string  $method
+     * @param  array   $parameters
+     * @return $this
+     */
+    public function __call($method, $parameters)
+    {
+        $p = count($parameters) > 0 ? $parameters[0] : true;
+        if ($method == 'class') {
+            if (isset($this->attributes[$method])) {
+                $this->attributes[$method] = "{$this->attributes[$method]} $p";
+            } else {
+                $this->attributes[$method] = &$p;
+            }
+            return $this;
+        }
+
+        $this->attributes[$method] = &$p;
+
+        return $this;
+    }
 }

@@ -108,8 +108,12 @@ class Product extends Controller
          *
          * @param mixed $value 原始字段值
          * @param Td $td 表格列字段管理对象（Table > Tr > Th, Td）
+         * @param Tr $tr Table > Tr
          */
-        $table->field('price', function ($value, Td $td) {
+        $table->field('price', function ($value, Td $td, Tr $tr) {
+            // 获取当前行数据
+//            $row = $tr->row();
+
             return $value + 100;
         });
 
@@ -156,6 +160,11 @@ class Product extends Controller
         });
         $table->column(6, '王者荣耀', '韩信');
         $table->column(100, '王者荣耀', '大乔');
+
+        // 定义行内容
+        $table->tr(function (Tr $tr) {
+           $tr->attribute('style', 'color:green');
+        });
     }
 
     /**
