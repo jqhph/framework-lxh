@@ -123,11 +123,12 @@ class Track
     {
         $db = $this->getRecordStore('db');
         $controllerManager = $this->container->make('controller.manager');
+        $uri = $request->getUri();
 
         $requestInfo = ' [Module: ' . $controllerManager->moduleName() . ', Controller: ' . $controllerManager->controllerName()
                         . ', Action: ' . $controllerManager->actionName() . '] '
                         . $request->date() . ' ' . $request->protocol(). ' ' . $request->getMethod() . ': '
-                        . $request->getUri()->getPath() . ' ' . $request->getUri()->getQuery();
+                        . $uri->getPath() . ' ' . $uri->getQuery();
 
         $allFiles = get_included_files();
 

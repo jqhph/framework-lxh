@@ -93,7 +93,11 @@ class Console
     {
         if (empty(static::$records)) return '';
 
-        $txt = 'console.group("%c FROM SERVER ", "color:red;font-weight:bold");';
+        $uri = request()->getUri();
+        $q = $uri->getQuery();
+        $path = $uri->getPath() . ($q ? "?$q" : '');
+
+        $txt = 'console.group("%c FROM SERVER ' . $path . '", "color:red;font-weight:bold");';
 
         foreach (static::$records as & $content) {
            $txt .= static::fetchRow($content);
