@@ -73,7 +73,7 @@ class Product extends Controller
         $grid = $content->grid($this->grid);
 
         // 添加过滤器，过滤器会根据搜索表单内容构建Sql where过滤语句
-        // 当然，你也可以在模型中自定义where语句内容
+        // 当然，你也可以在Model中重新定义where语句内容
         $grid->filter($filter);
 
         // 设置表格
@@ -95,7 +95,7 @@ class Product extends Controller
             // 设置标题颜色
             $th->attribute('style', 'color:green;');
             // 设置标题显示内容
-            $th->value('<b>名称</b>');
+            $th->value('<b>NAME</b>');
         });
 
         // 字段显示内容自定义：直接设置内容
@@ -147,6 +147,15 @@ class Product extends Controller
             $th->value('叫什么好呢？');
             return '演示一下而已~';
         });
+
+        // 添加列到指定位置
+        // [column]方法添加的列一定在[prepend]和[append]方法中间
+        $table->column(1, '元旦', '放假1天');
+        $table->column(5, '王者荣耀', function (array $row, Td $td, Th $th, Tr $tr) {
+            return '<b style="">李白</b> ';
+        });
+        $table->column(6, '王者荣耀', '韩信');
+        $table->column(100, '王者荣耀', '大乔');
     }
 
     /**

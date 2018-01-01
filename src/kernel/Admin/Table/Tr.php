@@ -111,46 +111,66 @@ class Tr extends Widget
     {
         $tdString = '';
 
-        $this->prependClolumns($tdString, $row);
+        $this->prependColumns($tdString, $row);
 
         $headers = $this->table->headers();
+        $counter = 1;
         foreach ($headers as $field => &$options) {
             if (!isset($row[$field])) {
                 continue;
             }
-
-            $td = $this->buildTd($field, $row[$field]);
-
-            if ($handler = $this->table->handler('field', $field)) {
-                // 自定义处理器
-                if (!is_string($handler) && is_callable($handler)) {
-                    $this->setupTdWithOptions($td, $options);
-                    $td->value(
-                        $handler($row[$field], $td)
-                    );
-                    $tdString .= $td->render();
-                } else {
-                    $tdString .=  $this->setupTdWithOptions($td, $options)->value($handler)->render();
+            if (isset($this->columns['mid'][$counter])) {
+                while ($column = get_value($this->columns['mid'], $counter)) {
+                    $tdString .= $this->columns['mid'][$counter]->tr($this)->row($row)->render();
+                    $counter++;
                 }
-                continue;
             }
 
-            if (! $options || ! is_array($options)) {
-                $tdString .= $td->render();
-                continue;
-            }
+            $this->renderColumns($tdString, $row, $field, $options);
 
-            $view = get_value($options, 'view');
-            if (! $view) {
-                $tdString .= $this->setupTdWithOptions($td, $options)->render();
-                continue;
+            $counter ++;
+        }
+
+        foreach ($this->columns['mid'] as $k => $column) {
+            if ($k > $counter) {
+                $tdString .= $column->tr($this)->row($row)->render();
             }
-            $tdString .= $this->renderFiledView($view, $field, $row[$field], $td, $options);
         }
 
         $this->appendColumns($tdString, $row);
 
         return $tdString;
+    }
+
+    protected function renderColumns(&$tdString, &$row, &$field, &$options)
+    {
+        $td = $this->buildTd($field, $row[$field]);
+
+        if ($handler = $this->table->handler('field', $field)) {
+            // 自定义处理器
+            if (!is_string($handler) && is_callable($handler)) {
+                $this->setupTdWithOptions($td, $options);
+                $td->value(
+                    $handler($row[$field], $td)
+                );
+                $tdString .= $td->render();
+            } else {
+                $tdString .=  $this->setupTdWithOptions($td, $options)->value($handler)->render();
+            }
+            return;
+        }
+
+        if (! $options || ! is_array($options)) {
+            $tdString .= $td->render();
+            return;
+        }
+
+        $view = get_value($options, 'view');
+        if (! $view) {
+            $tdString .= $this->setupTdWithOptions($td, $options)->render();
+            return;
+        }
+        $tdString .= $this->renderFiledView($view, $field, $row[$field], $td, $options);
     }
 
     /**
@@ -165,7 +185,7 @@ class Tr extends Widget
         return $td;
     }
 
-    protected function prependClolumns(&$tdString, &$row)
+    protected function prependColumns(&$tdString, &$row)
     {
         foreach ($this->columns['front'] as $column) {
             $tdString .= $column->tr($this)->row($row)->render();

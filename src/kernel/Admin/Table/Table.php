@@ -67,6 +67,7 @@ class Table extends Widget
     protected $columns = [
         'front' => [],
         'last' => [],
+        'mid' => [],
     ];
 
     /**
@@ -173,6 +174,26 @@ class Table extends Widget
     }
 
     /**
+     * 追加列到指定位置
+     *
+     * @param int $position 位置，从1开始
+     * @param string|callable $title 标题或回调函数
+     * @param string|callable $content 内容或回调函数
+     * @return Column
+     */
+    public function column($position, $title, $content = null)
+    {
+        if ($position < 1) {
+            throw new InvalidArgumentException('位置参数错误，请传入大于0的整数');
+        }
+        if (isset($this->columns['mid'][$position])) {
+            throw new InvalidArgumentException('该位置己存在其他列');
+        }
+
+        return $this->columns['mid'][intval($position)] = new Column($title, $content);
+    }
+
+    /**
      * 追加列到最前面
      *
      * @param string|callable $title 标题或回调函数
@@ -181,9 +202,7 @@ class Table extends Widget
      */
     public function prepend($title, $content = null)
     {
-        $column = new Column($title, $content);
-
-        return $this->columns['front'][] = $column;
+        return $this->columns['front'][] = new Column($title, $content);
     }
 
     /**
@@ -195,9 +214,7 @@ class Table extends Widget
      */
     public function append($title, $content = null)
     {
-        $column = new Column($title, $content);
-
-        return $this->columns['last'][] = $column;
+        return $this->columns['last'][] = new Column($title, $content);
     }
 
     public function allowRowSelector()
@@ -316,14 +333,33 @@ class Table extends Widget
     {
         $th = '';
 
+        // 额外追加的列
         foreach ($this->columns['front'] as &$column) {
             $th .= $column->title();
         }
 
+        $counter = 1;
         foreach ($this->headers as $field => &$options) {
+            if (isset($this->columns['mid'][$counter])) {
+                while ($column = get_value($this->columns['mid'], $counter)) {
+                    $th .= $this->columns['mid'][$counter]->title();
+                    $counter++;
+                }
+            }
+
             $th .= $this->buildTh($field, $options)->render();
+
+            $counter++;
         }
 
+        // 额外追加的列
+        foreach ($this->columns['mid'] as $k => $column) {
+            if ($k > $counter) {
+                $th .= $column->title();
+            }
+        }
+
+        // 额外追加的列
         foreach ($this->columns['last'] as &$column) {
             $th .= $column->title();
         }
@@ -400,6 +436,11 @@ class Table extends Widget
                 $th->value($selector->renderHead());
                 return $selector->render();
             }));
+        }
+
+        // 指定位置的额外添加列，需要按键值大小升序排序
+        if ($this->columns['mid']) {
+            ksort($this->columns['mid'], 1);
         }
 
         $rows = $this->buildRows();
