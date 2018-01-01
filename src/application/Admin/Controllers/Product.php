@@ -116,6 +116,13 @@ class Product extends Controller
         $table->field('price', function ($value, Td $td, Tr $tr) {
             // 获取当前行数据
 //            $row = $tr->row();
+            $data = [
+                1 => 'color:red',
+                2 => 'color:blue'
+            ];
+            $default = 'color:#333';
+
+            $td->style(get_value($data, $value, $default));
 
             return $value + 100;
         });
