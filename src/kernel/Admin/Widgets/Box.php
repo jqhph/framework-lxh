@@ -69,11 +69,7 @@ class Box extends Widget implements Renderable
      */
     public function content($content)
     {
-        if ($content instanceof Renderable) {
-            $this->content = $content->render();
-        } else {
-            $this->content = &$content;
-        }
+        $this->content = &$content;
 
         return $this;
     }
@@ -87,7 +83,7 @@ class Box extends Widget implements Renderable
      */
     public function title($title)
     {
-        $this->title = $title;
+        $this->title = &$title;
 
         return $this;
     }
@@ -217,9 +213,11 @@ EOF;
      */
     protected function variables()
     {
+        $content = $this->content instanceof Renderable ? $this->content->render() : $this->content;
+
         return [
             'title'      => $this->title,
-            'content'    => $this->content,
+            'content'    => &$content,
             'tools'      => $this->tools,
             'attributes' => $this->formatAttributes(),
             'id' => $this->id,

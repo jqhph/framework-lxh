@@ -150,30 +150,24 @@ class Menu extends Controller
         $content->header(trans('Menu'));
         $content->description(trans('Menu form'));
 
-        $content->row(function (Row $row) {
-            $row->column(12, $this->form()->render());
+        $box = $content->form(function (Form $form) {
+            $form->action(Url::makeAction('create'));
+
+            $form->selectTree('parent_id')->options(resolve('acl-menu')->all())->defaultOption(0, '顶级分类');
+            $form->text('title')->rules('required');
+            $form->text('icon')->help($this->iconHelp());
+            $form->text('name')->rules('required');
+            $form->text('controller');
+            $form->text('action');
+            $form->select('show')->options([1, 0])->default(1);
+            $form->select('priority')->options(range(0, 30))->help('值越小排序越靠前');
+
+            $form->useEditScript();
         });
 
+        $box->title(trans('Create Menu'));
+
         return $content->render();
-    }
-
-    protected function form($data = [])
-    {
-        $form = new Form($data);
-        $form->action(Url::makeAction('create'));
-
-        $form->selectTree('parent_id')->options(resolve('acl-menu')->all())->defaultOption(0, '顶级分类');
-        $form->text('title')->rules('required');
-        $form->text('icon')->help($this->iconHelp());
-        $form->text('name')->rules('required');
-        $form->text('controller');
-        $form->text('action');
-        $form->select('show')->options([1, 0])->default(1);
-        $form->select('priority')->options(range(0, 30))->help('值越小排序越靠前');
-
-        $form->useEditScript();
-
-        return (new Box(trans('Create Menu'), $form->render()))->backable();
     }
 
     protected function iconHelp()

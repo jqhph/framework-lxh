@@ -6,6 +6,8 @@ use Closure;
 use Lxh\Admin\Admin;
 use Lxh\Admin\Filter;
 use Lxh\Admin\Grid;
+use Lxh\Admin\Widgets\Box;
+use Lxh\Admin\Widgets\Form;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Support\MessageBag;
 
@@ -103,6 +105,31 @@ class Content implements Renderable
         }
         
         return $filter;
+    }
+
+    /**
+     * 表单
+     *
+     * @param $callback
+     * @return Box
+     */
+    public function form(callable $callback = null, $width = 12)
+    {
+        $row = new Row();
+
+        $form = new Form();
+
+        $box = new Box(null, $form);
+
+        $column = $row->column($width, $box->backable());
+
+        if ($callback) {
+            call_user_func($callback, $form, $column);
+        }
+
+        $this->addRow($row);
+
+        return $box;
     }
 
     public function modal()
