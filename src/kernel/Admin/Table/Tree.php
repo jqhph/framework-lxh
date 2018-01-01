@@ -33,7 +33,10 @@ class Tree
      * @var int
      */
     protected $tier = 1;
-    
+
+    /**
+     * @var array
+     */
     protected $rows = [];
     
     public function __construct(Tr $tr, $name, $tier, array &$rows)
@@ -64,11 +67,20 @@ class Tree
     }
 
 
+    /**
+     * @param $k
+     * @param $row
+     * @return Tr
+     */
     protected function buildTr($k, &$row)
     {
-        return new Tr($this->tr->table(), $k, $row, $this->tr->columns());
+        $tb = $this->tr->table();
+        return new Tr($tb, $k, $row, $tb->columns());
     }
 
+    /**
+     * @return string
+     */
     public function render()
     {
         $tr = '';

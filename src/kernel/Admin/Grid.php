@@ -211,6 +211,9 @@ class Grid implements Renderable
         return $this;
     }
 
+    /**
+     * 初始化每页显示行数
+     */
     protected function setupPerPage()
     {
         $maxSize = I($this->perPageKey);
@@ -245,22 +248,30 @@ class Grid implements Renderable
      */
     public function model($model = null)
     {
-        if ($model) {
+        if (is_string($model)) {
+            $this->model = create_model($model);
+        } elseif ($model instanceof Model) {
             $this->model = $model;
         }
+
         if (! $this->model) {
             $this->model = create_model(__CONTROLLER__);
         }
         return $this->model;
     }
 
+    /**
+     * 构建where过滤条件数组
+     *
+     * @return array
+     */
     protected function makeWhereContent()
     {
         if (! $this->filter) {
             return [];
         }
 
-        // 格式化查询数组
+        // 构建where查询数组
         $where = [];
         foreach ($this->filter->conditions() as $condition) {
             if ($value = $condition->build()) {
@@ -271,6 +282,11 @@ class Grid implements Renderable
         return $where;
     }
 
+    /**
+     * 构建排序数据
+     *
+     * @return string
+     */
     protected function makeOrderContent()
     {
         if (! $sort = I('sort')) return "`{$this->idName}` DESC";
@@ -325,6 +341,10 @@ class Grid implements Renderable
         return $this->rows = &$list;
     }
 
+    /**
+     * @param string $page
+     * @return static|string
+     */
     public function pageString($page = '')
     {
         if ($page) {
@@ -353,6 +373,11 @@ class Grid implements Renderable
         return $this->table;
     }
 
+    /**
+     * 是否启用分页
+     *
+     * @return bool
+     */
     public function usePagination()
     {
         return $this->options['usePagination'];
@@ -468,6 +493,10 @@ class Grid implements Renderable
         return $this->table->setRows($list)->render();
     }
 
+    /**
+     * 创建行action按钮
+     * 详情、删除
+     */
     protected function buildActions()
     {
         $action = null;

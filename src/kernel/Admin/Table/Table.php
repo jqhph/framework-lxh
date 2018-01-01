@@ -117,6 +117,14 @@ class Table extends Widget
     }
 
     /**
+     * @return array
+     */
+    public function columns()
+    {
+        return $this->columns;
+    }
+
+    /**
      * 获取id键名
      *
      * @return string
@@ -259,6 +267,9 @@ class Table extends Widget
         $this->headers = &$new;
     }
 
+    /**
+     * @return array
+     */
     public function headers()
     {
         return $this->headers;
@@ -274,9 +285,9 @@ class Table extends Widget
         return $this->setHandler('th', $field, $content);
     }
 
-    protected function setHandler($name, $key, $handler)
+    protected function setHandler($name, $key, &$handler)
     {
-        $this->handlers[$name][$key] = $handler;
+        $this->handlers[$name][$key] = &$handler;
 
         return $this;
     }
@@ -400,11 +411,18 @@ class Table extends Widget
         return $th;
     }
 
-    public function getPriorityFromOptions($options)
+    /**
+     * @param $options
+     * @return mixed
+     */
+    protected function getPriorityFromOptions($options)
     {
         return get_value($options, 'show', $this->defaultPriority);
     }
 
+    /**
+     * @return string
+     */
     protected function buildRows()
     {
         $tr = '';
@@ -414,7 +432,11 @@ class Table extends Widget
         return $tr;
     }
 
-
+    /**
+     * @param $k
+     * @param $row
+     * @return \Lxh\Admin\Table\Tr
+     */
     protected function buildTr($k, &$row)
     {
         return $this->trs[] = new Tr($this, $k, $row, $this->columns, $this->handlers);
@@ -455,6 +477,9 @@ class Table extends Widget
         return view($this->view, $vars)->render();
     }
 
+    /**
+     * @return string
+     */
     protected function noDataTip()
     {
         $tip = trans('No Data.');

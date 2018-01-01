@@ -58,11 +58,6 @@ class Tr extends Widget
         $this->columns = &$columns;
     }
 
-    public function columns()
-    {
-        return $this->columns;
-    }
-
     /**
      * 获取行号
      *
@@ -73,6 +68,9 @@ class Tr extends Widget
         return $this->offset + 1;
     }
 
+    /**
+     * @return string
+     */
     public function render()
     {
         $columns = $this->buildColumns($this->row);
@@ -90,6 +88,9 @@ class Tr extends Widget
         return $tr;
     }
 
+    /**
+     * @return \Lxh\Admin\Table\Table
+     */
     public function table()
     {
         return $this->table;
@@ -107,6 +108,10 @@ class Tr extends Widget
         return new Tree($this, $name, $this->offset + 1, $rows);
     }
 
+    /**
+     * @param array $row
+     * @return string
+     */
     protected function buildColumns(array &$row)
     {
         $tdString = '';
@@ -142,6 +147,12 @@ class Tr extends Widget
         return $tdString;
     }
 
+    /**
+     * @param $tdString
+     * @param $row
+     * @param $field
+     * @param $options
+     */
     protected function renderColumns(&$tdString, &$row, &$field, &$options)
     {
         $td = $this->buildTd($field, $row[$field]);
@@ -185,6 +196,10 @@ class Tr extends Widget
         return $td;
     }
 
+    /**
+     * @param $tdString
+     * @param $row
+     */
     protected function prependColumns(&$tdString, &$row)
     {
         foreach ($this->columns['front'] as $column) {
