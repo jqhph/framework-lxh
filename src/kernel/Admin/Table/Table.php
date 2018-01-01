@@ -508,7 +508,7 @@ class Table extends Widget
     {
         $tip = trans('No Data.');
         return <<<EOF
-            <tr><td></td><td data-priority="1"><span class="help-block" style="margin-bottom:0"><i class="fa fa-info-circle"></i>&nbsp;{$tip}</span></td></tr>
+<div style="margin:15px 0 0 25px;"><span class="help-block" style="margin-bottom:0"><i class="fa fa-info-circle"></i>&nbsp;{$tip}</span></div>
 EOF;
 
     }

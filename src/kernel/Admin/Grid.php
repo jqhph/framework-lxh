@@ -295,7 +295,7 @@ class Grid implements Renderable
 
         $sort = addslashes($sort);
 
-        return "`{$sort}`" . ($desc ? 'DESC' : 'ASC');
+        return "`{$sort}` " . ($desc ? 'DESC' : 'ASC');
     }
 
 
