@@ -89,11 +89,16 @@ class Product extends Controller
     protected function setupTable(Table $table)
     {
         /**
+         * 使用field方法添加字段
+         */
+        $table->field('timelimit')->view('Boolean')->sortable();
+
+        /**
          * 自定义字段标题内容
          *
          * @param Th $th 标题对象
          */
-        $table->th('name', function (Th $th) {
+        $table->field('name')->th(function (Th $th) {
             // 设置标题颜色
             $th->style('color:green;font-weight:600');
             // 设置属性
@@ -105,7 +110,7 @@ class Product extends Controller
 
         // 字段显示内容自定义：直接设置内容
         // 如果一个字段调用了field自定义处理之后，初始配置的字段渲染方法将不再执行
-        $table->field('order_num', '*****');
+        $table->field('order_num')->display('*****');
 
         /**
          * 字段显示内容自定义：使用匿名函数可以更灵活的定义想要的内容
@@ -115,7 +120,7 @@ class Product extends Controller
          * @param Td $td 表格列字段管理对象（Table > Tr > Th, Td）
          * @param Tr $tr Table > Tr
          */
-        $table->field('price', function ($value, Td $td, Tr $tr) {
+        $table->field('price')->display(function ($value, Td $td, Tr $tr) {
             // 获取当前行数据
 //            $row = $tr->row();
             $data = [

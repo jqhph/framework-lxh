@@ -80,6 +80,13 @@ class Table extends Widget
     ];
 
     /**
+     * 当前正在设置的字段名称
+     *
+     * @var string
+     */
+    protected $field;
+
+    /**
      * @var RowSelector
      */
     protected $rowSelector = null;
@@ -148,15 +155,87 @@ class Table extends Widget
     }
 
     /**
-     * 设置自定义处理字段渲染方法
+     * 设置字段
      *
-     * @param string $field
-     * @param string|callable $content
-     * @return static
+     * @param string $field 字段名称
+     * @return $this
      */
-    public function field($field, $content)
+    public function field($field)
     {
-        return $this->setHandler('field', $field, $content);
+        if (! isset($this->headers[$field])) {
+            $this->headers[$field] = [];
+        }
+        $this->field = &$field;
+        return $this;
+    }
+
+    /**
+     * 设置字段渲染view
+     *
+     * @param string $view
+     * @return $this
+     */
+    public function view($view)
+    {
+        if (! $this->field) {
+            return $this;
+        }
+        $this->headers[$this->field]['view'] = &$view;
+        return $this;
+    }
+
+    /**
+     * 自定义字段渲染处理方法
+     *
+     * @param $content
+     * @return $this
+     */
+    public function display($content)
+    {
+        if (! $this->field) {
+            return $this;
+        }
+        return $this->setHandler('field', $this->field, $content);
+    }
+
+    /**
+     * 设置字段为可排序
+     *
+     * @return $this
+     */
+    public function sortable()
+    {
+        if (! $this->field) {
+            return $this;
+        }
+        $this->headers[$this->field]['sortable'] = 1;
+        return $this;
+    }
+
+    /**
+     * 设置隐藏字段
+     * 当Table设置为允许响应式时有效
+     *
+     * @return $this
+     */
+    public function hide()
+    {
+        if (! $this->field) {
+            return $this;
+        }
+        $this->headers[$this->field]['show'] = 0;
+        return $this;
+    }
+
+    public function options($opts)
+    {
+        if (! $this->field) {
+            return $this;
+        }
+
+        $this->headers[$this->field]['options'] = &$opts;
+
+        return $this;
     }
 
     /**
@@ -260,9 +339,9 @@ class Table extends Widget
         foreach ($this->headers as $k => &$v) {
             if (is_int($k) && is_string($v)) {
                 if (! $v) continue;
-                $new[$v] = '';
+                $new[$v] = [];
             } else {
-                $new[$k] = $v;
+                $new[$k] = (array)$v;
             }
         }
         $this->headers = &$new;
@@ -277,13 +356,16 @@ class Table extends Widget
     }
 
     /**
-     * @param string $field
      * @param mixed $content
      * @return static
      */
-    public function th($field, $content = null)
+    public function th($content)
     {
-        return $this->setHandler('th', $field, $content);
+        if (! $this->field) {
+            return $this;
+        }
+
+        return $this->setHandler('th', $this->field, $content);
     }
 
     /**
