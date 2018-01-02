@@ -7,14 +7,14 @@
     ?>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="<?php echo $language->translateWithGolobal('web-description');?>">
+    <meta name="description" content="<?php echo config('admin.desc');?>">
     <meta name="author" content="Coderthemes">
 
     <!-- App Favicon -->
     <link rel="shortcut icon" href="<?php echo load_img('favicon.ico'); ?>">
 
     <!-- App title -->
-    <title><?php echo $language->translateWithGolobal('web-title');?></title>
+    <title><?php echo config('admin.title');?></title>
 
     <?php
         echo load_css('bootstrap.min');

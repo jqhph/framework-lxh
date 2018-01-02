@@ -60,6 +60,17 @@ abstract class Widget extends Fluent
     }
 
     /**
+     * @param $id
+     * @return $this
+     */
+    public function id($id)
+    {
+        $this->attributes['id'] = $id;
+
+        return $this;
+    }
+
+    /**
      * 设置css class
      *
      * @param $class

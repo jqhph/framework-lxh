@@ -29,6 +29,9 @@ class Url
     public function __construct(Uri $uri = null)
     {
         $this->request = request();
+        if ($uri) {
+            $this->setUri($uri);
+        }
     }
 
     /**
@@ -42,31 +45,30 @@ class Url
             return static::$current;
         }
 
-        static::$current = new static();
+        static::$current = new static(request()->getUri());
 
-        return static::$current->setUri(request()->getUri());
+        return static::$current;
     }
 
     public function setUri(UriInterface $uri)
     {
         $this->uri = $uri;
 
+        if ($q = $this->uri->getQuery()) {
+            parse_str($q, $this->query);
+        }
+        $this->path = $this->uri->getPath();
+
         return $this;
     }
 
     /**
-     * @param null $uri
-     * @return static
+     * @return $this
      */
-    public function create($uri = null)
+    public function create()
     {
         if (! $this->uri) {
-            $this->uri = $this->request->createUri();
-
-            if ($q = $this->uri->getQuery()) {
-                parse_str($q, $this->query);
-            }
-            $this->path = $this->uri->getPath();
+            $this->setUri($this->request->createUri());
         }
 
         return $this;

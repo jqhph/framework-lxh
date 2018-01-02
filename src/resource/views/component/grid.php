@@ -1,21 +1,4 @@
-<div class="table-rep-plugin"><div class="table-responsive" data-pattern="priority-columns"><?php echo $table?></div></div>
-<?php if ($page) { ?>
-    <div class="box-footer">
-        <div class="dataTables_paginate paging_simple_numbers pull-center" style="float:right">
-            <ul class="pagination" style="float:right"><?php echo $page;?></ul>
-            <?php if ($pages) {?>
-                <select class="input-sm grid-per-pager" name="per-page"  style="float:right;margin-top:10px;margin-right:10px;">
-                    <?php foreach ($pages as &$row) {
-                        $url = url()->query($perPageKey, $row)->string();
-                        ?>
-                        <option <?php if ($perPage == $row) echo 'selected';?> value="<?php echo $url?>"><?php echo $row;?></option>
-                    <?php } ?>
-                </select>
-            <?php }?>
-        </div>
-        <div style="clear:both"></div>
-    </div>
-<?php }?>
+<div id="pjax-container"><?php echo view('admin::grid-content')->render();?></div>
 <script>
     <?php if ($useRWD) {?>
     add_css('lib/plugins/RWD-Table-Patterns/dist/css/rwd-table.min.css');
@@ -28,7 +11,45 @@
     add_action(function () {
         $('.grid-per-pager').change(function () {
             window.location.href = $(this).val()
+            $.getJSON($(this).val(), )
         })
     })
     <?php }?>
 </script>
+<?php if ($pjax) {?>
+<script>
+    add_js('jquery.pjax.min');
+    add_action(function () {
+        $.pjax.defaults.timeout = 5000;
+        $.pjax.defaults.maxCacheLength = 0;
+        $(document).pjax('a:not(a[target="_blank"])', {
+            container: '#pjax-container'
+        });
+        $(document).on('submit', 'form[pjax-container]', function(event) {
+            $.pjax.submit(event, '#pjax-container')
+        });
+        $(document).on("pjax:popstate", function() {
+            $(document).one("pjax:end", function(event) {
+                $(event.target).find("script[data-exec-on-popstate]").each(function() {
+                    $.globalEval(this.text || this.textContent || this.innerHTML || '');
+                });
+            });
+        });
+        var $loading;
+        $(document).on('pjax:send', function(xhr) {
+            if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
+                var $submit_btn = $('form[pjax-container] :submit');
+                if($submit_btn) $submit_btn.button('loading');
+            }
+            $loading = loading('#lxh-app');
+        })
+        $(document).on('pjax:complete', function(xhr) {
+            if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
+                var $submit_btn = $('form[pjax-container] :submit');
+                if($submit_btn) $submit_btn.button('reset');
+            }
+            $loading.close()
+        })
+    })
+</script>
+<?php } ?>

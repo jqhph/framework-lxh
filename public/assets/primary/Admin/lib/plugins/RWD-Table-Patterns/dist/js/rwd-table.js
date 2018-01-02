@@ -122,7 +122,7 @@
         this.$btnToolbar = $('.btn-toolbar')//$('<div class="btn-toolbar" />');
 
         this.$dropdownGroup = $('<div class="btn-group dropdown-btn-group pull-right" />');
-        this.$dropdownBtn = $('<button class="btn btn-default dropdown-toggle  waves-effect waves-float" data-toggle="dropdown">' + trans('Display') + ' <span class="caret"></span></button>');
+        this.$dropdownBtn = $('<button data-rwd="1" class="btn btn-default dropdown-toggle  waves-effect waves-float" data-toggle="dropdown">' + trans('Display') + ' <span class="caret"></span></button>');
         this.$dropdownContainer = $('<ul class="dropdown-menu"/>');
 
         // Focus btn
@@ -131,9 +131,12 @@
          // Display-all btn
         if(this.options.addDisplayAllBtn) {
             // Create display-all btn
-            this.$displayAllBtn = $('<button class="btn btn-default  waves-effect waves-float">' + trans('Display all') + '</button>');
+            this.$displayAllBtn = $('<button data-rwd="2" class="btn btn-default  waves-effect waves-float">' + trans('Display all') + '</button>');
+
+            $('button[data-rwd="2"]').remove()
             // Add display-all btn to dropdown-btn-group
             this.$dropdownGroup.append(this.$displayAllBtn);
+
 
             if (this.$table.hasClass('display-all')) {
                 // add 'btn-primary' class to btn to indicate that display all is activated
@@ -146,8 +149,10 @@
             });
         }
 
+        $('button[data-rwd="1"]').remove()
         //add dropdown btn and menu to dropdown-btn-group
         this.$dropdownGroup.append(this.$dropdownBtn).append(this.$dropdownContainer);
+
 
         //add dropdown group to toolbar
         this.$btnToolbar.append(this.$dropdownGroup);

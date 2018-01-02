@@ -31,7 +31,15 @@ class Filter extends Widget implements Renderable
      */
     protected $view = 'admin::filter';
 
+    /**
+     * @var string
+     */
     protected $title = 'Search';
+
+    /**
+     * @var Grid
+     */
+    protected $grid;
 
     /**
      * @var array
@@ -68,15 +76,29 @@ class Filter extends Widget implements Renderable
 
         parent::__construct($attrbutes);
 
-        $this->setup();
     }
 
-    protected function setup()
+    protected function setupAttributes()
     {
+        $url = '';
+        if ($this->grid->allowPjax()) {
+            $url = request()->url()->string();
+        }
+
         $this->attributes = [
             'method' => 'post',
-            'action' => ''
+            'action' => &$url
         ];
+    }
+
+    /**
+     * @param Grid|null $grid
+     * @return $this
+     */
+    public function grid(Grid $grid = null)
+    {
+        $this->grid = $grid;
+        return $this;
     }
 
     /**
@@ -107,6 +129,17 @@ class Filter extends Widget implements Renderable
 
     public function render()
     {
+        $this->setupAttributes();
+
+        foreach ($this->fields as $field) {
+            $field->condition();
+        }
+
+        // pjax异步加载，无需重新渲染表单
+        if (I('_pjax')) {
+            return '';
+        }
+
         if (! $this->options['useBox']) {
             return view($this->view, $this->vars())->render();
         }
@@ -156,10 +189,6 @@ class Filter extends Widget implements Renderable
 
     protected function vars()
     {
-        foreach ($this->fields as $field) {
-            $field->condition();
-        }
-
         return [
             'attributes' => $this->formatAttributes(),
             'fields' => $this->fields,

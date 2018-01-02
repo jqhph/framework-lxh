@@ -240,6 +240,11 @@ class Content implements Renderable
      */
     public function render()
     {
+        // 异步加载table，无需加载整个内容
+        if (I('_pjax')) {
+            return $this->build();
+        }
+
         Admin::collectFieldAssets();
         $items = [
             'header'      => $this->header,

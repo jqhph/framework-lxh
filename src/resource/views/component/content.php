@@ -20,21 +20,14 @@
     (typeof loading == 'undefined') && (loading = parent.loading);
 </script>
 
+<div class="content-wrapper">
 <?php if ($header || $description) {?>
-<section class="content-header">
-    <h1><?php echo $header; ?><small><?php echo $description;?></small></h1>
-</section>
-<?php }?>
-
-<section class="content">
-    <?php
-    //    echo render_view('admin::partials.error');
-    //    echo render_view('admin::partials.success');
-    //    echo render_view('admin::partials.exception');
-    //    echo render_view('admin::partials.toastr');
-    ?>
-    <?php echo $content;?>
-</section>
+<section class="content-header"><h1><?php echo $header; ?><small><?php echo $description;?></small></h1></section>
+<?php } else {
+    echo '<div style="height:10px;"></div>';
+}?>
+<section class="content"><?php echo $content;?></section>
+</div>
 
 <?php
 echo load_css('bootstrap.min');
@@ -45,25 +38,25 @@ echo $js;
 echo $css;
 ?>
 <script>
-    (function (w) {
-        w.tab = function () {
-            var $top = w.$top || w.top.$top
-            return $top.tab
-        };
-        w.open_tab = function (id, url, label) {
-            tab().switch(id, url, label)
-        };
-        w.close_tab = function (id) {
-            tab().close(id)
-        };
-        w.reload_tab = function (id, url, label) {
-            tab().reload(id, url, label)
-        };
-        w.back_tab = function (step) {
-            tab().back(step)
-        };
-    })(window);
-    <?php echo $script?>
+(function (w) {
+    w.tab = function () {
+        var $top = w.$top || w.top.$top
+        return $top.tab
+    };
+    w.open_tab = function (id, url, label) {
+        tab().switch(id, url, label)
+    };
+    w.close_tab = function (id) {
+        tab().close(id)
+    };
+    w.reload_tab = function (id, url, label) {
+        tab().reload(id, url, label)
+    };
+    w.back_tab = function (step) {
+        tab().back(step)
+    };
+})(window);
+<?php echo $script?>
 </script>
 </body>
 </html>

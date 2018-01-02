@@ -1,4 +1,4 @@
-<form <?php echo $attributes ?>>
+<form <?php echo $attributes ?> pjax-container>
     <div class="box-body fields-group">
         <?php foreach($fields as $field): ?>
             <?php echo $field->render(); ?>

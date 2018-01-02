@@ -118,6 +118,7 @@ class Grid implements Renderable
         'allowBatchDelete' => true,
         'useRWD'           => true,
         'usePublicJs'      => true,
+        'pjax'             => true,
     ];
 
     /**
@@ -135,6 +136,17 @@ class Grid implements Renderable
      */
     protected $idName = 'id';
 
+    protected $pjax = '_pjax';
+
+    protected $pjaxContainer = '#pjax-container';
+
+    /**
+     * current url
+     *
+     * @var \Lxh\Http\Url
+     */
+    protected $url;
+
     /**
      * Create a new grid instance.
      *
@@ -149,6 +161,10 @@ class Grid implements Renderable
         $this->table->grid($this);
 
         $this->setupPerPage();
+
+        $this->url = request()->url();
+
+        $this->url->query($this->pjax, $this->pjaxContainer);
     }
 
     /**
@@ -234,7 +250,7 @@ class Grid implements Renderable
     {
         if (! $this->filter) {
             $this->filter = $filter;
-
+            $filter->grid($this);
             return $this;
         }
 
@@ -454,14 +470,37 @@ class Grid implements Renderable
     }
 
     /**
+     * 禁止响应式输出table
+     *
      * @return static
      */
-    public function disableUseRWD()
+    public function disableResponsive()
     {
         $this->options['useRWD'] = false;
         return $this;
     }
 
+    /**
+     * 禁止使用pjax
+     *
+     * @return $this
+     */
+    public function disablePjax()
+    {
+        $this->options['pjax'] = false;
+
+        $this->url->unsetQuery($this->pjax);
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function allowPjax()
+    {
+        return  $this->options['pjax'];
+    }
 
     /**
      * Get or set option for grid.
@@ -521,6 +560,10 @@ class Grid implements Renderable
             'perPage' => $this->perPage,
             'perPageKey' => $this->perPageKey
         ], $this->options);
+
+        if (I($this->pjax)) {
+            return view('admin::grid-content', $vars)->render();
+        }
 
         $box = new Box();
 
