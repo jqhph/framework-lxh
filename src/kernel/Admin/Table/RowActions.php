@@ -13,7 +13,7 @@ use Lxh\Admin\Widgets\Widget;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Support\Arr;
 
-class Actions
+class RowActions
 {
     /**
      * @var Grid

@@ -4,12 +4,16 @@ namespace Lxh\Admin;
 
 use Lxh\Admin\Fields\Button;
 use Lxh\Admin\Filter\AbstractFilter;
-use Lxh\Admin\Table\Actions;
+use Lxh\Admin\Layout\Row;
 use Lxh\Admin\Table\Column;
+use Lxh\Admin\Table\RowActions;
 use Lxh\Admin\Table\Table;
 use Lxh\Admin\Table\Td;
 use Lxh\Admin\Table\Th;
 use Lxh\Admin\Table\Tr;
+use Lxh\Admin\Tools\Actions;
+use Lxh\Admin\Tools\BatchDelete;
+use Lxh\Admin\Tools\Tools;
 use Lxh\Admin\Widgets\Box;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Admin\Kernel\Url;
@@ -95,6 +99,15 @@ class Grid implements Renderable
      */
     protected $perPageKey = 'maxSize';
 
+    /**
+     * @var Tools
+     */
+    protected $tools;
+
+    /**
+     * @var \Lxh\Admin\Tools\Actions
+     */
+    protected $actions;
 
     /**
      * Options for grid.
@@ -152,13 +165,11 @@ class Grid implements Renderable
     {
         $this->table = new Table($headers);
         $this->rows = &$rows;
-
         $this->table->grid($this);
-
-        $this->setupPerPage();
-
+        $this->tools = new Tools();
         $this->url = request()->url();
 
+        $this->setupPerPage();
         $this->url->query($this->pjax, $this->pjaxContainer);
     }
 
@@ -176,6 +187,18 @@ class Grid implements Renderable
         $this->idName = $name;
 
         return $this;
+    }
+
+    /**
+     * @return \Lxh\Admin\Tools\Actions
+     */
+    public function actions()
+    {
+        if (! $this->actions) {
+            $this->actions = new Actions();
+        }
+
+        return $this->actions;
     }
 
     /**
@@ -224,6 +247,18 @@ class Grid implements Renderable
         }
 
         $this->perPage = $maxSize;
+    }
+
+    protected function setupTools()
+    {
+        if ($this->options['allowBatchDelete']) {
+            $this->tools->append(new BatchDelete());
+        }
+
+//        if ($this->actions) {
+            $this->tools->prepend($this->actions());
+//        }
+        
     }
 
     /**
@@ -281,6 +316,14 @@ class Grid implements Renderable
         }
 
         return $where;
+    }
+
+    /**
+     * @return Tools
+     */
+    public function tool()
+    {
+        return $this->tools;
     }
 
     /**
@@ -511,7 +554,7 @@ class Grid implements Renderable
         $list = $this->findList();
 
         if ($list && $this->options['allowEdit'] || $this->options['allowDelete']) {
-            $this->buildActions();
+            $this->buildRowActions();
         }
 
         return $this->table->setRows($list)->render();
@@ -521,12 +564,12 @@ class Grid implements Renderable
      * 创建行action按钮
      * 详情、删除
      */
-    protected function buildActions()
+    protected function buildRowActions()
     {
         $action = null;
 
         $this->table->append(function (array $row, Td $td, Th $th, Tr $tr) use($action) {
-            if (! $action) $action = new Actions($this);
+            if (! $action) $action = new RowActions($this);
 
             $th->value($action->title());
 
@@ -550,12 +593,15 @@ class Grid implements Renderable
             return view('admin::grid-content', $vars)->render();
         }
 
+        $this->setupTools();
+
         $box = new Box();
+        $box->setTools($this->tools);
 
         $box->content(view($this->view, $vars)->render())->style('inverse')->btnToolbar();
 
         if ($btn = $this->buildCreateBtn()) {
-            $box->tool($btn);
+            $box->rightTools()->append($btn);
         }
 
         return $box->render();
@@ -570,10 +616,9 @@ class Grid implements Renderable
         $model = Admin::model();
 
         $label = trans('Create ' . $model);
-        return (new Button($label, Admin::url()->action('create'), [
-            'color' => 'success',
-            'id' => $this->getCreateBtnTabId(),
-        ]))->render();
+        $button = new Button($label, Admin::url()->action('create'));
+
+        return $button->name($this->getCreateBtnTabId())->color('success')->render();
     }
 
     protected function getCreateBtnTabId()

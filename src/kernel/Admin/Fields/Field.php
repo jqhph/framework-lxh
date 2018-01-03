@@ -14,6 +14,13 @@ class Field implements Renderable
     protected $name;
 
     /**
+     * 设置id
+     *
+     * @var string
+     */
+    protected $id = '';
+
+    /**
      *
      * @var mixed
      */
@@ -25,6 +32,9 @@ class Field implements Renderable
      */
     protected $attributes = [];
 
+    /**
+     * @var array
+     */
     protected $options = [];
 
     /**
@@ -32,13 +42,55 @@ class Field implements Renderable
      *
      * @var string
      */
-    protected $view = '';
+    protected $view;
+
+    /**
+     * @var string
+     */
+    protected $label = '';
 
     public function __construct($name, $value, $options = [])
     {
         $this->value = &$value;
 
-        $this->options = array_merge($this->options, (array) $options);
+        $this->options = array_merge($this->options, (array)$options);
+    }
+
+    public function label($label)
+    {
+        $this->label = $label;
+        return $this;
+    }
+
+    /**
+     * @param null $name
+     * @return $this|string
+     */
+    public function name($name = null)
+    {
+        if ($name === null) {
+            return $this->name;
+        }
+        $this->name = $name;
+        return $this;
+    }
+
+    protected function getElementSelector()
+    {
+        if ($this->id) {
+            return $this->id;
+        }
+
+        return "[data-name=\"{$this->name}\"]";
+    }
+
+    protected function buildSelectorAttribute()
+    {
+        if ($this->id) {
+            return $this->attribute('id', $this->id);
+        }
+
+        return $this->attribute('data-name', $this->name);
     }
 
     /**
@@ -51,11 +103,16 @@ class Field implements Renderable
      */
     public function option($key, $value = null)
     {
-        if (is_null($value)) {
+        $isArray = is_array($key);
+        if (is_null($value) && !$isArray) {
             return $this->options[$key];
         }
 
-        $this->options[$key] = $value;
+        if ($isArray) {
+            $this->options = array_merge($this->options, $key);
+        } else {
+            $this->options[$key] = $value;
+        }
 
         return $this;
     }
@@ -121,6 +178,8 @@ class Field implements Renderable
 
     public function render()
     {
+        $this->buildSelectorAttribute();
+
         if ($this->view) {
             return view($this->view, array_merge([
                 'value' => $this->value,

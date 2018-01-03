@@ -3,6 +3,7 @@
 namespace Lxh\Admin\Widgets;
 
 use Lxh\Admin\Admin;
+use Lxh\Admin\Tools\Tools;
 use Lxh\Contracts\Support\Renderable;
 
 class Box extends Widget implements Renderable
@@ -25,13 +26,17 @@ class Box extends Widget implements Renderable
     protected $content = '';
 
     /**
-     * @var array
+     * @var Tools
      */
-    protected $tools = [];
+    protected $leftTools;
+
+    /**
+     * @var Tools
+     */
+    protected $rightTools;
+
 
     protected $toolClass = '';
-
-    protected $actions = [];
 
     /**
      * @var mixed
@@ -58,6 +63,12 @@ class Box extends Widget implements Renderable
         $this->style('success');
 
         Admin::addScriptClass(__CLASS__);
+    }
+
+    public function setTools(Tools $tools)
+    {
+        $this->leftTools = $tools;
+        return $this;
     }
 
     /**
@@ -116,7 +127,9 @@ class Box extends Widget implements Renderable
     {
         $this->id = $this->generateId();
 
-        $this->tools[] = "<a id='collapse-{$this->id}' data-toggle=\"collapse\" href=\"#{$this->id}\"><i class=\"zmdi zmdi-minus\"></i></a>";
+        $this->rightTools()->append(
+            "<a id='collapse-{$this->id}' data-toggle=\"collapse\" href=\"#{$this->id}\"><i class=\"zmdi zmdi-minus\"></i></a>"
+        );
 
         return $this;
     }
@@ -128,7 +141,9 @@ class Box extends Widget implements Renderable
      */
     public function removable()
     {
-        $this->tools[] = '<a data-toggle="remove"><i class="zmdi zmdi-close"></i></a>';
+        $this->rightTools()->append(
+            '<a data-toggle="remove"><i class="zmdi zmdi-close"></i></a>'
+        );
 
         static::$scripts[0] = <<<EOF
             $('.portlet [data-toggle="remove"]').click(function (e) {
@@ -151,13 +166,29 @@ EOF;
         return $this;
     }
 
-    public function tool($tool)
+    public function rightTools()
     {
-        $this->tools[] = &$tool;
-        return $this;
+        if (! $this->rightTools) {
+            $this->rightTools = new Tools();
+        }
+
+        return $this->rightTools;
     }
 
-    public function action($action)
+    public function leftTools()
+    {
+        if (! $this->leftTools) {
+            $this->leftTools = new Tools();
+        }
+
+        return $this->leftTools;
+    }
+
+    /**
+     * @param $action
+     * @return $this
+     */
+    public function setAction($action)
     {
         $this->actions[] = &$action;
         return $this;
@@ -165,8 +196,10 @@ EOF;
 
     public function backable()
     {
-        $this->tools[] = '<button data-toggle="back" type="button" class="btn btn-default waves-effect"><i class="ti-arrow-left"></i>&nbsp;&nbsp;'
-            . trans('back') . '</button>';
+        $this->rightTools->append(
+            '<button data-toggle="back" type="button" class="btn btn-default waves-effect"><i class="ti-arrow-left"></i>&nbsp;&nbsp;'
+            . trans('back') . '</button>'
+        );
 
         static::$scripts[2] = <<<EOF
              $('.portlet [data-toggle="back"]').click(function(){back_tab();})
@@ -218,10 +251,10 @@ EOF;
         return [
             'title'      => $this->title,
             'content'    => &$content,
-            'tools'      => $this->tools,
+            'tools'      => $this->rightTools()->render(),
             'attributes' => $this->formatAttributes(),
             'id' => $this->id,
-            'actions' => $this->actions,
+            'actions' => $this->leftTools()->render(),
             'toolClass' => $this->toolClass(),
         ];
     }

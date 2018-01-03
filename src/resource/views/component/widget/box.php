@@ -1,16 +1,10 @@
 <div <?php echo $attributes  ?>>
     <div class="portlet-heading portlet-default">
         <h3 class="portlet-title"><?php echo $title ?></h3>
-        <span>
-            <?php foreach ($actions as &$action) {
-               echo '&nbsp;' .$action;
-            }?>
-        </span>
+        <span><?php echo $actions?></span>
         <div class="portlet-widgets">
             <div class="<?php echo $toolClass?>"><div class="btn-group dropdown-btn-group pull-right">
-            <?php foreach($tools as &$tool): ?>
-                &nbsp;<?php echo $tool  ?>
-            <?php endforeach; ?>
+            <?php echo $tools; ?>
             </div></div>
         </div>
         <div style="clear: both"></div>
