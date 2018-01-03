@@ -59,6 +59,13 @@ class Admin
     protected static $scriptClass = [];
 
     /**
+     * id字段名
+     *
+     * @var string
+     */
+    protected static $idName = 'id';
+
+    /**
      * @param $model
      * @param Closure $callable
      *
@@ -92,6 +99,21 @@ class Admin
         }
 
         return static::$scope;
+    }
+
+    /**
+     * 设置或获取id名称
+     *
+     * @param null $scope
+     * @return string
+     */
+    public static function id($id = null)
+    {
+        if ($id) {
+            static::$idName = $id;
+        }
+
+        return static::$idName;
     }
 
     /**

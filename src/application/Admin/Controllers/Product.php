@@ -21,10 +21,6 @@ use Lxh\Http\Response;
 
 class Product extends Controller
 {
-    protected $btns = [
-        'create' => 'Create'
-    ];
-
     /**
      * 网格报表配置
      *
@@ -48,43 +44,48 @@ class Product extends Controller
         'modified_at' => ['view' => 'Date'],
     ];
 
+    /**
+     * 开启过滤器
+     *
+     * @var bool
+     */
+    protected $filter = true;
+
     public function initialize()
     {
     }
 
-    public function actionList(Request $req, Response $resp, array & $params)
+    /**
+     * 自定义过滤器
+     *
+     * @param Filter $filter
+     */
+    protected function filter(Filter $filter)
     {
-        $content = $this->admin()->content();
-
-        $content->header(trans(__CONTROLLER__));
-        $content->description(trans(__CONTROLLER__ . ' list'));
-
-        // 构建搜索界面
-        $filter = $content->filter(function (Filter $filter) {
-            $filter->multipleSelect('status')->options(range(1, 10));
-            $filter->select('level')->options([1, 2]);
-            $filter->text('stock')->number();
-            $filter->text('name');
-            $filter->text('price');
-            $filter->dateRange('created_at')->between()->toTimestamp();
-        });
-
-        // 构建网格报表
-        $grid = $content->grid($this->grid);
-
-        // 添加过滤器，过滤器会根据搜索表单内容构建Sql where过滤语句
-        // 当然，你也可以在Model中重新定义where语句内容
-        $grid->filter($filter);
-
-        // 设置表格
-        // 可以自定义行、列、表头的内容和样式等，也可以追加列
-        $this->setupTable($grid->table());
-
-        // 渲染模板
-        return $content->render();
+        $filter->multipleSelect('status')->options(range(1, 10));
+        $filter->select('level')->options([1, 2]);
+        $filter->text('stock')->number();
+        $filter->text('name');
+        $filter->text('price');
+        $filter->dateRange('created_at')->between()->toTimestamp();
     }
 
-    protected function setupTable(Table $table)
+    /**
+     * 自定义网格配置
+     *
+     * @param Grid $grid
+     */
+    protected function grid(Grid $grid)
+    {
+    }
+
+    /**
+     * 自定义table
+     *
+     * @param Table $table
+     * @throws \Lxh\Exceptions\InvalidArgumentException
+     */
+    protected function table(Table $table)
     {
         /**
          * 使用field方法添加字段
@@ -182,26 +183,16 @@ class Product extends Controller
         });
     }
 
-    /**
-     * 获取详情界面字段视图信息
-     *
-     * @return array
-     */
-    protected function makeDetailItems($id = null)
-    {
-        return [
-            ['view' => 'varchar/edit', 'vars' => ['name' => 'name', 'labelCol' => 2, 'formCol' => 9]],
-            ['view' => 'varchar/edit', 'vars' => ['name' => 'price', 'labelCol' => 2, 'formCol' => 9]],
-            ['view' => 'varchar/edit', 'vars' => ['name' => 'counter_price', 'labelCol' => 2, 'formCol' => 9]],
-            ['view' => 'varchar/edit', 'vars' => ['name' => 'share_price', 'labelCol' => 2, 'formCol' => 9]],
-            ['view' => 'varchar/edit', 'vars' => ['name' => 'stock', 'labelCol' => 2, 'formCol' => 9]],
-            ['view' => 'varchar/edit', 'vars' => ['name' => 'desc', 'labelCol' => 2, 'formCol' => 9]],
-            ['view' => 'enum/edit', 'vars' => ['name' => 'level', 'labelCol' => 2, 'formCol' => 9]],
-            ['view' => 'bool/edit', 'vars' => ['name' => 'is_new', 'labelCol' => 2, 'formCol' => 9]],
-            ['view' => 'bool/edit', 'vars' => ['name' => 'is_hot', 'labelCol' => 2, 'formCol' => 9]],
-            ['view' => 'date/edit', 'vars' => ['name' => 'calendar', 'labelCol' => 2, 'formCol' => 9]],
 
-        ];
-    }
+//            ['view' => 'varchar/edit', 'vars' => ['name' => 'name', 'labelCol' => 2, 'formCol' => 9]],
+//            ['view' => 'varchar/edit', 'vars' => ['name' => 'price', 'labelCol' => 2, 'formCol' => 9]],
+//            ['view' => 'varchar/edit', 'vars' => ['name' => 'counter_price', 'labelCol' => 2, 'formCol' => 9]],
+//            ['view' => 'varchar/edit', 'vars' => ['name' => 'share_price', 'labelCol' => 2, 'formCol' => 9]],
+//            ['view' => 'varchar/edit', 'vars' => ['name' => 'stock', 'labelCol' => 2, 'formCol' => 9]],
+//            ['view' => 'varchar/edit', 'vars' => ['name' => 'desc', 'labelCol' => 2, 'formCol' => 9]],
+//            ['view' => 'enum/edit', 'vars' => ['name' => 'level', 'labelCol' => 2, 'formCol' => 9]],
+//            ['view' => 'bool/edit', 'vars' => ['name' => 'is_new', 'labelCol' => 2, 'formCol' => 9]],
+//            ['view' => 'bool/edit', 'vars' => ['name' => 'is_hot', 'labelCol' => 2, 'formCol' => 9]],
+//            ['view' => 'date/edit', 'vars' => ['name' => 'calendar', 'labelCol' => 2, 'formCol' => 9]],
 
 }

@@ -6,6 +6,7 @@ use Lxh\Admin\Admin;
 use Lxh\Admin\Form\Field;
 use Lxh\Contracts\Support\Arrayable;
 use Lxh\Contracts\Support\Renderable;
+use Lxh\Exceptions\InvalidArgumentException;
 use Lxh\Support\Arr;
 
 /**
@@ -50,6 +51,13 @@ use Lxh\Support\Arr;
  */
 class Form implements Renderable
 {
+    /**
+     * 字段id
+     *
+     * @var mixed
+     */
+    protected $id;
+
     /**
      * @var string
      */
@@ -103,6 +111,33 @@ class Form implements Renderable
         $this->initFormAttributes();
     }
 
+    /**
+     * @param $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * 查询数据
+     *
+     * @throws InvalidArgumentException
+     */
+    public function find()
+    {
+        if (! $this->id) {
+            throw new InvalidArgumentException('缺少id');
+        }
+
+        if (! $this->data) {
+            $this->data = model(Admin::model())->set(Admin::id(), $this->id)->find();
+        }
+
+        return $this;
+    }
 
     /**
      * Add or get options.
@@ -312,6 +347,10 @@ class Form implements Renderable
      */
     protected function getVariables()
     {
+        if ($this->id) {
+            $this->find();
+        }
+
         foreach ($this->fields as $field) {
             $field->fill($this->data);
         }

@@ -123,7 +123,7 @@ class Grid implements Renderable
         'allowEdit'        => true,
         'allowDelete'      => true,
         'allowCreate'      => true,
-        'allowBatchDelete' => true,
+        'allowBatchDelete' => false,
         'useRWD'           => true,
         'indexScript'      => 'view/public-index',
         'pjax'             => true,
@@ -144,8 +144,14 @@ class Grid implements Renderable
      */
     protected $idName = 'id';
 
+    /**
+     * @var string
+     */
     protected $pjax = '_pjax';
 
+    /**
+     * @var string
+     */
     protected $pjaxContainer = '#pjax-container';
 
     /**
@@ -168,25 +174,20 @@ class Grid implements Renderable
         $this->table->grid($this);
         $this->tools = new Tools();
         $this->url = request()->url();
+        $this->idName = Admin::id();
 
         $this->setupPerPage();
         $this->url->query($this->pjax, $this->pjaxContainer);
     }
 
     /**
-     * 设置或获取id键名
+     * 获取id键名
      *
-     * @param string $name
-     * @return static|string
+     * @return string
      */
-    public function idName($name = null)
+    public function idName()
     {
-        if ($name === null) {
-            return $this->idName;
-        }
-        $this->idName = $name;
-
-        return $this;
+        return $this->idName;
     }
 
     /**
