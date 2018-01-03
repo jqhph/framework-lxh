@@ -43,7 +43,19 @@ class Admin
      */
     public static $js = [];
 
+    /**
+     * @var array
+     */
+    public static $asyncjs = [];
+
+    /**
+     * @var array
+     */
     protected static $assetsClass = [];
+
+    /**
+     * @var array
+     */
     protected static $scriptClass = [];
 
     /**
@@ -181,6 +193,26 @@ class Admin
     }
 
     /**
+     * 使用js异步加载代码
+     *
+     * @param null $js
+     * @return string|void
+     */
+    public static function asyncJs($js = null)
+    {
+        if (!is_null($js)) {
+            self::$asyncjs = array_merge(self::$asyncjs, (array) $js);
+            return;
+        }
+
+        $script = '';
+        foreach (static::$asyncjs as &$js) {
+            $script .= "add_js('$js')";
+        }
+        return $script;
+    }
+
+    /**
      * @param string $script
      *
      * @return array
@@ -208,25 +240,25 @@ class Admin
             static::script($class::$scripts);
         }
     }
-    
+
+    /**
+     * 注册全局只加载一次JS或CSS的类
+     *
+     * @param $class
+     */
     public static function addAssetsFieldClass($class)
     {
         static::$assetsClass[$class] = 1;
     }
 
+    /**
+     * 注册全局只加载一次的JS代码的类
+     *
+     * @param $class
+     */
     public static function addScriptClass($class)
     {
         static::$scriptClass[$class] = 1;
-    }
-
-    /**
-     * Left sider-bar menu.
-     *
-     * @return array
-     */
-    public function menu()
-    {
-        return (new Menu())->toTree();
     }
 
     /**
@@ -249,35 +281,4 @@ class Admin
         return admin();
     }
 
-    /**
-     * Set navbar.
-     *
-     * @param Closure $builder
-     */
-    public function navbar(Closure $builder)
-    {
-        call_user_func($builder, $this->getNavbar());
-    }
-
-    /**
-     * Get navbar object.
-     *
-     * @return \Lxh\Admin\Widgets\Navbar
-     */
-    public function getNavbar()
-    {
-        if (is_null($this->navbar)) {
-            $this->navbar = new Navbar();
-        }
-
-        return $this->navbar;
-    }
-
-    public function registerAuthRoutes()
-    {
-    }
-
-    public function registerHelpersRoutes($attributes = [])
-    {
-    }
 }

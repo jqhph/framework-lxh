@@ -67,6 +67,7 @@ echo $css;
         return new loading();
     }
 })(window);
+<?php echo $asyncJs;?>;
 <?php echo $script?>
 </script>
 </body>

@@ -125,7 +125,7 @@ class Grid implements Renderable
         'allowCreate'      => true,
         'allowBatchDelete' => true,
         'useRWD'           => true,
-        'usePublicJs'      => true,
+        'indexScript'      => 'view/public-index',
         'pjax'             => true,
     ];
 
@@ -188,6 +188,32 @@ class Grid implements Renderable
 
         return $this;
     }
+
+    /**
+     * 加载js脚本
+     *
+     * @param $script
+     * @return $this
+     */
+    public function useGridScript($script)
+    {
+        $this->options['indexScript'] = &$script;
+
+        return $this;
+    }
+
+    /**
+     * 禁止使用公共js脚本
+     *
+     * @return $this
+     */
+    public function disableGridScript()
+    {
+        $this->options['indexScript'] = '';
+
+        return $this;
+    }
+
 
     /**
      * @return \Lxh\Admin\Tools\Actions
@@ -595,6 +621,15 @@ class Grid implements Renderable
 
         $this->setupTools();
 
+        if (!$this->allowDelete() && !$this->options['useRowSelector']) {
+            $this->disableGridScript();
+        }
+
+        return $this->renderBox($vars);
+    }
+
+    protected function renderBox(array &$vars)
+    {
         $box = new Box();
         $box->setTools($this->tools);
 

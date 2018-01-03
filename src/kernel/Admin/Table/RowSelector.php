@@ -33,7 +33,6 @@ class RowSelector extends Widget
     protected function setupScript()
     {
         return <<<EOF
-(function(){var b=$('input[data-action="select-all"]');b.click(function(){var j=$(this),e=j.parent().parent().parent().parent(),d=e.find('input[name="tb-row[]"]');if(j.prop("checked")){d.prop("checked",true);var g=[],f,h;for(f in d){if(typeof d[f]!="object"||typeof d[f]=="function"||typeof $(d[f]).val=="undefined"){continue}h=$(d[f]).val();if(!h||h=="on"){continue}g.push(h);c($(d[f]))}a(g.join(","))}else{d.prop("checked",false);j.val("");for(f in d){if(typeof d[f]!="object"||typeof d[f]=="function"||typeof $(d[f]).val=="undefined"){continue}c($(d[f]),false)}}});function a(d){b.val(d);$(document).trigger("grid.selected",d)}$('input[name="tb-row[]"]').click(function(){var e=b.val();e=e?e.split(","):[];if($(this).prop("checked")){e.push($(this).val());c($(this))}else{for(var d in e){if(e[d]==$(this).val()){e.splice(d,1);break}}c($(this),false)}a(e.join(","))});function c(d,f){if(d.data("action")=="select-all"){return}var e=d.parent().parent();e.removeClass("active");if(f!==false){e.addClass("active")}}})();        
 EOF;
 /**
  * 行选择器点击功能js，以上为压缩版本，原版js如下：

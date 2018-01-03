@@ -53,9 +53,14 @@ define(['css/sweet-alert.min.css', 'lib/js/sweet-alert.min'], function () {
     }
 
     // 绑定删除事件
-    $('a[data-action="delete-row"]').click(public.delete)
+    $('a[data-action="delete-row"]').click(public.delete);
     $(document).on('pjax:complete', function () {
         // 绑定删除事件
         $('a[data-action="delete-row"]').click(public.delete)
+    });
+
+    add_action(function () {
+        // 行选择器点击事件
+        (function(){var b=$('input[data-action="select-all"]');b.click(function(){var j=$(this),e=j.parent().parent().parent().parent(),d=e.find('input[name="tb-row[]"]');if(j.prop("checked")){d.prop("checked",true);var g=[],f,h;for(f in d){if(typeof d[f]!="object"||typeof d[f]=="function"||typeof $(d[f]).val=="undefined"){continue}h=$(d[f]).val();if(!h||h=="on"){continue}g.push(h);c($(d[f]))}a(g.join(","))}else{d.prop("checked",false);j.val("");for(f in d){if(typeof d[f]!="object"||typeof d[f]=="function"||typeof $(d[f]).val=="undefined"){continue}c($(d[f]),false)}}});function a(d){b.val(d);$(document).trigger("grid.selected",d)}$('input[name="tb-row[]"]').click(function(){var e=b.val();e=e?e.split(","):[];if($(this).prop("checked")){e.push($(this).val());c($(this))}else{for(var d in e){if(e[d]==$(this).val()){e.splice(d,1);break}}c($(this),false)}a(e.join(","))});function c(d,f){if(d.data("action")=="select-all"){return}var e=d.parent().parent();e.removeClass("active");if(f!==false){e.addClass("active")}}})();
     })
-})
+});

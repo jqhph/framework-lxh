@@ -249,8 +249,9 @@ class Content implements Renderable
             $script = Admin::script();
             $js = Admin::js();
             $css = Admin::css();
+            $asyncJs = Admin::asyncJs();
 
-            return "{$content}{$css}{$js}<script>{$script}</script>";
+            return "{$content}{$css}{$asyncJs}{$js}<script>{$script}</script>";
         }
 
         Admin::collectFieldAssets();
@@ -261,6 +262,7 @@ class Content implements Renderable
             'js'          => Admin::js(),
             'css'         => Admin::css(),
             'script'      => Admin::script(),
+            'asyncJs'     => Admin::asyncJs(),
         ];
 
         return view('admin::content', $items)->render();

@@ -4,8 +4,8 @@
     add_css('lib/plugins/RWD-Table-Patterns/dist/css/rwd-table.min.css');
     add_js('lib/plugins/RWD-Table-Patterns/dist/js/rwd-table.min');
     <?php }?>
-    <?php if ($usePublicJs) {?>
-    add_js('view/public-index');
+    <?php if ($indexScript) {?>
+    add_js('<?php echo $indexScript;?>');
     <?php }?>
     <?php if ($pages) {?>
     add_action(function () {
