@@ -27,74 +27,13 @@ class RowSelector extends Widget
     {
         $this->table = $table;
 
-        Admin::script($this->setupScript());
+//        Admin::script($this->setupScript());
     }
 
     protected function setupScript()
     {
         return <<<EOF
 EOF;
-/**
- * 行选择器点击功能js，以上为压缩版本，原版js如下：
- *
-(function () {
-var allInput = $('input[data-action="select-all"]')
-// 选中所有行checkbox点击事件
-allInput.click(function () {
-    var _this = $(this), tb = _this.parent().parent().parent().parent(), inputs = tb.find('input[name="tb-row[]"]');
-    if (_this.prop('checked')) {
-        // 选中所有行，并把所有行的id存储到本按钮value中
-        inputs.prop('checked', true);
-        var ids = [], i, id;
-        for (i in inputs) {
-            if (typeof inputs[i] != 'object' || typeof inputs[i] == 'function' || typeof $(inputs[i]).val == 'undefined') continue;
-            id = $(inputs[i]).val();
-            if (!id || id == 'on') continue;
-            ids.push(id);
-            active($(inputs[i])) // 添加选中效果
-        }
-        set_all_input(ids.join(','));
-
-    } else {
-        inputs.prop('checked', false);
-        set_all_input('') // 清除值
-        for (i in inputs) {
-            if (typeof inputs[i] != 'object' || typeof inputs[i] == 'function' || typeof $(inputs[i]).val == 'undefined') continue;
-            active($(inputs[i]), false) // 移除选中效果
-        }
-    }
-});
-function set_all_input(val) {
-    allInput.val(val)
-    $(document).trigger('grid.selected', val);
-}
-// 单行选中事件
-$('input[name="tb-row[]"]').click(function () {
-    var ids = allInput.val()
-    ids = ids ? ids.split(',') : [];
-    if ($(this).prop('checked')) {
-        ids.push($(this).val());
-        active($(this));
-    } else {
-        for(var i in ids) {
-            if(ids[i] == $(this).val()) {
-              ids.splice(i, 1);
-              break;
-            }
-        }
-        active($(this), false);
-    }
-    set_all_input(ids.join(','))
-})
-// 给当前行添加选中效果
-function active(input, close) {
-    if (input.data('action') == 'select-all') return;
-    var tr = input.parent().parent();
-    tr.removeClass('active');
-    if (close !== false) tr.addClass('active');
-}
-})()
- */
     }
 
     public function render()

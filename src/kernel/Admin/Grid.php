@@ -653,7 +653,10 @@ class Grid implements Renderable
         $label = trans('Create ' . $model);
         $button = new Button($label, Admin::url()->action('create'));
 
-        return $button->name($this->getCreateBtnTabId())->color('success')->render();
+        $button->attribute('data-action', 'create-row');
+        $button->name($this->getCreateBtnTabId());
+
+        return $button->color('success')->render();
     }
 
     protected function getCreateBtnTabId()

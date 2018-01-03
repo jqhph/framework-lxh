@@ -10,10 +10,8 @@ $config = [];
 
 // 是否启用缓存 ===> 已移至可写配置文件
 //$config['use-cache'] = true;
-
 // 前端缓存的默认缓存时间，单位毫秒 ===> 已移至可写配置文件
 //$config['cache-expire'] = 259200 * 1000;
-
 // 语言包缓存时间，单位毫秒 ===> 已移植可写配置文件
 //$config['lang-package-expire'] = 259200 * 1000; // 缓存时间，3天
 
@@ -38,7 +36,7 @@ $config['sea-config'] = [
     // 设置别名，方便调用
     'alias' => [
         'parsley' => 'lib/plugins/parsleyjs/dist/parsley.min',
-        'container' => 'lib/js/container.min',
+        'container' => 'lib/js/container',
         'toastr' => 'lib/plugins/toastr/toastr.min',
         'core' => 'lib/js/jquery.core.min',
         'blade' => 'lib/js/blade',

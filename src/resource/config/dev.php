@@ -226,7 +226,7 @@ return array (
     ),
     'guzzle' => 
     array (
-      'timeout' => 3,
+      'timeout' => 3.0,
     ),
   ),
   'client-config' => 
@@ -247,7 +247,7 @@ return array (
       'alias' => 
       array (
         'parsley' => 'lib/plugins/parsleyjs/dist/parsley.min',
-        'container' => 'lib/js/container.min',
+        'container' => 'lib/js/container',
         'toastr' => 'lib/plugins/toastr/toastr.min',
         'core' => 'lib/js/jquery.core.min',
         'blade' => 'lib/js/blade',

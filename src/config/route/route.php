@@ -83,14 +83,26 @@ $config[] = [
     ]
 ];
 
+// 删除单行数据路由
 $config[] = [
-    'pattern' => '/api/:lc[controller]/view/:int[id]',
+    'pattern' => '/api/:lc[controller]/:int[id]',
     'method' => 'DELETE',
     'params' => [
         'module' => 'Admin',
         'controller' => ':lc[controller]',
         'action' => 'Delete',
         'id' => ':int[id]'
+    ]
+];
+
+// 批量删除路由
+$config[] = [
+    'pattern' => '/api/:lc[controller]/batch-delete',
+    'method' => 'POST,DELETE',
+    'params' => [
+        'module' => 'Admin',
+        'controller' => ':lc[controller]',
+        'action' => 'BatchDelete'
     ]
 ];
 

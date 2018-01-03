@@ -249,22 +249,18 @@ return array (
         'parsley' => 'lib/plugins/parsleyjs/dist/parsley.min',
         'container' => 'lib/js/container',
         'toastr' => 'lib/plugins/toastr/toastr.min',
-        'core' => 'lib/js/jquery.core',
+        'core' => 'lib/js/jquery.core.min',
         'blade' => 'lib/js/blade',
-        'validate' => 'lib/js/validate',
-        'router' => 'lib/js/router',
+        'validate' => 'lib/js/validate.min',
       ),
     ),
     'public-css' => 
     array (
-      0 => 's/css/responsive.css',
+      0 => 's/css/responsive.min.css',
     ),
     'public-js' => 
     array (
-      0 => 'validate',
-      1 => 'container',
-      2 => 'core',
-      3 => 'lib/js/jquery.app',
+      0 => 'container.min',
     ),
   ),
   'mail' => 

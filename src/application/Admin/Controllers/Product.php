@@ -7,7 +7,7 @@
 
 namespace Lxh\Admin\Controllers;
 
-//use Lxh\MVC\Controller;
+use Lxh\Admin\MVC\Controller;
 use Lxh\Admin\Filter;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Layout\Row;

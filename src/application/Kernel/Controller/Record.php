@@ -127,6 +127,25 @@ class Record extends LxhController
     }
 
     /**
+     * 批量删除接口
+     */
+    public function actionBatchDelete()
+    {
+        // 判断是否有权限访问
+        if (! acl()->access()) {
+            throw new Forbidden();
+        }
+
+        $ids = explode(',', I('ids'));
+
+        if (empty($ids)) {
+            return $this->error(trans_with_global('Missing id.'));
+        }
+
+        return $this->model()->batchDelete($ids) ? $this->success() : $this->failed();
+    }
+
+    /**
      * 获取详情界面字段视图信息
      *
      * @return array

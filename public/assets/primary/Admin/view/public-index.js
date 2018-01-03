@@ -50,12 +50,37 @@ define(['css/sweet-alert.min.css', 'lib/js/sweet-alert.min'], function () {
 
         },
         // 批量删除
-        batchDelete: function () {
-
+        batchDelete: function (e) {
             if (! listids) {
-
+                return $lxh.ui().notify().error(trans('Unchecked!', 'tip'));
             }
-            console.log(123, listids)
+            var modelName = $(e.currentTarget).attr('data-model'),
+                model = $lxh.createModel(modelName);
+
+            model.set('ids', listids);
+
+            model.on('success', function () {
+                swal({
+                    title: trans("Deleted!", 'tip'),
+                    type: "success"
+                }, function () {
+                    window.location.reload();
+                });
+            });
+
+            // 确认窗
+            swal({
+                title: trans("Are you sure to delete these rows?", 'tip'),
+                text: listids + "\n" + trans("You will not be able to recover these rows!", 'tip'),
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: 'btn-danger',
+                confirmButtonText: trans("Yes, delete it!", 'tip'),
+                cancelButtonText: trans('Cancel'),
+                closeOnConfirm: false
+            }, function () {
+                model.batchDelete()
+            });
         }
 
     };
@@ -67,9 +92,64 @@ define(['css/sweet-alert.min.css', 'lib/js/sweet-alert.min'], function () {
         // 绑定删除事件
         $('a[data-action="delete-row"]').click(public.delete);
     });
-    $(document).on('grid.selected', function (e, data) {listids = data});
     add_action(function () {
         // 行选择器点击事件
-        (function(){var b=$('input[data-action="select-all"]');b.click(function(){var j=$(this),e=j.parent().parent().parent().parent(),d=e.find('input[name="tb-row[]"]');if(j.prop("checked")){d.prop("checked",true);var g=[],f,h;for(f in d){if(typeof d[f]!="object"||typeof d[f]=="function"||typeof $(d[f]).val=="undefined"){continue}h=$(d[f]).val();if(!h||h=="on"){continue}g.push(h);c($(d[f]))}a(g.join(","))}else{d.prop("checked",false);a('');for(f in d){if(typeof d[f]!="object"||typeof d[f]=="function"||typeof $(d[f]).val=="undefined"){continue}c($(d[f]),false)}}});function a(d){b.val(d);$(document).trigger("grid.selected",d)}$('input[name="tb-row[]"]').click(function(){var e=b.val();e=e?e.split(","):[];if($(this).prop("checked")){e.push($(this).val());c($(this))}else{for(var d in e){if(e[d]==$(this).val()){e.splice(d,1);break}}c($(this),false)}a(e.join(","))});function c(d,f){if(d.data("action")=="select-all"){return}var e=d.parent().parent();e.removeClass("active");if(f!==false){e.addClass("active")}}})();
-    })
+        (function () {
+            var allInput = $('input[data-action="select-all"]')
+            // 选中所有行checkbox点击事件
+            allInput.click(function () {
+                var _this = $(this), tb = _this.parent().parent().parent().parent(), inputs = tb.find('input[name="tb-row[]"]');
+                if (_this.prop('checked')) {
+                    // 选中所有行，并把所有行的id存储到本按钮value中
+                    inputs.prop('checked', true);
+                    var ids = [], i, id;
+                    for (i in inputs) {
+                        if (typeof inputs[i] != 'object' || typeof inputs[i] == 'function' || typeof $(inputs[i]).val == 'undefined') continue;
+                        id = $(inputs[i]).val();
+                        if (!id) continue;
+                        ids.push(id);
+                        active($(inputs[i])); // 添加选中效果
+                    }
+                    set_all_input(ids.join(','));
+
+                } else {
+                    inputs.prop('checked', false);
+                    set_all_input(''); // 清除值
+                    for (i in inputs) {
+                        if (typeof inputs[i] != 'object' || typeof inputs[i] == 'function' || typeof $(inputs[i]).val == 'undefined') continue;
+                        active($(inputs[i]), false) // 移除选中效果
+                    }
+                }
+            });
+            function set_all_input(val) {
+                listids = val;
+                allInput.val(val);
+                $(document).trigger('grid.selected', val);
+            }
+            // 单行选中事件
+            $('input[name="tb-row[]"]').click(function () {
+                var ids = allInput.val(), $this = $(this), id = $this.val();
+                ids = (ids !== 'on' && ids) ? ids.split(',') : [];
+                if ($this.prop('checked')) {
+                    if (id) ids.push(id);
+                    active($this);
+                } else {
+                    for(var i in ids) {
+                        if(ids[i] == id) {
+                            ids.splice(i, 1);
+                            break;
+                        }
+                    }
+                    active($this, false);
+                }
+                set_all_input(ids.join(','))
+            })
+            // 给当前行添加选中效果
+            function active(input, close) {
+                if (input.data('action') == 'select-all') return;
+                var tr = input.parent().parent();
+                tr.removeClass('active');
+                if (close !== false) tr.addClass('active');
+            }
+        })()    })
 });

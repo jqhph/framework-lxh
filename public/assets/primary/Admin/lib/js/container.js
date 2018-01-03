@@ -1450,6 +1450,11 @@ console.log('request data', data);
             return this.request(util.parseApi('delete'), 'DELETE');
         };
 
+        // 批量删除
+        this.batchDelete = function () {
+            return this.request(util.parseApi('batch-delete'), 'POST');
+        };
+
         /**
          * 获取列表数据
          *
@@ -1519,13 +1524,15 @@ console.log('request data', data);
                         return store.apiPrefix + scopeName + '/view/' + id;
                     case 'delete':
                         var id = self.get('id');
-                        return store.apiPrefix + scopeName + '/view/' + id;
+                        return store.apiPrefix + scopeName + '/' + id;
                     case 'list':
                         return store.apiPrefix + scopeName + '/list';
                     case 'detail':
                         return store.apiPrefix + scopeName + '/view/' + self.get('id');
                     case 'action':
                         return store.apiPrefix + scopeName + '/' + this.normalizeRequestName(options.action)
+                    case 'batch-delete':
+                        return store.apiPrefix + scopeName + '/batch-delete';
                 }
             },
 

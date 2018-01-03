@@ -7,7 +7,7 @@
 
 namespace Lxh\Admin\Models;
 
-use Lxh\MVC\Model;
+use Lxh\Admin\MVC\Model;
 
 class Product extends Model
 {
