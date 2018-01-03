@@ -61,10 +61,10 @@ class Button extends Field
 
         $icon = '';
         if ($this->icon) {
-            $icon = "<i class='{$this->icon}'></i> &nbsp;";
+            $icon = "&nbsp; <i class='{$this->icon}'></i>";
         }
 
-        return "<button {$this->formatAttributes()}>{$icon}{$this->label}</button>";
+        return "<button {$this->formatAttributes()}>{$this->label}{$icon}</button>";
     }
 
     /**

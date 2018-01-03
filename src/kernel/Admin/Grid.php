@@ -255,9 +255,9 @@ class Grid implements Renderable
             $this->tools->append(new BatchDelete());
         }
 
-//        if ($this->actions) {
-            $this->tools->prepend($this->actions());
-//        }
+        if ($this->actions) {
+            $this->tools->prepend($this->actions);
+        }
         
     }
 

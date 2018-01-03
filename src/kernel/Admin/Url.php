@@ -34,7 +34,7 @@ class Url
      * @param $scope
      * @return $this
      */
-    public function scope($scope)
+    protected function scope($scope)
     {
         $this->scope = Util::convertWith($scope, true, '-');
 

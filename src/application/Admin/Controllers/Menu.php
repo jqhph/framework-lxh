@@ -8,6 +8,7 @@
 
 namespace Lxh\Admin\Controllers;
 
+use Lxh\Admin\Admin;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Kernel\Url;
 use Lxh\Admin\Widgets\Box;
@@ -151,7 +152,7 @@ class Menu extends Controller
         $content->description(trans('Menu form'));
 
         $box = $content->form(function (Form $form) {
-            $form->action(Url::makeAction('create'));
+            $form->action(Admin::url()->action('create'));
 
             $form->selectTree('parent_id')->options(resolve('acl-menu')->all())->defaultOption(0, '顶级分类');
             $form->text('title')->rules('required');

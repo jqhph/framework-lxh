@@ -1,7 +1,7 @@
 <div <?php echo $attributes  ?>>
     <div class="portlet-heading portlet-default">
         <h3 class="portlet-title"><?php echo $title ?></h3>
-        <span><?php echo $actions?></span>
+        <span class="dropdown"><?php echo $actions?></span>
         <div class="portlet-widgets">
             <div class="<?php echo $toolClass?>"><div class="btn-group dropdown-btn-group pull-right">
             <?php echo $tools; ?>

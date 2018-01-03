@@ -509,7 +509,7 @@ a:focus {
   border: 1px solid rgba(152, 166, 173, 0.15);
 }
 .dropdown-menu > li > a {
-  padding: 6px 20px;
+  padding: 6px 20px !important;
 }
 .dropdown-menu > li > a:focus,
 .dropdown-menu > li > a:hover {

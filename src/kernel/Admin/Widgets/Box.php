@@ -196,7 +196,7 @@ EOF;
 
     public function backable()
     {
-        $this->rightTools->append(
+        $this->rightTools()->append(
             '<button data-toggle="back" type="button" class="btn btn-default waves-effect"><i class="ti-arrow-left"></i>&nbsp;&nbsp;'
             . trans('back') . '</button>'
         );

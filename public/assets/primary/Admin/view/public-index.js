@@ -54,4 +54,8 @@ define(['css/sweet-alert.min.css', 'lib/js/sweet-alert.min'], function () {
 
     // 绑定删除事件
     $('a[data-action="delete-row"]').click(public.delete)
+    $(document).on('pjax:complete', function () {
+        // 绑定删除事件
+        $('a[data-action="delete-row"]').click(public.delete)
+    })
 })
