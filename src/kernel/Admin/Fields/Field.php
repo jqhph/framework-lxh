@@ -14,13 +14,6 @@ class Field implements Renderable
     protected $name;
 
     /**
-     * 设置id
-     *
-     * @var string
-     */
-    protected $id = '';
-
-    /**
      *
      * @var mixed
      */
@@ -77,8 +70,8 @@ class Field implements Renderable
 
     protected function getElementSelector()
     {
-        if ($this->id) {
-            return $this->id;
+        if ($id = $this->getAttribute('id')) {
+            return $id;
         }
 
         return "[data-name=\"{$this->name}\"]";
@@ -86,8 +79,8 @@ class Field implements Renderable
 
     protected function buildSelectorAttribute()
     {
-        if ($this->id) {
-            return $this->attribute('id', $this->id);
+        if ($id = $this->getAttribute('id')) {
+            return $this;
         }
 
         return $this->attribute('data-name', $this->name);

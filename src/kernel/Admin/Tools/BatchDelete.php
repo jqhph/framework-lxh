@@ -7,6 +7,8 @@ use Lxh\Contracts\Support\Renderable;
 
 class BatchDelete implements Renderable
 {
+    protected $id = 'batch-delete';
+
     public function label()
     {
         return trans('Batch Remove');
@@ -16,7 +18,7 @@ class BatchDelete implements Renderable
     {
         $btn = new Button($this->label());
 
-        return $btn->color('danger')->icon('fa fa-trash')->render();
+        return $btn->attribute('id', $this->id)->color('danger')->icon('fa fa-trash')->render();
 
     }
 }

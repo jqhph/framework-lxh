@@ -57,7 +57,7 @@ allInput.click(function () {
 
     } else {
         inputs.prop('checked', false);
-        _this.val('') // 清除值
+        set_all_input('') // 清除值
         for (i in inputs) {
             if (typeof inputs[i] != 'object' || typeof inputs[i] == 'function' || typeof $(inputs[i]).val == 'undefined') continue;
             active($(inputs[i]), false) // 移除选中效果

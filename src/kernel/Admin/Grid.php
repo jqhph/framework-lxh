@@ -607,6 +607,10 @@ class Grid implements Renderable
     {
         $table = $this->getTableString();
 
+        if (!$this->allowDelete() && !$this->options['useRowSelector']) {
+            $this->disableGridScript();
+        }
+
         $vars = array_merge([
             'table' => &$table,
             'page'  => &$this->pageString,
@@ -620,10 +624,6 @@ class Grid implements Renderable
         }
 
         $this->setupTools();
-
-        if (!$this->allowDelete() && !$this->options['useRowSelector']) {
-            $this->disableGridScript();
-        }
 
         return $this->renderBox($vars);
     }
