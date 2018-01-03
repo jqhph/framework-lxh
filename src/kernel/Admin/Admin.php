@@ -198,7 +198,7 @@ class Admin
      * @param null $js
      * @return string|void
      */
-    public static function asyncJs($js = null)
+    public static function async($js = null)
     {
         if (!is_null($js)) {
             self::$asyncjs = array_merge(self::$asyncjs, (array) $js);

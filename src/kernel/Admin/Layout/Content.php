@@ -262,7 +262,7 @@ class Content implements Renderable
             'js'          => Admin::js(),
             'css'         => Admin::css(),
             'script'      => Admin::script(),
-            'asyncJs'     => Admin::asyncJs(),
+            'asyncJs'     => Admin::async(),
         ];
 
         return view('admin::content', $items)->render();
