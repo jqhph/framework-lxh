@@ -249,7 +249,7 @@ class Content implements Renderable
             $script = Admin::script();
             $js = Admin::js();
             $css = Admin::css();
-            $asyncJs = Admin::asyncJs();
+            $asyncJs = Admin::async();
 
             return "{$content}{$css}{$asyncJs}{$js}<script>{$script}</script>";
         }
