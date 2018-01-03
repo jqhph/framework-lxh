@@ -19,9 +19,14 @@ use InvalidArgumentException;
 class Admin
 {
     /**
-     * @var Navbar
+     * @var array
      */
-    protected $navbar;
+    protected static $urls = [];
+
+    /**
+     * @var string
+     */
+    protected static $scope = __CONTROLLER__;
 
     /**
      * @var array
@@ -63,15 +68,30 @@ class Admin
     }
 
     /**
-     * Build a tree.
+     * 设置或获取模型名称
      *
-     * @param $model
-     *
-     * @return \Lxh\Admin\Tree
+     * @param null $scope
+     * @return string
      */
-    public function tree($model, Closure $callable = null)
+    public static function model($scope = null)
     {
-        return new Tree($this->getModel($model), $callable);
+        if ($scope) {
+            static::$scope = $scope;
+        }
+
+        return static::$scope;
+    }
+
+    /**
+     * Admin url.
+     *
+     * @return Url
+     */
+    public static function url($scope = null)
+    {
+        $scope = $scope ?: static::$scope;
+
+        return isset(static::$urls[$scope]) ? static::$urls[$scope] : (static::$urls[$scope] = Url::create($scope));
     }
 
     /**
@@ -200,24 +220,6 @@ class Admin
     }
 
     /**
-     * Admin url.
-     *
-     * @param $url
-     *
-     * @return string
-     */
-    public static function url($url)
-    {
-        $prefix = (string) config('admin.prefix');
-
-        if (empty($prefix) || $prefix == '/') {
-            return '/'.trim($url, '/');
-        }
-
-        return "/$prefix/".trim($url, '/');
-    }
-
-    /**
      * Left sider-bar menu.
      *
      * @return array
@@ -230,7 +232,7 @@ class Admin
     /**
      * Get admin title.
      *
-     * @return Config
+     * @return string
      */
     public function title()
     {

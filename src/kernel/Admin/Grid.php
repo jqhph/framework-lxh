@@ -18,11 +18,6 @@ use Lxh\MVC\Model;
 class Grid implements Renderable
 {
     /**
-     * @var string
-     */
-    protected $module = __CONTROLLER__;
-
-    /**
      * @var Model
      */
     protected $model;
@@ -168,16 +163,6 @@ class Grid implements Renderable
     }
 
     /**
-     * 模块名称
-     *
-     * @return string
-     */
-    public function module()
-    {
-        return $this->module;
-    }
-
-    /**
      * 设置或获取id键名
      *
      * @param string $name
@@ -271,7 +256,7 @@ class Grid implements Renderable
         }
 
         if (! $this->model) {
-            $this->model = create_model(__CONTROLLER__);
+            $this->model = create_model(Admin::model());
         }
         return $this->model;
     }
@@ -582,8 +567,10 @@ class Grid implements Renderable
             return;
         }
 
-        $label = trans('Create ' . $this->module);
-        return (new Button($label, Url::makeAction('create', $this->module), [
+        $model = Admin::model();
+
+        $label = trans('Create ' . $model);
+        return (new Button($label, Admin::url()->action('create'), [
             'color' => 'success',
             'id' => $this->getCreateBtnTabId(),
         ]))->render();
@@ -591,6 +578,6 @@ class Grid implements Renderable
 
     protected function getCreateBtnTabId()
     {
-        return  'create-' . $this->module;
+        return  'create-' . Admin::model();
     }
 }
