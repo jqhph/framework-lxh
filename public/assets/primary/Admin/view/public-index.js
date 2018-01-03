@@ -115,9 +115,7 @@ define(['css/sweet-alert.min.css', 'lib/js/sweet-alert.min'], function () {
                 inputs.prop('checked', true);
                 var ids = [], i, id;
                 for (i in inputs) {
-                    if (typeof inputs[i] != 'object' || typeof inputs[i] == 'function' || typeof $(inputs[i]).val == 'undefined') continue;
-                    id = $(inputs[i]).val();
-                    if (!id) continue;
+                    if (! (id = notinvalid(inputs[i]))) continue;
                     ids.push(id);
                     active($(inputs[i])); // 添加选中效果
                 }
@@ -127,10 +125,15 @@ define(['css/sweet-alert.min.css', 'lib/js/sweet-alert.min'], function () {
                 inputs.prop('checked', false);
                 set_all_input(''); // 清除值
                 for (i in inputs) {
-                    if (typeof inputs[i] != 'object' || typeof inputs[i] == 'function' || typeof $(inputs[i]).val == 'undefined') continue;
+                    if (! notinvalid(inputs[i])) continue;
                     active($(inputs[i]), false) // 移除选中效果
                 }
             }
+        }
+        // 验证input对象是否无效
+        function notinvalid(input) {
+            if (typeof input != 'object' || typeof input == 'function' || typeof $(input).val == 'undefined' || ((input = $(input).val()) == 'on')) return false;
+            return input
         }
         function set_all_input(val) {
             listids = val;
