@@ -17,7 +17,6 @@
     (typeof jsLibArr == 'undefined') && (jsLibArr = (parent.jsLibArr = []));
     (typeof cssLibArr == 'undefined') && (cssLibArr = (parent.cssLibArr = []));
     (typeof array_unique == 'undefined') && (array_unique = parent.array_unique);
-    (typeof loading == 'undefined') && (loading = parent.loading);
 </script>
 
 <div class="content-wrapper">
@@ -31,7 +30,6 @@
 
 <?php
 echo load_css('bootstrap.min');
-//echo load_js('util');
 echo render_view('public.app-js');
 
 echo $js;
@@ -54,6 +52,20 @@ echo $css;
     w.back_tab = function (step) {
         TAB.back(step)
     };
+    w.loading = function (el, circle, timeout) {
+        el = el || 'body';
+        function loading() {
+            var $el = typeof el == 'object' ? el : $(el);
+            if (circle) {
+                $el.append('<div class=" loading loading-circle"></div>')
+            } else {
+                $el.append('<div class=" loading"><div class="loading1"></div><div class="loading2"></div><div class="loading3"></div></div>')
+            }
+            this.close = function () {$el.find('.loading').remove()};
+            if (timeout) setTimeout(this.close, timeout);
+        }
+        return new loading();
+    }
 })(window);
 <?php echo $script?>
 </script>

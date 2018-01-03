@@ -12,10 +12,10 @@
         $('.grid-per-pager').change(change)
         function change() {
             <?php if ($pjax) { ?>
-            var $loading = loading('#lxh-app')
+            var $loading = loading($('#pjax-container').parent());
             $.get($(this).val(), function (data) {
                 $('#pjax-container').html(data);
-                $(document).trigger('pjax:complete', {})
+                $(document).trigger('pjax:complete', {});
                 $loading.close()
             });
             <?php } else {
@@ -23,7 +23,7 @@
         } ?>
         }
         window.change_pages = change
-    })
+    });
     <?php }?>
 </script>
 <?php if ($pjax) {?>
@@ -52,7 +52,7 @@
                 var $submit_btn = $('form[pjax-container] :submit');
                 if($submit_btn) $submit_btn.button('loading');
             }
-            $loading = loading('#lxh-app');
+            $loading = loading($('#pjax-container').parent());
         })
         $(document).on('pjax:complete', function(xhr) {
             if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {

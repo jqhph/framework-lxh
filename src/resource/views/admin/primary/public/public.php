@@ -29,9 +29,6 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
-    <style type="text/css">
-        .loading{position:absolute;top:50%;left:48.5%;margin-top:-30px;z-index:999999;width:100px;text-align:center}.loading>div{width:20px;height:20px;background-color:#36d5ac;border-radius:100%;display:inline-block;-webkit-animation:bouncedelay 1.4s infinite ease-in-out;animation:bouncedelay 1.4s infinite ease-in-out;-webkit-animation-fill-mode:both;animation-fill-mode:both}.loading .loading1{-webkit-animation-delay:-.32s;animation-delay:-.32s}.loading .loading2{-webkit-animation-delay:-.16s;animation-delay:-.16s}@-webkit-keyframes bouncedelay{0%,100%,80%{-webkit-transform:scale(0)}40%{-webkit-transform:scale(1)}}@keyframes bouncedelay{0%,100%,80%{transform:scale(0);-webkit-transform:scale(0)}40%{transform:scale(1);-webkit-transform:scale(1)}}.loading-circle{position:relative;display:inline-block;line-height:0;vertical-align:middle;box-sizing:border-box}.loading-circle::after{content:"";display:inline-block;border:3px solid rgba(0,0,0,.1);border-radius:50%;height:32px;width:32px;box-sizing:border-box}.loading-circle:after{position:absolute;left:0;top:0;border-color:#21d376 transparent transparent;animation:loading .6s linear infinite}.loading-circle-sm::after,.loading-circle-sm::before{height:18px;width:18px;border-width:2px}.loading-circle-xs::after,.loading-circle-xs::before{height:12px;width:12px;border-width:2px}@keyframes loading{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
-    </style>
 </head>
 <script>
 
