@@ -114,6 +114,8 @@ class Controller extends Base
         $content->description(trans(__CONTROLLER__ . ' form'));
 
         $box = $content->form(function (Form $form) {
+            $form->useEditScript();
+            
             $this->form($form);
         });
 

@@ -89,6 +89,7 @@ class Form implements Renderable
     protected $options = [
         'enableSubmit' => true,
         'enableReset'  => true,
+        'editScript' => true,
     ];
 
     /**
@@ -259,9 +260,20 @@ class Form implements Renderable
      * @param string $js 需要异步加载的js
      * @return static
      */
-    public function useEditScript($js = 'view/public-detail')
+    public function useScript($js)
     {
-        return $this->asyncJs($js);
+        return $this->async($js);
+    }
+
+    /**
+     * 禁用公共编辑js
+     *
+     * @return $this
+     */
+    public function disableEditScript()
+    {
+        $this->options['editScript'] = false;
+        return $this;
     }
 
     /**
@@ -312,9 +324,15 @@ class Form implements Renderable
         return false;
     }
 
-    public function asyncJs($js)
+    /**
+     * 异步加载js
+     *
+     * @param $js
+     * @return $this
+     */
+    public function async($js)
     {
-        $this->asyncJs[] = $js;
+        $this->asyncJs[] = &$js;
 
         return $this;
     }
@@ -349,6 +367,10 @@ class Form implements Renderable
     {
         if ($this->id) {
             $this->find();
+        }
+
+        if ($this->options['editScript']) {
+            $this->async('view/public-detail');
         }
 
         foreach ($this->fields as $field) {
