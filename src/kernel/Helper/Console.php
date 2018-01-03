@@ -93,7 +93,7 @@ class Console
     {
         if (empty(static::$records)) return '';
 
-        $uri = request()->getUri();
+        $uri = url()->uri();
         $q = $uri->getQuery();
         $path = $uri->getPath() . ($q ? "?$q" : '');
 

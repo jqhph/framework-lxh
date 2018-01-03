@@ -39,21 +39,20 @@ echo $css;
 ?>
 <script>
 (function (w) {
-    w.tab = function () {
-        var $top = w.$top || w.top.$top
-        return $top.tab
-    };
+    var $top = w.top.$top;
+    w.TAB = $top.tab;
+    w.IFRAME = $top.iframe;
     w.open_tab = function (id, url, label) {
-        tab().switch(id, url, label)
+        TAB.switch(id, url, label)
     };
     w.close_tab = function (id) {
-        tab().close(id)
+        TAB.close(id)
     };
     w.reload_tab = function (id, url, label) {
-        tab().reload(id, url, label)
+        TAB.reload(id, url, label)
     };
     w.back_tab = function (step) {
-        tab().back(step)
+        TAB.back(step)
     };
 })(window);
 <?php echo $script?>

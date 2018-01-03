@@ -9,10 +9,20 @@
     <?php }?>
     <?php if ($pages) {?>
     add_action(function () {
-        $('.grid-per-pager').change(function () {
-            window.location.href = $(this).val()
-            $.getJSON($(this).val(), )
-        })
+        $('.grid-per-pager').change(change)
+        function change() {
+            <?php if ($pjax) { ?>
+            var $loading = loading('#lxh-app')
+            $.get($(this).val(), function (data) {
+                $('#pjax-container').html(data);
+                $(document).trigger('pjax:complete', {})
+                $loading.close()
+            });
+            <?php } else {
+            echo 'window.location.href = $(this).val();';
+        } ?>
+        }
+        window.change_pages = change
     })
     <?php }?>
 </script>
@@ -22,7 +32,7 @@
     add_action(function () {
         $.pjax.defaults.timeout = 5000;
         $.pjax.defaults.maxCacheLength = 0;
-        $(document).pjax('a:not(a[target="_blank"])', {
+        $(document).pjax('#pjax-container a:not(a[target="_blank"])', {
             container: '#pjax-container'
         });
         $(document).on('submit', 'form[pjax-container]', function(event) {
@@ -35,8 +45,9 @@
                 });
             });
         });
-        var $loading;
+        var $loading, $current = TAB.currentEl();
         $(document).on('pjax:send', function(xhr) {
+            $current = TAB.currentEl();
             if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
                 var $submit_btn = $('form[pjax-container] :submit');
                 if($submit_btn) $submit_btn.button('loading');
@@ -48,7 +59,11 @@
                 var $submit_btn = $('form[pjax-container] :submit');
                 if($submit_btn) $submit_btn.button('reset');
             }
-            $loading.close()
+            $loading && $loading.close();
+            // 重新绑定点击事件
+            $('.grid-per-pager').change(change_pages);
+            // 重新计算iframe高度
+            IFRAME.height($current.iframe.find('iframe'));
         })
     })
 </script>

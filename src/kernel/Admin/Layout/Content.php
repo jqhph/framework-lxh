@@ -242,7 +242,15 @@ class Content implements Renderable
     {
         // 异步加载table，无需加载整个内容
         if (I('_pjax')) {
-            return $this->build();
+            // 必须先调用build方法
+            // 否则可能导致加载不到相关js
+            $content = $this->build();
+
+            $script = Admin::script();
+            $js = Admin::js();
+            $css = Admin::css();
+
+            return "{$content}{$css}{$js}<script>{$script}</script>";
         }
 
         Admin::collectFieldAssets();

@@ -139,22 +139,40 @@
             store = {},
             firstIndex = 'home',
             def = {name: firstIndex, url: '', label: ''},
-            histories = [def]
+            histories = [def],
+            current = def;
+
+        this.current = function () {
+            return this.switch()
+        };
+
+        // 返回当前tab按钮和iframe的JQ元素对象
+        this.currentEl = function () {
+            var name = current.name;
+            return {'tab': $('[data-action="tab-'+ name +'"]'), 'iframe': $('#wrapper-' + name)};
+        };
 
         // 切换显示tab页
         this.switch = function (name, url, label) {
-            iframe.switch(name, url)
-            this.show(name, url, label)
-            this.addHistory(name, url, label)
-        }
+            if (! name) {
+                name = current.name;
+                url = current.url;
+                label = current.label;
+            } else {
+                current = {name: name, url: url, label: label};
+            }
+            iframe.switch(name, url);
+            this.show(name, url, label);
+            this.addHistory(name, url, label);
+        };
 
         // 返回上一级tab
         this.back = function (step) {
-            step = (parseInt(step) || 1)
-            var data = histories[step] || def
-            histories.splice(step - 1, 1)
-            this.switch(data.name, data.url, data.label)
-        }
+            step = (parseInt(step) || 1);
+            var data = histories[step] || def;
+            histories.splice(step - 1, 1);
+            this.switch(data.name, data.url, data.label);
+        };
 
         this.show = function (name, url, label) {
             var $this = $('[data-action="tab-'+ name +'"]')
@@ -171,92 +189,99 @@
             // 隐藏关闭按钮
             // $this.find('.tab-close').hide()
             return $this
-        }
+        };
 
         this.addHistory = function (name, url, label) {
             histories = unset(histories, 'name', name)
             histories.unshift({name: name, url: url, label: label})
-        }
+        };
 
         // 重新加载iframe
         this.reload = function (name, url, label) {
-            delete store[name]
-            iframe.remove(name)
-            this.open(name, url, label)
+            if (! name) {
+                name = current.name;
+                url = current.url;
+                label = current.label;
+            }
+
+            delete store[name];
+            iframe.remove(name);
+            this.open(name, url, label);
             this.addHistory(name, url, label)
-        }
+        };
 
         // 打开一个新的tab页
         this.open = function (name, url, label) {
-            url = url || name
-            label = label || name
+            url = url || name;
+            label = label || name;
 
+            current = {name: name, url: url, label: label};
             if (typeof store[name] != 'undefined') {
-                this.switch(name)
+                this.switch(name);
                 return false;
             }
-            firstIndex = firstIndex || name
+            firstIndex = firstIndex || name;
 
-            iframe.create(name, url)
+            iframe.create(name, url);
 
-            store[name] = true
+            store[name] = true;
 
-            create_btn(name, label)
+            create_btn(name, label);
 
-            var $tabBtn = this.show(name)
+            var $tabBtn = this.show(name);
             // 绑定点击事件
-            $tabBtn.find('.tab-close').off('click')
+            $tabBtn.find('.tab-close').off('click');
             $tabBtn.find('.tab-close').click(function () {
-                this.close(name)
-            }.bind(this))
+                this.close(name);
+            }.bind(this));
             // 点击tab切换显示iframe
-            $tabBtn.off('click')
+            $tabBtn.off('click');
             $tabBtn.click(function () {
                 this.switch(name)
-            }.bind(this))
-            $tabBtn.find('.icon-refresh').off('click')
+            }.bind(this));
+            $tabBtn.find('.icon-refresh').off('click');
             $tabBtn.find('.icon-refresh').click(function () {
                 self.reload(name, url)
             })
-        }
+        };
 
         // 关闭tab窗
         this.close = function ($this) {
             if (! $this) {
-                $this = histories.shift().name
+                $this = current.name;
             }
 
-            var name
+            var name;
             if (typeof $this != 'object') {
-                name = $this
-                $this = $('[data-action="tab-'+ $this +'"]')
+                name = $this;
+                $this = $('[data-action="tab-'+ $this +'"]');
             } else {
-                name = $this.data('action').replace('tab-', '')
+                name = $this.data('action').replace('tab-', '');
             }
             // 移除按钮
-            $this.remove()
+            $this.remove();
             // 移除iframe
-            iframe.remove(name)
+            iframe.remove(name);
 
-            delete store[name]
+            delete store[name];
             // 返回上一页
             this.back()
-        }
+        };
 
         this.removeActive = function () {
-            var $all = $('li.tab')
+            var $all = $('li.tab');
             // 移除所有tab按钮选中特效
             $all.removeClass('active')
-            $all.find('a').addClass('waves-effect waves-info')
+            $all.find('a').addClass('waves-effect waves-info');
             $all.find('.tab-close').show(300)
-        }
+        };
 
         // 删除数组元素
         function unset(arr, k, value) {
-            var i, res = []
+            var i, res = [];
             for (i in arr) {
                 if (arr[i][k] == value) continue;
-                res.push(arr[i])
+                res.push(arr[i]);
             }
             return res
         }
@@ -275,11 +300,11 @@
         var tpl = $('#iframe-tpl').html(),
             store = {},
             $app = $('#lxh-app'),
-            current
+            current;
 
         // 切换显示iframe
         this.switch = function (name, url) {
-            this.hide()
+            this.hide();
             var $iframe = $('#wrapper-' + name || document)
 
             if ($iframe.length < 1) {
@@ -287,31 +312,29 @@
             }
 
             // 显示当前iframe
-            $iframe.show()
+            $iframe.show();
             current = name
-        }
+        };
 
         this.removeStore = function (name) {
             delete store[name]
-        }
+        };
 
         this.current = function () {
             return current
-        }
+        };
 
         this.remove = function (name) {
-            delete store[name]
+            delete store[name];
             $('#wrapper-' + name).remove()
-        }
+        };
 
         // 创建iframe弹窗
         this.create = function (name, url) {
             if (typeof store[name] != 'undefined') return true;
 
-            var $loading = w.loading($app)
-
-            current = name
-
+            var $loading = w.loading($app);
+            current = name;
             url = url || name;
 
             store[name] = true;
@@ -319,31 +342,31 @@
             var html = tpl.replace('{$name}', name).replace('{$url}', url);
 
             // 隐藏所有iframe
-            this.hide()
+            this.hide();
 
-            $app.append(html)
+            $app.append(html);
 
-            var $iframe = $('#wrapper-' + name)
+            var $iframe = $('#wrapper-' + name);
             // 显示当前iframe
-            $iframe.show(220)
+            $iframe.show(220);
 
             $iframe.find('iframe').load(function (e) {
-                this.height($(e.currentTarget))
+                this.height($(e.currentTarget));
                 $loading.close()
             }.bind(this))
-        }
+        };
 
         // 自动设置高度
-        this.height = function ($this) {
-            if (typeof $this[0] == 'undefined') return;
-
-            var iframe = $this[0],
-                iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow,
+        this.height = function ($iframe) {
+            if (! $iframe) $iframe = $('#wrapper-' + current);
+            if (typeof $iframe[0] == 'undefined') return;
+            var iframe = $iframe[0],
+                iframeWin = (iframe.contentWindow || iframe.contentDocument.parentWindow) || iframe,
                 height;
             if (iframeWin.document.body) {
                 height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight;
                 // iframe.height = height
-                $this.css('height', height + 'px')
+                $iframe.css('height', height + 'px')
             }
         };
 

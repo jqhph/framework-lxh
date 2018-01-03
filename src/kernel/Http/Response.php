@@ -293,7 +293,7 @@ class Response extends PsrResponse
 		// 非生产环境和非命令行环境则输出控制台调试日志
 		if (
 			$this->outputConsoleLog && ! is_prod()
-			&& ! $this->request->isCli() && config('response-console-log', true) && ! $this->request->isAjax()
+			&& ! $this->request->isCli() && config('response-console-log', true) && (! $this->request->isAjax() || I('_pjax'))
 		) {
 			echo Console::fetch();
 		}
