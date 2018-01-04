@@ -5,17 +5,10 @@
         <?php endforeach; ?>
         <div style="clear: both;"></div>
     </div>
+    <input type="hidden" name="_token" value="<?php ?>">
+    <?php if ($footer) { ?></div>
     <div class="box-footer">
-        <input type="hidden" name="_token" value="<?php ?>">
-        <div class="col-sm-12">
-            <div class="btn-group pull-left" >
-                <button type="submit" class="btn btn-sm btn-primary pull-right"><?php echo trans('Search')?>&nbsp;&nbsp;&nbsp;<i class="fa fa-search"></i></button>
-            </div>
-            <?php if ($filterOptions['enableReset']) {?>
-                <div class="btn-group waves-effect pull-left" style="margin-left:15px;"><button type="reset" class="btn btn-sm btn-default pull-right">
-                        <?php echo trans('Reset')?>&nbsp;&nbsp;&nbsp;<i class="fa fa-undo"></i></button></div>
-            <?php } ?>
-        </div>
-        <div style="clear: both;height:5px;"></div>
+        <div class="col-sm-12"><?php echo $footer;?></div><div style="clear: both;height:5px;"></div>
     </div>
+    <?php } ?>
 </form>

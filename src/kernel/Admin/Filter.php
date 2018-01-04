@@ -11,6 +11,7 @@ use Lxh\Admin\Filter\Field\Text;
 use Lxh\Admin\Form\Field;
 use Lxh\Admin\Table\Table;
 use Lxh\Admin\Widgets\Box;
+use Lxh\Admin\Widgets\Modal;
 use Lxh\Admin\Widgets\Widget;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Admin\Kernel\Url;
@@ -34,7 +35,14 @@ class Filter extends Widget implements Renderable
     /**
      * @var string
      */
-    protected $title = 'Search';
+    protected $title = 'Filter';
+
+    /**
+     * 弹窗宽度
+     *
+     * @var string
+     */
+    protected $modalWidth = '55%';
 
     /**
      * @var Grid
@@ -92,6 +100,38 @@ class Filter extends Widget implements Renderable
     }
 
     /**
+     * 设置弹窗显示搜索框
+     *
+     * @return $this
+     */
+    public function useModal($width = null)
+    {
+        if ($width) {
+            $this->modalWidth = $width;
+        }
+
+        $this->options['useModal'] = true;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function allowUseModal()
+    {
+        return $this->options['useModal'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getModalId()
+    {
+        return 'filter-modal';
+    }
+
+    /**
      * @param Grid|null $grid
      * @return $this
      */
@@ -140,10 +180,30 @@ class Filter extends Widget implements Renderable
             return '';
         }
 
-        if (! $this->options['useBox']) {
+        if (! $this->options['useBox'] && ! $this->options['useModal']) {
             return view($this->view, $this->vars())->render();
         }
 
+        return $this->options['useModal'] ? $this->buildModal() : $this->buildBox();
+    }
+
+    protected function buildModal()
+    {
+        foreach ($this->fields as &$field) {
+            $field->multipleFieldWidth(2.5);
+        }
+
+        $modal = new Modal(trans($this->title), view($this->view, $this->vars())->render());
+
+        $modal->id($this->getModalId());
+        $modal->width($this->modalWidth);
+        $modal->disableCloseBtn();
+
+        return $modal->render();
+    }
+
+    protected function buildBox()
+    {
         $box = new Box($this->title);
 
         $box->content(view($this->view, $this->vars())->render())->style('primary');
@@ -193,7 +253,43 @@ class Filter extends Widget implements Renderable
             'attributes' => $this->formatAttributes(),
             'fields' => $this->fields,
             'filterOptions' => &$this->options,
+            'footer' => $this->buildFooter(),
         ];
+    }
+
+    protected function buildFooter()
+    {
+        $submit = $this->buildSubmitBtn();
+        if ($this->options['useModal']) {
+            $submit->color('danger');
+        }
+
+        $reset = '';
+        if ($this->options['enableReset']) {
+            $reset = $this->buildResetBtn()->render();
+        }
+
+        return $submit->render() . ' ' . $reset;
+    }
+
+    protected function buildSubmitBtn()
+    {
+        $submit = new Button(trans('Search'));
+        $submit->attribute('type', 'submit')
+            ->icon('fa fa-search')
+            ->disableEffect();
+
+        return $submit;
+    }
+
+    protected function buildResetBtn()
+    {
+        $reset = new Button(trans('Reset'));
+        $reset->attribute('type', 'reset')
+            ->color('default')
+            ->icon('fa fa-undo');
+
+        return $reset;
     }
 
 

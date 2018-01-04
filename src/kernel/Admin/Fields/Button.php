@@ -28,6 +28,11 @@ class Button extends Field
         'id' => 'button',
     ];
 
+    /**
+     * @var string
+     */
+    protected $effect = 'waves-effect';
+
     public function __construct($label, $url = null)
     {
         $this->label = $label;
@@ -52,9 +57,18 @@ class Button extends Field
         return $this;
     }
 
+    /**
+     * @return $this
+     */
+    public function disableEffect()
+    {
+        $this->effect = '';
+        return $this;
+    }
+
     public function render()
     {
-        $this->class("waves-effect btn btn-{$this->option('color')}");
+        $this->class("$this->effect btn btn-{$this->option('color')}");
         $this->attribute('onclick', $this->url());
         $this->buildSelectorAttribute();
 

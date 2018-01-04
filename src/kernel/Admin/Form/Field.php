@@ -403,6 +403,21 @@ class Field implements Renderable
     }
 
     /**
+     * @param float $mult
+     * @return $this
+     */
+    public function multipleFieldWidth($mult = 1.5)
+    {
+        if (isset($this->width['field'])) {
+            $this->width['field'] = ceil($this->width['field'] * $mult);
+        } else {
+            $this->width = ceil($this->width * $mult);
+        }
+
+        return $this;
+    }
+
+    /**
      * Set the field options.
      *
      * @param array $options

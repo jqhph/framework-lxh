@@ -62,10 +62,12 @@ class Product extends Controller
      */
     protected function filter(Filter $filter)
     {
+        $filter->useModal();
+
         $filter->multipleSelect('status')->options(range(1, 10));
-        $filter->select('level')->options([1, 2]);
         $filter->text('stock')->number();
         $filter->text('name');
+        $filter->select('level')->options([1, 2]);
         $filter->text('price');
         $filter->dateRange('created_at')->between()->toTimestamp();
     }

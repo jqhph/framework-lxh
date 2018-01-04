@@ -285,7 +285,6 @@ class Grid implements Renderable
         if ($this->actions) {
             $this->tools->prepend($this->actions);
         }
-        
     }
 
     /**
@@ -638,6 +637,14 @@ class Grid implements Renderable
 
         if ($btn = $this->buildCreateBtn()) {
             $box->rightTools()->append($btn);
+        }
+
+        if ($this->filter && $this->filter->allowUseModal()) {
+            $btn = new Button(trans('Filter'));
+            $btn->attribute('data-target', '#' . $this->filter->getModalId());
+            $btn->attribute('data-toggle', 'modal');
+
+            $box->rightTools()->prepend($btn);
         }
 
         return $box->render();
