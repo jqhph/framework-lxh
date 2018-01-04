@@ -11,8 +11,6 @@ return array (
     'success' => '成功',
     'Success' => '成功',
     'Failed' => '失败',
-    'web-title' => 'LXH framework',
-    'web-description' => 'LXH framework, PHP',
     'sign in' => '登陆',
     'project-desc' => '高效后台代码生成器',
     'loading' => '加载中......',
