@@ -10,7 +10,7 @@ window.Lxh = function (options) {
      * @constructor
      */
     function Container(options) {
-        var self = this, config, cache, store, user, language, view, ui, env, tpl, util, urlMaker, iframe, tab;
+        var self = this, config, cache, store, user, language, ui, env, tpl, util;
 
         function init() {
             // 配置文件管理
@@ -36,18 +36,6 @@ window.Lxh = function (options) {
 
             // 环境管理
             env = new Env();
-
-            // 模板管理器
-            tpl = new Tpl(self, cache, config);
-
-            // 视图管理
-            view = new View(self, tpl);
-
-            iframe = new Iframe(self);
-
-            tab = new Tab(iframe);
-
-            urlMaker = new UrlMaker(self)
         }
 
         // 获取父窗口对象
@@ -135,14 +123,6 @@ window.Lxh = function (options) {
         };
 
         /**
-         *
-         * @returns {View}
-         */
-        this.view = function () {
-            return view
-        };
-
-        /**
          * 
          * @returns {UI}
          */
@@ -158,33 +138,8 @@ window.Lxh = function (options) {
             return env
         };
 
-        /**
-         *
-         * @returns {Tpl}
-         */
-        this.tpl = function () {
-            return tpl
-        };
-
         this.util = function () {
             return util
-        };
-
-        /**
-         * url管理
-         *
-         * @returns {*}
-         */
-        this.url = function () {
-            return urlMaker
-        };
-
-        this.iframe = function () {
-            return iframe
-        };
-
-        this.tab = function () {
-            return tab
         };
 
         // 初始化
@@ -285,98 +240,6 @@ window.Lxh = function (options) {
         }
     };
 
-    function Tab(iframe) {
-        var $top = parent.$top || '';
-        // 切换显示tab页
-        this.switch = function (name) {
-            $top.tab.switch(name)
-        };
-
-        this.show = function (name) {
-            $top.tab.show(name)
-        };
-
-        // 打开一个新的tab页
-        this.open = function (name, url, label) {
-            $top.tab.open(name, url, label)
-        };
-
-        // 关闭tab窗
-        this.close = function ($this) {
-            $top.tab.close($this)
-        };
-
-        this.removeActive = function () {
-            $top.tab.removeActive(name)
-        };
-
-        // 初始化首页tab页和iframe
-        function init() {
-            $top && $top.iframe.height($('#wrapper-home iframe', window.parent.document));
-
-            var $thisTab =  $('[data-action="tab-home"]', window.parent.document);
-
-            $thisTab.click(function () {
-                $top && $top.tab.switch('home')
-            });
-
-            $thisTab.find('.tab-close').click(function () {
-                $top && $top.tab.close('home')
-            });
-
-            // 菜单按钮点击事件
-            $('[data-action="switch-menu"]').click(function () {
-                var $this = $(this),
-                    id = $this.data('id'),
-                    url = $this.data('url'),
-                    label = $this.data('name');
-
-                if (! url) return false;
-
-                $top && $top.tab.open(id, url, label);
-            })
-        }
-
-        init()
-    }
-
-    function Iframe(container) {
-        var $top = parent.$top || '';
-        // 切换显示iframe
-        this.switch = function (name) {
-            $top.iframe.switch(name)
-        };
-
-        // 当前iframe弹窗编号
-        this.current = function () {
-            return $top.iframe.current()
-        };
-
-        // 移除iframe
-        this.remove = function (name) {
-            $top.iframe.remove(name)
-        };
-
-        // 创建iframe弹窗
-        this.create = function (name, url) {
-            $top.iframe.create(name)
-        };
-
-        // 自动设置高度
-        this.height = function ($this) {
-            $top.iframe.height($this)
-        };
-
-        // 计算当前iframe弹窗高度
-        this.currentHeight = function () {
-            var $this = $('#wrapper-'+ $top.iframe.current() +' iframe', window.parent.document);
-            $top.iframe.height($this);
-        };
-
-        this.hide = function () {
-            $top.iframe.hide(name)
-        };
-    }
 
     /*
       --------------------------------------------------------------------------------------
@@ -466,34 +329,6 @@ window.Lxh = function (options) {
         }
     }
     // --------------------------------------Util END-----------------------------------------------
-
-
-    /**
-     * -------------------------------------------------------------------------------------
-     * URL管理
-     *
-     * @returns {{}}
-     * @constructor
-     */
-    function UrlMaker(container) {
-        var store = {
-            prefix: '/admin'
-        };
-
-        return {
-            makeAction: function (a, c) {
-                a = a || container.actionName();
-                c = c || container.controllerName();
-
-                return store.prefix + '/' + to_under_score(c) + '/' + to_under_score(a);
-            },
-
-            makeHome: function () {
-                return store.prefix
-            }
-        }
-    }
-    // --------------------------------------UrlMaker END-----------------------------------------------
 
 
     /**
@@ -615,51 +450,6 @@ window.Lxh = function (options) {
     }
     // --------------------------------------UI END-----------------------------------------------
 
-    /**
-     * -------------------------------------------------------------------------------------
-     * 视图管理
-     *
-     * @param container
-     * @param tpls
-     * @constructor
-     */
-    function View(container, tpl)
-    {
-        var store = {
-            tpl: tpl
-        };
-
-        /**
-         * 创建一个视图
-         *
-         */
-        this.create = function (viewname, options) {
-
-            return this
-        };
-
-        /**
-         * 加载视图并初始化
-         *
-         * @param callback
-         */
-        this.then = function (callback) {
-
-        };
-
-        /**
-         *
-         * @param deps
-         * @param callback
-         */
-        this.call = function (deps, callback) {
-            seajs.use(deps, function () {
-
-                var view = callback.call(arguments)
-            })
-        };
-    }
-    // --------------------------------------View END-----------------------------------------------
 
     /**
      * -------------------------------------------------------------------------------------
@@ -810,144 +600,6 @@ window.Lxh = function (options) {
     }
     // --------------------------------------Validator END-----------------------------------------------
 
-    /**
-     * -----------------------------------------------------------------------------------
-     * 模板管理器
-     *
-     * @constructor
-     */
-    function Tpl(container, cache, config)
-    {
-        var store = {},
-            expireTime = config.get('cache-expire'),
-            cacheKey = 'tpls',
-            useCache = config.get('use-cache'),
-            defaultScope = container.controllerName();
-
-        /**
-         * 注入数据
-         *
-         * @param packages {object} <code>
-         *     {"tplname":"<div>..."}
-         *  </code>
-         * @param save {bool} 是否缓存到localStore，默认false
-         * @type {Language.fill}
-         */
-        var fill = this.fill = function (packages, save) {
-            if (! packages) {
-                // 如果没有数据，则从缓存中获取并注入
-                packages = cache.get(cacheKey, {});
-                save = false;
-            }
-            for (var tplname in packages) {
-                store[tplname] = packages[tplname];
-            }
-            if (save) {
-                this.save(packages);
-            }
-        };
-
-        /**
-         * 缓存语言包
-         *
-         * @param packages
-         */
-        this.save = function (packages) {
-            if (! useCache) {
-                return;
-            }
-            var cachePackage = {}, i;
-            cachePackage = cache.get(cacheKey, {});
-            for (var tplname in packages) {
-                cachePackage[tplname] = packages[tplname];
-            }
-            cache.set(cacheKey, cachePackage);
-            cache.expire(cacheKey, expireTime);
-        };
-
-        /**
-         * 获取模板，如果缓存中没有会从服务器中获取，如果缓存中有则直接从缓存中获取
-         *
-         * @param {array} names 模板名称数组
-         * @param {function} call 获取成功后回调函数
-         * @returns void
-         */
-        this.fetch = function (names, call) {
-            names = typeof names == 'string' ? [names] : names;
-            if (useCache) {
-                var packages = {};
-                packages = cache.get(cacheKey);
-                fill(packages);
-            }
-
-            // 取出缓存中没有的语言包模块
-            var missingNames = [];
-            for (var i in names) {
-                if (! store[names[i]]) {
-                    missingNames.push(names[i]);
-                }
-            }
-
-            if (missingNames.length < 1) {
-                // 缓存中有需要的语言包
-                return call(store);
-            }
-
-            // 缓存中没有需要的语言包
-            var model = container.createModel('Tpl');
-
-            model.data({names: missingNames.join(',')});
-
-            model.on('success', function (data) {
-                // 注入并缓存
-                fill(data.list, true);
-
-                call(store);
-            });
-            model.touchAction('get', 'POST');
-
-        };
-
-        this.all = function () {
-            return store;
-        };
-
-        /**
-         * 获取模板内容
-         *
-         * @param name
-         */
-        this.get = function (name) {
-            return store[name] || null;
-        };
-
-        /**
-         * 获取普通模块组件
-         */
-        this.module = function (name) {
-            return store[defaultScope + '.' + name] || null
-        };
-
-        /**
-         * 获取组件模板
-         *
-         * @param name
-         * @returns {*}
-         */
-        this.component = function (name) {
-            return store['component.' + name] || null;
-        };
-
-        /**
-         * 获取字段组件模板
-         *
-         * @param name
-         */
-        this.fields = function (name) {
-            return store['component.fields.' + name] || null;
-        };
-    }
-    // --------------------------------------Tpl END-----------------------------------------------
 
     /**
      * -----------------------------------------------------------------------------------

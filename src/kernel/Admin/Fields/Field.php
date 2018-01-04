@@ -4,6 +4,9 @@ namespace Lxh\Admin\Fields;
 
 use Lxh\Contracts\Support\Renderable;
 
+/**
+ * @method $this class($class)
+ */
 class Field implements Renderable
 {
     /**
@@ -65,6 +68,48 @@ class Field implements Renderable
             return $this->name;
         }
         $this->name = $name;
+        return $this;
+    }
+
+
+    /**
+     * 设置样式
+     *
+     * @param $style
+     * @return $this
+     */
+    public function setStyle($style)
+    {
+        $this->attributes['style'] = &$style;
+        return $this;
+    }
+
+
+    /**
+     * 设置css class
+     *
+     * @param $class
+     * @return $this
+     */
+    public function setClass($class)
+    {
+        $this->attributes['class'] = &$class;
+        return $this;
+    }
+
+    /**
+     * 追加样式
+     *
+     * @param $style
+     * @return $this
+     */
+    public function style($style)
+    {
+        if (isset($this->attributes['style'])) {
+            $this->attributes['style'] = "{$this->attributes['style']};$style";
+        } else {
+            $this->attributes['style'] = &$style;
+        }
         return $this;
     }
 
@@ -180,6 +225,29 @@ class Field implements Renderable
             ], $this->options));
         }
         return $this->value;
+    }
+
+    /**
+     * Handle dynamic calls to the container to set attributes.
+     *
+     * @param  string  $method
+     * @param  array   $parameters
+     * @return $this
+     */
+    public function __call($method, $parameters)
+    {
+        $p = count($parameters) > 0 ? $parameters[0] : true;
+        if ($method == 'class') {
+            if (isset($this->attributes[$method])) {
+                $this->attributes[$method] = "{$this->attributes[$method]} $p";
+            } else {
+                $this->attributes[$method] = &$p;
+            }
+            return $this;
+        }
+        $this->attributes[$method] = &$p;
+
+        return $this;
     }
 
 }

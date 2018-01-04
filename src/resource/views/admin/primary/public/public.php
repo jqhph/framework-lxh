@@ -35,6 +35,7 @@
 </script>
 <body class="fixed-left" id="lxh-body">
 <!-- Begin page -->
+<div id="wrapper">
 <div id="lxh-app">
     <!-- Top Bar Start -->
     <?php echo render_view('public.top-bar');?>
@@ -56,7 +57,7 @@
     echo load_js('toastr.min', 'plugins/toastr');
     ?>
 </div>
-
+</div>
 <footer class="footer text-right">
     <?php echo config('admin.copyright')?>
 </footer>

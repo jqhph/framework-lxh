@@ -69,8 +69,6 @@
         $lxh.language().type(lang);
         // 注入语言包数据
         $lxh.language().fill(serverOptions.get('language') || null, true);
-        // 注入模板数据
-        $lxh.tpl().fill(serverOptions.get('tpl') || null, true);
 
         // 生成table 展示隐藏字段功能按键
         $('[data-pattern]').each(function () {

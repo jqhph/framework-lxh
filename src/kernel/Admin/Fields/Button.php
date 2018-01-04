@@ -54,7 +54,7 @@ class Button extends Field
 
     public function render()
     {
-        $this->attribute('class', "waves-effect btn btn-{$this->option('color')}");
+        $this->class("waves-effect btn btn-{$this->option('color')}");
         $this->attribute('onclick', $this->url());
         $this->buildSelectorAttribute();
 
