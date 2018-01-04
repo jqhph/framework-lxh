@@ -234,7 +234,7 @@ class Grid implements Renderable
      * @param array $rows
      * @return static
      */
-    public function rows(array &$rows)
+    public function rows(array $rows)
     {
         $this->table()->setRows($rows);
         $this->rows = &$rows;

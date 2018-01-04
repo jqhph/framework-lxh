@@ -771,7 +771,7 @@ window.Lxh = function (options) {
      * Created by Jqh on 2017/6/27.
      */
     function Model(name, module, container) {
-        var notify = container.ui().notify(), globalUtil = container.util();
+        var notify = container.ui().notify(), globalUtil = container.util(), idkey = '__id__', id = 0;
 
         var store = {
             /**
@@ -903,6 +903,9 @@ window.Lxh = function (options) {
                  */
                 any: function () {
 
+                },
+                // 请求开始回调函数
+                start: function (api, method, data) {
                 }
             }
         };
@@ -926,6 +929,16 @@ window.Lxh = function (options) {
                 store.attrs[k] = v;
             }
             return this
+        };
+
+        /**
+         * 设置id
+         *
+         * @param {string} value
+         */
+        this.setId = function (value) {
+            id = value;
+            (store.data == 'object' && store.data[idkey] != 'undefined') && (delete store.data[idkey]);
         };
 
         /**
@@ -969,6 +982,9 @@ window.Lxh = function (options) {
          */
         this.data = function (data) {
             store.data = data;
+            if (typeof data[idkey] != 'undefined') {
+                this.setId(data[idkey])
+            }
             return this
         };
 
@@ -1013,6 +1029,10 @@ window.Lxh = function (options) {
             store.isRequsting = true;
 
             var data = util.getData();
+
+            // 请求开始
+            data = store.call.start(store.api, store.method, data) || data;
+
 console.log('request data', data);
             if (store.method.toLocaleUpperCase() == 'PUT') {
                 data = JSON.stringify(data);
@@ -1076,6 +1096,7 @@ console.log('request data', data);
             // 判断是否有修改过表单内容
             if (container.util().cmp(store.initialData, store.formHandler.get(get_form_selector())) === true) {
                 notify.remove();
+
                 return notify.info(trans('Nothing has been change.'));
             }
 
@@ -1088,7 +1109,8 @@ console.log('request data', data);
         this.save = function () {
             var data = store.formHandler.get(get_form_selector());
 
-            if (data.id) {
+            if (typeof data[idkey] != 'undefined') {
+                this.setId(data[idkey]);
                 return this.edit();
             }
             return this.add();
@@ -1146,6 +1168,7 @@ console.log('request data', data);
             getData: function () {
                 var data = store.data;
                 if (data) {
+                    delete data[idkey];
                     store.data = null;
                     return data;
                 }
@@ -1153,7 +1176,11 @@ console.log('request data', data);
                 data = store.formHandler.get(get_form_selector());
 
                 for (var i in data) {
-                    self.set(i, data[i]);
+                    if (i == idkey) {
+                        self.setId(data[i]);
+                    } else {
+                        self.set(i, data[i]);
+                    }
                 }
 
                 return self.all();
@@ -1172,17 +1199,16 @@ console.log('request data', data);
                     case 'add':
                         return store.apiPrefix + scopeName;
                     case 'edit':
-                        var id = self.get('id') || store.formHandler.get(get_form_selector()).id;
+                        // var id = self.get('id') || store.formHandler.get(get_form_selector()).id;
                         return store.apiPrefix + scopeName + '/view/' + id;
                     case 'delete':
-                        var id = self.get('id');
                         return store.apiPrefix + scopeName + '/' + id;
                     case 'list':
                         return store.apiPrefix + scopeName + '/list';
                     case 'detail':
-                        return store.apiPrefix + scopeName + '/view/' + self.get('id');
+                        return store.apiPrefix + scopeName + '/view/' + id;
                     case 'action':
-                        return store.apiPrefix + scopeName + '/' + this.normalizeRequestName(options.action)
+                        return store.apiPrefix + scopeName + '/' + this.normalizeRequestName(options.action);
                     case 'batch-delete':
                         return store.apiPrefix + scopeName + '/batch-delete';
                 }

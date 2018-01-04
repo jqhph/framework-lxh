@@ -11,10 +11,11 @@ namespace Lxh\Admin\Controllers;
 use Lxh\Admin\Admin;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Kernel\Url;
+use Lxh\Admin\MVC\Controller;
+use Lxh\Admin\Table\Table;
 use Lxh\Admin\Widgets\Box;
 use Lxh\Admin\Widgets\Form;
 use Lxh\Exceptions\Forbidden;
-//use Lxh\MVC\Controller;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
 use Lxh\Helper\Valitron\Validator;
@@ -22,6 +23,22 @@ use Lxh\Admin\Layout\Row;
 
 class Menu extends Controller
 {
+    /**
+     * 网格字段定义
+     *
+     * @var array
+     */
+    protected $grid = [
+        'id' => ['show' => 0, 'sortable' => 1, 'desc' => 1],
+        'icon' => ['view' => 'Icon'],
+        'name' => [],
+        'controller' => [],
+        'action' => [],
+        'show' => ['view' => 'Boolean'],
+        'type' => ['view' => 'Enum'],
+        'priority' => [],
+    ];
+
     protected function initialize()
     {
     }
@@ -32,7 +49,7 @@ class Menu extends Controller
      * @param  array
      * @return mixed
      */
-    protected function updateValidate($id, array & $fields)
+    protected function updateable($id, array & $fields)
     {
         if ($fields['parent_id'] == $id) {
             return 'Can\'t put self as a parent';
@@ -57,7 +74,7 @@ class Menu extends Controller
     }
 
     // 删除操作验证方法
-    public function deleteValidate($id)
+    public function deleteable($id)
     {
         // 判断是否是系统菜单，如果是则不允许删除
         if ($this->model()->isSystem($id)) {
@@ -65,58 +82,7 @@ class Menu extends Controller
         }
     }
 
-    /**
-     * 新增操作界面
-     *
-     * @return string
-     */
-    public function actionCreate1(Request $req, Response $resp, & $params)
-    {
-        $currentTitle = 'Create Menu';
-
-        $menus = resolve('acl-menu')->all();
-
-        array_unshift($menus, ['id' => 0, 'name' => trans('Top level'), 'required' => 1]);
-
-        $this->share('navTitle', $currentTitle);
-
-        return $this->render('detail', ['menus' => & $menus], true);
-    }
-
-    /**
-     * 详情页
-     *
-     * @return array
-     */
     public function actionDetail1(Request $req, Response $resp, array & $params)
-    {
-        if (empty($params['id'])) {
-            throw new Forbidden();
-        }
-        $id = $params['id'];
-
-        $model = $this->model();
-
-        $model->id = $id;
-
-        $row = $model->find();
-
-        $menus = resolve('acl-menu')->all();
-
-        $currentTitle = 'Modify menu';
-
-        array_unshift($menus, ['id' => 0, 'name' => trans('Top level'), 'required' => 1]);
-
-        $this->share('navTitle', $currentTitle);
-
-        return $this->render(
-            'detail',
-            ['row' => & $row, 'menus' => & $menus, ],
-            true
-        );
-    }
-
-    public function actionDetail(Request $req, Response $resp, array & $params)
     {
         if (empty($params['id'])) {
             throw new Forbidden();
@@ -140,67 +106,50 @@ class Menu extends Controller
         return $content->render();
     }
 
-    /**
-     * 新增操作界面
-     *
-     * @return string
-     */
-    public function actionCreate(Request $req, Response $resp, & $params)
-    {
-        $content = $this->admin()->content();
-        $content->header(trans('Menu'));
-        $content->description(trans('Menu form'));
-
-        $box = $content->form(function (Form $form) {
-            $form->action(Admin::url()->action('create'));
-
-            $form->selectTree('parent_id')->options(resolve('acl-menu')->all())->defaultOption(0, '顶级分类');
-            $form->text('title')->rules('required');
-            $form->text('icon')->help($this->iconHelp());
-            $form->text('name')->rules('required');
-            $form->text('controller');
-            $form->text('action');
-            $form->select('show')->options([1, 0])->default(1);
-            $form->select('priority')->options(range(0, 30))->help('值越小排序越靠前');
-
-            $form->useEditScript();
-        });
-
-        $box->title(trans('Create Menu'));
-
-        return $content->render();
-    }
-
     protected function iconHelp()
     {
-        $url = Url::makeAction('font-awesome', 'public-entrance');
+        $url = Admin::url('PublicEntrance')->action('font-awesome');
+
         $label = trans_with_global('fontawesome icon CSS');
 
         return "<a onclick=\"open_tab('f-a-h', '{$url}', '$label')\">$label</a>";
     }
 
-    public function actionList(Request $req, Response $resp, array & $params)
+    /**
+     * 编辑界面表单定义
+     *
+     * @param Form $form
+     */
+    protected function form(Form $form)
     {
-        $content = $this->admin()->content();
-        $content->header(trans('Menu'));
-        $content->description(trans('Menu list'));
+        $form->selectTree('parent_id')->options(resolve('acl-menu')->all())->defaultOption(0, '顶级分类');
+        $form->text('name')->rules('required');
+        $form->text('icon')->help($this->iconHelp());
+        $form->text('controller');
+        $form->text('action');
+        $form->select('show')->options([1, 0])->default(1);
+        $form->select('priority')->options(range(0, 30))->help('值越小排序越靠前');
+    }
 
-        $grid = $content->grid([
-            'id' => ['show' => 0, 'sortable' => 1, 'desc' => 1],
-            'icon' => ['view' => 'Icon'],
-            'name' => [],
-            'controller' => [],
-            'action' => [],
-            'show' => ['view' => 'Boolean'],
-            'type' => ['view' => 'Enum'],
-            'priority' => [],
-        ]);
+    /**
+     * 网格定义
+     *
+     * @param Grid $grid
+     */
+    protected function grid(Grid $grid)
+    {
+        $grid->rows(resolve('acl-menu')->all());
+        $grid->disablePagination();
+    }
 
-        $rows = resolve('acl-menu')->all();
-
-        $grid->rows($rows)->disablePagination()->table()->useTree('subs');
-
-        return $content->render();
+    /**
+     * 表格定义
+     *
+     * @param Table $table
+     */
+    protected function table(Table $table)
+    {
+        $table->useTree('subs');
     }
 
 

@@ -90,7 +90,7 @@ EOF;
     {
         $name = get_value($this->row, 'name') ?: $id;
 
-        return $name . ' - ' . trans(Admin::model()) . trans('Edit');
+        return trim(str_replace('&nbsp;', '', $name)) . ' - ' . trans(Admin::model()) . trans('Edit');
     }
 
     protected function renderDelete($id)

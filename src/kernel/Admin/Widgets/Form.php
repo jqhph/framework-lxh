@@ -378,10 +378,11 @@ class Form implements Renderable
         }
 
         return [
-            'fields'     => $this->fields,
-            'attributes' => $this->formatAttribute(),
-            'asyncJs'    => &$this->asyncJs,
-            'formOptions'    => &$this->options
+            'fields'      => $this->fields,
+            'attributes'  => $this->formatAttribute(),
+            'asyncJs'     => &$this->asyncJs,
+            'formOptions' => &$this->options,
+            'id'          => $this->id,
         ];
     }
 

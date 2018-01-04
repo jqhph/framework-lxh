@@ -10,7 +10,12 @@ define(['validate'], function () {
 
         function submit(e) {
             notify.remove();
-            var $loading = window.loading();
+            var $loading;
+
+            // 设置请求开始回调函数
+            model.on('start', function (api, method, data) {
+                $loading = window.loading();
+            });
 
             // 设置成功回调函数
             model.on('success', function (data) {
@@ -28,10 +33,7 @@ define(['validate'], function () {
                 }
 
             });
-            model.on('failed', function () {
-                if (typeof swal != 'undefined') swal.close(); // 关闭提示窗
-                notify.remove();
-                notify.error(trans(data.msg, 'tip'));
+            model.on('any', function () {
                 $loading.close();
             });
 

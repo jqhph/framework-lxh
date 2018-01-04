@@ -7,7 +7,7 @@
                 <option value="<?php echo $defaultOption['value'] ?>" ><?php echo $defaultOption['label']?></option>
             <?php } ?>
             <?php foreach($options as $select => &$option): ?>
-            <option value="<?php echo $option['id'] ?>" <?php $option['id'] == $value ?'selected':''  ?>><?php echo $option['name']?></option>
+            <option value="<?php echo $option['id'] ?>" <?php echo $option['id'] == $value ?'selected':''  ?>><?php echo $option['name']?></option>
             <?php endforeach; ?>
         </select>
         <?php if ($help) {

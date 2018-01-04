@@ -73,6 +73,16 @@ class Model extends Entity
     }
 
     /**
+     * @param $name
+     * @return $this
+     */
+    public function setIdName($name)
+    {
+        $this->idFieldsName = $name;
+        return $this;
+    }
+
+    /**
      * 初始化操作
      *
      * @return void

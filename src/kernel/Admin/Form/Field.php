@@ -16,8 +16,6 @@ use Lxh\Support\Arr;
  */
 class Field implements Renderable
 {
-    const FILE_DELETE_FLAG = '_file_del_';
-
     /**
      * Element id.
      *
@@ -818,6 +816,7 @@ class Field implements Renderable
         if (! $this->rules) {
             return '';
         }
+        
         $rule = json_encode([
             'name' => $this->column, 'rules' => &$this->rules
         ]);

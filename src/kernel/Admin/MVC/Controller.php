@@ -18,6 +18,11 @@ use Lxh\Status;
 class Controller extends Base
 {
     /**
+     * @var string
+     */
+    protected $idName = 'id';
+
+    /**
      * 网格字段配置
      *
      * @var array
@@ -114,8 +119,6 @@ class Controller extends Base
         $content->description(trans(__CONTROLLER__ . ' form'));
 
         $box = $content->form(function (Form $form) {
-            $form->useEditScript();
-            
             $this->form($form);
         });
 
@@ -195,7 +198,7 @@ class Controller extends Base
             return $this->error(trans_with_global('Missing id.'));
         }
 
-        if ($msg = $this->deleteable($params['id'])) {
+        if ($msg = $this->deleteFilter($params['id'])) {
             return $this->error($msg);
         }
 
@@ -209,8 +212,18 @@ class Controller extends Base
     /**
      * @param $id
      */
-    protected function deleteable($id)
+    protected function deleteFilter($id)
     {
+    }
+
+    /**
+     * 户输入表单数据过滤
+     *
+     * @param array $input
+     */
+    protected function inputFilter(array &$input)
+    {
+        unset($input['_token']);
     }
 
     /**
@@ -228,14 +241,17 @@ class Controller extends Base
         if (! $_POST) {
             return $this->error();
         }
+        $input = $_POST;
+
+        $this->inputFilter($input);
 
         if ($rules = $this->rules()) {
             $validator = $this->validator();
-            $validator->fill($_POST);
+            $validator->fill($input);
         }
 
         // 验证表单数据
-        if ($msg = $this->createable($_POST)) {
+        if ($msg = $this->addFilter($input)) {
             return $this->error($msg);
         }
 
@@ -248,7 +264,7 @@ class Controller extends Base
         $model = $this->model();
 
         // 注入表单数据
-        $model->fill($_POST);
+        $model->attach($input);
 
         return $model->add() ? $this->success() : $this->failed();
     }
@@ -256,7 +272,7 @@ class Controller extends Base
     /**
      * @param array $data
      */
-    protected function createable(array &$data)
+    protected function addFilter(array &$data)
     {
 
     }
@@ -290,9 +306,12 @@ class Controller extends Base
         // 获取表单数据
         $data = json_decode(file_get_contents('php://input'), true);
 
-        if (! $data) {
+        if (! $data || !is_array($data)) {
             return $this->error();
         }
+
+        // 过滤用户输入数据
+        $this->inputFilter($data);
 
         if ($rules = $this->rules()) {
             $validator = $this->validator();
@@ -302,7 +321,7 @@ class Controller extends Base
         }
 
         // 验证表单数据
-        if ($msg = $this->updateable($params['id'], $data)) {
+        if ($msg = $this->updateFilter($params['id'], $data)) {
             return $this->error($msg);
         }
 
@@ -314,8 +333,11 @@ class Controller extends Base
         // 获取模型
         $model = $this->model();
 
+        // 设置id字段名称
+        $model->set($this->idName, $params['id']);
+
         // 注入表单数据
-        $model->fill($data);
+        $model->attach($data);
 
         return $model->save() ? $this->success() : $this->failed();
     }
@@ -324,7 +346,7 @@ class Controller extends Base
      * @param $id
      * @param array $data
      */
-    protected function updateable($id, array &$data)
+    protected function updateFilter($id, array &$data)
     {
     }
 

@@ -18,7 +18,7 @@ define(['css/sweet-alert.min.css', 'lib/js/sweet-alert.min'], function () {
                 model = $lxh.createModel(modelName);
             }
 
-            model.set('id', id);
+            model.setId(id);
 
             model.on('success', function () {
                 swal({
