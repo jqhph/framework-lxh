@@ -175,16 +175,16 @@
         };
 
         this.show = function (name, url, label) {
-            var $this = $('[data-action="tab-'+ name +'"]')
+            var $this = $('[data-action="tab-'+ name +'"]');
             if ($this.length < 1) {
                 return this.open(name, url, label)
             }
             // 移除tab按钮选中效果
-            this.removeActive()
+            this.removeActive();
             // 添加tab按钮选中效果
-            $this.addClass('active')
+            $this.addClass('active');
             // 去除按钮点击特效
-            $this.find('a').removeClass('waves-effect waves-info')
+            $this.find('a').removeClass('waves-effect waves-info');
             // $this.removeClass()
             // 隐藏关闭按钮
             // $this.find('.tab-close').hide()
@@ -264,8 +264,12 @@
             iframe.remove(name);
 
             delete store[name];
+            // 删除历史记录
+            histories = unset(histories, 'name', name)
             // 返回上一页
-            this.back()
+            if (current.name === name) {
+                this.back()
+            }
         };
 
         this.removeActive = function () {
