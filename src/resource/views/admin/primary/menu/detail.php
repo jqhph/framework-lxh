@@ -58,5 +58,5 @@ use Lxh\Admin\Kernel\Url;
     </div><!-- end col -->
 </div>
 <script>
-    add_js(parse_view_name('Menu', 'detail'));
+    require_js(parse_view_name('Menu', 'detail'));
 </script>

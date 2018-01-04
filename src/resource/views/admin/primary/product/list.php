@@ -86,8 +86,8 @@ use Lxh\Admin\Kernel\Url;
 </div>
 
 <script>
-    add_css('lib/plugins/RWD-Table-Patterns/dist/css/rwd-table.min.css');
-    add_js('lib/plugins/RWD-Table-Patterns/dist/js/rwd-table');
+    require_css('lib/plugins/RWD-Table-Patterns/dist/css/rwd-table.min.css');
+    require_js('lib/plugins/RWD-Table-Patterns/dist/js/rwd-table');
     // 引入index界面公共js
-    add_js('view/public-index');
+    require_js('view/public-index');
 </script>

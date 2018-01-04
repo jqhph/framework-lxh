@@ -25,4 +25,4 @@ $value = isset($value) ? $value : get_value($_REQUEST, $name, false);
         </div>
     </form>
 </div>
-<script>add_js('view/fields/enum/search-fliter')</script>
+<script>require_js('view/fields/enum/search-fliter')</script>

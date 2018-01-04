@@ -252,7 +252,7 @@ console.log('Success', data)
         $('#progressbarwizard').find('.bar').css  ({width:$percent+'%'})
     }
 
-    add_action(function () {
+    __then__(function () {
         modules.init()
 
         compute_progressbar_percent(current)

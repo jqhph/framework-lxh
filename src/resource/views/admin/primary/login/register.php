@@ -100,7 +100,7 @@
 
 </div>
 <!-- end wrapper page -->
-<script>add_js(parse_view_name('Login', 'Register'))</script>
+<script>require_js(parse_view_name('Login', 'Register'))</script>
 <?php echo render_view('public.app-js');?>
 
 </body>

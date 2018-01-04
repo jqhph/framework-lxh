@@ -43,5 +43,5 @@
     </div><!-- end col -->
 </div>
 <script>
-    add_js([parse_view_name('System', 'setting')]);
+    require_js([parse_view_name('System', 'setting')]);
 </script>

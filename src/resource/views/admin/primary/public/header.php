@@ -1,8 +1,8 @@
 <script>
     (typeof $lxh == 'undefined') && ($lxh = parent.$lxh);
-    (typeof add_action == 'undefined') && (add_action = parent.add_action);
-    (typeof add_js == 'undefined') && (add_js = parent.add_js);
-    (typeof add_css == 'undefined') && (add_css = parent.add_css);
+    (typeof __then__ == 'undefined') && (__then__ = parent.__then__);
+    (typeof require_js == 'undefined') && (require_js = parent.require_js);
+    (typeof require_css == 'undefined') && (require_css = parent.require_css);
     (typeof to_under_score == 'undefined') && (to_under_score = parent.to_under_score);
     (typeof parse_view_name == 'undefined') && (parse_view_name = parent.parse_view_name);
     (typeof build_http_params == 'undefined') && (build_http_params = parent.build_http_params);

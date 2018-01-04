@@ -83,7 +83,7 @@ use Lxh\Admin\Kernel\Url;
 </div>
 <script>
     // , 'lib/js/wizard'
-    add_js([
+    require_js([
         parse_view_name('System', 'Modules'),
     ]);
 </script>

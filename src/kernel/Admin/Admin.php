@@ -229,7 +229,7 @@ class Admin
 
         $script = '';
         foreach (static::$asyncjs as &$js) {
-            $script .= "add_js('$js')";
+            $script .= "require_js('$js')";
         }
         return $script;
     }

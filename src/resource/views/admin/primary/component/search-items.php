@@ -39,4 +39,4 @@
         </div>
     </div>
 </div>
-<script>add_js(['view/search-items'])</script>
+<script>require_js(['view/search-items'])</script>

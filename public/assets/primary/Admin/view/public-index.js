@@ -88,7 +88,7 @@ define(['css/sweet-alert.min.css', 'lib/js/sweet-alert.min'], function () {
     // 绑定删除事件
     $('a[data-action="delete-row"]').click(public.delete);
     $('#batch-delete').click(public.batchDelete)
-    add_action(function () {
+    __then__(function () {
         // 行选择器点击事件
         var allInput = $('input[data-action="select-all"]');
 

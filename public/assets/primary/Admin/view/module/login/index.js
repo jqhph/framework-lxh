@@ -1,4 +1,4 @@
-add_action(function (plugIns) {
+__then__(function (plugIns) {
     var v = $lxh.validator([
         {
             name: 'username',

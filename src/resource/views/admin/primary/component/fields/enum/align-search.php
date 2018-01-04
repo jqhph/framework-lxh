@@ -40,5 +40,5 @@ $value = isset($value) ? $value : get_value($_REQUEST, $name, false);
 
     </form>
 </div>
-<script>add_js('view/fields/enum/search-items')</script>
+<script>require_js('view/fields/enum/search-items')</script>
 

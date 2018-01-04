@@ -21,6 +21,6 @@
 <script type="text/javascript">
 <?php
 foreach ($asyncJs as &$js) {
-    echo "add_js('$js');";
+    echo "require_js('$js');";
 }
 ?></script>

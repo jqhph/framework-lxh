@@ -55,8 +55,8 @@ $loadJs = isset($loadJs) ? $loadJs : '';
 <script>
     window.validatorRules = <?php echo json_encode(empty($validatorRules) ? [] : $validatorRules);?>;
     <?php if ($loadJs) { ?>
-    add_js(parse_view_name('<?php echo __CONTROLLER__;?>', 'detail'));
+    require_js(parse_view_name('<?php echo __CONTROLLER__;?>', 'detail'));
     <?php } else { ?>
-    add_js('module/detail');
+    require_js('module/detail');
     <?php }?>
 </script>

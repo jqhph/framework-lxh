@@ -1,4 +1,4 @@
-add_action(function () {
+__then__(function () {
     var v = $lxh.validator(window.validatorRules || [], submit)
 
     var model = $lxh.createModel()

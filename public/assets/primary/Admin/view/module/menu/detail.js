@@ -1,4 +1,4 @@
-add_action(function () {
+__then__(function () {
     var v = $lxh.validator([
         {name: 'parent_id', rules: 'required',},
         {name: 'icon', rules: 'length_between[4-30]'},

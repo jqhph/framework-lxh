@@ -1,6 +1,6 @@
 define(['validate'], function () {
     // 所有js加载完毕时间
-    add_action(detail);
+    __then__(detail);
 
     function detail() {
         var v = $lxh.validator(window.formRules || [], submit);

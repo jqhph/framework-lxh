@@ -71,12 +71,12 @@ if (! empty($searchItems))  echo render_view('component.search-items', ['items' 
     <?php if ($useRWD) {
     // 控制字段显示隐藏
     ?>
-    add_css('lib/plugins/RWD-Table-Patterns/dist/css/rwd-table.min.css');
-    add_js('lib/plugins/RWD-Table-Patterns/dist/js/rwd-table');
+    require_css('lib/plugins/RWD-Table-Patterns/dist/css/rwd-table.min.css');
+    require_js('lib/plugins/RWD-Table-Patterns/dist/js/rwd-table');
     <?php }
         if ($loadPublicJs) {
     // 引入index界面公共js
     ?>
-    add_js('view/public-index');
+    require_js('view/public-index');
     <?php } ?>
 </script>

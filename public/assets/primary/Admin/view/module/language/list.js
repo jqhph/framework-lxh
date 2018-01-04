@@ -464,7 +464,7 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
         }
     }
 
-    add_action(function () {
+    __then__(function () {
         language.init()
     })
 })

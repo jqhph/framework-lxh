@@ -40,8 +40,8 @@
 </div>
 
 <script>
-    add_css(['lib/plugins/jstree/style.css', 'lib/plugins/custombox/dist/custombox.min.css']);
-    add_js([
+    require_css(['lib/plugins/jstree/style.css', 'lib/plugins/custombox/dist/custombox.min.css']);
+    require_js([
         'lib/plugins/jstree/jstree.min',
         parse_view_name('Language', 'List'),
 //        'lib/plugins/custombox/dist/custombox.min',

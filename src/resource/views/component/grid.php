@@ -1,14 +1,14 @@
 <div id="pjax-container"><?php echo view('admin::grid-content')->render();?></div>
 <script>
     <?php if ($useRWD) {?>
-    add_css('lib/plugins/RWD-Table-Patterns/dist/css/rwd-table.min.css');
-    add_js('lib/plugins/RWD-Table-Patterns/dist/js/rwd-table.min');
+    require_css('lib/plugins/RWD-Table-Patterns/dist/css/rwd-table.min.css');
+    require_js('lib/plugins/RWD-Table-Patterns/dist/js/rwd-table.min');
     <?php }?>
     <?php if ($indexScript) {?>
-    add_js('<?php echo $indexScript;?>');
+    require_js('<?php echo $indexScript;?>');
     <?php }?>
     <?php if ($pages) {?>
-    add_action(function () {
+    __then__(function () {
         $('.grid-per-pager').change(change)
         function change() {
             <?php if ($pjax) { ?>
@@ -28,8 +28,8 @@
 </script>
 <?php if ($pjax) {?>
 <script>
-    add_js('jquery.pjax.min');
-    add_action(function () {
+    require_js('jquery.pjax.min');
+    __then__(function () {
         $.pjax.defaults.timeout = 5000;
         $.pjax.defaults.maxCacheLength = 0;
         $(document).pjax('#pjax-container a:not(a[target="_blank"])', {container: '#pjax-container'});

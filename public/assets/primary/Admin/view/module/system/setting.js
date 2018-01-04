@@ -49,7 +49,7 @@ define(['css/sweet-alert.css', 'lib/js/sweet-alert.min'], function () {
         }
     }
 
-    add_action(function () {
+    __then__(function () {
         view.init()
     })
     return view

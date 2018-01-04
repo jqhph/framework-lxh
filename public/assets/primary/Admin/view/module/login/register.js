@@ -1,4 +1,4 @@
-add_action(function () {
+__then__(function () {
     var language = $lxh.language()
 
     var v = $lxh.validator([

@@ -15,13 +15,13 @@
 
     // 添加初始化完成后执行的动作
     o.lxhActions = []
-    o.add_action = function (call) {
+    o.__then__ = function (call) {
         lxhActions.push(call)
     }
 
     // 添加需要引入的js
     o.jsLibArr = []
-    o.add_js = function (data) {
+    o.require_js = function (data) {
         if (typeof data == 'string') {
             jsLibArr.push(data)
         } else {
@@ -33,7 +33,7 @@
 
     // 添加需要引入的css
     o.cssLibArr = []
-    o.add_css = function (data) {
+    o.require_css = function (data) {
         if (typeof data == 'string') {
             cssLibArr.push(data)
         } else {

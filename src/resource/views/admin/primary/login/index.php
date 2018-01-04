@@ -104,8 +104,8 @@
 </div>
 <!-- end wrapper page -->
 <script>
-    add_js('validate')
-    add_js(parse_view_name('login', 'index'))
+    require_js('validate')
+    require_js(parse_view_name('login', 'index'))
 </script>
 
 <?php
