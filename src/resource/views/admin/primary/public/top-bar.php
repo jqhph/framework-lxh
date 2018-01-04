@@ -1,7 +1,7 @@
 <div class="topbar">
     <!-- LOGO -->
     <div class="topbar-left">
-        <a href="javascript:$top.tab.switch('home')" class="logo"><?php echo config('admin.logo')?><i class="zmdi zmdi-layers"></i></a>
+        <a href="javascript:" class="logo open-left"><?php echo config('admin.logo')?><i class="zmdi zmdi-layers"></i></a>
     </div>
     <style>
         .page-title a{color:#505458}
@@ -12,9 +12,9 @@
             <div class="header-flex-box">
                 <nav class="header-tag">
                     <ul class="header-tag-list a tab-menu">
-                        <li class="ticket-tab active tab"  data-action="tab-home" data-name="home" style="min-width:100px;">
+                        <li class="ticket-tab active tab" onclick="TAB.switch('home')" data-action="tab-home" data-name="home" style="min-width:100px;">
                             <a><?php echo trans('Home')?></a>
-                            <i class="zmdi zmdi-refresh icon-refresh" onclick='$top.tab.reload("home", $top.homeUrl, "<?php echo trans('Home')?>");' style="right:0;"></i>
+                            <i class="zmdi zmdi-refresh icon-refresh" onclick='TAB.reload("home", HOMEURL, "<?php echo trans('Home')?>");' style="right:0;"></i>
                         </li>
                     </ul>
                 </nav>

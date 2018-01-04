@@ -37,9 +37,8 @@ echo $css;
 ?>
 <script>
 (function (w) {
-    var $top = w.top.$top;
-    w.TAB = $top.tab;
-    w.IFRAME = $top.iframe;
+    w.TAB = w.top.TAB;
+    w.IFRAME = w.top.IFRAME;;
     w.open_tab = function (id, url, label) {
         TAB.switch(id, url, label)
     };

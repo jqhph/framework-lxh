@@ -71,17 +71,12 @@ echo load_js('jquery.slimscroll.min');
 <script>
     var resizefunc = [];
 
-    var $iframe = new Iframe(),
-        $tab = new Tab($iframe)
-
-    var $top = {
-        tab: $tab,
-        iframe: $iframe,
-        homeUrl: '<?php echo $homeUrl?>'
-    }
+    var IFRAME = new Iframe(),
+        TAB = new Tab(IFRAME),
+        HOMEURL = '<?php echo $homeUrl?>';
 
     // 加载首页视图
-    $top.iframe.switch('home', '<?php echo $homeUrl?>');
+    IFRAME.switch('home', '<?php echo $homeUrl?>');
 </script>
 
 <!-- KNOB JS -->
