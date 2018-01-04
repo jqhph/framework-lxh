@@ -89,9 +89,7 @@ class Button extends Field
     public function on($event, $callback)
     {
         Admin::script(<<<EOT
-        $('{$this->getElementSelector()}').on('$event', function() {
-            $callback
-        });
+$('{$this->getElementSelector()}').on('$event', function(e) {{$callback}});
 EOT
         );
     }

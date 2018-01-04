@@ -640,7 +640,7 @@ class Grid implements Renderable
         }
 
         if ($this->filter && $this->filter->allowUseModal()) {
-            $btn = new Button(trans('Filter'));
+            $btn = new Button('<i class="fa fa-filter"></i> &nbsp;' . trans('Filter'));
             $btn->attribute('data-target', '#' . $this->filter->getModalId());
             $btn->attribute('data-toggle', 'modal');
 
@@ -663,6 +663,7 @@ class Grid implements Renderable
 
         $button->attribute('data-action', 'create-row');
         $button->name($this->getCreateBtnTabId());
+        $button->icon('zmdi zmdi-playlist-plus');
 
         return $button->color('success')->render();
     }

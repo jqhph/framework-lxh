@@ -260,16 +260,21 @@ class Filter extends Widget implements Renderable
     protected function buildFooter()
     {
         $submit = $this->buildSubmitBtn();
-        if ($this->options['useModal']) {
-            $submit->color('danger');
-        }
 
         $reset = '';
         if ($this->options['enableReset']) {
             $reset = $this->buildResetBtn()->render();
         }
 
-        return $submit->render() . ' ' . $reset;
+        $close = '';
+        if ($this->options['useModal']) {
+            $close = new Button(trans('Close'));
+            $close = $close->color('default')
+                ->attribute('data-dismiss', 'modal')
+                ->render();
+        }
+
+        return $submit->render() . ' ' . $reset . ' ' . $close;
     }
 
     protected function buildSubmitBtn()
@@ -278,6 +283,13 @@ class Filter extends Widget implements Renderable
         $submit->attribute('type', 'submit')
             ->icon('fa fa-search')
             ->disableEffect();
+
+        if ($this->options['useModal']) {
+            $submit->name('submit-filter');
+            $submit->color('inverse');
+
+            $submit->on('click', "$('#{$this->getModalId()}').modal('hide')");
+        }
 
         return $submit;
     }
