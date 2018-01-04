@@ -79,6 +79,7 @@ class Product extends Controller
      */
     protected function grid(Grid $grid)
     {
+        $grid->allowBatchDelete();
     }
 
     /**

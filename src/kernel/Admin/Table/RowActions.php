@@ -55,8 +55,8 @@ class RowActions
      */
     public function render()
     {
-        $allowEdit = $this->grid->allowEdit();
-        $allowDelete = $this->grid->allowDelete();
+        $allowEdit = $this->grid->option('allowEdit');
+        $allowDelete = $this->grid->option('allowDelete');
 
         $id = get_value($this->row, $this->grid->idName());
 

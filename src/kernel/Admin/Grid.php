@@ -493,14 +493,14 @@ class Grid implements Renderable
         return $this;
     }
 
-    public function allowEdit()
+    /**
+     * @return $this
+     */
+    public function allowBatchDelete()
     {
-        return $this->options['allowEdit'] === true;
-    }
+        $this->options['allowBatchDelete'] = true;
 
-    public function allowDelete()
-    {
-        return $this->options['allowDelete'] === true;
+        return $this;
     }
 
     /**
@@ -607,7 +607,7 @@ class Grid implements Renderable
     {
         $table = $this->getTableString();
 
-        if (!$this->allowDelete() && !$this->options['useRowSelector']) {
+        if (!$this->options['allowDelete'] && !$this->options['useRowSelector']) {
             $this->disableGridScript();
         }
 
@@ -639,7 +639,7 @@ class Grid implements Renderable
             $box->rightTools()->append($btn);
         }
 
-        if ($this->filter && $this->filter->allowUseModal()) {
+        if ($this->filter && $this->filter->allowedUseModal()) {
             $btn = new Button('<i class="fa fa-filter"></i> &nbsp;' . trans('Filter'));
             $btn->attribute('data-target', '#' . $this->filter->getModalId());
             $btn->attribute('data-toggle', 'modal');

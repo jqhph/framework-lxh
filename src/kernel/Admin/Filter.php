@@ -118,7 +118,7 @@ class Filter extends Widget implements Renderable
     /**
      * @return bool
      */
-    public function allowUseModal()
+    public function allowedUseModal()
     {
         return $this->options['useModal'];
     }
