@@ -76,7 +76,7 @@ echo load_js('jquery.slimscroll.min');
         HOMEURL = '<?php echo $homeUrl?>';
 
     // 加载首页视图
-    IFRAME.switch('home', '<?php echo $homeUrl?>');
+    IFRAME.switch('home', HOMEURL);
 </script>
 
 <!-- KNOB JS -->

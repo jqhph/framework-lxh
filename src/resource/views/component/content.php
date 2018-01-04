@@ -67,7 +67,7 @@ echo $css;
     }
 })(window);
 <?php echo $asyncJs;?>;
-<?php echo $script?>
+__then__(function () {<?php echo $script?>});
 </script>
 </body>
 </html>
