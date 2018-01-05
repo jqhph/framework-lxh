@@ -241,7 +241,11 @@ class Tr extends Widget
 
         $view = str_replace('.', '\\', $view);
 
-        $class  = "Lxh\\Admin\\Fields\\{$view}";
+        if (strpos($view, '\\') !== false) {
+            $class = $view;
+        } else {
+            $class  = "Lxh\\Admin\\Fields\\{$view}";
+        }
 
         return $td->value((new $class($field, $value, get_value($vars, $this->fieldOptionsKey)))->render())->render();
     }

@@ -105,7 +105,8 @@ EOT
             return $this;
         }
 
-        if ($this->option('useTab') && $this->url && ($name = $this->name())) {
+        if ($this->option('useTab') && $this->url) {
+            $name = str_replace('/', '-', $this->url);
             return "open_tab('{$name}', '{$this->url}', '{$this->label}')";
         }
         return $this->url;

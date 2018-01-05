@@ -337,7 +337,7 @@ class Grid implements Renderable
         $where = [];
         foreach ($this->filter->conditions() as $condition) {
             if ($value = $condition->build()) {
-                $where = array_merge($where, $value);
+                $where += $value;
             }
         }
 

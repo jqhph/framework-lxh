@@ -5,6 +5,7 @@ namespace Lxh\Support;
 use Countable;
 use Exception;
 use ArrayAccess;
+use Lxh\Contracts\Support\Jsonable;
 use Traversable;
 use ArrayIterator;
 use CachingIterator;

@@ -119,8 +119,8 @@ class Controller extends Base
         $content->header(trans(__CONTROLLER__));
         $content->description(trans(__CONTROLLER__ . ' form'));
 
-        $box = $content->form(function (Form $form) {
-            $this->form($form);
+        $box = $content->form(function (Form $form) use ($content) {
+            $this->form($form, $content);
         });
 
         $box->title(trans('Create ' . __CONTROLLER__));

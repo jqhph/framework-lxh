@@ -10,13 +10,6 @@ use Lxh\Contracts\Support\Renderable;
 class Field implements Renderable
 {
     /**
-     * 字段名称
-     *
-     * @var string
-     */
-    protected $name;
-
-    /**
      *
      * @var mixed
      */
@@ -59,20 +52,6 @@ class Field implements Renderable
     }
 
     /**
-     * @param null $name
-     * @return $this|string
-     */
-    public function name($name = null)
-    {
-        if ($name === null) {
-            return $this->name;
-        }
-        $this->name = $name;
-        return $this;
-    }
-
-
-    /**
      * 设置样式
      *
      * @param $style
@@ -113,19 +92,15 @@ class Field implements Renderable
         return $this;
     }
 
-    protected function getElementSelector()
+    public function getElementSelector()
     {
         if ($id = $this->getAttribute('id')) {
             return '#' . $id;
         }
 
-        if (! $this->name) {
-            $this->attribute('id', ($id = $this->generateId()));
+        $this->attribute('id', ($id = $this->generateId()));
 
-            return '#' . $id;
-        }
-
-        return "[data-name=\"{$this->name}\"]";
+        return '#' . $id;
     }
 
 
@@ -142,7 +117,7 @@ class Field implements Renderable
             return $this;
         }
 
-        return $this->attribute('data-name', $this->name);
+        return $this->attribute('id', $this->generateId());
     }
 
     /**

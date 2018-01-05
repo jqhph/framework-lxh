@@ -31,8 +31,10 @@ class Select extends Field
     public function render()
     {
         if (empty($this->script)) {
+            $selector = $this->getElementClassSelector();
             $this->script = <<<EOF
-$("{$this->getElementClassSelector()}").select2({allowClear:{$this->clear},placeholder:"{$this->getPlaceholder()}"});
+$("{$selector}").select2({allowClear:{$this->clear},placeholder:"{$this->getPlaceholder()}"});
+$(document).on('reset.form', function () {\$('{$selector}').trigger('change.select2');})
 EOF;
         }
 
