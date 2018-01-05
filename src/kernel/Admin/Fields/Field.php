@@ -116,10 +116,24 @@ class Field implements Renderable
     protected function getElementSelector()
     {
         if ($id = $this->getAttribute('id')) {
-            return $id;
+            return '#' . $id;
+        }
+
+        if (! $this->name) {
+            $this->attribute('id', ($id = $this->generateId()));
+
+            return '#' . $id;
         }
 
         return "[data-name=\"{$this->name}\"]";
+    }
+
+
+    protected function generateId()
+    {
+        $str = 'sdfghjklxcvbnm';
+
+        return substr(str_shuffle($str), 0, 3) .  mt_rand(0, 999);
     }
 
     protected function buildSelectorAttribute()

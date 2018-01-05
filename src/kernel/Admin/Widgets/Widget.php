@@ -82,6 +82,11 @@ abstract class Widget extends Fluent
         return $this;
     }
 
+    public function getAttribute($k, $def = null)
+    {
+        return get_value($this->attributes, $k, $def);
+    }
+
     /**
      * 追加样式
      *
@@ -96,6 +101,25 @@ abstract class Widget extends Fluent
             $this->attributes['style'] = &$style;
         }
         return $this;
+    }
+
+    protected function getIdElementSelector()
+    {
+        if ($id = $this->getAttribute('id')) {
+            return '#' . $id;
+        }
+
+        $this->attribute('id', ($id = $this->generateId()));
+
+        return '#' . $id;
+    }
+
+
+    protected function generateId()
+    {
+        $str = 'sdfghjklxcvbnm';
+
+        return substr(str_shuffle($str), 0, 3) .  mt_rand(0, 999);
     }
 
     /**
