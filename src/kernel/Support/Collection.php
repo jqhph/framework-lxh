@@ -1464,7 +1464,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
      */
     public function offsetExists($key)
     {
-        return array_key_exists($key, $this->items);
+        return isset($this->items[$key]);
     }
 
     /**

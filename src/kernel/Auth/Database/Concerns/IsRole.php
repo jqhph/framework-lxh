@@ -52,7 +52,7 @@ trait IsRole
     /**
      * Assign the role to the given model(s).
      *
-     * @param  string|\Lxh\Database\Eloquent\Model|\Lxh\Database\Eloquent\Collection  $model
+     * @param  string|Model|Collection  $model
      * @param  array|null  $keys
      * @return $this
      */
@@ -71,24 +71,27 @@ trait IsRole
      * Find the given roles, creating the names that don't exist yet.
      *
      * @param  iterable  $roles
-     * @return \Lxh\Database\Eloquent\Collection
+     * @return Collection
      */
     public function findOrCreateRoles($roles)
     {
         $roles = Helpers::groupModelsAndIdentifiersByType($roles);
 
-        $roles['integers'] = $this->find($roles['integers']);
+        if ($roles['integers']) {
+            $roles['integers'] = $this->where('id', 'IN', $roles['integers'])->find();
+        }
+
 
         $roles['strings'] = $this->findOrCreateRolesByName($roles['strings']);
 
-        return $this->newCollection(Arr::collapse($roles));
+        return new Collection(Arr::collapse($roles));
     }
 
     /**
      * Find roles by name, creating the ones that don't exist.
      *
      * @param  iterable  $names
-     * @return \Lxh\Database\Eloquent\Collection
+     * @return Collection
      */
     protected function findOrCreateRolesByName($names)
     {
@@ -96,7 +99,7 @@ trait IsRole
             return [];
         }
 
-        $existing = static::whereIn('name', $names)->get()->keyBy('name');
+        $existing = (new Collection($this->where('name', 'IN', $names)->find()))->keyBy('name');
 
         return (new Collection($names))
                 ->diff($existing->pluck('name'))
@@ -177,7 +180,7 @@ trait IsRole
     /**
      * Retract the role from the given model(s).
      *
-     * @param  string|\Lxh\Database\Eloquent\Model|\Lxh\Database\Eloquent\Collection  $model
+     * @param  string|Model|Collection  $model
      * @param  array|null  $keys
      * @return $this
      */
@@ -201,7 +204,7 @@ trait IsRole
     /**
      * Create the pivot table records for assigning the role to given models.
      *
-     * @param  \Lxh\Database\Eloquent\Model  $model
+     * @param  Model  $model
      * @param  array  $keys
      * @return array
      */
@@ -222,7 +225,7 @@ trait IsRole
      * Constrain the given query to roles that were assigned to the given authorities.
      *
      * @param  \Lxh\Database\Eloquent\Builder  $query
-     * @param  string|\Lxh\Database\Eloquent\Model|\Lxh\Database\Eloquent\Collection  $model
+     * @param  string|Model|Collection  $model
      * @param  array  $keys
      * @return void
      */

@@ -22,7 +22,11 @@ class Models
      *
      * @var array
      */
-    protected static $models = [];
+    protected static $models = [
+        'User' => Admin::class,
+        'Role' => Role::class,
+        'Ability' => Ability::class,
+    ];
 
     /**
      * Holds the map of ownership for models.
@@ -42,13 +46,6 @@ class Models
     ];
 
     /**
-     * The model scoping instance.
-     *
-     * @var \Lxh\Auth\Database\Scope\Scope
-     */
-    protected static $scope;
-
-    /**
      * Set the model to be used for abilities.
      *
      * @param  string  $model
@@ -56,7 +53,7 @@ class Models
      */
     public static function setAbilitiesModel($model)
     {
-        static::$models[Ability::class] = $model;
+        static::$models['Ability'] = $model;
     }
 
     /**
@@ -67,7 +64,7 @@ class Models
      */
     public static function setRolesModel($model)
     {
-        static::$models[Role::class] = $model;
+        static::$models['Role'] = $model;
     }
 
     /**
@@ -78,9 +75,9 @@ class Models
      */
     public static function setUsersModel($model)
     {
-        static::$models[Admin::class] = $model;
+        static::$models['User'] = $model;
 
-        static::$tables['users'] = static::user()->getTable();
+        static::$tables['users'] = static::user()->getTableName();
     }
 
     /**
@@ -146,61 +143,6 @@ class Models
     }
 
     /**
-     * Register an attribute/callback to determine if a model is owned by a given authority.
-     *
-     * @param  string|\Closure  $model
-     * @param  string|\Closure|null  $attribute
-     * @return void
-     */
-    public static function ownedVia($model, $attribute = null)
-    {
-        if (is_null($attribute)) {
-            static::$ownership['*'] = $model;
-        }
-
-        static::$ownership[$model] = $attribute;
-    }
-
-    /**
-     * Determines whether the given model is owned by the given authority.
-     *
-     * @param  Model  $authority
-     * @param  Model  $model
-     * @return bool
-     */
-    public static function isOwnedBy(Model $authority, Model $model)
-    {
-        $type = get_class($model);
-
-        if (isset(static::$ownership[$type])) {
-            $attribute = static::$ownership[$type];
-        } elseif (isset(static::$ownership['*'])) {
-            $attribute = static::$ownership['*'];
-        } else {
-            $attribute = strtolower(static::basename($authority)).'_id';
-        }
-
-        return static::isOwnedVia($attribute, $authority, $model);
-    }
-
-    /**
-     * Determines ownership via the given attribute.
-     *
-     * @param  string|\Closure  $attribute
-     * @param  Model  $authority
-     * @param  Model  $model
-     * @return bool
-     */
-    protected static function isOwnedVia($attribute, Model $authority, Model $model)
-    {
-        if ($attribute instanceof Closure) {
-            return $attribute($model, $authority);
-        }
-
-        return $authority->getKey() == $model->{$attribute};
-    }
-
-    /**
      * Get an instance of the ability model.
      *
      * @param  array  $attributes
@@ -241,7 +183,7 @@ class Models
      */
     public static function user(array $attributes = [])
     {
-        return create_model()->attach($attributes);
+        return create_model(static::classname('User'))->attach($attributes);
     }
 
 
@@ -252,7 +194,7 @@ class Models
      */
     public static function reset()
     {
-        static::$models = static::$tables = static::$ownership = [];
+        static::$models = static::$tables = [];
     }
 
     /**

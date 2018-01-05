@@ -92,7 +92,7 @@ class AuthManager
     }
 
     /**
-     * Start a chain, to allow the given authority an ability.
+     * 给用户分配能力
      *
      * @param  Model|string  $authority
      * @return \Lxh\Auth\Conductors\GivesAbilities
@@ -136,14 +136,14 @@ class AuthManager
     }
 
     /**
-     * Start a chain, to assign the given role to a model.
+     * 给用户分配角色
      *
      * @param  \Lxh\Auth\Database\Role|\Lxh\Support\Collection|string  $roles
      * @return \Lxh\Auth\Conductors\AssignsRoles
      */
     public function assign($roles)
     {
-        return new Conductors\AssignsRoles($roles);
+        return new Conductors\AssignsRoles($this, $roles);
     }
 
     /**
@@ -177,6 +177,14 @@ class AuthManager
     public function is(Model $authority)
     {
         return new Conductors\ChecksRoles($authority, $this->clipboard);
+    }
+
+    /**
+     * @return Model|\Lxh\MVC\Model
+     */
+    public function user()
+    {
+        return $this->user;
     }
 
     /**
@@ -237,17 +245,13 @@ class AuthManager
             return true;
         }
 
-        if (isset($this->abilities[$ability])) {
-            return $this->abilities[$ability]['forbidden'] == 0;
+        $abilities = $this->getAbilities();
+
+        if (isset($abilities[$ability])) {
+            return $abilities[$ability]['forbidden'] == 0;
         }
 
-        if ($this->abilities !== null) {
-            return false;
-        }
-
-        $this->abilities = $this->clipboard->getAbilities();
-
-        return (isset($this->abilities[$ability]) && $this->abilities[$ability]['forbidden'] == 0);
+        return false;
     }
 
     /**
@@ -262,17 +266,25 @@ class AuthManager
             return false;
         }
 
-        if (isset($this->abilities[$ability])) {
-            return $this->abilities[$ability]['forbidden'] == 1;
+        $abilities = $this->getAbilities();
+
+        if (isset($abilities[$ability])) {
+            return $abilities[$ability]['forbidden'] == 1;
         }
 
-        if ($this->abilities !== null) {
-            return false;
+        return false;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getAbilities()
+    {
+        if ($this->abilities === null) {
+            $this->abilities = $this->clipboard->getAbilities();
         }
 
-        $this->abilities = $this->clipboard->getAbilities();
-
-        return (isset($this->abilities[$ability]) && $this->abilities[$ability]['forbidden'] == 1);
+        return $this->abilities;
     }
 
     /**

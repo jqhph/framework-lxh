@@ -249,6 +249,7 @@ class Controller extends Base
         if ($rules = $this->rules()) {
             $validator = $this->validator();
             $validator->fill($input);
+            $validator->rules($rules);
         }
 
         // 验证表单数据

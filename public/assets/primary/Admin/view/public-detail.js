@@ -22,16 +22,8 @@ define(['validate'], function () {
                 // success
                 $loading.close();
                 notify.success(trans('success'));
-
                 // 500豪秒后跳转到菜单编辑界面
-                var id, name = '';
-                if (id = model.get('id')) {
-                    name = 'edit-' + $lxh.controllerName() + '-' + id
-                } else {
-                    name = 'create-' + $lxh.controllerName();
-                    close_tab(name)
-                }
-
+                close_tab(name)
             });
             model.on('any', function () {
                 $loading.close();

@@ -22,6 +22,13 @@ class Admin extends Model
     protected $defaultSelectFields = ['id', 'is_admin', 'username', 'first_name', 'last_name', 'email', 'mobile', 'sex', 'avatar', 'created_at'];
 
     /**
+     * 权限实体类型
+     *
+     * @var int
+     */
+    protected $morphType = 1;
+
+    /**
      * 缓存用户信息的session和cookie键名
      *
      * @var string
@@ -134,6 +141,14 @@ class Admin extends Model
     {
         // 默认一个月免登陆
         setcookie($this->sessionKey, $this->id, time() + config('login-time', 2592000));
+    }
+
+    /**
+     * @return int
+     */
+    public function getMorphType()
+    {
+        return $this->morphType;
     }
 
     /**

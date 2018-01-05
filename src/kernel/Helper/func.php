@@ -289,6 +289,15 @@ function logger($channel = 'primary')
     return $GLOBALS['CONTAINER']->make('logger')->channel($channel);
 }
 
+/**
+ *
+ * @return \Lxh\Auth\AuthManager
+ */
+function auth()
+{
+    return $GLOBALS['CONTAINER']['auth.manager'];
+}
+
 // 获取request参数
 function I($name = null, $default = null, $isEmpty = false)
 {

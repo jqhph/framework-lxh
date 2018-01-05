@@ -2,13 +2,20 @@
 
 namespace Lxh\Auth\Conductors;
 
+use Lxh\Auth\AuthManager;
 use Lxh\Auth\Helpers;
+use Lxh\ORM\Query;
 use Lxh\Support\Collection;
 use Lxh\Auth\Database\Models;
-use Lxh\Database\Eloquent\Model;
+use Lxh\MVC\Model;
 
 class AssignsRoles
 {
+    /**
+     * @var AuthManager
+     */
+    protected $auth;
+
     /**
      * The roles to be assigned.
      *
@@ -21,91 +28,88 @@ class AssignsRoles
      *
      * @param \Lxh\Support\Collection|\Lxh\Auth\Database\Role|string  $roles
      */
-    public function __construct($roles)
+    public function __construct(AuthManager $auth, $roles)
     {
+        $this->auth = $auth;
         $this->roles = Helpers::toArray($roles);
     }
 
     /**
      * Assign the roles to the given authority.
      *
-     * @param  \Lxh\Database\Eloquent\Model|array|int  $authority
+     * @param  Model|array|int  $authority
      * @return bool
      */
-    public function to($authority)
+    public function then()
     {
-        $authorities = is_array($authority) ? $authority : [$authority];
+        $authority = $this->auth->user();
 
         $roles = Models::role()->findOrCreateRoles($this->roles);
 
-        foreach (Helpers::mapAuthorityByClass($authorities) as $class => $ids) {
-            $this->assignRoles($roles, $class, new Collection($ids));
-        }
-
-        return true;
+        return $this->assignRoles($roles, $authority->getId());
     }
 
     /**
      * Assign the given roles to the given authorities.
      *
-     * @param  \Lxh\Suuport\Collection  $roles
+     * @param  \Lxh\Support\Collection  $roles
      * @param  string $authorityClass
-     * @param  \Lxh\Suuport\Collection  $authorityIds
-     * @return void
+     * @param  int  $authorityId
+     * @return bool
      */
-    protected function assignRoles(Collection $roles, $authorityClass, Collection $authorityIds)
+    protected function assignRoles(Collection $roles, $authorityId)
     {
         $roleIds = $roles->map(function ($model) {
-            return $model->getKey();
+            return $model['id'];
         });
 
-        $morphType = (new $authorityClass)->getMorphClass();
+        $morphType = $this->auth->user()->getMorphType();
 
-        $records = $this->buildAttachRecords($roleIds, $morphType, $authorityIds);
+        $records = $this->buildAttachRecords($roleIds, $morphType, $authorityId);
 
-        $existing = $this->getExistingAttachRecords($roleIds, $morphType, $authorityIds);
+        $existing = $this->getExistingAttachRecords($roleIds, $morphType, $authorityId);
 
-        $this->createMissingAssignRecords($records, $existing);
+        return $this->createMissingAssignRecords($records, $existing);
     }
 
     /**
      * Get the pivot table records for the roles already assigned.
      *
-     * @param  \Lxh\Suuport\Collection  $roleIds
+     * @param  \Lxh\Support\Collection  $roleIds
      * @param  string $morphType
-     * @param  \Lxh\Suuport\Collection  $authorityIds
+     * @param  int  $authorityId
      * @return \Lxh\Support\Collection
      */
-    protected function getExistingAttachRecords($roleIds, $morphType, $authorityIds)
+    protected function getExistingAttachRecords($roleIds, $morphType, $authorityId)
     {
         $query = $this->newPivotTableQuery()
-            ->whereIn('role_id', $roleIds->all())
-            ->whereIn('entity_id', $authorityIds->all())
-            ->where('entity_type', $morphType);
+            ->where([
+                'role_id' => ['IN', $roleIds->all()],
+                'entity_id' => $authorityId,
+                'entity_type' => $morphType
+            ]);
 
-        Models::scope()->applyToRelationQuery($query, $query->from);
-
-        return new Collection($query->get());
+        return new Collection($query->find());
     }
 
     /**
      * Build the raw attach records for the assigned roles pivot table.
      *
-     * @param  \Lxh\Suuport\Collection  $roleIds
+     * @param  \Lxh\Support\Collection  $roleIds
      * @param  string $morphType
-     * @param  \Lxh\Suuport\Collection  $authorityIds
+     * @param  int $authorityId
      * @return \Lxh\Support\Collection
      */
-    protected function buildAttachRecords($roleIds, $morphType, $authorityIds)
+    protected function buildAttachRecords($roleIds, $morphType, $authorityId)
     {
-        return $roleIds->map(function ($roleId) use ($morphType, $authorityIds) {
-            return $authorityIds->map(function ($authorityId) use ($roleId, $morphType) {
-                return Models::scope()->getAttachAttributes() + [
+        return $roleIds->map(function ($roleId) use ($morphType, $authorityId) {
+            return [
+                [
                     'role_id' => $roleId,
                     'entity_id' => $authorityId,
                     'entity_type' => $morphType,
-                ];
-            });
+                ]
+            ];
         })->collapse();
     }
 
@@ -114,7 +118,7 @@ class AssignsRoles
      *
      * @param  \Lxh\Support\Collection  $records
      * @param  \Lxh\Support\Collection  $existing
-     * @return void
+     * @return bool
      */
     protected function createMissingAssignRecords(Collection $records, Collection $existing)
     {
@@ -123,10 +127,12 @@ class AssignsRoles
         });
 
         $records = $records->reject(function ($record) use ($existing) {
-            return $existing->has($this->getAttachRecordHash($record));
+            return $existing->has($this->getAttachRecordHash((array) $record));
         });
 
-        $this->newPivotTableQuery()->insert($records->all());
+        $records = $records->all();
+
+        return $this->newPivotTableQuery()->batchInsert($records);
     }
 
     /**
@@ -143,10 +149,10 @@ class AssignsRoles
     /**
      * Get a query builder instance for the assigned roles pivot table.
      *
-     * @return \Lxh\Database\Query\Builder
+     * @return Query
      */
     protected function newPivotTableQuery()
     {
-        return Models::newQueryBuilder()->from(Models::table('assigned_roles'));
+        return query()->from(Models::table('assigned_roles'));
     }
 }

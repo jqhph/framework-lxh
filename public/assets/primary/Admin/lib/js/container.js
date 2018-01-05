@@ -1109,7 +1109,7 @@ console.log('request data', data);
         this.save = function () {
             var data = store.formHandler.get(get_form_selector());
 
-            if (typeof data[idkey] != 'undefined') {
+            if (typeof data[idkey] != 'undefined' && data[idkey]) {
                 this.setId(data[idkey]);
                 return this.edit();
             }

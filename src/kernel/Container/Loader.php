@@ -2,6 +2,7 @@
 
 namespace Lxh\Container;
 
+use Lxh\Auth\AuthManager;
 use Lxh\Exceptions\BindingResolutionException;
 use Lxh\Exceptions\InternalServerError;
 use Lxh\Exceptions\InvalidArgumentException;
@@ -58,6 +59,10 @@ trait Loader
             'shared' => false,
             'class' => 'Lxh\ORM\Query',
             'dependencies' => ['container'],
+        ],
+        'auth.manager' => [
+            'shared' => true,
+            'class' => AuthManager::class,
         ],
         'controller.manager' => [
             'shared' => true,

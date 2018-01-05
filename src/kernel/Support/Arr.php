@@ -43,11 +43,11 @@ class Arr
      * @param  array  $array
      * @return array
      */
-    public static function collapse(&$array)
+    public static function collapse($array)
     {
         $results = [];
 
-        foreach ($array as $values) {
+        foreach ($array as &$values) {
             if ($values instanceof Collection) {
                 $values = $values->all();
             } elseif (! is_array($values)) {

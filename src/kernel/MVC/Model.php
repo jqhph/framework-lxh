@@ -107,6 +107,16 @@ class Model extends Entity
     }
 
     /**
+     * 获取id
+     *
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->get($this->idFieldsName);
+    }
+
+    /**
      * 查找记录列表
      *
      * @param array $where

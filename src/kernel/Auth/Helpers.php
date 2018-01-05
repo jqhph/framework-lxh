@@ -7,7 +7,7 @@ use Lxh\Auth\Database\Models;
 use App\User;
 use InvalidArgumentException;
 use Lxh\Support\Collection;
-use Lxh\Database\Eloquent\Model;
+use Lxh\MVC\Model;
 
 class Helpers
 {
@@ -51,8 +51,8 @@ class Helpers
      */
     public static function fillMissingKeys($array, $value, $keys)
     {
-        foreach ($keys as $key) {
-            if (! array_key_exists($key, $array)) {
+        foreach ($keys as &$key) {
+            if (! isset($array[$key])) {
                 $array[$key] = $value;
             }
         }
