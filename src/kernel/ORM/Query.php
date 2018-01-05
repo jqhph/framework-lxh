@@ -243,6 +243,17 @@ class Query
 	}
 
 	/**
+	 * @param $whereString
+	 * @param array $prepareData
+	 */
+	public function whereRaw($whereString, array $prepareData = [])
+	{
+		$this->builder->where($whereString, $prepareData);
+
+		return $this;
+	}
+
+	/**
 	 *
 	 * @return static
 	 */
@@ -454,11 +465,18 @@ class Query
 	 *
 	 * @return static
 	 */
-	public function leftJoin($data, $p1 = null, $p2 = null)
+	public function leftJoin($table, $field1 = null, $field2 = null, $condit = '=')
 	{
-		$this->builder->leftJoin($data, $p1, $p2);
+		$this->builder->join($table, $field1, $field2, $condit);
 		return $this;
 	}
+
+	public function join($table, $field1 = null, $field2 = null , $condit = '=', $type = 'LEFT')
+	{
+		$this->builder->join($table, $field1, $field2, $condit, $type);
+		return $this;
+	}
+
 
 	/**
 	 *

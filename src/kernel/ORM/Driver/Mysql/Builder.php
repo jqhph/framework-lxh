@@ -100,9 +100,23 @@ class Builder
 //        $this->whereHandler($this->wheres, $tb, $p1, $p2, $p3, $this->whereData);
         $content = $this->where->table($tb)->build($p1, $p2, $p3)->pull();
 
-        $this->wheres = &$content['where'];
-        $this->orWheres = &$content['orWhere'];
+        $this->wheres = array_merge($this->wheres, $content['where']);
+        $this->orWheres = array_merge($this->orWheres, $content['orWhere']);
         $this->whereData = array_merge($this->whereData, $content['params']);
+
+        return $this;
+    }
+
+    /**
+     * @param $whereString
+     * @param array $prepareData
+     */
+    public function whereRaw($whereString, array $prepareData = [])
+    {
+        $this->wheres[] = &$whereString;
+        if ($prepareData) {
+            $this->whereData = array_merge($this->whereData, $prepareData);
+        }
 
         return $this;
     }
@@ -473,23 +487,33 @@ class Builder
     LEFT JOIN `menu_content` AS u    ON `table`.`menu_content_id`      = `u`.`id`
     LEFT JOIN `wechat_menu_type` AS w ON `u`.`wechat_menu_type_id` = `w`.`id`
      */
-    public function leftJoin(& $table, $p1 = null, $p2 = null)
+    public function leftJoin(& $table, $p1 = null, $p2 = null, $condit = '=')
+    {
+        return $this->join($table, $p1, $p2, 'LEFT');
+    }
+
+    public function rightJoin(& $table, $p1 = null, $p2 = null, $condit = '=')
+    {
+        return $this->join($table, $p1, $p2, 'RIGHT');
+    }
+
+    public function join(& $table, $field1 = null, $field2 = null, $condit = '=', $prefix = '')
     {
         if (preg_match($this->varPattern, $table)) {
             $table = "`$table`";
         }
 
-        $p1IsVar = preg_match($this->varPattern, $p1);
-        $p2IsVar = preg_match($this->varPattern, $p2);
+        $p1IsVar = preg_match($this->varPattern, $field1);
+        $p2IsVar = preg_match($this->varPattern, $field2);
 
         if (! $p1IsVar && ! $p2IsVar) {
-            $this->leftJoin[] = " LEFT JOIN $table ON $p1 = $p2";
+            $this->leftJoin[] = " $prefix JOIN $table ON $field1 $condit $field2";
 
         } elseif (! $p1IsVar) {
-            $this->leftJoin[] = " LEFT JOIN $table ON $p1 = `{$this->tableName}`.`$p2`";
+            $this->leftJoin[] = " $prefix JOIN $table ON $field1 $condit `{$this->tableName}`.`$field2`";
 
         } else {
-            $this->leftJoin[] = " LEFT JOIN $table ON $p2 = `{$this->tableName}`.`$p1`";
+            $this->leftJoin[] = " $prefix JOIN $table ON $field2 $condit `{$this->tableName}`.`$field1`";
 
         }
         return $this;
@@ -604,8 +628,6 @@ class Builder
     public function getWhereSql($isHaving = false, $isOrWhere = false)
     {
         $where  = '';
-        $data   = [];
-        $orData = [];
 
         $t = ' WHERE ';
 
