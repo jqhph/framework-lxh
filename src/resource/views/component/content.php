@@ -7,16 +7,16 @@
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 <body>
 <script>
-    (typeof __then__ == 'undefined') && (__then__ = parent.__then__);
-    (typeof require_js == 'undefined') && (require_js = parent.require_js);
-    (typeof require_css == 'undefined') && (require_css = parent.require_css);
-    (typeof to_under_score == 'undefined') && (to_under_score = parent.to_under_score);
-    (typeof parse_view_name == 'undefined') && (parse_view_name = parent.parse_view_name);
-    (typeof build_http_params == 'undefined') && (build_http_params = parent.build_http_params);
-    (typeof lxhActions == 'undefined') && (lxhActions = (parent.lxhActions = []));
-    (typeof jsLibArr == 'undefined') && (jsLibArr = (parent.jsLibArr = []));
-    (typeof cssLibArr == 'undefined') && (cssLibArr = (parent.cssLibArr = []));
-    (typeof array_unique == 'undefined') && (array_unique = parent.array_unique);
+    __then__ = parent.__then__;
+    require_js = parent.require_js;
+    require_css = parent.require_css;
+    to_under_score = parent.to_under_score;
+    parse_view_name = parent.parse_view_name;
+    build_http_params = parent.build_http_params;
+    lxhActions = (parent.lxhActions = []);
+    jsLibArr = (parent.jsLibArr = []);
+    cssLibArr = (parent.cssLibArr = []);
+    array_unique = parent.array_unique;
 </script>
 
 <div class="content-wrapper">
@@ -29,11 +29,7 @@
 </div>
 
 <?php
-echo load_css('bootstrap.min');
 echo render_view('public.app-js');
-
-echo $js;
-echo $css;
 ?>
 <script>
 (function (w) {
@@ -66,8 +62,17 @@ echo $css;
         return new loading();
     }
 })(window);
-<?php echo $asyncJs;?>;
+
+<?php
+    echo $js;
+    echo $css;
+    echo $asyncJs;
+?>;
 __then__(function () {<?php echo $script?>});
 </script>
+<?php
+// 加载sea js，加载所有require_js和require_css加载的文件
+echo load_js('app.min');
+?>
 </body>
 </html>

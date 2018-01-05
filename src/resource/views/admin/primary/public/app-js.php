@@ -5,24 +5,28 @@
  * Date: 2017/6/30
  * Time: 22:34
  */
-
-echo load_css('pages.min');
-echo load_css('core.min');
-echo load_css('components.min');
-echo load_css('icon.min');
+//echo load_css('bootstrap.min');
+//echo load_css('pages.min');
+//echo load_css('core.min');
+//echo load_css('components.min');
+//echo load_css('icon.min');
 echo load_js('jquery.min');
-echo load_js('bootstrap.min');
-//echo load_js('fastclick');
+//echo load_js('bootstrap.min');
 //echo load_js('detect');
 //echo load_js('jquery.slimscroll.min');
 echo load_js('waves.min');
 
 ?>
-
 <script>
+    require_css('css/bootstrap.min.css');
+    require_css('css/pages.min.css');
+    require_css('css/components.min.css');
+    require_css('css/icon.min.css');
+    require_css('css/core.min.css');
+    require_js('lib/js/bootstrap.min');
     // 配置
     function get_config() {
-        var data = {}
+        var data = {};
         // 容器配置
         data.options = <?php
             $config = array_merge(config('client-config'), config('replica-client-config'));
@@ -52,6 +56,3 @@ echo load_js('waves.min');
         return data
     }
 </script>
-<?php
-echo load_js('app.min');
-?>

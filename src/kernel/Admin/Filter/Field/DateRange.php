@@ -39,8 +39,8 @@ class DateRange extends Field
 
     protected function setup()
     {
-        $this->js('date-range', 'bootstrap-datetimepicker.min');
-        $this->css('date-range',  'bootstrap-datetimepicker.min');
+        $this->js('date-range', 'lib/js/bootstrap-datetimepicker.min');
+        $this->css('date-range',  'css/bootstrap-datetimepicker.min');
     }
 
     protected function setupValue($name)
