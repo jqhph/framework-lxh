@@ -7,6 +7,7 @@
 
 namespace Lxh\Admin\Controllers;
 
+use Lxh\Admin\Layout\Content;
 use Lxh\Admin\MVC\Controller;
 use Lxh\Admin\Filter;
 use Lxh\Admin\Grid;
@@ -77,7 +78,7 @@ class Product extends Controller
      *
      * @param Grid $grid
      */
-    protected function grid(Grid $grid)
+    protected function grid(Grid $grid, Content $content)
     {
         $grid->allowBatchDelete();
     }

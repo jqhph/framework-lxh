@@ -123,6 +123,14 @@ class Form implements Renderable
     }
 
     /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * 查询数据
      *
      * @throws InvalidArgumentException

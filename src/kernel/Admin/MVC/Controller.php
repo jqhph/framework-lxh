@@ -4,6 +4,7 @@ namespace Lxh\Admin\MVC;
 
 use Lxh\Admin\Admin;
 use Lxh\Admin\Filter;
+use Lxh\Admin\Layout\Content;
 use Lxh\Admin\Widgets\Box;
 use Lxh\Admin\Widgets\Form;
 use Lxh\Admin\Grid;
@@ -62,7 +63,7 @@ class Controller extends Base
         $grid = $content->grid($this->grid);
 
         // 自定义grid
-        $this->grid($grid);
+        $this->grid($grid, $content);
 
         if ($this->filter) {
             // 添加过滤器，过滤器会根据搜索表单内容构建Sql where过滤语句
@@ -83,7 +84,7 @@ class Controller extends Base
      *
      * @param Grid $grid
      */
-    protected function grid(Grid $grid)
+    protected function grid(Grid $grid, Content $content)
     {
     }
 
@@ -152,11 +153,11 @@ class Controller extends Base
         $content->header(trans(__CONTROLLER__));
         $content->description(trans(__CONTROLLER__ . ' form'));
 
-        $box = $content->form(function (Form $form) use ($id) {
+        $box = $content->form(function (Form $form) use ($id, $content) {
             // 设置id，用于查询当前行数据
             $form->setId($id);
             // 自定义form表单
-            $this->form($form);
+            $this->form($form, $content);
         });
 
         $box->title(trans('Edit ' . __CONTROLLER__));
@@ -178,7 +179,7 @@ class Controller extends Base
      *
      * @param Form $form
      */
-    protected function form(Form $form)
+    protected function form(Form $form, Content $content)
     {
     }
 

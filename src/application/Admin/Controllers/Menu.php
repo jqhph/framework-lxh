@@ -11,6 +11,7 @@ namespace Lxh\Admin\Controllers;
 use Lxh\Admin\Admin;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Kernel\Url;
+use Lxh\Admin\Layout\Content;
 use Lxh\Admin\MVC\Controller;
 use Lxh\Admin\Table\Table;
 use Lxh\Admin\Widgets\Box;
@@ -120,7 +121,7 @@ class Menu extends Controller
      *
      * @param Form $form
      */
-    protected function form(Form $form)
+    protected function form(Form $form, Content $content)
     {
         $form->selectTree('parent_id')->options(resolve('acl-menu')->all())->defaultOption(0, '顶级分类');
         $form->text('name')->rules('required');
@@ -136,7 +137,7 @@ class Menu extends Controller
      *
      * @param Grid $grid
      */
-    protected function grid(Grid $grid)
+    protected function grid(Grid $grid, Content $content)
     {
         $grid->rows(resolve('acl-menu')->all());
         $grid->disablePagination();
