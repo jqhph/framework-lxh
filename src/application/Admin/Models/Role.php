@@ -36,8 +36,6 @@ class Role extends \Lxh\Auth\Database\Role
     public function afterAdd($insertId, array & $data)
     {
         if (! $insertId) return;
-
-        auth()->assign(['vcxv', $insertId])->then();
     }
 
     /**

@@ -3,7 +3,7 @@
 namespace Lxh\Auth\Conductors;
 
 use Lxh\Auth\Database\Models;
-use Lxh\Database\Eloquent\Model;
+use Lxh\MVC\Model;
 
 class GivesAbilities
 {
@@ -12,14 +12,14 @@ class GivesAbilities
     /**
      * The authority to be given abilities.
      *
-     * @var \Lxh\Database\Eloquent\Model|string
+     * @var Model|string
      */
     protected $authority;
 
     /**
      * Constructor.
      *
-     * @param \Lxh\Database\Eloquent\Model|string  $authority
+     * @param Model|string  $authority
      */
     public function __construct($authority)
     {
@@ -29,35 +29,33 @@ class GivesAbilities
     /**
      * Give the abilities to the authority.
      *
-     * @param  \Lxh\Database\Eloquent\model|array|int  $abilities
-     * @param  \Lxh\Database\Eloquent\Model|string|null  $model
+     * @param  Model|array|int  $abilities
+     * @param  Model|string|null  $model
      * @param  array  $attributes
      * @return void
      */
-    public function to($abilities, $model = null, array $attributes = [])
+    public function then($abilities, array $attributes = [])
     {
         if (call_user_func_array([$this, 'shouldConductLazy'], func_get_args())) {
             return $this->conductLazy($abilities);
         }
 
-        $ids = $this->getAbilityIds($abilities, $model, $attributes);
+        $ids = $this->getAbilityIds($abilities, $attributes);
 
-        $this->giveAbilities($ids, $this->getAuthority());
+        return $this->giveAbilities($ids, $this->getAuthority());
     }
 
     /**
      * Associate the given ability IDs as allowed abilities.
      *
      * @param  array  $ids
-     * @param  \Lxh\Database\Eloquent\Model  $authority
-     * @return void
+     * @param  Model  $authority
+     * @return mixed
      */
     protected function giveAbilities(array $ids, Model $authority)
     {
         $ids = array_diff($ids, $this->getAssociatedAbilityIds($authority, $ids, false));
 
-        $attributes = Models::scope()->getAttachAttributes(get_class($authority));
-
-        $authority->abilities()->attach($ids, $attributes);
+        return $authority->abilities()->attach($ids);
     }
 }

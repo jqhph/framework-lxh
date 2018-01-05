@@ -5,6 +5,7 @@ namespace Lxh\Auth\Conductors\Concerns;
 use Lxh\Auth\Helpers;
 use Lxh\Support\Collection;
 use Lxh\Auth\Conductors\Lazy;
+use Lxh\MVC\Model;
 
 trait ConductsAbilities
 {
@@ -16,13 +17,13 @@ trait ConductsAbilities
      */
     public function everything(array $attributes = [])
     {
-        return $this->to('*', '*', $attributes);
+        return $this->then('*', '*', $attributes);
     }
 
     /**
      * Allow/disallow all abilities on the given model.
      *
-     * @param  string|array|\Lxh\Database\Eloquent\Model  $models
+     * @param  string|array|Model  $models
      * @param  array  $attributes
      * @return void
      */
@@ -35,29 +36,6 @@ trait ConductsAbilities
         } else {
             $this->to('*', $models, $attributes);
         }
-    }
-
-    /**
-     * Allow/disallow owning the given model.
-     *
-     * @param  string|object  $model
-     * @param  array  $attributes
-     * @return void
-     */
-    public function toOwn($model, array $attributes = [])
-    {
-        return new Lazy\HandlesOwnership($this, $model, $attributes);
-    }
-
-    /**
-     * Allow/disallow owning all models.
-     *
-     * @param  array  $attributes
-     * @return mixed
-     */
-    public function toOwnEverything(array $attributes = [])
-    {
-        return $this->toOwn('*', $attributes);
     }
 
     /**

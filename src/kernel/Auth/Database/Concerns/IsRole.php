@@ -8,6 +8,7 @@ use Lxh\Auth\Database\Scope\BaseTenantScope;
 use Lxh\Auth\Database\Queries\Roles as RolesQuery;
 
 use App\User;
+use Lxh\ORM\Connect\Mongo\Query;
 use Lxh\Support\Arr;
 use InvalidArgumentException;
 use Lxh\Support\Collection;
@@ -119,11 +120,15 @@ trait IsRole
     {
         $roles = Helpers::groupModelsAndIdentifiersByType($roles);
 
-        $roles['strings'] = $this->getKeysByName($roles['strings']);
+        if ($roles['strings']) {
+            $roles['strings'] = $this->getKeysByName($roles['strings']);
+        }
 
-        $roles['models'] = Arr::pluck($roles['models'], $this->getKeyName());
+        if ($roles['models']) {
+            $roles['models'] = Arr::pluck($roles['models'], $this->getKeyName());
+        }
 
-        return Arr::collapse($roles);
+        return $roles ? Arr::collapse($roles) : [];
     }
 
     /**
@@ -155,9 +160,11 @@ trait IsRole
             return [];
         }
 
-        return $this->whereIn('name', $names)
-                    ->select($this->getKeyName())->get()
-                    ->pluck($this->getKeyName())->all();
+        $key = $this->getKeyName();
+
+        return (new Collection(
+            $this->where('name', 'IN', $names)->select($key)->find()
+        ))->pluck($key)->all();
     }
 
     /**
@@ -172,9 +179,9 @@ trait IsRole
             return [];
         }
 
-        return $this->whereIn($this->getKeyName(), $keys)
-                    ->select('name')->get()
-                    ->pluck('name')->all();
+        return (new Collection(
+            $this->where($this->getKeyName(), 'IN', $keys)->select('name')->find()
+        ))->pluck('name')->all();
     }
 
     /**
@@ -188,13 +195,11 @@ trait IsRole
     {
         list($model, $keys) = Helpers::extractModelAndKeys($model, $keys);
 
-        $query = $this->newBaseQueryBuilder()
+        $query = query()
             ->from($table = Models::table('assigned_roles'))
-            ->where('role_id', $this->getKey())
-            ->where('entity_type', $model->getMorphClass())
-            ->whereIn('entity_id', $keys);
-
-        Models::scope()->applyToRelationQuery($query, $table);
+            ->where('role_id', $this->getId())
+            ->where('entity_type', $model->getMorphType())
+            ->where('entity_id', 'IN', $keys);
 
         $query->delete();
 
@@ -210,11 +215,11 @@ trait IsRole
      */
     protected function createAssignRecords(Model $model, array $keys)
     {
-        $type = $model->getMorphClass();
+        $type = $model->getMorphType();
 
         return array_map(function ($key) use ($type) {
             return Models::scope()->getAttachAttributes() + [
-                'role_id'     => $this->getKey(),
+                'role_id'     => $this->getId(),
                 'entity_type' => $type,
                 'entity_id'   => $key,
             ];
@@ -224,7 +229,7 @@ trait IsRole
     /**
      * Constrain the given query to roles that were assigned to the given authorities.
      *
-     * @param  \Lxh\Database\Eloquent\Builder  $query
+     * @param  Query  $query
      * @param  string|Model|Collection  $model
      * @param  array  $keys
      * @return void

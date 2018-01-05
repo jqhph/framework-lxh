@@ -14,7 +14,7 @@ class Helpers
     /**
      * Extract the model instance and model keys from the given parameters.
      *
-     * @param  \Lxh\Database\Eloquent\Model|\Lxh\Database\Eloquent\Collection|string  $model
+     * @param  Model|Collection|string  $model
      * @param  array|null  $keys
      * @return array
      */
@@ -29,12 +29,12 @@ class Helpers
         }
 
         if ($model instanceof Model) {
-            return [$model, [$model->getKey()]];
+            return [$model, [$model->getId()]];
         }
 
         if ($model instanceof Collection) {
             $keys = $model->map(function ($model) {
-                return $model->getKey();
+                return $model->getId();
             });
 
             return [$model->first(), $keys];
@@ -116,7 +116,7 @@ class Helpers
             return false;
         }
 
-        foreach ($array as $key => $value) {
+        foreach ($array as $key => &$value) {
             if (! is_numeric($key)) {
                 return false;
             }
@@ -156,9 +156,9 @@ class Helpers
 
         foreach ($authorities as $authority) {
             if ($authority instanceof Model) {
-                $map[get_class($authority)][] = $authority->getKey();
+                $map[get_class($authority)][] = $authority->getId();
             } else {
-                $map[Models::classname(User::class)][] = $authority;
+                $map[Models::classname('User')][] = $authority;
             }
         }
 
@@ -170,13 +170,13 @@ class Helpers
      *
      * @param  iterable  $items
      * @param  callable  $callback
-     * @return static
+     * @return Collection
      */
     public static function partition($items, callable $callback)
     {
         $partitions = [new Collection, new Collection];
 
-        foreach ($items as $key => $item) {
+        foreach ($items as $key => &$item) {
             $partitions[(int) ! $callback($item, $key)][$key] = $item;
         }
 

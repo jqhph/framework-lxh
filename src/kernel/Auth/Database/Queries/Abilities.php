@@ -73,7 +73,7 @@ class Abilities
                   ->join($pivot, "{$table}.{$authority->getKeyName()}", '=', $pivot.'.entity_id')
                   ->whereRaw("{$prefix}{$pivot}.role_id = {$prefix}{$roles}.id")
                   ->where($pivot.'.entity_type', $authority->getMorphClass())
-                  ->where("{$table}.{$authority->getKeyName()}", $authority->getKey());
+                  ->where("{$table}.{$authority->getKeyName()}", $authority->getId());
 
             Models::scope()->applyToModelQuery($query, $roles);
             Models::scope()->applyToRelationQuery($query, $pivot);
@@ -100,7 +100,7 @@ class Abilities
                   ->whereRaw("{$prefix}{$permissions}.ability_id = {$prefix}{$abilities}.id")
                   ->where("{$permissions}.entity_type", $authority->getMorphClass())
                   ->where("{$permissions}.forbidden", ! $allowed)
-                  ->where("{$table}.{$authority->getKeyName()}", $authority->getKey());
+                  ->where("{$table}.{$authority->getKeyName()}", $authority->getId());
 
             Models::scope()->applyToModelQuery($query, $abilities);
             Models::scope()->applyToRelationQuery($query, $permissions);

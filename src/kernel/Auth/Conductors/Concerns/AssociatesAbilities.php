@@ -3,7 +3,7 @@
 namespace Lxh\Auth\Conductors\Concerns;
 
 use Lxh\Auth\Database\Models;
-use Lxh\Database\Eloquent\Model;
+use Lxh\MVC\Model;
 
 trait AssociatesAbilities
 {
@@ -12,7 +12,7 @@ trait AssociatesAbilities
     /**
      * Get the authority, creating a role authority if necessary.
      *
-     * @return \Lxh\Database\Eloquent\Model
+     * @return Model
      */
     protected function getAuthority()
     {
@@ -26,7 +26,7 @@ trait AssociatesAbilities
     /**
      * Get the IDs of the associated abilities.
      *
-     * @param  \Lxh\Database\Eloquent\Model  $authority
+     * @param  Model  $authority
      * @param  array  $abilityIds
      * @param  bool $forbidden
      * @return array
@@ -35,9 +35,7 @@ trait AssociatesAbilities
     {
         $relation = $authority->abilities();
 
-        $relation->whereIn('id', $abilityIds)->wherePivot('forbidden', '=', $forbidden);
-
-        Models::scope()->applyToRelation($relation);
+        $relation->where('id', 'IN', $abilityIds)->wherePivot('forbidden', '=', $forbidden);
 
         return $relation->get(['id'])->pluck('id')->all();
     }

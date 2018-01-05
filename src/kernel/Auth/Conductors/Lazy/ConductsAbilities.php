@@ -64,7 +64,7 @@ class ConductsAbilities
      */
     public function __destruct()
     {
-        $this->conductor->to(
+        $this->conductor->then(
             $this->abilities,
             $this->everything ? '*' : null,
             $this->attributes

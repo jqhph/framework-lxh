@@ -43,6 +43,7 @@ class Models
     protected static $tables = [
         'roles' => 'role',
         'abilities' => 'abilities',
+        'assigned_roles' => 'assigned_roles',
     ];
 
     /**

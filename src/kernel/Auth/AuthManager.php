@@ -97,9 +97,9 @@ class AuthManager
      * @param  Model|string  $authority
      * @return \Lxh\Auth\Conductors\GivesAbilities
      */
-    public function allow($authority)
+    public function allow()
     {
-        return new Conductors\GivesAbilities($authority);
+        return new Conductors\GivesAbilities($this->user);
     }
 
     /**

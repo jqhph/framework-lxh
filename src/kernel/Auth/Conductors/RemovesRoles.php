@@ -57,7 +57,7 @@ class RemovesRoles
         });
 
         $ids = $models->map(function ($model) {
-            return $model->getKey();
+            return $model->getId();
         });
 
         if ($names->count()) {

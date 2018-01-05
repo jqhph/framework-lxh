@@ -93,7 +93,7 @@ class AbilitiesForModel
             }
 
             if ($model->exists) {
-                $query->orWhere($this->table.'.entity_id', $model->getKey());
+                $query->orWhere($this->table.'.entity_id', $model->getId());
             }
         };
     }

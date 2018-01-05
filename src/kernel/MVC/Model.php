@@ -117,6 +117,14 @@ class Model extends Entity
     }
 
     /**
+     * @return string
+     */
+    public function getKeyName()
+    {
+        return $this->idFieldsName;
+    }
+
+    /**
      * 查找记录列表
      *
      * @param array $where

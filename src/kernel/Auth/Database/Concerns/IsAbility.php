@@ -65,7 +65,7 @@ trait IsAbility
 
         return (new static)->forceFill($attributes + [
             'entity_type' => $model->getMorphClass(),
-            'entity_id'   => $model->exists ? $model->getKey() : null,
+            'entity_id'   => $model->exists ? $model->getId() : null,
         ]);
     }
 

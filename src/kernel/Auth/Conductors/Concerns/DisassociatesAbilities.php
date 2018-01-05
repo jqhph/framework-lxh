@@ -67,7 +67,7 @@ trait DisassociatesAbilities
         list($foreignKeyName, $relatedKeyName) = $this->getRelationKeyNames($relation);
 
         return $relation->newPivotStatement()
-                        ->where($foreignKeyName, $model->getKey())
+                        ->where($foreignKeyName, $model->getId())
                         ->whereIn($relatedKeyName, $ids);
     }
 
