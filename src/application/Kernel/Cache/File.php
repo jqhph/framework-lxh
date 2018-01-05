@@ -109,9 +109,9 @@ class File extends Cache
      * @param  string $dirname 目录名，传空则清除默认目录
      * @return bool
      */
-    public function removeType($dirname = '')
+    public function flush($dirname = '')
     {
-        $dirname = $dirname ?: $this->defaultType;
+        $dirname = $dirname ?: $this->getType();
 
         return $this->file->removeInDir($this->getBasePath() . $dirname);
     }

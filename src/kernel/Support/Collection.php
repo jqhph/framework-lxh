@@ -995,7 +995,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
             return $this->items[$keys];
         }
 
-        $keys = array_wrap($keys);
+        $keys = (array) $keys;
 
         return new static(array_intersect_key($this->items, array_flip($keys)));
     }
