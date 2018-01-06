@@ -24,6 +24,11 @@ class Controller extends Base
     protected $idName = 'id';
 
     /**
+     * @var int
+     */
+    protected $id;
+
+    /**
      * 网格字段配置
      *
      * @var array
@@ -149,7 +154,7 @@ class Controller extends Base
         if (empty($params['id'])) {
             throw new Forbidden();
         }
-        $id = $params['id'];
+        $this->id = $id = $params['id'];
 
         $content = $this->admin()->content();
         $content->header(trans(__CONTROLLER__));

@@ -200,6 +200,15 @@ class Field implements Renderable
     }
 
     /**
+     * @return $this
+     */
+    public function disabled()
+    {
+        $this->attribute('disabled', 'disabled');
+        return $this;
+    }
+
+    /**
      * 加载js（同个key只加载一次）
      *
      * @return static
@@ -340,6 +349,7 @@ class Field implements Renderable
      */
     public function fill($data)
     {
+        if ($this->value === false) return;
         // Field value is already setted.
         if (is_array($this->column)) {
             foreach ($this->column as $key => $column) {

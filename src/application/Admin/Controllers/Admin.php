@@ -16,6 +16,7 @@ use Lxh\Admin\Table\Table;
 use Lxh\Admin\Table\Td;
 use Lxh\Admin\Table\Th;
 use Lxh\Admin\Table\Tr;
+use Lxh\Admin\Widgets\Form;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
 
@@ -62,6 +63,7 @@ class Admin extends Controller
         $filter->text('mobile')->like()->right();
         $filter->text('name')->where(function () {
             if (! $value = I('name')) {
+                // 返回null，则不会执行此字段条件查询
                 return null;
             }
             $like = ['LIKE', "$value%"];
@@ -69,7 +71,28 @@ class Admin extends Controller
             return [
                 'OR' => ['first_name' => &$like, 'last_name' => &$like]
             ];
-        })->formatField(false);
+        })
+            ->formatField(false); // 使用自定义字段名称查询
+    }
+
+    protected function form(Form $form, Content $content)
+    {
+        $form->text('username')->rules('required|length_between[4-15]');
+
+        if ($this->id) {
+            // 修改管理员信息时，密码可以为空
+            $rules = 'length_between[5-15]';
+        } else {
+            // 创建新的管理员账号时，必须输入密码
+            $rules = 'required|length_between[5-15]';
+        }
+        $form->password('password')->rules($rules)->value(false);
+        $form->text('email')->rules('valid_email');
+        $form->text('mobile');
+        $form->select('status')->options([1, 0]);
+        $form->select('is_admin')->options([0, 1]);
+        $form->select('sex')->options([0, 1, 2]);
+
     }
 
     /**
