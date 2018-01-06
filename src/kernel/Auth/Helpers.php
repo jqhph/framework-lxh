@@ -68,7 +68,7 @@ class Helpers
      */
     public static function groupModelsAndIdentifiersByType($models)
     {
-        $groups = (new Collection($models))->groupBy(function ($model) {
+        $groups = (new Collection((array)$models))->groupBy(function ($model) {
             if (is_numeric($model)) {
                 return 'integers';
             } else if (is_string($model)) {

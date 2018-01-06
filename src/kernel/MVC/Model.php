@@ -288,25 +288,25 @@ class Model extends Entity
     }
 
     // 新增操作钩子方法，新增前调用
-    protected function beforeAdd(array & $data)
+    protected function beforeAdd(array &$input)
     {
 
     }
 
     // 新增操作钩子方法
-    protected function afterAdd($insertId, array & $data)
+    protected function afterAdd($insertId, array &$input)
     {
 
     }
 
     // 修改钩子方法，修改前调用
-    protected function beforeSave($id, array & $data)
+    protected function beforeSave($id, array &$input)
     {
 
     }
 
     // 修改钩子方法
-    protected function afterSave($id, array & $data, $result)
+    protected function afterSave($id, array &$input, $result)
     {
 
     }

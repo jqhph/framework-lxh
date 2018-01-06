@@ -37,7 +37,7 @@ trait IsRole
     /**
      * The users relationship.
      *
-     * @return \Lxh\Database\Eloquent\Relations\MorphedByMany
+     * @return array
      */
     public function users()
     {
@@ -105,7 +105,7 @@ trait IsRole
         return (new Collection($names))
                 ->diff($existing->pluck('name'))
                 ->map(function ($name) {
-                    return static::create(compact('name'));
+                    return $this->createAndReturn(compact('name'));
                 })
                 ->merge($existing);
     }

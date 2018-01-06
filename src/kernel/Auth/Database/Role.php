@@ -25,4 +25,30 @@ class Role extends Model
     {
         return $this->morphType;
     }
+
+    /**
+     * 创建并返回数据
+     *
+     * @param array $names
+     * @param array $attributes
+     * @return array
+     */
+    public function createAndReturn(array $names, array $attributes = [])
+    {
+        $attributes = $names + $this->formatCreateAttributes($attributes);
+        $newId = $this->query()->insert($attributes);
+
+        if (! $newId) return [];
+
+        $attributes[$this->idFieldsName] = $newId;
+        return $attributes;
+    }
+
+    protected function formatCreateAttributes(array &$attributes = [])
+    {
+        return array_merge([
+            'created_at' => time(),
+            'created_by_id' => admin()->getId()
+        ], $attributes);
+    }
 }

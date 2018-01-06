@@ -2,28 +2,34 @@
 
 namespace Lxh\Auth\Database;
 
-use Lxh\Database\Eloquent\Model;
+use Lxh\MVC\Model;
 
 class Ability extends Model
 {
     use Concerns\IsAbility;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['name', 'title'];
+    protected $tableName = 'abilities';
 
     /**
-     * Constructor.
+     * 根据权限名称创建权限
      *
-     * @param array  $attributes
+     * @param $name
      */
-    public function __construct(array $attributes = [])
+    protected function createAbilityAndReturn($names, array $attributes = [])
     {
-        $this->table = Models::table('abilities');
+        $attributes = $names + $this->formatCreateAttributes($attributes);
+        $newId = $this->query()->insert($attributes);
 
-        parent::__construct($attributes);
+        if (! $newId) return [];
+
+        $attributes[$this->idFieldsName] = $newId;
+        return $attributes;
+    }
+
+    protected function formatCreateAttributes(array &$attributes = [])
+    {
+        return array_merge([
+            'created_at' => time(),
+        ], $attributes);
     }
 }

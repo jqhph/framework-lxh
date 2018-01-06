@@ -8,12 +8,28 @@
 
 namespace Lxh\Admin\Models;
 
+use Lxh\Auth\Database\Models;
 use Lxh\Helper\Entity;
+use Lxh\Helper\Util;
 use Lxh\MVC\Model;
 use Lxh\Contracts\Container\Container;
 
 class Menu extends Model
 {
+    /**
+     * 快捷关联的权限
+     *
+     * @var string
+     */
+    protected $quickAbility = '';
+
+    /**
+     * 下拉选框选择的权限
+     *
+     * @var string
+     */
+    protected $selectedAbility = '';
+
     /**
      * 获取可显示菜单
      *
@@ -24,38 +40,55 @@ class Menu extends Model
         return $this->query()->where(['deleted' => 0, 'show' => 1])->read();
     }
 
-    protected function beforeAdd(array & $data)
+    protected function beforeAdd(array & $input)
     {
-        $data['created_at'] = $_SERVER['REQUEST_TIME'];
+        $input['created_at'] = $_SERVER['REQUEST_TIME'];
 
-        $data['created_by_id'] = admin()->id;
+        $input['created_by_id'] = admin()->getId();
 
-        if (empty($data['show'])) {
-            $data['show'] = 0;
+        if (empty($input['show'])) {
+            $input['show'] = 0;
         }
 
+        $this->setupAbility($input);
+    }
+
+    protected function setupAbility(array &$input)
+    {
+        $this->quickAbility = $input['quick_relate_ability'];
+        $this->selectedAbility = $input['ability'];
+        unset($input['quick_relate_ability'], $input['ability']);
+
+        // 用户选择了权限，则以此为主
+        if ($this->selectedAbility && is_int($this->selectedAbility)) {
+            return $input['ability_id'] = $this->selectedAbility;
+        }
+        if (! $this->quickAbility || empty($input['controller'])) return;
+
+        $controller = Util::convertWith($input['controller'], true, '-');
+        $abilityName = "$controller.{$this->quickAbility}";
+
+//        $ability = Models::ability()->findOrCreate($abilityName);
+
+//        return $input['ability_id'] = $ability->get('id');
     }
 
     // 保存数据前置钩子
-    protected function beforeSave($id, array & $data)
+    protected function beforeSave($id, array & $input)
     {
         if (isset($data['show'])) {
             if (! $data['show']) $data['show'] = 0;
         }
+        $this->setupAbility($input);
     }
 
-    protected function afterAdd($insertId, array & $data)
+    protected function afterAdd($insertId, array & $input)
     {
         if (! $insertId) return;
-
-//        $this->events->fire('Menu.add');
     }
 
-    protected function afterSave($id, array & $data, $result)
+    protected function afterSave($id, array & $input, $result)
     {
-        if (! $result) return;
-
-//        $this->events->fire('Menu.save');
     }
 
     // 删除后置钩子方法

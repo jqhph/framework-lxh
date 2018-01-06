@@ -16,6 +16,7 @@ use Lxh\Admin\MVC\Controller;
 use Lxh\Admin\Table\Table;
 use Lxh\Admin\Widgets\Box;
 use Lxh\Admin\Widgets\Form;
+use Lxh\Auth\Ability;
 use Lxh\Exceptions\Forbidden;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
@@ -106,10 +107,29 @@ class Menu extends Controller
         $form->text('action');
         $form->select('show')->options([1, 0])->default(1);
         $form->select('priority')->options(range(0, 30))->help('值越小排序越靠前');
+        $this->buildQuickCreateAbilityInput($form);
         $this->buildAbilitiesInput($form);
     }
 
-    protected function buildAbilitiesInput($form)
+    /**
+     * 创建快捷创建并关联权限表单
+     *
+     * @param Form $form
+     */
+    protected function buildQuickCreateAbilityInput(Form $form)
+    {
+        $support = [
+            Ability::READ, Ability::CREATE
+        ];
+
+        $form->select('quick_relate_ability')
+            ->options($support)
+            ->allowClear()
+            ->defaultOption()
+            ->help("快捷关联与此菜单控制器对应的权限，如权限不存在则会自动创建。如是空控制器，则此选项无效！");
+    }
+
+    protected function buildAbilitiesInput(Form $form)
     {
         if ($ablities = $this->formatAbilities()) {
             $url = Admin::url('Ability')->action('Create');
@@ -120,7 +140,7 @@ class Menu extends Controller
                 ->options($ablities)
                 ->allowClear()
                 ->defaultOption()
-                ->help("关联权限。<a onclick=\"open_tab('$tabid', '$url', '$tablabel')\">【点我创建权限】</a>");
+                ->help("关联指定权限。<a onclick=\"open_tab('$tabid', '$url', '$tablabel')\">【点我创建权限】</a>");
         }
     }
 

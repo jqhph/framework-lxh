@@ -132,7 +132,7 @@ class AssignsRoles
 
         $records = $records->all();
 
-        return $this->newPivotTableQuery()->batchInsert($records);
+        return $records ? $this->newPivotTableQuery()->batchInsert($records) : false;
     }
 
     /**
