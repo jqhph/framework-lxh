@@ -42,8 +42,8 @@ class Role extends Controller
     protected function filter(Filter $filter)
     {
         $filter->useModal();
-        $filter->text('name');
-        $filter->text('title');
+        $filter->text('name')->like();
+        $filter->text('title')->like();
         $filter->dateRange('created_at')->between()->toTimestamp();
     }
 

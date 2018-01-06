@@ -9,6 +9,7 @@
 namespace Lxh\MVC;
 
 use Lxh\Admin\Admin;
+use Lxh\Admin\Layout\Content;
 use Lxh\Config\Config;
 use Lxh\Contracts\Container\Container;
 use Lxh\Events\Dispatcher;
@@ -88,6 +89,14 @@ abstract class Controller
     protected function admin()
     {
         return $this->container['admin'];
+    }
+
+    /**
+     * @return Content
+     */
+    protected function content()
+    {
+        return $this->container['admin']->content();
     }
 
     /**

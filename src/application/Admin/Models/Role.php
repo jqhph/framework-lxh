@@ -12,8 +12,6 @@ class Role extends \Lxh\Auth\Database\Role
 {
     protected $selectFields = ['id', 'name', 'created_at', 'modified_at', 'admin.username AS created_by', 'comment', 'title'];
 
-    protected $permissions;
-
     public function beforeSave($id, array & $data)
     {
         $data['modified_at'] = time();

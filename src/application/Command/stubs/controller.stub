@@ -10,9 +10,30 @@ namespace {root-namespace}{module}\Controllers;
 use {root-namespace}MVC\Controller;
 use {root-namespace}Http\Request;
 use {root-namespace}Http\Response;
+use Lxh\Admin\Filter;
+use Lxh\Admin\Layout\Content;
+use Lxh\Admin\Widgets\Box;
+use Lxh\Admin\Widgets\Form;
+use Lxh\Admin\Grid;
+use Lxh\Admin\MVC\Controller;
+use Lxh\Admin\Table\Table;
 
 class {class} extends Controller
 {
+     /**
+     * 网格字段配置
+     *
+     * @var array
+     */
+    protected $grid = [];
+
+    /**
+     * 是否使用过滤器
+     *
+     * @var bool
+     */
+    protected $filter = false;
+
     public function initialize()
     {
     }
@@ -22,5 +43,40 @@ class {class} extends Controller
 
     }
 
+    /**
+     * Grid初始化方法
+     *
+     * @param Grid $grid
+     */
+    protected function grid(Grid $grid, Content $content)
+    {
+    }
+
+    /**
+     * Table初始化方法
+     *
+     * @param Table $table
+     */
+    protected function table(Table $table)
+    {
+    }
+
+    /**
+     * 过滤器初始化方法
+     *
+     * @param Filter $filter
+     */
+    protected function filter(Filter $filter)
+    {
+    }
+
+    /**
+     * Form初始化方法
+     *
+     * @param Form $form
+     */
+    protected function form(Form $form, Content $content)
+    {
+    }
 
 }

@@ -9,6 +9,11 @@ use Lxh\Support\Str;
 
 class Select extends Field
 {
+    /**
+     * @var array
+     */
+    protected $defaultOption = [];
+
     protected function setup()
     {
         $this->css('select', 'lib/plugins/select2/select2.min');
@@ -25,6 +30,24 @@ class Select extends Field
     public function allowClear()
     {
         $this->clear = 'true';
+        return $this;
+    }
+
+    /**
+     * 增加默认选项
+     *
+     * @param string $value
+     * @param string $label
+     * @return $this
+     */
+    public function defaultOption($value = '', $label = '')
+    {
+        $label = $label ?: trans_option($value, $this->column);
+
+        $this->defaultOption = [
+            'value' => $value, 'label' => $label
+        ];
+
         return $this;
     }
 
@@ -101,6 +124,13 @@ EOF;
         return $this;
     }
 
+    protected function variables()
+    {
+        return array_merge(parent::variables(), [
+            'defaultOption' => &$this->defaultOption
+        ]);
+    }
+
     /**
      * Load options for other select on change.
      *
@@ -154,6 +184,7 @@ EOT;
     {
         $ajaxOptions = [
             'url' => $url.'?'.http_build_query($parameters),
+            'dataType' => 'JSON'
         ];
 
         $ajaxOptions = json_encode(array_merge($ajaxOptions, $options));

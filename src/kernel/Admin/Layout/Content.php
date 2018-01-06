@@ -82,7 +82,7 @@ class Content implements Renderable
      *
      * @param mixed $content
      *
-     * @return Row
+     * @return $this
      */
     public function body($content)
     {
@@ -186,7 +186,7 @@ class Content implements Renderable
      *
      * @param $content
      *
-     * @return Row
+     * @return $this
      */
     public function row($content = '')
     {
@@ -199,7 +199,7 @@ class Content implements Renderable
             $this->addRow($row);
         }
 
-        return $row;
+        return $this;
     }
 
     /**

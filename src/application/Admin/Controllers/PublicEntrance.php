@@ -15,10 +15,9 @@ class PublicEntrance extends Controller
     // 字体展示
     public function actionFontAwesome()
     {
-        $navTitle = 'Font awesome';
-
-        $this->share('navTitle', $navTitle);
-
-        return $this->render('font-awesome', [], true);
+        return $this->content()
+            ->header('Font awesome')
+            ->body($this->render('font-awesome'))
+            ->render();
     }
 }

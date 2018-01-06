@@ -154,6 +154,16 @@ class Model extends Entity
         return call_user_func_array([$this->query()->select($this->selectFields), 'where'], func_get_args());
     }
 
+    /**
+     * select
+     *
+     * @return Query
+     */
+    public function select($fields)
+    {
+        return $this->query()->select($fields);
+    }
+
     // 查找数据
     public function find()
     {

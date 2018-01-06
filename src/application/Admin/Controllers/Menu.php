@@ -83,30 +83,6 @@ class Menu extends Controller
         }
     }
 
-    public function actionDetail1(Request $req, Response $resp, array & $params)
-    {
-        if (empty($params['id'])) {
-            throw new Forbidden();
-        }
-        $id = $params['id'];
-
-        $model = $this->model();
-
-        $model->id = $id;
-
-        $row = $model->find();
-
-        $content = $this->admin()->content();
-        $content->header(trans('菜单'));
-        $content->description(trans('菜单编辑'));
-
-        $content->row(function (Row $row) {
-            $row->column(12, $this->form($row)->render());
-        });
-
-        return $content->render();
-    }
-
     protected function iconHelp()
     {
         $url = Admin::url('PublicEntrance')->action('font-awesome');
@@ -130,6 +106,34 @@ class Menu extends Controller
         $form->text('action');
         $form->select('show')->options([1, 0])->default(1);
         $form->select('priority')->options(range(0, 30))->help('值越小排序越靠前');
+        $this->buildAbilitiesInput($form);
+    }
+
+    protected function buildAbilitiesInput($form)
+    {
+        if ($ablities = $this->formatAbilities()) {
+            $url = Admin::url('Ability')->action('Create');
+            $tabid = str_replace('/', '-', $url);
+            $tablabel = trans('Create Ability');
+
+            $form->select('ability')
+                ->options($ablities)
+                ->allowClear()
+                ->defaultOption()
+                ->help("关联权限。<a onclick=\"open_tab('$tabid', '$url', '$tablabel')\">【点我创建权限】</a>");
+        }
+    }
+
+    protected function formatAbilities()
+    {
+        $abilities = [];
+        foreach ($this->model('Ability')->find() as $row) {
+            $abilities[] = [
+                'value' => $row['id'],
+                'label' => $row['title']
+            ];
+        }
+        return $abilities;
     }
 
     /**

@@ -37,28 +37,10 @@ class SelectTree extends Select
      */
     protected $labelKey = 'name';
 
-    protected $defaultOption = [];
-
     protected function formatOptions() {
         $this->buildTree();
 
         return $this->options;
-    }
-
-    public function defaultOption($value, $label = '')
-    {
-        $label = $label ?: trans_option($value, $this->column);
-
-        return $this->defaultOption = [
-            'value' => $value, 'label' => $label
-        ];
-    }
-
-    protected function variables()
-    {
-        return array_merge(parent::variables(), [
-            'defaultOption' => $this->defaultOption
-        ]);
     }
 
     protected function buildTree()
