@@ -30,7 +30,10 @@ abstract class AbstractFilter
      */
     protected $conditionHandler;
 
-    protected $fieldFormatHandler;
+    /**
+     * @var mixed
+     */
+    protected $fieldFormatHandler = null;
 
     public function __construct(Field $field = null, callable $conditionHandler = null)
     {
@@ -95,15 +98,28 @@ abstract class AbstractFilter
             // 自定义处理器处理
             $condition = call_user_func($this->conditionHandler, $field, $this);
 
-            return $condition === null ? false : [$key => &$condition];
+            return $condition === null ? false : ($key ? [$key => &$condition] : $condition);
         }
 
+        $input = I($field);
+
         // 使用默认构建查询条件数组方法
-        if (($condition = $this->buildCondition($field)) === null) {
+        if ($this->inputInvalid($input) || ($condition = $this->buildCondition($field, $input)) === null) {
             return false;
         }
 
-        return [$key => &$condition];
+        return $key ? [$key => &$condition] : $condition;
+    }
+
+    /**
+     * 判断用户输入的值是否无效
+     *
+     * @param $field
+     * @return bool
+     */
+    protected function inputInvalid($input)
+    {
+        return ($input === null || $input === '') ? true : false;
     }
 
     protected function getFieldValue($field)
@@ -114,10 +130,10 @@ abstract class AbstractFilter
     /**
      * 设置格式化查询字段处理器
      *
-     * @param callable $handler
+     * @param mixed $handler
      * @return static
      */
-    public function formatField(callable $handler)
+    public function formatField($handler)
     {
         $this->fieldFormatHandler = $handler;
 
@@ -132,8 +148,9 @@ abstract class AbstractFilter
      */
     protected function formatFieldName($field)
     {
-        if ($this->fieldFormatHandler) {
-            return call_user_func($this->fieldFormatHandler, $field);
+        if ($this->fieldFormatHandler !== null) {
+            return is_callable($this->fieldFormatHandler) ? call_user_func($this->fieldFormatHandler, $field)
+                : $this->fieldFormatHandler;
         }
 
         return $field;
@@ -145,5 +162,5 @@ abstract class AbstractFilter
      * @param $field
      * @return mixed
      */
-    abstract protected function buildCondition($field);
+    abstract protected function buildCondition($field, $input);
 }

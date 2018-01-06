@@ -9,10 +9,8 @@ class Lt extends AbstractFilter
      */
     protected $name = '@lt';
 
-    protected function buildCondition($field)
+    protected function buildCondition($field, $input)
     {
-        $value = I($field);
-
-        return ($value === '' || $value === null) ? null : ['<', $value];
+        return ['<', $input];
     }
 }

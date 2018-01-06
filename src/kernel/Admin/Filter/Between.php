@@ -14,7 +14,7 @@ class Between extends AbstractFilter
 
     protected $toTimestamp = false;
 
-    protected function buildCondition($field)
+    protected function buildCondition($field, $input)
     {
         $start = I($field . '-start');
         $end = I($field . '-end');
@@ -45,6 +45,17 @@ class Between extends AbstractFilter
             $end = strtotime($end);
         }
         return ['<', $end];
+    }
+
+    /**
+     * 设置用户输入的值有效
+     *
+     * @param $field
+     * @return bool
+     */
+    protected function inputInvalid($field)
+    {
+        return false;
     }
 
     /**

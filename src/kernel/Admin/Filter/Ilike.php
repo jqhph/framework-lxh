@@ -13,17 +13,15 @@ class Ilike extends AbstractFilter
 
     protected $left = false;
 
-    protected function buildCondition($field)
+    protected function buildCondition($field, $input)
     {
-        $value = I($field);
-
         if ($this->left) {
-            $p = $this->left ? "%$value" : "%$value%";
+            $p = $this->left ? "%$input" : "%$input%";
         } else {
-            $p = $this->right ? "$value%" : "%$value%";
+            $p = $this->right ? "$input%" : "%$input%";
         }
 
-        return ($value === '' || $value === null) ? null : ['ilike', &$p];
+        return ['ilike', &$p];
     }
 
 

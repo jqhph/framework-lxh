@@ -9,23 +9,17 @@ class Equal extends AbstractFilter
      */
     protected $name = '@eq';
 
-    protected function buildCondition($field)
+    protected function buildCondition($field, $input)
     {
-        $value = I($field);
-
-        if ($value === '' || $value === null) {
-            return null;
-        }
-
-        if (is_array($value)) {
-            $count = count($value);
+        if (is_array($input)) {
+            $count = count($input);
 
             if ($count < 1) return null;
 
-            return count($value) > 1 ? ['IN', &$value] : $value[0];
+            return count($input) > 1 ? ['IN', &$input] : $input[0];
         }
 
-        return $value;
+        return $input;
     }
 
 }

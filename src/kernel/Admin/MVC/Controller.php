@@ -33,7 +33,7 @@ class Controller extends Base
     /**
      * 是否使用过滤器
      *
-     * @var bool
+     * @var bool|string
      */
     protected $filter = false;
 
@@ -57,6 +57,8 @@ class Controller extends Base
 
             // 自定义filter
             $this->filter($filter);
+            // 开启弹窗模式
+            $this->filter == 'modal' && $filter->useModal();
         }
 
         // 构建网格报表

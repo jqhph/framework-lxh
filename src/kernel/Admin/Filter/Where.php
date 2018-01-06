@@ -10,7 +10,7 @@ use Lxh\Admin\Form\Field;
  */
 class Where extends AbstractFilter
 {
-    protected function buildCondition($field)
+    protected function buildCondition($field, $input)
     {
     }
 }
