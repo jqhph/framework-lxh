@@ -1,7 +1,7 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : locahost
+Source Server         : localhost
 Source Server Version : 50714
 Source Host           : localhost:3306
 Source Database       : lxh
@@ -10,10 +10,42 @@ Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2017-12-29 22:38:56
+Date: 2018-01-06 18:43:13
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for abilities
+-- ----------------------------
+DROP TABLE IF EXISTS `abilities`;
+CREATE TABLE `abilities` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) NOT NULL DEFAULT '' COMMENT '权限唯一标识，只能填英文',
+  `title` varchar(255) NOT NULL COMMENT '权限名称',
+  `created_at` int(11) NOT NULL,
+  `modified_at` int(11) unsigned NOT NULL DEFAULT '0',
+  `created_by_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `forbidden` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0允许的权限，1禁止的权限',
+  `type` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1后台权限，2前台权限',
+  `comment` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`) USING BTREE
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of abilities
+-- ----------------------------
+INSERT INTO `abilities` VALUES ('1', 'user.read', '用户查看', '1515207448', '1515207550', '1', '0', '1', '查看用户列表');
+INSERT INTO `abilities` VALUES ('2', 'user.edit', '用户编辑', '1515207533', '0', '1', '0', '1', '');
+INSERT INTO `abilities` VALUES ('3', 'user.add', '用户新增', '1515207584', '0', '1', '0', '1', '');
+INSERT INTO `abilities` VALUES ('4', 'user.delete', '用户删除', '1515207646', '0', '1', '0', '1', '');
+INSERT INTO `abilities` VALUES ('5', 'menu.read', '菜单查看', '1515207863', '0', '1', '0', '1', '');
+INSERT INTO `abilities` VALUES ('6', 'menu.add', '菜单新增', '1515207911', '0', '1', '0', '1', '');
+INSERT INTO `abilities` VALUES ('7', 'menu.edit', '菜单编辑', '1515207928', '0', '1', '0', '1', '');
+INSERT INTO `abilities` VALUES ('8', 'menu.delete', '菜单删除', '1515207953', '0', '1', '0', '1', '');
+INSERT INTO `abilities` VALUES ('9', 'system.setting', '系统设置', '1515213158', '0', '1', '0', '1', '系统设置菜单进入权限');
+INSERT INTO `abilities` VALUES ('17', 'admin.admin.read', 'admin.admin.read', '1515230219', '0', '0', '0', '1', '');
 
 -- ----------------------------
 -- Table structure for admin
@@ -31,12 +63,11 @@ CREATE TABLE `admin` (
   `sex` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0未知，1男，2女',
   `deleted` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `created_at` int(11) unsigned NOT NULL DEFAULT '0',
-  `update_at` int(11) NOT NULL DEFAULT '0',
+  `modified_at` int(11) NOT NULL DEFAULT '0',
   `last_login_ip` char(15) NOT NULL DEFAULT '',
   `last_login_time` int(11) unsigned NOT NULL DEFAULT '0',
   `reg_ip` char(15) NOT NULL DEFAULT '',
   `is_admin` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `role_ids` varchar(255) NOT NULL DEFAULT '' COMMENT '角色id，如有多个用“,”隔开',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1激活，0禁用',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`) USING BTREE
@@ -45,7 +76,38 @@ CREATE TABLE `admin` (
 -- ----------------------------
 -- Records of admin
 -- ----------------------------
-INSERT INTO `admin` VALUES ('1', 'admin', '$2y$10$IK.HGNDMOV9LYHIG7jMxb.0iEV85SSkf6Lv8GN9aaAuAIFbsVnaSS', '', '', 'J', 'qh', '', '0', '0', '1499568986', '0', '127.0.0.1', '0', '127.0.0.1', '1', '', '1');
+INSERT INTO `admin` VALUES ('1', 'admin', '$2y$10$IK.HGNDMOV9LYHIG7jMxb.0iEV85SSkf6Lv8GN9aaAuAIFbsVnaSS', 'dfdsfdsdsfdfdfdsfdsfsd', '', 'J', 'qh', '', '0', '0', '1499568986', '0', '127.0.0.1', '0', '127.0.0.1', '1', '1');
+
+-- ----------------------------
+-- Table structure for assigned_abilities
+-- ----------------------------
+DROP TABLE IF EXISTS `assigned_abilities`;
+CREATE TABLE `assigned_abilities` (
+  `ability_id` int(11) unsigned NOT NULL,
+  `entity_id` int(11) unsigned NOT NULL,
+  `entity_type` tinyint(1) unsigned NOT NULL DEFAULT '2' COMMENT '1用户，2角色'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of assigned_abilities
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for assigned_roles
+-- ----------------------------
+DROP TABLE IF EXISTS `assigned_roles`;
+CREATE TABLE `assigned_roles` (
+  `role_id` int(11) unsigned NOT NULL,
+  `entity_id` int(11) unsigned NOT NULL,
+  `entity_type` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1用户',
+  UNIQUE KEY `role_id` (`role_id`,`entity_id`,`entity_type`) USING BTREE
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of assigned_roles
+-- ----------------------------
+INSERT INTO `assigned_roles` VALUES ('20', '1', '2');
+INSERT INTO `assigned_roles` VALUES ('31', '1', '1');
 
 -- ----------------------------
 -- Table structure for category
@@ -110,29 +172,27 @@ CREATE TABLE `menu` (
   `created_by_id` int(11) unsigned NOT NULL,
   `type` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1普通菜单，2系统菜单，不能被删除或修改',
   `priority` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '排序权重值，值越小排序越靠前',
+  `ability_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '权限id',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of menu
 -- ----------------------------
-INSERT INTO `menu` VALUES ('1', 'Menu management', 'zmdi zmdi-menu', '1', '13', '1', 'Menu', 'List', '0', '1500180853', '1', '2', '0');
-INSERT INTO `menu` VALUES ('13', 'System', 'fa fa-gears', '1', '0', '1', '', '', '0', '1500466810', '1', '1', '2');
-INSERT INTO `menu` VALUES ('14', 'Making modules', 'zmdi zmdi-widgets', '1', '13', '1', 'System', 'MakeModules', '0', '1500467096', '1', '1', '0');
-INSERT INTO `menu` VALUES ('15', 'Create reports', 'zmdi zmdi-view-list', '1', '13', '1', 'System', 'CreateReports', '0', '1500467299', '1', '1', '2');
-INSERT INTO `menu` VALUES ('16', 'Language Management', '', '1', '13', '1', 'Language', 'List', '0', '1500644030', '1', '1', '3');
-INSERT INTO `menu` VALUES ('17', 'Setting', '', '1', '13', '1', 'System', 'Setting', '0', '1501244109', '1', '1', '4');
-INSERT INTO `menu` VALUES ('18', 'Permissions', 'fa fa-pencil fa-fw', '1', '0', '1', '', '', '0', '1501583290', '1', '1', '1');
-INSERT INTO `menu` VALUES ('19', 'Role', 'fa fa-user-plus', '1', '18', '1', 'Role', 'List', '0', '1501592174', '1', '1', '0');
-INSERT INTO `menu` VALUES ('34', 'Products system', 'fa fa-opencart', '1', '0', '1', '', '', '0', '1508157506', '1', '1', '0');
-INSERT INTO `menu` VALUES ('22', 'Create Menu', '', '0', '1', '1', 'Menu', 'Create', '0', '1501652345', '1', '1', '0');
-INSERT INTO `menu` VALUES ('23', 'Modify Menu', '', '0', '1', '1', 'Menu', 'Detail', '0', '1501653713', '1', '1', '0');
-INSERT INTO `menu` VALUES ('24', 'Delete Menu', '', '0', '1', '1', 'Menu', 'Delete', '0', '1501653790', '1', '1', '0');
-INSERT INTO `menu` VALUES ('25', 'Create Role', '', '0', '19', '1', 'Role', 'Create', '0', '1501653930', '1', '1', '0');
-INSERT INTO `menu` VALUES ('26', 'Modify Role', '', '0', '19', '1', 'Role', 'Detail', '0', '1501653957', '1', '1', '0');
-INSERT INTO `menu` VALUES ('27', 'Delete Role', '', '0', '19', '1', 'Role', 'Delete', '0', '1501653981', '1', '1', '0');
-INSERT INTO `menu` VALUES ('36', 'Category', '', '1', '34', '1', 'Category', 'List', '0', '1508240328', '1', '1', '1');
-INSERT INTO `menu` VALUES ('35', 'Products', '', '1', '34', '1', 'Product', 'List', '0', '1508157865', '1', '1', '0');
+INSERT INTO `menu` VALUES ('1', 'Menu management', 'zmdi zmdi-menu', '1', '13', '1', 'Menu', 'List', '0', '1500180853', '1', '2', '0', '0');
+INSERT INTO `menu` VALUES ('13', 'System', 'fa fa-gears', '1', '0', '1', '', '', '0', '1500466810', '1', '1', '2', '0');
+INSERT INTO `menu` VALUES ('14', 'Making modules', 'zmdi zmdi-widgets', '1', '13', '1', 'System', 'MakeModules', '0', '1500467096', '1', '1', '0', '0');
+INSERT INTO `menu` VALUES ('15', 'Create reports', 'zmdi zmdi-view-list', '1', '13', '1', 'System', 'CreateReports', '0', '1500467299', '1', '1', '2', '0');
+INSERT INTO `menu` VALUES ('16', 'Language Management', '', '1', '13', '1', 'Language', 'List', '0', '1500644030', '1', '1', '3', '0');
+INSERT INTO `menu` VALUES ('17', 'Setting', '', '1', '13', '1', 'System', 'Setting', '0', '1501244109', '1', '1', '4', '0');
+INSERT INTO `menu` VALUES ('18', 'Permissions', 'fa fa-pencil fa-fw', '1', '0', '1', '', '', '0', '1501583290', '1', '1', '1', '0');
+INSERT INTO `menu` VALUES ('19', 'Role', 'fa fa-user-plus', '1', '18', '1', 'Role', 'List', '0', '1501592174', '1', '1', '0', '0');
+INSERT INTO `menu` VALUES ('34', 'Products system', 'fa fa-opencart', '1', '0', '1', '', '', '0', '1508157506', '1', '1', '0', '0');
+INSERT INTO `menu` VALUES ('43', 'User Manager', 'fa fa-users', '1', '0', '1', '', '', '0', '1515230163', '1', '1', '0', '0');
+INSERT INTO `menu` VALUES ('44', 'Admin', '', '1', '43', '1', 'Admin', 'List', '0', '1515230219', '1', '1', '0', '17');
+INSERT INTO `menu` VALUES ('36', 'Category', '', '1', '34', '1', 'Category', 'List', '0', '1508240328', '1', '1', '1', '0');
+INSERT INTO `menu` VALUES ('35', 'Products', '', '1', '34', '1', 'Product', 'List', '0', '1508157865', '1', '1', '0', '0');
+INSERT INTO `menu` VALUES ('37', 'Abilities', '', '1', '18', '1', 'Ability', 'List', '0', '1515206612', '1', '1', '1', '0');
 
 -- ----------------------------
 -- Table structure for order
@@ -256,52 +316,22 @@ INSERT INTO `product` VALUES ('47', 'test5', '0', '0', '0', '0', '0', '0', '0', 
 DROP TABLE IF EXISTS `role`;
 CREATE TABLE `role` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) NOT NULL,
-  `permissions` varchar(255) NOT NULL DEFAULT '' COMMENT '自定义权限，自定义权限配置id，多个用","隔开',
+  `name` varchar(30) NOT NULL COMMENT '角色唯一标识，只能填英文',
+  `comment` varchar(255) NOT NULL DEFAULT '' COMMENT '角色描述',
   `created_at` int(11) unsigned NOT NULL,
   `created_by_id` int(11) unsigned NOT NULL DEFAULT '0',
   `deleted` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `modified_at` int(11) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
+  `title` varchar(30) NOT NULL DEFAULT '' COMMENT '角色名称',
+  `type` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1后台角色，2前台角色',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`) USING BTREE
+) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of role
 -- ----------------------------
-INSERT INTO `role` VALUES ('1', '测试角色', '', '1501665012', '1', '0', '1501669890');
-INSERT INTO `role` VALUES ('3', '测试角色2', '', '1501686306', '1', '0', '0');
-INSERT INTO `role` VALUES ('4', '测试角色3', '', '1501686348', '1', '0', '0');
-INSERT INTO `role` VALUES ('5', '测试角色4', '', '1501686369', '1', '0', '0');
-INSERT INTO `role` VALUES ('6', '测试角色5', '', '1501686379', '1', '0', '0');
-INSERT INTO `role` VALUES ('7', '测试角色8', '', '1501686399', '1', '0', '0');
-
--- ----------------------------
--- Table structure for role_menu
--- ----------------------------
-DROP TABLE IF EXISTS `role_menu`;
-CREATE TABLE `role_menu` (
-  `role_id` int(11) unsigned NOT NULL,
-  `menu_id` int(11) NOT NULL,
-  UNIQUE KEY `role_id` (`role_id`,`menu_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- ----------------------------
--- Records of role_menu
--- ----------------------------
-INSERT INTO `role_menu` VALUES ('1', '15');
-INSERT INTO `role_menu` VALUES ('1', '19');
-INSERT INTO `role_menu` VALUES ('1', '26');
-INSERT INTO `role_menu` VALUES ('3', '1');
-INSERT INTO `role_menu` VALUES ('3', '19');
-INSERT INTO `role_menu` VALUES ('3', '22');
-INSERT INTO `role_menu` VALUES ('4', '14');
-INSERT INTO `role_menu` VALUES ('4', '19');
-INSERT INTO `role_menu` VALUES ('5', '1');
-INSERT INTO `role_menu` VALUES ('5', '27');
-INSERT INTO `role_menu` VALUES ('6', '1');
-INSERT INTO `role_menu` VALUES ('6', '22');
-INSERT INTO `role_menu` VALUES ('7', '19');
-INSERT INTO `role_menu` VALUES ('7', '26');
+INSERT INTO `role` VALUES ('15', 'dsfsdf', 'fdfdsf', '1515167353', '1', '0', '0', 'dfds', '1');
 
 -- ----------------------------
 -- Table structure for user
