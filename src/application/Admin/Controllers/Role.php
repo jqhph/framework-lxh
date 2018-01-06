@@ -50,7 +50,7 @@ class Role extends Controller
     protected function form(Form $form, Content $content)
     {
         $form->text('title')->rules('required|length_between[2-30]');
-        $form->text('name')->rules('required|length_between[2-10]');
+        $form->text('name')->rules('required|length_between[2-20]');
         $form->text('comment');
     }
 

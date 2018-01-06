@@ -86,13 +86,32 @@ class Admin extends Controller
             // 创建新的管理员账号时，必须输入密码
             $rules = 'required|length_between[5-15]';
         }
-        $form->password('password')->rules($rules)->value(false);
+        $form->text('password')->rules($rules)->value(false);
         $form->text('email')->rules('valid_email');
         $form->text('mobile');
         $form->select('status')->options([1, 0]);
         $form->select('is_admin')->options([0, 1]);
         $form->select('sex')->options([0, 1, 2]);
 
+        $url = \Lxh\Admin\Admin::url('Role')->action('Create');
+        $tabid = str_replace('/', '-', $url);
+        $tablabel = trans('Create Ability');
+
+        $form->multipleSelect('roles')
+            ->options($this->formatRoles())
+            ->help("<a onclick=\"open_tab('$tabid','$url','$tablabel')\">点我创建角色</a>");
+    }
+
+    protected function formatRoles()
+    {
+        $options = [];
+        foreach ($this->model('Role')->find() as &$row) {
+            $options[] = [
+                'value' => $row['id'],
+                'label' => $row['title']
+            ];
+        }
+        return $options;
     }
 
     /**
