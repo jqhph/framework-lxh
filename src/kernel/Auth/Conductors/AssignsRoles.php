@@ -24,6 +24,13 @@ class AssignsRoles
     protected $roles;
 
     /**
+     * 是否先重置用户和角色的关系
+     *
+     * @var bool
+     */
+    protected $reset = false;
+
+    /**
      * Constructor.
      *
      * @param \Lxh\Support\Collection|\Lxh\Auth\Database\Role|string  $roles
@@ -47,6 +54,16 @@ class AssignsRoles
         $roles = Models::role()->findOrCreate($this->roles);
 
         return $this->assignRoles($roles, $authority->getId());
+    }
+
+    /**
+     * @return $this
+     */
+    public function reset()
+    {
+        $this->reset = true;
+
+        return $this;
     }
 
     /**
@@ -131,6 +148,15 @@ class AssignsRoles
         });
 
         $records = $records->all();
+
+        if ($this->reset()) {
+            $user = $this->auth->user();
+            $where = [
+                'entity_id' => $user->getId(),
+                'entity_type' => $user->getMorphType()
+            ];
+            $this->newPivotTableQuery()->where($where)->delete();
+        }
 
         return $records ? $this->newPivotTableQuery()->batchInsert($records) : false;
     }

@@ -116,23 +116,21 @@ class AuthManager
     /**
      * Start a chain, to forbid the given authority an ability.
      *
-     * @param  Model|string  $authority
      * @return \Lxh\Auth\Conductors\GivesAbilities
      */
-    public function forbid($authority)
+    public function forbid()
     {
-        return new Conductors\ForbidsAbilities($authority);
+        return new Conductors\ForbidsAbilities($this->user);
     }
 
     /**
      * Start a chain, to unforbid the given authority an ability.
      *
-     * @param  Model|string  $authority
      * @return \Lxh\Auth\Conductors\RemovesAbilities
      */
-    public function unforbid($authority)
+    public function unforbid()
     {
-        return new Conductors\UnforbidsAbilities($authority);
+        return new Conductors\UnforbidsAbilities($this->user);
     }
 
     /**

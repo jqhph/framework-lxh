@@ -3,6 +3,7 @@ namespace Lxh\MVC;
 
 use Lxh\Exceptions\InternalServerError;
 use Lxh\Contracts\Container\Container;
+use Lxh\Exceptions\InvalidArgumentException;
 use Lxh\Helper\Entity;
 use Lxh\Helper\Util;
 use Lxh\ORM\Query;
@@ -59,17 +60,24 @@ class Model extends Entity
 
     protected $queries = [];
 
-    public function __construct($name, Container $container)
+    public function __construct($name = null, Container $container = null)
     {
-        $this->modelName = $name;
+        $this->modelName = $name ?: $this->parseName();
 
         if (! $this->tableName) $this->tableName = Util::convertWith($name, true);
 
-        $this->container = $container;
+        $this->container = $container ?: container();
 
         $this->events = $container['events'];
 
         $this->initialize();
+    }
+
+    protected function parseName()
+    {
+        $names = explode('\\', __CLASS__);
+
+        return end($names);
     }
 
     /**
@@ -178,14 +186,16 @@ class Model extends Entity
     }
 
     /**
-     * 修改操作
+     * 保存操作，如果没有设置id，则新增
+     *
+     * @return bool
      */
     public function save()
     {
         $data = $this->all();
 
         if (empty($data[$this->idFieldsName])) {
-            return false;
+            return $this->add();
         }
         $id = $data[$this->idFieldsName];
 
@@ -200,16 +210,21 @@ class Model extends Entity
         return $result;
     }
 
-    // 新增一条记录
+    /**
+     * @return bool
+     */
     public function add()
     {
-        $data = $this->all();
+        $input = $this->all();
+        if (! $input) {
+            throw new InvalidArgumentException('新增数据错误，参数不能为空');
+        }
 
-        $this->beforeAdd($data);
+        $this->beforeAdd($input);
 
-        $this->insertId = $this->query()->add($data);
+        $this->insertId = $this->query()->add($input);
 
-        $this->afterAdd($this->insertId, $data);
+        $this->afterAdd($this->insertId, $input);
 
         return $this->insertId;
     }

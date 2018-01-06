@@ -131,7 +131,6 @@ class Menu extends Controller
 
     protected function buildAbilitiesInput(Form $form)
     {
-        auth()->assign(['new', 'hahah'])->then();
         if ($ablities = $this->formatAbilities()) {
             $url = Admin::url('Ability')->action('Create');
             $tabid = str_replace('/', '-', $url);
@@ -141,7 +140,7 @@ class Menu extends Controller
                 ->options($ablities)
                 ->allowClear()
                 ->defaultOption()
-                ->help("关联指定权限。<a onclick=\"open_tab('$tabid', '$url', '$tablabel')\">【点我创建权限】</a>");
+                ->help("关联指定权限。<a onclick=\"open_tab('$tabid', '$url', '$tablabel')\">[点我创建权限]</a>");
         }
     }
 
