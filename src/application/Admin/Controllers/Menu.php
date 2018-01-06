@@ -17,7 +17,6 @@ use Lxh\Admin\Table\Table;
 use Lxh\Admin\Widgets\Box;
 use Lxh\Admin\Widgets\Form;
 use Lxh\Auth\Ability;
-use Lxh\Auth\Database\Models;
 use Lxh\Exceptions\Forbidden;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
@@ -44,26 +43,6 @@ class Menu extends Controller
 
     protected function initialize()
     {
-        $assignedAbilities = Models::table('assigned_abilities');
-        $assignedRoles = Models::table('assigned_roles');
-        $abilities   = Models::table('abilities');
-        $roles       = Models::table('roles');
-
-        $user = admin();
-        $select =
-            "{abilities}.*,$assignedAbilities.entity_id AS role_id,";
-
-        $q = query()
-            ->from('abilities')
-            ->select($select)
-            ->join($assignedAbilities, 'id', "$assignedAbilities.entity_id")
-            ->join($assignedRoles, "$assignedAbilities.entity_id", "$assignedRoles.entity_id")
-            ->where("$assignedRoles.entity_id", $user->getId())
-            ->where($assignedAbilities.'.entity_type', Models::role()->getMorphType())
-            ->where($assignedRoles.'.entity_type', $user->getMorphType())
-            ->querySql();
-
-        console_info($q);
     }
 
     /**
