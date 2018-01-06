@@ -11,7 +11,7 @@ use Lxh\Support\Collection;
 trait FindOrCreate
 {
     /**
-     * Find the given rows, creating the names that don't exist yet.
+     * Find the given names, creating the names that don't exist yet.
      *
      * @param  iterable  $names
      * @return Collection
@@ -30,7 +30,7 @@ trait FindOrCreate
     }
 
     /**
-     * Find by name, creating the ones that don't exist.
+     * Find by names, creating the ones that don't exist.
      *
      * @param  iterable  $names
      * @return Collection
