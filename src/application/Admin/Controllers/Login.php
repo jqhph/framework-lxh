@@ -18,6 +18,15 @@ class Login extends Controller
 {
     public function actionIndex(Request $request, Response $response, $params)
     {
+        $content = $this->admin()
+            ->content()
+            ->independent();
+
+            $content->body(
+                $this->render('index')
+            );
+        return $content->render();
+
         return $this->render('index');
     }
 

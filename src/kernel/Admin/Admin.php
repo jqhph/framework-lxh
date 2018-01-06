@@ -3,14 +3,9 @@
 namespace Lxh\Admin;
 
 use Closure;
-use Lxh\Admin\Auth\Database\Menu;
 use Lxh\Admin\Layout\Content;
 use Lxh\Admin\Widgets\Navbar;
-use Lxh\Database\Eloquent\Model as EloquentModel;
 use Lxh\MVC\Model;
-use Lxh\Support\Facades\Auth;
-use Lxh\Support\Facades\Config;
-use Lxh\Support\Facades\Route;
 use InvalidArgumentException;
 
 /**
@@ -215,6 +210,12 @@ class Admin
         }
         return $script;
     }
+
+    public function indie()
+    {
+
+    }
+
 
     /**
      * 使用js异步加载代码

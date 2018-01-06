@@ -28,6 +28,11 @@ class Content implements Renderable
     protected $description = '';
 
     /**
+     * @var string
+     */
+    protected $view = 'admin::content';
+
+    /**
      * @var Row[]
      */
     protected $rows = [];
@@ -105,6 +110,15 @@ class Content implements Renderable
         }
         
         return $filter;
+    }
+
+    /**
+     * @return $this
+     */
+    public function independent()
+    {
+        $this->view = 'admin::indie-content';
+        return $this;
     }
 
     /**
@@ -265,7 +279,7 @@ class Content implements Renderable
             'asyncJs'     => Admin::async(),
         ];
 
-        return view('admin::content', $items)->render();
+        return view($this->view, $items)->render();
     }
 
     /**

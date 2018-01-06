@@ -146,20 +146,32 @@ button.toast-close-button {
   margin-left: auto;
   margin-right: auto;
 }
+#toast-container > div {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  opacity: 1;
+}
+#toast-container > :hover {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  opacity: 0.9;
+}
 .toast {
-  background-color: #030303;
+  background-color: #71b6f9;
 }
 .toast-success {
-  background-color: #51a351;
+  background-color: rgba(16, 196, 105, 0.8);
+  border: 2px solid #10c469;
 }
 .toast-error {
-  background-color: #bd362f;
+  background-color: rgba(255, 91, 91, 0.8);
+  border: 2px solid #ff5b5b;
 }
 .toast-info {
-  background-color: #2f96b4;
+  background-color: rgba(53, 184, 224, 0.8);
+  border: 2px solid #35b8e0;
 }
 .toast-warning {
-  background-color: #f89406;
+  background-color: rgba(249, 200, 81, 0.8);
+  border: 2px solid #f9c851;
 }
 .toast-progress {
   position: absolute;
