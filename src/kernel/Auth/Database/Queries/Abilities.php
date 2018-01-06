@@ -4,20 +4,22 @@ namespace Lxh\Auth\Database\Queries;
 
 use Lxh\Auth\Database\Models;
 
-use Lxh\Database\Query\Builder;
-use Lxh\Database\Eloquent\Model;
+use Lxh\Support\Collection;
+use Lxh\MVC\Model;
 
 class Abilities
 {
     /**
      * Get a list of the authority's abilities.
      *
-     * @param  \Lxh\Database\Eloquent\Model  $authority
+     * @param  Model  $authority
      * @param  bool  $allowed
-     * @return \Lxh\Database\Eloquent\Collection
+     * @return Collection
      */
     public function getForAuthority(Model $authority)
     {
+        Models::ability()->where()->find();
+
         return Models::ability()
                      ->whereExists($this->getRoleConstraint($authority))
                      ->orWhereExists($this->getAuthorityConstraint($authority))
@@ -27,12 +29,25 @@ class Abilities
     /**
      * Get a constraint for abilities that have been granted to the given authority through a role.
      *
-     * @param  \Lxh\Database\Eloquent\Model  $authority
+     * @param  Model  $authority
      * @param  bool  $allowed
      * @return \Closure
      */
     protected function getRoleConstraint(Model $authority)
     {
+        $entityType = $authority->getMorphType();
+        $id = $authority->getId();
+
+        $assigned = Models::table('assigned_roles');
+        $abilities   = Models::table('abilities');
+        $roles       = Models::table('roles');
+
+        $i = query()->from($abilities)
+            ->where(['entity_id' => $id, 'entity_type' => $entityType])
+            ->find();
+
+        $i = query()->from('role');
+
         return function ($query) use ($authority) {
             $permissions = Models::table('permissions');
             $abilities   = Models::table('abilities');
@@ -58,7 +73,7 @@ class Abilities
     /**
      * Get a constraint for roles that are assigned to the given authority.
      *
-     * @param  \Lxh\Database\Eloquent\Model  $authority
+     * @param  Model  $authority
      * @return \Closure
      */
     protected function getAuthorityRoleConstraint(Model $authority)
@@ -83,7 +98,7 @@ class Abilities
     /**
      * Get a constraint for abilities that have been granted to the given authority.
      *
-     * @param  \Lxh\Database\Eloquent\Model  $authority
+     * @param  Model  $authority
      * @param  bool  $allowed
      * @return \Closure
      */

@@ -63,19 +63,17 @@ class CachedClipboard extends Clipboard implements Contracts
     /**
      * Get the given authority's abilities.
      *
-     * @param  Model  $authority
-     * @param  bool  $allowed
      * @return Collection
      */
-    public function getAbilities(Model $authority)
+    public function getAbilities()
     {
-        $key = $this->getCacheKey($authority, 'abilities');
+        $key = $this->getCacheKey($this->user, 'abilities');
 
         if (is_array($abilities = $this->cache->get($key)) && $abilities) {
             return $abilities;
         }
 
-        $abilities = $this->getFreshAbilities($authority);
+        $abilities = $this->getFreshAbilities();
 
         $this->cache->forever($key, $this->serializeAbilities($abilities));
 
@@ -100,12 +98,12 @@ class CachedClipboard extends Clipboard implements Contracts
      * @param  Model  $authority
      * @return \Lxh\Support\Collection
      */
-    public function getRoles(Model $authority)
+    public function getRoles()
     {
-        $key = $this->getCacheKey($authority, 'roles');
+        $key = $this->getCacheKey($this->user, 'roles');
 
-        return $this->sear($key, function () use ($authority) {
-            return parent::getRoles($authority);
+        return $this->sear($key, function () {
+            return parent::getRoles();
         });
     }
 
@@ -131,10 +129,10 @@ class CachedClipboard extends Clipboard implements Contracts
      * @param  Model  $authority
      * @return $this
      */
-    public function refresh($authority = null)
+    public function refresh()
     {
-        if ( ! is_null($authority)) {
-            return $this->refreshFor($authority);
+        if ( ! is_null($this->user)) {
+            return $this->refreshFor();
         }
 
         if ($this->cache) {
@@ -154,6 +152,7 @@ class CachedClipboard extends Clipboard implements Contracts
      */
     public function refreshFor(Model $authority)
     {
+        $authority = $authority ?: $this->user;
         $this->cache->forget($this->getCacheKey($authority, 'abilities'));
         $this->cache->forget($this->getCacheKey($authority, 'roles'));
 
@@ -190,6 +189,7 @@ class CachedClipboard extends Clipboard implements Contracts
             $this->tag(),
             $type,
             '_auth_',
+            $model->getId()
         ]);
     }
 
@@ -200,7 +200,7 @@ class CachedClipboard extends Clipboard implements Contracts
      */
     protected function tag()
     {
-        return $this->user->id;
+        return $this->user->getId();
     }
 
     /**
@@ -212,7 +212,7 @@ class CachedClipboard extends Clipboard implements Contracts
     protected function serializeAbilities(Collection $abilities)
     {
         return $abilities->map(function ($ability) {
-            return $ability->getAttributes();
+            return $ability->all();
         })->all();
     }
 }

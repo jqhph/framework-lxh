@@ -30,9 +30,9 @@ class Clipboard implements \Lxh\Bouncer\Contracts\Clipboard
      * @param  Model|string|null  $model
      * @return bool
      */
-    public function check(Model $authority, $ability, $model = null)
+    public function check($ability, $model = null)
     {
-        return (bool) $this->checkGetId($authority, $ability, $model);
+        return (bool) $this->checkGetId($ability, $model);
     }
 
     /**
@@ -43,7 +43,7 @@ class Clipboard implements \Lxh\Bouncer\Contracts\Clipboard
      * @param  Model|string|null  $model
      * @return int|bool|null
      */
-    protected function checkGetId(Model $authority, $ability, $model = null)
+    protected function checkGetId($ability, $model = null)
     {
         $applicable = $this->compileAbilityIdentifiers($ability, $model);
 
@@ -51,7 +51,7 @@ class Clipboard implements \Lxh\Bouncer\Contracts\Clipboard
         // If so, we'll return false right away, so as to not pass the check. Then,
         // we'll check if any of them have been allowed & return the matched ID.
         $forbiddenId = $this->findMatchingAbility(
-            $this->getForbiddenAbilities($authority), $applicable, $model, $authority
+            $this->getForbiddenAbilities(), $applicable, $model
         );
 
         if ($forbiddenId) {
@@ -59,7 +59,7 @@ class Clipboard implements \Lxh\Bouncer\Contracts\Clipboard
         }
 
         return $this->findMatchingAbility(
-            $this->getAbilities($authority), $applicable, $model, $authority
+            $this->getAbilities(), $applicable, $model
         );
     }
 
@@ -72,7 +72,7 @@ class Clipboard implements \Lxh\Bouncer\Contracts\Clipboard
      * @param  Model  $authority
      * @return int|null
      */
-    protected function findMatchingAbility($abilities, $applicable, $model, $authority)
+    protected function findMatchingAbility($abilities, $applicable, $model)
     {
         $abilities = $abilities->toBase()->pluck('identifier', 'id');
 
@@ -111,10 +111,11 @@ class Clipboard implements \Lxh\Bouncer\Contracts\Clipboard
      * @param  string  $boolean
      * @return bool
      */
-    public function checkRole(Model $authority, $roles, $boolean = 'or')
+    public function checkRole($roles, $boolean = 'or')
     {
-        $available = $this->getRoles($authority)
-                          ->intersect(Models::role()->getRoleNames($roles));
+        $available = $this->getRoles()
+                          ->intersect(Models::role()
+                          ->getRoleNames($roles));
 
         if ($boolean == 'or') {
             return $available->count() > 0;
@@ -157,12 +158,11 @@ class Clipboard implements \Lxh\Bouncer\Contracts\Clipboard
     /**
      * Get the given authority's roles.
      *
-     * @param  Model  $authority
      * @return \Lxh\Support\Collection
      */
-    public function getRoles(Model $authority)
+    public function getRoles()
     {
-        $collection = $authority->roles()->get(['name'])->pluck('name');
+        $collection = $this->user->roles()->get(['name'])->pluck('name');
 
         // In Laravel 5.1, "pluck" returns an Eloquent collection,
         // so we call "toBase" on it. In 5.2, "pluck" returns a
@@ -180,13 +180,9 @@ class Clipboard implements \Lxh\Bouncer\Contracts\Clipboard
      * @param  Model  $authority
      * @return array
      */
-    public function getAbilities(Model $authority = null)
+    public function getAbilities()
     {
-        if (! $authority) {
-            $authority = $this->user;
-        }
-
-        $abilities = (new AbilitiesQuery)->getForAuthority($authority);
+        $abilities = Models::ability()->getForAuthority($this->user);
 
         $abilities = $this->formatArray($abilities);
 
@@ -208,8 +204,8 @@ class Clipboard implements \Lxh\Bouncer\Contracts\Clipboard
      * @param  Model  $authority
      * @return Collection
      */
-    public function getForbiddenAbilities(Model $authority)
+    public function getForbiddenAbilities()
     {
-        return $this->getAbilities($authority, false);
+        return $this->getAbilities(true);
     }
 }

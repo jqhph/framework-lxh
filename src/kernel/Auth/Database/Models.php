@@ -44,6 +44,7 @@ class Models
         'roles' => 'role',
         'abilities' => 'abilities',
         'assigned_roles' => 'assigned_roles',
+        'assigned_abilities' => 'assigned_abilities'
     ];
 
     /**
