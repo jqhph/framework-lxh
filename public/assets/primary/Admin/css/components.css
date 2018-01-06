@@ -885,7 +885,7 @@ File: Components
   padding: 15px 15px 5px;
 }
 .portlet-default .portlet-title {
-  color: #797979 !important;
+  color: #555 !important;
 }
 .portlet .portlet-heading.bg-custom a,
 .portlet .portlet-heading.bg-purple a,

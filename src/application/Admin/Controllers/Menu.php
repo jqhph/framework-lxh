@@ -122,11 +122,8 @@ class Menu extends Controller
             Ability::READ, Ability::CREATE
         ];
 
-        $form->select('quick_relate_ability')
-            ->options($support)
-            ->allowClear()
-            ->defaultOption()
-            ->help("快捷关联与此菜单控制器对应的权限，如权限不存在则会自动创建。如是空控制器，则此选项无效！");
+        $form->text('quick_relate_ability')
+            ->help("快捷关联权限，请输入权限唯一标识。如权限不存在则会自动创建。");
     }
 
     protected function buildAbilitiesInput(Form $form)
@@ -140,7 +137,7 @@ class Menu extends Controller
                 ->options($ablities)
                 ->allowClear()
                 ->defaultOption()
-                ->help("关联指定权限。<a onclick=\"open_tab('$tabid', '$url', '$tablabel')\">[点我创建权限]</a>");
+                ->help("关联已有权限。<a onclick=\"open_tab('$tabid', '$url', '$tablabel')\">[点我创建权限]</a>");
         }
     }
 
