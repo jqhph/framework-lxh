@@ -3,7 +3,7 @@
 namespace Lxh\Auth\Database\Queries;
 
 use Lxh\Auth\Database\Models;
-use Lxh\Database\Eloquent\Model;
+use Lxh\MVC\Model;
 
 class AbilitiesForModel
 {
@@ -26,8 +26,8 @@ class AbilitiesForModel
     /**
      * Constrain a query to an ability for a specific model or wildcard.
      *
-     * @param  \Lxh\Database\Eloquent\Builder|\Lxh\Database\Query\Builder  $query
-     * @param  \Lxh\Database\Eloquent\Model|string  $model
+     * @param   $query
+     * @param  Model|string  $model
      * @param  bool  $strict
      * @return void
      */
@@ -45,7 +45,7 @@ class AbilitiesForModel
     /**
      * Constrain a query to a model wiildcard.
      *
-     * @param  \Lxh\Database\Eloquent\Builder|\Lxh\Database\Query\Builder  $query
+     * @param  $query
      * @param  bool  $strict
      * @return void
      */
@@ -61,8 +61,8 @@ class AbilitiesForModel
     /**
      * Constrain a query to an ability for a specific model.
      *
-     * @param  \Lxh\Database\Eloquent\Builder|\Lxh\Database\Query\Builder  $query
-     * @param  \Lxh\Database\Eloquent\Model  $model
+     * @param  $query
+     * @param  Model  $model
      * @param  bool  $strict
      * @return void
      */
@@ -78,7 +78,7 @@ class AbilitiesForModel
     /**
      * Get the constraint for the ability subquery.
      *
-     * @param  \Lxh\Database\Eloquent\Model  $model
+     * @param  Model  $model
      * @param  bool  $strict
      * @return \Closure
      */

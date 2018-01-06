@@ -44,7 +44,7 @@ class AssignsRoles
     {
         $authority = $this->auth->user();
 
-        $roles = Models::role()->findOrCreateRoles($this->roles);
+        $roles = Models::role()->findOrCreate($this->roles);
 
         return $this->assignRoles($roles, $authority->getId());
     }

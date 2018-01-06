@@ -131,6 +131,7 @@ class Menu extends Controller
 
     protected function buildAbilitiesInput(Form $form)
     {
+        auth()->assign(['new', 'hahah'])->then();
         if ($ablities = $this->formatAbilities()) {
             $url = Admin::url('Ability')->action('Create');
             $tabid = str_replace('/', '-', $url);

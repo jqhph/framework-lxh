@@ -68,9 +68,9 @@ class Menu extends Model
         $controller = Util::convertWith($input['controller'], true, '-');
         $abilityName = "$controller.{$this->quickAbility}";
 
-//        $ability = Models::ability()->findOrCreate($abilityName);
+        $ability = Models::ability()->findOrCreate($abilityName);
 
-//        return $input['ability_id'] = $ability->get('id');
+        return $input['ability_id'] = current($ability->all())['id'];
     }
 
     // 保存数据前置钩子

@@ -69,48 +69,6 @@ trait IsRole
     }
 
     /**
-     * Find the given roles, creating the names that don't exist yet.
-     *
-     * @param  iterable  $roles
-     * @return Collection
-     */
-    public function findOrCreateRoles($roles)
-    {
-        $roles = Helpers::groupModelsAndIdentifiersByType($roles);
-
-        if ($roles['integers']) {
-            $roles['integers'] = $this->where('id', 'IN', $roles['integers'])->find();
-        }
-
-
-        $roles['strings'] = $this->findOrCreateRolesByName($roles['strings']);
-
-        return new Collection(Arr::collapse($roles));
-    }
-
-    /**
-     * Find roles by name, creating the ones that don't exist.
-     *
-     * @param  iterable  $names
-     * @return Collection
-     */
-    protected function findOrCreateRolesByName($names)
-    {
-        if (empty($names)) {
-            return [];
-        }
-
-        $existing = (new Collection($this->where('name', 'IN', $names)->find()))->keyBy('name');
-
-        return (new Collection($names))
-                ->diff($existing->pluck('name'))
-                ->map(function ($name) {
-                    return $this->createAndReturn(compact('name'));
-                })
-                ->merge($existing);
-    }
-
-    /**
      * Get the IDs of the given roles.
      *
      * @param  iterable  $roles

@@ -6,7 +6,7 @@ use Lxh\MVC\Model;
 
 class Ability extends Model
 {
-    use Concerns\IsAbility;
+    use Concerns\IsAbility, Concerns\FindOrCreate;
 
     protected $tableName = 'abilities';
 
@@ -15,20 +15,26 @@ class Ability extends Model
      *
      * @param $name
      */
-    protected function createAbilityAndReturn($names, array $attributes = [])
+    protected function createAndReturn($names, array $attributes = [])
     {
-        $attributes = $names + $this->formatCreateAttributes($attributes);
+        $attributes = $this->formatCreateAttributes((array)$names, $attributes);
+
         $newId = $this->query()->insert($attributes);
 
         if (! $newId) return [];
 
         $attributes[$this->idFieldsName] = $newId;
+
         return $attributes;
     }
 
-    protected function formatCreateAttributes(array &$attributes = [])
+    protected function formatCreateAttributes(array $names, array &$attributes = [])
     {
-        return array_merge([
+        if (empty($attributes['title'])) {
+            $attributes['title'] = current($names);
+        }
+
+        return $names + array_merge([
             'created_at' => time(),
         ], $attributes);
     }

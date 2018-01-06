@@ -6,7 +6,7 @@ use Lxh\Admin\MVC\Model;
 
 class Role extends Model
 {
-    use Concerns\IsRole;
+    use Concerns\IsRole, Concerns\FindOrCreate;
 
     /**
      * 权限实体类型

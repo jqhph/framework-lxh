@@ -2,11 +2,14 @@
 
 namespace Lxh\Auth\Database\Concerns;
 
-use App\User;
+use Lxh\Auth\Helpers;
+use Lxh\Container\Container;
+use Lxh\MVC\Model;
 use Lxh\Auth\Database\Role;
 use Lxh\Auth\Database\Models;
-use Lxh\Auth\Database\Scope\BaseTenantScope;
 use Lxh\Auth\Database\Queries\AbilitiesForModel;
+use Lxh\Support\Arr;
+use Lxh\Support\Collection;
 
 trait IsAbility
 {
@@ -17,17 +20,12 @@ trait IsAbility
      */
     public static function bootIsAbility()
     {
-        BaseTenantScope::register(static::class);
-
-        static::creating(function ($ability) {
-            Models::scope()->applyToModel($ability);
-        });
     }
 
     /**
      * Create a new ability for a specific model.
      *
-     * @param  \Lxh\Database\Eloquent\Model|string  $model
+     * @param  Model|string  $model
      * @param  string|array  $attributes
      * @return static
      */
@@ -43,7 +41,7 @@ trait IsAbility
     /**
      * Make a new ability for a specific model.
      *
-     * @param  \Lxh\Database\Eloquent\Model|string  $model
+     * @param  Model|string  $model
      * @param  string|array  $attributes
      * @return static
      */
@@ -53,26 +51,13 @@ trait IsAbility
             $attributes = ['name' => $attributes];
         }
 
-        if ($model === '*') {
-            return (new static)->forceFill($attributes + [
-                'entity_type' => '*',
-            ]);
-        }
-
-        if (is_string($model)) {
-            $model = new $model;
-        }
-
-        return (new static)->forceFill($attributes + [
-            'entity_type' => $model->getMorphClass(),
-            'entity_id'   => $model->exists ? $model->getId() : null,
-        ]);
+        return Models::ability()->attach((array) $attributes);
     }
 
     /**
      * The roles relationship.
      *
-     * @return \Lxh\Database\Eloquent\Relations\MorphToMany
+     * @return array
      */
     public function roles()
     {
@@ -81,14 +66,12 @@ trait IsAbility
             'entity',
             Models::table('permissions')
         );
-
-        return Models::scope()->applyToRelation($relation);
     }
 
     /**
      * The users relationship.
      *
-     * @return \Lxh\Database\Eloquent\Relations\MorphToMany
+     * @return array
      */
     public function users()
     {
@@ -97,8 +80,6 @@ trait IsAbility
             'entity',
             Models::table('permissions')
         );
-
-        return Models::scope()->applyToRelation($relation);
     }
 
     /**
@@ -108,18 +89,14 @@ trait IsAbility
      */
     final public function getIdentifierAttribute()
     {
-        $slug = $this->attributes['name'];
+        $slug = $this->items['name'];
 
-        if ($this->attributes['entity_type']) {
-            $slug .= '-'.$this->attributes['entity_type'];
+        if ($this->items['entity_type']) {
+            $slug .= '-'.$this->items['entity_type'];
         }
 
-        if ($this->attributes['entity_id']) {
-            $slug .= '-'.$this->attributes['entity_id'];
-        }
-
-        if ($this->attributes['only_owned']) {
-            $slug .= '-owned';
+        if ($this->items['entity_id']) {
+            $slug .= '-'.$this->items['entity_id'];
         }
 
         return strtolower($slug);
@@ -138,7 +115,7 @@ trait IsAbility
     /**
      * Constrain a query to having the given name.
      *
-     * @param  \Lxh\Database\Eloquent\Builder|\Lxh\Database\Query\Builder  $query
+     * @param   $query
      * @return string|array  $name
      * @return bool  $strict
      * @return void
@@ -151,13 +128,13 @@ trait IsAbility
             $names[] = '*';
         }
 
-        $query->whereIn("{$this->table}.name", $names);
+        $query->where("{$this->table}.name", 'IN', $names);
     }
 
     /**
      * Constrain a query to simple abilities.
      *
-     * @param  \Lxh\Database\Eloquent\Builder|\Lxh\Database\Query\Builder  $query
+     * @param    $query
      * @return void
      */
     public function scopeSimpleAbility($query)
@@ -168,8 +145,8 @@ trait IsAbility
     /**
      * Constrain a query to an ability for a specific model.
      *
-     * @param  \Lxh\Database\Eloquent\Builder|\Lxh\Database\Query\Builder  $query
-     * @param  \Lxh\Database\Eloquent\Model|string  $model
+     * @param  $query
+     * @param  Model|string  $model
      * @param  bool  $strict
      * @return void
      */
