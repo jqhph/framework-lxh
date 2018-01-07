@@ -40,7 +40,7 @@ class Menu extends Model
         return $this->query()->where(['deleted' => 0, 'show' => 1])->read();
     }
 
-    protected function beforeAdd(array & $input)
+    protected function beforeAdd(array &$input)
     {
         $input['created_at'] = $_SERVER['REQUEST_TIME'];
 
@@ -63,21 +63,22 @@ class Menu extends Model
         if ($this->selectedAbility && is_int($this->selectedAbility)) {
             return $input['ability_id'] = $this->selectedAbility;
         }
-        if (! $this->quickAbility || empty($input['controller'])) return;
+        if (! $this->quickAbility) return;
 
-        $controller = Util::convertWith($input['controller'], true, '-');
-        $abilityName = "$controller.{$this->quickAbility}";
+//        $controller = Util::convertWith($input['controller'], true, '-');
+        $abilityName = $this->quickAbility;
 
-        $ability = Models::ability()->findOrCreate($abilityName);
+        $abilityModel = Models::ability();
+        $ability = $abilityModel->findOrCreate($abilityName);
 
-        return $input['ability_id'] = current($ability->all())['id'];
+        $input['ability_id'] = current($ability->all())[$abilityModel->getKeyName()];
     }
 
     // 保存数据前置钩子
-    protected function beforeSave($id, array & $input)
+    protected function beforeSave($id, array &$input)
     {
-        if (isset($data['show'])) {
-            if (! $data['show']) $data['show'] = 0;
+        if (isset($input['show'])) {
+            if (! $input['show']) $input['show'] = 0;
         }
         $this->setupAbility($input);
     }

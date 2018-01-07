@@ -331,11 +331,7 @@ class Model extends Entity
      */
     protected function query($name = null)
     {
-        if (isset($this->queries[$name])) {
-            return $this->queries[$name]->from($this->tableName);
-        }
-
-        return $this->queries[$name] = query($name ?: $this->connectionType)->from($this->tableName);
+        return query($name ?: $this->connectionType)->from($this->tableName);
     }
 
 }

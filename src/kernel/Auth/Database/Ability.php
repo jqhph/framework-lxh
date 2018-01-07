@@ -36,6 +36,7 @@ class Ability extends Model
 
         return $names + array_merge([
             'created_at' => time(),
+            'created_by_id' => admin()->getId() ?: 0,
         ], $attributes);
     }
 
