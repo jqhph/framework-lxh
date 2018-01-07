@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2018-01-06 18:43:13
+Date: 2018-01-08 00:11:00
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -31,7 +31,7 @@ CREATE TABLE `abilities` (
   `comment` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of abilities
@@ -45,7 +45,8 @@ INSERT INTO `abilities` VALUES ('6', 'menu.add', '菜单新增', '1515207911', '
 INSERT INTO `abilities` VALUES ('7', 'menu.edit', '菜单编辑', '1515207928', '0', '1', '0', '1', '');
 INSERT INTO `abilities` VALUES ('8', 'menu.delete', '菜单删除', '1515207953', '0', '1', '0', '1', '');
 INSERT INTO `abilities` VALUES ('9', 'system.setting', '系统设置', '1515213158', '0', '1', '0', '1', '系统设置菜单进入权限');
-INSERT INTO `abilities` VALUES ('17', 'admin.admin.read', 'admin.admin.read', '1515230219', '0', '0', '0', '1', '');
+INSERT INTO `abilities` VALUES ('17', 'admin.read', '管理员查看', '1515230219', '1515295922', '0', '0', '1', '');
+INSERT INTO `abilities` VALUES ('18', 'user.manager', 'user.manager', '1515296457', '0', '0', '0', '1', '');
 
 -- ----------------------------
 -- Table structure for admin
@@ -69,6 +70,7 @@ CREATE TABLE `admin` (
   `reg_ip` char(15) NOT NULL DEFAULT '',
   `is_admin` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1激活，0禁用',
+  `created_by_id` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
@@ -76,7 +78,7 @@ CREATE TABLE `admin` (
 -- ----------------------------
 -- Records of admin
 -- ----------------------------
-INSERT INTO `admin` VALUES ('1', 'admin', '$2y$10$IK.HGNDMOV9LYHIG7jMxb.0iEV85SSkf6Lv8GN9aaAuAIFbsVnaSS', 'dfdsfdsdsfdfdfdsfdsfsd', '', 'J', 'qh', '', '0', '0', '1499568986', '0', '127.0.0.1', '0', '127.0.0.1', '1', '1');
+INSERT INTO `admin` VALUES ('1', 'admin', '$2y$10$IK.HGNDMOV9LYHIG7jMxb.0iEV85SSkf6Lv8GN9aaAuAIFbsVnaSS', 'dfdsfdsdsfdfdfdsfdsfsd', '', 'J', 'qh', '', '0', '0', '1499568986', '0', '127.0.0.1', '0', '127.0.0.1', '1', '1', '0');
 
 -- ----------------------------
 -- Table structure for assigned_abilities
@@ -188,7 +190,7 @@ INSERT INTO `menu` VALUES ('17', 'Setting', '', '1', '13', '1', 'System', 'Setti
 INSERT INTO `menu` VALUES ('18', 'Permissions', 'fa fa-pencil fa-fw', '1', '0', '1', '', '', '0', '1501583290', '1', '1', '1', '0');
 INSERT INTO `menu` VALUES ('19', 'Role', 'fa fa-user-plus', '1', '18', '1', 'Role', 'List', '0', '1501592174', '1', '1', '0', '0');
 INSERT INTO `menu` VALUES ('34', 'Products system', 'fa fa-opencart', '1', '0', '1', '', '', '0', '1508157506', '1', '1', '0', '0');
-INSERT INTO `menu` VALUES ('43', 'User Manager', 'fa fa-users', '1', '0', '1', '', '', '0', '1515230163', '1', '1', '0', '0');
+INSERT INTO `menu` VALUES ('43', 'User Manager', 'fa fa-users', '1', '0', '1', '', '', '0', '1515230163', '1', '1', '0', '18');
 INSERT INTO `menu` VALUES ('44', 'Admin', '', '1', '43', '1', 'Admin', 'List', '0', '1515230219', '1', '1', '0', '17');
 INSERT INTO `menu` VALUES ('36', 'Category', '', '1', '34', '1', 'Category', 'List', '0', '1508240328', '1', '1', '1', '0');
 INSERT INTO `menu` VALUES ('35', 'Products', '', '1', '34', '1', 'Product', 'List', '0', '1508157865', '1', '1', '0', '0');
@@ -326,12 +328,13 @@ CREATE TABLE `role` (
   `type` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1后台角色，2前台角色',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of role
 -- ----------------------------
 INSERT INTO `role` VALUES ('15', 'dsfsdf', 'fdfdsf', '1515167353', '1', '0', '0', 'dfds', '1');
+INSERT INTO `role` VALUES ('32', 'admin.normal', '', '1515236040', '1', '0', '0', '普通管理员', '1');
 
 -- ----------------------------
 -- Table structure for user
