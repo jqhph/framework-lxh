@@ -11,8 +11,9 @@ namespace Lxh\Admin\Models;
 use Lxh\Contracts\Container\Container;
 use Lxh\Helper\Entity;
 use Lxh\MVC\Model;
+use Lxh\MVC\Session;
 
-class User extends Model
+class User extends Session
 {
     /**
      * 默认查询的字段
@@ -28,18 +29,9 @@ class User extends Model
      */
     protected $sessionKey = 'user';
 
-    protected $session;
-
-    protected $cookie;
-
     public function __construct($name, Container $container)
     {
         parent::__construct($name, $container);
-
-        $this->session = $this->container['session'];
-        $this->cookie = $this->container['cookie'];
-
-        $this->fillSession();
     }
 
     /**
@@ -126,63 +118,6 @@ class User extends Model
     }
 
     /**
-     * 缓存用户id到cookie
-     *
-     * @return void
-     */
-    public function saveCookie()
-    {
-        // 默认一个月免登陆
-        setcookie($this->sessionKey, $this->id, time() + config('login-time', 2592000));
-    }
-
-    /**
-     * 缓存用户数据到session
-     *
-     * @return void
-     */
-    public function saveSession()
-    {
-        $data = [];
-        foreach ($this->all() as $k => & $v) {
-            if ($k == 'password') continue;
-
-            $data[$k] = $v;
-        }
-
-        $this->session->set($this->sessionKey, $data);
-
-        $this->session->save();
-    }
-
-    /**
-     * 注入session数据
-     *
-     * @return void
-     */
-    public function fillSession()
-    {
-        // 检查session是否存在用户数据
-        if ($this->session->has($this->sessionKey)) {
-            $this->fill($this->session->get($this->sessionKey));
-            return;
-        }
-
-        // 检测cookie是否存在用户数据
-        if (! $this->cookie->has($this->sessionKey)) {
-            return;
-        }
-
-        $this->id = $this->cookie->get($this->sessionKey);
-
-        // 查出用户数据
-        $this->find();
-
-        // 保存到session
-        $this->saveSession();
-    }
-
-    /**
      * 判断是否已经登录
      *
      * @return int
@@ -190,32 +125,5 @@ class User extends Model
     public function auth()
     {
         return $this->id;
-    }
-
-    public function isAdmin()
-    {
-        return $this->is_admin;
-    }
-
-
-    /**
-     * 密码加密
-     *
-     * @param  string $pwd
-     * @return string
-     */
-    public function encrypt($pwd)
-    {
-        return password_hash($pwd, PASSWORD_DEFAULT);
-    }
-
-    /**
-     * 校验密码
-     *
-     * @return bool
-     */
-    public function passwordVertify($pwd, $hash)
-    {
-        return password_verify($pwd, $hash);
     }
 }

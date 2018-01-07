@@ -11,8 +11,10 @@ namespace Lxh\Admin\Models;
 use Lxh\Contracts\Container\Container;
 use Lxh\Helper\Entity;
 use Lxh\MVC\Model;
+use Lxh\MVC\Session;
+use Lxh\Support\Password;
 
-class Admin extends Model
+class Admin extends Session
 {
     /**
      * 默认查询的字段
@@ -29,27 +31,6 @@ class Admin extends Model
     protected $morphType = 1;
 
     /**
-     * 缓存用户信息的session和cookie键名
-     *
-     * @var string
-     */
-    protected $sessionKey = '$admin';
-
-    protected $session;
-
-    protected $cookie;
-
-    public function __construct($name, Container $container)
-    {
-        parent::__construct($name, $container);
-
-        $this->session = $this->container['session'];
-        $this->cookie = $this->container['cookie'];
-
-        $this->fillSession();
-    }
-
-    /**
      * 注册
      *
      * @param  array $options 注册参数
@@ -58,12 +39,19 @@ class Admin extends Model
     public function register(array & $options, $ip)
     {
         $this->username      = $options['username'];
-        $this->password      = $this->encrypt($options['password']);
+        $this->password      = Password::encrypt($options['password']);
         $this->reg_ip        = $ip;
         $this->last_login_ip = $ip;
         $this->created_at    = time();
 
         return $this->add();
+    }
+
+    public function beforeAdd(array &$input)
+    {
+        $input['created_at'] = time();
+        $input['created_by_id'] = admin()->getId() ?: 0;
+
     }
 
     /**
@@ -115,10 +103,10 @@ class Admin extends Model
         }
 
         // 注入用户信息
-        $this->fill($userData);
+        $this->attach($userData);
 
         // 验证密码是否正确
-        if (! $skipVertify && ! $this->passwordVertify($password, $userData['password'])) {
+        if (! $skipVertify && ! Password::verify($password, $userData['password'])) {
             return false;
         }
 
@@ -132,16 +120,6 @@ class Admin extends Model
         return true;
     }
 
-    /**
-     * 缓存用户id到cookie
-     *
-     * @return void
-     */
-    public function saveCookie()
-    {
-        // 默认一个月免登陆
-        setcookie($this->sessionKey, $this->id, time() + config('login-time', 2592000));
-    }
 
     /**
      * @return int
@@ -149,52 +127,6 @@ class Admin extends Model
     public function getMorphType()
     {
         return $this->morphType;
-    }
-
-    /**
-     * 缓存用户数据到session
-     *
-     * @return void
-     */
-    public function saveSession()
-    {
-        $data = [];
-        foreach ($this->all() as $k => & $v) {
-            if ($k == 'password') continue;
-
-            $data[$k] = $v;
-        }
-
-        $this->session->set($this->sessionKey, $data);
-
-        $this->session->save();
-    }
-
-    /**
-     * 注入session数据
-     *
-     * @return void
-     */
-    public function fillSession()
-    {
-        // 检查session是否存在用户数据
-        if ($this->session->has($this->sessionKey)) {
-            $this->fill($this->session->get($this->sessionKey));
-            return;
-        }
-
-        // 检测cookie是否存在用户数据
-        if (! $this->cookie->has($this->sessionKey)) {
-            return;
-        }
-
-        $this->id = $this->cookie->get($this->sessionKey);
-
-        // 查出用户数据
-        $this->find();
-
-        // 保存到session
-        $this->saveSession();
     }
 
     /**
@@ -212,25 +144,4 @@ class Admin extends Model
         return $this->is_admin;
     }
 
-
-    /**
-     * 密码加密
-     *
-     * @param  string $pwd
-     * @return string
-     */
-    public function encrypt($pwd)
-    {
-        return password_hash($pwd, PASSWORD_DEFAULT);
-    }
-
-    /**
-     * 校验密码
-     *
-     * @return bool
-     */
-    public function passwordVertify($pwd, $hash)
-    {
-        return password_verify($pwd, $hash);
-    }
 }

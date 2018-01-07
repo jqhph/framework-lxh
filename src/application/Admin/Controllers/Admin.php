@@ -102,6 +102,21 @@ class Admin extends Controller
             ->help("<a onclick=\"open_tab('$tabid','$url','$tablabel')\">点我创建角色</a>");
     }
 
+    public function rules()
+    {
+        $rules = [
+            'username' => 'required|lengthBetween:4,15',
+            'password' => 'lengthBetween:5,15',
+            'email' => 'email'
+        ];
+
+        if (! $this->id) {
+            $rules['password'] = 'required|lengthBetween:5,15';
+        }
+
+        return $rules;
+    }
+
     protected function formatRoles()
     {
         $options = [];

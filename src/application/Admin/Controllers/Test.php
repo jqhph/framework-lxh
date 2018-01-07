@@ -20,6 +20,7 @@ class Test extends Controller
 {
     public function actionTest(Request $req, Response $resp, & $params)
     {
+        return $this->render('test');
 //     header ('Content-type: image/png');
         $resp->contentType('image/png');
 

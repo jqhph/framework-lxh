@@ -1,544 +1,122 @@
-<?php echo load_css('admin/im.min')?>
-<div id="ember963" class="ember-view">    <div id="kchat-im-panel" class="kchat-group-chat ember-view ui-draggable" style="width: 1024px; right: auto; height: 622px; bottom: auto; left: 548px; top: -27px;"><style type="text/css">
-         #kchat-im-panel {
-            margin-left: auto;
-            left: auto;
-            right: 50px;
-         }
-      </style>
-      <header id="ember1329" class="kchat-im-panel-header ember-view"><div class="kchat-alert warning">
-            <!-- 目前有warning & success两种通知状态， js控制添加.show出现，效果点『转接客服』查看-->
-            <p></p>
-         </div>
+<!DOCTYPE html>
+<!-- saved from url=(0173)https://www.ly.com/scenery/zhuanti/spokesman?from=singlemessage#/index/share?open_id=oKpeW0jEyPwrmYzv8_4Dw_5VOz8A&sourceId=24621&project=0&pagetype=share&spm=3.23163.23165.1 -->
+<html style="font-size: 54.9333px;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script id="_1515240673992_3223" src="./分享设置_files/detect.json"></script>
 
-         <div id="ember1330" class="kchat-im-panel-header-user ember-view"><div class="drag-handle js-drag-handle ui-draggable-handle"></div>
+    <meta name="renderer" content="webkit">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>分享设置</title>
 
-            <img src="/images/icons/admin.jpg" alt="">
+    <style>
+*{margin:0;padding:0}address,caption,cite,code,dfn,em,th,var{font-style:normal}ul{list-style:none}table{border-collapse:collapse}body{overflow-x:hidden;font-size:14px;line-height:1.5;color:#333;font-family:arial,sans-serif}.clearfix:before,.clearfix:after{display:table;content:""}.clearfix:after{clear:both}a{text-decoration:none;color:#333}a{-webkit-tap-highlight-color:rgba(0,0,0,0)}.touched{background:#ddd}.none{display:none}.page-header{background:#f7f7f7;position:relative;border-bottom:1px solid #eee}.page-header.fixed{position:fixed;left:0;top:0;width:100%}.page-header.fixed-replace{position:absolute}.page-header h2{line-height:44px;font-size:18px;text-align:center;font-weight:400}.page-back{height:44px;width:44px;position:absolute;left:0;top:0}.page-back:before{content:'';display:block;width:18px;height:15px;margin:16px 0 0 15px;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAeBAMAAAC2z6FgAAAAGFBMVEUAAAAuvVkuvVkuvVkuvVkuvVkuvVkuvVmCtLdUAAAAB3RSTlMAV0aayAwxI3b28AAAAElJREFUKM9jgABGVwZ0IF4SgCbCWF7ugK6ovFwAQ1HhEFCkXo4OGMwxhcQxhRgxhRjUMWxkYMKwclApK8NUZoAuxFTMgAESEEwAnYQ88ucNmLgAAAAASUVORK5CYII=) no-repeat;background-size:contain}.header-right,.header-menu-btn{position:absolute;top:0;right:0;line-height:44px;padding:0 15px 0 10px}.header-menu-btn:before,.header-menu-btn:after{content:""}.header-menu-btn:before,.header-menu-btn i,.header-menu-btn:after{display:inline-block;width:4px;height:4px;background:#2ebd59;border-radius:50%;margin-left:4px;vertical-align:middle}.header-menu{position:absolute;right:5px;border-radius:5px;background:#f7f7f7;font-size:18px;z-index:1001;-webkit-transition:all .2s ease-in-out;transition:all .2s linear;opacity:0;-webkit-transform:translate(42px,-76px) scale(0);-moz-transform:translate(42px,-76px) scale(0);-ms-transform:translate(42px,-76px) scale(0);transform:translate(42px,-76px) scale(0)}.header-menu.open{opacity:1;-webkit-transform:translate(0,0) scale(1);-moz-transform:translate(0,0) scale(1);-ms-transform:translate(0,0) scale(1);transform:translate(0,0) scale(1)}.header-menu a{display:block;line-height:44px;width:132px;border-bottom:1px solid #434950;background:#434950;color:#ccc}.header-menu a:last-child{border-bottom:0}.header-menu:before{content:"";position:absolute;top:-9px;right:15px;height:0;border-style:solid;border-color:#434950 transparent;border-width:0 9px 9px}.header-menu a i{display:inline-block;width:20px;height:20px;float:left;margin:11px 6px 0 12px;background:url(//pic4.40017.cn/index/slide/2016/04/06/16/2AL3E9.png) scroll no-repeat 0 0 transparent;background-size:20px 80px;vertical-align:center}.header-menu .my i{background-position:0 -20px}.header-menu .login i{background-position:0 -40px}.header-menu .logout i{background-position:0 -60px;margin:12px 6px 0 12px}.header-menu .home{border-radius:5px 5px 0 0}.header-menu .login,.header-menu .logout{border-radius:0 0 5px 5px}.header-menu-bg{position:fixed;left:0;top:0;width:100%;height:100%;-webkit-transition:all .2s ease-in-out;transition:all .2s linear;opacity:0;z-index:1000}.header-menu-bg.open{opacity:.3}.side-back-top{position:fixed;bottom:40px;right:20px;width:45px;height:45px;background:#fff;border:1px solid #eee;border-radius:50%;display:none}.side-back-top:after{width:12px;height:12px;border:2px solid #666;border-width:2px 2px 0 0;transform:rotate(-45deg);-webkit-transform:rotate(-45deg);content:'';position:absolute;top:12px;left:16px}.side-back-top:before{width:2px;height:15px;content:'';position:absolute;top:12px;left:22px;background:#666}.side-back-top i{width:2px;height:2px;position:absolute;top:29px;left:22px;background:#666;box-shadow:0 4px #666}.page-footer{background:#f0f0f0}.page-footer .tool{padding:0 6px;background:#e2e2e2;height:30px}.page-footer .tool a,.page-footer .tool span{display:inline-block;padding:0 8px;line-height:30px;color:#7f7f7f}.page-footer .tool .logined{color:#4baf34}.page-footer .tool .back-top{float:right}.page-footer .tool .back-top:after{content:"";display:inline-block;width:12px;height:12px;border-left:1px solid #a1a1a1;border-top:1px solid #a1a1a1;-webkit-transform:rotate(45deg);transform:rotate(45deg);margin:0 5px;position:relative;top:6px}body .page-footer .nav{text-align:center}body .page-footer .nav a{display:inline-block;padding:10px 0 0;color:#666;line-height:1;width:24%}body .page-footer .service-tel{width:auto;background:0 0}body .page-footer p{text-align:center;color:#ccc;font-size:12px;line-height:30px;padding:0}#pageLoading,.page-loading{position:fixed;width:100%;height:100%;left:0;top:0;display:none}.loading-img{width:66px;height:66px;border-radius:50%;background:url(//img1.40017.cn/touch/public/common/common-loading.gif) scroll no-repeat center center transparent;background-size:66px 66px}#pageLoading .loading-img,.page-loading .loading-img{display:block;position:relative;left:50%;margin-left:-38px;top:50%;margin-top:-30px}.lazyload-img{background:url(//img1.40017.cn/touch/public/lazyload/loading.gif) center center no-repeat #fff}.collect{background:url(//img1.40017.cn/touch/public/part/collect.png) no-repeat 0 0}.collected{background:url(//img1.40017.cn/touch/public/part/collected.png) no-repeat 0 0}.collected,.collect{background-size:17px 16px}.gray-star{background:url(//img1.40017.cn/touch/public/part/gray-star.png) no-repeat 0 0}.light-star{background:url(//img1.40017.cn/touch/public/part/light-star.png) no-repeat 0 0}.light-star,.gray-star{width:24px;height:24px;display:block;background-size:24px}.public-notice{background-color:#fff4d9;color:#ff8400;padding:0 1.07em}.public-notice i:before{position:absolute;width:.14em;height:.1em;border-top:.4em solid #fff;border-bottom:.15em solid #FFF;color:#632525;top:23%;left:43%;content:""}.public-notice i{height:1.07em;width:1.07em;display:inline-block;vertical-align:middle;background-color:#ff8400;border-radius:.54em;color:#fff;position:relative;margin-right:.28em}.public-notice span{font-size:.86em}
+*{margin:0;padding:0;border:none;outline:0;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}ol,ul{list-style:none}button,input,select,textarea{-webkit-appearance:none;-webkit-user-select:auto;font-family:"HiraginoSansGB W6","microsoft yahei"}a{display:block;text-decoration:none}img{display:block}html{max-width:750px;margin:0 auto;height:100%}body{overflow-x:hidden;font-family:"HiraginoSansGB W6","microsoft yahei";height:100%;background:#efeff4;font-size:.28rem}.both{width:100%;height:100%;display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-webkit-flex-direction:column;-moz-box-orient:vertical;-moz-box-direction:normal;-ms-flex-direction:column;flex-direction:column}#app{height:100%;width:100%;position:relative}.child-view{position:absolute;-webkit-transition:all .5s cubic-bezier(.55,0,.1,1);transition:all .5s cubic-bezier(.55,0,.1,1)}.slide-left-enter,.slide-right-leave-active{opacity:0;-webkit-transform:translate(100%,0);-ms-transform:translate(100%,0);transform:translate(100%,0)}.slide-left-leave-active,.slide-right-enter{opacity:0;-webkit-transform:translate(-100%,0);-ms-transform:translate(-100%,0);transform:translate(-100%,0)}.headWrap{background:#2e343b;display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;height:1.4rem;-webkit-box-align:center;-webkit-align-items:center;-moz-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:justify;-webkit-justify-content:space-between;-moz-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;padding:0 .2rem;-webkit-box-flex:0;-webkit-flex:none;-moz-box-flex:0;-ms-flex:none;flex:none}.headWrap .img{width:1rem;height:1rem;border-radius:50%}.headWrap>div{color:#b2b2b2;-webkit-box-flex:1;-webkit-flex:auto;-moz-box-flex:1;-ms-flex:auto;flex:auto;margin-left:.2rem;font-size:.32rem}.headWrap>div p{line-height:.42rem}.headWrap a{color:#fff;display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-webkit-align-items:center;-moz-box-align:center;-ms-flex-align:center;align-items:center}.headWrap a em{width:.24rem;height:.28rem;background:url(//img1.40017.cn/cn/s/2017/zt/touch/spokesman/zhiyin.png) no-repeat;display:inline-block;background-size:100%;margin-right:.13rem}.tabWrap{display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-webkit-align-items:center;-moz-box-align:center;-ms-flex-align:center;align-items:center;height:.9rem;background:#2e343b;-webkit-box-flex:0;-webkit-flex:none;-moz-box-flex:0;-ms-flex:none;flex:none}.tabWrap>a{-webkit-box-flex:1;-webkit-flex:1;-moz-box-flex:1;-ms-flex:1;flex:1;color:#9d9e9f;font-size:.32rem;-webkit-box-align:center;-webkit-align-items:center;-moz-box-align:center;-ms-flex-align:center;align-items:center;display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;height:.9rem;-webkit-box-pack:center;-webkit-justify-content:center;-moz-box-pack:center;-ms-flex-pack:center;justify-content:center}.tabWrap>a.active{color:#28c54d}.tabWrap>a em{display:inline-block;width:.31rem;height:.3rem;background:url(//img1.40017.cn/cn/s/2017/zt/touch/spokesman/tab.png) no-repeat;background-size:.33rem 1.8rem;margin-right:.18rem}.tabWrap>a.find em{background-position:0 0}.tabWrap>a.find.active em{background-position:0 -.45rem}.tabWrap>a.me em{background-position:0 -.9rem}.tabWrap>a.me.active em{background-position:0 -1.35rem}.balanceWrap{height:1.5rem;background:#ff6d4f;display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;padding:0 .4rem;-webkit-box-align:center;-webkit-align-items:center;-moz-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:justify;-webkit-justify-content:space-between;-moz-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;color:#fff;font-size:.32rem;-webkit-box-flex:0;-webkit-flex:none;-moz-box-flex:0;-ms-flex:none;flex:none}.balanceWrap .money{font-size:.28rem;margin-top:.1rem}.balanceWrap .money b{font-size:.4rem}.balanceWrap .tixian{width:.94rem;height:.5rem;background:#fff;color:#333;-webkit-border-radius:.1rem;border-radius:.1rem;text-align:center;line-height:.5rem;font-size:.28rem}.incomeWrap{height:1.5rem;background:-webkit-gradient(linear,left top,left bottom,from(#ff9728),to(#ff6f4d));background:-webkit-linear-gradient(top,#ff9728,#ff6f4d);background:linear-gradient(to bottom,#ff9728,#ff6f4d);display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-webkit-align-items:center;-moz-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:justify;-webkit-justify-content:space-between;-moz-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;color:#fff;font-size:.28rem;-webkit-box-flex:0;-webkit-flex:none;-moz-box-flex:0;-ms-flex:none;flex:none}.incomeWrap li{-webkit-box-flex:1;-webkit-flex:1;-moz-box-flex:1;-ms-flex:1;flex:1;padding-left:.4rem}.incomeWrap .money{margin-top:.15rem}.incomeWrap .money b{font-size:.4rem}.loader{overflow:hidden;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;text-align:center;padding:10px 0;margin:0 .1rem;color:#FFF;position:fixed;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%);top:50%;left:50%}.loader img{width:50px;-webkit-border-radius:50%;border-radius:50%;display:block;margin:0 auto 5px}.noData{text-align:center;padding:.2rem;color:#999}.tipWrap{position:fixed;top:0;right:0;bottom:0;left:0;z-index:9}.tipWrap .tip{position:absolute;top:50%;left:50%;width:200px;min-width:60px;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%);-webkit-border-radius:3px;border-radius:3px;background:rgba(0,0,0,.6);text-align:center;color:#fff;padding:.2rem 0;overflow:hidden}.comfirmWrap{position:fixed;top:0;right:0;bottom:0;left:0;z-index:9;background:rgba(0,0,0,.6)}.comfirm{position:absolute;top:50%;left:50%;width:80%;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%);background:#fff;border:1px solid #ddd;-webkit-border-radius:.08rem;border-radius:.08rem}.comfirm p{padding:.1rem .2rem;font-size:.3rem}.comfirm p label{width:100px;display:inline-block;text-align:right}.comfirm p.info{color:#ff0016}.comfirm h3{text-align:center;padding:.2rem 0;border-bottom:1px solid #ddd}.comfirmBtn{border-top:1px solid #ddd;display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex}.comfirmBtn button{-webkit-box-flex:1;-webkit-flex:1;-moz-box-flex:1;-ms-flex:1;flex:1;background:#fff;height:.8rem}.comfirmBtn button:first-child{border-right:1px solid #ddd}
+.sharePage{background:#fff;width:100%;height:100%;display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-webkit-flex-direction:column;-moz-box-orient:vertical;-moz-box-direction:normal;-ms-flex-direction:column;flex-direction:column}.sharePageCon{-webkit-box-flex:1;-ms-flex:auto;flex:auto;overflow:auto;background:#fff;-webkit-overflow-scrolling:touch}.commission{width:100%;height:.6rem;line-height:.6rem;border-bottom:1px solid #efeff4;background:#fff7dc}.commission p{font-size:.28rem;color:#9e8052;padding-left:.2rem}.commission p i{display:inline-block;width:.28rem;height:.28rem;vertical-align:middle;margin-right:.1rem}.commission p i img{width:100%}.commission p em{color:#ff6d4f}.choosePictures{padding:0 .2rem .2rem}.choosePictures p{font-size:.32rem;color:#333;padding:.2rem 0}.choosePicturesCon{overflow:hidden}.choosePictures ul{display:-ms-flexbox;display:flex;display:-webkit-flex;display:-webkit-box;overflow-x:scroll}.choosePictures ul li{width:2.22rem;height:1.4rem;margin-right:.2rem;position:relative}.choosePicture{width:100%;height:1.4rem}.choosePictures ul li span{display:block;width:.28rem;height:.28rem;border:1px solid #d0d0d0;-webkit-box-sizing:border-box;box-sizing:border-box;position:absolute;top:.1rem;right:.1rem;border-radius:.04rem;background:#fff}.choosePictures ul li.on span{background:url(//img1.40017.cn/cn/s/2017/zt/touch/spokesman/icon_gou.png) no-repeat #fff center center;background-size:90% 60%}.editShareTxt,.ticketTxt{width:100%;height:.76rem;line-height:.76rem;background:#efeff4;font-size:.32rem;color:#333;padding-left:.2rem;border-top:1px solid #e4e4e4;border-bottom:1px solid #e4e4e4}.ticketType ul li{display:-ms-flexbox;display:flex;display:-webkit-flex;display:-webkit-box;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;width:100%;border-bottom:1px solid #e4e4e4;padding-bottom:.18rem}.ticketTypeLeft{-webkit-box-flex:0;-ms-flex:none;flex:none;width:6rem;padding-left:.2rem}.ticketType ul li h2{font-size:.32rem;color:#333;line-height:.36rem;padding:.2rem 0;line-height:.42rem;font-weight:400}.ticketTypePrice{font-size:.24rem;color:#666;line-height:.4rem}.ticketTypePrice i{color:#ff4614;font-style:normal;margin-left:.08rem}.ticketTypePrice em{font-size:.4rem;color:#ff4614}.ticketTypePrice span{font-size:.26rem;color:#999;margin-left:.22rem}.ticketTypeLeft p{font-size:.24rem;color:#666;margin-top:.06rem}.ticketTypeLeft p em{margin-left:.7rem}.ticketTypeRight{-webkit-box-flex:1;-ms-flex:auto;flex:auto;margin-top:.4rem}.ticketType ul li.on .ticketTypeRight span.icon{background:url(//img1.40017.cn/cn/s/2017/zt/touch/spokesman/icon_gou2.png) no-repeat center center #09bb07;background-size:50% 35%}.ticketTypeRight span.icon{display:block;width:.5rem;height:.5rem;margin:0 auto;background:url(//img1.40017.cn/cn/s/2017/zt/touch/spokesman/icon_gou2.png) no-repeat center center #cacace;background-size:50% 35%;border-radius:50%}.ticketTypeRight p{font-size:.24rem;color:#ff4614;text-align:center;margin-top:.1rem}.ticketTypeRight .order{font-size:.24rem;border:1px solid #09bb07;border-radius:.1rem;margin:0 auto;display:block;width:1.2rem;text-align:center}.editShareTxtCon{padding:.22rem .2rem .2rem}.editShareTxtContainer{height:1.9rem;overflow-y:auto}.editShareTxtContainer h3{font-size:.28rem;color:#333;line-height:.38rem}.editShareTxtContainer p{font-size:.24rem;color:#666;line-height:.36rem;padding-bottom:.1rem}.editShareTxtContainer em{display:block;width:3rem;border-bottom:1px dashed #999}.copyTxt{font-size:.24rem;color:#ff4614;margin-top:.1rem}.copyTxt em{display:inline-block;width:.28rem;height:.28rem;vertical-align:middle;margin-right:.08rem}.copyTxt em img{width:100%}.shareTo{height:1.05rem;line-height:1.05rem;background:#efeff4;border-top:1px solid #e4e4e4;border-bottom:1px solid #e4e4e4;font-size:.24rem;color:#7c7c7d;text-align:center;position:relative}.shareTo:after,.shareTo:before{display:block;content:'';width:2.88rem;height:1px;background:#e4e4e4;position:absolute;top:.54rem}.shareTo:before{left:0}.shareTo:after{right:0}.mask{width:100%;height:100%;position:fixed;top:0;left:0;background:rgba(0,0,0,.4);z-index:1}.loadMask{width:100%;height:100%;position:fixed;top:0;left:0;background:rgba(255,255,255,.95);z-index:10}.loadMask img{width:1rem;height:1rem;position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}.popContainer{width:7rem;position:fixed;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%);z-index:5}.popContainerNone{display:none}.addCity{position:relative}.popContainer .popContainerImg{width:100%;height:3.2rem}.addCity span{padding:.02rem .16rem;background:#ec252d;position:absolute;top:0;left:0;z-index:10;font-size:.24rem;color:#fff}.addCity span:after{display:block;content:'';width:0;height:0;border-left:0 solid transparent;border-right:.12rem solid transparent;border-top:.42rem solid #ec252d;position:absolute;top:0;right:-.1rem}#popContainerCon,#popContainerCon2{background:#fff}.popContainer .add{padding:0 0 0 .2rem}.popContainer .logo{width:1.58rem;height:.38rem;position:absolute;top:.55rem;right:.5rem;z-index:10}.popContainer .addName{font-size:.4rem;color:#333;line-height:.4rem;font-weight:700;padding:0 0 .1rem}.popContainer .addDes{font-size:.24rem;color:#666;padding-bottom:.1rem}.popContainer .infoLeft{max-width:4.6rem}.info{background:#fff;padding:0 .2rem .35rem;display:-ms-flexbox;display:flex;display:-webkit-flex;display:-webkit-box;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.info h2{font-size:.28rem;color:#333;line-height:.36rem;padding:.2rem 0}.popDes{font-size:.24rem;color:#666}.popPrice{font-size:.24rem;color:#666}.popPrice i{font-style:normal;color:#ff4614;margin:0 .04rem}.popPrice .tcPrice{font-size:.4rem;color:#ff4614}.popPrice .yh{border:1px solid #ff4614;padding-right:.1rem;color:#ff4614;height:.25rem;line-height:.25rem;margin-left:.06rem;vertical-align:text-top}.popPrice .yh em{background:#ff4614;width:1rem;color:#fff;padding:0 .04rem 0 .1rem;margin-right:.04rem}.popPrice p{font-size:.24rem;color:#b6b6b6}.popPrice p span{position:relative;display:inline-block;width:.8rem;text-align:center}.popPrice p em{width:.75rem;height:.02rem;background:#b6b6b6;position:absolute;top:.18rem;left:0}.infoRightBox{text-align:center}.infoRight{margin:0 auto;background-size:100% 100%;margin-top:.14rem}.infoRight img{width:1.14rem;height:1.14rem}.infoRightBox p{font-size:.24rem;color:#000;text-align:center;font-weight:700;margin-top:.1rem}.shareBtnBox{width:100%;height:1.14rem;background:#fff;-webkit-box-shadow:0 0 30px #d8d5d5;box-shadow:0 0 30px #d8d5d5;display:-ms-flexbox;display:flex;display:-webkit-flex;display:-webkit-box;padding:.14rem .2rem;box-sizing:border-box;-webkit-box-flex:0;-webkit-flex:none;-moz-box-flex:0;-ms-flex:none;flex:none;z-index:10}.shareBox,.shareType,.shareView{-webkit-box-flex:1;-ms-flex:1;flex:1;height:.86rem;line-height:.86rem;background:#09bb07;border:1px solid #029400;border-radius:.1rem;-webkit-box-sizing:border-box;box-sizing:border-box;font-size:.36rem;color:#fff;text-align:center}.shareView{margin-left:.2rem}.shareBox{width:80%;margin:0 auto}.shareBtn{display:none}.hasGetImg .closeBtn{width:.44rem;height:.44rem;position:absolute;right:0;top:-.9rem;background:url(//img1.40017.cn/cn/s/2017/zt/touch/spokesman/icon_closebtn.png) no-repeat;background-size:100% 100%}.hasGetImg .closeBtn img{width:100%;height:.44rem}.hasGetImg .tipImg{width:4.98rem;height:1.38rem;position:absolute;right:0;bottom:-1.4rem;z-index:10;background:url(//img1.40017.cn/cn/s/2017/zt/touch/spokesman/tipImg.png) no-repeat;background-size:100% 100%}.hasGetImg .closeBtn:after{display:block;content:'';width:.02rem;height:.5rem;background:#fff;position:absolute;top:.44rem;left:.22rem}[v-cloak]{display:none}.hasGetImg{width:7rem;position:fixed;display:none;top:50%;left:50%;z-index:8;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}.hasGetImg img{width:100%;height:100%}.hasGetImgShow{display:block}.backTop{position:fixed;bottom:1.6rem;right:.2rem;z-index:100}.backTop img{width:.7rem;height:.7rem}#popContainerCon .headWrap,#popContainerCon2 .headWrap{background:#fff;height:1.2rem}#popContainerCon .headWrap .img,#popContainerCon2 .headWrap .img{width:.62rem;height:.62rem}#popContainerCon .headWrap>div p,#popContainerCon2 .headWrap>div p{font-size:.24rem;color:#333;line-height:.32rem}#popContainerCon2 .addName{padding:.1rem 0 .4rem}#popContainerCon2 .addDes{font-size:.32rem;padding-top:.2rem;padding-bottom:0}#popContainerCon2 label{font-size:.18rem;color:#999}
+        [v-cloak] {display: none;}
+        .popContainer .infoLeft {max-width: 4.3rem;}
+        .label {text-align: center;padding: .08rem 0 .08rem .06rem;}
+        .codeFriendImg {text-align: center;}
+        .mask {z-index: 20;background: transparent;}
+        .hasGetImg {z-index: 28;}
+        .bWrap .tip2 {text-align: justify;}
+        .popContainerNone{display: block}
+        .popContainer{z-index: 999;}
+    </style>
+</head>
 
-            <div class="info">
-
-               <h4>江清华</h4>
-
-               <div id="ember1331" class="state ember-view">
-                  <a class="online">
-                     在线
-                  </a>
-
-                  <div class="state-choice">
-                     <ul>
-                        <li class="online" data-ember-action="" data-ember-action-1332="1332">在线</li>
-                        <li class="busyline" data-ember-action="" data-ember-action-1333="1333">忙碌</li>
-                        <li class="offline" data-ember-action="" data-ember-action-1334="1334">离线</li>
-                     </ul>
-                  </div>
-               </div>
-
+<body>
+<div class="mask" style="display: block">
+    <div class="popContainer popContainerNone">
+        <div id="popContainerCon2" class="share-container">
+            <div class="headWrap">
+                <img src="<?php echo load_img('users/avatar-1.jpg')?>" class="img">
+                <div>
+                    <p>微信昵称：远行歌</p> <p>推荐人ID：356487198</p>
+                </div>
             </div>
-         </div>
-
-         <div class="kchat-im-panel-header-operation">
-            <div class="drag-handle js-drag-handle ui-draggable-handle"></div>
-            <div id="ember1335" class="right-top-btn ember-view">    <a title="展开" class="expand-open" data-ember-action="" data-ember-action-1336="1336"><i class="icon-open-size"></i></a>
-
-               <a title="关闭窗口" class="close" data-ember-action="" data-ember-action-1337="1337"><i class="icon-close"></i></a>
+            <div class="add">
+                <img src="" class="logo"> <p class="addName">岭南印象园</p>
             </div>
-
-            <nav id="ember1338" class="nav1 ember-view">
-               <a id="ember1860" class="active ember-view">        本次对话
-               </a>
-
-               <a id="ember1862" class="ember-view">        历史对话
-               </a>
-            </nav>
-
-            <nav id="ember1343" class="nav2 ember-view">
-               <a id="ember1864" class="active ember-view">        信息
-               </a>
-
-               <a id="ember1866" class="ember-view">        知识库
-               </a>
-
-               <a id="ember1868" class="ember-view">        应用
-               </a>
-            </nav>
-         </div>
-      </header>
-
-      <div class="kchat-im-panel-body">
-
-         <div id="ember1350" class="kchat-im-panel-body-left ember-view"><div id="ember1351" class="kchat-im-panel-userlist-nav ember-view">
-               <a id="ember1352" class=" active ember-view">        对话中
-               </a>
-
-               <a id="ember1353" class="ember-view">        已结束
-               </a>
+            <div class="addCity">
+<!--                http://pic4.40017.cn/scenery/destination/2016/07/21/15/h6Uumm.jpg-->
+                <img src="<?php echo load_img('banner2.png')?>" class="popContainerImg">
+                <span>广州人民</span></div> <div class="info"><div class="infoLeft">
+                    <p class="addDes">置身水乡，寻找童年记忆，重拾岭南情怀</p> <label>AAAA景区</label>
+                    <div class="popPrice">
+                        同程价<i>¥</i><em class="tcPrice">54</em>起
+                        <p>门市价 <span>¥60<em></em></span></p>
+                    </div>
+                </div>
+                <div class="infoRightBox">
+                    <div class="infoRight"></div> <p>长按识别二维码</p>
+                </div>
             </div>
-
-
-            <div class="kchat-im-panel-userlist scrollbar-auto">
-
-
-               <div class="kchat-talk-list-group">
-                  <div tabindex="0" id="ember1354" class="kchat-queue ember-view"><style type="text/css">
-                        .kchat-pop.db{display:block;}
-                        a.f-list-toggle-label:focus{outline:none;}
-                     </style>
-
-                     <h3>
-                        <a tabindex="-1" class="f-list-toggle-label">
-                           交谈队列 1/1
-                        </a>
-                     </h3>
-
-                     <div class="kchat-pop ">
-                        <ul>
-                           <li id="ember1566" class="active ember-view">                最多接待1人
-                           </li>    </ul>
-                     </div>
-                  </div>
-
-                  <div id="ember1359" class="ember-view"><ul>
-                        <li id="ember1364" class="active ember-view"><a title="置顶" class="top-tag " data-ember-action="" data-ember-action-1365="1365"></a>
-
-                           <a title="结束对话" class="close" data-ember-action="" data-ember-action-1366="1366"></a>
-
-                           <!---->
-                           <div class="avatar-source pc "></div>
-
-                           <div class="info">
-                              <h4>
-                                 访客1
-
-                                 <!---->
-                                 <!---->    </h4>
-
-                              <!----></div>
-                        </li>
-                     </ul>
-                  </div>
-               </div>
-
-
-               <!---->
-            </div>
-
-         </div>
-
-         <div class="kchat-im-panel-main">
-
-
-
-            <div class="kchat-im-panel-main-chat list1">
-
-               <div id="ember2043" class="kchat-im-panel-main-chat-content scrollbar-auto scrollbar-auto ember-view"><div class="chat-box chat-style1 f-preview-context">
-
-                     <!---->
-                     <div id="ember2044" class="ember-view">
-                        <div id="ember2045" class="ember-view"><div class="chat-item">
-                              <div class="chat-left">
-                                 <div class="chat-item-info">
-
-                                    <!---->
-                                    <span class="name">&nbsp;访客1&nbsp;</span> -
-                                    <time>&nbsp;2017-12-19 10:53:57&nbsp;</time>
-                                 </div>
-                                 <div class="chat-info">测试</div>
-                              </div>
-                           </div>
-                        </div>
-
-
-                        <div id="ember2046" class="ember-view"><div class="chat-item">
-                              <div class="chat-right">
-                                 <div class="chat-item-info">
-
-                                    <!---->
-                                    <span class="name">&nbsp;江清华&nbsp;</span> -
-                                    <time>&nbsp;2017-12-19 10:57:36&nbsp;</time>
-                                 </div>
-                                 <div class="chat-info">123</div>
-                              </div>
-                           </div>
-                        </div>
-
-
-                        <div id="ember2047" class="ember-view"><div class="chat-item">
-                              <div class="chat-right">
-                                 <div class="chat-item-info">
-
-                                    <!---->
-                                    <span class="name">&nbsp;江清华&nbsp;</span> -
-                                    <time>&nbsp;2017-12-19 10:58:18&nbsp;</time>
-                                 </div>
-                                 <div class="chat-info">查</div>
-                              </div>
-                           </div>
-                        </div>
-
-                     </div>
-
-                  </div>
-               </div>
-
-               <div id="ember2048" class="kchat-im-panel-main-chat-textarea ember-view"><div id="ember2049" class="top-bar ember-view"><ul>
-
-                        <li tabindex="0" id="emoji-face-btn" class="ember-view"><i class="f-toggle-btn icon-chat1"></i>
-
-                           <div class="kchat-pop emoji-face-box ">
-                              <ul>
-                                 <li>
-                                    <span id="ember2050" class="emoji emoji1f60a ember-view">😊</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2051" class="emoji emoji1f604 ember-view">😄</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2052" class="emoji emoji1f601 ember-view">😁</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2053" class="emoji emoji1f602 ember-view">😂</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2054" class="emoji emoji1f603 ember-view">😃</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2055" class="emoji emoji1f605 ember-view">😅</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2056" class="emoji emoji1f606 ember-view">😆</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2057" class="emoji emoji1f620 ember-view">😠</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2058" class="emoji emoji1f60d ember-view">😍</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2059" class="emoji emoji1f61c ember-view">😜</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2060" class="emoji emoji1f629 ember-view">😩</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2061" class="emoji emoji1f61e ember-view">😞</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2062" class="emoji emoji1f635 ember-view">😵</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2063" class="emoji emoji1f630 ember-view">😰</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2064" class="emoji emoji1f618 ember-view">😘</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2065" class="emoji emoji1f61a ember-view">😚</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2066" class="emoji emoji1f637 ember-view">😷</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2067" class="emoji emoji1f633 ember-view">😳</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2068" class="emoji emoji263a ember-view">☺</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2069" class="emoji emoji1f622 ember-view">😢</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2070" class="emoji emoji1f62d ember-view">😭</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2071" class="emoji emoji1f621 ember-view">😡</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2072" class="emoji emoji1f60c ember-view">😌</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2073" class="emoji emoji1f616 ember-view">😖</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2074" class="emoji emoji1f631 ember-view">😱</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2075" class="emoji emoji1f62a ember-view">😪</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2076" class="emoji emoji1f60f ember-view">😏</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2077" class="emoji emoji1f613 ember-view">😓</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2078" class="emoji emoji1f625 ember-view">😥</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2079" class="emoji emoji1f62b ember-view">😫</span>
-                                 </li>
-                                 <li>
-                                    <span id="ember2080" class="emoji emoji1f609 ember-view">😉</span>
-                                 </li>
-                              </ul>
-                           </div>
-                        </li>
-
-                        <li id="ember2081" class="ember-view">    <i class="icon-chat2"></i>
-                           <form>
-                              <input type="file" id="attachmentHolder" name="" value="" placeholder="" multiple="multiple" hidden="hidden">
-                           </form>
-                        </li>
-                     </ul>
-
-                     <!----></div>
-
-                  <textarea placeholder="输入信息…" id="ember2082" class="js-message-content ember-text-area ember-view"></textarea>
-
-                  <div class="bottom-bar">
-
-                     <ul id="ember2083" class="left ember-view">
-                        <li>
-                           <a data-ember-action="" data-ember-action-2084="2084">结束对话</a>
-                        </li>
-
-                        <li>
-                           <a data-ember-action="" data-ember-action-2085="2085">转接客服</a>
-                        </li>
-
-                        <li>
-                           <a data-ember-action="" data-ember-action-2086="2086">请求评价</a>
-                        </li>
-
-                        <!----></ul>
-
-                     <div class="send">
-
-                        <a data-ember-action="" data-ember-action-2087="2087">发送</a>
-
-                        <div tabindex="0" id="ember2088" class="ember-view" style="display: inline-block;"><span>
-    <i class="icon-expand-less"></i>
-</span>
-
-                           <style type="text/css">
-                              .opened .send-pop {
-                                 display: block !important;
-                              }
-                           </style>
-
-                           <div class="send-pop kchat-pop">
-                              <ul>
-                                 <li data-ember-action="" data-ember-action-2089="2089">欢迎语</li>
-                                 <li data-ember-action="" data-ember-action-2090="2090">结束语</li>
-                              </ul>
-                           </div>
-                        </div>
-
-                     </div>
-
-                  </div>
-               </div>
-
-            </div>
-
-            <!---->
-            <div id="ember1465" class="kchat-im-panel-main-info ember-view">
-               <div class="scrollbar-auto">
-                  <div id="ember2175" class="chat-user-info ember-view"><div id="ember2176" class="ember-view">    <dl id="ember2177" class="ember-view"><dt>
-                              访客信息
-
-                              <!----></dt>
-
-                           <style>
-                              .f-organization-select {
-                                 position: relative;
-                                 overflow: visible!important;
-                                 max-width: 320px;
-                              }
-
-                              .s-field-label {
-                                 display: inline-block;
-                                 width: 60px;
-                              }
-
-                              .f-organization-select .select {
-                                 display: inline-block;
-                                 width: 160px;
-                                 vertical-align: middle;
-                              }
-
-                              .f-organization-select .select a {
-                                 color: inherit;
-                              }
-                           </style>
-
-                           <dd class="f-organization-select">
-                              <span class="s-field-label">昵称：</span>
-                              <input type="text" placeholder="昵称" id="ember2178" class="ember-text-field ember-view">
-                           </dd>
-                           <dd class="f-organization-select">
-                              <span class="s-field-label">备注姓名：</span>
-                              <input type="text" placeholder="备注姓名" id="ember2179" class="ember-text-field ember-view">
-                           </dd>
-                           <dd class="f-organization-select">
-                              <span class="s-field-label">邮箱：</span>
-                              <input type="text" placeholder="邮箱" id="ember2180" class="ember-text-field ember-view">
-                           </dd>
-                           <dd class="f-organization-select">
-                              <span class="s-field-label">手机：</span>
-                              <input type="text" placeholder="手机" id="ember2181" class="ember-text-field ember-view">
-                           </dd>
-                           <dd class="f-organization-select">
-                              <span class="s-field-label">公司组织：</span>
-                              <div tabindex="0" id="ember2182" class="drop-btn-default select ember-view"><a class="drop-btn">-</a>
-
-                                 <select id="ember2183" style="display: none;" class="ember-view">    <option value="">-</option>
-
-                                    <option value="1021737">
-                                       银河在线
-                                    </option>
-                                 </select>
-
-                                 <div class="drop-box drop-select-box ">
-
-                                    <!---->
-                                    <ul class="options-ul">
-
-                                       <li data-value="" class="option-li" data-ember-action="" data-ember-action-2184="2184">
-                                          <a class="opiont-item ">
-                                             -
-                                          </a>
-                                       </li>
-
-                                       <li data-value="1021737" class="option-li" data-ember-action="" data-ember-action-2185="2185">
-                                          <a class="opiont-item ">
-                                             银河在线
-                                          </a>
-                                       </li>
-
-                                    </ul>
-                                 </div>
-                              </div>
-                           </dd>
-
-                           <dd>
-                              <a class="btn btn-sm" data-ember-action="" data-ember-action-2186="2186">
-                                 保存
-                              </a>
-                           </dd>
-                        </dl>
-
-
-                        <!----></div>
-
-                     <dl>
-                        <dt>访问信息</dt>
-
-                        <dd>对话ID: 37993808</dd>
-                        <dd>持续时间：00:09:53</dd>
-
-                        <dd>
-                           人工服务时长：
-                           00:09:53
-                        </dd>
-                        <dd>
-                           首次响应时长：
-                           00:03:44
-                        </dd>
-
-                        <dd title="在线支持">
-                           对话来路：
-                           在线支持
-                        </dd>
-                     </dl>
-
-                     <div id="ember2187" class="ember-view"><dl>
-                           <dt>
-                              工单跟进
-                              <a class="btn" data-ember-action="" data-ember-action-2188="2188">创建工单</a>
-                           </dt>
-
-                           <!---->
-                           <!----></dl>
-                     </div>
-
-                     <!---->
-                     <dl>
-                        <dt>
-                           其他信息
-                        </dt>
-                        <dd>
-                           地理位置：
-                           中国广东广州
-                        </dd>
-                        <dd>
-                           ip地址：
-                           14.147.78.193
-                        </dd>
-                        <dd>
-                           访问环境：
-                           chrome
-                        </dd>
-                        <dd>
-                           操作系统：
-                           Win32
-                        </dd>
-                     </dl>
-
-                     <dl id="ember2189" class="kf5-chat-tag ember-view"><dt>标签</dt>
-                        <!---->
-                        <dd class="add-tag cb">
-
-                           <style type="text/css">
-                              .kf5-chat-tag .add-tag ul li a {
-                                 color: #0096C4;
-                                 padding: 5px 10px;
-                              }
-                           </style>
-
-                           <div tabindex="0" id="ember2190" class="ember-view"><input type="text" placeholder="添加标签" id="ember2191" style="display: none;" class="text drop-btn response-text-field ember-text-field ember-view">
-
-                              <a id="ember2192" class="dropup  btn btn-sm green btn-hollow ember-view">    添加标签
-                              </a>
-                              <div id="ember2193" style="display: none;" class="drop-box drop-select-box   ember-view">    <ul>
-                                    <li>
-                                       <a id="ember2197" class="drop-opt f-drop-opt-0 ember-view">                            <span class="status status2">产品</span>
-
-                                       </a>        </li>
-                                    <li>
-                                       <a id="ember2198" class="drop-opt f-drop-opt-1 ember-view">                            <span class="status status2">咨询</span>
-
-                                       </a>        </li>
-                                    <li>
-                                       <a id="ember2199" class="drop-opt f-drop-opt-2 ember-view">                            <span class="status status2">售后</span>
-
-                                       </a>        </li>
-                                    <li>
-                                       <a id="ember2200" class="drop-opt f-drop-opt-3 ember-view">                            <span class="status status2">投诉</span>
-
-                                       </a>        </li>
-                                 </ul>
-                              </div></div></dd>
-                     </dl>
-
-                  </div>
-                  <div class="prohibition">
-                     <p>
-                        <a data-ember-action="" data-ember-action-2194="2194">封禁用户</a>
-                     </p>
-                  </div>
-               </div>
-
-
-               <!---->
-               <!---->
-               <!---->
-               <!----></div>
-
-
-
-         </div>
-
-      </div>
-   </div>
+        </div>
+    </div>
+    <div class="loadMask popContainerNone">
+        <img src="./分享设置_files/loading(1).gif">
+    </div>
+</div>
+<div id="hasGetImg" class="hasGetImg hasGetImgShow">
+    <span class="closeBtn"></span>
+    <div class="tipImg"></div>
+    <img src="">
 </div>
 
+<?php
+echo load_js('jquery.min');
+echo load_js('html2canvas.min');
+echo load_js('canvas2image');
+echo load_js('jquery.qrcode.min');
+?>
+
+<!-- rem -->
+<script type="text/javascript">
+//    makePictureFn();
+    qrcode('test.php');
+    function qrcode(shortUrl) {
+        console.log(shortUrl);
+        var that = this;
+        $(".infoRight").html('');
+        $(".infoRight").qrcode({
+            text: shortUrl,
+            width: 100,
+            height: 100
+        });
+    }
+    function makePictureFn() {
+        $(".hasGetImg img").remove();
+
+        var dom = $('#popContainerCon2'); //你要转变的dom
+
+        setTimeout(function () {
+            var width = dom.width();
+            var height = dom.height();
+            var type = "png";
+            var scaleBy = 3; //缩放比例
+            var canvas = document.createElement('canvas');
+            canvas.width = width * scaleBy;
+            canvas.height = height * scaleBy;
+            var context = canvas.getContext('2d');
+            context.scale(scaleBy, scaleBy);
+
+            var opts = {
+                scale: scaleBy, // 添加的scale 参数
+                canvas: canvas, //自定义 canvas
+                logging: true, //日志开关
+                width: width, //dom 原始宽度
+                height: height, //dom 原始高度
+                useCORS: true
+            };
+
+            html2canvas(dom[0], opts).then(function (canvas) {
+                var img = Canvas2Image.convertToImage(canvas, canvas.width, canvas.height, type);
+                $(".hasGetImg").append(img);
+            });
+        }, 1000);
+    }
+</script>
+
+
+
+</body></html>

@@ -91,16 +91,6 @@ function container()
 }
 
 /**
- * 获取容器实例
- *
- * @return object
- */
-function ioc()
-{
-    return $GLOBALS['CONTAINER'];
-}
-
-/**
  * 从容器中获取一个服务
  *
  * @param  string $abstract 服务名称
@@ -248,7 +238,7 @@ function user()
 
     if ($instance) return $instance;
 
-    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->create('User');
+    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->create('User')->setupSession();
 
 }
 
@@ -264,7 +254,7 @@ function admin()
 
     if ($instance) return $instance;
 
-    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->create('Admin');
+    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->create('Admin')->setupSession();
 
 }
 
