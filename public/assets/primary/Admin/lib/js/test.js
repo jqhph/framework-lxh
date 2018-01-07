@@ -7,7 +7,25 @@ function qrcode(shortUrl) {
         height: 100
     });
 }
-
+/*
+SELECT
+a.*
+FROM
+    `sline_tuan` a
+LEFT JOIN `sline_allorderlist` b ON (
+    a.id = b.aid
+AND b.typeid = 13
+AND a.webid = b.webid
+)
+WHERE
+a.ishidden = 0
+AND a.endtime > unix_timestamp(now())
+ORDER BY
+IFNULL(b.displayorder, 9999) ASC,
+    a.modtime DESC,
+    a.addtime DESC
+LIMIT 0, 10
+ */
 /*生成图片*/
 function makePictureFn(domParent) {
     var that = this;

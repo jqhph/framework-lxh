@@ -519,6 +519,16 @@ class Builder
         return $this;
     }
 
+    /**
+     * @param $string
+     * @return $this
+     */
+    public function joinRaw($string)
+    {
+        $this->leftJoin[] = &$string;
+        return $this;
+    }
+
     public function union()
     {
 

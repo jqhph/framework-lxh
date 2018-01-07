@@ -593,12 +593,29 @@ class Query
 		return $this;
 	}
 
+    /**
+     * @param $table
+     * @param null $field1
+     * @param null $field2
+     * @param string $condit
+     * @param string $type
+     * @return $this
+     */
 	public function join($table, $field1 = null, $field2 = null , $condit = '=', $type = 'LEFT')
 	{
 		$this->builder->join($table, $field1, $field2, $condit, $type);
 		return $this;
 	}
 
+    /**
+     * @param $string
+     * @return $this
+     */
+	public function joinRaw($string)
+    {
+        $this->builder->joinRaw($string);
+        return $this;
+    }
 
 	/**
 	 *

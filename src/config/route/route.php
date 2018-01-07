@@ -50,12 +50,12 @@ $config[] = [
 ];
 
 $config[] = [
-    'pattern' => '/api/user/login',
+    'pattern' => '/api/admin/login',
     'method' => 'POST',
     'params' => [
         'auth' => false,
         'module' => 'Admin',
-        'controller' => 'User',
+        'controller' => 'Admin',
         'action' => 'Login'
     ]
 ];

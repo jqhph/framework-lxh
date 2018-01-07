@@ -35,6 +35,12 @@ class Session extends Model
      */
     protected $defaultLoginTime = 2592000;
 
+    protected function initialize()
+    {
+        $this->session = $this->container['session'];
+        $this->cookie = $this->container['cookie'];
+    }
+
     /**
      * 缓存用户id到cookie
      *
@@ -45,6 +51,7 @@ class Session extends Model
         // 默认一个月免登陆
         setcookie($this->sessionKey, $this->getId(), time() + config('login-time', $this->defaultLoginTime));
     }
+
 
     /**
      * 缓存用户数据到session

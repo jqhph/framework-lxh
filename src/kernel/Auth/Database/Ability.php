@@ -46,27 +46,16 @@ class Ability extends Model
         $assignedRoles = Models::table('assigned_roles');
 
         $select =
-            "{$this->tableName}.id,{$this->tableName}.name,forbidden,$assignedAbilities.entity_id role_id";
+            "{$this->tableName}.id,{$this->tableName}.`name`,forbidden,ab.entity_id role_id";
 
-/**
-SELECT
-	abilities.id,abilities.name,forbidden,assigned_abilities.entity_id AS role_id
-FROM
-	`abilities`
-LEFT JOIN `assigned_abilities` ON assigned_abilities.entity_id = `abilities`.`id`
-LEFT JOIN `assigned_roles` ON assigned_abilities.entity_id = assigned_roles.entity_id
-WHERE
-	assigned_abilities.entity_type = 2
-    AND assigned_roles.entity_type = 1
-    AND assigned_roles.entity_id = 1
-*/
+        $roleType = Models::role()->getMorphType();
+        $userType = $user->getMorphType();
+
         return $this->query()
             ->select($select)
-            ->join($assignedAbilities, 'id', "$assignedAbilities.entity_id")
-            ->join($assignedRoles, "$assignedAbilities.entity_id", "$assignedRoles.entity_id")
-            ->where("$assignedRoles.entity_id", $user->getId())
-            ->where($assignedAbilities.'.entity_type', Models::role()->getMorphType())
-            ->where($assignedRoles.'.entity_type', $user->getMorphType())
+            ->joinRaw("LEFT JOIN $assignedAbilities ab ON ({$this->tableName}.id = ab.ability_id AND ab.entity_type = $roleType)")
+            ->joinRaw("LEFT JOIN $assignedRoles ar ON (ar.role_id = ab.entity_id AND ar.entity_type = $userType)")
+            ->where("ar.entity_id", $user->getId())
             ->find();
     }
 }
