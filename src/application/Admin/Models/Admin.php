@@ -51,7 +51,16 @@ class Admin extends Session
     {
         $input['created_at'] = time();
         $input['created_by_id'] = admin()->getId() ?: 0;
+        $input['password'] = Password::encrypt($input['password']);
 
+    }
+
+    protected function beforeSave($id, array &$input)
+    {
+        if (! empty($input['password'])) {
+            $input['password'] = Password::encrypt($input['password']);
+        }
+        $input['modified_at'] = time();
     }
 
     /**
@@ -66,12 +75,6 @@ class Admin extends Session
             return true;
         }
         return false;
-    }
-
-    protected function beforeSave($id, array & $data)
-    {
-        unset($data['cookie']);
-        unset($data['session']);
     }
 
     /**

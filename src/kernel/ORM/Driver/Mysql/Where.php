@@ -140,6 +140,14 @@ class Where
                 }
                 $data[] = $p1 . ' IN (' . implode(',', $p3) . ')';
                 break;
+            case 'not in':
+                foreach ($p3 as & $v) {
+                    $this->params[] = $v;
+
+                    $v = '?';
+                }
+                $data[] = $p1 . ' NOT IN (' . implode(',', $p3) . ')';
+                break;
             default:
                 $data[] 	   = "$p1 $p2 ?";
                 $this->params[] = $p3;

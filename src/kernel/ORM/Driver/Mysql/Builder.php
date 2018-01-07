@@ -90,7 +90,7 @@ class Builder
         return $this;
     }
 
-    public function where(& $p1, & $p2 = '=', $p3 = null, $table = null)
+    public function where(& $p1, $p2 = '=', $p3 = null, $table = null)
     {
         $tb = $table ? $table : $this->tableName;
         if (! $tb) {

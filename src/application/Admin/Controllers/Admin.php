@@ -27,6 +27,10 @@ class Admin extends Controller
      */
     protected $filter = 'modal';
 
+    protected function initialize()
+    {
+    }
+
     /**
      * @param Grid $grid
      * @param Content $content
