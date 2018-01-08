@@ -36,7 +36,6 @@ class Where
     public function reset()
     {
         $this->where = [];
-        $this->orWhere = [];
         $this->params = [];
         return $this;
     }
@@ -45,7 +44,6 @@ class Where
     {
         $data = [
             'where' => $this->where,
-            'orWhere' => $this->orWhere,
             'params' => $this->params
         ];
 
@@ -185,9 +183,6 @@ class Where
 
                 $data[] = '(' . implode(' OR ', $and)  . ')';
 
-            } elseif($field == 'ors' || $field == 'ORS') {
-                $ors = $this->handle($val, null, null, $autoAddTable);
-                $this->orWhere[] = '(' . implode(' OR ', $ors)  . ')';
             } else {
                 if (count($val) < 2) {
                     throw new InvalidArgumentException('where字句构造参数不合法！');

@@ -3,6 +3,7 @@
 namespace Lxh\Auth\Database;
 
 use Lxh\Admin\MVC\Model;
+use Lxh\MVC\Model AS Base;
 
 class Role extends Model
 {
@@ -58,7 +59,7 @@ class Role extends Model
      * @param Model $user
      * @return mixed
      */
-    public function resetAssigned(Model $user)
+    public function resetAssigned(Base $user)
     {
         $where = [
             'entity_id' => $user->getId(),

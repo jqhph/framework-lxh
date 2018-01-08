@@ -27,9 +27,9 @@ class AssignsRoles
      * 角色名或id或模型
      * 是否先重置用户和角色的关系
      *
-     * @var bool
+     * @var null|array
      */
-    protected $retracts = [];
+    protected $retracts = null;
 
     /**
      * Constructor.
@@ -51,6 +51,10 @@ class AssignsRoles
     public function then()
     {
         $roles = Models::role()->findOrCreate($this->roles);
+
+        if ($this->retracts !== null) {
+            AuthManager::create($this->authority)->retract($this->retracts)->then();
+        }
 
         return $this->assignRoles($roles, $this->authority->getId());
     }
@@ -147,10 +151,6 @@ class AssignsRoles
         });
 
         $records = $records->all();
-
-        if ($this->retracts) {
-            AuthManager::create($this->authority)->retract($this->retracts)->then();
-        }
 
         return $records ? $this->newPivotTableQuery()->batchInsert($records) : false;
     }

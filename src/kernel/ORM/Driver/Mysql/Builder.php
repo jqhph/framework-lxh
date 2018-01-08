@@ -101,7 +101,7 @@ class Builder
         $content = $this->where->table($tb)->build($p1, $p2, $p3)->pull();
 
         $this->wheres = array_merge($this->wheres, $content['where']);
-        $this->orWheres = array_merge($this->orWheres, $content['orWhere']);
+//        $this->orWheres = array_merge($this->orWheres, $content['orWhere']);
         $this->whereData = array_merge($this->whereData, $content['params']);
 
         return $this;
@@ -262,7 +262,7 @@ class Builder
 
         $content = $this->where->table($tb)->build($p1, $p2, $p3)->pull();
 
-        $this->orWheres = &$content['where'];
+        $this->orWheres[] = '(' . implode(' AND ', $content['where']) . ')';
         $this->whereData = array_merge($this->whereData, $content['params']);
 
         return $this;
@@ -659,7 +659,7 @@ class Builder
             if ($where) {
                 $where .= ' OR ';
             }
-            $where .= '(' . implode(' AND ', $orData) . ')';
+            $where .= implode(' OR ', $orData);
 
         }
 

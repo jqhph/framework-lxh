@@ -29,6 +29,7 @@ class Admin extends Controller
 
     protected function initialize()
     {
+//        auth()->retract([32, 'dsfsdf'])->then();
     }
 
     /**
