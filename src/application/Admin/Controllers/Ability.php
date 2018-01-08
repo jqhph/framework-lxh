@@ -88,6 +88,14 @@ class Ability extends Controller
         $form->select('forbidden')->options([0, 1]);
     }
 
+
+    protected function addFilter(array &$input)
+    {
+        if ($this->model()->select('id')->where('name', $input['name'])->findOne()) {
+            return $input['name'] . ' already exist.';
+        }
+    }
+
     public function actionAll()
     {
         return $this->model()->find();

@@ -8,6 +8,7 @@
 
 namespace Lxh\Admin\Controllers;
 
+use Lxh\Admin\Admin;
 use Lxh\Admin\Filter;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Layout\Content;
@@ -52,6 +53,34 @@ class Role extends Controller
         $form->text('title')->rules('required|length_between[2-30]');
         $form->text('name')->rules('required|length_between[2-20]');
         $form->text('comment');
+        $this->buildAbilitiesInput($form);
+
+    }
+
+    protected function buildAbilitiesInput(Form $form)
+    {
+        if ($ablities = $this->formatAbilities()) {
+            $url = Admin::url('Ability')->action('Create');
+            $tabid = str_replace('/', '-', $url);
+            $tablabel = trans('Create Ability');
+
+            $form->tableCheckbox('abilities')
+                ->rows($ablities)
+                ->color('danger')
+                ->help("关联已有权限。<a onclick=\"open_tab('$tabid', '$url', '$tablabel')\">[点我创建权限]</a>");
+        }
+    }
+
+    protected function formatAbilities()
+    {
+        $abilities = [];
+        foreach ($this->model('Ability')->find() as $row) {
+            $abilities[] = [
+                'value' => $row['id'],
+                'label' => $row['title']
+            ];
+        }
+        return $abilities;
     }
 
     /**
@@ -84,10 +113,17 @@ class Role extends Controller
 //        ];
 //    }
 
-    protected function updateFilter($id, array &$fields)
+    protected function updateFilter($id, array &$input)
     {
-        if (empty($fields['permissions'])) {
+        if (empty($input['permissions'])) {
             return 'The permissions fields is required';
+        }
+    }
+
+    protected function addFilter(array &$input)
+    {
+        if ($this->model()->select('id')->where('name', $input['name'])->findOne()) {
+            return $input['name'] . ' already exist.';
         }
     }
 

@@ -325,7 +325,7 @@ class AuthManager
     public function abilities()
     {
         if ($this->abilities === null) {
-            $this->abilities = new Collection($this->clipboard()->getAbilities());
+            $this->abilities = $this->clipboard()->getAbilities();
         }
 
         return $this->abilities;

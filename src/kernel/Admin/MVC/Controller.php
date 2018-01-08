@@ -281,9 +281,8 @@ class Controller extends Base
     /**
      * @param array $data
      */
-    protected function addFilter(array &$data)
+    protected function addFilter(array &$input)
     {
-
     }
 
     /**

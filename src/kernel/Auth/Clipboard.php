@@ -178,15 +178,13 @@ class Clipboard
      * Get a list of the authority's abilities.
      *
      * @param  Model  $authority
-     * @return array
+     * @return Collection
      */
     public function getAbilities()
     {
         $abilities = Models::ability()->getForAuthority($this->user);
 
-        $abilities = $this->formatArray($abilities);
-
-        return $abilities;
+        return new Collection($this->formatArray($abilities));
     }
 
     protected function formatArray(array &$abilities)
