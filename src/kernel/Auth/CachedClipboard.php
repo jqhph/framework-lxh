@@ -5,11 +5,10 @@ namespace Lxh\Auth;
 use Lxh\Auth\Database\Models;
 
 use Lxh\Auth\Cache\Store;
-use Lxh\Bouncer\Contracts\Clipboard as Contracts;
 use Lxh\MVC\Model;
 use Lxh\Support\Collection;
 
-class CachedClipboard extends Clipboard implements Contracts
+class CachedClipboard extends Clipboard
 {
     /**
      * The tag used for caching.
@@ -131,10 +130,14 @@ class CachedClipboard extends Clipboard implements Contracts
      */
     public function refresh()
     {
-        if ( ! is_null($this->user)) {
-            return $this->refreshFor();
-        }
+        return $this->refreshFor();
+    }
 
+    /**
+     * @return $this
+     */
+    public function refreshAll()
+    {
         if ($this->cache) {
             $this->cache->flush();
         } else {

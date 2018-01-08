@@ -3,6 +3,7 @@
 namespace Lxh\Auth;
 
 use Lxh\Auth\Conductors\FindRoles;
+use Lxh\Cache\File;
 use Lxh\MVC\Model;
 use Lxh\Auth\Cache\Store;
 use Lxh\Auth\Clipboard;
@@ -32,9 +33,9 @@ class AuthManager
     protected $cache;
 
     /**
-     * @var array
+     * @var Collection
      */
-    protected $roles = [];
+    protected $roles = null;
 
     /**
      * @var Collection
@@ -56,8 +57,13 @@ class AuthManager
         $this->usesCached = config('admin.auth.cache', true);
 
         if ($this->usesCached) {
-            $this->cache = new Store();
+            $this->cache = new Store($this->createCacheStore());
         }
+    }
+
+    protected function createCacheStore()
+    {
+        return new File();
     }
 
     /**
@@ -167,7 +173,7 @@ class AuthManager
      */
     public function assign($roles)
     {
-        return new Conductors\AssignsRoles($this->user, $roles);
+        return new Conductors\AssignsRoles($this, $this->user, $roles);
     }
 
     /**
@@ -178,7 +184,7 @@ class AuthManager
      */
     public function retract($roles = [])
     {
-        return new Conductors\RemovesRoles($this->user, $roles);
+        return new Conductors\RemovesRoles($this, $this->user, $roles);
     }
 
     /**
@@ -195,12 +201,11 @@ class AuthManager
     /**
      * Start a chain, to check if the given authority has a certain role.
      *
-     * @param  Model  $authority
      * @return \Lxh\Auth\Conductors\ChecksRoles
      */
-    public function is(Model $authority)
+    public function is()
     {
-        return new Conductors\ChecksRoles($authority, $this->clipboard);
+        return new Conductors\ChecksRoles($this->user, $this->roles(), $this->clipboard());
     }
 
     /**
@@ -223,13 +228,12 @@ class AuthManager
     /**
      * Clear the cache.
      *
-     * @param  mixed  $authority
      * @return $this
      */
-    public function refresh($authority = null)
+    public function refresh()
     {
         if ($this->usesCached) {
-            $this->clipboard->refresh($authority);
+            $this->clipboard()->refresh();
         }
         return $this;
     }
@@ -240,10 +244,24 @@ class AuthManager
      * @param  mixed  $authority
      * @return $this
      */
-    public function refreshFor($authority)
+    public function refreshFor($authority = null)
     {
         if ($this->usesCached) {
-            $this->clipboard->refreshFor($authority);
+            $this->clipboard()->refreshFor($authority);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Clear the cache for all authorities.
+     *
+     * @return $this
+     */
+    public function refreshAll()
+    {
+        if ($this->usesCached) {
+            $this->clipboard()->refreshAll();
         }
 
         return $this;
@@ -305,7 +323,7 @@ class AuthManager
     public function abilities()
     {
         if ($this->abilities === null) {
-            $this->abilities = new Collection($this->clipboard->getAbilities());
+            $this->abilities = new Collection($this->clipboard()->getAbilities());
         }
 
         return $this->abilities;
@@ -346,13 +364,11 @@ class AuthManager
      */
     public function roles()
     {
-        $id = $this->user->getId();
-
-        if (isset($this->roles[$id])) {
-            return $this->roles[$id];
+        if ($this->roles !== null) {
+            return $this->roles;
         }
 
-        return $this->roles[$id] = (new FindRoles($this->user, $this->abilities))->find();
+        return $this->roles = (new FindRoles($this->user, $this->abilities))->find();
     }
 
     /**

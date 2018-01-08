@@ -3,16 +3,22 @@
 namespace Lxh\Auth\Conductors;
 
 use Lxh\Auth\Clipboard;
-use Lxh\Database\Eloquent\Model;
+use Lxh\MVC\Model;
+use Lxh\Support\Collection;
 
 class ChecksRoles
 {
     /**
      * The authority against which to check for roles.
      *
-     * @var \Lxh\Database\Eloquent\Model
+     * @var Model
      */
     protected $authority;
+
+    /**
+     * @var Collection
+     */
+    protected $roles;
 
     /**
      * The bouncer clipboard instance.
@@ -24,12 +30,13 @@ class ChecksRoles
     /**
      * Constructor.
      *
-     * @param \Lxh\Database\Eloquent\Model  $authority
+     * @param Model  $authority
      * @param \Lxh\Auth\Clipboard  $clipboard
      */
-    public function __construct(Model $authority, Clipboard $clipboard)
+    public function __construct(Model $authority, Collection $roles, Clipboard $clipboard)
     {
         $this->authority = $authority;
+        $this->roles = $roles;
         $this->clipboard = $clipboard;
     }
 

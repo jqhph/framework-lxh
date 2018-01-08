@@ -2,6 +2,7 @@
 
 namespace Lxh\Auth\Conductors;
 
+use Lxh\Auth\AuthManager;
 use Lxh\Auth\Helpers;
 use Lxh\Auth\Database\Role;
 use Lxh\Auth\Database\Models;
@@ -12,6 +13,11 @@ use Lxh\Support\Collection;
 
 class RemovesRoles
 {
+    /**
+     * @var AuthManager
+     */
+    protected $auth;
+
     /**
      * @var Model
      */
@@ -29,11 +35,11 @@ class RemovesRoles
      *
      * @param \Lxh\Support\Collection|\Lxh\Auth\Database\Role|string  $roles
      */
-    public function __construct(Model $authority, $roles)
+    public function __construct(AuthManager $auth, Model $authority, $roles)
     {
+        $this->auth = $auth;
         $this->authority = $authority;
-
-        $this->roles = Helpers::toArray($roles);
+        $this->roles = array_filter(Helpers::toArray($roles));
     }
 
     /**
@@ -50,7 +56,13 @@ class RemovesRoles
 
         $authorities = is_array($authority) ? $authority : [$authority];
 
-        return $this->retractRoles($roleIds, $authorities);
+        $result = $this->retractRoles($roleIds, $authorities);
+
+        foreach ($authorities as &$authority) {
+            $this->auth->refreshFor($authority);
+        }
+
+        return $result;
     }
 
     /**
@@ -61,14 +73,22 @@ class RemovesRoles
     public function then()
     {
         if (! $this->roles) {
-            return Models::role()->resetAssigned($this->authority);
+            $result = Models::role()->resetAssigned($this->authority);
+
+            $this->auth->refresh();
+
+            return $result;
         }
 
         if (! ($roleIds = $this->getRoleIds())) {
             return false;
         }
 
-        return $this->retractRoles($roleIds, [$this->authority]);
+        $result = $this->retractRoles($roleIds, [$this->authority]);
+
+        $this->auth->refresh();
+
+        return $result;
     }
 
     /**
@@ -78,6 +98,8 @@ class RemovesRoles
      */
     protected function getRoleIds()
     {
+        if (! $this->roles) return [];
+
         $roles = Helpers::groupModelsAndIdentifiersByType($this->roles);
 
         $ids = [];

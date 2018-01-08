@@ -12,6 +12,11 @@ use Lxh\MVC\Model;
 class AssignsRoles
 {
     /**
+     * @var AuthManager
+     */
+    protected $auth;
+
+    /**
      * @var Model
      */
     protected $authority;
@@ -36,10 +41,11 @@ class AssignsRoles
      *
      * @param \Lxh\Support\Collection|\Lxh\Auth\Database\Role|string  $roles
      */
-    public function __construct(Model $authority, $roles)
+    public function __construct(AuthManager $auth, Model $authority, $roles)
     {
+        $this->auth = $auth;
         $this->authority = $authority;
-        $this->roles = Helpers::toArray($roles);
+        $this->roles = array_filter(Helpers::toArray($roles));
     }
 
     /**
@@ -50,13 +56,25 @@ class AssignsRoles
      */
     public function then()
     {
-        $roles = Models::role()->findOrCreate($this->roles);
-
-        if ($this->retracts !== null) {
-            AuthManager::resolve($this->authority)->retract($this->retracts)->then();
+        if ($this->roles) {
+            $roles = Models::role()->findOrCreate($this->roles);
         }
 
-        return $this->assignRoles($roles, $this->authority->getId());
+        if ($this->retracts !== null) {
+            $this->auth->retract($this->retracts)->then();
+        }
+
+        if ($this->roles && $roles) {
+            $result = $this->assignRoles($roles, $this->authority->getId());
+            
+            $this->auth->refresh();
+
+            return $result;
+        } else {
+            $this->auth->refresh();
+        }
+
+        return false;
     }
 
     /**

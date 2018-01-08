@@ -8,7 +8,7 @@ use Lxh\Auth\Database\Queries\Abilities as AbilitiesQuery;
 use Lxh\Support\Collection;
 use Lxh\MVC\Model;
 
-class Clipboard implements \Lxh\Bouncer\Contracts\Clipboard
+class Clipboard
 {
     use HandlesAuthorization;
 
