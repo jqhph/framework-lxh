@@ -17,23 +17,39 @@ class Role extends \Lxh\Auth\Database\Role
         $data['modified_at'] = time();
     }
 
-    public function afterSave($id, array & $data, $result)
+    public function afterSave($id, array &$input, $result)
     {
+        if ($input['abilities']) {
+            $this->resetAbilities();
+            $this->assignAbilities($input['abilities']);
+            // 清除相关用户缓存
+            auth()->refreshForRoles($this);
+        }
     }
 
     public function afterDelete($id, $result)
     {
+        if (! $result) return;
+
+        $this->resetAbilities();
+        auth()->refreshForRoles($this);
     }
 
-    public function beforeAdd(array & $data)
+    public function beforeAdd(array &$input)
     {
         $data['created_at']    = time();
         $data['created_by_id'] = admin()->id;
     }
 
-    public function afterAdd($insertId, array & $data)
+    public function afterAdd($insertId, array &$input)
     {
         if (! $insertId) return;
+
+        if ($input['abilities']) {
+            $this->assignAbilities($input['abilities']);
+            // 清除相关用户缓存
+            auth()->refreshForRoles($this);
+        }
     }
 
     /**

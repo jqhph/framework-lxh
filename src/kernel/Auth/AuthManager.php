@@ -3,6 +3,7 @@
 namespace Lxh\Auth;
 
 use Lxh\Auth\Conductors\FindRoles;
+use Lxh\Auth\Database\Role;
 use Lxh\Cache\File;
 use Lxh\MVC\Model;
 use Lxh\Auth\Cache\Store;
@@ -371,6 +372,28 @@ class AuthManager
         }
 
         return $this->roles = (new FindRoles($this->user, $this->abilities))->find();
+    }
+
+    /**
+     * 根据角色清除用户权限缓存
+     *
+     * @param Role|array $roles
+     * @return void
+     */
+    public function refreshForRoles($roles)
+    {
+        $users = [];
+        foreach ((array) $roles as &$role) {
+            $users = array_merge($users, $role->findUsersIds()->all());
+        }
+
+        foreach ($users as &$id) {
+            $user = Models::user();
+
+            $this->refreshFor($user->attach([
+                $user->getKeyName() => $id,
+            ]));
+        }
     }
 
 

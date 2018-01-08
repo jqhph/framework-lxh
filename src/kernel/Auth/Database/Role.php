@@ -85,4 +85,75 @@ class Role extends Model
 
         return query()->from(Models::table('assigned_roles'))->where($where)->delete();
     }
+
+
+    /**
+     * 重置角色已分配的权限
+     *
+     * @return bool
+     */
+    public function resetAbilities()
+    {
+        if (! $id = $this->getId()) {
+            return false;
+        }
+
+        $where = [
+            'entity_id' => $id,
+            'entity_type' => $this->getMorphType()
+        ];
+
+        return query()->from(Models::table('assigned_abilities'))->where($where)->delete();
+    }
+
+    /**
+     * 给角色分派权限
+     *
+     * @param mixed $abilities 权限id
+     * @return bool|mixed
+     */
+    public function assignAbilities($abilities)
+    {
+        if (!$id = $this->getId()) {
+            return false;
+        }
+        $type = $this->getMorphType();
+        $inserts = [];
+
+        foreach (array_filter((array) $abilities) as &$abilityId) {
+            $inserts[] = [
+                'ability_id' => $abilityId,
+                'entity_id' => $id,
+                'entity_type' => $type
+            ];
+        }
+
+        if (!$inserts) return false;
+
+        return query()->from(Models::table('assigned_abilities'))->batchInsert($inserts);
+    }
+
+    /**
+     * 获取角色所属用户id数组
+     *
+     * @return Collection
+     */
+    public function findUsersIds()
+    {
+        if (!$id = $this->getId()) {
+            return [];
+        }
+
+        $usertype = Models::user()->getMorphType();
+
+        $where = [
+            'role_id' => $id,
+            'entity_type' => $usertype
+        ];
+        $content = query()->select('entity_id')->from(Models::table('assigned_roles'))->where($where)->find();
+
+        if (! $content) return $content;
+
+        return (new Collection($content))->pluck('entity_id');
+    }
 }

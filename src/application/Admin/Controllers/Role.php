@@ -67,7 +67,7 @@ class Role extends Controller
             $form->tableCheckbox('abilities')
                 ->rows($ablities)
                 ->color('danger')
-                ->help("关联已有权限。<a onclick=\"open_tab('$tabid', '$url', '$tablabel')\">[点我创建权限]</a>");
+                ->help(trans('Assign abilities') . " <a onclick=\"open_tab('$tabid', '$url', '$tablabel')\">[$tablabel]</a>");
         }
     }
 

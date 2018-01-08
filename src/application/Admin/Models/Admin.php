@@ -81,12 +81,20 @@ class Admin extends Session
     {
         if (! $insertId) return;
 
-        $this->assignRoles();
+        if ($this->roles) {
+            AuthManager::resolve($this)->assign($this->roles)->then();
+        }
     }
 
     protected function afterSave($id, array &$input, $result)
     {
-        $this->assignRoles();
+        if (! $this->roles) return;
+
+        AuthManager::resolve($this)
+            ->assign($this->roles)
+            ->retract() // 先重置所有已关联角色
+            ->refresh() // 清除缓存
+            ->then(); // 执行
     }
 
     protected function afterDelete($id, $result)
@@ -108,21 +116,6 @@ class Admin extends Session
         $data['roles'] = AuthManager::resolve($this)->roles()->pluck(Models::role()->getKeyName())->all();
 
         return $data;
-    }
-
-    /**
-     * 给用户关联角色
-     * 先重置再关联
-     */
-    protected function assignRoles()
-    {
-        if (! $this->roles) return;
-
-        AuthManager::resolve($this)
-            ->assign($this->roles)
-            ->retract() // 先重置所有已关联角色
-            ->refresh() // 清除缓存
-            ->then(); // 执行
     }
 
     /**
