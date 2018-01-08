@@ -329,7 +329,7 @@ class Model extends Entity
     /**
      * @return Query
      */
-    protected function query($name = null)
+    public function query($name = null)
     {
         return query($name ?: $this->connectionType)->from($this->tableName);
     }
