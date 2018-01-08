@@ -37,7 +37,7 @@ class AuthManager
     protected $roles = [];
 
     /**
-     * @var array
+     * @var Collection
      */
     protected $abilities = null;
 
@@ -269,7 +269,7 @@ class AuthManager
             return true;
         }
 
-        $abilities = $this->getAbilities();
+        $abilities = $this->abilities()->all();
 
         if (isset($abilities[$ability])) {
             return $abilities[$ability]['forbidden'] == 0;
@@ -290,7 +290,7 @@ class AuthManager
             return false;
         }
 
-        $abilities = $this->getAbilities();
+        $abilities = $this->abilities()->all();
 
         if (isset($abilities[$ability])) {
             return $abilities[$ability]['forbidden'] == 1;
@@ -300,12 +300,12 @@ class AuthManager
     }
 
     /**
-     * @return array
+     * @return Collection
      */
-    protected function getAbilities()
+    public function abilities()
     {
         if ($this->abilities === null) {
-            $this->abilities = $this->clipboard->getAbilities();
+            $this->abilities = new Collection($this->clipboard->getAbilities());
         }
 
         return $this->abilities;
@@ -349,10 +349,10 @@ class AuthManager
         $id = $this->user->getId();
 
         if (isset($this->roles[$id])) {
-            return $this->roles;
+            return $this->roles[$id];
         }
 
-        return $this->roles = (new FindRoles($this->user, $this->abilities))->find();
+        return $this->roles[$id] = (new FindRoles($this->user, $this->abilities))->find();
     }
 
     /**
