@@ -12,9 +12,9 @@ use Lxh\MVC\Model;
 class AssignsRoles
 {
     /**
-     * @var AuthManager
+     * @var Model
      */
-    protected $auth;
+    protected $authority;
 
     /**
      * The roles to be assigned.
@@ -24,20 +24,21 @@ class AssignsRoles
     protected $roles;
 
     /**
+     * 角色名或id或模型
      * 是否先重置用户和角色的关系
      *
      * @var bool
      */
-    protected $reset = false;
+    protected $retracts = [];
 
     /**
      * Constructor.
      *
      * @param \Lxh\Support\Collection|\Lxh\Auth\Database\Role|string  $roles
      */
-    public function __construct(AuthManager $auth, $roles)
+    public function __construct(Model $authority, $roles)
     {
-        $this->auth = $auth;
+        $this->authority = $authority;
         $this->roles = Helpers::toArray($roles);
     }
 
@@ -49,19 +50,17 @@ class AssignsRoles
      */
     public function then()
     {
-        $authority = $this->auth->user();
-
         $roles = Models::role()->findOrCreate($this->roles);
 
-        return $this->assignRoles($roles, $authority->getId());
+        return $this->assignRoles($roles, $this->authority->getId());
     }
 
     /**
      * @return $this
      */
-    public function retract()
+    public function retract($roles = [])
     {
-        $this->reset = true;
+        $this->retracts = &$roles;
 
         return $this;
     }
@@ -80,7 +79,7 @@ class AssignsRoles
             return $model['id'];
         });
 
-        $morphType = $this->auth->user()->getMorphType();
+        $morphType = $this->authority->getMorphType();
 
         $records = $this->buildAttachRecords($roleIds, $morphType, $authorityId);
 
@@ -149,13 +148,8 @@ class AssignsRoles
 
         $records = $records->all();
 
-        if ($this->reset) {
-            $user = $this->auth->user();
-            $where = [
-                'entity_id' => $user->getId(),
-                'entity_type' => $user->getMorphType()
-            ];
-            $this->newPivotTableQuery()->where($where)->delete();
+        if ($this->retracts) {
+            AuthManager::create($this->authority)->retract($this->retracts)->then();
         }
 
         return $records ? $this->newPivotTableQuery()->batchInsert($records) : false;

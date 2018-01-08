@@ -141,7 +141,7 @@ class AuthManager
      */
     public function assign($roles)
     {
-        return new Conductors\AssignsRoles($this, $roles);
+        return new Conductors\AssignsRoles($this->user, $roles);
     }
 
     /**
