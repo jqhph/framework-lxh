@@ -34,10 +34,21 @@ class FindRoles
      */
     public function find()
     {
+        $role = Models::role();
+
         if (! $this->abilities) {
-            return new Collection(Models::role()->findByAuthority($this->authority));
+            return new Collection($role->findByAuthority($this->authority));
+        }
+
+        // 根据id查询
+        $roleIds = (new Collection($this->abilities))->pluck('role_id')->all();
+
+        if (count($roleIds) > 1) {
+            $where = [$role->getKeyName(), ['IN', &$roleIds]];
+        } else {
+            $where = [$role->getKeyName() => $roleIds];
         }
         
-
+        return new Collection($role->where($where)->find());
     }
 }
