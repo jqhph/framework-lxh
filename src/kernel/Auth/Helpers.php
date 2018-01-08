@@ -68,7 +68,7 @@ class Helpers
      */
     public static function groupModelsAndIdentifiersByType($models)
     {
-        $groups = (new Collection((array)$models))->groupBy(function ($model) {
+        $groups = (new Collection(array_filter((array) $models)))->groupBy(function ($model) {
             if (is_numeric($model)) {
                 return 'integers';
             } else if (is_string($model)) {
@@ -155,11 +155,7 @@ class Helpers
         $map = [];
 
         foreach ($authorities as $authority) {
-            if ($authority instanceof Model) {
-                $map[get_class($authority)][] = $authority->getId();
-            } else {
-                $map[Models::classname('User')][] = $authority;
-            }
+            $map[get_class($authority)][] = $authority->getId();
         }
 
         return $map;

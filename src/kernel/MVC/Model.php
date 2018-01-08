@@ -81,6 +81,15 @@ class Model extends Entity
     }
 
     /**
+     * 模型类型
+     *
+     * @return mixed
+     */
+    public function getMorphType()
+    {
+    }
+
+    /**
      * @param $name
      * @return $this
      */
@@ -167,9 +176,9 @@ class Model extends Entity
      *
      * @return Query
      */
-    public function select($fields)
+    public function select($fields = null)
     {
-        return $this->query()->select($fields);
+        return $this->query()->select($fields ?: $this->selectFields);
     }
 
     // 查找数据
@@ -329,7 +338,7 @@ class Model extends Entity
     /**
      * @return Query
      */
-    protected function query($name = null)
+    public function query($name = null)
     {
         return query($name ?: $this->connectionType)->from($this->tableName);
     }

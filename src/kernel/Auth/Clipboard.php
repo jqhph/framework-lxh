@@ -8,7 +8,7 @@ use Lxh\Auth\Database\Queries\Abilities as AbilitiesQuery;
 use Lxh\Support\Collection;
 use Lxh\MVC\Model;
 
-class Clipboard implements \Lxh\Bouncer\Contracts\Clipboard
+class Clipboard
 {
     use HandlesAuthorization;
 
@@ -178,15 +178,13 @@ class Clipboard implements \Lxh\Bouncer\Contracts\Clipboard
      * Get a list of the authority's abilities.
      *
      * @param  Model  $authority
-     * @return array
+     * @return Collection
      */
     public function getAbilities()
     {
         $abilities = Models::ability()->getForAuthority($this->user);
 
-        $abilities = $this->formatArray($abilities);
-
-        return $abilities;
+        return new Collection($this->formatArray($abilities));
     }
 
     protected function formatArray(array &$abilities)
@@ -206,6 +204,6 @@ class Clipboard implements \Lxh\Bouncer\Contracts\Clipboard
      */
     public function getForbiddenAbilities()
     {
-        return $this->getAbilities(true);
+        return $this->getAbilities();
     }
 }

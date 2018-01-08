@@ -5,7 +5,7 @@
  * @author Jqh
  * @date   2017/7/27 09:21
  */
-namespace Lxh\Kernel\Cache;
+namespace Lxh\Cache;
 
 use Lxh\File\FileManager;
 

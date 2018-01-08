@@ -116,17 +116,6 @@ function make($abstract)
  */
 function model($name = __CONTROLLER__)
 {
-    return $GLOBALS['MODEL_FACTORY']->get($name);
-}
-
-/**
- * 创建一个新的模型
- *
- * @param  string $name
- * @return Model
- */
-function create_model($name = __CONTROLLER__)
-{
     return $GLOBALS['MODEL_FACTORY']->create($name);
 }
 

@@ -2,7 +2,10 @@
 
 namespace Lxh\Auth;
 
-use Lxh\Admin\MVC\Model;
+use Lxh\Auth\Conductors\FindRoles;
+use Lxh\Auth\Database\Role;
+use Lxh\Cache\File;
+use Lxh\MVC\Model;
 use Lxh\Auth\Cache\Store;
 use Lxh\Auth\Clipboard;
 use Lxh\Auth\Database\Models;
@@ -10,6 +13,11 @@ use Lxh\Support\Collection;
 
 class AuthManager
 {
+    /**
+     * @var array
+     */
+    protected static $instances = [];
+
     /**
      * @var bool
      */
@@ -26,12 +34,12 @@ class AuthManager
     protected $cache;
 
     /**
-     * @var array
+     * @var Collection
      */
-    protected $roles = [];
+    protected $roles = null;
 
     /**
-     * @var array
+     * @var Collection
      */
     protected $abilities = null;
 
@@ -50,8 +58,13 @@ class AuthManager
         $this->usesCached = config('admin.auth.cache', true);
 
         if ($this->usesCached) {
-            $this->cache = new Store();
+            $this->cache = new Store($this->createCacheStore());
         }
+    }
+
+    protected function createCacheStore()
+    {
+        return new File();
     }
 
     /**
@@ -81,12 +94,32 @@ class AuthManager
     }
 
     /**
-     * Create a new Auth instance.
+     * Resolve a Auth instance.
      *
      * @param  mixed  $user
      * @return static
      */
-    public static function create($user = null)
+    public static function resolve(Model $user = null)
+    {
+        if (! $user) {
+            $user = admin();
+        }
+        $id = $user->getId();
+
+        if (isset(static::$instances[$id])) {
+            return static::$instances[$id];
+        }
+
+        return static::$instances[$id] = new static($user);
+    }
+
+    /**
+     * Create a new Auth instance.
+     *
+     * @param  Model  $user
+     * @return static
+     */
+    public static function create(Model $user = null)
     {
         return new static($user);
     }
@@ -141,7 +174,7 @@ class AuthManager
      */
     public function assign($roles)
     {
-        return new Conductors\AssignsRoles($this, $roles);
+        return new Conductors\AssignsRoles($this, $this->user, $roles);
     }
 
     /**
@@ -150,9 +183,9 @@ class AuthManager
      * @param  \Lxh\Support\Collection|\Lxh\Auth\Database\Role|string  $roles
      * @return \Lxh\Auth\Conductors\RemovesRoles
      */
-    public function retract($roles)
+    public function retract($roles = [])
     {
-        return new Conductors\RemovesRoles($roles);
+        return new Conductors\RemovesRoles($this, $this->user, $roles);
     }
 
     /**
@@ -169,12 +202,11 @@ class AuthManager
     /**
      * Start a chain, to check if the given authority has a certain role.
      *
-     * @param  Model  $authority
      * @return \Lxh\Auth\Conductors\ChecksRoles
      */
-    public function is(Model $authority)
+    public function is()
     {
-        return new Conductors\ChecksRoles($authority, $this->clipboard);
+        return new Conductors\ChecksRoles($this->user, $this->roles(), $this->clipboard());
     }
 
     /**
@@ -197,13 +229,12 @@ class AuthManager
     /**
      * Clear the cache.
      *
-     * @param  mixed  $authority
      * @return $this
      */
-    public function refresh($authority = null)
+    public function refresh()
     {
         if ($this->usesCached) {
-            $this->clipboard->refresh($authority);
+            $this->clipboard()->refresh();
         }
         return $this;
     }
@@ -214,10 +245,24 @@ class AuthManager
      * @param  mixed  $authority
      * @return $this
      */
-    public function refreshFor($authority)
+    public function refreshFor($authority = null)
     {
         if ($this->usesCached) {
-            $this->clipboard->refreshFor($authority);
+            $this->clipboard()->refreshFor($authority);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Clear the cache for all authorities.
+     *
+     * @return $this
+     */
+    public function refreshAll()
+    {
+        if ($this->usesCached) {
+            $this->clipboard()->refreshAll();
         }
 
         return $this;
@@ -243,7 +288,7 @@ class AuthManager
             return true;
         }
 
-        $abilities = $this->getAbilities();
+        $abilities = $this->abilities()->all();
 
         if (isset($abilities[$ability])) {
             return $abilities[$ability]['forbidden'] == 0;
@@ -264,7 +309,7 @@ class AuthManager
             return false;
         }
 
-        $abilities = $this->getAbilities();
+        $abilities = $this->abilities()->all();
 
         if (isset($abilities[$ability])) {
             return $abilities[$ability]['forbidden'] == 1;
@@ -274,12 +319,14 @@ class AuthManager
     }
 
     /**
-     * @return array
+     * 获取当前用户所有权限
+     *
+     * @return Collection
      */
-    protected function getAbilities()
+    public function abilities()
     {
         if ($this->abilities === null) {
-            $this->abilities = $this->clipboard->getAbilities();
+            $this->abilities = $this->clipboard()->getAbilities();
         }
 
         return $this->abilities;
@@ -314,25 +361,39 @@ class AuthManager
     }
 
     /**
-     * Get an instance of the role model.
+     * 获取当前用户所有的角色.
      *
-     * @param  array  $attributes
-     * @return \Lxh\Auth\Database\Role
+     * @return Collection
      */
-    public function role(array $attributes = [])
+    public function roles()
     {
-        return Models::role($attributes);
+        if ($this->roles !== null) {
+            return $this->roles;
+        }
+
+        return $this->roles = (new FindRoles($this->user, $this->abilities))->find();
     }
 
     /**
-     * Get an instance of the ability model.
+     * 根据角色清除用户权限缓存
      *
-     * @param  array  $attributes
-     * @return \Lxh\Auth\Database\Ability
+     * @param Role|array $roles
+     * @return void
      */
-    public function ability(array $attributes = [])
+    public function refreshForRoles($roles)
     {
-        return Models::ability($attributes);
+        $users = [];
+        foreach ((array) $roles as &$role) {
+            $users = array_merge($users, $role->findUsersIds()->all());
+        }
+
+        foreach ($users as &$id) {
+            $user = Models::user();
+
+            $this->refreshFor($user->attach([
+                $user->getKeyName() => $id,
+            ]));
+        }
     }
 
 

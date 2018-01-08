@@ -13,6 +13,8 @@ use Lxh\Support\Arr;
  * Class Field.
  *
  * @method Field default($value) set field default value
+ * @method $this class($class)
+ * @method
  */
 class Field implements Renderable
 {
@@ -205,6 +207,35 @@ class Field implements Renderable
     public function disabled()
     {
         $this->attribute('disabled', 'disabled');
+        return $this;
+    }
+
+    /**
+     * 设置样式
+     *
+     * @param $style
+     * @return $this
+     */
+    public function setStyle($style)
+    {
+        $this->attributes['style'] = &$style;
+        return $this;
+    }
+
+
+    /**
+     * 追加样式
+     *
+     * @param $style
+     * @return $this
+     */
+    public function style($style)
+    {
+        if (isset($this->attributes['style'])) {
+            $this->attributes['style'] = "{$this->attributes['style']};$style";
+        } else {
+            $this->attributes['style'] = &$style;
+        }
         return $this;
     }
 
@@ -906,10 +937,23 @@ class Field implements Renderable
      *
      * @return $this
      */
-    public function __call($method, $arguments)
+    public function __call($method, $parameters)
     {
         if ($method === 'default') {
-            return $this->setDefault(get_value($arguments, 0));
+            return $this->setDefault(get_value($parameters, 0));
         }
+
+        $p = count($parameters) > 0 ? $parameters[0] : true;
+        if ($method == 'class') {
+            if (isset($this->attributes[$method])) {
+                $this->attributes[$method] = "{$this->attributes[$method]} $p";
+            } else {
+                $this->attributes[$method] = &$p;
+            }
+            return $this;
+        }
+        $this->attributes[$method] = &$p;
     }
+
+
 }

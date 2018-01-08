@@ -281,9 +281,8 @@ class Controller extends Base
     /**
      * @param array $data
      */
-    protected function addFilter(array &$data)
+    protected function addFilter(array &$input)
     {
-
     }
 
     /**
@@ -311,6 +310,8 @@ class Controller extends Base
         if (empty($params['id'])) {
             return $this->error(trans_with_global('Missing id.'));
         }
+
+        $this->id = $params['id'];
 
         // 获取表单数据
         $data = json_decode(file_get_contents('php://input'), true);

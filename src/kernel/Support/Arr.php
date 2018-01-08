@@ -339,7 +339,7 @@ class Arr
      * @param  string|array|null  $key
      * @return array
      */
-    public static function pluck(&$array, $value, $key = null)
+    public static function pluck($array, $value, $key = null)
     {
         $results = [];
 

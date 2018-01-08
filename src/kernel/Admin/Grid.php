@@ -311,13 +311,13 @@ class Grid implements Renderable
     public function model($model = null)
     {
         if (is_string($model)) {
-            $this->model = create_model($model);
+            $this->model = model($model);
         } elseif ($model instanceof Model) {
             $this->model = $model;
         }
 
         if (! $this->model) {
-            $this->model = create_model(Admin::model());
+            $this->model = model(Admin::model());
         }
         return $this->model;
     }

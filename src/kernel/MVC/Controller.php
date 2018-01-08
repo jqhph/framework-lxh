@@ -163,7 +163,7 @@ abstract class Controller
      */
     protected function model($name = __CONTROLLER__)
     {
-        return $this->container['model.factory']->$name;
+        return $this->container['model.factory']->create($name);
     }
 
     /**

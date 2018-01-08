@@ -48,6 +48,7 @@ use Lxh\Support\Arr;
  * @method Field\Html           html($html)
  * @method Field\Tags           tags($column, $label = '')
  * @method Field\Icon           icon($column, $label = '')
+ * @method Field\TableCheckbox  tableCheckbox($column, $label = '')
  */
 class Form implements Renderable
 {
