@@ -24,7 +24,9 @@ trait FindOrCreate
             $items['integers'] = $this->where('id', 'IN', $items['integers'])->find();
         }
 
-        $items['strings'] = $this->findOrCreateByName($items['strings'], $attributes);
+        if ($items['strings']) {
+            $items['strings'] = $this->findOrCreateByName($items['strings'], $attributes);
+        }
 
         return new Collection(Arr::collapse($items));
     }

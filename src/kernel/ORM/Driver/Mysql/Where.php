@@ -185,7 +185,7 @@ class Where
 
             } else {
                 if (count($val) < 2) {
-                    throw new InvalidArgumentException('where字句构造参数不合法！');
+                    throw new InvalidArgumentException('where字句构造参数错误！');
                 }
                 $data[] = $this->handle($field, $val[0], $val[1], $autoAddTable)[0];
             }
