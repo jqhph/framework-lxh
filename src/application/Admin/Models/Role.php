@@ -67,7 +67,7 @@ class Role extends \Lxh\Auth\Database\Role
     public function findList(array $where, $orderString = 'id Desc', $offset = 0, $maxSize = 20)
     {
         $q = $this->query()
-            ->select($this->selectFields)
+            ->select(['id', 'name', 'created_at', 'modified_at', 'admin.username AS created_by', 'comment', 'title'])
             ->leftJoin('admin', 'admin.id', 'created_by_id')
             ->limit($offset, $maxSize);
 

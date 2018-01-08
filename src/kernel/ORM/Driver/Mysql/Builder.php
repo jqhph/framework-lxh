@@ -318,40 +318,36 @@ class Builder
         return $this;
     }
 
-    protected function fieldHandler(& $fieldsContainer, & $data, $table)
+    protected function fieldHandler(& $fieldsContainer, &$data, $table)
     {
         if (! is_array($data)) {
             if (preg_match($this->varPattern, $data)) {
                 $fieldsContainer .= '`' . $table . '`.`' . $data . '`, ';
-
             } else {
                 $fieldsContainer .= $data . ', ';
-
             }
+            return;
+        }
+        foreach ($data as $k => & $v) {
+            if (is_numeric($k)) {
+                $this->fieldHandler($fieldsContainer, $v, $table);
 
-        } else {
-            foreach ($data as $k => & $v) {
-                if (is_numeric($k)) {
-                    $this->fieldHandler($fieldsContainer, $v, $table);
-
-                } else {
-                    if (! is_array($v)) {
-                        $fieldsContainer .= "`$table`.`$k` AS `$v`,";
-                        continue;
-                    }// $v是数组, $k是表名
-                    $tb = $k;
-                    foreach ($v as $i => & $f) {
-                        if (is_numeric($i)) {
-                            $this->fieldHandler($fieldsContainer, $f, $tb);
-
-                        } else {
-                            $fieldsContainer .= "`$tb`.`$i` AS `$f`,";
-
-                        }
+            } else {
+                if (! is_array($v)) {
+                    $fieldsContainer .= "`$table`.`$k` AS `$v`,";
+                    continue;
+                }// $v是数组, $k是表名
+                $tb = $k;
+                foreach ($v as $i => & $f) {
+                    if (is_numeric($i)) {
+                        $this->fieldHandler($fieldsContainer, $f, $tb);
+                    } else {
+                        $fieldsContainer .= "`$tb`.`$i` AS `$f`,";
                     }
                 }
             }
         }
+
     }
 
     public function querySql($clear = false)
