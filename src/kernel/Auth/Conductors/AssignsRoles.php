@@ -59,7 +59,7 @@ class AssignsRoles
     /**
      * @return $this
      */
-    public function reset()
+    public function retract()
     {
         $this->reset = true;
 

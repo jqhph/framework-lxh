@@ -8,6 +8,8 @@
 
 namespace Lxh\Admin\Models;
 
+use Lxh\Auth\AuthManager;
+use Lxh\Auth\Database\Models;
 use Lxh\Contracts\Container\Container;
 use Lxh\Helper\Entity;
 use Lxh\MVC\Model;
@@ -29,6 +31,11 @@ class Admin extends Session
      * @var int
      */
     protected $morphType = 1;
+
+    /**
+     * @var array
+     */
+    protected $roles = [];
 
     /**
      * 注册
@@ -53,6 +60,8 @@ class Admin extends Session
         $input['created_by_id'] = admin()->getId() ?: 0;
         $input['password'] = Password::encrypt($input['password']);
 
+        $this->roles = $input['roles'];
+        unset($input['roles']);
     }
 
     protected function beforeSave($id, array &$input)
@@ -61,6 +70,43 @@ class Admin extends Session
             $input['password'] = Password::encrypt($input['password']);
         }
         $input['modified_at'] = time();
+
+        $this->roles = $input['roles'];
+        unset($input['roles']);
+    }
+
+    protected function afterAdd($insertId, array &$input)
+    {
+        if (! $insertId) return;
+
+        $this->assignRoles();
+    }
+
+    protected function afterSave($id, array &$input, $result)
+    {
+        $this->assignRoles();
+    }
+
+    protected function afterDelete($id, $result)
+    {
+        if (! $id) return;
+
+        // 清除用户所有角色
+        AuthManager::create($this)->retract()->then();
+    }
+
+    /**
+     * 给用户关联角色
+     * 先重置再关联
+     */
+    protected function assignRoles()
+    {
+        if (! $this->roles) return;
+
+        AuthManager::create($this)
+            ->assign($this->roles)
+            ->retract()
+            ->then();
     }
 
     /**
@@ -94,11 +140,8 @@ class Admin extends Session
 
         $userData = $query
             ->select($this->defaultSelectFields)
-            ->where(
-                [
-                    'deleted' => 0, 'OR' => ['username' => & $account, 'email' => & $account, 'mobile' => & $account]
-                ]
-            )
+            ->where('deleted', 0)
+            ->whereOr(['username' => & $account, 'email' => & $account, 'mobile' => & $account])
             ->findOne();
 
         if (! $userData) {
@@ -139,7 +182,7 @@ class Admin extends Session
      */
     public function auth()
     {
-        return $this->id;
+        return $this->getId();
     }
 
     public function isAdmin()

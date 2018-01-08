@@ -155,11 +155,7 @@ class Helpers
         $map = [];
 
         foreach ($authorities as $authority) {
-            if ($authority instanceof Model) {
-                $map[get_class($authority)][] = $authority->getId();
-            } else {
-                $map[Models::classname('User')][] = $authority;
-            }
+            $map[get_class($authority)][] = $authority->getId();
         }
 
         return $map;

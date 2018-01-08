@@ -150,7 +150,7 @@ class CachedClipboard extends Clipboard implements Contracts
      * @param  Model  $authority
      * @return $this
      */
-    public function refreshFor(Model $authority)
+    public function refreshFor(Model $authority = null)
     {
         $authority = $authority ?: $this->user;
         $this->cache->forget($this->getCacheKey($authority, 'abilities'));

@@ -206,6 +206,6 @@ class Clipboard implements \Lxh\Bouncer\Contracts\Clipboard
      */
     public function getForbiddenAbilities()
     {
-        return $this->getAbilities(true);
+        return $this->getAbilities();
     }
 }

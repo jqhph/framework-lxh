@@ -51,4 +51,20 @@ class Role extends Model
             'created_by_id' => admin()->getId()
         ], $attributes);
     }
+
+    /**
+     * 重置用户已分配角色
+     *
+     * @param Model $user
+     * @return mixed
+     */
+    public function resetAssigned(Model $user)
+    {
+        $where = [
+            'entity_id' => $user->getId(),
+            'entity_type' => $user->getMorphType()
+        ];
+
+        return query()->from(Models::table('assigned_roles'))->where($where)->delete();
+    }
 }

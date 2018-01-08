@@ -5,10 +5,18 @@ namespace Lxh\Auth\Conductors;
 use Lxh\Auth\Helpers;
 use Lxh\Auth\Database\Role;
 use Lxh\Auth\Database\Models;
-use Lxh\Database\Eloquent\Model;
+use Lxh\MVC\Model;
+use Lxh\ORM\Query;
+use Lxh\Support\Arr;
+use Lxh\Support\Collection;
 
 class RemovesRoles
 {
+    /**
+     * @var Model
+     */
+    protected $authority;
+
     /**
      * The roles to be removed.
      *
@@ -21,28 +29,46 @@ class RemovesRoles
      *
      * @param \Lxh\Support\Collection|\Lxh\Auth\Database\Role|string  $roles
      */
-    public function __construct($roles)
+    public function __construct(Model $authority, $roles)
     {
+        $this->authority = $authority;
+
         $this->roles = Helpers::toArray($roles);
     }
 
     /**
      * Remove the role from the given authority.
      *
-     * @param  \Lxh\Database\Eloquent\Model|array|int  $authority
-     * @return void
+     * @param  Model|array|int  $authority
+     * @return mixed
      */
     public function from($authority)
     {
         if (! ($roleIds = $this->getRoleIds())) {
-            return;
+            return false;
         }
 
         $authorities = is_array($authority) ? $authority : [$authority];
 
-        foreach (Helpers::mapAuthorityByClass($authorities) as $class => $keys) {
-            $this->retractRoles($roleIds, $class, $keys);
+        return $this->retractRoles($roleIds, $authorities);
+    }
+
+    /**
+     * 清除关联关系
+     *
+     * @return mixed
+     */
+    public function then()
+    {
+        if (! $this->roles) {
+            return Models::role()->resetAssigned($this->authority);
         }
+
+        if (! ($roleIds = $this->getRoleIds())) {
+            return false;
+        }
+
+        return $this->retractRoles($roleIds, [$this->authority]);
     }
 
     /**
@@ -52,35 +78,43 @@ class RemovesRoles
      */
     protected function getRoleIds()
     {
-        list($models, $names) = Helpers::partition($this->roles, function ($role) {
-            return $role instanceof Model;
-        });
+        $roles = Helpers::groupModelsAndIdentifiersByType($this->roles);
 
-        $ids = $models->map(function ($model) {
-            return $model->getId();
-        });
-
-        if ($names->count()) {
-            $ids = $ids->merge($this->getRoleIdsFromNames($names->all()));
+        $ids = [];
+        if ($roles['integers']) {
+            $ids = $roles['integers'];
         }
 
-        return $ids->all();
+        if ($roles['models']) {
+            foreach ($roles['models'] as $model) {
+                $ids[] = $model->getId();
+            }
+        }
+
+        if ($roles['strings']) {
+            $ids = array_merge($ids, $this->getRoleIdsFromNames($roles['strings'])->all());
+        }
+
+        return $ids;
     }
 
     /**
      * Get the IDs of the roles with the given names.
      *
      * @param  string[]  $names
-     * @return \Lxh\Database\Eloquent\Collection
+     * @return Collection
      */
-    protected function getRoleIdsFromNames(array $names)
+    protected function getRoleIdsFromNames(array &$names)
     {
         $key = Models::role()->getKeyName();
 
-        return Models::role()
-                     ->whereIn('name', $names)
-                     ->get([$key])
-                     ->pluck($key);
+        return (new Collection(
+            Models::role()
+            ->select($key)
+            ->where('name', 'IN', $names)
+            ->find()
+        ))
+            ->pluck($key);
     }
 
     /**
@@ -89,51 +123,34 @@ class RemovesRoles
      * @param  array  $roleIds
      * @param  string $authorityClass
      * @param  array $authorityIds
-     * @return void
+     * @return mixed
      */
-    protected function retractRoles($roleIds, $authorityClass, $authorityIds)
+    protected function retractRoles($roleIds, array $authorities)
     {
         $query = $this->newPivotTableQuery();
 
-        $morphType = (new $authorityClass)->getMorphClass();
-
         foreach ($roleIds as $roleId) {
-            foreach ($authorityIds as $authorityId) {
-                $query->orWhere($this->getDetachQueryConstraint(
-                    $roleId, $authorityId, $morphType
-                ));
+            foreach ($authorities as $authority) {
+                $query->orWhere([
+                    'role_id' => $roleId,
+                    'entity_id' => $authority->getId(),
+                    'entity_type' => $authority->getMorphType(),
+                ]);
             }
         }
 
-        $query->delete();
+        return $query->delete();
     }
 
-    /**
-     * Get a constraint for the detach query for the given parameters.
-     *
-     * @param  mixed  $roleId
-     * @param  mixed  $authorityId
-     * @param  string  $morphType
-     * @return \Closure
-     */
-    protected function getDetachQueryConstraint($roleId, $authorityId, $morphType)
-    {
-        return function ($query) use ($roleId, $authorityId, $morphType) {
-            $query->where(Models::scope()->getAttachAttributes() + [
-                'role_id' => $roleId,
-                'entity_id' => $authorityId,
-                'entity_type' => $morphType,
-            ]);
-        };
-    }
+
 
     /**
      * Get a query builder instance for the assigned roles pivot table.
      *
-     * @return \Lxh\Database\Query\Builder
+     * @return Query
      */
     protected function newPivotTableQuery()
     {
-        return Models::newQueryBuilder()->from(Models::table('assigned_roles'));
+        return query()->from(Models::table('assigned_roles'));
     }
 }

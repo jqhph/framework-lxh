@@ -150,9 +150,9 @@ class AuthManager
      * @param  \Lxh\Support\Collection|\Lxh\Auth\Database\Role|string  $roles
      * @return \Lxh\Auth\Conductors\RemovesRoles
      */
-    public function retract($roles)
+    public function retract($roles = [])
     {
-        return new Conductors\RemovesRoles($roles);
+        return new Conductors\RemovesRoles($this->user, $roles);
     }
 
     /**
