@@ -31,6 +31,11 @@ class RemovesRoles
     protected $roles;
 
     /**
+     * @var bool
+     */
+    protected $refresh = false;
+
+    /**
      * Constructor.
      *
      * @param \Lxh\Support\Collection|\Lxh\Auth\Database\Role|string  $roles
@@ -40,6 +45,17 @@ class RemovesRoles
         $this->auth = $auth;
         $this->authority = $authority;
         $this->roles = array_filter(Helpers::toArray($roles));
+    }
+
+
+    /**
+     * @return $this
+     */
+    public function refresh()
+    {
+        $this->refresh = true;
+
+        return $this;
     }
 
     /**
@@ -58,8 +74,10 @@ class RemovesRoles
 
         $result = $this->retractRoles($roleIds, $authorities);
 
-        foreach ($authorities as &$authority) {
-            $this->auth->refreshFor($authority);
+        if ($this->refresh) {
+            foreach ($authorities as &$authority) {
+                $this->auth->refreshFor($authority);
+            }
         }
 
         return $result;
@@ -75,7 +93,7 @@ class RemovesRoles
         if (! $this->roles) {
             $result = Models::role()->resetAssigned($this->authority);
 
-            $this->auth->refresh();
+            $this->refresh && $this->auth->refresh();
 
             return $result;
         }
@@ -86,7 +104,7 @@ class RemovesRoles
 
         $result = $this->retractRoles($roleIds, [$this->authority]);
 
-        $this->auth->refresh();
+        $this->refresh && $this->auth->refresh();
 
         return $result;
     }

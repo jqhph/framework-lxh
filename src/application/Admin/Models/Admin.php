@@ -93,8 +93,10 @@ class Admin extends Session
     {
         if (! $id) return;
 
-        // 清除用户所有角色
-        AuthManager::resolve($this)->retract()->then();
+        AuthManager::resolve($this)
+            ->retract() // 清除用户所有已关联角色
+            ->refresh() // 刷新缓存
+            ->then(); // 执行
     }
 
     public function find()
@@ -118,8 +120,9 @@ class Admin extends Session
 
         AuthManager::resolve($this)
             ->assign($this->roles)
-            ->retract()
-            ->then();
+            ->retract() // 先重置所有已关联角色
+            ->refresh() // 清除缓存
+            ->then(); // 执行
     }
 
     /**

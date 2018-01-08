@@ -37,6 +37,11 @@ class AssignsRoles
     protected $retracts = null;
 
     /**
+     * @var bool
+     */
+    protected $refresh = false;
+
+    /**
      * Constructor.
      *
      * @param \Lxh\Support\Collection|\Lxh\Auth\Database\Role|string  $roles
@@ -46,6 +51,16 @@ class AssignsRoles
         $this->auth = $auth;
         $this->authority = $authority;
         $this->roles = array_filter(Helpers::toArray($roles));
+    }
+
+    /**
+     * @return $this
+     */
+    public function refresh()
+    {
+        $this->refresh = true;
+
+        return $this;
     }
 
     /**
@@ -66,12 +81,12 @@ class AssignsRoles
 
         if ($this->roles && $roles) {
             $result = $this->assignRoles($roles, $this->authority->getId());
-            
-            $this->auth->refresh();
+
+            $this->refresh && $this->auth->refresh();
 
             return $result;
         } else {
-            $this->auth->refresh();
+            $this->refresh && $this->auth->refresh();
         }
 
         return false;

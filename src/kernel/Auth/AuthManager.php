@@ -318,6 +318,8 @@ class AuthManager
     }
 
     /**
+     * 获取当前用户所有权限
+     *
      * @return Collection
      */
     public function abilities()
@@ -369,17 +371,6 @@ class AuthManager
         }
 
         return $this->roles = (new FindRoles($this->user, $this->abilities))->find();
-    }
-
-    /**
-     * Get an instance of the ability model.
-     *
-     * @param  array  $attributes
-     * @return \Lxh\Auth\Database\Ability
-     */
-    public function ability(array $attributes = [])
-    {
-        return Models::ability($attributes);
     }
 
 
