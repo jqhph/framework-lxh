@@ -141,7 +141,7 @@ class Role extends Model
     public function findUsersIds()
     {
         if (!$id = $this->getId()) {
-            return [];
+            return new Collection();
         }
 
         $usertype = Models::user()->getMorphType();
@@ -152,8 +152,28 @@ class Role extends Model
         ];
         $content = query()->select('entity_id')->from(Models::table('assigned_roles'))->where($where)->find();
 
-        if (! $content) return $content;
-
-        return (new Collection($content))->pluck('entity_id');
+        return (new Collection((array)$content))->pluck('entity_id');
     }
+
+    /**
+     * 根据角色获取权限id
+     *
+     * @return Collection
+     */
+    public function findAbilitiesIdsForRole()
+    {
+        if (! $id = $this->getId()) {
+            return new Collection();
+        }
+
+        $where = [
+            'entity_type' => $this->getMorphType(),
+            'entity_id' => $id
+        ];
+
+        $r = query()->select('ability_id')->from(Models::table('assigned_abilities'))->where($where)->find();
+
+        return (new Collection((array)$r))->pluck('ability_id');
+    }
+
 }

@@ -314,7 +314,7 @@ class Builder
      */
     public function select(& $data)
     {
-        $this->fieldHandler($this->field, $data, $this->tableName);
+        $this->field = &$data;
         return $this;
     }
 
@@ -673,7 +673,10 @@ class Builder
 
     protected function getFieldsSql()
     {
-        return $this->field ? rtrim($this->field, ', ') : '* ';
+        $fields = '';
+        $this->fieldHandler($fields, $this->field, $this->tableName);
+
+        return $fields ? rtrim($fields, ', ') : '* ';
     }
 
     protected function getLimitSql()
