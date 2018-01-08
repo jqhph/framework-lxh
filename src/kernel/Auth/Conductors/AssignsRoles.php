@@ -149,7 +149,7 @@ class AssignsRoles
 
         $records = $records->all();
 
-        if ($this->reset()) {
+        if ($this->reset) {
             $user = $this->auth->user();
             $where = [
                 'entity_id' => $user->getId(),
