@@ -312,7 +312,7 @@ class Controller extends Base
             return $this->error(trans_with_global('Missing id.'));
         }
 
-        $this->id = $params['id'];
+
 
         // 获取表单数据
         $data = json_decode(file_get_contents('php://input'), true);

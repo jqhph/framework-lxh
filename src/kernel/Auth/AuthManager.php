@@ -2,6 +2,7 @@
 
 namespace Lxh\Auth;
 
+use Lxh\Auth\Conductors\FindRoles;
 use Lxh\MVC\Model;
 use Lxh\Auth\Cache\Store;
 use Lxh\Auth\Clipboard;
@@ -10,6 +11,11 @@ use Lxh\Support\Collection;
 
 class AuthManager
 {
+    /**
+     * @var array
+     */
+    protected static $instances = [];
+
     /**
      * @var bool
      */
@@ -81,12 +87,32 @@ class AuthManager
     }
 
     /**
-     * Create a new Auth instance.
+     * Resolve a Auth instance.
      *
      * @param  mixed  $user
      * @return static
      */
-    public static function create($user = null)
+    public static function resolve(Model $user = null)
+    {
+        if (! $user) {
+            $user = admin();
+        }
+        $id = $user->getId();
+
+        if (isset(static::$instances[$id])) {
+            return static::$instances[$id];
+        }
+
+        return static::$instances[$id] = new static($user);
+    }
+
+    /**
+     * Create a new Auth instance.
+     *
+     * @param  Model  $user
+     * @return static
+     */
+    public static function create(Model $user = null)
     {
         return new static($user);
     }
@@ -314,14 +340,19 @@ class AuthManager
     }
 
     /**
-     * Get an instance of the role model.
+     * 获取当前用户所有的角色.
      *
-     * @param  array  $attributes
-     * @return \Lxh\Auth\Database\Role
+     * @return Collection
      */
-    public function role(array $attributes = [])
+    public function roles()
     {
-        return Models::role($attributes);
+        $id = $this->user->getId();
+
+        if (isset($this->roles[$id])) {
+            return $this->roles;
+        }
+
+        return $this->roles = (new FindRoles($this->user, $this->abilities))->find();
     }
 
     /**

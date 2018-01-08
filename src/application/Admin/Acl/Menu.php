@@ -29,13 +29,13 @@ class Menu
     protected $current;
 
     /**
-     * @var \Lxh\Admin\Model\Menu
+     * @var \Lxh\Admin\Models\Menu
      */
     protected $model;
 
     public function __construct()
     {
-        $this->model = create_model('Menu');
+        $this->model = model('Menu');
 
         $this->get();
     }

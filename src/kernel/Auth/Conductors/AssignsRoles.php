@@ -53,7 +53,7 @@ class AssignsRoles
         $roles = Models::role()->findOrCreate($this->roles);
 
         if ($this->retracts !== null) {
-            AuthManager::create($this->authority)->retract($this->retracts)->then();
+            AuthManager::resolve($this->authority)->retract($this->retracts)->then();
         }
 
         return $this->assignRoles($roles, $this->authority->getId());

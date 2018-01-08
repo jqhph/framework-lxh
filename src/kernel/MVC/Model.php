@@ -81,6 +81,15 @@ class Model extends Entity
     }
 
     /**
+     * 模型类型
+     *
+     * @return mixed
+     */
+    public function getMorphType()
+    {
+    }
+
+    /**
      * @param $name
      * @return $this
      */

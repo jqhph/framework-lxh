@@ -4,6 +4,7 @@ namespace Lxh\Auth\Database;
 
 use Lxh\Admin\MVC\Model;
 use Lxh\MVC\Model AS Base;
+use Lxh\Support\Collection;
 
 class Role extends Model
 {
@@ -51,6 +52,22 @@ class Role extends Model
             'created_at' => time(),
             'created_by_id' => admin()->getId()
         ], $attributes);
+    }
+
+    /**
+     * 查找出用户所拥有的角色
+     *
+     * @return array
+     */
+    public function findByAuthority(Base $user)
+    {
+        $assignedRoles = Models::table('assigned_roles');
+        $userType = $user->getMorphType();
+
+        return $this->query()
+            ->joinRaw("LEFT JOIN $assignedRoles ar ON (ar.role_id = {$this->tableName}.id AND ar.entity_type = $userType)")
+            ->where('ar.entity_id', $user->getId())
+            ->find();
     }
 
     /**

@@ -185,7 +185,7 @@ class Models
      */
     public static function user(array $attributes = [])
     {
-        return create_model(static::classname('User'))->attach($attributes);
+        return model(static::classname('User'))->attach($attributes);
     }
 
 
