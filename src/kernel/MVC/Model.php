@@ -167,9 +167,9 @@ class Model extends Entity
      *
      * @return Query
      */
-    public function select($fields)
+    public function select($fields = null)
     {
-        return $this->query()->select($fields);
+        return $this->query()->select($fields ?: $this->selectFields);
     }
 
     // 查找数据

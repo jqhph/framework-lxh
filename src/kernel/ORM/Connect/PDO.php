@@ -157,6 +157,7 @@ class PDO
                 continue;
 
             foreach ($info as $k => & $v) {
+                if (! $k) continue;
                 if ($key != 'ok')
                     $key  .= "`$k`,";
                 $vals .= '?,';//$vals .= '"' . $v . '",';
@@ -300,15 +301,16 @@ class PDO
     public function update($table, array $data = [], $where = '', array $whereData = [])
     {
         $updateStr = '';
+        $values = [];
         foreach ($data as $key => $val) {
+            if (! $key) continue;
             if (strpos($key, '=') === false) {
                 $updateStr .= "`$key` = ?,";
             } else {
                 $updateStr .= "$key ?,";
             }
 
-            $data[] = $val;
-            unset($data[$key]);
+            $values[] = $val;
         }
 
         $updateStr = substr($updateStr, 0, - 1);
@@ -317,8 +319,8 @@ class PDO
 
         $sql = "UPDATE `$table` SET {$updateStr} {$where}";
 
-        $data = array_merge($data, $whereData);
-        return $this->prepare($sql, $data, false);
+        $values = array_merge($values, $whereData);
+        return $this->prepare($sql, $values, false);
     }
 
     /**
@@ -379,12 +381,13 @@ class PDO
         $field = '';
         $values = '';
 
+        $inserts = [];
         foreach ($data as $k => $v) {
+            if (! $k) continue;
             $field  .= "`$k`,";
             $values .= '?,';
 
-            unset($data[$k]);
-            $data[] = $v;
+            $inserts[] = $v;
         }
         $field  = substr($field,  0, - 1);
         $values = substr($values, 0, - 1);
@@ -393,7 +396,7 @@ class PDO
 
         $sql = "INSERT $ignore INTO `$table` ($field) VALUES ($values)";
 
-        $res = $this->prepare($sql, $data, false);
+        $res = $this->prepare($sql, $inserts, false);
         $id = $this->pdo->lastInsertId();
 
         return $id ?: $res;

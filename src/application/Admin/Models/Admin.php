@@ -68,6 +68,8 @@ class Admin extends Session
     {
         if (! empty($input['password'])) {
             $input['password'] = Password::encrypt($input['password']);
+        } else {
+            unset($input['password']);
         }
         $input['modified_at'] = time();
 
