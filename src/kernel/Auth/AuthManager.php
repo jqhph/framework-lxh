@@ -374,17 +374,12 @@ class AuthManager
     /**
      * 根据角色清除用户权限缓存
      *
-     * @param Role|array $roles
+     * @param Role $roles
      * @return void
      */
-    public function refreshForRoles($roles)
+    public function refreshForRole(Role $role)
     {
-        $users = [];
-        foreach ((array) $roles as &$role) {
-            $users = array_merge($users, $role->findUsersIds()->all());
-        }
-
-        foreach ($users as &$id) {
+        foreach ($role->findUsersIds()->all() as &$id) {
             $user = Models::user();
 
             $this->refreshFor($user->attach([

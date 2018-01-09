@@ -1046,6 +1046,7 @@ console.log('request data', data);
                 async: true,
                 data: data,
                 timeout: store.timeout,
+                dataType: 'JSON',
                 success: function(data) {
                     // 标记请求结束
                     store.isRequsting = false;

@@ -13,20 +13,31 @@ use Lxh\Auth\Database\Models;
 
 class Role extends \Lxh\Auth\Database\Role
 {
+    /**
+     * @var array
+     */
     protected $selectFields = ['id', 'name', 'created_at', 'modified_at', 'comment', 'title'];
 
-    public function beforeSave($id, array & $data)
+    /**
+     * @var array
+     */
+    protected $abilities = [];
+
+    public function beforeSave($id, array &$input)
     {
         $data['modified_at'] = time();
+
+        $this->abilities = $input['abilities'];
+        unset($input['abilities']);
     }
 
     public function afterSave($id, array &$input, $result)
     {
-        if ($input['abilities']) {
+        if ($this->abilities) {
             $this->resetAbilities();
-            $this->assignAbilities($input['abilities']);
+            $this->assignAbilities($this->abilities);
             // 清除相关用户缓存
-            auth()->refreshForRoles($this);
+            auth()->refreshForRole($this);
         }
     }
 
@@ -35,21 +46,24 @@ class Role extends \Lxh\Auth\Database\Role
         if (! $result) return;
 
         $this->resetAbilities();
-        auth()->refreshForRoles($this);
+        auth()->refreshForRole($this);
     }
 
     public function beforeAdd(array &$input)
     {
         $data['created_at']    = time();
         $data['created_by_id'] = admin()->id;
+
+        $this->abilities = $input['abilities'];
+        unset($input['abilities']);
     }
 
     public function afterAdd($insertId, array &$input)
     {
         if (! $insertId) return;
 
-        if ($input['abilities']) {
-            $this->assignAbilities($input['abilities']);
+        if ($this->abilities) {
+            $this->assignAbilities($this->abilities);
             // 清除相关用户缓存
             auth()->refreshForRoles($this);
         }
@@ -92,17 +106,4 @@ class Role extends \Lxh\Auth\Database\Role
 
         return $data;
     }
-
-    // 查找数据
-//    public function find()
-//    {
-//        $id = $this->{$this->idFieldsName};
-//
-//        if ($id) {
-//            $data = $this->query()->select($this->selectFields)->leftJoin('admin', 'admin.id', 'created_by_id')->where($this->idFieldsName, $id)->findOne();
-//            $this->fill($data);
-//            return $data;
-//        }
-//        return $this->query()->select($this->selectFields)->leftJoin('admin', 'admin.id', 'created_by_id')->where('deleted', 0)->find();
-//    }
 }

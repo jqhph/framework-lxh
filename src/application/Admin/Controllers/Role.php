@@ -83,41 +83,11 @@ class Role extends Controller
         return $abilities;
     }
 
-    /**
-     * 获取详情界面字段视图信息
-     *
-     * @return array
-     */
-//    protected function makeDetailItems($id = null)
-//    {
-//        $permissions = ['menus' => [], 'custom' => []];
-//        if ($id) {
-//            $permissions = $this->model('Role')->getPermissions($id);
-//        }
-//
-//        $menuList = make('acl-menu')->permissionsList($permissions['menus']);
-//
-//        return [
-//            ['view' => 'varchar/edit', 'vars' => ['name' => 'name', 'labelCol' => 1, 'formCol' => 9]],
-//            [
-//                'view' => 'checkbox/items-edit',
-//                'vars' => [
-//                    'name' => 'permissions',
-//                    'labelCol' => 1,
-//                    'formCol' => 9,
-//                    'labelCategory' => 'menus',
-//                    'columns' => 6,
-//                    'list' => & $menuList,
-//                ]
-//            ],
-//        ];
-//    }
-
     protected function updateFilter($id, array &$input)
     {
-        if (empty($input['permissions'])) {
-            return 'The permissions fields is required';
-        }
+//        if (empty($input['permissions'])) {
+//            return 'The permissions fields is required';
+//        }
     }
 
     protected function addFilter(array &$input)
