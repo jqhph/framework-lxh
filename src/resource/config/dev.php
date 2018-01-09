@@ -243,6 +243,7 @@ return array (
         'view' => '/assets/primary/Admin/view',
         'module' => '/assets/primary/Admin/view/module',
         'css' => '/assets/primary/Admin/css',
+        'admin' => '/assets/primary/Admin/components',
       ),
       'alias' => 
       array (

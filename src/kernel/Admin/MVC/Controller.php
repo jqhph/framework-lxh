@@ -66,6 +66,8 @@ class Controller extends Base
             $this->filter == 'modal' && $filter->useModal();
         }
 
+        $this->beforeGridCreate($content);
+
         // 构建网格报表
         $grid = $content->grid($this->grid);
 
@@ -84,6 +86,13 @@ class Controller extends Base
 
         // 渲染模板
         return $content->render();
+    }
+
+    /**
+     * @param Content $content
+     */
+    protected function beforeGridCreate(Content $content)
+    {
     }
 
     /**
@@ -126,6 +135,8 @@ class Controller extends Base
         $content->header(trans(__CONTROLLER__));
         $content->description(trans(__CONTROLLER__ . ' form'));
 
+        $this->beforeFormCreate($content);
+
         $box = $content->form(function (Form $form) use ($content) {
             $this->form($form, $content);
         });
@@ -135,6 +146,10 @@ class Controller extends Base
         $this->formBox($box);
 
         return $content->render();
+    }
+
+    protected function beforeFormCreate(Content $content)
+    {
     }
 
     /**

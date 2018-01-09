@@ -10,11 +10,6 @@ class Button extends Field
     /**
      * @var string
      */
-    protected $label;
-
-    /**
-     * @var string
-     */
     protected $url;
 
     /**
@@ -22,6 +17,9 @@ class Button extends Field
      */
     protected $icon;
 
+    /**
+     * @var array
+     */
     protected $options = [
         'color' => 'primary',
         'useTab' => true,
@@ -69,15 +67,18 @@ class Button extends Field
     public function render()
     {
         $this->class("$this->effect btn btn-{$this->option('color')}");
-        $this->attribute('onclick', $this->url());
-        $this->buildSelectorAttribute();
+        if ($url = $this->url()) {
+            $this->buildSelectorAttribute();
+
+            $this->attribute('onclick', $url);
+        }
 
         $icon = '';
         if ($this->icon) {
             $icon = "&nbsp; <i class='{$this->icon}'></i>";
         }
 
-        return "<button {$this->formatAttributes()}>{$this->label}{$icon}</button>";
+        return "<button {$this->formatAttributes()}>{$this->label()}{$icon}</button>";
     }
 
     /**

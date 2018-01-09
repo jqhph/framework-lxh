@@ -8,6 +8,8 @@
 
 namespace Lxh\Admin\Controllers;
 
+use Lxh\Admin\Fields\Button;
+use Lxh\Admin\Fields\Tag;
 use Lxh\Admin\Filter;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Layout\Content;
@@ -17,8 +19,10 @@ use Lxh\Admin\Table\Td;
 use Lxh\Admin\Table\Th;
 use Lxh\Admin\Table\Tr;
 use Lxh\Admin\Widgets\Form;
+use Lxh\Admin\Widgets\Modal;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
+use Lxh\Admin\Admin as AdminCreator;
 
 class Admin extends Controller
 {
@@ -26,6 +30,11 @@ class Admin extends Controller
      * @var string
      */
     protected $filter = 'modal';
+
+    /**
+     * @var string
+     */
+    protected $modalId = '';
 
     protected function initialize()
     {
@@ -37,6 +46,22 @@ class Admin extends Controller
      */
     public function grid(Grid $grid, Content $content)
     {
+        // 生成弹窗用于展示用户角色和权限
+        $modal = new Modal(trans('Roles'));
+        $modal->generateId();
+
+        $this->modalId = $modal->getId();
+
+        $content->row(
+            $modal->render()
+        );
+
+        AdminCreator::js('admin/admin-index');
+    }
+
+    protected function createModalId()
+    {
+
     }
 
     public function table(Table $table)
@@ -56,7 +81,15 @@ class Admin extends Controller
         $table->column(3, 'name', function (array $row, Td $td, Th $th, Tr $tr) {
             return $row['first_name'] . $row['last_name'];
         });
-        $table->column(6, 'roles', function (array $row, Td $td, Th $th, Tr $tr) {
+
+        $tag = new Tag();
+        $tag->color('danger');
+        $tag->class('roles-list');
+        $tag->attribute('data-modal', $this->modalId);
+        $table->column(6, 'roles', function (array $row, Td $td, Th $th, Tr $tr) use ($tag) {
+            $tag->attribute('data-id', $row[$this->model()->getKeyName()]);
+
+            return $tag->value(trans('list'))->render();
         });
     }
 
@@ -98,18 +131,27 @@ class Admin extends Controller
         if (auth()->isAdministrator()) {
             $form->select('is_admin')->options([0, 1]);
         }
-
         $form->select('sex')->options([0, 1, 2]);
-
-        $url = \Lxh\Admin\Admin::url('Role')->action('Create');
-        $tabid = str_replace('/', '-', $url);
-        $tablabel = trans('Create Ability');
 
         $form->multipleSelect('roles')
             ->options($this->formatRoles())
-            ->help("<a onclick=\"open_tab('$tabid','$url','$tablabel')\">点我创建角色</a>");
+            ->help($this->getRolesHelp());
     }
 
+    protected function getRolesHelp()
+    {
+        $url = AdminCreator::url('Role')->action('Create');
+        $tabid = str_replace('/', '-', $url);
+        $tablabel = trans('Create Ability');
+
+        return "<a onclick=\"open_tab('$tabid','$url','$tablabel')\">点我创建角色</a>";
+    }
+
+    /**
+     * 新增、修改接口验证规则定义
+     *
+     * @return array
+     */
     public function rules()
     {
         $rules = [
@@ -119,6 +161,7 @@ class Admin extends Controller
         ];
 
         if (! $this->id) {
+            // 新增接口，密码是必须的
             $rules['password'] = 'required|lengthBetween:5,15';
         }
 
@@ -138,6 +181,25 @@ class Admin extends Controller
     }
 
     /**
+     * 根据用户id获取用户角色列表
+     *
+     * @param Request $req
+     * @param Response $resp
+     */
+    public function actionRoleList(Request $req, Response $resp, array &$params)
+    {
+        if (! $id = get_value($params, 'id')) {
+            return $this->error();
+        }
+
+        $content = '';
+
+        return $this->success('haha', [
+            'content' => &$content
+        ]);
+    }
+
+    /**
      * 用户登录api
      *
      * @return string
@@ -152,7 +214,6 @@ class Admin extends Controller
         $v->fill($_POST);
 
         $v->rule('username', 'lengthBetween', 4, 20);
-
         $v->rule('password', 'lengthBetween', 4, 30);
 
         if (! $v->validate()) {
@@ -166,7 +227,13 @@ class Admin extends Controller
         return $this->success();
     }
 
-
+    /**
+     * 注册接口
+     *
+     * @param Request $req
+     * @param Response $resp
+     * @return array
+     */
     public function actionRegister(Request $req, Response $resp)
     {
         if (empty($_POST)) {
@@ -177,9 +244,7 @@ class Admin extends Controller
         $v->fill($_POST);
 
         $v->rule('username', 'lengthBetween', 4, 20);
-
         $v->rule('password', 'lengthBetween', 4, 30);
-
         $v->rule('password', 'equals', 'repassword');
 
         if (! $v->validate()) {

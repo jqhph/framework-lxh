@@ -32,6 +32,7 @@ $config['sea-config'] = [
         'view' => "$base/view",
         'module' => "$base/view/module",
         'css' => "$base/css",
+        'admin' => "$base/components",
     ],
     // 设置别名，方便调用
     'alias' => [

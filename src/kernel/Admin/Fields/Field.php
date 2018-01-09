@@ -3,6 +3,7 @@
 namespace Lxh\Admin\Fields;
 
 use Lxh\Contracts\Support\Renderable;
+use Lxh\Helper\Util;
 
 /**
  * @method $this class($class)
@@ -14,6 +15,11 @@ class Field implements Renderable
      * @var mixed
      */
     protected $value;
+
+    /**
+     * @var string
+     */
+    protected $name;
 
     /**
      *
@@ -38,17 +44,44 @@ class Field implements Renderable
      */
     protected $label = '';
 
-    public function __construct($name, $value, $options = [])
+    /**
+     * Field constructor.
+     *
+     * @param null $name
+     * @param null $value
+     * @param array $options
+     */
+    public function __construct($name = null, $value = null, $options = [])
     {
+        $this->name = $name;
         $this->value = &$value;
-
-        $this->options = array_merge($this->options, (array)$options);
+        $this->options = (array)$options;
     }
 
-    public function label($label)
+    /**
+     * @param $label
+     * @return $this|string
+     */
+    public function label($label = null)
     {
-        $this->label = $label;
-        return $this;
+        if ($label !== null) {
+            $this->label = &$label;
+            return $this;
+        }
+        return $this->label;
+    }
+
+    /**
+     * @return string|$this
+     */
+    public function name($name = null)
+    {
+        if ($name !== null) {
+            $this->name = &$name;
+            return $this;
+        }
+
+        return $this->name;
     }
 
     /**
@@ -92,32 +125,58 @@ class Field implements Renderable
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getElementSelector()
     {
         if ($id = $this->getAttribute('id')) {
             return '#' . $id;
         }
 
-        $this->attribute('id', ($id = $this->generateId()));
+       $this->buildSelectorAttribute();
 
-        return '#' . $id;
+        return '#' . $this->getAttribute('id');
     }
 
-
-    protected function generateId()
+    /**
+     * @param null $value
+     * @return $this|mixed
+     */
+    public function value($value = null)
     {
-        $str = 'sdfghjklxcvbnm';
+        if ($value !== null) {
+            $this->value = &$value;
+            return $this;
+        }
 
-        return substr(str_shuffle($str), 0, 3) .  mt_rand(0, 999);
+        return $this->value;
+
     }
 
-    protected function buildSelectorAttribute()
+
+    /**
+     * 随机生成id
+     *
+     * @return $this
+     */
+    public function generateId()
+    {
+        $this->attribute('id', Util::randomString());
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function buildSelectorAttribute()
     {
         if ($id = $this->getAttribute('id')) {
             return $this;
         }
 
-        return $this->attribute('id', $this->generateId());
+        return $this->generateId();
     }
 
     /**
@@ -132,7 +191,7 @@ class Field implements Renderable
     {
         $isArray = is_array($key);
         if (is_null($value) && !$isArray) {
-            return $this->options[$key];
+            return isset($this->options[$key]) ? $this->options[$key] : null;
         }
 
         if ($isArray) {
@@ -163,6 +222,11 @@ class Field implements Renderable
         return $this;
     }
 
+    /**
+     * @param $k
+     * @param null $def
+     * @return mixed
+     */
     public function getAttribute($k, $def = null)
     {
         return get_value($this->attributes, $k, $def);

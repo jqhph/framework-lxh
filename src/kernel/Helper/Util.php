@@ -108,6 +108,20 @@ class Util
         return $return;
     }
 
+    /**
+     * 获取随机字符串
+     *
+     * @param int $len
+     * @param string $string
+     * @return string
+     */
+    public static function randomString($len = 6, $string = '')
+    {
+        $str = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890';
+
+        return substr(str_shuffle($string ?: $str), 0, $len);
+    }
+
     // 二维数组按某个字段值正序快速排序
     public static function quickSort(array & $sort, $k, $start, $end)
     {

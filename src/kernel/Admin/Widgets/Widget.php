@@ -2,6 +2,7 @@
 
 namespace Lxh\Admin\Widgets;
 
+use Lxh\Helper\Util;
 use Lxh\Support\Fluent;
 
 /**
@@ -82,6 +83,11 @@ abstract class Widget extends Fluent
         return $this;
     }
 
+    /**
+     * @param $k
+     * @param null $def
+     * @return mixed
+     */
     public function getAttribute($k, $def = null)
     {
         return get_value($this->attributes, $k, $def);
@@ -103,23 +109,38 @@ abstract class Widget extends Fluent
         return $this;
     }
 
-    protected function getIdElementSelector()
+    /**
+     * @return string
+     */
+    public function getIdElementSelector()
     {
         if ($id = $this->getAttribute('id')) {
             return '#' . $id;
         }
 
-        $this->attribute('id', ($id = $this->generateId()));
+        $this->generateId();
 
-        return '#' . $id;
+        return '#' . $this->getAttribute('id');
     }
 
-
-    protected function generateId()
+    /**
+     * 随机生成id
+     *
+     * @return $this
+     */
+    public function generateId()
     {
-        $str = 'sdfghjklxcvbnm';
+        $this->attribute('id', Util::randomString());
 
-        return substr(str_shuffle($str), 0, 3) .  mt_rand(0, 999);
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->getAttribute('id');
     }
 
     /**

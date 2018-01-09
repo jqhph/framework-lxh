@@ -5,6 +5,7 @@ namespace Lxh\Admin\Widgets;
 use Lxh\Admin\Admin;
 use Lxh\Admin\Tools\Tools;
 use Lxh\Contracts\Support\Renderable;
+use Lxh\Helper\Util;
 
 class Box extends Widget implements Renderable
 {
@@ -99,11 +100,6 @@ class Box extends Widget implements Renderable
         return $this;
     }
 
-    protected function generateId()
-    {
-        return md5(uniqid(microtime(true)));
-    }
-
     public function toolClass($class = null)
     {
         if ($class != null) {
@@ -125,7 +121,7 @@ class Box extends Widget implements Renderable
      */
     public function collapsable()
     {
-        $this->id = $this->generateId();
+        $this->id = Util::randomString();
 
         $this->rightTools()->append(
             "<a id='collapse-{$this->id}' data-toggle=\"collapse\" href=\"#{$this->id}\"><i class=\"zmdi zmdi-minus\"></i></a>"
