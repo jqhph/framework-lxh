@@ -50,10 +50,7 @@ class AuthManager
 
     public function __construct(Model $user = null)
     {
-        if (! $user) {
-            $user = admin();
-        }
-        $this->user = $user;
+        $this->user = $user ?: admin();
 
         $this->usesCached = config('admin.auth.cache', true);
 

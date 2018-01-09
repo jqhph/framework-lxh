@@ -672,7 +672,7 @@ class Builder
         $fields = '';
         $this->fieldHandler($fields, $this->field, $this->tableName);
 
-        return $fields ? rtrim($fields, ', ') : '* ';
+        return rtrim($fields, ', ') ?: '* ';
     }
 
     protected function getLimitSql()
