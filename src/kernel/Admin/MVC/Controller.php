@@ -455,6 +455,9 @@ class Controller extends Base
      */
     protected function message($msg, $status, array $options = [])
     {
+        if (is_array($msg)) {
+            return ['status' => & $status] + $msg;
+        }
         return (['status' => & $status, 'msg' => & $msg] + $options);
     }
 }

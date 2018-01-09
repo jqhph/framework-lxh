@@ -7,7 +7,7 @@ use Lxh\Contracts\Support\Renderable;
 class Boolean extends Field
 {
     protected $options = [
-        'color' => 'primary'
+        'color' => 'success'
     ];
 
     public function render()

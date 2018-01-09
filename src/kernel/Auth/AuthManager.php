@@ -330,6 +330,28 @@ class AuthManager
     }
 
     /**
+     * 获取根据角色分组的权限列表
+     *
+     * @return Collection
+     */
+    public function abilitiesGroupByRoles()
+    {
+        $abilities = $this->abilities();
+        $roles = $this->roles();
+        $roleKeyName = Models::role()->getKeyName();
+
+        return $roles->keyBy(function (&$row) use ($abilities, $roleKeyName) {
+            $row['abilities'] = $abilities->filter(function ($ability) use ($row, $roleKeyName) {
+                if ($ability['role_id'] == $row[$roleKeyName]) {
+                    return $ability;
+                }
+            });
+
+            return $row['title'];
+        });
+    }
+
+    /**
      * Determine if the given ability is allowed.
      *
      * Alias for the "can" method.

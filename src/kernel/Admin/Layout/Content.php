@@ -8,6 +8,7 @@ use Lxh\Admin\Filter;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Widgets\Box;
 use Lxh\Admin\Widgets\Form;
+use Lxh\Admin\Widgets\Modal;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Support\MessageBag;
 
@@ -146,9 +147,23 @@ class Content implements Renderable
         return $box;
     }
 
-    public function modal()
+    /**
+     * @param null $title
+     * @param Closure|null $callback
+     */
+    public function modal($title = null, Closure $callback = null)
     {
-        
+        $modal = new Modal($title);
+
+        if ($callback) {
+            $callback($modal);
+        }
+
+        $row = new Row();
+        $row->column(12, $modal);
+        $this->addRow($row);
+
+        return $modal;
     }
 
     /**

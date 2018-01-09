@@ -55,7 +55,9 @@ class Field implements Renderable
     {
         $this->name = $name;
         $this->value = &$value;
-        $this->options = (array)$options;
+        if ($options) {
+            $this->options = (array)$options;
+        }
     }
 
     /**
@@ -68,7 +70,7 @@ class Field implements Renderable
             $this->label = &$label;
             return $this;
         }
-        return $this->label;
+        return $this->label ?: ($this->value ?: $this->name);
     }
 
     /**

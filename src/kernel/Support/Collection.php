@@ -257,7 +257,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
      */
     public function each(callable $callback)
     {
-        foreach ($this->items as $key => $item) {
+        foreach ($this->items as $key => &$item) {
             if ($callback($item, $key) === false) {
                 break;
             }
@@ -279,7 +279,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
         if (func_num_args() == 1) {
             $callback = $this->valueRetriever($key);
 
-            foreach ($this->items as $k => $v) {
+            foreach ($this->items as $k => &$v) {
                 if (! $callback($v, $k)) {
                     return false;
                 }
@@ -503,7 +503,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
      */
     public function forget($keys)
     {
-        foreach ((array) $keys as $key) {
+        foreach ((array) $keys as &$key) {
             $this->offsetUnset($key);
         }
 
@@ -539,14 +539,14 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
 
         $results = [];
 
-        foreach ($this->items as $key => $value) {
+        foreach ($this->items as $key => &$value) {
             $groupKeys = $groupBy($value, $key);
 
             if (! is_array($groupKeys)) {
                 $groupKeys = [$groupKeys];
             }
 
-            foreach ($groupKeys as $groupKey) {
+            foreach ($groupKeys as &$groupKey) {
                 $groupKey = is_bool($groupKey) ? (int) $groupKey : $groupKey;
 
                 if (! array_key_exists($groupKey, $results)) {
@@ -572,7 +572,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
 
         $results = [];
 
-        foreach ($this->items as $key => $item) {
+        foreach ($this->items as $key => &$item) {
             $resolvedKey = $keyBy($item, $key);
 
             if (is_object($resolvedKey)) {

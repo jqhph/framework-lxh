@@ -46,7 +46,7 @@ class Ability extends Model
         $assignedRoles = Models::table('assigned_roles');
 
         $select =
-            "{$this->tableName}.id,{$this->tableName}.`name`,forbidden,ab.entity_id role_id";
+            "{$this->tableName}.id,{$this->tableName}.`name`,{$this->tableName}.title,forbidden,ab.entity_id role_id";
 
         $roleType = Models::role()->getMorphType();
         $userType = $user->getMorphType();

@@ -52,12 +52,12 @@ class Tag extends Button
 
         $tags = '';
         $counter = 0;
-        foreach ((array)$this->value as &$value) {
+        foreach ((array)$this->label() as &$value) {
             $color = $this->getColor($useRandomColor, $counter);
 
             $this->setClass("$class label-$color");
 
-            $tags .= "<span {$this->formatAttributes()}>{$icon} {$value}</span>";
+            $tags .= "<span {$this->formatAttributes()}>{$icon} {$value}</span> ";
 
             $counter++;
         }

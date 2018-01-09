@@ -47,14 +47,10 @@ class Admin extends Controller
     public function grid(Grid $grid, Content $content)
     {
         // 生成弹窗用于展示用户角色和权限
-        $modal = new Modal(trans('Roles'));
+        $modal = $content->modal(trans('Roles'));
+        $modal->width('55%');
         $modal->generateId();
-
         $this->modalId = $modal->getId();
-
-        $content->row(
-            $modal->render()
-        );
 
         AdminCreator::js('admin/admin-index');
     }
@@ -82,14 +78,18 @@ class Admin extends Controller
             return $row['first_name'] . $row['last_name'];
         });
 
+        // 角色字段
         $tag = new Tag();
         $tag->color('danger');
         $tag->class('roles-list');
         $tag->attribute('data-modal', $this->modalId);
-        $table->column(6, 'roles', function (array $row, Td $td, Th $th, Tr $tr) use ($tag) {
-            $tag->attribute('data-id', $row[$this->model()->getKeyName()]);
 
-            return $tag->value(trans('list'))->render();
+        $keyName = $this->model()->getKeyName();
+        $label = trans('list');
+        $table->column(6, 'roles', function (array $row, Td $td, Th $th, Tr $tr) use ($tag, $keyName, $label) {
+            $tag->attribute('data-id', $row[$keyName]);
+
+            return $tag->label($label)->render();
         });
     }
 
@@ -192,10 +192,27 @@ class Admin extends Controller
             return $this->error();
         }
 
-        $content = '';
+        $abilities = auth()->abilitiesGroupByRoles()->map(function ($roles, $roleTitle) {
+            $tag = new Button($roleTitle);
+            $tag->class('btn-sm')->color('primary');
 
-        return $this->success('haha', [
-            'content' => &$content
+            $table = new \Lxh\Admin\Widgets\Table([$tag->render()]);
+
+            $tags = [];
+            foreach ($roles['abilities'] as &$ability) {
+                $tags[] = $ability['title'];
+            }
+
+            $tag = new Tag();
+            $tag->label($tags)->useRandomColor();
+
+            $table->setRows([[$tag->render()]]);
+
+            return $table->render();
+        })->all();
+
+        return $this->success([
+            'content' => implode('<br>', $abilities),
         ]);
     }
 
