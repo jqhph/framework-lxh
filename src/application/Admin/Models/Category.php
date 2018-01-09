@@ -24,7 +24,7 @@ class Category extends Model
 
     }
 
-    public function beforeSave($id, array & $data)
+    public function beforeUpdate($id, array & $data)
     {
         $data['modified_at'] = time();
     }

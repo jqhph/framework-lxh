@@ -23,7 +23,7 @@ class Role extends \Lxh\Auth\Database\Role
      */
     protected $abilities = [];
 
-    public function beforeSave($id, array &$input)
+    public function beforeUpdate($id, array &$input)
     {
         $data['modified_at'] = time();
 
@@ -31,7 +31,7 @@ class Role extends \Lxh\Auth\Database\Role
         unset($input['abilities']);
     }
 
-    public function afterSave($id, array &$input, $result)
+    public function afterUpdate($id, array &$input, $result)
     {
         if ($this->abilities) {
             $this->resetAbilities();

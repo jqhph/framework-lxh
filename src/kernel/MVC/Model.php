@@ -210,11 +210,11 @@ class Model extends Entity
 
         unset($data[$this->idFieldsName]);
 
-        $this->beforeSave($id, $data);
+        $this->beforeUpdate($id, $data);
 
         $result = $this->query()->where($this->idFieldsName, $id)->update($data);
 
-        $this->afterSave($id, $data, $result);
+        $this->afterUpdate($id, $data, $result);
 
         return $result;
     }
@@ -324,13 +324,13 @@ class Model extends Entity
     }
 
     // 修改钩子方法，修改前调用
-    protected function beforeSave($id, array &$input)
+    protected function beforeUpdate($id, array &$input)
     {
 
     }
 
     // 修改钩子方法
-    protected function afterSave($id, array &$input, $result)
+    protected function afterUpdate($id, array &$input, $result)
     {
 
     }

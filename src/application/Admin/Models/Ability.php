@@ -13,12 +13,12 @@ class Ability extends Model
 {
     protected $tableName = 'abilities';
 
-    public function beforeSave($id, array & $data)
+    public function beforeUpdate($id, array & $data)
     {
         $data['modified_at'] = time();
     }
 
-    public function afterSave($id, array & $data, $result)
+    public function afterUpdate($id, array & $data, $result)
     {
     }
 

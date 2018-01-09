@@ -65,7 +65,7 @@ class User extends Session
         return false;
     }
 
-    protected function beforeSave($id, array & $data)
+    protected function beforeUpdate($id, array & $data)
     {
         unset($data['cookie']);
         unset($data['session']);

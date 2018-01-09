@@ -75,7 +75,7 @@ class Menu extends Model
     }
 
     // 保存数据前置钩子
-    protected function beforeSave($id, array &$input)
+    protected function beforeUpdate($id, array &$input)
     {
         if (isset($input['show'])) {
             if (! $input['show']) $input['show'] = 0;
@@ -88,7 +88,7 @@ class Menu extends Model
         if (! $insertId) return;
     }
 
-    protected function afterSave($id, array & $input, $result)
+    protected function afterUpdate($id, array & $input, $result)
     {
     }
 

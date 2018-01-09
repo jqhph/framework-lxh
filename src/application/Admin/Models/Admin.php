@@ -64,7 +64,7 @@ class Admin extends Session
         unset($input['roles']);
     }
 
-    protected function beforeSave($id, array &$input)
+    protected function beforeUpdate($id, array &$input)
     {
         if (! empty($input['password'])) {
             $input['password'] = Password::encrypt($input['password']);
@@ -86,7 +86,7 @@ class Admin extends Session
         }
     }
 
-    protected function afterSave($id, array &$input, $result)
+    protected function afterUpdate($id, array &$input, $result)
     {
         if (! $this->roles) return;
 

@@ -29,7 +29,7 @@ class Model extends FileGenerator
             [
                 '{module}' => $this->generator->module(),
                 '{beforeAdd}' => $this->makeBeforeAddContent(),
-                '{beforeSave}' => $this->makeBeforeSaveContent(),
+                '{beforeUpdate}' => $this->makebeforeUpdateContent(),
                 '{controllerEnName}' => $this->options('en_name'),
                 '{beforeDelete}' => $this->makeBeforeDeleteContent(),
             ]
@@ -42,7 +42,7 @@ class Model extends FileGenerator
         return '';
     }
 
-    protected function makeBeforeSaveContent()
+    protected function makebeforeUpdateContent()
     {
         return '';
     }
