@@ -191,7 +191,7 @@ class Clipboard
     {
         $content = [];
         foreach ($abilities as &$row) {
-            $content['name'] = $row;
+            $content[$row['name']] = $row;
         }
         return $content;
     }

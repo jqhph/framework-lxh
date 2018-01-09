@@ -129,7 +129,7 @@ class File extends Cache
      */
     public function useCache()
     {
-        return USE_CACHE;
+        return defined('USE_CACHE') ? USE_CACHE : config('use-cache');
     }
 
     /**
