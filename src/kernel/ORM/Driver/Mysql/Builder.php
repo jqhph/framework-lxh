@@ -24,18 +24,39 @@ class Builder
      */
     protected $field;
 
+    /**
+     * @var array
+     */
     protected $orWhereData = [];
 
+    /**
+     * @var array
+     */
     protected $wheres = [];
 
+    /**
+     * @var array
+     */
     protected $whereData = [];
 
+    /**
+     * @var array
+     */
     protected $orWheres = [];
 
+    /**
+     * @var array
+     */
     protected $havingData = [];
 
+    /**
+     * @var array
+     */
     protected $having = [];
 
+    /**
+     * @var array
+     */
     protected $orHaving = [];
 
     /**
@@ -48,7 +69,10 @@ class Builder
      */
     protected $orderBy;
 
-    protected $leftJoin = [];
+    /**
+     * @var array
+     */
+    protected $join = [];
 
     /**
      * @var string
@@ -72,14 +96,15 @@ class Builder
      */
     protected $where;
 
+    /**
+     * @var array
+     */
     protected $options = [];
 
     public function __construct(Container $container, Query $query)
     {
         $this->container = $container;
-
         $this->query = $query;
-
         $this->where = new Where();
     }
 
@@ -97,11 +122,9 @@ class Builder
             throw new InvalidArgumentException('表名不能为空');
         }
 
-//        $this->whereHandler($this->wheres, $tb, $p1, $p2, $p3, $this->whereData);
         $content = $this->where->table($tb)->build($p1, $p2, $p3)->pull();
 
         $this->wheres = array_merge($this->wheres, $content['where']);
-//        $this->orWheres = array_merge($this->orWheres, $content['orWhere']);
         $this->whereData = array_merge($this->whereData, $content['params']);
 
         return $this;
@@ -206,7 +229,8 @@ class Builder
     }
 
     /**
-     * 获取统计数量
+     * @return int
+     * @throws InternalServerError
      */
     public function count()
     {
@@ -215,6 +239,11 @@ class Builder
         return $r ? $r['TOTAL'] : 0;
     }
 
+    /**
+     * @param $field
+     * @param string $as
+     * @return $this
+     */
     public function sum($field, $as = 'SUM')
     {
         $t = "SUM(`$field`) AS `$as`";
@@ -256,6 +285,13 @@ class Builder
         return $this->leftJoin($left, "`$table2`.id", "$as.{$this->tableName}_id");
     }
 
+    /**
+     * @param $p1
+     * @param string $p2
+     * @param null $p3
+     * @param null $table
+     * @return $this
+     */
     public function orWhere(& $p1, $p2 = '=', $p3 = null, $table = null)
     {
         $tb = $table ? $table : $this->tableName;
@@ -268,24 +304,38 @@ class Builder
         return $this;
     }
 
+    /**
+     * @param $p1
+     * @param string $p2
+     * @param null $p3
+     * @param null $table
+     * @return $this
+     */
     public function having(& $p1, $p2 = '=', $p3 = null, $table = null)
     {
         $tb = $table ? $table : $this->tableName;
 
         $content = $this->where->table($tb)->build($p1, $p2, $p3)->pull();
 
-        $this->having = &$content['where'];
+        $this->having = array_merge($this->having, $content['where']);
         $this->havingData = array_merge($this->havingData, $content['params']);
         return $this;
     }
 
+    /**
+     * @param $p1
+     * @param string $p2
+     * @param null $p3
+     * @param null $table
+     * @return $this
+     */
     public function orHaving($p1, $p2 = '=', $p3 = null, $table = null)
     {
         $tb = $table ? $table : $this->tableName;
 
         $content = $this->where->table($tb)->build($p1, $p2, $p3)->pull();
 
-        $this->orHaving = &$content['where'];
+        $this->orHaving = array_merge($this->orHaving, $content['where']);
         $this->havingData = array_merge($this->havingData, $content['params']);
         return $this;
     }
@@ -293,7 +343,7 @@ class Builder
     /**
      * INSERT IGNORE INTO `tb` SET ...
      *
-     * @return static
+     * @return $this
      */
     public function ignore()
     {
@@ -318,6 +368,11 @@ class Builder
         return $this;
     }
 
+    /**
+     * @param $fieldsContainer
+     * @param $data
+     * @param $table
+     */
     protected function fieldHandler(& $fieldsContainer, &$data, $table)
     {
         if (! is_array($data)) {
@@ -350,6 +405,10 @@ class Builder
 
     }
 
+    /**
+     * @param bool $clear
+     * @return array
+     */
     public function querySql($clear = false)
     {
         $table  = "`$this->tableName`";
@@ -485,14 +544,29 @@ class Builder
      */
     public function leftJoin(& $table, $p1 = null, $p2 = null, $condit = '=')
     {
-        return $this->join($table, $p1, $p2, 'LEFT');
+        return $this->join($table, $p1, $p2, $condit, 'LEFT');
     }
 
+    /**
+     * @param $table
+     * @param null $p1
+     * @param null $p2
+     * @param string $condit
+     * @return Builder
+     */
     public function rightJoin(& $table, $p1 = null, $p2 = null, $condit = '=')
     {
-        return $this->join($table, $p1, $p2, 'RIGHT');
+        return $this->join($table, $p1, $p2, $condit, 'RIGHT');
     }
 
+    /**
+     * @param $table
+     * @param null $field1
+     * @param null $field2
+     * @param string $condit
+     * @param string $prefix
+     * @return $this
+     */
     public function join(& $table, $field1 = null, $field2 = null, $condit = '=', $prefix = '')
     {
         if (preg_match($this->varPattern, $table)) {
@@ -503,13 +577,13 @@ class Builder
         $p2IsVar = preg_match($this->varPattern, $field2);
 
         if (! $p1IsVar && ! $p2IsVar) {
-            $this->leftJoin[] = " $prefix JOIN $table ON $field1 $condit $field2";
+            $this->join[] = " $prefix JOIN $table ON $field1 $condit $field2";
 
         } elseif (! $p1IsVar) {
-            $this->leftJoin[] = " $prefix JOIN $table ON $field1 $condit `{$this->tableName}`.`$field2`";
+            $this->join[] = " $prefix JOIN $table ON $field1 $condit `{$this->tableName}`.`$field2`";
 
         } else {
-            $this->leftJoin[] = " $prefix JOIN $table ON $field2 $condit `{$this->tableName}`.`$field1`";
+            $this->join[] = " $prefix JOIN $table ON $field2 $condit `{$this->tableName}`.`$field1`";
 
         }
         return $this;
@@ -521,7 +595,7 @@ class Builder
      */
     public function joinRaw($string)
     {
-        $this->leftJoin[] = &$string;
+        $this->join[] = &$string;
         return $this;
     }
 
@@ -530,6 +604,11 @@ class Builder
 
     }
 
+    /**
+     * @param null $id
+     * @return mixed
+     * @throws InvalidArgumentException
+     */
     public function remove($id = null)
     {
         if ($id) {
@@ -542,11 +621,19 @@ class Builder
         return $res;
     }
 
+    /**
+     * @param null $id
+     * @return mixed
+     */
     public function delete($id = null)
     {
         return $this->remove($id);
     }
 
+    /**
+     * @param array $p1
+     * @return bool
+     */
     public function insert(array & $p1)
     {
         $res = $this->query->connection()->options($this->options)->add($this->tableName, $p1);
@@ -554,6 +641,10 @@ class Builder
         return $res;
     }
 
+    /**
+     * @param array $p1
+     * @return mixed
+     */
     public function replace(array & $p1)
     {
         $res = $this->query->connection()->options($this->options)->replace($this->tableName, $p1);
@@ -572,6 +663,11 @@ class Builder
      *  $this->update('age', '+');
      *
      *  $this->update('age', '-');
+     *
+     * @param $p1
+     * @param null $p2
+     * @param int $p3
+     * @return int
      */
     public function update(& $p1, $p2 = null, $p3 = 1)
     {
@@ -596,19 +692,36 @@ class Builder
         return $res;
     }
 
-    // 字段值--
+    /**
+     * 字段值--
+     *
+     * @param $field
+     * @param int $step
+     * @return int
+     */
     public function incr($field, $step = 1)
     {
         return $this->update($field, '+', $step);
     }
 
-    // 字段值++
+    /**
+     * 字段值++
+     *
+     * @param $field
+     * @param int $step
+     * @return int
+     */
     public function decr($field, $step = 1)
     {
         return $this->update($field, '-', $step);
     }
 
-    // 批量新增
+    /**
+     * 批量新增
+     *
+     * @param $data
+     * @return mixed
+     */
     public function batchInsert(&$data)
     {
         $res = $this->query->connection()->options($this->options)->batchAdd($this->tableName, $data);
@@ -616,22 +729,32 @@ class Builder
         return $res;
     }
 
+    /**
+     * @return string
+     */
     protected function getOrderBySql()
     {
         return $this->orderBy;
     }
 
+    /**
+     * @return string
+     */
     protected function getLeftJoinSql()
     {
-        if (count($this->leftJoin) > 0) {
-            return implode(' ', $this->leftJoin);
+        if (count($this->join) > 0) {
+            return implode(' ', $this->join);
         }
     }
 
     /**
      * 获取where字符串
-     * */
-    public function getWhereSql($isHaving = false, $isOrWhere = false)
+     *
+     * @param bool $isHaving
+     * @param bool $isOrWhere
+     * @return string
+     */
+    protected function getWhereSql($isHaving = false)
     {
         $where  = '';
 
@@ -690,7 +813,7 @@ class Builder
 
         $this->whereData  = [];
         $this->havingData = [];
-        $this->leftJoin   = [];
+        $this->join   = [];
         $this->wheres     = [];
         $this->orWheres   = [];
         $this->having	  = [];
