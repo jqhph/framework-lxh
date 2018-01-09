@@ -4,7 +4,6 @@ namespace Lxh\Auth;
 
 use Lxh\Auth\Access\HandlesAuthorization;
 use Lxh\Auth\Database\Models;
-use Lxh\Auth\Database\Queries\Abilities as AbilitiesQuery;
 use Lxh\Support\Collection;
 use Lxh\MVC\Model;
 
@@ -74,17 +73,6 @@ class Clipboard
      */
     protected function findMatchingAbility($abilities, $applicable, $model)
     {
-        $abilities = $abilities->toBase()->pluck('identifier', 'id');
-
-        if ($id = $this->getMatchedAbilityId($abilities, $applicable)) {
-            return $id;
-        }
-
-        if ($model instanceof Model && Models::isOwnedBy($authority, $model)) {
-            return $this->getMatchedAbilityId($abilities, $applicable->map(function ($identifier) {
-                return $identifier.'-owned';
-            }));
-        }
     }
 
     /**
@@ -162,16 +150,7 @@ class Clipboard
      */
     public function getRoles()
     {
-        $collection = $this->user->roles()->get(['name'])->pluck('name');
-
-        // In Laravel 5.1, "pluck" returns an Eloquent collection,
-        // so we call "toBase" on it. In 5.2, "pluck" returns a
-        // base instance, so there is no "toBase" available.
-        if (method_exists($collection, 'toBase')) {
-            $collection = $collection->toBase();
-        }
-
-        return $collection;
+      
     }
 
     /**

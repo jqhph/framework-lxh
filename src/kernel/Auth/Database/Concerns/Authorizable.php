@@ -4,6 +4,7 @@ namespace Lxh\Auth\Database\Concerns;
 
 use Lxh\Auth\Clipboard;
 use Lxh\Container\Container;
+use Lxh\MVC\Model;
 
 trait Authorizable
 {
@@ -11,7 +12,7 @@ trait Authorizable
      * Determine if the authority has a given ability.
      *
      * @param  string  $ability
-     * @param  \Lxh\Database\Eloquent\Model|null  $model
+     * @param  Model|null  $model
      * @return bool
      */
     public function can($ability, $model = null)
@@ -23,7 +24,7 @@ trait Authorizable
      * Determine if the authority does not have a given ability.
      *
      * @param  string  $ability
-     * @param  \Lxh\Database\Eloquent\Model|null  $model
+     * @param  Model|null  $model
      * @return bool
      */
     public function cant($ability, $model = null)
@@ -35,7 +36,7 @@ trait Authorizable
      * Determine if the authority does not have a given ability.
      *
      * @param  string  $ability
-     * @param  \Lxh\Database\Eloquent\Model|null  $model
+     * @param  Model|null  $model
      * @return bool
      */
     public function cannot($ability, $model = null)

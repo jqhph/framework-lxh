@@ -94,7 +94,11 @@ class Admin extends Controller
         $form->text('email')->rules('valid_email');
         $form->text('mobile');
         $form->select('status')->options([1, 0]);
-        $form->select('is_admin')->options([0, 1]);
+
+        if (auth()->isAdministrator()) {
+            $form->select('is_admin')->options([0, 1]);
+        }
+
         $form->select('sex')->options([0, 1, 2]);
 
         $url = \Lxh\Admin\Admin::url('Role')->action('Create');

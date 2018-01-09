@@ -2,14 +2,14 @@
 
 namespace Lxh\Auth\Conductors;
 
+use Lxh\MVC\Model;
+
 class UnforbidsAbilities
 {
-    use Concerns\DisassociatesAbilities;
-
     /**
      * The authority from which to remove the forbiddal.
      *
-     * @var \Lxh\Database\Eloquent\Model|string
+     * @var Model|string
      */
     protected $authority;
 
@@ -23,7 +23,7 @@ class UnforbidsAbilities
     /**
      * Constructor.
      *
-     * @param \Lxh\Database\Eloquent\Model|string  $authority
+     * @param Model|string  $authority
      */
     public function __construct($authority)
     {

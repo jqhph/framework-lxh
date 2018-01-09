@@ -125,52 +125,7 @@ trait HasRoles
 
         return $clipboard->checkRole($this, $roles, 'and');
     }
-
-    /**
-     * Constrain the given query by the provided role.
-     *
-     * @param  \Lxh\Database\Eloquent\Builder  $query
-     * @param  string  $role
-     * @return void
-     */
-    public function scopeWhereIs($query, $role)
-    {
-        call_user_func_array(
-            [new RolesQuery, 'constrainWhereIs'],
-            func_get_args()
-        );
-    }
-
-    /**
-     * Constrain the given query by all provided roles.
-     *
-     * @param  \Lxh\Database\Eloquent\Builder  $query
-     * @param  string  $role
-     * @return void
-     */
-    public function scopeWhereIsAll($query, $role)
-    {
-        call_user_func_array(
-            [new RolesQuery, 'constrainWhereIsAll'],
-            func_get_args()
-        );
-    }
-
-    /**
-     * Constrain the given query by the provided role.
-     *
-     * @param  \Lxh\Database\Eloquent\Builder  $query
-     * @param  string  $role
-     * @return void
-     */
-    public function scopeWhereIsNot($query, $role)
-    {
-        call_user_func_array(
-            [new RolesQuery, 'constrainWhereIsNot'],
-            func_get_args()
-        );
-    }
-
+    
     /**
      * Get an instance of the bouncer's clipboard.
      *

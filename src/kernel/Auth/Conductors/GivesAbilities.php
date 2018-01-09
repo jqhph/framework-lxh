@@ -36,13 +36,6 @@ class GivesAbilities
      */
     public function then($abilities, array $attributes = [])
     {
-        if (call_user_func_array([$this, 'shouldConductLazy'], func_get_args())) {
-            return $this->conductLazy($abilities);
-        }
-
-        $ids = $this->getAbilityIds($abilities, $attributes);
-
-        return $this->giveAbilities($ids, $this->getAuthority());
     }
 
     /**
@@ -54,8 +47,5 @@ class GivesAbilities
      */
     protected function giveAbilities(array $ids, Model $authority)
     {
-        $ids = array_diff($ids, $this->getAssociatedAbilityIds($authority, $ids, false));
-
-        return $authority->abilities()->attach($ids);
     }
 }

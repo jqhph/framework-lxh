@@ -61,11 +61,6 @@ trait IsAbility
      */
     public function roles()
     {
-        $relation = $this->morphedByMany(
-            Models::classname(Role::class),
-            'entity',
-            Models::table('permissions')
-        );
     }
 
     /**
@@ -75,11 +70,6 @@ trait IsAbility
      */
     public function users()
     {
-        $relation = $this->morphedByMany(
-            Models::classname(User::class),
-            'entity',
-            Models::table('permissions')
-        );
     }
 
     /**
@@ -128,7 +118,7 @@ trait IsAbility
             $names[] = '*';
         }
 
-        $query->where("{$this->table}.name", 'IN', $names);
+        $query->where("{$this->tableName}.name", 'IN', $names);
     }
 
     /**
@@ -139,19 +129,7 @@ trait IsAbility
      */
     public function scopeSimpleAbility($query)
     {
-        $query->whereNull("{$this->table}.entity_type");
+        $query->whereNull("{$this->tableName}.entity_type");
     }
 
-    /**
-     * Constrain a query to an ability for a specific model.
-     *
-     * @param  $query
-     * @param  Model|string  $model
-     * @param  bool  $strict
-     * @return void
-     */
-    public function scopeForModel($query, $model, $strict = false)
-    {
-        (new AbilitiesForModel)->constrain($query, $model, $strict);
-    }
 }

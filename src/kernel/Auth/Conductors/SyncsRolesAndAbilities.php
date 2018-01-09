@@ -7,23 +7,21 @@ use Lxh\Auth\Database\Models;
 
 use Lxh\Support\Arr;
 use Lxh\Support\Collection;
-use Lxh\Database\Eloquent\Model;
+use Lxh\MVC\Model;
 
 class SyncsRolesAndAbilities
 {
-    use Concerns\FindsAndCreatesAbilities;
-
     /**
      * The authority for whom to sync roles/abilities.
      *
-     * @var \Lxh\Database\Eloquent\Model|string
+     * @var Model|string
      */
     protected $authority;
 
     /**
      * Constructor.
      *
-     * @param \Lxh\Database\Eloquent\Model|string  $authority
+     * @param Model|string  $authority
      */
     public function __construct($authority)
     {
@@ -38,7 +36,6 @@ class SyncsRolesAndAbilities
      */
     public function roles($roles)
     {
-        $this->authority->roles()->sync(Models::role()->getRoleKeys($roles), true);
     }
 
     /**
@@ -49,7 +46,6 @@ class SyncsRolesAndAbilities
      */
     public function abilities($abilities)
     {
-        $this->syncAbilities($abilities);
     }
 
     /**
@@ -60,7 +56,6 @@ class SyncsRolesAndAbilities
      */
     public function forbiddenAbilities($abilities)
     {
-        $this->syncAbilities($abilities, ['forbidden' => true]);
     }
 
     /**
@@ -72,32 +67,15 @@ class SyncsRolesAndAbilities
      */
     protected function syncAbilities($abilities, $options = ['forbidden' => false])
     {
-        $abilityKeys = $this->getAbilityIds($abilities);
-
-        $this->getAuthority()->abilities()
-             ->whereNotIn($this->getAbilitiesQualifiedKeyName(), $abilityKeys)
-             ->wherePivot('forbidden', $options['forbidden'])
-             ->detach();
-
-        if ($options['forbidden']) {
-            (new ForbidsAbilities($this->authority))->to($abilityKeys);
-        } else {
-            (new GivesAbilities($this->authority))->to($abilityKeys);
-        }
     }
 
     /**
      * Get the authority for whom to sync roles/abilities.
      *
-     * @return \Lxh\Database\Eloquent\Model
+     * @return Model
      */
     protected function getAuthority()
     {
-        if ($this->authority instanceof Model) {
-            return $this->authority;
-        }
-
-        return Models::role()->firstOrCreate(['name' => $this->authority]);
     }
 
     /**
@@ -107,8 +85,5 @@ class SyncsRolesAndAbilities
      */
     protected function getAbilitiesQualifiedKeyName()
     {
-        $model = Models::ability();
-
-        return $model->getTable().'.'.$model->getKeyName();
     }
 }
