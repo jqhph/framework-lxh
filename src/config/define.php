@@ -1,7 +1,4 @@
 <?php
-/**
- * 公共常量配置文件
- *
- * @author Jqh
- * @date   2017/6/13 18:21
- */
+
+// 使用配置文件缓存
+define('USE_CONFIG_CACHE', true);

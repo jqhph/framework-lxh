@@ -13,14 +13,26 @@ use Lxh\Helper\Entity;
 
 class Config extends Entity
 {
-    protected $root = __ROOT__;// 项目目录
+    /**
+     * 项目目录
+     *
+     * @var string
+     */
+    protected $root = __ROOT__;
 
+    /**
+     * @var string
+     */
     protected $prefix = 'config';
 
+    /**
+     * @var string
+     */
     protected $cachePath = 'resource/config/';
 
-    protected static $instance;
-
+    /**
+     * @var string
+     */
     protected $env = __ENV__;
 
     /**
@@ -35,7 +47,7 @@ class Config extends Entity
      *
      * @var array
      */
-    protected $confFiles = ['config', 'app'];
+    protected $confFiles = ['config'];
 
     /**
      * 可写配置参数
@@ -44,9 +56,16 @@ class Config extends Entity
      */
     protected $writableData = [];
 
+    /**
+     * @var bool
+     */
+    protected $useCache = true;
+
     public function __construct()
     {
-        $this->fillConfig();
+        $this->attachItems();
+
+        $this->useCache = defined('USE_CONFIG_CACHE') ? USE_CONFIG_CACHE : true;
     }
 
     /**
@@ -58,7 +77,7 @@ class Config extends Entity
     {
         $this->items = [];
 
-        $this->fillConfig(true);
+        $this->attachItems(true);
 
         return $this;
     }
@@ -80,6 +99,9 @@ class Config extends Entity
      */
     protected function readCache()
     {
+        if (!$this->useCache) {
+            return false;
+        }
         // 如果存在缓存，则直接加载缓存中的文件
         if (! is_file($cachePath = $this->getCachePath())) {
             return false;
@@ -114,7 +136,7 @@ class Config extends Entity
      * @param bool $useCurrentEnv 是否加载指定环境配置文件
      * @return void
      */
-    public function fillConfig($useCurrentEnv = false)
+    public function attachItems($useCurrentEnv = false)
     {
         if ($this->readCache()) {
             return;
@@ -126,22 +148,22 @@ class Config extends Entity
             $file = "{$pre}{$f}.php";
 
             if (is_file($file)) {
-                $this->items += include $file;
+                $this->items = array_merge($this->items, (array) include $file);
             }
         }
         if (count($this->items) < 1) {
             throw new InvalidArgumentException("Config file[$file] not found!");
         }
 
-        $this->attachItems($this->get('add-config'), $useCurrentEnv);
+        $this->attachFiles($this->get('add-config'), $useCurrentEnv);
 
         $this->writableData = include $this->getWritableConfigPath();
-        $this->items += $this->writableData;
+        $this->items = array_merge($this->items, (array) $this->writableData);
 
         $this->saveCache();
     }
 
-    protected function attachItems($files, $useCurrentEnv = false)
+    protected function attachFiles($files, $useCurrentEnv = false)
     {
         $pre = $this->getBasePath();
 
@@ -170,12 +192,16 @@ class Config extends Entity
     // 保存缓存
     public function saveCache()
     {
+        if (! $this->useCache) return;
+
         files()->putPhpContents($this->getCachePath(), $this->items);
     }
 
     // 清除缓存
     public function removeCache()
     {
+        if (! $this->useCache) return;
+
         return files()->remove($this->getCachePath());
     }
 
