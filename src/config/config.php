@@ -82,15 +82,12 @@ $config['cookie'] = [
 // 增加配置文件
 $config['add-config'] = [
     // 数据库配置文件
-    __ENV__ . '/db/config',
-    __ENV__ . '/app',
+    'db' => __ENV__ . '/db/config',
+    'client-config' => __ENV__ . '/client',
+    'app' => __ENV__ . '/app',
+    'mail' => 'mail',
 ];
 
-// 增加配置文件，并使用文件名作为key
-$config['add-config-name'] = [
-    __ENV__ . '/client-config',
-    'mail'
-];
 
 // 模块设定, 支持多模块, 多个用数组表示
 // 如果设置了多模块, 且没有开启子域名部署, 配置路由的时候默认指向第一个模块, 如需走第二个模块需要在路由配置中使用"module"参数指定

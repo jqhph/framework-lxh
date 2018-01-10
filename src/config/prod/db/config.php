@@ -8,7 +8,7 @@
 
 $config = [];
 
-$config['db'] = [
+$config = [
     'primary' => [
         'usepool' => false,
         'type' => 'mysql',

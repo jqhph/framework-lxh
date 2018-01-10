@@ -133,9 +133,7 @@ class Config extends Entity
             throw new InvalidArgumentException("Config file[$file] not found!");
         }
 
-        $this->fillWithFiles($this->get('add-config'), false, $useCurrentEnv);
-
-        $this->fillWithFiles($this->get('add-config-name'), true, $useCurrentEnv);
+        $this->attachItems($this->get('add-config'), $useCurrentEnv);
 
         $this->writableData = include $this->getWritableConfigPath();
         $this->items += $this->writableData;
@@ -143,7 +141,7 @@ class Config extends Entity
         $this->saveCache();
     }
 
-    protected function fillWithFiles($files, $useKey = false, $useCurrentEnv = false)
+    protected function attachItems($files, $useCurrentEnv = false)
     {
         $pre = $this->getBasePath();
 
@@ -151,6 +149,7 @@ class Config extends Entity
             $envpre = '/' . __ENV__ . '/';
             $currentEnvpre = '/' . $this->env . '/';
         }
+
         foreach ((array) $files as $k => &$filename) {
             $path = "{$pre}{$filename}.php";
             if (isset($envpre)) {
@@ -160,10 +159,10 @@ class Config extends Entity
                 throw new InvalidArgumentException("Config file[$path] not found!");
             }
 
-            if ($useKey) {
-                $this->items[basename($filename)] = include $path;
+            if (is_string($k)) {
+                $this->items[$k] = include $path;
             } else {
-                $this->items += include $path;
+                $this->items = array_merge($this->items, (array) include $path);
             }
         }
     }
