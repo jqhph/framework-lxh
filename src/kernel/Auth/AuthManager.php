@@ -334,7 +334,7 @@ class AuthManager
      *
      * @return Collection
      */
-    public function abilitiesGroupByRoles()
+    public function getAbilitiesGroupByRoles()
     {
         $abilities = $this->abilities();
         $roles = $this->roles();

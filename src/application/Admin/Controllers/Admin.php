@@ -195,24 +195,31 @@ class Admin extends Controller
         }
 
         $admin = Models::user()->setId($id);
+        $roleUrl = AdminCreator::url('Role');
+        $abUrl = AdminCreator::url('Ability');
+        $roleKey = Models::role()->getKeyName();
+        $abKey = Models::ability()->getKeyName();
 
-        $abilities = AuthManager::resolve($admin)->abilitiesGroupByRoles()->map(function ($roles, $roleTitle) {
+        $abilities = AuthManager::resolve($admin)->getAbilitiesGroupByRoles()->map(function ($roles, $roleTitle) use ($roleUrl, $abUrl, $roleKey, $abKey) {
             // 角色
             $tag = new Tag();
-            $tag->value($roleTitle)->icon('fa fa-tags')->middle();
+            $tag->value($roleTitle)
+                ->icon('fa fa-tags')
+                ->url($roleUrl->detail($roles[$roleKey]))
+                ->middle();
 
             $table = new \Lxh\Admin\Widgets\Table([$tag->render()]);
 
-            $tags = [];
+            // 权限
+            $tags = '';
             foreach ($roles['abilities'] as &$ability) {
-                $tags[] = $ability['title'];
+                $tags .= (new Tag())
+                    ->label($ability['title'])
+                    ->url($abUrl->detail($ability[$abKey]))
+                    ->render();
             }
 
-            // 权限
-            $tag = new Tag();
-            $tag->label($tags);
-
-            $table->setRows([[$tag->render()]]);
+            $table->setRows([[$tags]]);
 
             return $table->render();
         })->all();
