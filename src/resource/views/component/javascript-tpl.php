@@ -8,6 +8,10 @@
             </div>
             <div class="modal-body">{content}</div>
             <div class="modal-footer">
+                @if {dataId} || {useRefresh}
+                <button data-action="refresh" type="button" class="btn btn-purple waves-effect waves-light"><i class="zmdi zmdi-refresh-alt"></i> {refreshLabel}</button>
+                @endif
+
                 @if {confirmBtn}
                 <button data-action="confirm" type="button" class="btn {confirmBtnClass} waves-effect waves-light">{confirmBtnLabel}</button>
                 @endif

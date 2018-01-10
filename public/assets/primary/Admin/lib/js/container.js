@@ -36,6 +36,36 @@ window.Lxh = function (options) {
 
             // 环境管理
             env = new Env();
+
+            function setup_ajax_modal() {
+                $('.ajax-modal').click(show_modal_btn);
+                $(document).on('pjax:complete', function(xhr) {$('.ajax-modal').click(show_modal_btn);});
+
+                var tag, modal;
+                // 点击查看角色列表按钮事件
+                function show_modal_btn(e) {
+                    tag = $(this);
+                    var title = tag.attr('modal-title'), // 弹窗标题
+                        url = tag.attr('modal-url'), // 取数据url
+                        dataId = tag.attr('modal-data-id'), // 缓存数据id
+                        id = tag.attr('modal-id');
+                    if (! url) return;
+
+                    tag.addClass('disabled');
+                    if (!modal) {
+                        modal = ui.modal({
+                            title: title, confirmBtn: false, url: url, id: id, dataId: dataId
+                        });
+                    }
+                    // 设置唯一id，用于缓存从服务器抓取的数据
+                    modal.setDataId(dataId);
+                    // 开始抓取数据，并附加到弹窗展示
+                    modal.then(function () {
+                        tag.removeClass('disabled');
+                    })
+                }
+            }
+            setup_ajax_modal();
         }
 
         // 获取父窗口对象
@@ -416,6 +446,9 @@ window.Lxh = function (options) {
                 options.tpl = options.tpl || $('#modal-tpl').text();
                 options.footer = options.footer || '';
                 options.url = options.url || null;
+                options.dataId = options.dataId || null;
+                options.useRefresh = options.useRefresh || false;
+                options.refreshLabel = trans('Refresh');
 
                 var blade = new Blade(options.tpl, options);
 
@@ -426,12 +459,62 @@ window.Lxh = function (options) {
 
                 $('body').append(blade.fetch());
 
-                var $container = $('#' + options.id);
+                var $container = $('#' + options.id),
+                    modal = $container.modal(),
+                    requesting,
+                    $loading,
+                    self = this,
+                    contents = {},
+                    _then;
 
-                var modal = $container.modal();
+                // 如果传递了url参数，则传递此id会缓存从url抓取到的数据到js对象
+                $container.setDataId = function (id) {
+                    options.dataId = id;
+                };
+
+                // 如果传递了url参数，则执行此方法会开始到服务器抓取数据并替换到弹窗内容里面
+                $container.then = function (call) {
+                    _then = call
+                    fetch_data(options.dataId, options.url, function (content) {
+                        if (content) {
+                            $container.find('.modal-body').html(content);
+                            $container.modal('show');
+                            // 回调用户设置的回调函数
+                        } else {
+                            self.notify().info(trans('No data.'));
+                        }
+                        if (call) call(content);
+                    });
+                };
 
                 if (call) {
                     $container.find('button[data-action="confirm"]').click(call);
+                }
+                // 刷新按钮
+                $container.find('[data-action="refresh"]').click(function () {
+                    if (requesting) return;
+                    delete contents[options.dataId];
+                    $container.then(_then)
+                });
+
+                // 获取服务器数据
+                function fetch_data(id, url, callback) {
+                    if (id && typeof contents[id] != 'undefined') {
+                        readyclick();
+                        return callback(contents[id]);
+                    }
+                    $loading = loading();
+                    $.getJSON(url, function (data) {
+                        readyclick();
+                        // 缓存数据到js对象，不用每次都去服务器取
+                        contents[id] = data.content;
+                        callback(contents[id])
+                    });
+                }
+
+                function readyclick() {
+                    requesting = 0;
+                    $loading.close();
                 }
 
                 return $container;

@@ -43,8 +43,6 @@ class Admin extends Controller
      */
     public function grid(Grid $grid, Content $content)
     {
-        // 展示用户角色和权限
-        AdminCreator::js('admin/ajax-modal');
     }
 
     protected function createModalId()
@@ -72,7 +70,7 @@ class Admin extends Controller
 
         // 角色字段
         $btn = new Tag();
-        // ajax modal弹窗点击事件按钮
+        // ajax modal自动从设置的url中抓取数据展示到弹窗里面
         $btn->class('ajax-modal');
         // ajax modal标题
         $btn->attribute('modal-title', 'Roles');
@@ -81,9 +79,9 @@ class Admin extends Controller
         $keyName = $this->model()->getKeyName();
         $label = trans('list');
         $table->column(6, 'roles', function (array $row, Td $td, Th $th, Tr $tr) use ($btn, $keyName, $label) {
-            // 设置id
-            $btn->attribute('data-id', $row[$keyName]);
-            // 取数据url
+            // ajax modal 设置dataid，用于缓存从服务器抓取的数据，无需每次重复抓取
+            $btn->attribute('modal-data-id', $row[$keyName]);
+            // ajax modal 取数据url
             $btn->attribute('modal-url', '/api/admin/roles-list/' . $row[$keyName]);
 
             return $btn->label($label . ' <i class="zmdi zmdi-tag-more"></i>')->render();
