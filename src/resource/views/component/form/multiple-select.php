@@ -6,7 +6,6 @@
             <option value="<?php echo  $option['value'] ?>" <?php echo in_array($option['value'], $value) ?'selected':''  ?>><?php echo  $option['label'] ?></option>
             <?php endforeach; ?>
         </select>
-        <input type="hidden" name="<?php echo $name ?>[]" />
         <?php if ($help) {
             echo view('admin::form.help-block')->render();
         }?>

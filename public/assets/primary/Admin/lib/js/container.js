@@ -1236,10 +1236,11 @@ console.log('request data', data);
      * @constructor
      */
     function Form() {
-        var formEles = ['input', 'textarea', 'select'];
+        var formEles = ['input', 'textarea', 'select'], $selector;
 
         // 获取指定form中的所有的<input>对象
         function get_elements(selector) {
+            $selector = selector;
             var form = document.querySelector(selector);// || document.querySelector('form');
             if (! form) return [];
             var elements = [], tagElements;
@@ -1266,6 +1267,10 @@ console.log('request data', data);
                 case 'radio':
                     return input_selector(element);
                 default:
+                    if (element.name.indexOf('[') !== -1 && element.name.indexOf(']') !== -1) {
+                        // 兼容select2 js多选框
+                        return [element.name, $($selector).find('[name="'+element.name+'"]').val()];
+                    }
                     return [element.name, element.value];
             }
             return false;
@@ -1289,12 +1294,16 @@ console.log('request data', data);
             for (var i = 0; i < elements.length; i++) {
                 var component = serialize_element(elements[i]);
                 if (!component || typeof component[1] == 'undefined') continue;
-                if (component[0].indexOf('[') !== -1 && component[0].indexOf(']') !== -1 ) {
+                if (component[0].indexOf('[') !== -1 && component[0].indexOf(']') !== -1) {
                     component[0] = component[0].replace('[]', '');
                     if (typeof data[component[0]] == 'undefined') {
                         data[component[0]] = [];
                     }
-                    data[component[0]].push(component[1]);
+                    if (typeof component[1] == 'object') {
+                        data[component[0]] = component[1];
+                    } else {
+                        data[component[0]].push(component[1]);
+                    }
                 } else {
                     data[component[0]] = component[1];
                 }
