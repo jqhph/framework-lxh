@@ -8,6 +8,10 @@
             </div>
             <div class="modal-body">{content}</div>
             <div class="modal-footer">
+                @foreach {buttons} {row}
+                <button data-action="{row.label}" type="button" class="btn {row.class} waves-effect" >{row.label}</button>
+                @endforeach
+
                 @if {dataId} || {useRefresh}
                 <button data-action="refresh" type="button" class="btn btn-purple waves-effect waves-light"><i class="zmdi zmdi-refresh-alt"></i> {refreshLabel}</button>
                 @endif
@@ -20,9 +24,6 @@
                 <button data-action="close" type="button" class="btn btn-default waves-effect" data-dismiss="modal">{closeBtnLabel}</button>
                 @endif
 
-                @foreach {buttons} {row}
-                <button data-action="{row.label}" type="button" class="btn {row.class} waves-effect" >{row.label}</button>
-                @endforeach
                 {footer}
             </div>
         </div>
