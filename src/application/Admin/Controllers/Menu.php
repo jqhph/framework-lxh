@@ -36,7 +36,7 @@ class Menu extends Controller
         'name' => [],
         'controller' => [],
         'action' => [],
-        'show' => ['view' => 'Boolean'],
+        'show' => ['view' => 'Checkbox'],
         'type' => ['view' => 'Enum'],
         'priority' => [],
     ];

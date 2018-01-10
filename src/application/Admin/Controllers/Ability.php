@@ -56,7 +56,7 @@ class Ability extends Controller
         $table->field('id')->hide()->sortable();
         $table->field('title');
         $table->field('name');
-        $table->field('forbidden')->view('Boolean');
+        $table->field('forbidden')->view('Checkbox');
         $table->field('comment');
         $table->field('created_at')->view('date')->sortable();
         $table->field('modified_at')->view('date')->sortable();

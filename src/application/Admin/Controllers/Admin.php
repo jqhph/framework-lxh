@@ -68,8 +68,8 @@ class Admin extends Controller
         $table->field('username');
         $table->field('email');
         $table->field('mobile');
-        $table->field('status')->view('Boolean');
-        $table->field('is_admin')->view('Boolean')->hide();
+        $table->field('status')->view('Checkbox');
+        $table->field('is_admin')->view('Checkbox')->hide();
         $table->field('sex')->view('Select');
         $table->field('created_at')->view('Date')->sortable();
         $table->field('modified_at')->view('Date')->sortable()->hide();
@@ -210,7 +210,7 @@ class Admin extends Controller
 
             // 权限
             $tag = new Tag();
-            $tag->label($tags)->useRandomColor();
+            $tag->label($tags);
 
             $table->setRows([[$tag->render()]]);
 

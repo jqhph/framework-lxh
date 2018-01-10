@@ -4,10 +4,10 @@ namespace Lxh\Admin\Fields;
 
 use Lxh\Contracts\Support\Renderable;
 
-class Boolean extends Field
+class Checkbox extends Field
 {
     protected $options = [
-        'color' => 'success'
+        'color' => 'danger'
     ];
 
     public function render()

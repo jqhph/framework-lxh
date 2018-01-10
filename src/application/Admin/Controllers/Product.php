@@ -35,9 +35,9 @@ class Product extends Controller
         'share_price' => ['sortable' => 1,],
         'level',
         'stock',
-        'is_hot' => ['view' => 'Boolean'],
-        'is_new' => ['view' => 'Boolean'],
-        'calendar' => ['view' => 'Boolean'],
+        'is_hot' => ['view' => 'Checkbox'],
+        'is_new' => ['view' => 'Checkbox'],
+        'calendar' => ['view' => 'Checkbox'],
         'order_num',
         'desc' => ['show' => 0],
         'category_id' => ['show' => 0],
@@ -94,7 +94,7 @@ class Product extends Controller
         /**
          * 使用field方法添加字段
          */
-        $table->field('timelimit')->view('Boolean')->sortable();
+        $table->field('timelimit')->view('Checkbox')->sortable();
 
         /**
          * 自定义字段标题内容
