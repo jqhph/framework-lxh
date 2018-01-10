@@ -366,10 +366,11 @@
             if (typeof $iframe[0] == 'undefined') return;
             var iframe = $iframe[0],
                 iframeWin = (iframe.contentWindow || iframe.contentDocument.parentWindow) || iframe,
-                height;
+                height,
+                minHeight = 725;
             if (iframeWin.document.body) {
                 height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight;
-                // iframe.height = height
+                height = height > minHeight ? (height) : minHeight;
                 $iframe.css('height', height + 'px')
             }
         };
@@ -379,6 +380,6 @@
         }
     }
 
-    w.Tab = Tab
-    w.Iframe = Iframe
+    w.Tab = Tab;
+    w.Iframe = Iframe;
 })(window);
