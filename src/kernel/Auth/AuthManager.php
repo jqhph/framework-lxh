@@ -5,6 +5,7 @@ namespace Lxh\Auth;
 use Lxh\Auth\Conductors\FindRoles;
 use Lxh\Auth\Database\Role;
 use Lxh\Cache\File;
+use Lxh\Exceptions\InvalidArgumentException;
 use Lxh\MVC\Model;
 use Lxh\Auth\Cache\Store;
 use Lxh\Auth\Clipboard;
@@ -51,6 +52,10 @@ class AuthManager
     public function __construct(Model $user = null)
     {
         $this->user = $user ?: admin();
+
+        if (! $this->user->getId()) {
+            throw new InvalidArgumentException('Invalid user model.');
+        }
 
         $this->usesCached = config('admin.auth.cache', true);
 
@@ -101,7 +106,9 @@ class AuthManager
         if (! $user) {
             $user = admin();
         }
-        $id = $user->getId();
+        if (! $id = $user->getId()) {
+            throw new InvalidArgumentException('Invalid user model.');
+        }
 
         if (isset(static::$instances[$id])) {
             return static::$instances[$id];
