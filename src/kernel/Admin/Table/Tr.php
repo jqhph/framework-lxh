@@ -44,6 +44,13 @@ class Tr extends Widget
     protected $columns = [];
 
     /**
+     * 层级
+     *
+     * @var int
+     */
+    protected $tier = 1;
+
+    /**
      * 字段自定义配置键值
      *
      * @var string
@@ -56,6 +63,12 @@ class Tr extends Widget
         $this->offset = $offset;
         $this->row = &$row;
         $this->columns = &$columns;
+    }
+
+    public function setTier($tier)
+    {
+        $this->tier = $tier;
+        return $this;
     }
 
     /**
@@ -113,7 +126,7 @@ class Tr extends Widget
      */
     protected function buildTree($name, &$rows)
     {
-        return new Tree($this, $name, $this->offset + 1, $rows);
+        return new Tree($this, $name, $this->tier, $rows);
     }
 
     /**

@@ -46,7 +46,7 @@ class Tree
         $this->tier = $tier;
         $this->rows = &$rows;
 
-        $this->spacing = $this->tier * 3;
+        $this->spacing = $this->tier * 5;
     }
 
     /**
@@ -75,7 +75,7 @@ class Tree
     protected function buildTr($k, &$row)
     {
         $tb = $this->tr->table();
-        return new Tr($tb, $k, $row, $tb->columns());
+        return (new Tr($tb, $k, $row, $tb->columns()))->setTier($this->tier + 1);
     }
 
     /**

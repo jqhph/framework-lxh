@@ -21,7 +21,7 @@ class SelectTree extends Select
      *
      * @var int
      */
-    protected $level = 1;
+    protected $tier = 1;
 
     /**
      * 子级数据键名
@@ -50,7 +50,7 @@ class SelectTree extends Select
             $new[] = &$row;
             if (empty($row[$this->subsKey])) continue;
 
-            $new = array_merge($new, $this->buildRows($row[$this->subsKey]));
+            $new = array_merge($new, $this->buildRows($row[$this->subsKey], $this->tier));
 
             unset($row[$this->subsKey]);
         }
@@ -58,21 +58,20 @@ class SelectTree extends Select
         $this->options = &$new;
     }
 
-    protected function buildRows(array &$options)
+    protected function buildRows(array &$options, $tier = 1)
     {
         $new = [];
         $end = count($options) - 1;
         foreach ($options as $k => &$row) {
-            $row[$this->labelKey] = $this->formatIndent($row[$this->labelKey], $k == $end);
+            $row[$this->labelKey] = $this->formatIndent($tier, $row[$this->labelKey], $k == $end);
 
             $new[] = &$row;
             if (! empty($row[$this->subsKey])) {
-                $new = array_merge($new, $this->buildRows($row[$this->subsKey]));
+                $this->tier++;
+                $new = array_merge($new, $this->buildRows($row[$this->subsKey], $this->tier));
             }
             unset($row[$this->subsKey]);
         }
-
-        $this->level++;
 
         return $new;
     }
@@ -84,9 +83,9 @@ class SelectTree extends Select
      * @paran bool $end
      * @return string
      */
-    protected function formatIndent($value, $end = false)
+    protected function formatIndent($tier, $value, $end = false)
     {
-        $indent = str_repeat('&nbsp;', $this->level * 3);
+        $indent = str_repeat('&nbsp;', $tier * 3);
 
         if ($end) {
             return "{$indent}└─ {$value}";
