@@ -31,10 +31,10 @@ class Button extends Field
      */
     protected $effect = 'waves-effect';
 
-    public function __construct($label, $url = null)
+    public function __construct($label = null, $url = null)
     {
-        $this->label = $label;
-        $this->url = $url;
+        $this->label = &$label;
+        $this->url = &$url;
     }
 
     /**

@@ -20,6 +20,8 @@ use Lxh\Admin\Table\Th;
 use Lxh\Admin\Table\Tr;
 use Lxh\Admin\Widgets\Form;
 use Lxh\Admin\Widgets\Modal;
+use Lxh\Auth\AuthManager;
+use Lxh\Auth\Database\Models;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
 use Lxh\Admin\Admin as AdminCreator;
@@ -79,17 +81,18 @@ class Admin extends Controller
         });
 
         // 角色字段
-        $tag = new Tag();
-        $tag->color('danger');
-        $tag->class('roles-list');
-        $tag->attribute('data-modal', $this->modalId);
+        $btn = new Button();
+        $btn->color('default');
+        $btn->class('roles-list btn-sm');
+        $btn->attribute('data-modal', $this->modalId);
+        $btn->icon('zmdi zmdi-tag-more');
 
         $keyName = $this->model()->getKeyName();
         $label = trans('list');
-        $table->column(6, 'roles', function (array $row, Td $td, Th $th, Tr $tr) use ($tag, $keyName, $label) {
-            $tag->attribute('data-id', $row[$keyName]);
+        $table->column(6, 'roles', function (array $row, Td $td, Th $th, Tr $tr) use ($btn, $keyName, $label) {
+            $btn->attribute('data-id', $row[$keyName]);
 
-            return $tag->label($label)->render();
+            return $btn->label($label)->render();
         });
     }
 
@@ -192,9 +195,11 @@ class Admin extends Controller
             return $this->error();
         }
 
-        $abilities = auth()->abilitiesGroupByRoles()->map(function ($roles, $roleTitle) {
-            $tag = new Button($roleTitle);
-            $tag->class('btn-sm')->color('primary');
+        $admin = Models::user()->setId($id);
+
+        $abilities = AuthManager::resolve($admin)->abilitiesGroupByRoles()->map(function ($roles, $roleTitle) {
+            $tag = new Button('<i class="fa fa-tags"></i> ' . $roleTitle);
+            $tag->class('btn-sm')->color('default');
 
             $table = new \Lxh\Admin\Widgets\Table([$tag->render()]);
 

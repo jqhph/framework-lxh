@@ -174,7 +174,7 @@ class Models
     {
         $class = static::classname($model);
 
-        return new $class($model, Container::getInstance());
+        return new $class();
     }
 
     /**
@@ -185,7 +185,7 @@ class Models
      */
     public static function user(array $attributes = [])
     {
-        return model(static::classname('User'))->attach($attributes);
+        return static::make('User')->attach($attributes);
     }
 
 

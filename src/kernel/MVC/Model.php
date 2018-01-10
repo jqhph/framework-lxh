@@ -1,6 +1,7 @@
 <?php
 namespace Lxh\MVC;
 
+use Lxh\Exceptions\Exception;
 use Lxh\Exceptions\InternalServerError;
 use Lxh\Contracts\Container\Container;
 use Lxh\Exceptions\InvalidArgumentException;
@@ -87,15 +88,31 @@ class Model extends Entity
      */
     public function getMorphType()
     {
+        throw new Exception('没有定义类型');
     }
 
     /**
+     * 设置id名称
+     *
      * @param $name
      * @return $this
      */
     public function setIdName($name)
     {
         $this->idFieldsName = $name;
+        return $this;
+    }
+
+    /**
+     * 设置id
+     *
+     * @param $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->set($this->idFieldsName, $id);
+
         return $this;
     }
 
