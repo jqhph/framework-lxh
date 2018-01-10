@@ -401,50 +401,40 @@ window.Lxh = function (options) {
             // 弹窗
             modal: function (options, call) {
                 options = options || {};
-                options.closeButton = options.closeButton || true;
+                options.closeBtn = typeof options.closeBtn == 'undefined' ? true : options.closeBtn;
                 options.class = options.class || 'modal-container';
 
+                options.id = options.id || ('mdl' + Math.random().toString(36).substr(2, 5));
                 options.title = trans(options.title) || '';
                 options.content = options.content || '';
-                options.saveButton = options.saveButton || true;
-                options.saveButtonClass = options.saveButtonClass || 'btn-primary';
+                options.width = options.width || '50%';
+                options.confirmBtn = typeof options.confirmBtn == 'undefined' ? true : options.confirmBtn;
+                options.confirmBtnClass = options.confirmBtnClass || 'btn-primary';
                 options.buttons = options.buttons || {};
-                options.closeButtonLabel = trans(options.closeButtonLabel) || trans('Close');
-                options.saveButtonLabel = trans(options.saveButtonLabel) || trans('Save');
-                options.tpl = options.tpl || $('#modal-basic').text();
+                options.closeBtnLabel = trans(options.closeBtnLabel) || trans('Close');
+                options.confirmBtnLabel = trans(options.confirmBtnLabel) || trans('Save');
+                options.tpl = options.tpl || $('#modal-tpl').text();
+                options.footer = options.footer || '';
+                options.url = options.url || null;
 
                 var blade = new Blade(options.tpl, options);
 
-                var $container = $('div.' + options.class);
-
-                if ($container.length > 0) {
-                    return $container.modal();
+                if ($(options.id).length > 0) {
+                    $(options.id).modal();
+                    return $(options.id);
                 }
 
                 $('body').append(blade.fetch());
 
-                $container = $('div.' + options.class);
-
-                $container.find('button[data-action="modal-basic-close"]').click(close);
+                var $container = $('#' + options.id);
 
                 var modal = $container.modal();
 
                 if (call) {
-                    $container.find('button[data-action="modal-basic-save"]').click(function () {
-                        call(modal);
-                    });
+                    $container.find('button[data-action="confirm"]').click(call);
                 }
 
-                // 添加close事件
-                modal.close = close;
-
-                return modal;
-
-                function close() {
-                    $('.modal-backdrop').remove();
-                    $container.remove();
-                    $('body').removeClass('modal-open');
-                }
+                return $container;
             }
         }
     }

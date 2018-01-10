@@ -8,18 +8,17 @@
             </div>
             <div class="modal-body">{content}</div>
             <div class="modal-footer">
-                @if {closeBtn}
-                    <button data-action="close" type="button" class="btn btn-default waves-effect" data-dismiss="modal">{closeBtnLabel}</button>
+                @if {confirmBtn}
+                <button data-action="confirm" type="button" class="btn {confirmBtnClass} waves-effect waves-light">{confirmBtnLabel}</button>
                 @endif
 
-                @if {confirmBtn}
-                    <button data-action="confirm" type="button" class="btn {confirmBtnClass} waves-effect waves-light">{confirmBtnLabel}</button>
+                @if {closeBtn}
+                <button data-action="close" type="button" class="btn btn-default waves-effect" data-dismiss="modal">{closeBtnLabel}</button>
                 @endif
 
                 @foreach {buttons} {row}
-                    <button data-action="{row.label}" type="button" class="btn {row.class} waves-effect" >{row.label}</button>
+                <button data-action="{row.label}" type="button" class="btn {row.class} waves-effect" >{row.label}</button>
                 @endforeach
-
                 {footer}
             </div>
         </div>

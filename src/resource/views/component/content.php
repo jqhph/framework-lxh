@@ -73,6 +73,8 @@ __then__(function () {<?php echo $script?>});
 <?php
 // 加载sea js，加载所有require_js和require_css加载的文件
 echo load_js('app.min');
+// js模板
+echo render_view('admin::javascript-tpl');
 ?>
 </body>
 </html>

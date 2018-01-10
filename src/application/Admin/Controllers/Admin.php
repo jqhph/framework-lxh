@@ -33,11 +33,6 @@ class Admin extends Controller
      */
     protected $filter = 'modal';
 
-    /**
-     * @var string
-     */
-    protected $modalId = '';
-
     protected function initialize()
     {
     }
@@ -48,13 +43,8 @@ class Admin extends Controller
      */
     public function grid(Grid $grid, Content $content)
     {
-        // 生成弹窗用于展示用户角色和权限
-        $modal = $content->modal(trans('Roles'));
-        $modal->width('55%');
-        $modal->generateId();
-        $this->modalId = $modal->getId();
-
-        AdminCreator::js('admin/admin-index');
+        // 展示用户角色和权限
+        AdminCreator::js('admin/ajax-modal');
     }
 
     protected function createModalId()
@@ -82,14 +72,19 @@ class Admin extends Controller
 
         // 角色字段
         $btn = new Tag();
-        $btn->class('roles-list');
-        $btn->attribute('data-modal', $this->modalId);
+        // ajax modal弹窗点击事件按钮
+        $btn->class('ajax-modal');
+        // ajax modal标题
+        $btn->attribute('modal-title', 'Roles');
         $btn->style('margin-left:0;padding-top:0');
 
         $keyName = $this->model()->getKeyName();
         $label = trans('list');
         $table->column(6, 'roles', function (array $row, Td $td, Th $th, Tr $tr) use ($btn, $keyName, $label) {
+            // 设置id
             $btn->attribute('data-id', $row[$keyName]);
+            // 取数据url
+            $btn->attribute('modal-url', '/api/admin/roles-list/' . $row[$keyName]);
 
             return $btn->label($label . ' <i class="zmdi zmdi-tag-more"></i>')->render();
         });
