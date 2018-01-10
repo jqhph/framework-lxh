@@ -51,8 +51,8 @@ class Role extends \Lxh\Auth\Database\Role
 
     public function beforeAdd(array &$input)
     {
-        $data['created_at']    = time();
-        $data['created_by_id'] = admin()->id;
+        $input['created_at']    = time();
+        $input['created_by_id'] = admin()->getId();
 
         $this->abilities = $input['abilities'];
         unset($input['abilities']);
@@ -65,7 +65,7 @@ class Role extends \Lxh\Auth\Database\Role
         if ($this->abilities) {
             $this->assignAbilities($this->abilities);
             // 清除相关用户缓存
-            auth()->refreshForRoles($this);
+            auth()->refreshForRole($this);
         }
     }
 

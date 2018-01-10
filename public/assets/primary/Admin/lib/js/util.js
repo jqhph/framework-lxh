@@ -169,7 +169,7 @@
         // 返回上一级tab
         this.back = function (step) {
             step = (parseInt(step) || 1);
-            var data = histories[step] || def;
+            var data = histories[step - 1] || def;
             histories.splice(step - 1, 1);
             this.switch(data.name, data.url, data.label);
         };
