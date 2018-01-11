@@ -434,7 +434,7 @@ window.Lxh = function (options) {
                 options.closeBtn = typeof options.closeBtn == 'undefined' ? true : options.closeBtn;
                 options.class = options.class || 'modal-container';
 
-                options.id = options.id || ('mdl' + Math.random().toString(36).substr(2, 5));
+                options.id = options.id || ('mdl' + Math.random().toString(36).substr(2, 7));
                 options.title = trans(options.title) || '';
                 options.content = options.content || '';
                 options.width = options.width || '50%';
@@ -474,7 +474,7 @@ window.Lxh = function (options) {
 
                 // 如果传递了url参数，则执行此方法会开始到服务器抓取数据并替换到弹窗内容里面
                 $container.then = function (call) {
-                    _then = call
+                    _then = call;
                     fetch_data(options.dataId, options.url, function (content) {
                         if (content) {
                             $container.find('.modal-body').html(content);
@@ -582,8 +582,6 @@ window.Lxh = function (options) {
      */
     function validator(options, call, selector) {
         selector = selector || ('.' + window.$lxh.controllerName() + '-form');
-
-        var self = this;
 
         $(selector).submit(function () {
             return false;

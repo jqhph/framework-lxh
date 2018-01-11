@@ -18,11 +18,11 @@ echo load_js('waves.min');
 
 ?>
 <script>
-    require_css('css/bootstrap.min.css');
-    require_css('css/pages.min.css');
-    require_css('css/components.min.css');
-    require_css('css/icon.min.css');
-    require_css('css/core.min.css');
+    require_css('css/bootstrap.min');
+    require_css('css/pages.min');
+    require_css('css/components.min');
+    require_css('css/icon.min');
+    require_css('css/core.min');
     require_js('lib/js/bootstrap.min');
     // 配置
     function get_config() {
@@ -43,7 +43,6 @@ echo load_js('waves.min');
                 'dataApi' => 'api/data'
             ]);
             ?>
-            
         // seajs配置
         data.seaConfig = data.options.config['sea-config']
         // 需要载入的css

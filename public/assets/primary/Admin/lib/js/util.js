@@ -1,9 +1,9 @@
 (function (o) {
-    o.dataStore = {}
+    o.dataStore = {};
 
     // 数组去重
     o.array_unique = function ($this) {
-        var res = [], json = {}, i
+        var res = [], json = {}, i;
         for (i = 0; i < $this.length; i++) {
             if (!json[$this[i]]) {
                 res.push($this[i]);
@@ -11,37 +11,37 @@
             }
         }
         return res;
-    }
+    };
 
     // 添加初始化完成后执行的动作
-    o.lxhActions = []
+    o.lxhActions = [];
     o.__then__ = function (call) {
         lxhActions.push(call)
-    }
+    };
 
     // 添加需要引入的js
-    o.jsLibArr = []
+    o.jsLibArr = [];
     o.require_js = function (data) {
         if (typeof data == 'string') {
             jsLibArr.push(data)
         } else {
             for (var i in data) {
-                jsLibArr.push(data[i])
+                jsLibArr.push(data[i]);
             }
         }
-    }
+    };
 
     // 添加需要引入的css
-    o.cssLibArr = []
+    o.cssLibArr = [];
     o.require_css = function (data) {
         if (typeof data == 'string') {
-            cssLibArr.push(data)
+            cssLibArr.push(data.indexOf('.css') == -1 ? (data+'.css') : data);
         } else {
             for (var i in data) {
-                cssLibArr.push(data[i])
+                cssLibArr.push(data[i]);
             }
         }
-    }
+    };
     /**
      * Convert name from Camel Case format to underscore.
      * ex. camelCase to camel_case
@@ -52,12 +52,12 @@
     o.to_under_score = function (str) {
         str = str.replace(/([A-Z])/g, function (full, match) {
             return '-' + match.toLowerCase()
-        })
+        });
         if (str.indexOf('-') === 0) {
             return str.replace('-', '')
         }
         return str
-    }
+    };
 
     /**
      * 解析视图路径名
@@ -67,8 +67,8 @@
      * @returns {*}
      */
     o.parse_view_name = function (c, a) {
-        return 'module/' + to_under_score(c) + '/' + to_under_score(a)
-    }
+        return 'module/' + to_under_score(c) + '/' + to_under_score(a);
+    };
 
     // 把json对象转化为get字符串
     o.build_http_params = function (param, key) {
@@ -77,36 +77,36 @@
             if (key) paramStr += "&" + key + "=" + encodeURIComponent(param);
         } else {
             $.each(param, function (i) {
-                var k = key == null ? i : key + (param instanceof Array ? "[" + i + "]" : "." + i)
+                var k = key == null ? i : key + (param instanceof Array ? "[" + i + "]" : "." + i);
                 paramStr += '&' + build_http_params(this, k);
             });
         }
         return paramStr.substr(1);
-    }
+    };
 
     // loading效果
     o.loading = function (el, circle, timeout) {
-        el = el || '#lxh-app'
+        el = el || '#lxh-app';
         function loading() {
-            var $el = typeof el == 'object' ? el : $(el)
+            var $el = typeof el == 'object' ? el : $(el);
             if (circle) {
-                $el.append('<div class=" loading loading-circle"></div>')
+                $el.append('<div class=" loading loading-circle"></div>');
             } else {
-                $el.append('<div class=" loading"><div class="loading1"></div><div class="loading2"></div><div class="loading3"></div></div>')
+                $el.append('<div class=" loading"><div class="loading1"></div><div class="loading2"></div><div class="loading3"></div></div>');
             }
             this.close = function () {
-                $el.find('.loading').remove()
-            }
-            if (timeout) setTimeout(this.close, timeout)
+                $el.find('.loading').remove();
+            };
+            if (timeout) setTimeout(this.close, timeout);
         }
         return new loading()
-    }
+    };
 
     // 格式化php时间戳
     o.format_php_timestamp = function (time, format) {
-        if (! time || parseInt(time) < 1) return ''
-        return new Date(parseInt(time + '000')).format(format || 'yyyy-mm-dd hh:ii:ss')
-    }
+        if (! time || parseInt(time) < 1) return '';
+        return new Date(parseInt(time + '000')).format(format || 'yyyy-mm-dd hh:ii:ss');
+    };
 
     // new Date(1458692752478).format('yyyy-mm-dd hh:ii:ss')
     Date.prototype.format = function(format) {
@@ -128,7 +128,7 @@
             }
         }
         return format;
-    }
+    };
 })(window);
 
 (function (w) {
@@ -185,14 +185,11 @@
             $this.addClass('active');
             // 去除按钮点击特效
             $this.find('a').removeClass('waves-effect waves-info');
-            // $this.removeClass()
-            // 隐藏关闭按钮
-            // $this.find('.tab-close').hide()
             return $this
         };
 
         this.addHistory = function (name, url, label) {
-            histories = unset(histories, 'name', name)
+            histories = unset(histories, 'name', name);
             histories.unshift({name: name, url: url, label: label})
         };
 
@@ -265,7 +262,7 @@
 
             delete store[name];
             // 删除历史记录
-            histories = unset(histories, 'name', name)
+            histories = unset(histories, 'name', name);
             // 返回上一页
             if (current.name === name) {
                 this.back()
@@ -275,9 +272,9 @@
         this.removeActive = function () {
             var $all = $('li.tab');
             // 移除所有tab按钮选中特效
-            $all.removeClass('active')
+            $all.removeClass('active');
             $all.find('a').addClass('waves-effect waves-info');
-            $all.find('.tab-close').show(300)
+            $all.find('.tab-close').show(300);
         };
 
         // 删除数组元素
@@ -309,7 +306,7 @@
         // 切换显示iframe
         this.switch = function (name, url) {
             this.hide();
-            var $iframe = $('#wrapper-' + name || document)
+            var $iframe = $('#wrapper-' + name || document);
 
             if ($iframe.length < 1) {
                 return this.create(name, url)

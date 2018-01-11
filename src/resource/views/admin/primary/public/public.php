@@ -19,7 +19,7 @@
     echo load_css('icon.min');
     echo load_css('core.min');
 
-    echo load_js('util');
+    echo load_js('util.min');
     echo load_js('jquery.min');
     ?>
 
