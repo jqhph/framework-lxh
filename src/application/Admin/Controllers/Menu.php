@@ -17,6 +17,7 @@ use Lxh\Admin\Table\Table;
 use Lxh\Admin\Widgets\Box;
 use Lxh\Admin\Widgets\Form;
 use Lxh\Auth\Ability;
+use Lxh\Auth\AuthManager;
 use Lxh\Exceptions\Forbidden;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
@@ -123,6 +124,7 @@ class Menu extends Controller
         ];
 
         $form->text('quick_relate_ability')
+            ->options(Ability::getAbilitiesSupport())
             ->help("快捷关联权限，请输入权限唯一标识。如权限不存在则会自动创建。");
     }
 

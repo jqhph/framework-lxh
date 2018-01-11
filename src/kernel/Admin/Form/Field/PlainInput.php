@@ -147,11 +147,10 @@ trait PlainInput
 
     protected function attachOptionsScript()
     {
+        $class = $this->getElementClassSelector();
         // 点击下拉菜单选项并把选项的值赋给text输入框
         Admin::script(<<<EOF
-$('{$this->getElementClassSelector()}').next().find('li').click(function (e) {
-    $('{$this->getElementClassSelector()}').val($(this).text());
-});
+$('{$class}').next().find('li').click(function (e) {\$('{$class}').val($(this).text())});
 EOF
         );
     }

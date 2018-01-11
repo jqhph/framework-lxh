@@ -12,20 +12,10 @@ use Lxh\Auth\Cache\Store;
 use Lxh\Auth\Clipboard;
 use Lxh\Auth\Database\Models;
 use Lxh\Support\Collection;
+use Lxh\Auth\Ability;
 
 class AuthManager
 {
-    const READ = 'read';
-    const CREATE = 'create';
-    const UPDATE = 'update';
-    const DELETE = 'delete';
-    const EXPORT = 'export';
-    const IMPORT = 'import';
-    const UPLOAD = 'upload';
-    const BATCHDELETE = 'batch-delete';
-    const BATCHUPDATE = 'batch-update';
-    const BATCHCREATE = 'batch-create';
-
     /**
      * @var array
      */
@@ -320,7 +310,7 @@ class AuthManager
      */
     public function readable($controller = __CONTROLLER__)
     {
-        return $this->can($controller . '.' . static::READ);
+        return $this->can($controller . '.' . Ability::READ);
     }
 
     /**
@@ -330,7 +320,7 @@ class AuthManager
      */
     public function createable($controller = __CONTROLLER__)
     {
-        return $this->can($controller . '.' . static::CREATE);
+        return $this->can($controller . '.' . Ability::CREATE);
     }
 
     /**
@@ -340,7 +330,7 @@ class AuthManager
      */
     public function updateable($controller = __CONTROLLER__)
     {
-        return $this->can($controller . '.' . static::UPDATE);
+        return $this->can($controller . '.' . Ability::UPDATE);
     }
 
     /**
@@ -350,7 +340,7 @@ class AuthManager
      */
     public function deleteable($controller = __CONTROLLER__)
     {
-        return $this->can($controller . '.' . static::DELETE);
+        return $this->can($controller . '.' . Ability::DELETE);
     }
 
     /**
@@ -360,7 +350,7 @@ class AuthManager
      */
     public function batchDeleteable($controller = __CONTROLLER__)
     {
-        return $this->can($controller . '.' . static::BATCHDELETE);
+        return $this->can($controller . '.' . Ability::BATCHDELETE);
     }
 
     /**
@@ -370,7 +360,7 @@ class AuthManager
      */
     public function exportable($controller = __CONTROLLER__)
     {
-        return $this->can($controller . '.' . static::EXPORT);
+        return $this->can($controller . '.' . Ability::EXPORT);
     }
 
     /**
@@ -380,7 +370,7 @@ class AuthManager
      */
     public function importable($controller = __CONTROLLER__)
     {
-        return $this->can($controller . '.' . static::IMPORT);
+        return $this->can($controller . '.' . Ability::IMPORT);
     }
 
     /**
@@ -390,7 +380,7 @@ class AuthManager
      */
     public function uploadable($controller = __CONTROLLER__)
     {
-        return $this->can($controller . '.' . static::UPLOAD);
+        return $this->can($controller . '.' . Ability::UPLOAD);
     }
 
     /**

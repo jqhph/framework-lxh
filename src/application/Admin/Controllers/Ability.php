@@ -83,28 +83,18 @@ class Ability extends Controller
      */
     protected function form(Form $form, Content $content)
     {
+        $support = \Lxh\Auth\Ability::getAbilitiesSupport();
+        
         $form->text('title')->rules('required|length_between[2-30]');
-        $form->text('name')->options($this->getCommonAbilitiesName())->rules('required|length_between[2-40]');
+        $form->text('name')->options($support)->help($this->getNameHelp())->rules('required|length_between[2-40]');
         $form->text('comment');
         $form->select('forbidden')->options([0, 1]);
     }
 
-    protected function getCommonAbilitiesName()
+    protected function getNameHelp()
     {
-        return [
-            '.' . AuthManager::READ,
-            '.' . AuthManager::CREATE,
-            '.' . AuthManager::UPDATE,
-            '.' . AuthManager::DELETE,
-            '.' . AuthManager::EXPORT,
-            '.' . AuthManager::IMPORT,
-            '.' . AuthManager::UPLOAD,
-            '.' . AuthManager::BATCHDELETE,
-            '.' . AuthManager::BATCHCREATE,
-            '.' . AuthManager::BATCHUPDATE,
-        ];
+        return '请输入权限唯一标识。如是常用增删改查权限，请选择下拉菜单中对应的选项！';
     }
-
 
     protected function addFilter(array &$input)
     {

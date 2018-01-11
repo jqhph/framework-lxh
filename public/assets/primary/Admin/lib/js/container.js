@@ -609,9 +609,7 @@ window.Lxh = function (options) {
                         element = $form[field.name];
 
                     if (element && element !== undefined) {
-                        element.onfocus = element.onkeyup = function (e) {
-                            v._validateForm(e);
-                        }
+                        element.onkeyup = v._validateForm.bind(v);
                     }
                 }
             }
