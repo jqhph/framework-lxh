@@ -457,7 +457,6 @@ window.Lxh = function (options) {
                 $('body').append(blade.fetch());
 
                 var $container = $(id),
-                    modal = $container.modal(),
                     requesting,
                     $loading,
                     self = this,
