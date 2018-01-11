@@ -7,7 +7,7 @@
             <?php endforeach; ?>
         </select>
         <?php if ($help) {
-            echo view('admin::form.help-block')->render();
+            echo view('admin::form.help-block', ['help' => &$help])->render();
         }?>
     </div>
 </div>

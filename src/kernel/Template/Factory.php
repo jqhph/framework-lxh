@@ -50,9 +50,14 @@ class Factory
         }
     }
 
+    /**
+     * @param $view
+     * @param array $vars
+     * @return mixed
+     */
     public function make($view, array &$vars = [])
     {
-        return $this->factory->make($this->normalizeView($view))->share($vars);
+        return $this->factory->make($this->normalizeView($view), $vars);
     }
 
     public function render()

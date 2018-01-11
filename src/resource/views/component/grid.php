@@ -1,4 +1,14 @@
-<div id="pjax-container"><?php echo view('admin::grid-content')->render();?></div>
+<div id="pjax-container"><?php
+    echo view('admin::grid-content', [
+        'table' => &$table,
+        'page' => &$page,
+        'pages' => &$pages,
+        'perPageKey' => &$perPageKey,
+        'useRWD' => &$useRWD,
+        'pjax' => &$pjax,
+        'perPage' => &$perPage,
+    ])->render();
+?></div>
 <script>
     <?php if ($useRWD) {?>
     require_css('lib/plugins/RWD-Table-Patterns/dist/css/rwd-table.min.css');

@@ -13,7 +13,7 @@
 <?php
 //echo load_css('bootstrap.min');
 echo load_js('jquery.min');
-echo load_js('util');
+echo load_js('util.min');
 ?>
 
 <div class="content-wrapper">
@@ -49,7 +49,7 @@ echo render_view('public.app-js');
         echo $asyncJs;
         ?>;
     require_js('lib/plugins/toastr/toastr.min');
-    require_css('lib/plugins/toastr/toastr.min.css');
+    require_css('lib/plugins/toastr/toastr.min');
     __then__(function () {<?php echo $script?>});
 </script>
 <?php

@@ -44,14 +44,31 @@ class View
      */
     protected $hints = [];
 
-    // 模板版本
-    protected $version;
+    /**
+     * 模板版本
+     *
+     * @var string
+     */
+    protected $version = 'primary';
 
+    /**
+     * @var string
+     */
     protected $root = __ROOT__;
 
+    /**
+     * @var string
+     */
     protected $dir = '';
 
+    /**
+     * @var string
+     */
     protected $currentView;
+
+    /**
+     * @var array
+     */
     protected $currentVars = [];
 
     public function __construct(ControllerManager $manager)
@@ -84,7 +101,7 @@ class View
 
     /**
      * 分配变量到模板输出
-     * 通过此方法分配的变量所有引入的模板都可用
+     * 通过此方法分配的变量只有当前模板能用
      *
      * @param  string $key  在模板使用的变量名称
      * @param  mixed $value 变量值，此处使用引用传值，分配时变量必须先定义
@@ -93,9 +110,9 @@ class View
     public function with($key, & $value = null)
     {
         if (is_array($key)) {
-            $this->vars = array_merge($this->vars, $key);
+            $this->currentVars = array_merge($this->currentVars, $key);
         } else {
-            $this->vars[$key] = $value;
+            $this->currentVars[$key] = $value;
         }
 
         return $this;
@@ -144,15 +161,18 @@ class View
         // 页面缓存
         ob_start();
 
-        foreach ($this->vars as $k => & $v) {
-            ${$k} = & $v;
+        foreach ($this->vars as $k => &$v) {
+            ${$k} = &$v;
         }
 
         $view = $view ?: $this->currentView;
         $vars = $vars ?: $this->currentVars;
 
-        foreach ($vars as $k => & $v) {
-            ${$k} = & $v;
+        $this->currentView = '';
+        $this->currentVars = [];
+
+        foreach ($vars as $k => &$v) {
+            ${$k} = &$v;
         }
 
         // 读取模板
