@@ -16,7 +16,6 @@ use Lxh\Admin\Tools\BatchDelete;
 use Lxh\Admin\Tools\Tools;
 use Lxh\Admin\Widgets\Box;
 use Lxh\Contracts\Support\Renderable;
-use Lxh\Admin\Kernel\Url;
 use Lxh\MVC\Model;
 
 class Grid implements Renderable

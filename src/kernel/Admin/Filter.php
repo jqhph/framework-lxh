@@ -285,7 +285,7 @@ class Filter extends Widget implements Renderable
             ->disableEffect();
 
         if ($this->options['useModal']) {
-            $submit->color('custom');
+//            $submit->color('purple');
 
             $submit->on('click', "$('#{$this->getModalId()}').modal('hide')");
         }
