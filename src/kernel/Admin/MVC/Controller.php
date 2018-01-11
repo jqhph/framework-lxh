@@ -303,7 +303,7 @@ class Controller extends Base
     /**
      * 表单字段验证规则
      *
-     * @return void|array
+     * @return array
      */
     protected function rules()
     {

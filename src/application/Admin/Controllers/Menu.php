@@ -38,7 +38,7 @@ class Menu extends Controller
         'controller' => [],
         'action' => [],
         'show' => ['view' => 'Checkbox'],
-        'type' => ['view' => 'Enum'],
+        'type' => ['view' => 'Select'],
         'priority' => [],
     ];
 
@@ -62,7 +62,7 @@ class Menu extends Controller
     /**
      * 表单字段验证规则
      *
-     * @return void|array
+     * @return array
      */
     protected function rules()
     {

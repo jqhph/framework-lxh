@@ -53,14 +53,14 @@ class Admin extends Controller
 
     public function table(Table $table)
     {
-        $table->field('id')->sortable();
-        $table->field('username');
-        $table->field('email');
-        $table->field('mobile');
+        $table->text('id')->sortable();
+        $table->text('username');
+        $table->text('email');
+        $table->text('mobile');
 
         $keyName = $this->model()->getKeyName();
-        $table->field('roles')
-            ->link(function (Link $link) use ($keyName) {
+        $table->link('roles')
+            ->then(function (Link $link) use ($keyName) {
                 $id = $link->row($keyName);
 
                 $link->useAjaxModal()
@@ -70,13 +70,13 @@ class Admin extends Controller
                     ->label(trans('list'));
             });
 
-        $table->field('status')->view('Checkbox');
-        $table->field('is_admin')->view('Checkbox')->hide();
-        $table->field('sex')->view('Select');
-        $table->field('created_at')->view('Date')->sortable();
-        $table->field('modified_at')->view('Date')->sortable()->hide();
-        $table->field('last_login_ip')->hide();
-        $table->field('last_login_time')->view('Date')->hide();
+        $table->checkbox('status');
+        $table->checkbox('is_admin')->hide();
+        $table->select('sex');
+        $table->date('created_at')->sortable();
+        $table->date('modified_at')->sortable()->hide();
+        $table->text('last_login_ip')->hide();
+        $table->date('last_login_time')->hide();
 
         $table->column(3, 'name', function (array $row, Td $td, Th $th, Tr $tr) {
             return $row['first_name'] . $row['last_name'];

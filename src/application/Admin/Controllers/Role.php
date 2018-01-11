@@ -32,13 +32,13 @@ class Role extends Controller
 
     protected function table(Table $table)
     {
-        $table->field('id')->hide()->sortable();
-        $table->field('title');
-        $table->field('name');
-        $table->field('comment');
-        $table->field('created_at')->sortable()->date();
-        $table->field('modified_at')->sortable()->date();
-        $table->field('created_by')->link(function (Link $link) {
+        $table->text('id')->hide()->sortable();
+        $table->text('title');
+        $table->text('name');
+        $table->text('comment');
+        $table->date('created_at')->sortable();
+        $table->date('modified_at')->sortable();
+        $table->link('created_by')->then(function (Link $link) {
             $link->format(
                 Admin::url('Admin')->detail('{value}'), 'created_by_id'
             );

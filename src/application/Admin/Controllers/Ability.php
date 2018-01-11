@@ -54,13 +54,13 @@ class Ability extends Controller
      */
     protected function table(Table $table)
     {
-        $table->field('id')->hide()->sortable();
-        $table->field('title');
-        $table->field('name');
-        $table->field('forbidden')->view('Checkbox');
-        $table->field('comment');
-        $table->field('created_at')->view('date')->sortable();
-        $table->field('modified_at')->view('date')->sortable();
+        $table->text('id')->hide()->sortable();
+        $table->text('title');
+        $table->text('name');
+        $table->checkbox('forbidden');
+        $table->text('comment');
+        $table->date('created_at')->sortable();
+        $table->date('modified_at')->sortable();
     }
 
     /**

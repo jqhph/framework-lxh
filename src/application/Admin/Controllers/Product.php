@@ -94,14 +94,14 @@ class Product extends Controller
         /**
          * 使用field方法添加字段
          */
-        $table->field('timelimit')->view('Checkbox')->sortable();
+        $table->checkbox('timelimit')->sortable();
 
         /**
          * 自定义字段标题内容
          *
          * @param Th $th 标题对象
          */
-        $table->field('name')->th(function (Th $th) {
+        $table->text('name')->th(function (Th $th) {
             // 设置标题颜色
             $th->style('color:green;font-weight:600');
             // 设置属性
