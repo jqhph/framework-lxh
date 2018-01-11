@@ -7,9 +7,6 @@
 
 namespace {root-namespace}{module}\Controllers;
 
-use {root-namespace}MVC\Controller;
-use {root-namespace}Http\Request;
-use {root-namespace}Http\Response;
 use Lxh\Admin\Filter;
 use Lxh\Admin\Layout\Content;
 use Lxh\Admin\Widgets\Box;
@@ -38,7 +35,7 @@ class {class} extends Controller
     {
     }
 
-    public function action{method}(Request $req, Response $resp, array & $params)
+    public function action{method}(array $params)
     {
 
     }
