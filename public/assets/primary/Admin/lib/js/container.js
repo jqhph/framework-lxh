@@ -41,26 +41,22 @@ window.Lxh = function (options) {
                 $('.ajax-modal').click(show_modal_btn);
                 $(document).on('pjax:complete', function(xhr) {$('.ajax-modal').click(show_modal_btn);});
 
-                var tag, modal;
+
                 // 点击查看角色列表按钮事件
                 function show_modal_btn(e) {
-                    tag = $(this);
+                    var tag = $(this);
                     var title = tag.attr('modal-title'), // 弹窗标题
                         url = tag.attr('modal-url'), // 取数据url
-                        dataId = tag.attr('modal-data-id'), // 缓存数据id
-                        id = tag.attr('modal-id');
+                        dataId = tag.attr('modal-data-id'),// 设置唯一id，用于缓存从服务器抓取的数据
+                        id = tag.attr('modal-id') || 'ajax-modal';
                     if (! url) return;
 
                     tag.addClass('disabled');
-                    if (!modal) {
-                        modal = ui.modal({
-                            title: title, confirmBtn: false, url: url, id: id, dataId: dataId
-                        });
-                    }
-                    // 设置唯一id，用于缓存从服务器抓取的数据
-                    modal.setDataId(dataId);
+
+                    var modal = ui.modal({title: title, confirmBtn: false, url: url, id: id, dataId: dataId});
+
                     // 开始抓取数据，并附加到弹窗展示
-                    modal.then(function () {
+                    modal.then(url, dataId, function () {
                         tag.removeClass('disabled');
                     })
                 }
@@ -369,6 +365,8 @@ window.Lxh = function (options) {
      * @constructor
      */
     function UI() {
+        var modals = {};
+
         return {
             /**
              * loading
@@ -446,34 +444,31 @@ window.Lxh = function (options) {
                 options.tpl = options.tpl || $('#modal-tpl').text();
                 options.footer = options.footer || '';
                 options.url = options.url || null;
-                options.dataId = options.dataId || null;
+                options.dataId = options.dataId || null; // 如果传递了url参数，则传递此id会缓存从url抓取到的数据到js对象
                 options.useRefresh = options.useRefresh || false;
                 options.refreshLabel = trans('Refresh');
+                var id = '#' + options.id;
 
-                var blade = new Blade(options.tpl, options);
-
-                if ($(options.id).length > 0) {
-                    $(options.id).modal();
-                    return $(options.id);
+                if (typeof modals[options.id] != 'undefined') {
+                    return modals[options.id];
                 }
+                var blade = new Blade(options.tpl, options);
 
                 $('body').append(blade.fetch());
 
-                var $container = $('#' + options.id),
+                var $container = $(id),
                     modal = $container.modal(),
                     requesting,
                     $loading,
                     self = this,
                     contents = {},
                     _then;
-
-                // 如果传递了url参数，则传递此id会缓存从url抓取到的数据到js对象
-                $container.setDataId = function (id) {
-                    options.dataId = id;
-                };
+                modals[options.id] = $container; // 缓存modal弹窗jq对象
 
                 // 如果传递了url参数，则执行此方法会开始到服务器抓取数据并替换到弹窗内容里面
-                $container.then = function (call) {
+                $container.then = function (url, dataid, call) {
+                    options.dataId = dataid || options.dataId;
+                    options.url = url || options.url;
                     _then = call;
                     fetch_data(options.dataId, options.url, function (content) {
                         if (content) {
