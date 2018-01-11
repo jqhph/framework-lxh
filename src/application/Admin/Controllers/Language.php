@@ -52,7 +52,11 @@ class Language extends Controller
         // 获取语言包目录
         $fileList = $file->getFileList($languagePackDir, true);
 
-        return $this->render('list', ['list' => & $fileList], true);
+        return $this->content()
+            ->body(
+                $this->render('list', ['list' => &$fileList])
+            )
+            ->render();
     }
 
     /**

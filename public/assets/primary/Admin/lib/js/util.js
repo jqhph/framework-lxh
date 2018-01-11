@@ -265,7 +265,7 @@
             histories = unset(histories, 'name', name);
             // 返回上一页
             if (current.name === name) {
-                this.back()
+                this.back();
             }
         };
 
@@ -292,8 +292,8 @@
             if ($menu.find('[data-action="tab-' +name+ '"]').length > 0) {
                 return false;
             }
-            var html = tpl.replace('{name}', name).replace('{name}', name).replace('{label}', label)
-            $menu.append(html)
+            var html = tpl.replace('{name}', name).replace('{name}', name).replace('{label}', label);
+            $menu.append(html);
         }
     }
 
@@ -306,7 +306,7 @@
         // 切换显示iframe
         this.switch = function (name, url) {
             this.hide();
-            var $iframe = $('#wrapper-' + name || document);
+            var $iframe = this.container(name);
 
             if ($iframe.length < 1) {
                 return this.create(name, url)
@@ -327,7 +327,7 @@
 
         this.remove = function (name) {
             delete store[name];
-            $('#wrapper-' + name).remove()
+            this.container(name).remove()
         };
 
         // 创建iframe弹窗
@@ -347,7 +347,7 @@
 
             $app.append(html);
 
-            var $iframe = $('#wrapper-' + name);
+            var $iframe = this.container(name);
             // 显示当前iframe
             $iframe.show(220);
 
@@ -359,7 +359,8 @@
 
         // 自动设置高度
         this.height = function ($iframe) {
-            if (! $iframe) $iframe = $('#wrapper-' + current);
+            if (! $iframe) $iframe = this.container(current).find('iframe');
+            if (typeof $iframe != 'object') $iframe = this.container($iframe).find('iframe');
             if (typeof $iframe[0] == 'undefined') return;
             var iframe = $iframe[0],
                 iframeWin = (iframe.contentWindow || iframe.contentDocument.parentWindow) || iframe,
@@ -374,7 +375,11 @@
 
         this.hide = function () {
             $('.lxh-wrapper').hide()
-        }
+        };
+
+        this.container = function (name) {
+            return $('#wrapper-' + name)
+        };
     }
 
     w.Tab = Tab;

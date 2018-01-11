@@ -1,91 +1,93 @@
 /**
  * Created by Jqh on 2017/7/21. , 'css/sweet-twitter.css'
  */
-define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
+define(['css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
+    var currentIframeName = IFRAME.current();
+
     var language = {
         // 初始化方法
         init: function () {
             // 添加自定义标签
             BladeConfig.addTag('view', function ($view, name, data, category) {
-                if (typeof data != 'object') return ''
+                if (typeof data != 'object') return '';
 
-                var blade = new Blade($('#' + name).text())
+                var blade = new Blade($('#' + name).text());
 
                 return blade.fetch({list: data, cate: category})
-            })
+            });
 
-            this.$languageTable = $('.language-table')
-            this.$languageBody = this.$languageTable.find('tbody')
-            this.$packageTitle = $('.package-title')
-            this.$saveButton = $('button[data-action="save"]')
-            this.$cancelButton = $('button[data-action="cancel"]')
-            this.languageBlade = new Blade($('#row-tpl').text())
-            this.model = $lxh.createModel()
-            this.saveModel = $lxh.createModel()
+            this.$languageTable = $('.language-table');
+            this.$languageBody = this.$languageTable.find('tbody');
+            this.$packageTitle = $('.package-title');
+            this.$saveButton = $('button[data-action="save"]');
+            this.$cancelButton = $('button[data-action="cancel"]');
+            this.languageBlade = new Blade($('#row-tpl').text());
+            this.model = $lxh.createModel();
+            this.saveModel = $lxh.createModel();
 
-            this.notify = $lxh.ui().notify()
+            this.notify = $lxh.ui().notify();
 
             // 注册成功回调事件
-            this.saveModel.on('success', this.saveSuccess.bind(this))
-            this.model.on('success', this.renderLanguageList.bind(this))
+            this.saveModel.on('success', this.saveSuccess.bind(this));
+            this.model.on('success', this.renderLanguageList.bind(this));
 
             // 初始化语言包树
             $('.basic-language').jstree({
                 'core' : {
-                    'themes' : {'responsive': true},
+                    'themes' : {'responsive': true}
                     // 'check_callback': false
                 },
                 'types' : {
-                    'default' : {'icon' : 'zmdi zmdi-folder folder',},
+                    'default' : {'icon' : 'zmdi zmdi-folder folder'},
                     'file' : {'icon' : 'zmdi zmdi-file file'}
                 },
                 'plugins' : ['types', 'wholerow', 'sort', 'ui']
             })
 
             // 语言包文件点击事件
-            $('a.jstree-anchor').on("click.jstree", this.events.leafClick.bind(this))
+            $('a.jstree-anchor').on("click.jstree", this.events.leafClick.bind(this));
 
-            $('button[data-action="edit"]').click(this.events.editTable.bind(this))
-            $('button[data-action="create-category"]').click(this.events.createCategory.bind(this))
-            $('button[data-action="create-value"]').click(this.events.createValue.bind(this))
-            $('button[data-action="create-file"]').click(this.events.createFile.bind(this))
-            $('button[data-action="copy-file"]').click(this.events.copyFile.bind(this))
-            $('button[data-action="create-options"]').click(this.events.createOptions.bind(this))
-            this.$saveButton.click(this.events.save.bind(this))
-            this.$cancelButton.click(this.events.cancel.bind(this))
+            $('button[data-action="edit"]').click(this.events.editTable.bind(this));
+            $('button[data-action="create-category"]').click(this.events.createCategory.bind(this));
+            $('button[data-action="create-value"]').click(this.events.createValue.bind(this));
+            $('button[data-action="create-file"]').click(this.events.createFile.bind(this));
+            $('button[data-action="copy-file"]').click(this.events.copyFile.bind(this));
+            $('button[data-action="create-options"]').click(this.events.createOptions.bind(this));
+            this.$saveButton.click(this.events.save.bind(this));
+            this.$cancelButton.click(this.events.cancel.bind(this));
         },
 
         // 切换编辑模式
         toggleTableInput: function (show) {
-            var method = show ? 'show' : 'hide'
-            var spanMethod = show ? 'hide' : 'show'
+            var method = show ? 'show' : 'hide';
+            var spanMethod = show ? 'hide' : 'show';
 
             // 隐藏或显示表单
-            this.$languageBody.find('input')[method]()
-            this.$languageBody.find('span.text')[spanMethod]()
+            this.$languageBody.find('input')[method]();
+            this.$languageBody.find('span.text')[spanMethod]();
 
-            this.$languageTable.find('.remove-td')[method]()
+            this.$languageTable.find('.remove-td')[method]();
 
             // 隐藏或显示保存和取消按钮
-            this.$saveButton[method]()
+            this.$saveButton[method]();
             this.$cancelButton[method]()
         },
 
         // 保存成功回调模式
         saveSuccess: function (data) {
-            this.notify.remove()
+            this.notify.remove();
 
-            this.saveData.content = JSON.parse(this.saveData.content)
-            this.renderLanguageList(this.saveData)
+            this.saveData.content = JSON.parse(this.saveData.content);
+            this.renderLanguageList(this.saveData);
 
-            this.notify.success(trans('success'))
+            this.notify.success(trans('success'));
 
             this.toggleTableInput(false)
         },
 
         // 格式化表单数据
         normalizeFormData: function (data) {
-            var content = {}, i, c
+            var content = {}, i, c;
             // 先转化第一层
             for (i in data) {
                 if (i == 'origin_category') {
@@ -99,9 +101,9 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
             for (i in data) {
                 if (i == 'category') {
                     for (c in data[i]) {
-                        if (data[i][c] == data['origin_category'][c]) continue
-                        content[data[i][c]] = content[data['origin_category'][c]]
-                        delete content[data['origin_category'][c]]
+                        if (data[i][c] == data['origin_category'][c]) continue;
+                        content[data[i][c]] = content[data['origin_category'][c]];
+                        delete content[data['origin_category'][c]];
                     }
                 }
             }
@@ -109,20 +111,20 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
             return content
 
             function get_name_and_value(content, data, useValue, changes) {
-                var nameKey, valueKey, tmp, i, j, newContent = {}
+                var nameKey, valueKey, tmp, i, j, newContent = {};
                 for (i in content) {
-                    tmp = {}
+                    tmp = {};
                     if (useValue) {
-                        nameKey = content[i] + '_value_name'
+                        nameKey = content[i] + '_value_name';
                         valueKey = content[i] + '_value'
                     } else {
-                        nameKey = i + '_value_name'
+                        nameKey = i + '_value_name';
                         valueKey = i + '_value'
                     }
 
                     if (data[nameKey] && data[valueKey]) {
                         for (j in data[nameKey]) {
-                            tmp[data[nameKey][j]] = data[valueKey][j]
+                            tmp[data[nameKey][j]] = data[valueKey][j];
                         }
                         if (useValue) {
                             if (! changes[i]) {
@@ -135,7 +137,7 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
                         }
 
                     } else if(data[nameKey]) {
-                        newContent[i] = get_name_and_value(data['origin_' + nameKey], data, true, data[nameKey])
+                        newContent[i] = get_name_and_value(data['origin_' + nameKey], data, true, data[nameKey]);
                         // console.log(2333, get_name_and_value(data['origin_' + nameKey], data, true))
                     } else {
                         newContent[i] = {}
@@ -222,7 +224,7 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
 
                     }.bind(this))
 
-                    model.data({path: path, name: name})
+                    model.data({path: path, name: name});
 
                     model.touchAction('create-category', 'POST')
 
@@ -360,7 +362,7 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
                 keyValueTpl = $('#addKeyValueTpl').text(),
                 blade = new Blade($('#' + opts.tplId).text()),
                 model = $lxh.createModel(),
-                notify = this.notify
+                notify = this.notify;
 
             for (var i in data.category) {
                 categories.push(data.category[i])
@@ -383,26 +385,26 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
 
                 notify.info(trans('loading'))
 
-                model.data({path: path, content: formData})
+                model.data({path: path, content: formData});
 
                 // 创建成功回调函数
                 model.on('success', function (data) {
                     // 重新渲染table
-                    this.renderLanguageList(data)
-                    notify.success(trans('success'))
+                    this.renderLanguageList(data);
+                    notify.success(trans('success'));
                     // 关闭弹窗
                     modal.close()
                 }.bind(this))
 
-                model.touchAction(opts.action, 'POST')
+                model.touchAction(opts.action, 'POST');
 
                 // 格式化
                 function normalize(data) {
-                    var newData = {}
+                    var newData = {};
 
-                    if (! data[opts.firstInputName]) throw new Error('Invalid arguments')
+                    if (! data[opts.firstInputName]) throw new Error('Invalid arguments');
 
-                    newData[data[opts.firstInputName]] = {}
+                    newData[data[opts.firstInputName]] = {};
                     for (i in data.key) {
                         if (! data.key[i] || ! data.value[i]) {
                             throw new Error('Invalid arguments')
@@ -450,17 +452,17 @@ define(['blade', 'css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
 
         // 渲染语言包到table列表
         renderLanguageList: function (data) {
-            this.toggleTableInput(false)
+            this.toggleTableInput(false);
 
-            this.notify.remove()
+            this.notify.remove();
 
-            this.$languageBody.html(this.languageBlade.fetch({list: data.content}))
+            this.$languageBody.html(this.languageBlade.fetch({list: data.content}));
 
-            this.$languageTable.find('i[data-action="remove-edit-row"]').unbind('click')
-            this.$languageTable.find('i[data-action="remove-edit-row"]').click(this.events.removeRow.bind(this))
+            this.$languageTable.find('i[data-action="remove-edit-row"]').unbind('click');
+            this.$languageTable.find('i[data-action="remove-edit-row"]').click(this.events.removeRow.bind(this));
 
             // 重新设置iframe高度
-            $lxh.iframe().currentHeight()
+            IFRAME.height(currentIframeName);
         }
     }
 

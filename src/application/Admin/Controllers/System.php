@@ -121,8 +121,8 @@ class System extends Controller
     // 清除客户端所有缓存接口
     public function actionClearAllClientCache()
     {
-        if (! admin()->isAdmin()) {
-//            return $this->failed('Forbidden');
+        if (! auth()->can('clear.all.client.cache')) {
+            return $this->failed('Forbidden');
         }
 
         if (resolve('front.client')->clearCache()) {
@@ -135,7 +135,7 @@ class System extends Controller
     // 清除客户端js缓存接口
     public function actionClearClientCache()
     {
-        if (! admin()->isAdmin()) {
+        if (! auth()->can('clear.client.cache')) {
 //            return $this->failed('Forbidden');
         }
 

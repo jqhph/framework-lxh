@@ -37,7 +37,7 @@ class Record extends LxhController
      *
      * @return string
      */
-    public function actionList(Request $req, Response $resp, array & $params)
+    public function actionList(array $params)
     {
         // 判断是否有权限访问
         if (! acl()->access()) {
@@ -104,7 +104,7 @@ class Record extends LxhController
     /**
      * 创建记录界面
      */
-    public function actionCreate(Request $req, Response $resp, & $params)
+    public function actionCreate(array $params)
     {
         // 判断是否有权限访问
         if (! acl()->access()) {
@@ -164,7 +164,7 @@ class Record extends LxhController
      * @return string
      * @throws Forbidden
      */
-    public function actionDetail(Request $req, Response $resp, array & $params)
+    public function actionDetail(array $params)
     {
         // 判断是否有权限访问
         if (! acl()->access()) {
@@ -236,7 +236,7 @@ class Record extends LxhController
      *
      * @return array
      */
-    public function actionDelete(Request $req, Response $resp, array & $params)
+    public function actionDelete(array $params)
     {
         // 判断是否有权限访问
         if (! acl()->access()) {
@@ -269,7 +269,7 @@ class Record extends LxhController
      *
      * @return array
      */
-    public function actionAdd(Request $req, Response $resp, & $params)
+    public function actionAdd(array $params)
     {
         // 判断是否有权限访问
         if (! acl()->accessCreate()) {
