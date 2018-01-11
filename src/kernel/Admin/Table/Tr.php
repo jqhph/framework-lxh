@@ -139,9 +139,6 @@ class Tr extends Widget
         $headers = $this->table->headers();
         $counter = 1;
         foreach ($headers as $field => &$options) {
-            if (!isset($row[$field])) {
-                continue;
-            }
             if (isset($this->columns['mid'][$counter])) {
                 while ($column = get_value($this->columns['mid'], $counter)) {
                     $tdString .= $this->columns['mid'][$counter]->tr($this)->row($row)->render();
@@ -173,14 +170,16 @@ class Tr extends Widget
      */
     protected function renderColumns(&$tdString, &$row, &$field, &$options)
     {
-        $td = $this->buildTd($field, $row[$field]);
+        $value = get_value($row, $field);
+
+        $td = $this->buildTd($field, $value);
 
         if ($handler = $this->table->handler('field', $field)) {
             // 自定义处理器
             if (!is_string($handler) && is_callable($handler)) {
                 $this->setupTdWithOptions($td, $options);
                 $td->value(
-                    $handler($row[$field], $td, $this)
+                    $handler($value, $td, $this)
                 );
                 $tdString .= $td->render();
             } else {
@@ -199,7 +198,7 @@ class Tr extends Widget
             $tdString .= $this->setupTdWithOptions($td, $options)->render();
             return;
         }
-        $tdString .= $this->renderFiledView($view, $field, $row[$field], $td);
+        $tdString .= $this->renderFiledView($view, $field, $value, $td);
     }
 
     /**

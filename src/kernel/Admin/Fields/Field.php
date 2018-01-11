@@ -17,6 +17,11 @@ class Field implements Renderable
     protected $tr;
 
     /**
+     * @var \Closure
+     */
+    protected $then;
+
+    /**
      *
      * @var mixed
      */
@@ -90,6 +95,16 @@ class Field implements Renderable
     }
 
     /**
+     * 获取当前行其他字段
+     *
+     * @param $key
+     */
+    public function row($key = null)
+    {
+        return $this->tr->row($key);
+    }
+
+    /**
      * @return string|$this
      */
     public function name($name = null)
@@ -114,6 +129,18 @@ class Field implements Renderable
         return $this;
     }
 
+    /**
+     * 当字段调用render方法时会触发此回调函数
+     *
+     * @param \Closure $then
+     * @return $this
+     */
+    public function then(\Closure $then)
+    {
+        $this->then = $then;
+
+        return $this;
+    }
 
     /**
      * 设置css class
@@ -289,6 +316,8 @@ class Field implements Renderable
     {
         $this->buildSelectorAttribute();
 
+        $this->callThen();
+
         if ($this->view) {
             return view($this->view, array_merge([
                 'value' => $this->value,
@@ -296,6 +325,14 @@ class Field implements Renderable
             ], $this->options));
         }
         return $this->value;
+    }
+
+    protected function callThen()
+    {
+        if ($this->then) {
+            $then = $this->then;
+            $then($this);
+        }
     }
 
     /**

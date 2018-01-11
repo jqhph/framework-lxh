@@ -28,6 +28,8 @@ class Link extends Tag
     {
         $this->style('margin-left:0;margin-right:0;padding-top:0');
 
+        $this->callThen();
+
         if (! $this->url && ($format = $this->option('format'))) {
             $replace = $this->options['formatKey'] ? $this->tr->row($this->options['formatKey']) : $this->value;
 
