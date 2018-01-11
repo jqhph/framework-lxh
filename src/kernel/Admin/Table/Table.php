@@ -19,14 +19,14 @@ use Lxh\Support\Arr;
 
 /**
  *
- * @method Link link();
- * @method Button button();
- * @method Label label();
- * @method Tag tag();
- * @method Checkbox checkbox();
- * @method null date();
- * @method null icon();
- * @method null select();
+ * @method Table link($callback = null);
+ * @method Table button($callback = null);
+ * @method Table label($callback = null);
+ * @method Table tag($callback = null);
+ * @method Table checkbox($callback = null);
+ * @method Table date();
+ * @method Table icon();
+ * @method Table select();
  */
 class Table extends Widget
 {
@@ -209,12 +209,15 @@ class Table extends Widget
      * @param string $view
      * @return $this
      */
-    public function view($view)
+    public function view($view, \Closure $then = null)
     {
         if (! $this->field) {
             return $this;
         }
         $this->headers[$this->field]['view'] = &$view;
+        if ($then) {
+            $this->headers[$this->field]['then'] = &$then;
+        }
         return $this;
     }
 
@@ -621,10 +624,7 @@ EOF;
     public function __call($method, $parameters)
     {
         if (isset(static::$fields[$method])) {
-            $class = static::$fields[$method];
-            $field = new $class();
-            $this->view($field);
-            return $field;
+            return $this->view(static::$fields[$method], isset($parameters[0]) ? $parameters[0] : null);
         }
 
         if (isset($this->builderViewTypes[$method])) {

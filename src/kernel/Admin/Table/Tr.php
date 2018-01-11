@@ -188,6 +188,7 @@ class Tr extends Widget
             return;
         }
 
+        // 没有定义视图，字段原样显示
         if (! $options || ! is_array($options)) {
             $tdString .= $td->render();
             return;
@@ -198,7 +199,9 @@ class Tr extends Widget
             $tdString .= $this->setupTdWithOptions($td, $options)->render();
             return;
         }
-        $tdString .= $this->renderFiledView($view, $field, $value, $td);
+
+        // 定义了视图
+        $tdString .= $this->renderFiledView($view, $field, $value, $td, get_value($options, 'then'));
     }
 
     /**
@@ -238,10 +241,14 @@ class Tr extends Widget
 
 
     /**
-     *
-     * @return string
+     * @param string|object $view
+     * @param string $field
+     * @param mixed $value
+     * @param Td $td
+     * @param \Closure $then
+     * @return mixed|string
      */
-    protected function renderFiledView($view, $field, $value, Td $td)
+    protected function renderFiledView($view, $field, $value, Td $td, \Closure $then = null)
     {
         if (! is_object($view)) {
             $method = 'build' . $view;
@@ -264,6 +271,8 @@ class Tr extends Widget
         }
 
         $view->setTr($this);
+
+        if ($then) $then($view);
 
         return $td->value($view->render())->render();
     }

@@ -9,6 +9,7 @@
 namespace Lxh\Admin\Controllers;
 
 use Lxh\Admin\Admin;
+use Lxh\Admin\Fields\Link;
 use Lxh\Admin\Filter;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Layout\Content;
@@ -37,9 +38,11 @@ class Role extends Controller
         $table->field('comment');
         $table->field('created_at')->sortable()->date();
         $table->field('modified_at')->sortable()->date();
-        $table->field('created_by')->link()->format(
-            Admin::url('Admin')->detail('{value}'), 'created_by_id'
-        );
+        $table->field('created_by')->link(function (Link $link) {
+            $link->format(
+                Admin::url('Admin')->detail('{value}'), 'created_by_id'
+            );
+        });
     }
 
     protected function filter(Filter $filter)

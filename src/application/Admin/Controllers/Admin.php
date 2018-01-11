@@ -60,8 +60,7 @@ class Admin extends Controller
 
         $keyName = $this->model()->getKeyName();
         $table->field('roles')
-            ->link()
-            ->then(function (Link $link) use ($keyName) {
+            ->link(function (Link $link) use ($keyName) {
                 $id = $link->row($keyName);
 
                 $link->useAjaxModal()
@@ -70,7 +69,6 @@ class Admin extends Controller
                     ->url('/api/admin/roles-list/' .$id)
                     ->label(trans('list'));
             });
-            
 
         $table->field('status')->view('Checkbox');
         $table->field('is_admin')->view('Checkbox')->hide();
@@ -83,24 +81,6 @@ class Admin extends Controller
         $table->column(3, 'name', function (array $row, Td $td, Th $th, Tr $tr) {
             return $row['first_name'] . $row['last_name'];
         });
-
-        // 角色字段
-//        $link = new Link();
-//        // ajax modal自动从设置的url中抓取数据展示到弹窗里面
-//        $link->useAjaxModal();
-//        // ajax modal标题
-//        $link->title(trans('Roles'));
-//        $link->label(trans('list') . ' <i class="zmdi zmdi-tag-more"></i>');
-
-//        $keyName = $this->model()->getKeyName();
-//        $table->column(6, 'roles', function (array $row, Td $td, Th $th, Tr $tr) use ($link, $keyName) {
-//            // ajax modal 设置dataid，用于缓存从服务器抓取的数据，无需每次重复抓取
-//            $link->dataId($row[$keyName]);
-//            // ajax modal 取数据url
-//            $link->url('/api/admin/roles-list/' . $row[$keyName]);
-//
-//            return $link->render();
-//        });
     }
 
     public function filter(Filter $filter)

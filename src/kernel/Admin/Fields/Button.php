@@ -67,9 +67,6 @@ class Button extends Field
     public function render()
     {
         $this->class("$this->effect btn btn-{$this->option('color')}");
-
-        $this->callThen();
-
         if ($url = $this->url()) {
             $this->buildSelectorAttribute();
 

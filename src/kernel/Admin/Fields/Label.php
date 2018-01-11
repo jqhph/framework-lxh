@@ -29,8 +29,6 @@ class Label extends Button
 
     public function render()
     {
-        $this->callThen();
-        
         $this->class("$this->effect label");
 
         if ($url = $this->url()) {

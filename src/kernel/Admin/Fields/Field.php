@@ -316,8 +316,6 @@ class Field implements Renderable
     {
         $this->buildSelectorAttribute();
 
-        $this->callThen();
-
         if ($this->view) {
             return view($this->view, array_merge([
                 'value' => $this->value,
@@ -325,14 +323,6 @@ class Field implements Renderable
             ], $this->options));
         }
         return $this->value;
-    }
-
-    protected function callThen()
-    {
-        if ($this->then) {
-            $then = $this->then;
-            $then($this);
-        }
     }
 
     /**
