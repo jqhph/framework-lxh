@@ -587,6 +587,16 @@ class Grid implements Renderable
     }
 
     /**
+     * 判断是否是pjax请求
+     *
+     * @return bool
+     */
+    public static function isPjaxRequest()
+    {
+        return (bool) I('_pjax');
+    }
+
+    /**
      * 创建行action按钮
      * 详情、删除
      */

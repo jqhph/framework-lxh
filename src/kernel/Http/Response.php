@@ -2,6 +2,7 @@
 
 namespace Lxh\Http;
 
+use Lxh\Admin\Grid;
 use Lxh\Http\Header;
 use Lxh\Http\Request;
 use Lxh\Contracts\Container\Container;
@@ -293,7 +294,7 @@ class Response extends PsrResponse
 		// 非生产环境和非命令行环境则输出控制台调试日志
 		if (
 			$this->outputConsoleLog && ! is_prod()
-			&& ! $this->request->isCli() && config('response-console-log', true) && (! $this->request->isAjax() || I('_pjax'))
+			&& ! $this->request->isCli() && config('response-console-log', true) && (! $this->request->isAjax() || Grid::isPjaxRequest())
 		) {
 			echo Console::fetch();
 		}

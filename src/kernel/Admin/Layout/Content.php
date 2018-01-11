@@ -270,7 +270,7 @@ class Content implements Renderable
     public function render()
     {
         // 异步加载table，无需加载整个内容
-        if (I('_pjax')) {
+        if (Grid::isPjaxRequest()) {
             // 必须先调用build方法
             // 否则可能导致加载不到相关js
             $content = $this->build();

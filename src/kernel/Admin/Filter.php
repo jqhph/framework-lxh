@@ -176,7 +176,7 @@ class Filter extends Widget implements Renderable
         }
 
         // pjax异步加载，无需重新渲染表单
-        if (I('_pjax')) {
+        if (Grid::isPjaxRequest()) {
             return '';
         }
 
