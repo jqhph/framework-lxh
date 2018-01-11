@@ -35,9 +35,11 @@ class Role extends Controller
         $table->field('title');
         $table->field('name');
         $table->field('comment');
-        $table->field('created_at')->view('date')->sortable();
-        $table->field('modified_at')->view('date')->sortable();
-        $table->field('created_by')->view('Link')->options(['format' => Admin::url('Admin')->detail('{value}')]);
+        $table->field('created_at')->sortable()->date();
+        $table->field('modified_at')->sortable()->date();
+        $table->field('created_by')->link()->format(
+            Admin::url('Admin')->detail('{value}'), 'created_by_id'
+        );
     }
 
     protected function filter(Filter $filter)

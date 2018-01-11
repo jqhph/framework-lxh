@@ -50,13 +50,6 @@ class Tr extends Widget
      */
     protected $tier = 1;
 
-    /**
-     * 字段自定义配置键值
-     *
-     * @var string
-     */
-    protected $fieldOptionsKey = 'options';
-
     public function __construct(Table $table, $offset, &$row, array $columns = [])
     {
         $this->table = $table;
@@ -206,7 +199,7 @@ class Tr extends Widget
             $tdString .= $this->setupTdWithOptions($td, $options)->render();
             return;
         }
-        $tdString .= $this->renderFiledView($view, $field, $row[$field], $td, $options);
+        $tdString .= $this->renderFiledView($view, $field, $row[$field], $td);
     }
 
     /**
@@ -249,26 +242,31 @@ class Tr extends Widget
      *
      * @return string
      */
-    protected function renderFiledView($view, $field, $value, Td $td, $vars)
+    protected function renderFiledView($view, $field, $value, Td $td)
     {
-        $method = 'build' . $view;
-        if (method_exists($this, $method)) {
-            return $td->value($this->$method($field, $value, get_value($vars, $this->fieldOptionsKey)))->render();
-        }
+        if (! is_object($view)) {
+            $method = 'build' . $view;
+            if (method_exists($this, $method)) {
+                return $td->value($this->$method($field, $value))->render();
+            }
 
-        $view = str_replace('.', '\\', $view);
+            $view = str_replace('.', '\\', $view);
 
-        if (strpos($view, '\\') !== false) {
-            $class = $view;
+            if (strpos($view, '\\') !== false) {
+                $class = $view;
+            } else {
+                $class  = "Lxh\\Admin\\Fields\\{$view}";
+            }
+
+            $view = new $class($field, $value);
         } else {
-            $class  = "Lxh\\Admin\\Fields\\{$view}";
+            $view->name($field);
+            $view->value($value);
         }
 
-        $field = new $class($field, $value, get_value($vars, $this->fieldOptionsKey));
+        $view->setTr($this);
 
-        $field->setTr($this);
-
-        return $td->value($field->render())->render();
+        return $td->value($view->render())->render();
     }
 
     /**
