@@ -40,6 +40,16 @@ abstract class Controller
     protected $module;
 
     /**
+     * @var Request
+     */
+    protected $request;
+
+    /**
+     * @var Response
+     */
+    protected $response;
+
+    /**
      * @var ControllerManager
      */
     protected $manager;
@@ -61,17 +71,26 @@ abstract class Controller
      */
     protected $container;
 
-    public function __construct($name, Container $container, ControllerManager $manager)
+    public function __construct($name = null, Container $container = null, ControllerManager $manager = null)
     {
-        $this->name = $name;
-        $this->container = $container;
-        $this->manager = $manager;
-
+        $this->name = $name ?: $this->parseName();
+        $this->container = $container ?: container();
+        $this->manager = $manager ?: $this->container['controller.manager'];
+        $this->request = request();
+        $this->response = response();
         $this->module = __MODULE__;
 
         // 初始化
         $this->initialize();
     }
+
+    protected function parseName()
+    {
+        $names = explode('\\', __CLASS__);
+
+        return end($names);
+    }
+
 
     /**
      * 初始化操作

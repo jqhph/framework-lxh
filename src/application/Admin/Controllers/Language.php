@@ -21,7 +21,7 @@ class Language extends Controller
      * @param Response $resp
      * @return array
      */
-    public function actionGet(Request $req, Response $resp)
+    public function actionGet()
     {
         $scopes = explode(',', I('scopes'));
 
@@ -39,7 +39,7 @@ class Language extends Controller
      *
      * @return string
      */
-    public function actionList(Request $req, Response $resp, array & $params)
+    public function actionList(array $params)
     {
         if (! acl()->isAdmin()) {
             throw new Forbidden();

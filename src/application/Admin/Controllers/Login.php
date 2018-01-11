@@ -16,7 +16,7 @@ use Lxh\Http\Response;
 
 class Login extends Controller
 {
-    public function actionIndex(Request $request, Response $response, $params)
+    public function actionIndex($params)
     {
         return $this->content()
             ->independent()

@@ -26,7 +26,7 @@ class Js extends Controller
      *
      * @return string
      */
-    public function actionEntrance(Request $req, Response $resp, & $params)
+    public function actionEntrance(array $params)
     {
         if (empty($params['type'])) {
             return;

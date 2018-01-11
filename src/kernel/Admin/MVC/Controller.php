@@ -49,7 +49,7 @@ class Controller extends Base
      * @param Response $resp
      * @param array $params
      */
-    public function actionList(Request $req, Response $resp, array &$params)
+    public function actionList(array $params)
     {
         $content = $this->admin()->content();
 
@@ -129,7 +129,7 @@ class Controller extends Base
      * @param Response $resp
      * @param array $params
      */
-    public function actionCreate(Request $req, Response $resp, array &$params)
+    public function actionCreate(array $params)
     {
         $content = $this->admin()->content();
         $content->header(trans(__CONTROLLER__));
@@ -159,7 +159,7 @@ class Controller extends Base
      * @param Response $resp
      * @param array $params
      */
-    public function actionDetail(Request $req, Response $resp, array &$params)
+    public function actionDetail(array $params)
     {
         // 判断是否有权限访问
         if (! acl()->access()) {
@@ -210,7 +210,7 @@ class Controller extends Base
      *
      * @return array
      */
-    public function actionDelete(Request $req, Response $resp, array &$params)
+    public function actionDelete(array $params)
     {
         // 判断是否有权限访问
         if (! acl()->access()) {
@@ -254,7 +254,7 @@ class Controller extends Base
      *
      * @return array
      */
-    public function actionAdd(Request $req, Response $resp, array &$params)
+    public function actionAdd(array $params)
     {
         // 判断是否有权限访问
         if (! acl()->accessCreate()) {
@@ -315,7 +315,7 @@ class Controller extends Base
      *
      * @return array
      */
-    public function actionUpdate(Request $req, Response $resp, array &$params)
+    public function actionUpdate(array $params)
     {
         // 判断是否有权限访问
         if (! acl()->accessUpdate()) {

@@ -181,7 +181,7 @@ class Admin extends Controller
      * @param Request $req
      * @param Response $resp
      */
-    public function actionRoleList(Request $req, Response $resp, array &$params)
+    public function actionRoleList(array $params)
     {
         if (! $id = get_value($params, 'id')) {
             return $this->error();
@@ -227,7 +227,7 @@ class Admin extends Controller
      *
      * @return string
      */
-    public function actionLogin(Request $req, Response $resp)
+    public function actionLogin()
     {
         if (empty($_POST)) {
             return $this->error();
@@ -257,7 +257,7 @@ class Admin extends Controller
      * @param Response $resp
      * @return array
      */
-    public function actionRegister(Request $req, Response $resp)
+    public function actionRegister()
     {
         if (empty($_POST)) {
             return $this->error();
@@ -280,7 +280,7 @@ class Admin extends Controller
             return $this->error('The username exists.');
         }
 
-        if (! $admin->register($_POST, $req->ip())) {
+        if (! $admin->register($_POST, $this->request->ip())) {
             return $this->failed();
         }
 

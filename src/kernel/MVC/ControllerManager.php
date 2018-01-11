@@ -190,13 +190,13 @@ class ControllerManager extends Factory
                 $this->request->withAttribute('mid.params', $middlewareParams);
 
                 if ($this->first) {
-                    $this->events->fire('route.auth.success', [$this->request, $this->response, $this->requestParams]);
+                    $this->events->fire('route.auth.success', [&$params]);
 
                     // 注册当前控制器
                     $this->container->instance('controller', $contr);
                 }
 
-                return $contr->$action($this->request, $this->response, $params);
+                return $contr->$action($params);
             });
     }
 

@@ -19,7 +19,7 @@ class User extends Controller
      *
      * @return string
      */
-    public function actionLogin(Request $req, Response $resp)
+    public function actionLogin()
     {
         if (empty($_POST)) {
             return $this->error();
@@ -44,7 +44,7 @@ class User extends Controller
     }
     
     
-    public function actionRegister(Request $req, Response $resp)
+    public function actionRegister()
     {
         if (empty($_POST)) {
             return $this->error();
@@ -69,7 +69,7 @@ class User extends Controller
             return $this->error('The username exists.');
         }
 
-        if (! $user->register($_POST, $req->ip())) {
+        if (! $user->register($_POST, $this->request->ip())) {
             return $this->failed();
         }
 
