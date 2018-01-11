@@ -2,6 +2,7 @@
 
 namespace Lxh\Admin\Filter\Field;
 
+use Lxh\Admin\Admin;
 use Lxh\Admin\Form\Field;
 use Lxh\Admin\Filter\Equal;
 use Lxh\Admin\Filter\Gt;
@@ -24,15 +25,19 @@ use Lxh\Admin\Filter\Ilike;
  */
 class Text extends Field
 {
-    use Condition;
+    use Field\PlainInput, Condition;
 
+    /**
+     * @var string
+     */
     protected $view = 'admin::filter.text';
 
+    /**
+     * @var array
+     */
     protected $width = [
         'field' => 2
     ];
-
-    protected $append;
 
     protected function variables()
     {
@@ -48,36 +53,15 @@ class Text extends Field
             ->defaultAttribute('class', 'form-control '.$this->getElementClassString())
             ->defaultAttribute('placeholder', $this->getPlaceholder());
 
+        if ($this->options) {
+            // 下拉点击菜单
+            $this->attribute('data-toggle', 'dropdown');
+
+            $this->attachOptionsScript();
+        }
+
         return parent::variables();
     }
 
-    /**
-     * 设置表单类型
-     *
-     * @param string $type
-     * @return static
-     */
-    public function type($type = 'text')
-    {
-        return $this->attribute('type', $type);
-    }
-
-    public function number()
-    {
-        return $this->attribute('type', 'number');
-    }
-
-    public function password()
-    {
-        return $this->attribute('type', 'password');
-    }
-
-    protected function defaultAttribute($attribute, $value)
-    {
-        if (!isset($this->attributes[$attribute])) {
-            $this->attribute($attribute, $value);
-        }
-        return $this;
-    }
 
 }

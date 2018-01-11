@@ -461,7 +461,7 @@ class Field implements Renderable
     /**
      * Set the field options.
      *
-     * @param array $options
+     * @param mixed $options
      *
      * @return $this
      */
@@ -471,7 +471,7 @@ class Field implements Renderable
             $options = $options->toArray();
         }
 
-        $this->options = array_merge($this->options, $options);
+        $this->options = array_merge($this->options, (array) $options);
 
         return $this;
     }
@@ -855,6 +855,7 @@ class Field implements Renderable
             'errorKey' => $this->getErrorKey(),
             'attributes' => $this->formatAttributes(),
             'placeholder' => $this->getPlaceholder(),
+            'options' => &$this->options
         ]);
     }
 

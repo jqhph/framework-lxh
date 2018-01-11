@@ -7,6 +7,7 @@
 
 namespace Lxh\Admin\Controllers;
 
+use Lxh\Auth\AuthManager;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
 use Lxh\Admin\Filter;
@@ -83,9 +84,25 @@ class Ability extends Controller
     protected function form(Form $form, Content $content)
     {
         $form->text('title')->rules('required|length_between[2-30]');
-        $form->text('name')->rules('required|length_between[2-20]');
+        $form->text('name')->options($this->getCommonAbilitiesName())->rules('required|length_between[2-20]');
         $form->text('comment');
         $form->select('forbidden')->options([0, 1]);
+    }
+
+    protected function getCommonAbilitiesName()
+    {
+        return [
+            '.' . AuthManager::READ,
+            '.' . AuthManager::CREATE,
+            '.' . AuthManager::UPDATE,
+            '.' . AuthManager::DELETE,
+            '.' . AuthManager::EXPORT,
+            '.' . AuthManager::IMPORT,
+            '.' . AuthManager::UPLOAD,
+            '.' . AuthManager::BATCHDELETE,
+            '.' . AuthManager::BATCHCREATE,
+            '.' . AuthManager::BATCHUPDATE,
+        ];
     }
 
 

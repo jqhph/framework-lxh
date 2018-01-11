@@ -21,7 +21,7 @@ class AuthManager
     const EXPORT = 'Export';
     const IMPORT = 'Import';
     const UPLOAD = 'Upload';
-    const BATCHELETE = 'BatchDelete';
+    const BATCHDELETE = 'BatchDelete';
     const BATCHUPDATE = 'BatchUpdate';
     const BATCHCREATE = 'BatchCreate';
 
@@ -359,7 +359,7 @@ class AuthManager
      */
     public function batchDeleteable($controller = __CONTROLLER__)
     {
-        return $this->can($controller . '.' . static::BATCHELETE);
+        return $this->can($controller . '.' . static::BATCHDELETE);
     }
 
     /**

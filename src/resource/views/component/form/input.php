@@ -9,6 +9,13 @@
             <?php if ($append) {?>
             <span class="input-group-addon clearfix"><?php echo $append ?></span>
             <?php } ?>
+            <?php if ($options) {?>
+                <ul class="dropdown-menu col-sm-12">
+                    <?php foreach ((array)$options as &$v) {?>
+                        <li><a><?php echo $v;?></a></li>
+                    <?php }?>
+                </ul>
+            <?php }?>
         </div>
         <?php if ($help) {
             echo view('admin::form.help-block', ['help' => &$help])->render();
