@@ -23,6 +23,10 @@ class Language extends Controller
      */
     public function actionGet()
     {
+        if (! auth()->readable()) {
+            throw new Forbidden();
+        }
+
         $scopes = explode(',', I('scopes'));
 
         if (empty($scopes)) {
@@ -41,7 +45,7 @@ class Language extends Controller
      */
     public function actionList(array $params)
     {
-        if (! acl()->isAdmin()) {
+        if (! auth()->readable()) {
             throw new Forbidden();
         }
 
@@ -64,7 +68,7 @@ class Language extends Controller
      */
     public function actionGetPackage()
     {
-        if (! acl()->isAdmin()) {
+        if (! auth()->readable()) {
             throw new Forbidden();
         }
 
@@ -88,7 +92,7 @@ class Language extends Controller
      */
     public function actionSave()
     {
-        if (! acl()->isAdmin()) {
+        if (! auth()->updateable()) {
             throw new Forbidden();
         }
 
@@ -115,7 +119,7 @@ class Language extends Controller
      */
     public function actionCreateCategory()
     {
-        if (! acl()->isAdmin()) {
+        if (! auth()->updateable()) {
             throw new Forbidden();
         }
 
@@ -149,7 +153,7 @@ class Language extends Controller
      */
     public function actionCreateFile()
     {
-        if (! acl()->isAdmin()) {
+        if (! auth()->updateable()) {
             throw new Forbidden();
         }
 
@@ -187,7 +191,7 @@ class Language extends Controller
      */
     public function actionCreateValue()
     {
-        if (! acl()->isAdmin()) {
+        if (! auth()->updateable()) {
             throw new Forbidden();
         }
 
@@ -217,7 +221,7 @@ class Language extends Controller
      */
     public function actionCreateOption()
     {
-        if (! acl()->isAdmin()) {
+        if (! auth()->updateable()) {
             throw new Forbidden();
         }
 
@@ -246,7 +250,7 @@ class Language extends Controller
      */
     public function actionCopyFile()
     {
-        if (! acl()->isAdmin()) {
+        if (! auth()->updateable()) {
             throw new Forbidden();
         }
 

@@ -14,6 +14,17 @@ use Lxh\Support\Collection;
 
 class AuthManager
 {
+    const READ = 'Read';
+    const CREATE = 'Create';
+    const UPDATE = 'Update';
+    const DELETE = 'Delete';
+    const EXPORT = 'Export';
+    const IMPORT = 'Import';
+    const UPLOAD = 'Upload';
+    const BATCHELETE = 'BatchDelete';
+    const BATCHUPDATE = 'BatchUpdate';
+    const BATCHCREATE = 'BatchCreate';
+
     /**
      * @var array
      */
@@ -299,6 +310,86 @@ class AuthManager
         }
 
         return false;
+    }
+
+    /**
+     * 检查读权限
+     *
+     * @return bool
+     */
+    public function readable($controller = __CONTROLLER__)
+    {
+        return $this->can($controller . '.' . static::READ);
+    }
+
+    /**
+     * 检查创建权限
+     *
+     * @return bool
+     */
+    public function createable($controller = __CONTROLLER__)
+    {
+        return $this->can($controller . '.' . static::CREATE);
+    }
+
+    /**
+     * 检查编辑权限
+     *
+     * @return bool
+     */
+    public function updateable($controller = __CONTROLLER__)
+    {
+        return $this->can($controller . '.' . static::UPDATE);
+    }
+
+    /**
+     * 检查删除权限
+     *
+     * @return bool
+     */
+    public function deleteable($controller = __CONTROLLER__)
+    {
+        return $this->can($controller . '.' . static::DELETE);
+    }
+
+    /**
+     * 检查批量删除权限
+     *
+     * @return bool
+     */
+    public function batchDeleteable($controller = __CONTROLLER__)
+    {
+        return $this->can($controller . '.' . static::BATCHELETE);
+    }
+
+    /**
+     * 检查导出权限
+     *
+     * @return bool
+     */
+    public function exportable($controller = __CONTROLLER__)
+    {
+        return $this->can($controller . '.' . static::EXPORT);
+    }
+
+    /**
+     * 检查导入权限
+     *
+     * @return bool
+     */
+    public function importable($controller = __CONTROLLER__)
+    {
+        return $this->can($controller . '.' . static::IMPORT);
+    }
+
+    /**
+     * 检查上传权限
+     *
+     * @return bool
+     */
+    public function uploadable($controller = __CONTROLLER__)
+    {
+        return $this->can($controller . '.' . static::UPLOAD);
     }
 
     /**
