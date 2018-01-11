@@ -102,10 +102,14 @@ class Tr extends Widget
     }
 
     /**
-     * @return array
+     * @return mixed
      */
-    public function row()
+    public function row($key = null)
     {
+        if ($key) {
+            return get_value($this->row, $key);
+        }
+
         return $this->row;
     }
 
@@ -260,7 +264,11 @@ class Tr extends Widget
             $class  = "Lxh\\Admin\\Fields\\{$view}";
         }
 
-        return $td->value((new $class($field, $value, get_value($vars, $this->fieldOptionsKey)))->render())->render();
+        $field = new $class($field, $value, get_value($vars, $this->fieldOptionsKey));
+
+        $field->setTr($this);
+
+        return $td->value($field->render())->render();
     }
 
     /**

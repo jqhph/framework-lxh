@@ -37,7 +37,7 @@ class Role extends Controller
         $table->field('comment');
         $table->field('created_at')->view('date')->sortable();
         $table->field('modified_at')->view('date')->sortable();
-        $table->field('created_by');
+        $table->field('created_by')->view('Link')->options(['format' => Admin::url('Admin')->detail('{value}')]);
     }
 
     protected function filter(Filter $filter)

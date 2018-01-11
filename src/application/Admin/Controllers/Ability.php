@@ -93,7 +93,7 @@ class Ability extends Controller
 
     protected function getNameHelp()
     {
-        return '请输入权限唯一标识。如是常用增删改查权限，请选择下拉菜单中对应的选项！';
+        return '请输入权限唯一标识。如果是常用增删改查权限，请选择下拉菜单中对应的选项！';
     }
 
     protected function addFilter(array &$input)

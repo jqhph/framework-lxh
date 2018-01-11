@@ -9,6 +9,7 @@
 namespace Lxh\Admin\Controllers;
 
 use Lxh\Admin\Fields\Button;
+use Lxh\Admin\Fields\Link;
 use Lxh\Admin\Fields\Tag;
 use Lxh\Admin\Filter;
 use Lxh\Admin\Grid;
@@ -69,22 +70,21 @@ class Admin extends Controller
         });
 
         // 角色字段
-        $btn = new Tag();
+        $link = new Link();
         // ajax modal自动从设置的url中抓取数据展示到弹窗里面
-        $btn->class('ajax-modal');
+        $link->useAjaxModal();
         // ajax modal标题
-        $btn->attribute('modal-title', 'Roles');
-        $btn->style('margin-left:0;padding-top:0');
+        $link->title(trans('Roles'));
 
         $keyName = $this->model()->getKeyName();
         $label = trans('list');
-        $table->column(6, 'roles', function (array $row, Td $td, Th $th, Tr $tr) use ($btn, $keyName, $label) {
+        $table->column(6, 'roles', function (array $row, Td $td, Th $th, Tr $tr) use ($link, $keyName, $label) {
             // ajax modal 设置dataid，用于缓存从服务器抓取的数据，无需每次重复抓取
-            $btn->attribute('modal-data-id', $row[$keyName]);
+            $link->dataId($row[$keyName]);
             // ajax modal 取数据url
-            $btn->attribute('modal-url', '/api/admin/roles-list/' . $row[$keyName]);
+            $link->url('/api/admin/roles-list/' . $row[$keyName]);
 
-            return $btn->label($label . ' <i class="zmdi zmdi-tag-more"></i>')->render();
+            return $link->label($label . ' <i class="zmdi zmdi-tag-more"></i>')->render();
         });
     }
 

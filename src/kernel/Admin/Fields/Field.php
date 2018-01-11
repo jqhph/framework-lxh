@@ -2,6 +2,7 @@
 
 namespace Lxh\Admin\Fields;
 
+use Lxh\Admin\Table\Tr;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Helper\Util;
 
@@ -10,6 +11,11 @@ use Lxh\Helper\Util;
  */
 class Field implements Renderable
 {
+    /**
+     * @var Tr
+     */
+    protected $tr;
+
     /**
      *
      * @var mixed
@@ -71,6 +77,16 @@ class Field implements Renderable
             return $this;
         }
         return $this->label ?: ($this->value ?: $this->name);
+    }
+
+    /**
+     * @param Tr $tr
+     * @return $this
+     */
+    public function setTr(Tr $tr)
+    {
+        $this->tr = $tr;
+        return $this;
     }
 
     /**
