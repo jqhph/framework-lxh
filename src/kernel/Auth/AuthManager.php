@@ -6,6 +6,7 @@ use Lxh\Auth\Conductors\FindRoles;
 use Lxh\Auth\Database\Role;
 use Lxh\Cache\File;
 use Lxh\Exceptions\InvalidArgumentException;
+use Lxh\Helper\Util;
 use Lxh\MVC\Model;
 use Lxh\Auth\Cache\Store;
 use Lxh\Auth\Clipboard;
@@ -14,16 +15,16 @@ use Lxh\Support\Collection;
 
 class AuthManager
 {
-    const READ = 'Read';
-    const CREATE = 'Create';
-    const UPDATE = 'Update';
-    const DELETE = 'Delete';
-    const EXPORT = 'Export';
-    const IMPORT = 'Import';
-    const UPLOAD = 'Upload';
-    const BATCHDELETE = 'BatchDelete';
-    const BATCHUPDATE = 'BatchUpdate';
-    const BATCHCREATE = 'BatchCreate';
+    const READ = 'read';
+    const CREATE = 'create';
+    const UPDATE = 'update';
+    const DELETE = 'delete';
+    const EXPORT = 'export';
+    const IMPORT = 'import';
+    const UPLOAD = 'upload';
+    const BATCHDELETE = 'batch-delete';
+    const BATCHUPDATE = 'batch-update';
+    const BATCHCREATE = 'batch-create';
 
     /**
      * @var array

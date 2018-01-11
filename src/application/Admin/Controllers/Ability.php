@@ -84,7 +84,7 @@ class Ability extends Controller
     protected function form(Form $form, Content $content)
     {
         $form->text('title')->rules('required|length_between[2-30]');
-        $form->text('name')->options($this->getCommonAbilitiesName())->rules('required|length_between[2-20]');
+        $form->text('name')->options($this->getCommonAbilitiesName())->rules('required|length_between[2-40]');
         $form->text('comment');
         $form->select('forbidden')->options([0, 1]);
     }
