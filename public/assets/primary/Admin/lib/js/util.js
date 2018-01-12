@@ -140,10 +140,15 @@
             firstIndex = 'home',
             def = {name: firstIndex, url: '', label: ''},
             histories = [def],
-            current = def;
+            current = def,
+            max = 10;
 
         this.current = function () {
             return this.switch()
+        };
+
+        this.setMax = function (num) {
+            max = num;
         };
 
         // 返回当前tab按钮和iframe的JQ元素对象
@@ -161,8 +166,10 @@
             } else {
                 current = {name: name, url: url, label: label};
             }
+            if (this.show(name, url, label) === false) {
+                return;
+            }
             iframe.switch(name, url);
-            this.show(name, url, label);
             this.addHistory(name, url, label);
         };
 
@@ -207,8 +214,21 @@
             this.addHistory(name, url, label)
         };
 
+        /**
+         *
+         * @returns {*}
+         */
+        this.num = function () {
+            return $('.ticket-tab').length;
+        };
+
         // 打开一个新的tab页
         this.open = function (name, url, label) {
+            if (this.num() >= max) {
+                _alert('Exceeding quantity limit');
+                return false;
+            }
+
             url = url || name;
             label = label || name;
 
@@ -294,6 +314,13 @@
             }
             var html = tpl.replace('{name}', name).replace('{name}', name).replace('{label}', label);
             $menu.append(html);
+        }
+
+        function _alert(msg) {
+            if (typeof w.$lxh == 'undefined') {
+                return alert(msg)
+            }
+            w.$lxh.ui().notify().warning(trans(msg));
         }
     }
 

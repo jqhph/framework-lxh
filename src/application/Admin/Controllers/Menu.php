@@ -18,6 +18,7 @@ use Lxh\Admin\Widgets\Box;
 use Lxh\Admin\Widgets\Form;
 use Lxh\Auth\Ability;
 use Lxh\Auth\AuthManager;
+use Lxh\Auth\Database\Models;
 use Lxh\Exceptions\Forbidden;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
@@ -142,9 +143,12 @@ class Menu extends Controller
     protected function formatAbilities()
     {
         $abilities = [];
-        foreach ($this->model('Ability')->find() as $row) {
+
+        $keyName = Models::getAbilityKeyName();
+
+        foreach ($this->model('Ability')->find() as &$row) {
             $abilities[] = [
-                'value' => $row['id'],
+                'value' => $row[$keyName],
                 'label' => $row['title']
             ];
         }
