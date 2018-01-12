@@ -114,7 +114,7 @@ class Role extends Model
      */
     public function assignAbilities($abilities)
     {
-        if (!$id = $this->getId()) {
+        if (!$id = $this->getId() || ! $abilities) {
             return false;
         }
         $type = $this->getMorphType();

@@ -33,12 +33,10 @@ class Role extends \Lxh\Auth\Database\Role
 
     public function afterUpdate($id, array &$input, $result)
     {
-        if ($this->abilities) {
-            $this->resetAbilities();
-            $this->assignAbilities($this->abilities);
-            // 清除相关用户缓存
-            auth()->refreshForRole($this);
-        }
+        $this->resetAbilities();
+        $this->assignAbilities($this->abilities);
+        // 清除相关用户缓存
+        auth()->refreshForRole($this);
     }
 
     public function afterDelete($id, $result)

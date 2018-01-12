@@ -88,8 +88,6 @@ class Admin extends Session
 
     protected function afterUpdate($id, array &$input, $result)
     {
-        if (! $this->roles) return;
-
         AuthManager::resolve($this)
             ->assign($this->roles)
             ->retract() // 先重置所有已关联角色
