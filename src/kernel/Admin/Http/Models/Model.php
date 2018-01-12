@@ -1,6 +1,6 @@
 <?php
 
-namespace Lxh\Admin\MVC;
+namespace Lxh\Admin\Http\Models;
 
 use Lxh\MVC\Model as Base;
 

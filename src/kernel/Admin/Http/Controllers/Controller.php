@@ -1,6 +1,6 @@
 <?php
 
-namespace Lxh\Admin\MVC;
+namespace Lxh\Admin\Http\Controllers;
 
 use Lxh\Admin\Admin;
 use Lxh\Admin\Filter;

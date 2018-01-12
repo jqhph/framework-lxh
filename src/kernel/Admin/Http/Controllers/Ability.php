@@ -1,8 +1,7 @@
 <?php
 
-namespace Lxh\Admin\MVC;
+namespace Lxh\Admin\Http\Controllers;
 
-use Lxh\Admin\MVC\Controller;
 use Lxh\Auth\AuthManager;
 use Lxh\Http\Request;
 use Lxh\Http\Response;

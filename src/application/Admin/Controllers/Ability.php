@@ -16,8 +16,7 @@ use Lxh\Admin\Widgets\Box;
 use Lxh\Admin\Widgets\Form;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Table\Table;
-use Lxh\Admin\MVC\Controller;
 
-class Ability extends \Lxh\Admin\MVC\Ability
+class Ability extends \Lxh\Admin\Http\Controllers\Ability
 {
 }

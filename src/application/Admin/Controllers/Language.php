@@ -12,6 +12,6 @@ use Lxh\Exceptions\Forbidden;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
 
-class Language extends \Lxh\Admin\MVC\Language
+class Language extends \Lxh\Admin\Http\Controllers\Language
 {
 }

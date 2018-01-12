@@ -2,7 +2,7 @@
 
 namespace Lxh\Auth\Database;
 
-use Lxh\Admin\MVC\Model;
+use Lxh\Admin\Http\Models\Model;
 use Lxh\MVC\Model AS Base;
 use Lxh\Support\Collection;
 

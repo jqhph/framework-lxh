@@ -16,7 +16,6 @@ use Lxh\Admin\Form\Field\MultipleFile;
 use Lxh\Admin\Form\Field\MultipleSelect;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Layout\Content;
-use Lxh\Admin\MVC\Controller;
 use Lxh\Admin\Table\Table;
 use Lxh\Admin\Table\Td;
 use Lxh\Admin\Table\Th;
@@ -29,7 +28,7 @@ use Lxh\Http\Request;
 use Lxh\Http\Response;
 use Lxh\Admin\Admin as AdminCreator;
 
-class Admin extends \Lxh\Admin\MVC\Admin
+class Admin extends \Lxh\Admin\Http\Controllers\Admin
 {
 
 }

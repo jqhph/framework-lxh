@@ -1,6 +1,6 @@
 <?php
 
-namespace Lxh\Admin\MVC;
+namespace Lxh\Admin\Http\Controllers;
 
 use Lxh\Admin\Admin as AdminCreator;
 use Lxh\Admin\Fields\Link;
@@ -8,7 +8,6 @@ use Lxh\Admin\Fields\Tag;
 use Lxh\Admin\Filter;
 use Lxh\Admin\Form\Field\MultipleSelect;
 use Lxh\Admin\Layout\Content;
-use Lxh\Admin\MVC\Controller;
 use Lxh\Admin\Table\Td;
 use Lxh\Admin\Table\Th;
 use Lxh\Admin\Table\Tr;

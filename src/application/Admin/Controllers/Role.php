@@ -13,7 +13,6 @@ use Lxh\Admin\Fields\Link;
 use Lxh\Admin\Filter;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Layout\Content;
-use Lxh\Admin\MVC\Controller;
 use Lxh\Admin\Table\Table;
 use Lxh\Admin\Widgets\Form;
 use Lxh\Exceptions\Forbidden;
@@ -21,6 +20,6 @@ use Lxh\Http\Request;
 use Lxh\Http\Response;
 use Lxh\Helper\Valitron\Validator;
 
-class Role extends \Lxh\Admin\MVC\Role
+class Role extends \Lxh\Admin\Http\Controllers\Role
 {
 }

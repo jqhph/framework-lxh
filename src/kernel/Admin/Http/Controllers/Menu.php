@@ -6,14 +6,13 @@
  * Time: 12:57
  */
 
-namespace Lxh\Admin\MVC;
+namespace Lxh\Admin\Http\Controllers;
 
 use Lxh\Admin\Admin;
 use Lxh\Admin\Fields\Link;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Kernel\Url;
 use Lxh\Admin\Layout\Content;
-use Lxh\Admin\MVC\Controller;
 use Lxh\Admin\Table\Table;
 use Lxh\Admin\Widgets\Box;
 use Lxh\Admin\Widgets\Form;

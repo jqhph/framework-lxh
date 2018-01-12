@@ -2,8 +2,8 @@
 
 namespace Lxh\Auth\Database;
 
+use Lxh\Admin\Http\Models\Model;
 use Lxh\Auth\Database\Models;
-use Lxh\MVC\Model;
 
 class Menu extends Model
 {

@@ -25,7 +25,7 @@ use Lxh\Http\Response;
 use Lxh\Helper\Valitron\Validator;
 use Lxh\Admin\Layout\Row;
 
-class Menu extends \Lxh\Admin\MVC\Menu
+class Menu extends \Lxh\Admin\Http\Controllers\Menu
 {
 
 }

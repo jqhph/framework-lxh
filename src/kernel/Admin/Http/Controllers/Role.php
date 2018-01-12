@@ -6,7 +6,7 @@
  * Time: 20:57
  */
 
-namespace Lxh\Admin\MVC;
+namespace Lxh\Admin\Http\Controllers;
 
 use Lxh\Admin\Admin;
 use Lxh\Admin\Fields\Link;
