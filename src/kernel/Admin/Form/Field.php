@@ -38,6 +38,13 @@ class Field implements Renderable
     protected $value;
 
     /**
+     * Row data
+     *
+     * @var array
+     */
+    protected $row = [];
+
+    /**
      * Field original value.
      *
      * @var mixed
@@ -114,6 +121,9 @@ class Field implements Renderable
      */
     protected static $js = [];
 
+    /**
+     * @var array
+     */
     public static $scripts = [];
 
     /**
@@ -181,6 +191,12 @@ class Field implements Renderable
     ];
 
     /**
+     *
+     * @var \Closure
+     */
+    protected $attaching;
+
+    /**
      * Field constructor.
      *
      * @param $column
@@ -198,7 +214,6 @@ class Field implements Renderable
     // 初始化
     protected function setup()
     {
-
     }
 
     /**
@@ -222,6 +237,23 @@ class Field implements Renderable
         return $this;
     }
 
+    /**
+     * @param \Closure $then
+     * @return $this
+     */
+    public function attaching(\Closure $then)
+    {
+        $this->attaching = $then;
+
+        return $this;
+    }
+
+    public function callAttaching()
+    {
+        if ($then = $this->attaching) {
+            $then($this);
+        }
+    }
 
     /**
      * 追加样式
@@ -372,6 +404,17 @@ class Field implements Renderable
     }
 
     /**
+     * @param null $key
+     * @return mixed
+     */
+    public function row($key = null)
+    {
+        if ($key === null) return $this->row;
+
+        return get_value($this->row, $key);
+    }
+
+    /**
      * Fill data to the field.
      *
      * @param array $data
@@ -380,10 +423,14 @@ class Field implements Renderable
      */
     public function fill($data)
     {
+        $data = (array)$data;
+
+        $this->row = &$data;
+
         if ($this->value === false) return;
         // Field value is already setted.
         if (is_array($this->column)) {
-            foreach ($this->column as $key => $column) {
+            foreach ($this->column as $key => &$column) {
                 $this->value[$key] = get_value($data, $column);
             }
 

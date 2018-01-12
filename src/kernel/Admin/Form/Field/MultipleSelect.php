@@ -24,6 +24,7 @@ class MultipleSelect extends Select
 
     public function fill($data)
     {
+        $this->row = &$data;
         // Field value is already setted.
         if (is_array($this->column)) {
             foreach ($this->column as $key => $column) {

@@ -384,6 +384,7 @@ class Form implements Renderable
 
         foreach ($this->fields as $field) {
             $field->fill($this->data);
+            $field->callAttaching();
         }
 
         return [

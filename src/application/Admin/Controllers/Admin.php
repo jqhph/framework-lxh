@@ -12,6 +12,8 @@ use Lxh\Admin\Fields\Button;
 use Lxh\Admin\Fields\Link;
 use Lxh\Admin\Fields\Tag;
 use Lxh\Admin\Filter;
+use Lxh\Admin\Form\Field\MultipleFile;
+use Lxh\Admin\Form\Field\MultipleSelect;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Layout\Content;
 use Lxh\Admin\MVC\Controller;
@@ -125,7 +127,12 @@ class Admin extends Controller
 
         $form->multipleSelect('roles')
             ->options($this->formatRoles())
-            ->help($this->getRolesHelp());
+            ->help($this->getRolesHelp())
+            ->attaching(function (MultipleSelect $select) {
+                if ($select->row('is_admin')) {
+                    $select->disabled();
+                }
+            });
     }
 
     protected function getRolesHelp()
@@ -134,7 +141,9 @@ class Admin extends Controller
         $tabid = str_replace('/', '-', $url);
         $tablabel = trans('Create Ability');
 
-        return "<a onclick=\"open_tab('$tabid','$url','$tablabel')\">点我创建角色</a>";
+        $help = trans('Create Role');
+
+        return "<a onclick=\"open_tab('$tabid','$url','$tablabel')\">$help</a>";
     }
 
     /**
