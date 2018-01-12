@@ -512,11 +512,11 @@ class Table extends Widget
      */
     protected function buildTh($field, &$options = [])
     {
-        $vars = (array)get_value($options, 'th');
+        $th = $this->ths[$field] = new Th($this, $field);
 
-        $vars['data-priority'] = $this->getPriorityFromOptions($options);
-
-        $th = $this->ths[$field] = new Th($this, $field, $vars);
+        if (get_isset($options, 'hide')) {
+            $th->hide();
+        }
 
         if (get_isset($options, 'sortable')) {
             $th->sortable();
@@ -536,15 +536,6 @@ class Table extends Widget
         }
 
         return $th;
-    }
-
-    /**
-     * @param $options
-     * @return mixed
-     */
-    protected function getPriorityFromOptions($options)
-    {
-        return get_value($options, 'show', $this->defaultPriority);
     }
 
     /**

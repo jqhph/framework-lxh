@@ -54,7 +54,9 @@ class Th extends Widget
         $this->field = &$name;
         $this->value($name);
 
-        parent::__construct((array) $attributes);
+        if ($attributes) {
+            parent::__construct((array) $attributes);
+        }
     }
 
     /**
