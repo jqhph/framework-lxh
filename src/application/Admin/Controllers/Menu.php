@@ -32,14 +32,14 @@ class Menu extends Controller
      * @var array
      */
     protected $grid = [
-        'id' => ['show' => 0, 'sortable' => 1, 'desc' => 1],
+        'id' => ['hide' => 1, 'sortable' => 1, 'desc' => 1],
         'icon' => ['view' => 'Icon'],
-        'name' => [],
-        'controller' => [],
-        'action' => [],
+        'name',
+        'controller',
+        'action',
         'show' => ['view' => 'Checkbox'],
         'type' => ['view' => 'Select'],
-        'priority' => [],
+        'priority',
     ];
 
     protected function initialize()

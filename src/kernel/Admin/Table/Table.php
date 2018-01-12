@@ -260,7 +260,7 @@ class Table extends Widget
         if (! $this->field) {
             return $this;
         }
-        $this->headers[$this->field]['show'] = 0;
+        $this->headers[$this->field]['hide'] = 1;
         return $this;
     }
 
@@ -516,6 +516,8 @@ class Table extends Widget
 
         if (get_isset($options, 'hide')) {
             $th->hide();
+        } else {
+            $th->show();
         }
 
         if (get_isset($options, 'sortable')) {

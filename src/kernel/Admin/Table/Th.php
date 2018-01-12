@@ -60,6 +60,16 @@ class Th extends Widget
     }
 
     /**
+     * @return $this
+     */
+    public function show()
+    {
+        $this->attributes['data-priority'] = 1;
+
+        return $this;
+    }
+
+    /**
      * 默认隐藏列
      *
      * @return static

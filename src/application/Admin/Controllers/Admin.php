@@ -188,29 +188,31 @@ class Admin extends Controller
         $roleKey = Models::role()->getKeyName();
         $abKey = Models::ability()->getKeyName();
 
-        $abilities = AuthManager::resolve($admin)->getAbilitiesGroupByRoles()->map(function ($roles, $roleTitle) use ($roleUrl, $abUrl, $roleKey, $abKey) {
-            // 角色
-            $tag = new Tag();
-            $tag->value($roleTitle)
-                ->icon('fa fa-tags')
-                ->url($roleUrl->detail($roles[$roleKey]))
-                ->middle();
+        $abilities = AuthManager::resolve($admin)
+            ->getAbilitiesGroupByRoles()
+            ->map(function ($roles, $roleTitle) use ($roleUrl, $abUrl, $roleKey, $abKey) {
+                // 角色
+                $tag = new Tag();
+                $tag->value($roleTitle)
+                    ->icon('fa fa-tags')
+                    ->url($roleUrl->detail($roles[$roleKey]))
+                    ->middle();
 
-            $table = new \Lxh\Admin\Widgets\Table([$tag->render()]);
+                $table = new \Lxh\Admin\Widgets\Table([$tag->render()]);
 
-            // 权限
-            $tags = '';
-            foreach ($roles['abilities'] as &$ability) {
-                $tags .= (new Tag())
-                    ->label($ability['title'])
-                    ->url($abUrl->detail($ability[$abKey]))
-                    ->render();
-            }
+                // 权限
+                $tags = '';
+                foreach ($roles['abilities'] as &$ability) {
+                    $tags .= (new Tag())
+                        ->label($ability['title'])
+                        ->url($abUrl->detail($ability[$abKey]))
+                        ->render();
+                }
 
-            $table->setRows([[$tags]]);
+                $table->setRows([[$tags]]);
 
-            return $table->render();
-        })->all();
+                return $table->render();
+            })->all();
 
         return $this->success([
             'content' => implode('<br>', $abilities),

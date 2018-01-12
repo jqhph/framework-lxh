@@ -28,7 +28,7 @@ class Product extends Controller
      * @var array
      */
     protected $grid = [
-        'id' => ['show' => 0, 'sortable' => 1],
+        'id' => ['hide' => 1, 'sortable' => 1],
         'name' => ['sortable' => 1],
         'price' => ['sortable' => 1,],
         'counter_price',
