@@ -201,7 +201,7 @@ class Model extends Entity
     // 查找数据
     public function find()
     {
-        $id = $this->{static::$idFieldsName};
+        $id = $this->getId();
 
         if ($id) {
             $data = $this->query()->select($this->selectFields)->where(static::$idFieldsName, $id)->findOne();
@@ -271,7 +271,7 @@ class Model extends Entity
     // 删除一条记录
     public function delete()
     {
-        $id = $this->id;
+        $id = $this->getId();
         if (empty($id)) {
             return false;
         }
