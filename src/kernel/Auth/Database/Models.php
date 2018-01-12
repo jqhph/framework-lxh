@@ -3,10 +3,9 @@
 namespace Lxh\Auth\Database;
 
 use Closure;
-use Lxh\Admin\Models\Admin;
+use Lxh\Admin\Models\Admin as AppAdmin;
 use Lxh\Container\Container;
 use Lxh\MVC\Model;
-use Lxh\Auth\Database\Scope\Scope;
 
 class Models
 {
@@ -23,7 +22,7 @@ class Models
      * @var array
      */
     protected static $models = [
-        'User' => Admin::class,
+        'User' => AppAdmin::class,
         'Role' => Role::class,
         'Ability' => Ability::class,
     ];

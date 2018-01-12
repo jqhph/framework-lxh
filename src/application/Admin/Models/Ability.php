@@ -11,8 +11,6 @@ use Lxh\MVC\Model;
 
 class Ability extends \Lxh\Auth\Database\Ability
 {
-    protected $tableName = 'abilities';
-
     public function afterUpdate($id, array & $data, $result)
     {
     }
