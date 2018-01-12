@@ -29,7 +29,7 @@ class Index extends Controller
 
         $index = $this->admin()->index();
 
-        $index->topbar(<<<EOF
+        $index->addTopbarContent(<<<EOF
 <li>
     <div class="notification-box">
         <ul class="list-inline m-b-0">

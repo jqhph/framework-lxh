@@ -15,9 +15,25 @@ use InvalidArgumentException;
 class Index
 {
     /**
-     * @var string
+     * @var array
      */
-    protected $view = 'admin::index';
+    protected $views = [
+        'index' => 'admin::index',
+        'top-bar' => 'admin::index.top-bar',
+        'sitebar' => 'admin::index.left-bar',
+        'user' => 'admin::index.user'
+    ];
+
+    /**
+     * @var array
+     */
+    protected $variables = [
+        'maxTab' => 10,
+        'topbarContent' => '',
+        'users' => '',
+        'menuTitle' => '',
+        'homeUrl' => '/admin/index/index'
+    ];
 
     /**
      * tab按钮最大数量
@@ -27,34 +43,20 @@ class Index
     protected $maxTab = 10;
 
     /**
-     * 顶部工具栏内容定义
-     *
-     * @var mixed
-     */
-    protected $topbar;
-
-    /**
-     * 用户信息
-     *
-     * @var string
-     */
-    protected $users;
-
-    /**
      * @var Content
      */
     protected $content;
 
     /**
-     * @var string
+     * @var mixed
      */
-    protected $menuTitle = '';
+    protected $user;
 
     /**
-     * @var string
+     * @var mixed
      */
-    protected $homeUrl = '/admin/index/index';
-    
+    protected $topbarContent;
+
     public function __construct(Closure $content = null)
     {
         if ($content) {
@@ -65,17 +67,118 @@ class Index
     }
 
     /**
+     * 设置首页链接
+     *
      * @param $url
      * @return $this
      */
     public function setHomeUrl($url)
     {
-        $this->homeUrl = $url;
+        $this->variables['homeUrl'] = $url;
         return $this;
     }
 
     /**
+     * 设置后台主页视图
      *
+     * @param $view
+     * @return $this
+     */
+    public function setIndexView($view)
+    {
+        $this->views['index'] = $view;
+        return $this;
+    }
+
+    /**
+     * 设置顶部工具栏视图
+     *
+     * @param $view
+     * @return $this
+     */
+    public function setTopbarView($view)
+    {
+        $this->views['top-bar'] = $view;
+        return $this;
+    }
+
+    /**
+     * 设置菜单栏视图
+     *
+     * @param $view
+     * @return $this
+     */
+    public function setSitebarView($view)
+    {
+        $this->views['sitebar'] = $view;
+        return $this;
+    }
+
+    /**
+     * 设置菜单栏用户区块视图
+     *
+     * @param $view
+     * @return $this
+     */
+    public function setUserView($view)
+    {
+        $this->views['user'] = $view;
+        return $this;
+    }
+
+    /**
+     * 设置菜单标题
+     *
+     * @param $title
+     * @return $this
+     */
+    public function setMenuTitle($title)
+    {
+        $this->variables['menuTitle'] = $this->normalizeContent($title);
+
+        return $this;
+    }
+
+    /**
+     * 设置tab按钮最大数量
+     *
+     * @param int $num
+     * @return $this
+     */
+    public function setMaxTab($num)
+    {
+        $this->maxTab = $num;
+        return $this;
+    }
+
+    /**
+     * 定义左边菜单栏用户信息
+     * 如果调用了此方法，user视图将不会再渲染
+     *
+     * @param $content
+     * @return $this
+     */
+    public function setUser($content)
+    {
+        $this->user = $this->normalizeContent($content);
+
+        return $this;
+    }
+
+    /**
+     * 设置顶部工具栏右边内容
+     *
+     * @param $content
+     * @return $this
+     */
+    public function addTopbarContent($content)
+    {
+        $this->topbarContent = $this->normalizeContent($content);
+        return $this;
+    }
+
+    /**
+     * 增加行内容
      *
      * @param $row
      * @return $this
@@ -97,30 +200,6 @@ class Index
         return $this->content;
     }
 
-    /**
-     * @param $title
-     * @return $this
-     */
-    public function menuTitle($title)
-    {
-        $this->menuTitle = $this->normalizeContent($title);
-
-        return $this;
-    }
-
-    /**
-     * 定义左边菜单栏用户信息
-     *
-     * @param $content
-     * @return $this
-     */
-    public function users($content)
-    {
-        $this->users = $this->normalizeContent($content);
-
-        return $this;
-    }
-
     protected function normalizeContent(&$content)
     {
         if ($content instanceof Closure) {
@@ -131,62 +210,52 @@ class Index
         return (string) $content;
     }
 
-    /**
-     * 顶部工具栏内容
-     *
-     * @param $content
-     * @return $this
-     */
-    public function topbar($content)
+    protected function buildUser()
     {
-        $this->topbar = $this->normalizeContent($content);
-        return $this;
-    }
+        if ($this->user) {
+            return $this->user;
+        }
 
-    /**
-     * 设置tab按钮最大数量
-     *
-     * @param int $num
-     * @return $this
-     */
-    public function maxTab($num)
-    {
-        $this->maxTab = $num;
-        return $this;
-    }
-    
-    protected function setupUsers()
-    {
         $user = admin();
         $name = $user->first_name . $user->last_name;
         $username = $name ?: $user->username;
 
-        $avatar = load_img('users/avatar-1.jpg');
+        $avatar = $user->avatar() ?: load_img('users/avatar-1.jpg');
 
-        $this->users = view('admin::index.user', ['name' => $username, 'avatar' => &$avatar])->render();
+        return view($this->views['user'], ['name' => $username, 'avatar' => &$avatar])->render();
 
     }
 
-    public function render()
+    protected function buildTopbar()
+    {
+        return view($this->views['top-bar'], ['content' => &$this->topbarContent])->render();
+    }
+
+    protected function buildSitebar()
+    {
+        return view(
+            $this->views['sitebar'],
+            ['users' => $this->buildUser(), 'title' => $this->variables['menuTitle']]
+        )->render();
+    }
+
+    protected function variables()
     {
         $content = '';
         if ($this->content) {
             $content = $this->content->build();
         }
 
-        if (! $this->users) {
-            $this->setupUsers();
-        }
+        return array_merge($this->variables, [
+            'topbar' => $this->buildTopbar(),
+            'sitebar' => $this->buildSitebar(),
+            'content' => &$content,
+        ]);
+    }
 
-        return view($this->view, [
-                'maxTab' => $this->maxTab,
-                'topbar' => &$this->topbar,
-                'users' => &$this->users,
-                'content' => &$content,
-                'homeUrl' => &$this->homeUrl,
-                'menuTitle' => &$this->menuTitle,
-            ])
-            ->render();
+    public function render()
+    {
+        return view($this->views['index'], $this->variables())->render();
     }
 
 }

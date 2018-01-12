@@ -9,6 +9,7 @@ return [
     'copyright' => '2017 @copyright JQH',
 
     'index' => [
-        'max-tab' => 10
+        'max-tab' => 10,
+        'default-avatar' => 'users/avatar-1.jpg',
     ]
 ];

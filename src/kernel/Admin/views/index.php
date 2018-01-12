@@ -40,11 +40,11 @@
 <div id="wrapper">
     <div id="lxh-app">
         <!-- Top Bar Start -->
-        <?php echo view('admin::index.top-bar', ['content' => &$topbar])->render();?>
+        <?php echo $topbar;?>
         <!-- Top Bar End -->
 
         <!-- ========== Left Sidebar Start ========== -->
-        <?php echo view('admin::index.left-bar', ['users' => &$users, 'title' => &$menuTitle])->render();?>
+        <?php echo $sitebar;?>
         <!-- Left Sidebar End -->
         <script id="iframe-tpl" type="text/html">
             <div id="wrapper-{$name}" class="wrapper lxh-wrapper">

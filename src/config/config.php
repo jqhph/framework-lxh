@@ -27,7 +27,7 @@ $config['view.version'] = 'php';
 $config['view.version'] = 'primary';
 // 视图模板路径别名
 $config['view.namespaces'] = [
-//    'admin' => "resource/views/component",
+    'admin' => 'kernel/Admin/views',
 ];
 
 // 是否输出控制台调试信息，默认true

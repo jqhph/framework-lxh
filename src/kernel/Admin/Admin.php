@@ -60,11 +60,6 @@ class Admin
      */
     protected static $idName = 'id';
 
-    public function __construct()
-    {
-        add_view_namespace('admin', __DIR__ . '/views');
-    }
-
     /**
      * @param $model
      * @param Closure $callable

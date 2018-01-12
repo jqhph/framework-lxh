@@ -73,6 +73,16 @@ class Session extends Model
     }
 
     /**
+     * 获取用户头像
+     *
+     * @return mixed
+     */
+    public function avatar()
+    {
+
+    }
+
+    /**
      * 注入session数据
      *
      * @return $this
