@@ -17,6 +17,10 @@ class Role extends Model
      */
     protected $morphType = 2;
 
+    /**
+     * @var array
+     */
+    protected $abilities = [];
 
     protected function initialize()
     {
@@ -114,7 +118,7 @@ class Role extends Model
      */
     public function assignAbilities($abilities)
     {
-        if (!$id = $this->getId() || ! $abilities) {
+        if (!($id = $this->getId()) || ! $abilities) {
             return false;
         }
         $type = $this->getMorphType();
@@ -175,11 +179,6 @@ class Role extends Model
 
         return (new Collection((array)$r))->pluck('ability_id');
     }
-
-    /**
-     * @var array
-     */
-    protected $abilities = [];
 
     public function beforeUpdate($id, array &$input)
     {
