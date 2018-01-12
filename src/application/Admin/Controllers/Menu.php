@@ -119,10 +119,6 @@ class Menu extends Controller
      */
     protected function buildQuickCreateAbilityInput(Form $form)
     {
-        $support = [
-            Ability::READ, Ability::CREATE
-        ];
-
         $form->text('quick_relate_ability')
             ->options(Ability::getAbilitiesSupport())
             ->help("快捷关联权限，请输入权限唯一标识。如权限不存在则会自动创建。");
