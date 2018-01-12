@@ -101,7 +101,7 @@ class Menu extends Controller
      */
     protected function form(Form $form, Content $content)
     {
-        $form->selectTree('parent_id')->options(resolve('acl-menu')->all())->defaultOption(0, '顶级分类');
+        $form->selectTree('parent_id')->options(auth()->menu()->all())->defaultOption(0, '顶级分类');
         $form->text('name')->rules('required');
         $form->text('icon')->help($this->iconHelp());
         $form->text('controller');
@@ -162,7 +162,7 @@ class Menu extends Controller
      */
     protected function grid(Grid $grid, Content $content)
     {
-        $grid->rows(resolve('acl-menu')->all());
+        $grid->rows(auth()->menu()->all());
         $grid->disablePagination();
     }
 

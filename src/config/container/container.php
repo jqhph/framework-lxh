@@ -8,11 +8,6 @@
 
 $config = [];
 
-$config['acl-menu'] = [
-    'shared' => true,
-    'class' => 'Lxh\Admin\Acl\Menu',
-];
-
 $config['front.client'] = [
     'shared' => true,
     'class' => 'Lxh\Kernel\Client'

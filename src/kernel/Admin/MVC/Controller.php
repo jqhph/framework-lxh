@@ -162,7 +162,7 @@ class Controller extends Base
     public function actionDetail(array $params)
     {
         // 判断是否有权限访问
-        if (! acl()->access()) {
+        if (! auth()->updateable()) {
             throw new Forbidden();
         }
 
@@ -213,7 +213,7 @@ class Controller extends Base
     public function actionDelete(array $params)
     {
         // 判断是否有权限访问
-        if (! acl()->access()) {
+        if (! auth()->deleteable()) {
             throw new Forbidden();
         }
 
@@ -257,7 +257,7 @@ class Controller extends Base
     public function actionAdd(array $params)
     {
         // 判断是否有权限访问
-        if (! acl()->accessCreate()) {
+        if (! auth()->createable()) {
             throw new Forbidden();
         }
 
@@ -318,7 +318,7 @@ class Controller extends Base
     public function actionUpdate(array $params)
     {
         // 判断是否有权限访问
-        if (! acl()->accessUpdate()) {
+        if (! auth()->updateable()) {
             throw new Forbidden();
         }
 
@@ -383,7 +383,7 @@ class Controller extends Base
     public function actionBatchDelete()
     {
         // 判断是否有权限访问
-        if (! acl()->access()) {
+        if (! auth()->batchDeleteable()) {
             throw new Forbidden();
         }
 

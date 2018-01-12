@@ -18,20 +18,6 @@ function pages()
     return resolve('page');
 }
 
-
-
-/**
- * 权限管理
- *
- * @return Permit
- */
-function acl()
-{
-    static $instance = null;
-
-    return $instance ?: ($instance = new Permit());
-}
-
 /**
  * 缓存
  *

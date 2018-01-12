@@ -51,6 +51,11 @@ class AuthManager
      */
     protected $clipboard;
 
+    /**
+     * @var Menu
+     */
+    protected $menu;
+
     public function __construct(Model $user = null)
     {
         $this->user = $user ?: admin();
@@ -294,13 +299,26 @@ class AuthManager
             return true;
         }
 
-        $abilities = $this->abilities()->all();
+        $keyName = Models::getAbilityKeyName();
 
-        if (isset($abilities[$ability])) {
-            return $abilities[$ability]['forbidden'] == 0;
+        $exists = false;
+        foreach ($this->abilities()->all() as $name => &$row) {
+            if ($name == $ability || get_value($row, $keyName) == $ability) {
+                $exists = $row;
+                break;
+            }
         }
+        if (! $exists) return false;
 
-        return false;
+        return $exists['forbidden'] == 0 ? false : true;
+    }
+
+    /**
+     * @return Menu
+     */
+    public function menu()
+    {
+        return $this->menu ?: ($this->menu = new Menu($this));
     }
 
     /**
@@ -395,13 +413,18 @@ class AuthManager
             return false;
         }
 
-        $abilities = $this->abilities()->all();
+        $keyName = Models::getAbilityKeyName();
 
-        if (isset($abilities[$ability])) {
-            return $abilities[$ability]['forbidden'] == 1;
+        $exists = false;
+        foreach ($this->abilities()->all() as $name => &$row) {
+            if ($name == $ability || get_value($row, $keyName) == $ability) {
+                $exists = $row;
+                break;
+            }
         }
+        if (! $exists) return false;
 
-        return false;
+        return $exists['forbidden'] == 0 ? true : false;
     }
 
     /**

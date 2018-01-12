@@ -48,6 +48,16 @@ class Models
     ];
 
     /**
+     * @var array
+     */
+    protected static $keyNames = [
+        'Role' => 'id',
+        'Ability' => 'id',
+        'User' => 'id',
+        'Menu' => 'id',
+    ];
+
+    /**
      * Set the model to be used for abilities.
      *
      * @param  string  $model
@@ -56,6 +66,58 @@ class Models
     public static function setAbilitiesModel($model)
     {
         static::$models['Ability'] = $model;
+    }
+
+    /**
+     * @param $model
+     * @param $keyName
+     */
+    public static function setKeyName($model, $keyName)
+    {
+        static::$keyNames[$model] = $keyName;
+    }
+
+    /**
+     * @param $model
+     * @return mixed
+     */
+    public static function getKeyName($model)
+    {
+        return get_value(static::$keyNames, $model);
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function getUserKeyName()
+    {
+        return static::getKeyName('User');
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public static function getRoleKeyName()
+    {
+        return static::getKeyName('Role');
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public static function getAbilityKeyName()
+    {
+        return static::getKeyName('Ability');
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function getMenuKeyName()
+    {
+        return static::getKeyName('Menu');
     }
 
     /**

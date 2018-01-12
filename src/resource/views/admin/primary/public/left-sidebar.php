@@ -1,5 +1,5 @@
 <?php
-$menu = make('acl-menu');
+$menu = auth()->menu();
 $user = admin();
 $name = $user->first_name . $user->last_name;
 ?>
