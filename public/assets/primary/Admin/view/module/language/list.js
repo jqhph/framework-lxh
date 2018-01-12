@@ -374,8 +374,8 @@ define(['css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
                 content: blade.fetch({categories: categories}),
                 saveButtonLabel: 'Create',
                 class: '',
-            }, function (modal) {
-                var formData = $lxh.form().get('.modal-container')
+            }, function () {
+                var formData = $lxh.form().get('.modal-container');
 
                 try {
                     formData = normalize(formData)
@@ -393,7 +393,7 @@ define(['css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
                     this.renderLanguageList(data);
                     notify.success(trans('success'));
                     // 关闭弹窗
-                    modal.close()
+                    modal.modal('hide')
                 }.bind(this))
 
                 model.touchAction(opts.action, 'POST');
@@ -414,7 +414,8 @@ define(['css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
                     return newData
                 }
 
-            }.bind(this))
+            }.bind(this));
+            modal.modal('show');
 
             $('i[data-action="add-key-value-row"]').unbind('click')
             $('i[data-action="add-key-value-row"]').click(add_key_value_row)
@@ -432,7 +433,7 @@ define(['css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
                     {name: 'value[]', rules: 'required' },
                 ], function () {
 
-                }, '.modal-container')
+                }, '.modal-container');
                 v._validateForm('submit')
             }
 

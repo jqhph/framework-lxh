@@ -1341,8 +1341,11 @@ console.log('request data', data);
                     return input_selector(element);
                 default:
                     if (element.name.indexOf('[') !== -1 && element.name.indexOf(']') !== -1) {
-                        // 兼容select2 js多选框
-                        return [element.name, $($selector).find('[name="'+element.name+'"]').val()];
+                        var val = $($selector).find('[name="'+element.name+'"]').val();
+                        if (val && typeof val == 'object') {
+                            // 兼容select2 js多选框
+                            return [element.name, val];
+                        }
                     }
                     return [element.name, element.value];
             }

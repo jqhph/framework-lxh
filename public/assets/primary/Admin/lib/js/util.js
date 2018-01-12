@@ -224,11 +224,6 @@
 
         // 打开一个新的tab页
         this.open = function (name, url, label) {
-            if (this.num() >= max) {
-                _alert('Exceeding quantity limit');
-                return false;
-            }
-
             url = url || name;
             label = label || name;
 
@@ -237,6 +232,11 @@
                 this.switch(name);
                 return false;
             }
+            if (this.num() >= max) {
+                _alert('Exceeding quantity limit');
+                return false;
+            }
+
             firstIndex = firstIndex || name;
 
             iframe.create(name, url);

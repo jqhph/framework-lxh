@@ -7,8 +7,8 @@
 
 namespace Lxh\Admin\Controllers;
 
+use Lxh\Admin\Http\Controllers\Controller;
 use Lxh\Admin\Layout\Content;
-use Lxh\Admin\MVC\Controller;
 use Lxh\Admin\Filter;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Layout\Row;
