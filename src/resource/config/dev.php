@@ -7,6 +7,7 @@ return array (
   'view.version' => 'primary',
   'view.namespaces' => 
   array (
+    'admin' => 'kernel/Admin/views',
   ),
   'response-console-log' => true,
   'response-trace-log' => true,
@@ -291,6 +292,7 @@ return array (
     'index' => 
     array (
       'max-tab' => 10,
+      'default-avatar' => 'users/avatar-1.jpg',
     ),
   ),
   'js-version' => 1514519758,
