@@ -235,7 +235,12 @@ class Index
     {
         return view(
             $this->views['sitebar'],
-            ['users' => $this->buildUser(), 'title' => $this->variables['menuTitle']]
+            [
+                'users' => $this->buildUser(),
+                'title' => $this->variables['menuTitle'],
+                'home' => $this->variables['homeUrl'],
+                'menu' => auth()->menu(),
+            ]
         )->render();
     }
 

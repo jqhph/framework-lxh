@@ -38,7 +38,7 @@ class Menu extends Model
     public function findShow()
     {
         $ability = Models::table('ability');
-        $select = "{$this->tableName}.*,$ability.name,$ability.title";
+        $select = $this->getDefaultSelect($ability);
 
         return $this->query()
             ->select($select)
@@ -81,13 +81,17 @@ class Menu extends Model
         $input['ability_id'] = current($ability->all())[$abilityModel->getKeyName()];
     }
 
+    protected function getDefaultSelect($ability)
+    {
+        return "{$this->tableName}.*,$ability.name ability,$ability.title ability_title";
+    }
+
     public function find()
     {
         $id = $this->getId();
-        
-        $ability = Models::table('ability');
 
-        $select = "{$this->tableName}.*,$ability.name ability,$ability.title ability_title";
+        $ability = Models::table('ability');
+        $select = $this->getDefaultSelect($ability);
 
         if ($id) {
             $data = $this->query()

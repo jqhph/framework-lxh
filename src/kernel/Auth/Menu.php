@@ -165,7 +165,7 @@ class Menu
         $tree = [];
         foreach ($data as &$v) {
             // 检查用户权限
-            if ($auth && ! $this->auth->can(get_value($v, 'ability_id'))) {
+            if ($auth && ! $this->auth->can(get_value($v, 'ability'))) {
                 continue;
             }
 
@@ -221,16 +221,21 @@ class Menu
             return $this->data;
         }
 
-        $this->data = $this->cache->get($this->cacheKey);
+        if ($data = $this->cache->get($this->cacheKey)) {
+            $data = $this->makeTree($data);
+            // 如果存在子菜单则根据priority字段排序, priority越小越前面
+            $this->sort($data);
 
-        if ($this->data) {
-            return $this->data;
+            return $this->data = $data;
         }
 
         $this->data = $this->fetch();
 
         // 缓存数据
         $this->cache->set($this->cacheKey, $this->data, $this->expireTime);
+
+        $this->data = $this->makeTree($this->data);
+        $this->sort($this->data);
 
         return $this->data;
     }
@@ -276,11 +281,6 @@ class Menu
     public function fetch()
     {
         $data = $this->model->findShow();
-
-        $data = $this->makeTree($data);
-
-        // 如果存在子菜单则根据priority字段排序, priority越小越前面
-        $this->sort($data);
 
         return $data;
     }

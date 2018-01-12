@@ -324,7 +324,7 @@ class AuthManager
         }
         if (! $exists) return false;
 
-        return $exists['forbidden'] == 0 ? false : true;
+        return $exists['forbidden'] == 0 ? true : false;
     }
 
     /**

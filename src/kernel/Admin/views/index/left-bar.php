@@ -1,7 +1,3 @@
-<?php
-$menu = auth()->menu();
-?>
-
 <div class="left side-menu">
     <div class="sidebar-inner slimscrollleft">
         <!-- User -->
@@ -16,14 +12,14 @@ $menu = auth()->menu();
                 <?php } ?>
 
                 <li>
-                    <a onclick="TAB.switch('home', '<?php echo Lxh\Admin\Kernel\Url::makeHome();?>', '<?php echo trans('Home')?>')" class="waves-effect
+                    <a onclick="TAB.switch('home', '<?php echo $home;?>', '<?php echo trans('Home')?>')" class="waves-effect
                     <?php if ($menu->isActive('Index', 'Index')) echo 'active';?> "><i class="zmdi zmdi-home"></i> <span>
                             <?php echo trans('Home', 'menus');?> </span> </a>
                 </li>
 
                 <?php foreach ($menu->get() as & $m) { ?>
                     <li class="has_sub">
-                        <a onclick="<?php echo empty($m['subs']) ? "TAB.switch({$m['id']}, '{$m['url']}', '{$m['name']}')" : '';?>"
+                        <a onclick="<?php echo empty($m['subs']) && !empty($m['controller']) ? "TAB.switch({$m['id']}, '{$m['url']}', '{$m['name']}')" : '';?>"
                            class="waves-effect <?php if ($menu->isActive($m['controller'], $m['action'])) echo 'active';?>">
                             <i class="<?php echo $m['icon'];?>"></i>
                             <span><?php echo $m['name'];?></span>
