@@ -145,7 +145,10 @@ class FileViewFinder implements ViewFinderInterface
 
     protected function normalizePath(&$path)
     {
-        return "{$this->root}{$path}";
+        if (strpos($path, '/') === 0 || strpos($path, ':')) {
+            return $path;
+        }
+        return $this->root . $path;
     }
 
     /**

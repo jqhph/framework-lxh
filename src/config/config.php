@@ -7,14 +7,6 @@
  */
 $config = [];
 
-$config['admin'] = [
-    'title' => 'Lxh',
-    'desc' => '',
-    'logo' => '<span>L<span >xh</span></span>',
-    'favicon' => '',
-    'copyright' => '2017 @copyright JQH',
-];
-
 // 时区配置
 $config['timezone'] = 'PRC';
 
@@ -35,7 +27,7 @@ $config['view.version'] = 'php';
 $config['view.version'] = 'primary';
 // 视图模板路径别名
 $config['view.namespaces'] = [
-    'admin' => "resource/views/component",
+//    'admin' => "resource/views/component",
 ];
 
 // 是否输出控制台调试信息，默认true
@@ -86,6 +78,7 @@ $config['add-config'] = [
     'client-config' => __ENV__ . '/client',
     'app' => __ENV__ . '/app',
     'mail' => 'mail',
+    'admin' => 'admin',
 ];
 
 

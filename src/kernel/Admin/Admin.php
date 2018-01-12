@@ -60,6 +60,11 @@ class Admin
      */
     protected static $idName = 'id';
 
+    public function __construct()
+    {
+        add_view_namespace('admin', __DIR__ . '/views');
+    }
+
     /**
      * @param $model
      * @param Closure $callable
@@ -69,6 +74,16 @@ class Admin
     public function grid($model, Closure $callable)
     {
         return new Grid($this->getModel($model), $callable);
+    }
+
+    /**
+     * 后台首页内容
+     *
+     * @return Index
+     */
+    public function index(Closure $callable = null)
+    {
+        return new Index($callable);
     }
 
     /**

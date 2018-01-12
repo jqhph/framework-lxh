@@ -1,13 +1,5 @@
 <?php 
 return array (
-  'admin' => 
-  array (
-    'title' => 'Lxh',
-    'desc' => '',
-    'logo' => '<span>L<span >xh</span></span>',
-    'favicon' => '',
-    'copyright' => '2017 @copyright JQH',
-  ),
   'timezone' => 'PRC',
   'use-language' => true,
   'view.compiled' => 'resource/blade-cache',
@@ -15,7 +7,6 @@ return array (
   'view.version' => 'primary',
   'view.namespaces' => 
   array (
-    'admin' => 'resource/views/component',
   ),
   'response-console-log' => true,
   'response-trace-log' => true,
@@ -38,6 +29,7 @@ return array (
     'client-config' => 'dev/client',
     'app' => 'dev/app',
     'mail' => 'mail',
+    'admin' => 'admin',
   ),
   'modules' => 
   array (
@@ -286,6 +278,19 @@ return array (
       array (
         0 => 'mail/views/vendor/mail',
       ),
+    ),
+  ),
+  'admin' => 
+  array (
+    'title' => 'Lxh',
+    'description' => '',
+    'keyword' => '',
+    'logo' => '<span>L<span >xh</span></span>',
+    'favicon' => '',
+    'copyright' => '2017 @copyright JQH',
+    'index' => 
+    array (
+      'max-tab' => 10,
     ),
   ),
   'js-version' => 1514519758,

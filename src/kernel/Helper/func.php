@@ -433,6 +433,18 @@ function render_view($view, array $data = [])
 }
 
 /**
+ * Add a new namespace to the loader.
+ *
+ * @param  string  $namespace
+ * @param  string|array  $hints
+ * @return \Lxh\Template\Factory
+ */
+function add_view_namespace($namespace, $hints)
+{
+    return $GLOBALS['CONTAINER']['view.adaptor']->addNamespace($namespace, $hints);
+}
+
+/**
  * @return \Lxh\Http\Request
  */
 function request() {

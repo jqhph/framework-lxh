@@ -7,7 +7,7 @@
 
 namespace Lxh\Admin\Controllers;
 
-use Lxh\Admin\Chat\Room;
+use Lxh\Chats\Views\Room;
 use Lxh\Admin\Layout\Row;
 use Lxh\Admin\Widgets\InfoBox;
 use Lxh\Admin\Widgets\Navbar;
@@ -19,7 +19,6 @@ class Index extends Controller
 {
     protected function initialize()
     {
-        
     }
 
     // 主页菜单
@@ -28,9 +27,29 @@ class Index extends Controller
         // 关闭输出控制台调试信息
         $this->withConsoleOutput(false);
 
-        $chat = (new Room())->render();
+        $index = $this->admin()->index();
 
-        return $this->render('public.public', ['homeUrl' => '/admin/index/index', 'imview' => &$chat]);
+        $index->topbar(<<<EOF
+<li>
+    <div class="notification-box">
+        <ul class="list-inline m-b-0">
+            <li>
+                <a href="javascript:void(0);" class="right-bar-toggle"><i class="zmdi zmdi-notifications-none"></i></a>
+                <div class="noti-dot" style="display:none">
+                    <span class="dot"></span><span class="pulse"></span>
+                </div>
+            </li>
+        </ul>
+    </div>
+</li>
+EOF
+);
+
+        return $index->render();
+
+
+
+//        return $this->render('public.public', ['homeUrl' => '/admin/index/index', 'imview' => &$chat]);
     }
 
     // 首页

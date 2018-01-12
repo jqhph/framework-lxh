@@ -244,11 +244,19 @@ class View
         foreach ((array) $paths as & $path) {
             $file = str_replace('.', '/', $name).'.php';
 
-            if (is_file($viewPath = "{$this->root}{$path}/$file")) {
+            if (is_file($viewPath = "{$this->normalizePath($path)}/$file")) {
                 return $viewPath;
             }
         }
         throw new InvalidArgumentException("View [$name] not found.");
+    }
+
+    protected function normalizePath(&$path)
+    {
+        if (strpos($path, '/') === 0 || strpos($path, ':')) {
+            return $path;
+        }
+        return $this->root . $path;
     }
 
     /**

@@ -29,7 +29,7 @@
 </div>
 
 <?php
-echo render_view('public.app-js');
+echo render_view('admin::index.app-js');
 ?>
 <script>
 (function (w) {
