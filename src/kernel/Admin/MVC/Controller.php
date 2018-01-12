@@ -227,7 +227,7 @@ class Controller extends Base
 
         $model = $this->model();
 
-        $model->id = $params['id'];
+        $model->setId($params['id']);
 
         return $model->delete() ? $this->success() : $this->failed();
     }
@@ -359,7 +359,7 @@ class Controller extends Base
         $model = $this->model();
 
         // 设置id字段名称
-        $model->set($this->idName, $params['id']);
+        $model->setId($params['id']);
 
         // 注入表单数据
         $model->attach($data);

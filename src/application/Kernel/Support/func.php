@@ -6,17 +6,7 @@
  * @date   2017/6/15 15:17
  */
 
-use Lxh\Admin\Acl\Permit;
-use Lxh\Kernel\Support\Page;
-use Lxh\Kernel\Cache\Cache;
 
-/**
- * @return Page
- */
-function pages()
-{
-    return resolve('page');
-}
 
 /**
  * 缓存

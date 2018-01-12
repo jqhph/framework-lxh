@@ -143,7 +143,7 @@ class Form implements Renderable
         }
 
         if (! $this->data) {
-            $this->data = model(Admin::model())->set(Admin::id(), $this->id)->find();
+            $this->data = model(Admin::model())->setId($this->id)->find();
         }
 
         return $this;

@@ -1,30 +1,84 @@
 <?php
 
-namespace Lxh\Kernel\Support;
+namespace Lxh\Admin\Widgets;
 
-class Page
+class Pages
 {
-    // 起始行数
+    /**
+     * 起始行数
+     *
+     * @var int
+     */
     public $firstRow;
-    // 列表每页显示行数
+
+    /**
+     * 列表每页显示行数
+     *
+     * @var int
+     */
     public $listRows;
-    // 页数跳转时要带的参数
+
+    /**
+     * 页数跳转时要带的参数
+     *
+     * @var string
+     */
     public $parameter;
-    // 分页总页面数
+
+    /**
+     * 分页总页面数
+     *
+     * @var int
+     */
     protected $totalPages;
-    // 总行数
+
+    /**
+     * 总行数
+     *
+     * @var int
+     */
     protected $totalRows;
-    // 当前页数
+
+    /**
+     * 当前页数
+     *
+     * @var int
+     */
     protected $currentPage = 1;
-    // 分页的栏的总页数
+
+    /**
+     * 分页的栏的总页数
+     *
+     * @var int
+     */
     protected $coolPages;
-    // 分页栏每页显示的页数
+
+    /**
+     * 分页栏每页显示的页数
+     *
+     * @var int
+     */
     protected $rollPage;
-    // 分页显示定制
+
+    /**
+     * 分页显示定制
+     *
+     * @var array
+     */
     protected $config;
-    // 分页跳转url
+
+    /**
+     * 分页跳转url
+     *
+     * @var string
+     */
     protected $url;
-    // 分页栏每页显示的页数的中间数
+
+    /**
+     * 分页栏每页显示的页数的中间数
+     *
+     * @var int
+     */
     protected $centerNum;
 
     public function __construct()

@@ -15,6 +15,7 @@ use Lxh\Admin\Tools\Actions;
 use Lxh\Admin\Tools\BatchDelete;
 use Lxh\Admin\Tools\Tools;
 use Lxh\Admin\Widgets\Box;
+use Lxh\Admin\Widgets\Pages;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\MVC\Model;
 
@@ -107,6 +108,11 @@ class Grid implements Renderable
      * @var \Lxh\Admin\Tools\Actions
      */
     protected $actions;
+
+    /**
+     * @var mixed
+     */
+    protected $paginator;
 
     /**
      * Options for grid.
@@ -457,9 +463,19 @@ class Grid implements Renderable
      *
      * @return mixed
      */
-    public function paginator()
+    public function paginator($pages = null)
     {
-        return pages();
+        if ($pages) {
+            $this->paginator = $pages;
+
+            return $this;
+        }
+
+        if ($this->paginator) {
+            return $this->paginator;
+        }
+
+        return $this->paginator = new Pages();
     }
 
     /**
