@@ -20,7 +20,7 @@ class Role extends Model
 
     protected function initialize()
     {
-        $this->tableName = Models::table('roles');
+        $this->tableName = Models::table('role');
     }
 
     public function getMorphType()

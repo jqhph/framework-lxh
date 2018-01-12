@@ -589,7 +589,7 @@ class Query
 	 */
 	public function leftJoin($table, $field1 = null, $field2 = null, $condit = '=')
 	{
-		$this->builder->join($table, $field1, $field2, $condit);
+		$this->builder->leftJoin($table, $field1, $field2, $condit);
 		return $this;
 	}
 

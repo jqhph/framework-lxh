@@ -288,6 +288,18 @@ class AuthManager
     }
 
     /**
+     * 由于数据库不区分大小写
+     * 所以建议所有权限唯一标识均采用小写中划线模式命名
+     *
+     * @param $name
+     * @return string
+     */
+    public static function normalizName($name)
+    {
+        return Util::convertWith($name, true, '-');
+    }
+
+    /**
      * Determine if the given ability is allowed.
      *
      * @param  string  $ability
@@ -298,6 +310,8 @@ class AuthManager
         if ($this->isAdministrator()) {
             return true;
         }
+
+        $ability = static::normalizName($ability);
 
         $keyName = Models::getAbilityKeyName();
 

@@ -37,7 +37,15 @@ class Menu extends Model
      */
     public function findShow()
     {
-        return $this->query()->where(['deleted' => 0, 'show' => 1])->read();
+        $ability = Models::table('ability');
+        $select = "{$this->tableName}.*,$ability.name,$ability.title";
+
+        return $this->query()
+            ->select($select)
+            ->where('deleted', 0)
+            ->where('show', 1)
+            ->leftJoin($ability, 'ability_id', "$ability.id")
+            ->find();
     }
 
     protected function beforeAdd(array &$input)
@@ -56,12 +64,11 @@ class Menu extends Model
     protected function setupAbility(array &$input)
     {
         $this->quickAbility = $input['quick_relate_ability'];
-        $this->selectedAbility = $input['ability'];
-        unset($input['quick_relate_ability'], $input['ability']);
+        unset($input['quick_relate_ability']);
 
         // 用户选择了权限，则以此为主
-        if ($this->selectedAbility && is_int($this->selectedAbility)) {
-            return $input['ability_id'] = $this->selectedAbility;
+        if ($input['ability_id'] && is_int($input['ability_id'])) {
+            return;
         }
         if (! $this->quickAbility) return;
 
@@ -72,6 +79,32 @@ class Menu extends Model
         $ability = $abilityModel->findOrCreate($abilityName);
 
         $input['ability_id'] = current($ability->all())[$abilityModel->getKeyName()];
+    }
+
+    public function find()
+    {
+        $id = $this->getId();
+        
+        $ability = Models::table('ability');
+
+        $select = "{$this->tableName}.*,$ability.name ability,$ability.title ability_title";
+
+        if ($id) {
+            $data = $this->query()
+                ->select($select)
+                ->where(static::$idFieldsName, $id)
+                ->leftJoin($ability, 'ability_id', "$ability.id")
+                ->where('deleted', 0)
+                ->findOne();
+            $this->attach($data);
+
+            return $data;
+        }
+        return $this->query()
+            ->select($select)
+            ->where('deleted', 0)
+            ->leftJoin($ability, 'ability_id', "$ability.id")
+            ->find();
     }
 
     // 保存数据前置钩子

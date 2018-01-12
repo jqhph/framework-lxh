@@ -2,6 +2,7 @@
 
 namespace Lxh\Auth\Database;
 
+use Lxh\Auth\AuthManager;
 use Lxh\MVC\Model;
 
 class Ability extends Model
@@ -19,13 +20,28 @@ class Ability extends Model
     {
         $attributes = $this->formatCreateAttributes((array)$names, $attributes);
 
-        $newId = $this->query()->insert($attributes);
+        $this->attach($attributes);
+
+        $newId = $this->add();
 
         if (! $newId) return [];
 
         $attributes[static::$idFieldsName] = $newId;
 
         return $attributes;
+    }
+
+    protected function beforeAdd(array &$input)
+    {
+        $input['name'] = AuthManager::normalizName($input['name']);
+        $input['created_at']    = time();
+        $input['created_by_id'] = admin()->getId();
+    }
+
+    protected function beforeUpdate($id, array &$input)
+    {
+        $input['name'] = AuthManager::normalizName($input['name']);
+        $input['modified_at'] = time();
     }
 
     protected function formatCreateAttributes(array $names, array &$attributes = [])

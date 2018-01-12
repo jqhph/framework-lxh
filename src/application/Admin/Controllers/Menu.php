@@ -9,6 +9,7 @@
 namespace Lxh\Admin\Controllers;
 
 use Lxh\Admin\Admin;
+use Lxh\Admin\Fields\Link;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Kernel\Url;
 use Lxh\Admin\Layout\Content;
@@ -132,7 +133,7 @@ class Menu extends Controller
             $tabid = str_replace('/', '-', $url);
             $tablabel = trans('Create Ability');
 
-            $form->select('ability')
+            $form->select('ability_id')
                 ->options($ablities)
                 ->allowClear()
                 ->defaultOption()
@@ -174,6 +175,12 @@ class Menu extends Controller
     protected function table(Table $table)
     {
         $table->useTree('subs');
+
+        $table->link('ability_title')->then(function (Link $link) {
+            $link->format(
+                Admin::url('Ability')->detail('{value}'), 'ability_id'
+            );
+        });
     }
 
 

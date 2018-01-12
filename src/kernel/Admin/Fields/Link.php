@@ -31,6 +31,8 @@ class Link extends Tag
         if (! $this->url && ($format = $this->option('format'))) {
             $replace = $this->options['formatKey'] ? $this->tr->row($this->options['formatKey']) : $this->value;
 
+            if (! $replace) return '';
+
             $this->url = str_replace('{value}', $replace, $format);
         }
 

@@ -267,7 +267,7 @@ class Menu
             return $this->list;
         }
 
-        return $this->list = $this->model->select('*')->where(['deleted' => 0])->find();
+        return $this->list = $this->model->find();
     }
 
     /**
@@ -275,7 +275,7 @@ class Menu
      */
     public function fetch()
     {
-        $data = $this->model->where(['deleted' => 0, 'show' => 1])->find();
+        $data = $this->model->findShow();
 
         $data = $this->makeTree($data);
 
