@@ -135,7 +135,7 @@ class Menu extends Model
     // 判断菜单是否是系统菜单
     public function isSystem($id)
     {
-        $r = $this->query()->select('type')->where($this->idFieldsName, $id)->findOne();
+        $r = $this->query()->select('type')->where(static::$idFieldsName, $id)->findOne();
 
         if (! $r) {
             return false;

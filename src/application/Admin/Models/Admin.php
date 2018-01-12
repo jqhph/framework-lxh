@@ -113,7 +113,7 @@ class Admin extends Session
 
         if (! $data || ! $this->getId()) return $data;
 
-        $data['roles'] = AuthManager::resolve($this)->roles()->pluck(Models::role()->getKeyName())->all();
+        $data['roles'] = AuthManager::resolve($this)->roles()->pluck(Models::getRoleKeyName())->all();
 
         return $data;
     }

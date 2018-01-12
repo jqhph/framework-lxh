@@ -58,7 +58,7 @@ class Admin extends Controller
         $table->text('email');
         $table->text('mobile');
 
-        $keyName = $this->model()->getKeyName();
+        $keyName = Models::getUserKeyName();
         $table->link('roles')
             ->then(function (Link $link) use ($keyName) {
                 $id = $link->row($keyName);
@@ -185,8 +185,8 @@ class Admin extends Controller
         $admin = Models::user()->setId($id);
         $roleUrl = AdminCreator::url('Role');
         $abUrl = AdminCreator::url('Ability');
-        $roleKey = Models::role()->getKeyName();
-        $abKey = Models::ability()->getKeyName();
+        $roleKey = Models::getRoleKeyName();
+        $abKey = Models::getAbilityKeyName();
 
         $abilities = AuthManager::resolve($admin)
             ->getAbilitiesGroupByRoles()

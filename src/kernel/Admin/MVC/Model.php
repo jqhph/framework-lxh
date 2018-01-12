@@ -18,9 +18,9 @@ class Model extends Base
         }
 
         if (count($ids) > 1) {
-            $res = $this->query()->where($this->idFieldsName, 'IN', $ids)->delete();
+            $res = $this->query()->where(static::$idFieldsName, 'IN', $ids)->delete();
         } else {
-            $res = $this->query()->where($this->idFieldsName, $ids[0])->delete();
+            $res = $this->query()->where(static::$idFieldsName, $ids[0])->delete();
         }
 
         $this->afterBatchDelete($ids);

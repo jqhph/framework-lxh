@@ -17,7 +17,7 @@ class Model extends Entity
      *
      * @var string
      */
-    protected $idFieldsName = 'id';
+    protected static $idFieldsName = 'id';
 
     /**
      * 默认查询的字段
@@ -99,7 +99,7 @@ class Model extends Entity
      */
     public function setIdName($name)
     {
-        $this->idFieldsName = $name;
+        static::$idFieldsName = $name;
         return $this;
     }
 
@@ -111,7 +111,7 @@ class Model extends Entity
      */
     public function setId($id)
     {
-        $this->set($this->idFieldsName, $id);
+        $this->set(static::$idFieldsName, $id);
 
         return $this;
     }
@@ -147,7 +147,7 @@ class Model extends Entity
      */
     public function getId()
     {
-        return $this->get($this->idFieldsName);
+        return $this->get(static::$idFieldsName);
     }
 
     /**
@@ -155,7 +155,7 @@ class Model extends Entity
      */
     public function getKeyName()
     {
-        return $this->idFieldsName;
+        return static::$idFieldsName;
     }
 
     /**
@@ -201,10 +201,10 @@ class Model extends Entity
     // 查找数据
     public function find()
     {
-        $id = $this->{$this->idFieldsName};
+        $id = $this->{static::$idFieldsName};
 
         if ($id) {
-            $data = $this->query()->select($this->selectFields)->where($this->idFieldsName, $id)->findOne();
+            $data = $this->query()->select($this->selectFields)->where(static::$idFieldsName, $id)->findOne();
             $this->fill($data);
             return $data;
         }
@@ -220,16 +220,16 @@ class Model extends Entity
     {
         $data = $this->all();
 
-        if (empty($data[$this->idFieldsName])) {
+        if (empty($data[static::$idFieldsName])) {
             return $this->add();
         }
-        $id = $data[$this->idFieldsName];
+        $id = $data[static::$idFieldsName];
 
-        unset($data[$this->idFieldsName]);
+        unset($data[static::$idFieldsName]);
 
         $this->beforeUpdate($id, $data);
 
-        $result = $this->query()->where($this->idFieldsName, $id)->update($data);
+        $result = $this->query()->where(static::$idFieldsName, $id)->update($data);
 
         $this->afterUpdate($id, $data, $result);
 
@@ -278,7 +278,7 @@ class Model extends Entity
 
         $this->beforeDelete($id);
 
-        $result = $this->query()->where($this->idFieldsName, $id)->delete();
+        $result = $this->query()->where(static::$idFieldsName, $id)->delete();
 
         $this->afterDelete($id, $result);
 

@@ -42,7 +42,7 @@ class Role extends Model
 
         if (! $newId) return [];
 
-        $attributes[$this->idFieldsName] = $newId;
+        $attributes[static::$idFieldsName] = $newId;
         return $attributes;
     }
 

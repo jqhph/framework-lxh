@@ -450,7 +450,7 @@ class AuthManager
     {
         $abilities = $this->abilities();
         $roles = $this->roles();
-        $roleKeyName = Models::role()->getKeyName();
+        $roleKeyName = Models::getRoleKeyName();
 
         return $roles->keyBy(function (&$row) use ($abilities, $roleKeyName) {
             $row['abilities'] = $abilities->filter(function ($ability) use ($row, $roleKeyName) {

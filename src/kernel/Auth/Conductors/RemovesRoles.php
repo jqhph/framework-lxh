@@ -146,7 +146,7 @@ class RemovesRoles
      */
     protected function getRoleIdsFromNames(array &$names)
     {
-        $key = Models::role()->getKeyName();
+        $key = Models::getRoleKeyName();
 
         return (new Collection(
             Models::role()
