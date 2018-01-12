@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title><?php echo config('admin.title')?></title>
-    <meta name="description" content="<?php echo config('admin.desc');?>">
-    <meta name="keywork" content="<?php echo config('admin.keywork');?>">
+    <meta name="description" content="<?php echo config('admin.description');?>">
+    <meta name="keywords" content="<?php echo config('admin.keywords');?>">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <link rel="shortcut icon" href="<?php echo load_img('favicon.ico'); ?>">
+    <link rel="shortcut icon" href="<?php echo config('admin.favicon'); ?>">
 </head>
 <body>
 <?php

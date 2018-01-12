@@ -3,7 +3,8 @@
 return [
     'title' => 'Lxh',
     'description' => '',
-    'keyword' => '',
+    'keywords' => '',
+    'author' => '',
     'logo' => '<span>L<span >xh</span></span>',
     'favicon' => '',
     'copyright' => '2017 @copyright JQH',

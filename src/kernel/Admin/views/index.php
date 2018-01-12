@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="<?php echo config('admin.description')?>">
-    <meta name="keyword" content="<?php echo config('admin.keyword')?>">
+    <meta name="keywords" content="<?php echo config('admin.keywords')?>">
     <meta name="author" content="<?php echo config('admin.author')?>">
-    <link rel="shortcut icon" href="<?php echo config('admin.favicon')?>">
+    <link rel="shortcut icon" href="<?php echo config('admin.favicon');?>">
     <title><?php echo config('admin.title'); ?></title>
 
     <?php
