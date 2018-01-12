@@ -33,28 +33,14 @@
 
 </script>
 <body class="fixed-left" id="lxh-body">
-
-<section class="content"><?php echo $content;?></section>
-
-<!-- Begin page -->
 <div id="wrapper">
     <div id="lxh-app">
-        <!-- Top Bar Start -->
-        <?php echo $topbar;?>
-        <!-- Top Bar End -->
-
-        <!-- ========== Left Sidebar Start ========== -->
-        <?php echo $sitebar;?>
-        <!-- Left Sidebar End -->
-        <script id="iframe-tpl" type="text/html">
-            <div id="wrapper-{$name}" class="wrapper lxh-wrapper">
-                <div class="content-page">
-                    <div class="content"><div class="container"><iframe src="{$url}" scrolling="no"></iframe></div></div>
-                </div>
-            </div>
-        </script>
-        <!-- END wrapper -->
         <?php
+        // 输出顶部工具栏
+        echo $topbar;
+        // 输出左边导航栏
+        echo $sitebar;
+
         echo load_css('toastr.min', 'lib/plugins/toastr');
         echo load_js('toastr.min', 'plugins/toastr');
         ?>
@@ -62,13 +48,24 @@
 </div>
 
 <footer class="footer text-right"><?php echo config('admin.copyright')?></footer>
+<script id="iframe-tpl" type="text/html">
+    <div id="wrapper-{$name}" class="wrapper lxh-wrapper">
+        <div class="content-page">
+            <div class="content"><div class="container"><iframe src="{$url}" scrolling="no"></iframe></div></div>
+        </div>
+    </div>
+</script>
+
+<section class="content"><?php
+    // 输出内外内容
+    echo $content;
+?></section>
 
 <?php
 //echo load_js('fastclick');
 echo load_js('waves.min');
 echo load_js('jquery.slimscroll.min');
 ?>
-
 <script>
     var resizefunc = [];
     var IFRAME = new Iframe(),
@@ -89,6 +86,5 @@ echo load_js('jquery.slimscroll.min');
 <?php
 echo load_js('jquery.app');
 ?>
-
 </body>
 </html>
