@@ -11,17 +11,4 @@ use Lxh\MVC\Model;
 
 class Ability extends \Lxh\Auth\Database\Ability
 {
-    public function afterUpdate($id, array & $data, $result)
-    {
-    }
-
-    public function afterDelete($id, $result)
-    {
-    }
-
-    public function afterAdd($insertId, array & $data)
-    {
-        if (! $insertId) return;
-    }
-
 }

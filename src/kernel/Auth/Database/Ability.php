@@ -4,6 +4,7 @@ namespace Lxh\Auth\Database;
 
 use Lxh\Auth\AuthManager;
 use Lxh\MVC\Model;
+use Lxh\Support\Collection;
 
 class Ability extends Model
 {
@@ -56,6 +57,12 @@ class Ability extends Model
         ], $attributes);
     }
 
+    /**
+     * 根据用户获取权限
+     *
+     * @param Model $user
+     * @return array
+     */
     public function getForAuthority(Model $user)
     {
         $assignedAbilities = Models::table('assigned_abilities');
@@ -74,4 +81,59 @@ class Ability extends Model
             ->where("ar.entity_id", $user->getId())
             ->find();
     }
+
+    public function afterUpdate($id, array &$input, $result)
+    {
+        // 清除所有与此权限相关的用户权限缓存
+        auth()->refreshForAbility($this);
+    }
+
+    public function afterDelete($id, $result)
+    {
+        if ($result) {
+            $this->deleteAssigned();
+            // 清除所有与此权限相关的用户权限缓存
+            auth()->refreshForAbility($this);
+        }
+    }
+
+    /**
+     * 查找出有关联的id
+     *
+     * @return Collection
+     */
+    public function findRolesIds()
+    {
+        if (! $id = $this->getId()) {
+            return new Collection();
+        }
+
+        $type = Models::role()->getMorphType();
+
+        $r = $this->query()
+            ->from(Models::table('assigned_abilities'))
+            ->where('ability_id', $id)
+            ->where('entity_type', $type)
+            ->find();
+
+        return (new Collection((array) $r))->pluck('entity_id');
+    }
+
+    /**
+     * 删除已分配的权限信息
+     *
+     * @return bool|mixed
+     */
+    public function deleteAssigned()
+    {
+        if (! $id = $this->getId()) {
+            return false;
+        }
+
+        return $this->query()
+            ->from(Models::table('assigned_abilities'))
+            ->where('ability_id', $this->getId())
+            ->delete();
+    }
+
 }

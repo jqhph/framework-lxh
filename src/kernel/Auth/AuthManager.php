@@ -13,6 +13,7 @@ use Lxh\Auth\Clipboard;
 use Lxh\Auth\Database\Models;
 use Lxh\Support\Collection;
 use Lxh\Auth\Ability;
+use Lxh\Auth\Database\Ability as AbilityModel;
 
 class AuthManager
 {
@@ -280,6 +281,25 @@ class AuthManager
     }
 
     /**
+     * 删除有关权限的缓存
+     *
+     * @return $this
+     */
+    public function refreshForAbility(AbilityModel $ability)
+    {
+        if (! $this->usesCached) {
+           return $this;
+        }
+
+        foreach ($ability->findRolesIds()->all() as &$id) {
+            $role = Models::role();
+            $this->refreshForRole($role->setId($id));
+        }
+
+        return $this;
+    }
+
+    /**
      * @return bool|mixed
      */
     public function usesCached()
@@ -523,17 +543,19 @@ class AuthManager
      * 根据角色清除用户权限缓存
      *
      * @param Role $roles
-     * @return void
+     * @return $this
      */
     public function refreshForRole(Role $role)
     {
+        if (! $this->usesCached) return $this;
+
         foreach ($role->findUsersIds()->all() as &$id) {
             $user = Models::user();
 
-            $this->refreshFor($user->attach([
-                $user->getKeyName() => $id,
-            ]));
+            $this->refreshFor($user->setId($id));
         }
+
+        return $this;
     }
 
 
