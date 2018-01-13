@@ -174,7 +174,7 @@ class Admin extends Controller
      *
      * @return array
      */
-    public function actionRoleList(array $params)
+    public function actionRolesList(array $params)
     {
         if (! $id = get_value($params, 'id')) {
             return $this->error();

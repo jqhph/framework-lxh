@@ -10,11 +10,13 @@ namespace Lxh\Admin\Http\Controllers;
 
 use Lxh\Admin\Admin;
 use Lxh\Admin\Fields\Link;
+use Lxh\Admin\Fields\Tag;
 use Lxh\Admin\Filter;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Layout\Content;
 use Lxh\Admin\Table\Table;
 use Lxh\Admin\Widgets\Form;
+use Lxh\Auth\Database\Models;
 use Lxh\Exceptions\Forbidden;
 use Lxh\Helper\Valitron\Validator;
 
@@ -36,6 +38,19 @@ class Role extends Controller
         $table->text('title');
         $table->text('name');
         $table->text('comment');
+
+        $keyName = Models::getRoleKeyName();
+        $label = trans('Abilities');
+        $table->link('abilities')
+            ->then(function (Link $link) use ($keyName, $label) {
+                $id = $link->row($keyName);
+
+                $link->useAjaxModal()
+                    ->title($label)
+                    ->dataId($id)
+                    ->url('/api/role/abilities/' .$id)
+                    ->label(trans('list'));
+            });
         $table->date('created_at')->sortable();
         $table->date('modified_at')->sortable();
         $table->link('created_by')->then(function (Link $link) {
@@ -97,6 +112,27 @@ class Role extends Controller
         if ($this->model()->select('id')->where('name', $input['name'])->findOne()) {
             return $input['name'] . ' already exist.';
         }
+    }
+
+    public function actionAbilities(array $params)
+    {
+        if (! $id = get_value($params, 'id')) {
+            return $this->error();
+        }
+
+        $url = Admin::url('Ability');
+
+        $role = Models::role()->setId($id);
+
+        $tags = $role->findAbilitiesForRole()->map(function ($ability) use ($url) {
+            return (new Tag())->label($ability['title'])
+                ->url($url->detail($ability['ability_id']))
+                ->render();
+        });
+
+        return $this->success([
+            'content' => &$tags,
+        ]);
     }
 
     // 字段验证规则

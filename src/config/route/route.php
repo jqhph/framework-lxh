@@ -61,13 +61,24 @@ $config[] = [
 ];
 
 // 根据管理员id获取角色列表
+//$config[] = [
+//    'pattern' => '/api/admin/roles-list/:int[id]',
+//    'method' => 'GET',
+//    'params' => [
+//        'module' => 'Admin',
+//        'controller' => 'Admin',
+//        'action' => 'RoleList',
+//        'id' => ':int[id]'
+//    ]
+//];
+
 $config[] = [
-    'pattern' => '/api/admin/roles-list/:int[id]',
+    'pattern' => '/api/:lc[c]/:lc[a]/:int[id]',
     'method' => 'GET',
     'params' => [
         'module' => 'Admin',
-        'controller' => 'Admin',
-        'action' => 'RoleList',
+        'controller' => ':lc[c]',
+        'action' => ':lc[a]',
         'id' => ':int[id]'
     ]
 ];

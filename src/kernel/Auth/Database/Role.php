@@ -180,6 +180,34 @@ class Role extends Model
         return (new Collection((array)$r))->pluck('ability_id');
     }
 
+    /**
+     * 根据角色获取权限
+     *
+     * @return Collection
+     */
+    public function findAbilitiesForRole()
+    {
+        if (! $id = $this->getId()) {
+            return new Collection();
+        }
+
+        $ability = Models::table('ability');
+
+        $where = [
+            'entity_type' => $this->getMorphType(),
+            'entity_id' => $id
+        ];
+
+        $r = query()
+            ->select("ability_id,$ability.name,$ability.title")
+            ->from(Models::table('assigned_abilities'))
+            ->leftJoin($ability, "$ability.id", 'assigned_abilities.ability_id')
+            ->where($where)
+            ->find();
+
+        return (new Collection((array)$r));
+    }
+
     public function beforeUpdate($id, array &$input)
     {
         $data['modified_at'] = time();
