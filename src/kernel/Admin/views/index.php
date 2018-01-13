@@ -84,7 +84,7 @@ echo load_js('jquery.slimscroll.min');
 <![endif]-->
 
 <?php
-echo load_js('jquery.app');
+echo load_js('jquery.app.min');
 ?>
 </body>
 </html>
