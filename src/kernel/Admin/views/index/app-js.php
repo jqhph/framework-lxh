@@ -14,7 +14,7 @@ echo load_js('jquery.min');
 //echo load_js('bootstrap.min');
 //echo load_js('detect');
 //echo load_js('jquery.slimscroll.min');
-echo load_js('waves.min');
+//echo load_js('waves.min');
 
 ?>
 <script>

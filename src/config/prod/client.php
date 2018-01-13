@@ -41,7 +41,6 @@ $config['sea-config'] = [
         'container' => 'lib/js/container',
         'toastr' => 'lib/plugins/toastr/toastr.min',
         'core' => 'lib/js/jquery.core.min',
-        'blade' => 'lib/js/blade',
         'validate' => 'lib/js/validate.min',
     ]
 ];

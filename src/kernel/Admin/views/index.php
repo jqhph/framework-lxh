@@ -63,7 +63,7 @@
 
 <?php
 //echo load_js('fastclick');
-echo load_js('waves.min');
+//echo load_js('waves.min');
 echo load_js('jquery.slimscroll.min');
 ?>
 <script>
