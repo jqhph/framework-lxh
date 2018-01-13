@@ -54,9 +54,18 @@ class Th extends Widget
         $this->field = &$name;
         $this->value($name);
 
+        $this->show();
+
         if ($attributes) {
             parent::__construct((array) $attributes);
         }
+    }
+
+    public function disableResponsive()
+    {
+        unset($this->attributes['data-priority']);
+
+        return $this;
     }
 
     /**
@@ -187,6 +196,10 @@ class Th extends Widget
 
     public function render()
     {
+        if (! $this->value) {
+            $this->disableResponsive();
+        }
+
         return "<th {$this->formatAttributes()}>{$this->value}{$this->sorter()}</th>";
     }
 

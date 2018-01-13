@@ -516,8 +516,6 @@ class Table extends Widget
 
         if (get_isset($options, 'hide')) {
             $th->hide();
-        } else {
-            $th->show();
         }
 
         if (get_isset($options, 'sortable')) {
@@ -581,6 +579,8 @@ class Table extends Widget
                 $selector->row($row);
 
                 $th->value($selector->renderHead());
+
+                $th->disableResponsive();
                 return $selector->render();
             }));
         }
