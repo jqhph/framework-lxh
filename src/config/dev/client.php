@@ -37,7 +37,7 @@ $config['sea-config'] = [
     // 设置别名，方便调用
     'alias' => [
         'parsley' => 'lib/plugins/parsleyjs/dist/parsley.min',
-        'container' => 'lib/js/container',
+        'container' => 'lib/js/container.min',
         'toastr' => 'lib/plugins/toastr/toastr.min',
         'core' => 'lib/js/jquery.core.min',
         'validate' => 'lib/js/validate',
