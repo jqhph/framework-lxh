@@ -74,6 +74,8 @@ class Controller extends Base
         // 自定义grid
         $this->grid($grid, $content);
 
+        $this->gridPermit($grid);
+
         if ($this->filter) {
             // 添加过滤器，过滤器会根据搜索表单内容构建Sql where过滤语句
             // 当然，你也可以在Model中重新定义where语句内容
@@ -86,6 +88,36 @@ class Controller extends Base
 
         // 渲染模板
         return $content->render();
+    }
+
+    /**
+     * 权限判断
+     *
+     * @param Grid $grid
+     */
+    protected function gridPermit(Grid $grid)
+    {
+        $auth = auth();
+
+        // 检查是否有创建权限
+        if (!$auth->createable()) {
+            $grid->disableCreate();
+        }
+
+        // 检查是否有详情页查看权限
+        if (!$auth->detailable()) {
+            $grid->disableEdit();
+        }
+
+        // 检查是否有删除权限
+        if (!$auth->deleteable()) {
+            $grid->disableDelete();
+        }
+
+        // 检查是否允许批量删除
+        if ($auth->batchDeleteable()) {
+            $grid->allowBatchDelete();
+        }
     }
 
     /**
@@ -161,11 +193,11 @@ class Controller extends Base
      */
     public function actionDetail(array $params)
     {
-        // 判断是否有权限访问
-        if (! auth()->updateable()) {
+        if (! auth()->detailable()) {
             throw new Forbidden();
         }
 
+        // 判断是否有权限访问
         if (empty($params['id'])) {
             throw new Forbidden();
         }
@@ -180,6 +212,10 @@ class Controller extends Base
             $form->setId($id);
             // 自定义form表单
             $this->form($form, $content);
+
+            if (! auth()->updateable()) {
+                $form->disableSubmit();
+            }
         });
 
         $box->title(trans('Edit ' . __CONTROLLER__));

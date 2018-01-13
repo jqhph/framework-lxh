@@ -386,6 +386,16 @@ class AuthManager
     }
 
     /**
+     * 检查详情页查看权限
+     *
+     * @return bool
+     */
+    public function detailable($controller = __CONTROLLER__)
+    {
+        return $this->can($controller . '.' . Ability::DETAIL);
+    }
+
+    /**
      * 检查删除权限
      *
      * @return bool

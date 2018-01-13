@@ -15,6 +15,7 @@ class Ability
      */
     const READ = 'read';
     const CREATE = 'create';
+    const DETAIL = 'detail';
     const UPDATE = 'update';
     const DELETE = 'delete';
     const EXPORT = 'export';
@@ -29,6 +30,7 @@ class Ability
         return [
             '.' . static::READ,
             '.' . static::CREATE,
+            '.' . static::DETAIL,
             '.' . static::UPDATE,
             '.' . static::DELETE,
             '.' . static::EXPORT,

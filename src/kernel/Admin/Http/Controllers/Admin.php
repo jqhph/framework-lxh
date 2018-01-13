@@ -50,17 +50,7 @@ class Admin extends Controller
         $table->text('email');
         $table->text('mobile');
 
-        $keyName = Models::getUserKeyName();
-        $table->link('roles')
-            ->then(function (Link $link) use ($keyName) {
-                $id = $link->row($keyName);
-
-                $link->useAjaxModal()
-                    ->title(trans('Roles'))
-                    ->dataId($id)
-                    ->url('/api/admin/roles-list/' .$id)
-                    ->label(trans('list'));
-            });
+        $this->buildRoles($table);
 
         $table->checkbox('status');
         $table->checkbox('is_admin')->hide();
@@ -73,6 +63,25 @@ class Admin extends Controller
         $table->column(3, 'name', function (array $row, Td $td, Th $th, Tr $tr) {
             return $row['first_name'] . $row['last_name'];
         });
+    }
+
+    protected function buildRoles(Table $table)
+    {
+        if (!auth()->can('role.read')) {
+            return;
+        }
+
+        $keyName = Models::getUserKeyName();
+        $table->link('roles')
+            ->then(function (Link $link) use ($keyName) {
+                $id = $link->row($keyName);
+
+                $link->useAjaxModal()
+                    ->title(trans('Roles'))
+                    ->dataId($id)
+                    ->url('/api/admin/roles-list/' .$id)
+                    ->label(trans('list'));
+            });
     }
 
     public function filter(Filter $filter)
@@ -176,17 +185,40 @@ class Admin extends Controller
      */
     public function actionRolesList(array $params)
     {
+        $auth = auth();
+        if (!$auth->can('role.read')) {
+            throw new Forbidden();
+        }
+
         if (! $id = get_value($params, 'id')) {
             return $this->error();
         }
 
-        $admin = Models::user()->setId($id);
+        $selected = Models::user()->setId($id);
+        $selected = AuthManager::resolve($selected);
         $roleUrl = AdminCreator::url('Role');
-        $abUrl = AdminCreator::url('Ability');
         $roleKey = Models::getRoleKeyName();
+
+        if (! $auth->can('ability.read')) {
+            // 如果没有权限查看权限，则只显示角色信息
+            $tags = '';
+            foreach ($selected->roles()->all() as &$row) {
+                $tags .= (new Tag())
+                    ->label($row['title'])
+                    ->url($roleUrl->detail($row[$roleKey]))
+                    ->render();
+            }
+
+            return $this->success([
+                'content' => &$tags,
+            ]);
+        }
+
+        // 查看角色和角色所拥有的权限
+        $abUrl = AdminCreator::url('Ability');
         $abKey = Models::getAbilityKeyName();
 
-        $abilities = AuthManager::resolve($admin)
+        $abilities = $selected
             ->getAbilitiesGroupByRoles()
             ->map(function ($roles, $roleTitle) use ($roleUrl, $abUrl, $roleKey, $abKey) {
                 // 角色

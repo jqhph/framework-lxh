@@ -39,6 +39,23 @@ class Role extends Controller
         $table->text('name');
         $table->text('comment');
 
+        $this->buildAbilities($table);
+
+        $table->date('created_at')->sortable();
+        $table->date('modified_at')->sortable();
+        $table->link('created_by')->then(function (Link $link) {
+            $link->format(
+                Admin::url('Admin')->detail('{value}'), 'created_by_id'
+            );
+        });
+    }
+
+    protected function buildAbilities(Table $table)
+    {
+        // 检查是否有读取权限信息的权限
+        if (! auth()->can('ability.read')) {
+            return;
+        }
         $keyName = Models::getRoleKeyName();
         $label = trans('Abilities');
         $table->link('abilities')
@@ -51,13 +68,6 @@ class Role extends Controller
                     ->url('/api/role/abilities/' .$id)
                     ->label(trans('list'));
             });
-        $table->date('created_at')->sortable();
-        $table->date('modified_at')->sortable();
-        $table->link('created_by')->then(function (Link $link) {
-            $link->format(
-                Admin::url('Admin')->detail('{value}'), 'created_by_id'
-            );
-        });
     }
 
     protected function filter(Filter $filter)
@@ -122,6 +132,10 @@ class Role extends Controller
      */
     public function actionAbilities(array $params)
     {
+        if (! auth()->can('ability.read')) {
+            throw new Forbidden();
+        }
+
         if (! $id = get_value($params, 'id')) {
             return $this->error();
         }
