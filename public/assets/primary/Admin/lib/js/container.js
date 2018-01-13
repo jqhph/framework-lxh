@@ -488,7 +488,7 @@ window.Lxh = function (options) {
                 $container.find('[data-action="refresh"]').click(function () {
                     if (requesting) return;
                     delete contents[options.dataId];
-                    $container.then(_then)
+                    $container.then(null, null, _then)
                 });
 
                 // 获取服务器数据
@@ -497,6 +497,8 @@ window.Lxh = function (options) {
                         readyclick();
                         return callback(contents[id]);
                     }
+                    if (requesting) return;
+                    requesting = 1;
                     $loading = loading();
                     $.getJSON(url, function (data) {
                         readyclick();

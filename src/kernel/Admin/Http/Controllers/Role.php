@@ -114,6 +114,12 @@ class Role extends Controller
         }
     }
 
+    /**
+     * 权限列表查看接口
+     *
+     * @param array $params
+     * @return array
+     */
     public function actionAbilities(array $params)
     {
         if (! $id = get_value($params, 'id')) {
