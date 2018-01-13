@@ -2,7 +2,7 @@
 
 namespace Lxh\MVC;
 
-use Lxh\Admin\Http\Models\Model;
+use Lxh\MVC\Model;
 use Lxh\Cookie\Store AS Cookie;
 use Lxh\Session\Store AS SessionStore;
 use Lxh\Support\Password;
