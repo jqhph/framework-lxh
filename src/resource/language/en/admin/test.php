@@ -2,7 +2,7 @@
 return array (
   'options' => 
   array (
-    '多发点' => 
+    '多发点23456' => 
     array (
       1 => 'dfd',
     ),

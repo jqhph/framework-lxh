@@ -10,7 +10,8 @@
 		"erusev/parsedown": "^1.6",
 		"tijsverkoyen/css-to-inline-styles": "^2.2",
 		"psr/log": "^1.0",
-		"endroid/qrcode": "^2.5"
+		"endroid/qrcode": "^2.5",
+		"symfony/http-foundation": "^3.4"
 	},
 	"autoload": {
 		"psr-4": {

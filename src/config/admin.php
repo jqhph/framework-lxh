@@ -4,7 +4,7 @@ return [
     'title' => 'Lxh',
     'description' => '',
     'keywords' => '',
-    'author' => '',
+    'author' => 'Jqh',
     // 如果是图片需要自己写img标签和宽度
     'logo' => '<span style="font-size:42px;">L<span >xh</span></span>',
     // 如果是图片需要自己写img标签和宽度
@@ -16,5 +16,14 @@ return [
         'sitebar-collapse' => true,
         'max-tab' => 10,
         'default-avatar' => 'users/avatar-1.jpg',
+    ],
+
+    'operation-log' => [
+        'enable' => true,
+        'handler' => 'operator',
+    ],
+
+    'upload' => [
+
     ]
 ];

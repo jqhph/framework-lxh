@@ -19,6 +19,7 @@ use Lxh\Admin\Table\Th;
 use Lxh\Admin\Table\Tr;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Product extends Controller
 {
