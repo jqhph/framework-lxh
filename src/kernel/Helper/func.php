@@ -28,7 +28,7 @@ $GLOBALS['CONFIG']        = $GLOBALS['CONTAINER']->make('config');
 $GLOBALS['MODEL_FACTORY'] = $GLOBALS['CONTAINER']->make('model.factory');
 $GLOBALS['EVENTS']        = $GLOBALS['CONTAINER']->make('events');
 if ($GLOBALS['CONFIG']->get('use-language')) {
-    $GLOBALS['LANGUAGE'] = $GLOBALS['CONTAINER']->make('language.manager');
+    $GLOBALS['LANGUAGE'] = $GLOBALS['CONTAINER']->make('translator');
 }
 
 $GLOBALS['resource-server']  = $GLOBALS['CONFIG']->get('client-config.resource-server');
@@ -166,18 +166,6 @@ function load_img($name, $dir = 'images', $module = __MODULE__)
 function language()
 {
     return $GLOBALS['LANGUAGE'];
-}
-
-function _x($string, $context = null)
-{
-    if ($context === null) {
-        return _($string);
-    }
-
-    $contextString = "{$context}\004{$string}";
-    $translation = _($contextString);
-
-    return $translation == $contextString ? $string : $translation;
 }
 
 /**

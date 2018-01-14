@@ -13,7 +13,7 @@ use Lxh\Helper\Entity;
 use Lxh\Contracts\Container\Container;
 use Lxh\Helper\Util;
 
-class Manager
+class Translator
 {
     protected $container;
 

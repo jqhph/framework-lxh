@@ -242,7 +242,7 @@ class Application
 
                 $module = get_value($domains, $host);
 
-                $path = "{$this->root}config/route/{$module}.php";
+                $path = __CONFIG__ . "route/{$module}.php";
 
                 if (is_file($path)) {
                     $configPath = & $path;

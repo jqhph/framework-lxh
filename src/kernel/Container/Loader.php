@@ -149,9 +149,9 @@ trait Loader
             'class' => 'Lxh\Debug\Track',
             'dependencies' => 'container'
         ],
-        'language.manager' => [
+        'translator' => [
             'shared' => true,
-            'class' => 'Lxh\Language\Manager',
+            'class' => 'Lxh\Language\Translator',
             'dependencies' => 'container'
         ],
         'shutdown' => [
