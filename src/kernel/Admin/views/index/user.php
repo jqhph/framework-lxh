@@ -1,5 +1,5 @@
 <div class="user-img">
-    <img src="<?php echo $avatar?>" alt="user-img" title="Mat Helme" class="img-circle img-thumbnail img-responsive">
+    <img src="<?php echo $avatar?>" alt="user-img" class="img-circle img-thumbnail img-responsive">
     <div class="user-status offline"><i class="zmdi zmdi-dot-circle"></i></div>
 </div>
 <h5><a href="#"><?php echo $name?></a></h5>

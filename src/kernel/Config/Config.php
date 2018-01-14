@@ -63,9 +63,9 @@ class Config extends Entity
 
     public function __construct()
     {
-        $this->attachItems();
-
         $this->useCache = defined('USE_CONFIG_CACHE') ? USE_CONFIG_CACHE : true;
+
+        $this->attachItems();
     }
 
     /**

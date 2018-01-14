@@ -64,7 +64,7 @@ return array (
   ),
   'events' => 
   array (
-    'route.dispatch.after' => 
+    'response.send.before' => 
     array (
     ),
     'response.send.after' => 
@@ -75,6 +75,9 @@ return array (
     array (
     ),
     'route.dispatch.before' => 
+    array (
+    ),
+    'route.dispatch.after' => 
     array (
     ),
   ),
@@ -208,9 +211,7 @@ return array (
         'container' => 'lib/js/container.min',
         'toastr' => 'lib/plugins/toastr/toastr.min',
         'core' => 'lib/js/jquery.core.min',
-        'blade' => 'lib/js/blade',
         'validate' => 'lib/js/validate',
-        'router' => 'lib/js/router',
       ),
     ),
     'public-css' => 
@@ -285,12 +286,15 @@ return array (
   array (
     'title' => 'Lxh',
     'description' => '',
-    'keyword' => '',
-    'logo' => '<span>L<span >xh</span></span>',
+    'keywords' => '',
+    'author' => '',
+    'logo' => '<span style="font-size:25px;">L<span >xh</span></span>',
+    'sm-logo' => '<b>Lxh</b>',
     'favicon' => '',
     'copyright' => '2017 @copyright JQH',
     'index' => 
     array (
+      'sitebar-collapse' => true,
       'max-tab' => 10,
       'default-avatar' => 'users/avatar-1.jpg',
     ),

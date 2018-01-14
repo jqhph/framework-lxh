@@ -1,12 +1,21 @@
 <div class="topbar">
     <!-- LOGO -->
     <div class="topbar-left">
-        <a class="logo open-left"><?php echo config('admin.logo')?><i class="zmdi zmdi-layers"></i></a>
+        <a class="logo open-left">
+            <?php echo config('admin.logo')?>
+            <i class=""><?php echo config('admin.sm-logo');?></i>
+        </a>
     </div>
     <style>.page-title a{color:#505458}</style>
     <!-- Button mobile view to collapse sidebar menu -->
     <div class="navbar navbar-default" role="navigation">
         <div class="container">
+            <?php if (0) {?>
+            <div class="pull-left">
+                <button class="button-menu-mobile open-left" style="color:#fff;line-height:60px;margin-left:12px;font-size:18px;">
+                    <i class="zmdi zmdi-menu"></i></button></div>
+            <?php } ?>
+
             <div class="header-flex-box">
                 <nav class="header-tag">
                     <ul class="header-tag-list a tab-menu">
