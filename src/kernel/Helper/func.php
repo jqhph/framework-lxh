@@ -161,7 +161,7 @@ function load_img($name, $dir = 'images', $module = __MODULE__)
 /**
  * 获取语言包管理对象
  *
- * @return Manager
+ * @return \Lxh\Language\Translator
  */
 function language()
 {
