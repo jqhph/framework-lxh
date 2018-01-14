@@ -50,27 +50,26 @@ class Application
      */
     protected $events;
 
+    /**
+     * @var array
+     */
     protected $commands = [];
 
     /**
      * Application constructor.
      * @param string $rootDir 项目根目录
      */
-    public function __construct($rootDir = '')
+    public function __construct()
     {
-        define('__ROOT__', $rootDir . '/');
-
         ob_start();
 
-        $this->root = __ROOT__;
-
+        $this->define();
         $this->loadInitConfig();
         $this->loadFunctionFile();
         $this->loadServiceBindConfig();
 
         $this->events    = events();
         $this->container = container();
-
         $this->container->instance('app', $this);
 
         if ($timezone = config('timezone')) {
@@ -85,6 +84,18 @@ class Application
         $this->bindRouter();
     }
 
+    protected function define()
+    {
+        require __DIR__ . '/define.php';
+
+        $this->root = __ROOT__;
+    }
+
+    /**
+     * 获取web目录路径
+     *
+     * @return string
+     */
     public function getPublicPath()
     {
         if (defined('__PUBLIC_ROOT__')) {
@@ -92,6 +103,20 @@ class Application
         }
 
         return dirname($this->root) . '/public/';
+    }
+
+    /**
+     * 获取data目录路径
+     *
+     * @return string
+     */
+    public function getDataPath()
+    {
+        if (defined('__DATA_ROOT__')) {
+            return __DATA_ROOT__;
+        }
+
+        return dirname($this->root) . '/data/';
     }
 
     /**
@@ -120,7 +145,7 @@ class Application
             }
         }
 
-        $this->events->listen('exception', 'exception.handler');
+        $this->events->listen(EVENT_EXCEPTION, 'exception.handler');
     }
 
     /**
@@ -139,13 +164,16 @@ class Application
             $this->addListeners();
 
             // 触发路由匹配前置事件
-            $this->events->fire('route.dispatch.before', [$this->request, $this->response]);
+            $this->events->fire(EVENT_ROUTE_DISPATCH_BEFORE);
 
             $router = $this->container['router'];
 
             if (! $router->handle()) {
                 throw new NotFound();
             }
+
+            // 触发陆游匹配成功后事件
+            $this->events->fire(EVENT_ROUTE_DISPATCH_AFTER, [$router->requestParams]);
 
             $this->container['controller.manager']->handle($router);
 
@@ -164,7 +192,7 @@ class Application
     protected function loadFunctionFile()
     {
         require $this->root . 'kernel/Helper/func.php';
-        require $this->root . 'application/Kernel/Support/func.php';
+        require __APP__ . 'Kernel/Support/func.php';
     }
 
     /**
@@ -174,12 +202,20 @@ class Application
      */
     protected function loadInitConfig()
     {
-        require $this->root . 'config/ini.php';
+        require __CONFIG__ . 'ini.php';
+
+        // 如果没有定义当前环境常量，则默认为测试环境
+        if (! defined('__ENV__')) {
+            define('__ENV__', ENV_DEV);
+        }
+
+        require __CONFIG__ . __ENV__ . '/ini.php';
+
     }
 
     protected function loadServiceBindConfig()
     {
-        require $this->root . 'config/container/bind.php';
+        require __CONFIG__ . 'container/bind.php';
     }
 
     /**
@@ -192,7 +228,7 @@ class Application
         $this->container->singleton('router', function (Container $container) {
             $request = $container['http.request'];
 
-            $configPath = $this->root . 'config/route/route.php';
+            $configPath = __CONFIG__ . 'route/route.php';
 
             // 判断是否开启了子域名部署
             if (config('domain-deploy')) {

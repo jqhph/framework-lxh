@@ -170,8 +170,6 @@ class ControllerManager extends Factory
         $middleware = [];
 
         if ($this->first) {
-            $this->events->fire('route.dispatch.after', [$this->request, $this->response, $params]);
-
             // 添加公共中间件
             $this->addMiddleware($middleware);
         }
@@ -185,12 +183,12 @@ class ControllerManager extends Factory
             ->then(function ($middlewareParams) use ($contr, $action, $params) {
                 unset($middlewareParams['req'], $middlewareParams['resp'], $middlewareParams['params']);
                 // 存储路由参数
-                $this->request->withAttribute('route.params', $params);
+                $this->request->withAttribute('request.params', $params);
                 // 存储中间件参数
                 $this->request->withAttribute('mid.params', $middlewareParams);
 
                 if ($this->first) {
-                    $this->events->fire('route.auth.success', [&$params]);
+                    $this->events->fire(EVENT_AUTH_SUCCESS, [&$params]);
 
                     // 注册当前控制器
                     $this->container->instance('controller', $contr);

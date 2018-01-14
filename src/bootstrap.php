@@ -8,7 +8,7 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-$app = new Lxh\Application(__DIR__);
+$app = new Lxh\Application();
 
 $app->handle();
 

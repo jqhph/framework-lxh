@@ -229,22 +229,24 @@ class Response extends PsrResponse
 			return;
 		}
 
-		$this->events->fire('response.send.before', [$this->request, $this]);
+		$requestParams = $this->request->getAttribute('request.params');
+
+		$this->events->fire(EVENT_RESPONSE_BEFORE, [&$requestParams]);
 
 		$this->sendHeader();
 
 		if (($data = $this->normalizeContent()) !== false) {
-			$this->events->fire('response.send.after', [$this->request, $this]);
 
 			$this->sent = true;
 
 			echo ob_get_clean();
 
 			echo $data;
-
-			$this->sendConsole();
 		}
 
+        $this->events->fire(EVENT_RESPONSE_AFTER, [&$requestParams]);
+
+        $this->sendConsole();
 		$this->reportError();
 	}
 
@@ -279,7 +281,7 @@ class Response extends PsrResponse
 				return $this->data;
 			}
 		} catch (\Exception $e) {
-			$this->events->fire('exception', [$e]);
+			$this->events->fire(EVENT_EXCEPTION, [$e]);
 			return false;
 		}
 	}

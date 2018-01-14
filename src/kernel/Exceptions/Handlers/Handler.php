@@ -157,7 +157,7 @@ class Handler
 	 */
 	protected function responseError(\Exception $e)
 	{
-		$this->events->fire('exception.report', ['e' => $e]);
+		$this->events->fire(EVENT_EXCEPTION_REPORT, [$e]);
 
 		$code = $e->getCode();
 

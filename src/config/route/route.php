@@ -73,13 +73,13 @@ $config[] = [
 //];
 
 $config[] = [
-    'pattern' => '/api/:lc[c]/:lc[a]/:int[id]',
+    'pattern' => '/api/:lc@c/:lc@a/:int@id',
     'method' => 'GET',
     'params' => [
         'module' => 'Admin',
-        'controller' => ':lc[c]',
-        'action' => ':lc[a]',
-        'id' => ':int[id]'
+        'controller' => ':lc@c',
+        'action' => ':lc@a',
+        'id' => ':int@id'
     ]
 ];
 
@@ -96,58 +96,58 @@ $config[] = [
 ];
 
 $config[] = [
-    'pattern' => '/api/:lc[controller]/view/:int[id]',
+    'pattern' => '/api/:lc@c/view/:int@id',
     'method' => 'PUT',
     'params' => [
         'module' => 'Admin',
-        'controller' => ':lc[controller]',
+        'controller' => ':lc@c',
         'action' => 'Update',
-        'id' => ':int[id]'
+        'id' => ':int@id'
     ]
 ];
 
 // 删除单行数据路由
 $config[] = [
-    'pattern' => '/api/:lc[controller]/:int[id]',
+    'pattern' => '/api/:lc@c/:int@id',
     'method' => 'DELETE',
     'params' => [
         'module' => 'Admin',
-        'controller' => ':lc[controller]',
+        'controller' => ':lc@c',
         'action' => 'Delete',
-        'id' => ':int[id]'
+        'id' => ':int@id'
     ]
 ];
 
 // 批量删除路由
 $config[] = [
-    'pattern' => '/api/:lc[controller]/batch-delete',
+    'pattern' => '/api/:lc@c/batch-delete',
     'method' => 'POST,DELETE',
     'params' => [
         'module' => 'Admin',
-        'controller' => ':lc[controller]',
+        'controller' => ':lc@c',
         'action' => 'BatchDelete'
     ]
 ];
 
 $config[] = [
-    'pattern' => '/api/:lc[controller]',
+    'pattern' => '/api/:lc@c',
     'method' => 'POST',
     'params' => [
         'module' => 'Admin',
-        'controller' => ':lc[controller]',
+        'controller' => ':lc@c',
         'action' => 'Add',
         'id' => ':int[id]'
     ]
 ];
 
 $config[] = [
-    'pattern' => '/api/:lc[controller]/:lc[action]',
+    'pattern' => '/api/:lc@c/:lc@a',
     'method' => '*',
     'params' => [
         'auth' => false,
         'module' => 'Admin',
-        'controller' => ':lc[controller]',
-        'action' => ':lc[action]',
+        'controller' => ':lc@c',
+        'action' => ':lc@a',
     ]
 ];
 
@@ -164,21 +164,21 @@ $config[] = [
 
 
 $config[] = [
-    'pattern' => 'admin/:lc[controller]/:lc[action]',
+    'pattern' => 'admin/:lc@c/:lc@a',
     'method' => '*',
     'params' => [
         'module' => 'Admin',
-        'controller' => ':lc[controller]',
-        'action' => ':lc[action]'
+        'controller' => ':lc@c',
+        'action' => ':lc@a'
     ]
 ];
 
 $config[] = [
-    'pattern' => 'admin/:lc[controller]/view/:int',
+    'pattern' => 'admin/:lc@c/view/:int',
     'method' => 'GET',
     'params' => [
         'module' => 'Admin',
-        'controller' => ':lc[controller]',
+        'controller' => ':lc@c',
         'action' => 'Detail',
         'id' => ':int',
     ]

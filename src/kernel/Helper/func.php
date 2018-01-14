@@ -168,6 +168,18 @@ function language()
     return $GLOBALS['LANGUAGE'];
 }
 
+function _x($string, $context = null)
+{
+    if ($context === null) {
+        return _($string);
+    }
+
+    $contextString = "{$context}\004{$string}";
+    $translation = _($contextString);
+
+    return $translation == $contextString ? $string : $translation;
+}
+
 /**
  * @return FileManager
  */

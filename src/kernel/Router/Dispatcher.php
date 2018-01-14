@@ -40,7 +40,7 @@ class Dispatcher implements Router
      *
      * @var string
      */
-    protected $regularSymbol = '@';
+    protected $regularSymbol = '#';
 
     /**
      * 匹配任意路由规则符号
@@ -56,6 +56,9 @@ class Dispatcher implements Router
      */
     protected $regularSymbolByUri = '-';
 
+    /**
+     * @var string
+     */
     protected $defaultMethod = 'GET';
 
     /**
@@ -141,6 +144,16 @@ class Dispatcher implements Router
     ];
 
     /**
+     * @var string
+     */
+    protected $placeholderDelimiter = '@';
+
+    /**
+     * @var string
+     */
+    protected $requestMethod;
+
+    /**
      * Dispatcher constructor.
      * @param array $config
      */
@@ -148,6 +161,7 @@ class Dispatcher implements Router
     {
         $this->config = & $config;
 
+        $this->requestMethod = get_value($_SERVER, 'REQUEST_METHOD');
     }
 
     // 添加路由规则配置
@@ -315,7 +329,7 @@ class Dispatcher implements Router
 
         // 请求方法匹配，默认GET方法
         $method = get_value($rule, 'method', $this->defaultMethod);
-        if ($method != $this->anySymbol && (strpos($method, $_SERVER['REQUEST_METHOD']) === false)) {
+        if ($method != $this->anySymbol && (strpos($method, $this->requestMethod) === false)) {
             return false;
         }
 
@@ -355,7 +369,7 @@ class Dispatcher implements Router
     {
         foreach ($rule['pattern'] as $k => & $p) {
             // 特殊占位符匹配
-            $t = explode('[', $p);
+            $t = explode($this->placeholderDelimiter, $p);
             if (isset($this->placeholderPatterns[$t[0]])) {
                 if (! preg_match($this->placeholderPatterns[$t[0]], $patharr[$k])) {
                     return false;

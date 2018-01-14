@@ -108,8 +108,9 @@ class Track
      * @param Request $request
      * @param Response $response
      */
-    public function handle(Request $request, Response $response)
+    public function handle()
     {
+        $request = request();
         if ($this->checkResponseAccess($request)) {
             $this->response($request);
         }

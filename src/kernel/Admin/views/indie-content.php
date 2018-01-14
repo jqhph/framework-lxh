@@ -24,7 +24,7 @@ echo load_js('util.min');
 </div>
 
 <?php
-echo render_view('admin::app-js');
+echo view('admin::index.app-js')->render();
 ?>
 <script>
     (function (w) {

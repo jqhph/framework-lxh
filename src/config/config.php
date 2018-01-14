@@ -124,15 +124,15 @@ $config['record-error-info-level'] = [
  * exception             抛出异常时触发（异常处理事件）
  */
 $config['events'] = [
-    'route.dispatch.after' => [
+    EVENT_RESPONSE_BEFORE => [
     ],
-    'response.send.after' => [
+    EVENT_RESPONSE_AFTER => [
         'track'
     ],
     // 异常报告
-    'exception.report' => [],
-    'route.dispatch.before' => [],
-    'route.dispatch.after' => [],
+    EVENT_EXCEPTION_REPORT => [],
+    EVENT_ROUTE_DISPATCH_BEFORE => [],
+    EVENT_ROUTE_DISPATCH_AFTER => [],
 
 ];
 

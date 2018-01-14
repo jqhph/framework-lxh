@@ -8,4 +8,4 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-(new Lxh\Application(__DIR__))->console();
+(new Lxh\Application())->console();
