@@ -50,7 +50,6 @@ trait UploadField
      */
     protected function initStorage()
     {
-        $this->disk(config('admin.upload.disk'));
     }
 
     /**
@@ -68,16 +67,14 @@ trait UploadField
             'showUpload'           => false,
             'initialCaption'       => $this->initialCaption($this->value),
             'deleteExtraData'      => [
-                $this->column            => static::FILE_DELETE_FLAG,
-                static::FILE_DELETE_FLAG => '',
-                '_token'                 => csrf_token(),
+                '_token'                 => '',
                 '_method'                => 'PUT',
             ],
         ];
 
-        if ($this->form instanceof Form) {
-            $defaultOptions['deleteUrl'] = $this->form->resource().'/'.$this->form->model()->getKey();
-        }
+//        if ($this->form instanceof Form) {
+//            $defaultOptions['deleteUrl'] = $this->form->resource().'/'.$this->form->model()->getKey();
+//        }
 
         $this->options($defaultOptions);
     }
@@ -126,158 +123,6 @@ trait UploadField
     }
 
     /**
-     * Set disk for storage.
-     *
-     * @param string $disk Disks defined in `config/filesystems.php`.
-     *
-     * @return $this
-     */
-    public function disk($disk)
-    {
-        if (!array_key_exists($disk, config('filesystems.disks'))) {
-            $error = new MessageBag([
-                'title'   => 'Config error.',
-                'message' => "Disk [$disk] not configured, please add a disk config in `config/filesystems.php`.",
-            ]);
-
-            return session()->flash('error', $error);
-        }
-
-        $this->storage = Storage::disk($disk);
-
-        return $this;
-    }
-
-    /**
-     * Specify the directory and name for upload file.
-     *
-     * @param string      $directory
-     * @param null|string $name
-     *
-     * @return $this
-     */
-    public function move($directory, $name = null)
-    {
-        $this->dir($directory);
-
-        $this->name($name);
-
-        return $this;
-    }
-
-    /**
-     * Specify the directory upload file.
-     *
-     * @param string $dir
-     *
-     * @return $this
-     */
-    public function dir($dir)
-    {
-        if ($dir) {
-            $this->directory = $dir;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set name of store name.
-     *
-     * @param string|callable $name
-     *
-     * @return $this
-     */
-    public function name($name)
-    {
-        if ($name) {
-            $this->name = $name;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use unique name for store upload file.
-     *
-     * @return $this
-     */
-    public function uniqueName()
-    {
-        $this->useUniqueName = true;
-
-        return $this;
-    }
-
-    /**
-     * Get store name of upload file.
-     *
-     * @param UploadedFile $file
-     *
-     * @return string
-     */
-    protected function getStoreName(UploadedFile $file)
-    {
-        if ($this->useUniqueName) {
-            return $this->generateUniqueName($file);
-        }
-
-        if (is_callable($this->name)) {
-            $callback = $this->name->bindTo($this);
-
-            return call_user_func($callback, $file);
-        }
-
-        if (is_string($this->name)) {
-            return $this->name;
-        }
-
-        return $file->getClientOriginalName();
-    }
-
-    /**
-     * Get directory for store file.
-     *
-     * @return mixed|string
-     */
-    public function getDirectory()
-    {
-        if ($this->directory instanceof \Closure) {
-            return call_user_func($this->directory, $this->form);
-        }
-
-        return $this->directory ?: $this->defaultDirectory();
-    }
-
-    /**
-     * Upload file and delete original file.
-     *
-     * @param UploadedFile $file
-     *
-     * @return mixed
-     */
-    protected function upload(UploadedFile $file)
-    {
-        $this->renameIfExists($file);
-
-        return $this->storage->putFileAs($this->getDirectory(), $file, $this->name);
-    }
-
-    /**
-     * If name already exists, rename it.
-     *
-     * @param $file
-     *
-     * @return void
-     */
-    public function renameIfExists(UploadedFile $file)
-    {
-        if ($this->storage->exists("{$this->getDirectory()}/$this->name")) {
-            $this->name = $this->generateUniqueName($file);
-        }
-    }
-
-    /**
      * Get file visit url.
      *
      * @param $path
@@ -286,7 +131,7 @@ trait UploadField
      */
     public function objectUrl($path)
     {
-        if (URL::isValidUrl($path)) {
+        if (is_valid_url($path)) {
             return $path;
         }
 
@@ -312,8 +157,5 @@ trait UploadField
      */
     public function destroy()
     {
-        if ($this->storage->exists($this->original)) {
-            $this->storage->delete($this->original);
-        }
     }
 }

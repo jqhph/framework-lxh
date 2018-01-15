@@ -24,6 +24,13 @@ return [
     ],
 
     'upload' => [
+        'disk' => 'admin',
 
+        'directory' => [
+            'image' => 'upload/image',
+            'file'  => 'upload/file',
+        ],
+
+        'host' => '',
     ]
 ];

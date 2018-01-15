@@ -16,7 +16,7 @@ class File extends Field
      * @var array
      */
     protected static $css = [
-        '/packages/admin/bootstrap-fileinput/css/fileinput.min.css?v=4.3.7',
+        '/packages/admin/bootstrap-fileinput/css/fileinput.min',
     ];
 
     /**
@@ -25,21 +25,21 @@ class File extends Field
      * @var array
      */
     protected static $js = [
-        '/packages/admin/bootstrap-fileinput/js/plugins/canvas-to-blob.min.js?v=4.3.7',
-        '/packages/admin/bootstrap-fileinput/js/fileinput.min.js?v=4.3.7',
+        '/packages/admin/bootstrap-fileinput/js/plugins/canvas-to-blob.min',
+        '/packages/admin/bootstrap-fileinput/js/fileinput.min',
     ];
 
     /**
      * Create a new File instance.
      *
      * @param string $column
-     * @param array  $arguments
+     * @param mixed  $label
      */
-    public function __construct($column, $arguments = [])
+    public function __construct($column, $label = '')
     {
         $this->initStorage();
 
-        parent::__construct($column, $arguments);
+        parent::__construct($column, $label);
     }
 
     /**
@@ -50,80 +50,6 @@ class File extends Field
     public function defaultDirectory()
     {
         return config('admin.upload.directory.file');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getValidator(array $input)
-    {
-        if (request()->has(static::FILE_DELETE_FLAG)) {
-            return false;
-        }
-
-        /*
-         * If has original value, means the form is in edit mode,
-         * then remove required rule from rules.
-         */
-        if ($this->original()) {
-            $this->removeRule('required');
-        }
-
-        /*
-         * Make input data validatable if the column data is `null`.
-         */
-        if (array_has($input, $this->column) && is_null(array_get($input, $this->column))) {
-            $input[$this->column] = '';
-        }
-
-        $rules = $attributes = [];
-
-        if (!$fieldRules = $this->getRules()) {
-            return false;
-        }
-
-        $rules[$this->column] = $fieldRules;
-        $attributes[$this->column] = $this->label;
-
-        return Validator::make($input, $rules, [], $attributes);
-    }
-
-    /**
-     * Prepare for saving.
-     *
-     * @param UploadedFile|array $file
-     *
-     * @return mixed|string
-     */
-    public function prepare($file)
-    {
-        if (request()->has(static::FILE_DELETE_FLAG)) {
-            return $this->destroy();
-        }
-
-        $this->name = $this->getStoreName($file);
-
-        return $this->uploadAndDeleteOriginal($file);
-    }
-
-    /**
-     * Upload file and delete original file.
-     *
-     * @param UploadedFile $file
-     *
-     * @return mixed
-     */
-    protected function uploadAndDeleteOriginal(UploadedFile $file)
-    {
-        $this->renameIfExists($file);
-
-        $target = $this->getDirectory().'/'.$this->name;
-
-        $this->storage->put($target, file_get_contents($file->getRealPath()));
-
-        $this->destroy();
-
-        return $target;
     }
 
     /**
@@ -178,9 +104,7 @@ class File extends Field
         $options = json_encode($this->options);
 
         $this->script = <<<EOT
-
 $("input{$this->getElementClassSelector()}").fileinput({$options});
-
 EOT;
 
         return parent::render();

@@ -539,6 +539,21 @@ function is_cli()
 }
 
 /**
+ * Determine if the given path is a valid URL.
+ *
+ * @param  string  $path
+ * @return bool
+ */
+function is_valid_url($path)
+{
+    if (! preg_match('~^(#|//|https?://|mailto:|tel:)~', $path)) {
+        return filter_var($path, FILTER_VALIDATE_URL) !== false;
+    }
+
+    return true;
+}
+
+/**
  * 获取pdo连接实例
  *
  * @param  string $name 对应配置文件数据库配置键名

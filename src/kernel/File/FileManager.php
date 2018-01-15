@@ -5,6 +5,7 @@ use Dotenv\Exception\InvalidFileException;
 use Lxh\Config\Config;
 use Lxh\Exceptions\Error;
 use Lxh\Helper\Util;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileManager
 {
@@ -90,13 +91,40 @@ class FileManager
     }
 
     /**
+     * Store the uploaded file on the disk with a given name.
+     *
+     * @param  string  $path
+     * @param  UploadedFile  $file
+     * @param  string  $name
+     * @param  array  $options
+     * @return string|false
+     */
+    public function putFileAs($path, $file, $name, $options = [])
+    {
+        $stream = fopen($file->getRealPath(), 'r+');
+
+        // Next, we will format the path of the file and store the file using a stream since
+        // they provide better performance than alternatives. Once we write the file this
+        // stream will get closed automatically by us so the developer doesn't have to.
+        $result = $this->putContents(
+            $path = trim($path.'/'.$name, '/'), $stream, $options
+        );
+
+        if (is_resource($stream)) {
+            fclose($stream);
+        }
+
+        return $result ? $path : false;
+    }
+
+    /**
      * Convert file list to a single array
      *
-     * @param aray $fileList
+     * @param array $fileList
      * @param bool $onlyFileType [null, true, false] - Filter for type of files/directories.
      * @param string $parentDirName
      *
-     * @return aray
+     * @return array
      */
     protected function getSingeFileList(array $fileList, $onlyFileType = null, $parentDirName = '')
     {
