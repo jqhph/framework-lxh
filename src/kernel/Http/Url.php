@@ -13,6 +13,11 @@ class Url
     protected static $current;
 
     /**
+     * @var string
+     */
+    protected static $savekey = '_REFERER';
+
+    /**
      * @var Request
      */
     protected $request;
@@ -22,8 +27,14 @@ class Url
      */
     protected $uri;
 
+    /**
+     * @var array
+     */
     protected $query = [];
 
+    /**
+     * @var string
+     */
     protected $path;
 
     public function __construct(Uri $uri = null)
@@ -50,6 +61,34 @@ class Url
         return static::$current;
     }
 
+    /**
+     * 缓存当前url到cookie
+     *
+     * @return void
+     */
+    public function save()
+    {
+        cookie()->forever(static::$savekey, $this->string());
+    }
+
+    /**
+     * 获取保存的url
+     *
+     * @param null $def
+     * @return mixed
+     */
+    public static function referer($def = null)
+    {
+        $cookie = cookie();
+        $referer = $cookie->get(static::$savekey, $def);
+        $cookie->delete(static::$savekey);
+        return $referer;
+    }
+
+    /**
+     * @param UriInterface $uri
+     * @return $this
+     */
     public function setUri(UriInterface $uri)
     {
         $this->uri = $uri;

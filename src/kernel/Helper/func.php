@@ -460,6 +460,22 @@ function response()
 }
 
 /**
+ * @return \Lxh\Cookie\Store
+ */
+function cookie()
+{
+    return $GLOBALS['CONTAINER']['cookie'];
+}
+
+/**
+ * @return \Lxh\Session\Store
+ */
+function session()
+{
+    return $GLOBALS['CONTAINER']['session'];
+}
+
+/**
  * @return \Lxh\Http\Url
  */
 function url()

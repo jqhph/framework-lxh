@@ -59,6 +59,36 @@ class Url
     }
 
     /**
+     * 登录url
+     *
+     * @return string
+     */
+    public function login()
+    {
+        return "/{$this->prefix}/login";
+    }
+
+    /**
+     * 注册url
+     *
+     * @return string
+     */
+    public function register()
+    {
+        return "/{$this->prefix}/register";
+    }
+
+    /**
+     * 登出url
+     *
+     * @return string
+     */
+    public function logout()
+    {
+        return "/{$this->prefix}/logout";
+    }
+
+    /**
      * 普通自定义action
      *
      * @param $action

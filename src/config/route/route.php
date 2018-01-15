@@ -152,7 +152,7 @@ $config[] = [
 ];
 
 $config[] = [
-    'pattern' => '/lxh/login',
+    'pattern' => '/admin/login',
     'method' => 'GET',
     'params' => [
         'auth' => false,

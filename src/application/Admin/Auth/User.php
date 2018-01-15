@@ -9,6 +9,7 @@
 namespace Lxh\Admin\Auth;
 
 use Closure;
+use Lxh\Admin\Admin;
 use Lxh\Http\Response;
 use Lxh\Http\Request;
 use Lxh\Contracts\Container\Container;
@@ -37,10 +38,18 @@ class User
         $this->response = $resp;
     }
 
+    /**
+     * @param array $options
+     * @param Closure $next
+     * @return mixed
+     */
     public function handle(array $options, Closure $next)
     {
-        if (! admin()->id) {
-            return $this->response->redirect('/lxh/login');
+        $admin = admin();
+        if (! $admin->getId()) {
+            request()->url()->save();
+
+            return $this->response->redirect(Admin::url()->login());
         }
 
         return $next($options);

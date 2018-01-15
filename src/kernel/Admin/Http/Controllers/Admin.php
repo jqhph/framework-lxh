@@ -19,6 +19,7 @@ use Lxh\Auth\AuthManager;
 use Lxh\Auth\Database\Models;
 use Lxh\Exceptions\Forbidden;
 use Lxh\Helper\Valitron\Validator;
+use Lxh\Http\Url;
 
 class Admin extends Controller
 {
@@ -274,7 +275,9 @@ class Admin extends Controller
             return $this->failed();
         }
 
-        return $this->success();
+        $target = Url::referer() ?: AdminCreator::url()->home();
+
+        return $this->success(['target' => $target]);
     }
 
     /**

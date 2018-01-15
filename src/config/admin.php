@@ -8,7 +8,7 @@ return [
     // 如果是图片需要自己写img标签和宽度
     'logo' => '<span style="font-size:42px;">L<span >xh</span></span>',
     // 如果是图片需要自己写img标签和宽度
-    'sm-logo' => '<b>Lxh</b>',
+    'sm-logo' => '<b style="font-style:italic">Lxh</b>',
     'favicon' => '',
     'copyright' => '2017 @copyright JQH',
 
