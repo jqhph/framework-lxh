@@ -209,10 +209,12 @@ class Table extends Widget
     }
 
     /**
+     * Call when rendering
      *
      * @param \Closure $then
+     * @return $this
      */
-    public function then(\Closure $then)
+    public function rendering(\Closure $then)
     {
         if (! $this->field) {
             return $this;

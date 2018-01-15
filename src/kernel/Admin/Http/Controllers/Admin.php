@@ -74,7 +74,7 @@ class Admin extends Controller
 
         $keyName = Models::getUserKeyName();
         $table->link('roles')
-            ->then(function (Link $link) use ($keyName) {
+            ->rendering(function (Link $link) use ($keyName) {
                 $id = $link->row($keyName);
 
                 $link->useAjaxModal()

@@ -43,7 +43,7 @@ class Role extends Controller
 
         $table->date('created_at')->sortable();
         $table->date('modified_at')->sortable();
-        $table->link('created_by')->then(function (Link $link) {
+        $table->link('created_by')->rendering(function (Link $link) {
             $link->format(
                 Admin::url('Admin')->detail('{value}'), 'created_by_id'
             );
@@ -59,7 +59,7 @@ class Role extends Controller
         $keyName = Models::getRoleKeyName();
         $label = trans('Abilities');
         $table->link('abilities')
-            ->then(function (Link $link) use ($keyName, $label) {
+            ->rendering(function (Link $link) use ($keyName, $label) {
                 $id = $link->row($keyName);
 
                 $link->useAjaxModal()
@@ -145,9 +145,10 @@ class Role extends Controller
         $role = Models::role()->setId($id);
 
         $tags = $role->findAbilitiesForRole()->map(function ($ability) use ($url) {
-            return (new Tag())->label($ability['title'])
-                ->url($url->detail($ability['ability_id']))
-                ->render();
+            $tag = new Tag();
+            $tag->label($ability['title'] ?: $ability['name']);
+            $tag->url($url->detail($ability['ability_id']));
+            return $tag->render();
         });
 
         return $this->success([
