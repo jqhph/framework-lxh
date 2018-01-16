@@ -22,7 +22,7 @@ class Factory
 
     public function __construct(Container $container)
     {
-        $this->driver = config('view.version', 'php');
+        $this->driver = config('view.driver', 'php');
         $this->controller = Util::convertWith(__CONTROLLER__, true, '-');
 
         $this->module = Util::convertWith(__MODULE__, true, '-');

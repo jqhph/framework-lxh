@@ -279,6 +279,9 @@ class Model extends Entity
         $this->beforeAdd($input);
 
         $this->insertId = $this->query()->add($input);
+        if ($this->insertId) {
+            $this->setId($this->insertId);
+        }
 
         $this->afterAdd($this->insertId, $input);
 
