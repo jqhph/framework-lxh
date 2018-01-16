@@ -29,8 +29,14 @@ class Query
 	 */
 	protected $connection;
 
+    /**
+     * @var string
+     */
 	protected $connectionName = 'primary';
 
+    /**
+     * @var string
+     */
 	protected $defaultConnectionType = 'primary';
 
 	public function __construct(Container $container)
@@ -223,8 +229,19 @@ class Query
 	}
 
     /**
+     * @param $whereString
+     * @param array $prepareData
+     */
+    public function havingRaw($whereString, array $prepareData = [])
+    {
+        $this->builder->havingRaw($whereString, $prepareData);
+
+        return $this;
+    }
+
+    /**
      *
-    ->whereOrs([
+    ->whereOr([
         'test' => 1, 'test2' => 2,
     ])
      *
@@ -235,6 +252,17 @@ class Query
     {
         $type = 'OR';
         $this->builder->where($type, $where);
+        return $this;
+    }
+
+    /**
+     * @param array $where
+     * @return $this
+     */
+    public function havingOr(array $where)
+    {
+        $type = 'OR';
+        $this->builder->having($type, $where);
         return $this;
     }
 
@@ -258,6 +286,19 @@ class Query
             'OR+' => $where
         ];
         $this->builder->where($where);
+        return $this;
+    }
+
+    /**
+     * @param array $where
+     * @return $this
+     */
+    public function havingOrs(array $where)
+    {
+        $where = [
+            'OR+' => $where
+        ];
+        $this->builder->having($where);
         return $this;
     }
 
