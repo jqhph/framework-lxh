@@ -523,6 +523,26 @@ function url()
 }
 
 /**
+ * 后台模块名
+ *
+ * @return mixed
+ */
+function admin_name()
+{
+    return config('admin-name', 'Admin');
+}
+
+/**
+ * 定义前台模块名
+ *
+ * @return mixed
+ */
+function home_name()
+{
+    return config('home-name', 'Home');
+}
+
+/**
  * 手动调用控制器接口
  *
  * @return mixed

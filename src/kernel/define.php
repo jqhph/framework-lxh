@@ -67,3 +67,18 @@ define('EVENT_RESPONSE_BEFORE', 'response.send.before');
  *
  */
 define('EVENT_RESPONSE_AFTER', 'response.send.after');
+
+// 主题插件
+define('PLUGIN_THEME', 'theme');
+
+// 功能插件
+define('PLUGIN_FUNCTION', 'function');
+
+// 前台插件
+define('PLUGIN_BELONG_HOME', 'home');
+
+// 后台插件
+define('PLUGIN_BELONG_ADMIN', 'admin');
+
+// 前后台插件
+define('PLUGIN_BELONG_BOTH', 'both');

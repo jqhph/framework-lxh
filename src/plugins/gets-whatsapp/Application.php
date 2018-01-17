@@ -44,7 +44,8 @@ class Application implements PluginRegister
     protected function registerRouter()
     {
         $prefix = 'whatsapp';
-        $module = 'Admin';
+        // 后台模块
+        $module = admin_name();
         $namespace = "GetsWhatsApp\\Http\\Controllers";
 
         $this->router->attach([
