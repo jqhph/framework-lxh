@@ -34,6 +34,8 @@ class Ability extends Model
 
     protected function beforeAdd(array &$input)
     {
+        parent::beforeAdd($input);
+
         $input['name'] = AuthManager::normalizName($input['name']);
         $input['created_at']    = time();
         $input['created_by_id'] = admin()->getId();
@@ -41,6 +43,8 @@ class Ability extends Model
 
     protected function beforeUpdate($id, array &$input)
     {
+        parent::beforeUpdate($id, $input);
+
         $input['name'] = AuthManager::normalizName($input['name']);
         $input['modified_at'] = time();
     }
@@ -84,12 +88,16 @@ class Ability extends Model
 
     public function afterUpdate($id, array &$input, $result)
     {
+        parent::afterUpdate($id, $input, $result);
+
         // 清除所有与此权限相关的用户权限缓存
         auth()->refreshForAbility($this);
     }
 
     public function afterDelete($id, $result)
     {
+        parent::afterDelete($id, $result);
+
         if ($result) {
             $this->deleteAssigned();
             // 清除所有与此权限相关的用户权限缓存

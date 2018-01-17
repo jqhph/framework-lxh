@@ -67,6 +67,8 @@ class User extends Session
 
     protected function beforeUpdate($id, array & $data)
     {
+        parent::beforeUpdate($id, $data);
+        
         unset($data['cookie']);
         unset($data['session']);
     }

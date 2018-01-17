@@ -31,6 +31,10 @@ if ($GLOBALS['CONFIG']->get('use-language')) {
     $GLOBALS['LANGUAGE'] = $GLOBALS['CONTAINER']->make('translator');
 }
 
+//if ($GLOBALS['CONFIG']->get('plugins')) {
+//    $GLOBALS['PLUGINDISPATCHER'] = $GLOBALS['CONTAINER']->make('plugin.manager');
+//}
+
 $GLOBALS['resource-server']  = $GLOBALS['CONFIG']->get('client-config.resource-server');
 $GLOBALS['js-version']       = $GLOBALS['CONFIG']->get('js-version');
 $GLOBALS['css-version']      = $GLOBALS['CONFIG']->get('css-version');
@@ -107,7 +111,6 @@ function make($abstract)
 }
 
 
-
 /**
  * 获取单例模型
  *
@@ -127,6 +130,27 @@ function model($name = __CONTROLLER__)
 function events()
 {
     return $GLOBALS['EVENTS'];
+}
+
+/**
+ * @param $event
+ * @param array $payload
+ * @param bool $halt
+ * @return mixed
+ */
+function fire($event, $payload = [], $halt = false)
+{
+    return $GLOBALS['EVENTS']->fire($event, $payload, $halt);
+}
+
+/**
+ * @param $event
+ * @param $listener
+ * @param int $priority
+ */
+function listen($event, $listener, $priority = 0)
+{
+    $GLOBALS['EVENTS']->listen($event, $listener, $priority);
 }
 
 /**
@@ -176,6 +200,21 @@ function files()
     return $GLOBALS['CONTAINER']->make('files');
 }
 
+/**
+ * 驼峰转化为小写中划线
+ *
+ * @param $name
+ * @return string
+ */
+function lc_dash($name)
+{
+    $symbol = '-';
+    $text = preg_replace_callback('/([A-Z])/', function (& $text) use ($symbol) {
+        return $symbol . strtolower($text[1]);
+    }, $name);
+
+    return ltrim($text, $symbol);
+}
 
 /**
  * Translate label/labels

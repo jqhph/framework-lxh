@@ -46,6 +46,8 @@ class Admin extends Session
 
     public function beforeAdd(array &$input)
     {
+        parent::beforeAdd($input);
+
         $input['created_at'] = time();
         $input['created_by_id'] = admin()->getId() ?: 0;
         $input['password'] = Password::encrypt($input['password']);
@@ -56,6 +58,8 @@ class Admin extends Session
 
     protected function beforeUpdate($id, array &$input)
     {
+        parent::beforeUpdate($id, $input);
+
         if (! empty($input['password'])) {
             $input['password'] = Password::encrypt($input['password']);
         } else {
@@ -69,6 +73,8 @@ class Admin extends Session
 
     protected function afterAdd($insertId, array &$input)
     {
+        parent::afterAdd($insertId, $input);
+
         if (! $insertId) return;
 
         if ($this->roles) {
@@ -78,6 +84,8 @@ class Admin extends Session
 
     protected function afterUpdate($id, array &$input, $result)
     {
+        parent::afterUpdate($id, $input, $result);
+
         AuthManager::resolve($this)
             ->assign($this->roles)
             ->retract() // 先重置所有已关联角色
@@ -87,6 +95,8 @@ class Admin extends Session
 
     protected function afterDelete($id, $result)
     {
+        parent::afterDelete($id, $result);
+
         if (! $id) return;
 
         AuthManager::resolve($this)

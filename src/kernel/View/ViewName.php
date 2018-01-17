@@ -16,7 +16,7 @@ class ViewName
     {
 //        $delimiter = ViewFinderInterface::HINT_PATH_DELIMITER;
 
-        return Util::convertWith(str_replace('/', '.', $name), true, '-');
+        return lc_dash(str_replace('/', '.', $name));
 //        if (strpos($name, $delimiter) === false) {
 //
 //        }

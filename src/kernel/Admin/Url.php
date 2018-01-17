@@ -36,7 +36,7 @@ class Url
      */
     protected function scope($scope)
     {
-        $this->scope = Util::convertWith($scope, true, '-');
+        $this->scope = lc_dash($scope);
 
         return $this;
     }
@@ -97,7 +97,7 @@ class Url
      */
     public function action($action = __ACTION__, $id = null)
     {
-        $action = Util::convertWith($action, true, '-');
+        $action = lc_dash($action);
 
         $id = $id ? "/$id" : '';
 

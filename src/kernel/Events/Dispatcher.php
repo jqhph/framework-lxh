@@ -3,10 +3,13 @@
 namespace Lxh\Events;
 
 use Lxh\Contracts\Container\Container;
-use Lxh\Helper\Str;
+use Lxh\Support\Str;
 
 class Dispatcher implements \Lxh\Contracts\Events\Dispatcher
 {
+	/**
+	 * @var Container
+	 */
 	protected $container;
 	
 	/**

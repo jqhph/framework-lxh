@@ -84,11 +84,22 @@ abstract class Controller
         $this->initialize();
     }
 
+    /**
+     * @return mixed
+     */
     protected function parseName()
     {
         $names = explode('\\', __CLASS__);
 
         return end($names);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getLowerCaseDashName()
+    {
+        return lc_dash($this->name);
     }
 
 

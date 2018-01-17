@@ -41,8 +41,9 @@ class Menu extends Model
 
     protected function beforeAdd(array &$input)
     {
-        $input['created_at'] = $_SERVER['REQUEST_TIME'];
+        parent::beforeAdd($input);
 
+        $input['created_at'] = $_SERVER['REQUEST_TIME'];
         $input['created_by_id'] = admin()->getId();
 
         if (empty($input['show'])) {
@@ -63,7 +64,6 @@ class Menu extends Model
         }
         if (! $this->quickAbility) return;
 
-//        $controller = Util::convertWith($input['controller'], true, '-');
         $abilityName = $this->quickAbility;
 
         $abilityModel = Models::ability();
@@ -110,19 +110,25 @@ class Menu extends Model
     // 保存数据前置钩子
     protected function beforeUpdate($id, array &$input)
     {
+        parent::beforeUpdate($id, $input);
+
         if (isset($input['show'])) {
             if (! $input['show']) $input['show'] = 0;
         }
         $this->setupAbility($input);
     }
+//
+//    protected function afterAdd($insertId, array & $input)
+//    {
+//        parent::afterAdd($insertId, $input);
+//
+//        if (! $insertId) return;
+//    }
 
-    protected function afterAdd($insertId, array & $input)
+    protected function afterUpdate($id, array &$input, $result)
     {
-        if (! $insertId) return;
-    }
+        parent::afterUpdate($id, $input, $result);
 
-    protected function afterUpdate($id, array & $input, $result)
-    {
         if ($id) {
             // 刷新缓存
             auth()->menu()->refresh();
@@ -132,6 +138,8 @@ class Menu extends Model
     // 删除后置钩子方法
     protected function afterDelete($id, $result)
     {
+        parent::afterDelete($id, $result);
+
         if (! $result) return;
 
         // 如果删除成功，把所有的下级菜单也一并删除

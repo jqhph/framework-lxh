@@ -10,6 +10,7 @@ use Lxh\Admin\Widgets\Form;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Table\Table;
 use Lxh\Exceptions\Forbidden;
+use Lxh\Helper\Util;
 use Lxh\Helper\Valitron\Validator;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
@@ -56,6 +57,11 @@ class Controller extends Base
         $content->header(trans(__CONTROLLER__));
         $content->description(trans(__CONTROLLER__ . ' list'));
 
+        $evt = $this->getLowerCaseDashName();
+        $list = "admin.$evt.list";
+        // 列表页创建grid前
+        fire($list . '.grid.before', [$content]);
+
         if ($this->filter) {
             // 构建搜索界面
             $filter = $content->filter();
@@ -64,6 +70,9 @@ class Controller extends Base
             $this->filter($filter);
             // 开启弹窗模式
             $this->filter == 'modal' && $filter->useModal();
+
+            // 列表页创建filter后
+            fire($list . '.filter', [$filter]);
         }
 
         $this->beforeGridCreate($content);
@@ -84,7 +93,10 @@ class Controller extends Base
 
         // 自定义表格
         // 可以自定义行、列、表头的内容和样式等，也可以追加列
-        $this->table($grid->table());
+        $this->table($table = $grid->table());
+
+        // 列表页创建grid后
+        fire($list . '.grid.after', [$grid, $table]);
 
         // 渲染模板
         return $content->render();
@@ -167,15 +179,26 @@ class Controller extends Base
         $content->header(trans(__CONTROLLER__));
         $content->description(trans(__CONTROLLER__ . ' form'));
 
+        $evt = $this->getLowerCaseDashName();
+        $evt = "admin.$evt.create";
+
+        // 新建页创建from前
+        fire($evt . '.form.before', [$content]);
+
         $this->beforeFormCreate($content);
 
-        $box = $content->form(function (Form $form) use ($content) {
-            $this->form($form, $content);
+        $form = '';
+        $box = $content->form(function (Form $f) use ($content, $form) {
+            $form = $f;
+            $this->form($f, $content);
         });
 
         $box->title(trans('Create ' . __CONTROLLER__));
 
         $this->formBox($box);
+
+        // 列表页创建form后
+        fire($evt . '.form.after', [$content, $form, $box]);
 
         return $content->render();
     }
@@ -207,7 +230,15 @@ class Controller extends Base
         $content->header(trans(__CONTROLLER__));
         $content->description(trans(__CONTROLLER__ . ' form'));
 
-        $box = $content->form(function (Form $form) use ($id, $content) {
+        $evt = $this->getLowerCaseDashName();
+        $evt = "admin.$evt.detail";
+
+        // 详情页创建from前
+        fire($evt . '.form.before', [$this->id, $content]);
+
+        $form = '';
+        $box = $content->form(function (Form $f) use ($id, $content, $form) {
+            $form = $f;
             // 设置id，用于查询当前行数据
             $form->setId($id);
             // 自定义form表单
@@ -221,6 +252,9 @@ class Controller extends Base
         $box->title(trans('Edit ' . __CONTROLLER__));
 
         $this->formBox($box);
+
+        // 详情页创建from前
+        fire($evt . '.form.after', [$this->id, $content, $form, $box]);
 
         return $content->render();
     }

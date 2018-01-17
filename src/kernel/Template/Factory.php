@@ -23,9 +23,9 @@ class Factory
     public function __construct(Container $container)
     {
         $this->driver = config('view.driver', 'php');
-        $this->controller = Util::convertWith(__CONTROLLER__, true, '-');
+        $this->controller = lc_dash(__CONTROLLER__);
 
-        $this->module = Util::convertWith(__MODULE__, true, '-');
+        $this->module = lc_dash(__MODULE__);
         $this->viewVersion = config('view.version', 'primary');
 
         // 判断是否使用blade模板引擎

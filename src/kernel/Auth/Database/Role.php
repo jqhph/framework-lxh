@@ -218,6 +218,8 @@ class Role extends Model
 
     public function afterUpdate($id, array &$input, $result)
     {
+        parent::afterUpdate($id, $input, $result);
+
         $this->resetAbilities();
         $this->assignAbilities($this->abilities);
         // 清除相关用户缓存
@@ -226,6 +228,8 @@ class Role extends Model
 
     public function afterDelete($id, $result)
     {
+        parent::afterDelete($id, $result);
+
         if (! $result) return;
 
         $this->resetAbilities();
@@ -234,6 +238,8 @@ class Role extends Model
 
     public function beforeAdd(array &$input)
     {
+        parent::beforeAdd($input);
+
         $input['created_at']    = time();
         $input['created_by_id'] = admin()->getId();
 
@@ -243,6 +249,8 @@ class Role extends Model
 
     public function afterAdd($insertId, array &$input)
     {
+        parent::afterAdd($insertId, $input);
+        
         if (! $insertId) return;
 
         if ($this->abilities) {

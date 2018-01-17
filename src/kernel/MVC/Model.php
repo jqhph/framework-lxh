@@ -27,6 +27,11 @@ class Model extends Entity
     protected $selectFields = '*';
 
     /**
+     * @var string
+     */
+    protected $module = '';
+
+    /**
      * 模型名称
      *
      * @var string
@@ -52,6 +57,9 @@ class Model extends Entity
      */
     protected $container;
 
+    /**
+     * @var string
+     */
     protected $connectionType = 'primary';
 
     /**
@@ -63,7 +71,8 @@ class Model extends Entity
 
     public function __construct($name = null, Container $container = null)
     {
-        $this->modelName = $name ?: $this->parseName();
+        $this->modelName = lc_dash($name ?: $this->parseName());
+        $this->module = lc_dash(__MODULE__);
 
         if (! $this->tableName) $this->tableName = Util::convertWith($name, true);
 
@@ -164,10 +173,18 @@ class Model extends Entity
 
     protected function beforeBatchDelete(array &$ids)
     {
+        fire(
+            "{$this->module}.{$this->modelName}.batch-delete.before",
+            [$ids]
+        );
     }
 
     protected function afterBatchDelete(array &$ids)
     {
+        fire(
+            "{$this->module}.{$this->modelName}.batch-delete.after",
+            [$ids]
+        );
     }
 
     /**
@@ -326,7 +343,10 @@ class Model extends Entity
      */
     protected function beforeDelete($id)
     {
-
+        fire(
+            "{$this->module}.{$this->modelName}.delete.before",
+            [&$id]
+        );
     }
 
     /**
@@ -338,7 +358,10 @@ class Model extends Entity
      */
     protected function afterDelete($id, $result)
     {
-
+        fire(
+            "{$this->module}.{$this->modelName}.delete.after",
+            [&$id, $result]
+        );
     }
 
     /**
@@ -364,25 +387,37 @@ class Model extends Entity
     // 新增操作钩子方法，新增前调用
     protected function beforeAdd(array &$input)
     {
-
+        fire(
+            "{$this->module}.{$this->modelName}.add.before",
+            [&$input]
+        );
     }
 
     // 新增操作钩子方法
     protected function afterAdd($insertId, array &$input)
     {
-
+        fire(
+            "{$this->module}.{$this->modelName}.add.after",
+            [$insertId, &$input]
+        );
     }
 
     // 修改钩子方法，修改前调用
     protected function beforeUpdate($id, array &$input)
     {
-
+        fire(
+            "{$this->module}.{$this->modelName}.update.before",
+            [$id, &$input]
+        );
     }
 
     // 修改钩子方法
     protected function afterUpdate($id, array &$input, $result)
     {
-
+        fire(
+            "{$this->module}.{$this->modelName}.update.after",
+            [$id, &$input, $result]
+        );
     }
 
     /**

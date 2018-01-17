@@ -190,7 +190,9 @@ class Config extends Entity
         }
     }
 
-    // 保存缓存
+    /**
+     * 保存缓存
+     */
     public function saveCache()
     {
         if (! $this->useCache) return;
@@ -278,6 +280,9 @@ class Config extends Entity
         return $this->getBasePath() . $this->env . "/$filename.php";
     }
 
+    /**
+     * @return string
+     */
     protected function getWritableConfigPath()
     {
         return $this->getEnvConfigPath($this->writeableFileName);
@@ -293,7 +298,13 @@ class Config extends Entity
 
         $config = (array) include $path;
 
-        return files()->putPhpContents($path, Util::unsetInArray($config, $key), true);
+        $result = files()->putPhpContents($path, Util::unsetInArray($config, $key), true);
+
+        $this->removeCache();
+        $this->refetch();
+        $this->saveCache();
+
+        return $result;
     }
 
     /**

@@ -316,7 +316,7 @@ class AuthManager
      */
     public static function normalizName($name)
     {
-        return Util::convertWith($name, true, '-');
+        return lc_dash($name);
     }
 
     /**

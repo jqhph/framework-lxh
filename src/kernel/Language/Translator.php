@@ -99,7 +99,7 @@ class Translator
 
         $c = $container->make('controller.manager');
 
-        $this->moduleName = Util::convertWith($c->moduleName(), true, '-');
+        $this->moduleName = lc_dash($c->moduleName());
 
     }
 
@@ -219,7 +219,7 @@ class Translator
     {
         $lang = $lang ?: $this->language;
 
-        $scope = Util::convertWith($scope, true, '-');
+        $scope = lc_dash($scope);
 
 //        if ($scope == 'Global') {
 //            return "{$this->root}{$this->dir}/{$lang}/$scope.php";
