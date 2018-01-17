@@ -68,6 +68,27 @@ define('EVENT_RESPONSE_BEFORE', 'response.send.before');
  */
 define('EVENT_RESPONSE_AFTER', 'response.send.after');
 
+/**
+ * 菜单管理类被实例化时触发，监听此事件可以增加插件菜单
+ *
+ * @param Lxh\Auth\Menu
+ */
+define('EVENT_MENU_RESOLVING', 'menu.resolving');
+
+/**
+ * 加载后台首页时触发
+ *
+ * @param Lxh\Admin\Index
+ */
+define('EVENT_ADMIN_INDEX', 'admin.index.index');
+
+/**
+ * 加载后台dashboard页时触发
+ *
+ * @param Lxh\Admin\Layout\Content
+ */
+define('EVENT_ADMIN_DASHBOARD', 'admin.index.dashboard');
+
 // 主题插件
 define('PLUGIN_THEME', 'theme');
 

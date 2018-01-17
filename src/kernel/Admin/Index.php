@@ -4,6 +4,7 @@ namespace Lxh\Admin;
 
 use Closure;
 use Lxh\Admin\Layout\Content;
+use Lxh\Admin\Layout\Row;
 use Lxh\Admin\Widgets\Navbar;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\MVC\Model;
@@ -181,7 +182,7 @@ class Index
      * 增加行内容
      *
      * @param $row
-     * @return $this
+     * @return Content
      */
     public function row($row)
     {

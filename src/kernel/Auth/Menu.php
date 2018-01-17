@@ -79,7 +79,7 @@ class Menu
         $this->model = model('Menu');
         $this->cache = File::create('__menu__');
 
-        fire('menu.resolve', [$this]);
+        fire('menu.resolving', [$this]);
     }
 
     /**
@@ -225,6 +225,23 @@ class Menu
         $this->pluginsMenus[] = &$content;
 
         return $this;
+    }
+
+    /**
+     * @param $label
+     * @param null $url
+     * @return string
+     */
+    public function buildRow($label, $url = null)
+    {
+        $label = trans($label, 'menus');
+        $tab = '';
+        if ($url) {
+            $id = str_replace('/', '-', $url);
+            $tab = "onclick=\"TAB.switch('$id', '$url', '$label')\"";
+        }
+
+        return "<a $tab>$label</a>";
     }
 
     /**

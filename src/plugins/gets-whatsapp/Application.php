@@ -6,12 +6,13 @@ use Lxh\Auth\AuthManager;
 use Lxh\Auth\Menu;
 use Lxh\Container\Container;
 use Lxh\Contracts\PluginRegister;
-use Lxh\Router\Dispatcher;
+use Lxh\Plugins\Dispatcher;
+use Lxh\Router\Dispatcher as Router;
 
 class Application implements PluginRegister
 {
     /**
-     * @var Dispatcher
+     * @var Router
      */
     protected $router;
 
@@ -29,8 +30,12 @@ class Application implements PluginRegister
     {
         $this->registerRouter();
 
-        listen('menu.resolve', function (Menu $menu) {
-            $menu->addPlugin('<a>test</a>');
+        // 创建菜单
+        listen(EVENT_MENU_RESOLVING, function (Menu $menu) {
+            // 权限判断
+            if (auth()->can('whatsapp')) {
+                $menu->addPlugin($menu->buildRow('test', '/whatsapp/test'));
+            }
         });
 
     }

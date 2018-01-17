@@ -32,7 +32,7 @@ class Index extends Controller
         $index = $this->admin()->index();
 
         // 触发加载首页事件
-        fire(Dispatcher::ADMININDEX, $index);
+        fire(EVENT_ADMIN_INDEX, $index);
 
         return $index->render();
     }
@@ -43,7 +43,7 @@ class Index extends Controller
         $content = $this->admin()->content();
 
         // 触发加载dashboard页事件
-        fire(Dispatcher::ADMINDASHBOARD, $content);
+        fire(EVENT_ADMIN_DASHBOARD, $content);
 
         return $content->render();
     }
