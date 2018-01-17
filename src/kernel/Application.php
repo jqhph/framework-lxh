@@ -14,6 +14,7 @@ use Lxh\Contracts\Events\Dispatcher;
 use Lxh\Helper\Console;
 use Lxh\Http\Response;
 use Lxh\Http\Request;
+use Lxh\Plugins\Plugin;
 use Lxh\Router\Dispatcher as Router;
 use Lxh\View\ViewServiceProvider;
 use Symfony\Component\Console\Input\ArgvInput;
@@ -62,6 +63,9 @@ class Application
         $this->events    = events();
         $this->container = container();
         $this->container->instance('app', $this);
+        $this->response = $this->container['http.response'];
+        $this->request = $this->container['http.request'];
+        $this->bindRouter();
 
         // 设置时区
         if ($timezone = config('timezone')) {
@@ -70,7 +74,7 @@ class Application
         register_shutdown_function([$this, 'shutdown']);
         // 记录程序执行开始时间
         debug_track('start');
-        $this->bindRouter();
+        
     }
 
     /**
@@ -117,6 +121,17 @@ class Application
 //        $this->events->fire('app.shutdown');
         $this->container['http.response']->send();
     }
+
+    /**
+     * 注册插件
+     */
+    protected function registerPlugins()
+    {
+        foreach (config('plugins') as $name => &$namespace) {
+            Plugin::createApplication($namespace)->register();
+        }
+    }
+
     /**
      * 添加事件监听者
      *
@@ -131,6 +146,7 @@ class Application
         }
         $this->events->listen(EVENT_EXCEPTION, 'exception.handler');
     }
+
     /**
      * 运行WEB应用
      *
@@ -139,8 +155,6 @@ class Application
     public function handle()
     {
         try {
-            $this->response = $this->container['http.response'];
-            $this->request = $this->container['http.request'];
             // 添加事件监听
             $this->addListeners();
             // 触发路由调度前事件
@@ -203,24 +217,37 @@ class Application
      */
     protected function bindRouter()
     {
-        $this->container->singleton('router', function (Container $container) {
-            $request = $container['http.request'];
-            $configPath = __CONFIG__ . 'route/route.php';
-            // 判断是否开启了子域名部署
-            if (config('domain-deploy')) {
-                $domains = config('domain-deploy-config');
-                $host = $request->host();
-                if (substr_count($host, '.') < 2) {
-                    $host = 'www.' . $host;
-                }
-                $module = get_value($domains, $host);
-                $path = __CONFIG__ . "route/{$module}.php";
-                if (is_file($path)) {
-                    $configPath = & $path;
-                }
+        $router = new Router();
+        // 先注册路由
+        $this->container->instance('router', $router);
+
+        // 再注册插件
+        $this->registerPlugins();
+
+        // 最后注册路由规则
+        $router->attach($this->getRouteRules());
+    }
+
+    /**
+     * @return array
+     */
+    protected function getRouteRules()
+    {
+        $configPath = __CONFIG__ . 'route/route.php';
+        // 判断是否开启了子域名部署
+        if (config('domain-deploy')) {
+            $domains = config('domain-deploy-config');
+            $host = $this->request->host();
+            if (substr_count($host, '.') < 2) {
+                $host = 'www.' . $host;
             }
-            return new Router((array) include $configPath);
-        });
+            $module = get_value($domains, $host);
+            $path = __CONFIG__ . "route/{$module}.php";
+            if (is_file($path)) {
+                $configPath = & $path;
+            }
+        }
+        return (array) include $configPath;
     }
 
     /**

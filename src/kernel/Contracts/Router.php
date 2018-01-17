@@ -27,7 +27,7 @@ interface Router
      * @param  array $config
      * @return $this
      */
-    public function fill(array $config);
+    public function attach(array $config);
 
     /**
      * 执行匹配操作

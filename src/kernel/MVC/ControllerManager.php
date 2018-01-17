@@ -23,6 +23,7 @@ use Lxh\Events\Dispatcher as Events;
 
 class ControllerManager extends Factory
 {
+
     /**
      * @var string
      */
@@ -32,6 +33,11 @@ class ControllerManager extends Factory
      * @var string
      */
     protected $defaultAction = 'List';// 默认方法
+
+    /**
+     * @var string
+     */
+    protected $controllerClass;
 
     /**
      * @var string
@@ -276,30 +282,32 @@ class ControllerManager extends Factory
      */
     public function create($name)
     {
-        $className = 'Lxh\\' . $this->module . '\\Controllers\\';
-        if ($this->folder) {
-            $className .= $this->folder . '\\';
+        if ($this->controllerClass) {
+            $className = &$this->controllerClass;
+        } else {
+            $className = 'Lxh\\' . $this->module . '\\Controllers\\';
+            if ($this->folder) {
+                $className .= $this->folder . '\\';
 
-            $this->folder = null;
-        }
-        if (get_value($this->requestParams, 'api')) {
-            $apiClass = $className . "Api\\$name";
-            if (class_exists($apiClass)) {
-                $className = $apiClass;
+                $this->folder = null;
+            }
+            if (get_value($this->requestParams, 'api')) {
+                $apiClass = $className . "Api\\$name";
+                if (class_exists($apiClass)) {
+                    $className = $apiClass;
+                } else {
+                    $className .= $name;
+                }
             } else {
                 $className .= $name;
             }
-        } else {
-            $className .= $name;
         }
 
-        if (class_exists($className)) {
-            $instance = new $className($name, $this->container, $this);
+//        if (class_exists($className)) {
+        return new $className($name, $this->container, $this);
+//        }
 
-            return $instance;
-        }
-
-        throw new NotFound("Controller '$className' not exists.", false);
+//        throw new NotFound("Controller '$className' not exists.", false);
     }
 
     /**
@@ -444,6 +452,13 @@ class ControllerManager extends Factory
      */
     protected function setControllerName($name)
     {
+        if (strpos($name, '\\') !== false) {
+            // 传递的是完整类名
+            $this->controllerClass = $name;
+
+            $name = explode('\\', $name);
+            $name = end($name);
+        }
         $this->controllerName = $name ? Util::toCamelCase($name, true, '-') : $this->defaultController;
     }
 

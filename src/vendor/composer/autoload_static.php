@@ -56,6 +56,7 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
             'GuzzleHttp\\Psr7\\' => 16,
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
+            'GetsWhatsApp\\' => 13,
         ),
         'E' => 
         array (
@@ -152,6 +153,10 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         'GuzzleHttp\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
+        ),
+        'GetsWhatsApp\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/plugins/gets-whatsapp',
         ),
         'Endroid\\QrCode\\' => 
         array (
@@ -263,6 +268,8 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         'File_Iterator' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Iterator.php',
         'File_Iterator_Facade' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Facade.php',
         'File_Iterator_Factory' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Factory.php',
+        'GetsWhatsApp\\Application' => __DIR__ . '/../..' . '/plugins/gets-whatsapp/Application.php',
+        'GetsWhatsApp\\Installer\\Handler' => __DIR__ . '/../..' . '/plugins/gets-whatsapp/Installer/Handler.php',
         'GuzzleHttp\\Client' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/Client.php',
         'GuzzleHttp\\ClientInterface' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/ClientInterface.php',
         'GuzzleHttp\\Cookie\\CookieJar' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/Cookie/CookieJar.php',

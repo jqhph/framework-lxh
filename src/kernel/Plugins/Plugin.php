@@ -136,6 +136,24 @@ class Plugin
         return $this->application;
     }
 
+
+    /**
+     * @param $namespace
+     * @param $plugin
+     * @return PluginRegister
+     */
+    public static function createApplication($namespace)
+    {
+        $class = "$namespace\\Application";
+
+        $app = new $class();
+
+        if (!$app instanceof PluginRegister) {
+            throw new InvalidArgumentException("Invalid class Application");
+        }
+        return $app;
+    }
+
     /**
      * 检查配置文件是否存在
      *
@@ -226,8 +244,8 @@ class Plugin
         // 检查注册类是否有效
         $app = $this->getApplication();
         if (! $app instanceof PluginRegister) {
-            $class = get_class($app);
-            $interf = PluginRegister::class;
+//            $class = get_class($app);
+//            $interf = PluginRegister::class;
             throw new InvalidArgumentException("Invalid class Application");
         }
     }

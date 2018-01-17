@@ -19,7 +19,7 @@ class Dispatcher implements Router
      *
      * @var array
      */
-    protected $config = [];
+    protected $rules = [];
 
     /**
      * $_SERVER['REQUEST_URI']，去除“?”以及后面的参数
@@ -167,77 +167,58 @@ class Dispatcher implements Router
     protected function setup(array &$config)
     {
         if (config('admin.use-admin-routes', true)) {
-            $this->config = include __DIR__ . '/admin-routes.php';
+            $this->rules = include __DIR__ . '/admin-routes.php';
         }
 
-        $this->config = array_merge($this->config, $config);
+        $this->rules = array_merge($this->rules, $config);
     }
 
     /**
      * 添加路由规则配置
      *
-     * @param array $config
+     * @param array $rule
      * @return $this
      */
-    public function add(array $config)
+    public function add(array $rule)
     {
-        $this->config[] = & $config;
+        $this->rules[] = &$rule;
         return $this;
     }
 
     /**
-     * @param array $config
+     * @param array $rules
      *
      * @return $this
      */
-    public function fill(array $config)
+    public function attach(array $rules)
     {
-        $this->config = & $config;
+        $this->rules = array_merge($this->rules, $rules);
+        return $this;
     }
 
     /**
-     * @return array
-     */
-    public function config()
-    {
-        return $this->config;
-    }
-
-    /**
-     * 开始匹配路由
-     *
-     * @return bool
-     */
-    public function handle()
-    {
-        // 解析路由
-        return $this->matchResult = $this->dispatch();
-
-    }
-
-    /**
-     * 解析路由
+     * 路由调度
      *
      * @return string
      */
-    protected function dispatch()
+    public function handle()
     {
         $patharr = $this->getPathArr();
 
         $pathlen = count($patharr);
 
         // 匹配路由
-        foreach ($this->getRouterRules() as & $rule) {
+        foreach ($this->rules() as & $rule) {
             if (empty($rule['pattern'])) continue;
 
             if ($this->matchingPattern($rule, $patharr, $pathlen)) {
                 // 匹配成功，保存路由信息
                 $this->save($rule, $patharr);
-                return true;
+                return $this->matchResult = true;
             }
         }
 
-        return false;
+        return $this->matchResult = false;
     }
 
     /**
@@ -266,7 +247,7 @@ class Dispatcher implements Router
 
         $params = [];// 参数
 
-        foreach (get_value($rule, 'params', []) as $k => & $p) {
+        foreach ((array)get_value($rule, 'params') as $k => & $p) {
             switch ($k) {
                 case 'controller':
                     $contr = & $p;
@@ -319,6 +300,11 @@ class Dispatcher implements Router
         }
         if (! $realAction) {
             $realAction = & $action;
+        }
+
+        // 控制器命名空间
+        if ($namespace = get_value($params, 'namespace')) {
+            $realContr = $namespace . '\\' . $realContr;
         }
 
         // 控制器文件夹
@@ -438,9 +424,9 @@ class Dispatcher implements Router
     }
 
     // 获取路由规则
-    public function getRouterRules()
+    public function rules()
     {
-        return $this->config;
+        return $this->rules;
     }
 
     // 去除空值并重置key  array_values(array_filter($arr))

@@ -19,6 +19,9 @@
             "Lxh\\": [
                 "kernel\/",
                 "application\/"
+            ],
+            "GetsWhatsApp\\": [
+                "plugins\/gets-whatsapp"
             ]
         }
     },
