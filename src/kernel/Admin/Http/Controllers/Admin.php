@@ -76,11 +76,12 @@ class Admin extends Controller
         $table->link('roles')
             ->rendering(function (Link $link) use ($keyName) {
                 $id = $link->row($keyName);
+                $api = AdminCreator::url()->api('roles-list', $id);
 
                 $link->useAjaxModal()
                     ->title(trans('Roles'))
                     ->dataId($id)
-                    ->url('/api/admin/roles-list/' .$id)
+                    ->url($api)
                     ->label(trans('list'));
             });
     }

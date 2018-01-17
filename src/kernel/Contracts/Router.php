@@ -17,7 +17,7 @@ interface Router
      * 添加路由配置
      *
      * @param  array $config
-     * @return void
+     * @return $this
      */
     public function add(array $config);
 
@@ -25,7 +25,7 @@ interface Router
      * 设置路由配置
      *
      * @param  array $config
-     * @return void
+     * @return $this
      */
     public function fill(array $config);
 

@@ -26,6 +26,7 @@ echo load_js('jquery.min');
     require_js('lib/js/bootstrap.min');
     // 配置
     function get_config() {
+        window.APIPREFIX = '/admin/api/';
         var data = {};
         // 容器配置
         data.options = <?php
@@ -40,15 +41,15 @@ echo load_js('jquery.min');
                 'action' => __ACTION__,
                 'config' => & $config,
                 'users' => admin()->all(),
-                'dataApi' => 'api/data'
+                'dataApi' => '/admin/api/js/data'
             ]);
             ?>
             // seajs配置
-            data.seaConfig = data.options.config['sea-config']
+            data.seaConfig = data.options.config['sea-config'];
         // 需要载入的css
-        data.publicCss = data.options.config['public-css']
+        data.publicCss = data.options.config['public-css'];
         // 需要载入的js
-        data.publicJs = data.options.config['public-js']
+        data.publicJs = data.options.config['public-js'];
         // 需要载入的语言包模块
         data.langScopes = <?php echo json_encode(['Global', __CONTROLLER__]);?>
 

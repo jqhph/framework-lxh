@@ -92,14 +92,16 @@ class Url
      * 普通自定义action
      *
      * @param $action
-     * @param $controller
+     * @param $id
      * @return string
      */
-    public function action($action = __ACTION__)
+    public function action($action = __ACTION__, $id = null)
     {
         $action = Util::convertWith($action, true, '-');
 
-        return "/{$this->prefix}/$this->scope/$action";
+        $id = $id ? "/$id" : '';
+
+        return "/{$this->prefix}/$this->scope/action/{$action}{$id}";
     }
 
     /**
@@ -116,9 +118,10 @@ class Url
      * @param $id
      * @return string
      */
-    public function api($action)
+    public function api($action, $id = null)
     {
-        return "/{$this->prefix}/api/$this->scope/action/$action";
+        $id = $id ? "/$id" : '';
+        return "/{$this->prefix}/api/$this->scope/{$action}{$id}";
     }
 
     /**

@@ -159,23 +159,45 @@ class Dispatcher implements Router
      */
     public function __construct(array $config = [])
     {
-        $this->config = & $config;
+        $this->setup($config);
 
         $this->requestMethod = get_value($_SERVER, 'REQUEST_METHOD');
     }
 
-    // 添加路由规则配置
+    protected function setup(array &$config)
+    {
+        if (config('admin.use-admin-routes', true)) {
+            $this->config = include __DIR__ . '/admin-routes.php';
+        }
+
+        $this->config = array_merge($this->config, $config);
+    }
+
+    /**
+     * 添加路由规则配置
+     *
+     * @param array $config
+     * @return $this
+     */
     public function add(array $config)
     {
         $this->config[] = & $config;
+        return $this;
     }
 
-    // 设置路由规则配置
+    /**
+     * @param array $config
+     *
+     * @return $this
+     */
     public function fill(array $config)
     {
         $this->config = & $config;
     }
 
+    /**
+     * @return array
+     */
     public function config()
     {
         return $this->config;
@@ -218,6 +240,9 @@ class Dispatcher implements Router
         return false;
     }
 
+    /**
+     * @return array
+     */
     protected function getPathArr()
     {
         $patharr = explode('/', $this->getPath());

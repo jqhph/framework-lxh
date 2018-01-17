@@ -12,6 +12,9 @@ return [
     'favicon' => '',
     'copyright' => '2017 @copyright JQH',
 
+    // 使用默认路由
+    'use-admin-routes' => true,
+
     'index' => [
         'sitebar-collapse' => true,
         'max-tab' => 10,

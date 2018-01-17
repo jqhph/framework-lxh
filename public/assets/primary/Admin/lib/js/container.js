@@ -900,7 +900,7 @@ window.Lxh = function (options) {
              *
              * @type {string}
              */
-            apiPrefix: '/api/',
+            apiPrefix: '/admin/api/',
 
             /**
              * 请求方法
@@ -975,6 +975,7 @@ window.Lxh = function (options) {
             }
         };
 
+        store.apiPrefix = window.APIPREFIX || store.apiPrefix;
         store.formHandler = container.form();
         store.name = name;
         // 保存初始数据
