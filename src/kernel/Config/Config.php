@@ -215,7 +215,7 @@ class Config extends Entity
     public function load($path)
     {
         if (! isset($this->loaded[$path])) {
-            $file = $this->getBasePath() . $path;
+            $file = $this->normalizePath($path);
             if (is_file($file)) {
                 throw new InvalidArgumentException('The config file is not exist! [' . $path . ']');
             }
@@ -224,6 +224,14 @@ class Config extends Entity
         }
 
         return $this;
+    }
+
+    protected function normalizePath(&$path)
+    {
+        if (strpos($path, '/') === 0 || strpos($path, ':')) {
+            return $path;
+        }
+        return $this->getBasePath() . $path;
     }
 
     /**
