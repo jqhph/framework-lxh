@@ -78,6 +78,8 @@ class Menu
         $this->auth = $auth ?: auth();
         $this->model = model('Menu');
         $this->cache = File::create('__menu__');
+
+        fire('menu.resolve', [$this]);
     }
 
     /**

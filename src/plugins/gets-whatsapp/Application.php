@@ -2,6 +2,8 @@
 
 namespace GetsWhatsApp;
 
+use Lxh\Auth\AuthManager;
+use Lxh\Auth\Menu;
 use Lxh\Container\Container;
 use Lxh\Contracts\PluginRegister;
 use Lxh\Router\Dispatcher;
@@ -26,6 +28,11 @@ class Application implements PluginRegister
     public function register()
     {
         $this->registerRouter();
+
+        listen('menu.resolve', function (Menu $menu) {
+            $menu->addPlugin('<a>test</a>');
+        });
+
     }
 
     /**

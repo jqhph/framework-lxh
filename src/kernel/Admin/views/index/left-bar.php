@@ -46,10 +46,11 @@
                 if ($plugins) { ?>
                 <li class="has_sub">
                     <a class="waves-effect ">
-                        <i class=" "></i>
-                        <span><?php echo 'Plugins';?></span><span class="menu-arrow"></span>
+                        <i class="fa fa-plug"></i>
+                        <span><?php echo trans('Plugins', 'menus');?></span><span class="menu-arrow"></span>
                     </a>
-
+                    <ul class="list-unstyled"><?php echo $plugins;?></ul>
+                </li>
                 <?php }?>
 
             </ul>
