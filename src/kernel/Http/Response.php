@@ -39,9 +39,9 @@ class Response extends PsrResponse
 	/**
 	 * 要输出的内容
 	 *
-	 * @var mixed
+	 * @var array
 	 */
-	public $data;
+	public $data = [];
 
 	/**
 	 * @var Request
@@ -174,7 +174,7 @@ class Response extends PsrResponse
 	/**
 	 * 页面输出类型
 	 * @param string $contentType 输出类型
-	 * @param string $charset     输出编码
+	 * @param string $charset 输出编码
 	 * @return static
 	 */
 	public function contentType($contentType, $charset = 'utf-8')
@@ -242,18 +242,18 @@ class Response extends PsrResponse
 			echo $data;
 		}
 
-        $this->events->fire(EVENT_RESPONSE_AFTER);
+		$this->events->fire(EVENT_RESPONSE_AFTER);
 
-        $this->sendConsole();
+		$this->sendConsole();
 		$this->reportError();
 	}
 
 	protected function reportError()
 	{
-		if (! ($error = error_get_last())) {
+		if (!($error = error_get_last())) {
 			return;
 		}
-		if (in_array((int) $error['type'], config('record-error-info-level'), true)) {
+		if (in_array((int)$error['type'], config('record-error-info-level'), true)) {
 			$this->container['error.handler']->handle($error);
 		}
 	}
@@ -266,18 +266,21 @@ class Response extends PsrResponse
 	protected function &normalizeContent()
 	{
 		try {
-			if (is_array($this->data)) {
-				$data = json_encode($this->data);
+			$string = '';
+			foreach ((array)$this->data as &$data) {
+				if (is_array($data)) {
+					$json = json_encode($data);
+					if ($json === false) {
+						throw new \InvalidArgumentException(json_last_error_msg());
+					}
 
-				if ($data === false) {
-					throw new \InvalidArgumentException(json_last_error_msg());
+					$string .= $json;
+				} else {
+					$string .= $data;
 				}
-
-				return $data;
-			} else {
-
-				return $this->data;
 			}
+
+			return $string;
 		} catch (\Exception $e) {
 			$this->events->fire(EVENT_EXCEPTION, [$e]);
 			return false;
@@ -293,8 +296,8 @@ class Response extends PsrResponse
 	{
 		// 非生产环境和非命令行环境则输出控制台调试日志
 		if (
-			$this->outputConsoleLog && ! is_prod()
-			&& ! $this->request->isCli() && config('response-console-log', true) && (! $this->request->isAjax() || Grid::isPjaxRequest())
+			$this->outputConsoleLog && !is_prod()
+			&& !$this->request->isCli() && config('response-console-log', true) && (!$this->request->isAjax() || Grid::isPjaxRequest())
 		) {
 			echo Console::fetch();
 		}
@@ -330,7 +333,30 @@ class Response extends PsrResponse
 	 */
 	public function data($data)
 	{
-		$this->data = & $data;
+		$this->data = &$data;
+		return $this;
+	}
+
+	/**
+	 * 追加要输出的内容
+	 *
+	 * @return $this
+	 */
+	public function append($data)
+	{
+		$this->data[] = &$data;
+
+		return $this;
+	}
+
+	/**
+	 * @param $data
+	 * @return $this
+	 */
+	public function prepend($data)
+	{
+		array_unshift($this->data, $data);
+
 		return $this;
 	}
 

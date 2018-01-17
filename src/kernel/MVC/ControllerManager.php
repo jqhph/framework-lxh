@@ -177,7 +177,9 @@ class ControllerManager extends Factory
             define('__MODULE__', $this->module);
         }
 
-        $this->response->data = $this->call($this->controllerName, $this->actionName, $this->requestParams);
+        $this->response->append(
+            $this->call($this->controllerName, $this->actionName, $this->requestParams)
+        );
 
         $this->first = false;
     }
