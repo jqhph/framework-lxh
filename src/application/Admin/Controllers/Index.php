@@ -22,7 +22,7 @@ class Index extends Controller
     }
 
     // 主页菜单
-    public function actionList()
+    public function actionIndex()
     {
         // 关闭输出控制台调试信息
         $this->withConsoleOutput(false);
@@ -53,7 +53,7 @@ EOF
     }
 
     // 首页
-    public function actionIndex()
+    public function actionDashboard()
     {
         $content = $this->admin()->content();
 

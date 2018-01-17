@@ -175,7 +175,7 @@ class Menu extends Controller
     {
         $table->useTree('subs');
 
-        $table->link('ability_title')->then(function (Link $link) {
+        $table->link('ability_title')->rendering(function (Link $link) {
             $link->format(
                 Admin::url('Ability')->detail('{value}'), 'ability_id'
             );

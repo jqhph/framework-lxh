@@ -16,7 +16,7 @@ return [
         'params' => [
             'module' => 'Admin',
             'controller' => 'Index',
-            'action' => 'List'
+            'action' => 'Index'
         ]
     ],
 
