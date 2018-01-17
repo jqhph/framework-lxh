@@ -32,7 +32,7 @@ class Index
         'topbarContent' => '',
         'users' => '',
         'menuTitle' => '',
-        'homeUrl' => '/admin/index/index'
+        'homeUrl' => '/admin/index/action/index'
     ];
 
     /**
