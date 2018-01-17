@@ -139,8 +139,10 @@ class ControllerManager extends Factory
     }
 
     /**
-     * 分派控制器并调用action
-     * */
+     * 控制器调度
+     *
+     * @return void
+     */
     public function handle(Router $router)
     {
         $this->setControllerName($router->controllerName);
@@ -324,12 +326,17 @@ class ControllerManager extends Factory
      */
     public function methodExcluded(& $method, array & $options)
     {
-        return (isset($options['only']) && ! in_array($method, $this->getMidMethods($options['only']))) ||
-        (! empty($options['except']) && in_array($method, $this->getMidMethods($options['except'])));
+        return (isset($options['only']) && ! in_array($method, $this->normalizeMiddlewareMethods($options['only']))) ||
+        (! empty($options['except']) && in_array($method, $this->normalizeMiddlewareMethods($options['except'])));
     }
 
-    // 把方法名转化为小写
-    protected function getMidMethods(& $data)
+    /**
+     * 把方法名转化为小写
+     *
+     * @param $data
+     * @return array
+     */
+    protected function normalizeMiddlewareMethods(& $data)
     {
         $data = (array) $data;
         foreach ($data as & $method) {
@@ -340,7 +347,9 @@ class ControllerManager extends Factory
 
     /**
      * 获取身份鉴权类实例
+     * 必须身份鉴权类必须实现handle方法
      *
+     * @return object
      */
     public function getAuth()
     {
@@ -356,7 +365,9 @@ class ControllerManager extends Factory
     }
 
     /**
-     * 获取接口验证相关配置参数
+     * 设置接口验证相关配置
+     *
+     * @param $params
      */
     protected function setAuthParams(& $params)
     {
@@ -366,6 +377,11 @@ class ControllerManager extends Factory
         }
     }
 
+    /**
+     * 获取控制器名称
+     *
+     * @return string
+     */
     public function controllerName()
     {
         return $this->controllerName ?: $this->defaultController;
@@ -376,6 +392,11 @@ class ControllerManager extends Factory
         return $this->actionName;
     }
 
+    /**
+     * 获取模块名称
+     *
+     * @return mixed
+     */
     public function moduleName()
     {
         return $this->module ?: $this->getDefaultModule();
@@ -391,25 +412,47 @@ class ControllerManager extends Factory
         $this->module = $name ?: $this->getDefaultModule();
     }
 
+    /**
+     * 获取默认模块
+     *
+     * @return mixed
+     */
     protected function getDefaultModule()
     {
         $modules = (array) config('modules');
         if (count($modules) < 1) {
-            throw new RuntimeException('Get the default module failed');
+            throw new RuntimeException('Unable to obtain module parameters.');
         }
         return $modules[0];
     }
 
+    /**
+     * 设置控制器文件夹
+     *
+     * @param $name
+     */
     protected function setFolder($name)
     {
         $this->folder = $name;
     }
 
+    /**
+     * 设置控制器名称
+     * 并由小写中划线格式转化为大驼峰格式
+     *
+     * @param $name
+     */
     protected function setControllerName($name)
     {
         $this->controllerName = $name ? Util::toCamelCase($name, true, '-') : $this->defaultController;
     }
 
+    /**
+     * 设置action名称
+     * 并由小写中划线格式转化为大驼峰格式
+     *
+     * @param $name
+     */
     protected function setActionName($name)
     {
         $this->actionName = $name ? Util::toCamelCase($name, true, '-') : $this->defaultAction;
