@@ -421,7 +421,7 @@ class ControllerManager extends Factory
     {
         $modules = (array) config('modules');
         if (count($modules) < 1) {
-            throw new RuntimeException('Unable to obtain module parameters.');
+            throw new RuntimeException('Module params miss.');
         }
         return $modules[0];
     }
