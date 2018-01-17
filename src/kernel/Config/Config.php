@@ -10,6 +10,7 @@ namespace Lxh\Config;
 
 use Lxh\Exceptions\InvalidArgumentException;
 use Lxh\Helper\Entity;
+use Lxh\Helper\Util;
 
 class Config extends Entity
 {
@@ -40,7 +41,7 @@ class Config extends Entity
      *
      * @var string
      */
-    protected $writableConfigName = 'writable';
+    protected $writeableFileName = 'writeable';
 
     /**
      * 配置文件路径
@@ -157,8 +158,8 @@ class Config extends Entity
 
         $this->attachFiles($this->get('add-config'), $useCurrentEnv);
 
-        $this->writableData = include $this->getWritableConfigPath();
-        $this->items = array_merge($this->items, (array) $this->writableData);
+        $this->writableData = (array)include $this->getWritableConfigPath();
+        $this->items = Util::merge($this->items, $this->writableData, true);//array_merge($this->items, (array) $this->writableData);
 
         $this->saveCache();
     }
@@ -218,7 +219,7 @@ class Config extends Entity
             if (is_file($file)) {
                 throw new InvalidArgumentException('The config file is not exist! [' . $path . ']');
             }
-            $this->fill(include $file);
+            $this->fill((array)include $file);
             $this->loaded[$path] = true;
         }
 
@@ -256,7 +257,7 @@ class Config extends Entity
     // 获取容器配置参数
     public function getContainerConfig()
     {
-        return include $this->root . 'config/container/container.php';
+        return (array)include $this->root . 'config/container/container.php';
     }
 
     /**
@@ -271,7 +272,7 @@ class Config extends Entity
 
     protected function getWritableConfigPath()
     {
-        return $this->getEnvConfigPath($this->writableConfigName);
+        return $this->getEnvConfigPath($this->writeableFileName);
     }
 
     /**

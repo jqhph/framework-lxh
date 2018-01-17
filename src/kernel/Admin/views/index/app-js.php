@@ -29,7 +29,7 @@ echo load_js('jquery.min');
         var data = {};
         // 容器配置
         data.options = <?php
-            $config = array_merge(config('client-config'), config('replica-client-config'));
+            $config = config('client-config');
             $config['language'] = config('language');
             $config['js-version'] = & $GLOBALS['js-version'];
             $config['css-version'] = & $GLOBALS['css-version'];
