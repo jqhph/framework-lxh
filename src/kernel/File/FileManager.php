@@ -306,7 +306,7 @@ class FileManager
      * @param bool $readable 是否写入易读的数组格式（使用易读模式效率较低）
      * @return bool
      */
-    public function putPhpContents($path, array & $data, $readable = false)
+    public function putPhpContents($path, array $data, $readable = false)
     {
         if ($readable) {
             $txt = "<?php \nreturn " . Util::arrayToText($data) . ";\n";
@@ -327,7 +327,7 @@ class FileManager
      *
      * @return bool
      */
-    public function putContentsJson($path, & $data)
+    public function putContentsJson($path, $data)
     {
         if (is_array($data)) {
             $data = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
@@ -528,6 +528,30 @@ class FileManager
         }
 
         return $res;
+    }
+
+    /**
+     * @param $src
+     * @param $dst
+     */
+    public function recurseCopy($src, $dst)
+    {
+        $dir = opendir($src);
+
+        if (! is_dir($dst)) {
+            $this->mkdir($dst, null, true);
+        }
+
+        while (false !== ($file = readdir($dir))) {
+            if (($file != '.') && ($file != '..')) {
+                if (is_dir($src . '/' . $file)) {
+                    $this->recurseCopy($src . '/' . $file, $dst . '/' . $file);
+                } else {
+                    copy($src . '/' . $file, $dst . '/' . $file);
+                }
+            }
+        }
+        closedir($dir);
     }
 
     /**

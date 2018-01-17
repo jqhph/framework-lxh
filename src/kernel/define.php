@@ -13,6 +13,7 @@ define('__CONFIG__', __ROOT__ . 'config/');
 define('__RESOURCE__', __ROOT__ . 'resource/');
 define('__LANGUAGE__', __ROOT__ . 'resource/language/');
 define('__VIEW__', __ROOT__ . 'resource/views/');
+define('__PLUGINS__', __ROOT__ . 'plugins/');
 
 // 环境常量
 define('ENV_TEST', 'test'); // 测试环境

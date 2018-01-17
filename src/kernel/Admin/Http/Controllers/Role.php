@@ -65,7 +65,7 @@ class Role extends Controller
                 $link->useAjaxModal()
                     ->title($label)
                     ->dataId($id)
-                    ->url('/api/role/abilities/' .$id)
+                    ->url(Admin::url()->api('abilities', $id))
                     ->label(trans('list'));
             });
     }

@@ -276,6 +276,19 @@ class Config extends Entity
     }
 
     /**
+     * @param $key
+     * @return bool
+     */
+    public function delete($key)
+    {
+        $path = $this->getWritableConfigPath();
+
+        $config = (array) include $path;
+
+        return files()->putPhpContents($path, Util::unsetInArray($config, $key), true);
+    }
+
+    /**
      * 保存配置
      *
      * @param  array $opts 要保存的配置数据
@@ -283,7 +296,7 @@ class Config extends Entity
      */
     public function save(array $opts)
     {
-        $res = files()->mergeContents($this->getWritableConfigPath(), $opts);
+        $res = files()->mergeContents($this->getWritableConfigPath(), $opts, true, true);
 
         $this->removeCache();
         $this->refetch();

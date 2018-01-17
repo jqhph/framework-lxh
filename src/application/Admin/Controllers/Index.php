@@ -14,6 +14,7 @@ use Lxh\Admin\Widgets\Navbar;
 use Lxh\MVC\Controller;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
+use Lxh\Support\Composer;
 
 class Index extends Controller
 {

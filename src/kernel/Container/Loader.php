@@ -178,7 +178,11 @@ trait Loader
         'url' => [
             'shared' => false,
             'class' => 'Lxh\Http\Url',
-        ]
+        ],
+        'plugin.manager' => [
+            'shared' => true,
+            'class' => 'Lxh\Plugins\Manager',
+        ],
     ];
 
     /**

@@ -12,6 +12,10 @@ $config = [
     // 是否开启语言包功能
     'use-language' => true,
 
+    // 配置composer.phar安装路径
+    // 如果composer是全局安装，则无需配置此参数
+    'composer.working-path' => '',
+
     'view' => [
         // 模板文件路径
         'paths' => 'resource/views',
