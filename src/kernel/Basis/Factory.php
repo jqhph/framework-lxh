@@ -20,7 +20,10 @@ abstract class Factory implements ArrayAccess
 
     /**
      * 获取对象实例
-     * */
+     *
+     * @param null $name
+     * @return mixed
+     */
     final public function get($name = null)
     {
         if (! $name) {

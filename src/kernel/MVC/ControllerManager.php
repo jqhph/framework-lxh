@@ -70,7 +70,12 @@ class ControllerManager extends Factory
      *
      * @var string | bool
      */
-    protected $authParams = 'User';// 登录验证相关信息
+    protected $authParams = true;// 登录验证相关信息
+
+    /**
+     * @var string
+     */
+    protected $defaultAuthClass = 'User';
 
     /**
      * @var array
@@ -178,7 +183,7 @@ class ControllerManager extends Factory
         $this->getContrMiddleware($middleware, $contr);
 
         return $this->pipeline
-            ->send(['req' => $this->request, 'resp' => $this->response, 'params' => & $params])
+            ->send($params)
             ->through($middleware)
             ->then(function ($middlewareParams) use ($contr, $action, $params) {
                 unset($middlewareParams['req'], $middlewareParams['resp'], $middlewareParams['params']);
@@ -255,7 +260,16 @@ class ControllerManager extends Factory
 
             $this->folder = null;
         }
-        $className .= $name;
+        if (get_value($this->requestParams, 'api')) {
+            $apiClass = $className . "Api\\$name";
+            if (class_exists($apiClass)) {
+                $className = $apiClass;
+            } else {
+                $className .= $name;
+            }
+        } else {
+            $className .= $name;
+        }
 
         if (class_exists($className)) {
             $instance = new $className($name, $this->container, $this);
@@ -311,7 +325,8 @@ class ControllerManager extends Factory
     public function getAuth()
     {
         if (! $this->auth) {
-            $className = strpos($this->authParams, '\\') !== false ? $this->authParams : "\\Lxh\\{$this->module}\\Auth\\{$this->authParams}";
+            $className = strpos($this->authParams, '\\') !== false ? $this->authParams :
+                (is_bool($this->authParams) ? "\\Lxh\\{$this->module}\\Auth\\{$this->defaultAuthClass}" : "\\Lxh\\{$this->module}\\Auth\\{$this->authParams}");
 
             $this->auth = new $className($this->container, $this->request, $this->response);
 

@@ -43,7 +43,7 @@ class User
      * @param Closure $next
      * @return mixed
      */
-    public function handle(array $options, Closure $next)
+    public function handle(array $requestParams, Closure $next)
     {
         $admin = admin();
         if (! $admin->getId()) {
@@ -52,6 +52,6 @@ class User
             return $this->response->redirect(Admin::url()->login());
         }
 
-        return $next($options);
+        return $next($requestParams);
     }
 }

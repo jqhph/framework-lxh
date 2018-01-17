@@ -38,6 +38,7 @@ return [
         'method' => 'POST',
         'params' => [
             'auth' => false,
+            'api' => true,
             'module' => 'Admin',
             'controller' => 'Admin',
             'action' => 'Login'
@@ -50,6 +51,7 @@ return [
         'method' => 'GET',
         'params' => [
             'module' => 'Admin',
+            'api' => true,
             'controller' => ':lc@c',
             'action' => ':lc@a',
             'id' => ':int@id'
@@ -62,6 +64,7 @@ return [
         'method' => 'GET',
         'params' => [
             'auth' => false,
+            'api' => true,
             'module' => 'Admin',
             'controller' => 'Js',
             'action' => 'Entrance',
@@ -75,6 +78,7 @@ return [
         'method' => 'PUT',
         'params' => [
             'module' => 'Admin',
+            'api' => true,
             'controller' => ':lc@c',
             'action' => 'Update',
             'id' => ':int@id'
@@ -87,6 +91,7 @@ return [
         'method' => 'DELETE',
         'params' => [
             'module' => 'Admin',
+            'api' => true,
             'controller' => ':lc@c',
             'action' => 'Delete',
             'id' => ':int@id'
@@ -99,6 +104,7 @@ return [
         'method' => 'POST,DELETE',
         'params' => [
             'module' => 'Admin',
+            'api' => true,
             'controller' => ':lc@c',
             'action' => 'BatchDelete'
         ]
@@ -110,6 +116,7 @@ return [
         'method' => 'POST',
         'params' => [
             'module' => 'Admin',
+            'api' => true,
             'controller' => ':lc@c',
             'action' => 'Add',
             'id' => ':int[id]'
@@ -122,6 +129,7 @@ return [
         'method' => '*',
         'params' => [
             'auth' => false,
+            'api' => true,
             'module' => 'Admin',
             'controller' => ':lc@c',
             'action' => ':lc@a',
