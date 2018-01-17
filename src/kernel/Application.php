@@ -58,9 +58,12 @@ class Application
         $this->loadInitConfig();
         $this->loadFunctionFile();
         $this->loadServiceBindConfig();
+
         $this->events    = events();
         $this->container = container();
         $this->container->instance('app', $this);
+
+        // 设置时区
         if ($timezone = config('timezone')) {
             date_default_timezone_set($timezone);
         }
@@ -69,11 +72,16 @@ class Application
         debug_track('start');
         $this->bindRouter();
     }
+
+    /**
+     * 定义系统常量
+     */
     protected function define()
     {
         require __DIR__ . '/define.php';
         $this->root = __ROOT__;
     }
+
     /**
      * 获取web目录路径
      *
@@ -106,7 +114,7 @@ class Application
     public function shutdown()
     {
         // 触发程序终结事件
-        $this->events->fire('app.shutdown', [$this->response]);
+//        $this->events->fire('app.shutdown');
         $this->container['http.response']->send();
     }
     /**
@@ -135,18 +143,22 @@ class Application
             $this->request = $this->container['http.request'];
             // 添加事件监听
             $this->addListeners();
-            // 触发路由匹配前置事件
+            // 触发路由调度前事件
             $this->events->fire(EVENT_ROUTE_DISPATCH_BEFORE);
             $router = $this->container['router'];
+
+            // 开始路由调度
             if (! $router->handle()) {
                 throw new NotFound();
             }
-            // 触发陆游匹配成功后事件
-            $this->events->fire(EVENT_ROUTE_DISPATCH_AFTER, [$router->requestParams]);
+            // 触发路由调度成功后事件
+            $this->events->fire(EVENT_ROUTE_DISPATCH_AFTER);
+
             $this->container['controller.manager']->handle($router);
+
             return $this->response;
         } catch (\Exception $e) {
-            $this->events->fire('exception', [$e]);
+            $this->events->fire(EVENT_EXCEPTION, [$e]);
             return $this->response;
         }
     }
@@ -160,6 +172,7 @@ class Application
         require $this->root . 'kernel/Helper/func.php';
         require __APP__ . 'Kernel/Support/func.php';
     }
+
     /**
      * 载入初始化配置文件
      *
@@ -174,10 +187,15 @@ class Application
         }
         require __CONFIG__ . __ENV__ . '/ini.php';
     }
+
+    /**
+     * 加载容器配置文件
+     */
     protected function loadServiceBindConfig()
     {
         require __CONFIG__ . 'container/bind.php';
     }
+
     /**
      * 注册路由服务
      *
@@ -204,9 +222,15 @@ class Application
             return new Router((array) include $configPath);
         });
     }
+
+    /**
+     * @param array $commands
+     * @return $this
+     */
     public function addCommands(array $commands)
     {
         $this->commands = array_merge($this->commands, $commands);
+        return $this;
     }
     /**
      * 执行命令

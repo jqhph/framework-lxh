@@ -229,9 +229,7 @@ class Response extends PsrResponse
 			return;
 		}
 
-		$requestParams = $this->request->getAttribute('request.params');
-
-		$this->events->fire(EVENT_RESPONSE_BEFORE, [&$requestParams]);
+		$this->events->fire(EVENT_RESPONSE_BEFORE);
 
 		$this->sendHeader();
 
@@ -244,7 +242,7 @@ class Response extends PsrResponse
 			echo $data;
 		}
 
-        $this->events->fire(EVENT_RESPONSE_AFTER, [&$requestParams]);
+        $this->events->fire(EVENT_RESPONSE_AFTER);
 
         $this->sendConsole();
 		$this->reportError();

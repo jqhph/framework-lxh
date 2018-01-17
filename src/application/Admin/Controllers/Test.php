@@ -20,7 +20,7 @@ class Test extends Controller
 {
     public function actionTest(array $params)
     {
-
+        return 123;
     }
 
 }

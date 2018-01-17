@@ -24,6 +24,20 @@ class Request extends Message\ServerRequest
 	const METHOD_OVERRIDE = '_METHOD';
 
 	/**
+	 * 路由调度成功后的参数
+	 *
+	 * @var array
+	 */
+	protected $params = [];
+
+	/**
+	 * 控制器中间件传递的参数
+	 *
+	 * @var mixed
+	 */
+	protected $middlewaresParams;
+
+	/**
 	 * HTTP协议版本号
 	 *
 	 * @var string
@@ -97,6 +111,56 @@ class Request extends Message\ServerRequest
 				$file['type']
 			);
 		}
+	}
+
+	/**
+	 * 获取路由请求参数
+	 *
+	 * @param null $key
+	 * @param null $def
+	 * @return mixed|null
+	 */
+	public function param($key = null, $def = null)
+	{
+		if ($key === null) {
+			return $this->params;
+		}
+
+		return isset($this->params[$key]) ? $this->params[$key] : $def;
+	}
+
+	/**
+	 * 设置路由请求参数
+	 *
+	 * @param array $params
+	 * @return $this
+	 */
+	public function setParams(array $params)
+	{
+		$this->params = &$params;
+		return $this;
+	}
+
+	/**
+	 * 获取控制器中间件传递的参数
+	 *
+	 * @return mixed|null
+	 */
+	public function getMiddlewaresParams()
+	{
+		return $this->middlewaresParams;
+	}
+
+	/**
+	 * 设置控制器中间件传递的参数
+	 *
+	 * @param $params
+	 * @return $this
+	 */
+	public function setMiddlewaresParams($params)
+	{
+		$this->middlewaresParams = &$params;
+		return $this;
 	}
 
 	/**

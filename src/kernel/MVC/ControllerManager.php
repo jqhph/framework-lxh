@@ -23,11 +23,34 @@ use Lxh\Events\Dispatcher as Events;
 
 class ControllerManager extends Factory
 {
+    /**
+     * @var string
+     */
     protected $defaultController = 'Index';// 默认控制器
+
+    /**
+     * @var string
+     */
     protected $defaultAction = 'List';// 默认方法
+
+    /**
+     * @var string
+     */
     protected $module;
+
+    /**
+     * @var string
+     */
     protected $folder;
+
+    /**
+     * @var string
+     */
     protected $controllerName;
+
+    /**
+     * @var string
+     */
     protected $actionName;
 
     /**
@@ -183,17 +206,14 @@ class ControllerManager extends Factory
         $this->getContrMiddleware($middleware, $contr);
 
         return $this->pipeline
-            ->send($params)
+            ->send([])
             ->through($middleware)
             ->then(function ($middlewareParams) use ($contr, $action, $params) {
-                unset($middlewareParams['req'], $middlewareParams['resp'], $middlewareParams['params']);
-                // 存储路由参数
-                $this->request->withAttribute('request.params', $params);
-                // 存储中间件参数
-                $this->request->withAttribute('mid.params', $middlewareParams);
-
                 if ($this->first) {
-                    $this->events->fire(EVENT_AUTH_SUCCESS, [&$params]);
+                    // 存储中间件传递的参数
+                    $this->request->setMiddlewaresParams($middlewareParams);
+
+                    $this->events->fire(EVENT_AUTH_SUCCESS);
 
                     // 注册当前控制器
                     $this->container->instance('controller', $contr);
@@ -397,7 +417,9 @@ class ControllerManager extends Factory
 
     protected function setRequestParams($params)
     {
-        $this->requestParams = & $params;
+        $this->requestParams = &$params;
+        // 存储路由参数
+        $this->request->setParams($params);
     }
 
 }

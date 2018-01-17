@@ -21,14 +21,14 @@ define('ENV_PROD', 'prod'); // 生产环境
 
 // 事件常量
 /**
- * 路由匹配之前触发
+ * 路由调度之前触发
  *
  * 不接受任何参数
  */
 define('EVENT_ROUTE_DISPATCH_BEFORE', 'route.dispatch.before');
 
 /**
- * 路由匹配之后触发
+ * 路由调度之后触发
  *
  * @param array $requestParams 路由解析后的请求参数
  */
@@ -52,20 +52,17 @@ define('EVENT_EXCEPTION_REPORT', 'exception.report');
 /**
  * 用户身份鉴权成功后触发（如果允许免登录访问，也默认为鉴权成功）
  *
- * @param array $requestParams 路由解析后的请求参数
  */
 define('EVENT_AUTH_SUCCESS', 'auth.success');
 
 /**
  * 用户控制器action执行完毕，输出内容之前
  *
- * @param array $requestParams 路由解析后的请求参数
  */
 define('EVENT_RESPONSE_BEFORE', 'response.send.before');
 
 /**
  * 用户控制器action执行完毕，输出内容之后
  *
- * @param array $requestParams 路由解析后的请求参数
  */
 define('EVENT_RESPONSE_AFTER', 'response.send.after');
