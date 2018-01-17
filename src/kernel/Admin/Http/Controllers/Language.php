@@ -104,7 +104,7 @@ class Language extends Controller
 
         $languagePackDir = language()->getBasePath();
 
-        $result = files()->putPhpContents($languagePackDir . $_POST['path'], $_POST['content']);
+        $result = files()->putPhpContents($languagePackDir . $_POST['path'], $_POST['content'], true);
 
         if ($result) {
             // 更新前端缓存
@@ -139,7 +139,7 @@ class Language extends Controller
 
         $package[$_POST['name']] = [];
 
-        if ($file->putPhpContents($path, $package)) {
+        if ($file->putPhpContents($path, $package, true)) {
             // 更新前端缓存
             resolve('front.client')->updateCache();
             return $this->success('success', ['content' => & $package]);
@@ -179,7 +179,7 @@ class Language extends Controller
             'fields' => [],
         ];
 
-        if (files()->putPhpContents($path, $data)) {
+        if (files()->putPhpContents($path, $data, true)) {
             return $this->success();
         }
         return $this->failed();
@@ -270,7 +270,7 @@ class Language extends Controller
             return $this->error(trans('File already exists'));
         }
 
-        if ($file->putPhpContents($newPath, $data)) {
+        if ($file->putPhpContents($newPath, $data, true)) {
             // 更新前端缓存
             resolve('front.client')->updateCache();
             return $this->success();

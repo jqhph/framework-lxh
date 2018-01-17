@@ -1,20 +1,16 @@
 <?php 
-return array (
-  'options' => 
-  array (
-    '多发点23456' => 
-    array (
-      1 => 'dfd',
-    ),
-    'status' => 
-    array (
-      1 => '23',
-      'd' => '123',
-    ),
-  ),
-  'fields1' => 
-  array (
-    'emaildddvvvv' => 'Email',
-    'testsssffff' => '123dfdfd',
-  ),
-);
+return [
+    'options' => [
+        'test123123123dfdf' => [
+            1 => 'dfd',
+        ],
+        'statusvv' => [
+            1 => '23',
+            'd' => '123',
+        ],
+    ],
+    'fields1' => [
+        'emaildddvvvv' => 'Email',
+        'testsssffff' => '123dfdfd',
+    ],
+];

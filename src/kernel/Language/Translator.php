@@ -24,14 +24,29 @@ class Translator
      */
     protected $packages = [];
 
-    private $deletedData = array();
+    /**
+     * @var array
+     */
+    private $deletedData = [];
 
-    private $changedData = array();
+    /**
+     * @var array
+     */
+    private $changedData = [];
 
+    /**
+     * @var string
+     */
     private $root = __ROOT__;
 
+    /**
+     * @var mixed|null
+     */
     private $language = null;
 
+    /**
+     * @var string
+     */
     protected $defaultLanguage = 'en';
 
     /**
@@ -321,7 +336,7 @@ class Translator
             if (!empty($data)) {
                 $path = $this->getPackagePath($scope);
 
-                if (! $file->mergePhpContents($path, $data)) {
+                if (! $file->mergePhpContents($path, $data, null, true)) {
                     return false;
                 }
             }

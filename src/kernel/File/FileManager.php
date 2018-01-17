@@ -384,11 +384,12 @@ class FileManager
      * @param string | array $path
      * @param string $content JSON string
      * @param string | array $removeOptions - List of unset keys from content
+     * @param bool $readable
      * @return bool
      */
-    public function mergePhpContents($path, & $content, $removeOptions = null)
+    public function mergePhpContents($path, & $content, $removeOptions = null, $readable = false)
     {
-        return $this->mergeContents($path, $content, $removeOptions, true);
+        return $this->mergeContents($path, $content, $removeOptions, true, $readable);
     }
 
     /**
@@ -536,10 +537,10 @@ class FileManager
      * @param string $content JSON string
      * @param string | array $removeOptions - List of unset keys from content
      * @param bool $isPhp - Is merge php files
-     *
+     * @param bool $readable
      * @return bool | array
      */
-    public function mergeContents($path, & $content, $removeOptions = null, $isPhp = true)
+    public function mergeContents($path, &$content, $removeOptions = null, $isPhp = true, $readable = false)
     {
         if ($isPhp) {
             $fileContent = $this->getPhpContents($path);
@@ -557,7 +558,7 @@ class FileManager
         Util::merge($savedDataArray, $newDataArray, true);
 
         if ($isPhp) {
-            return $this->putPhpContents($path, $savedDataArray);
+            return $this->putPhpContents($path, $savedDataArray, $readable);
         }
 
         return $this->putContents($path, $savedDataArray);
