@@ -41,6 +41,17 @@
                     </li>
                 <?php } ?>
 
+                <?php
+                $plugins = $menu->renderPlugins();
+                if ($plugins) { ?>
+                <li class="has_sub">
+                    <a class="waves-effect ">
+                        <i class=" "></i>
+                        <span><?php echo 'Plugins';?></span><span class="menu-arrow"></span>
+                    </a>
+
+                <?php }?>
+
             </ul>
             <div class="clearfix"></div>
         </div>

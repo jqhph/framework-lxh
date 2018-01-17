@@ -18,6 +18,11 @@ class Menu
     protected $data;
 
     /**
+     * @var array
+     */
+    protected $pluginsMenus = [];
+
+    /**
      * 未经处理的原始菜单数据（开启显示的菜单）
      *
      * @var array
@@ -208,6 +213,36 @@ class Menu
 
     }
 
+    /**
+     * 注册插件菜单
+     *
+     * @return $this
+     */
+    public function addPlugin($content)
+    {
+        $this->pluginsMenus[] = &$content;
+
+        return $this;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderPlugins()
+    {
+        $lis = '';
+
+        foreach ($this->pluginsMenus as &$menu) {
+            if ($menu instanceof \Closure) {
+                $lis .= '<li>' . $menu() . '</li>';
+            } else {
+                $lis .= '<li>' . $menu . '</li>';
+            }
+        }
+
+        return $lis;
+    }
 
     /**
      * 获取按层级排序好的菜单
