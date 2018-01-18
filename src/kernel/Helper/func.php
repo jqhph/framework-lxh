@@ -229,6 +229,22 @@ function lc_dash($name)
 }
 
 /**
+ * 驼峰转化为小写下划线
+ *
+ * @param $name
+ * @return string
+ */
+function lc_underline($name)
+{
+    $symbol = '_';
+    $text = preg_replace_callback('/([A-Z])/', function (& $text) use ($symbol) {
+        return $symbol . strtolower($text[1]);
+    }, $name);
+
+    return ltrim($text, $symbol);
+}
+
+/**
  * 转化为驼峰
  *
  * @param $name

@@ -3,10 +3,10 @@
 namespace {namespace};
 
 use Lxh\Auth\Menu;
-use Lxh\Container\Container;
 use Lxh\Contracts\PluginRegister;
 use Lxh\Router\Dispatcher as Router;
 use Lxh\Template\Factory as ViewFactory;
+use Lxh\Contracts\Container\Container;
 
 class Application implements PluginRegister
 {
@@ -16,13 +16,22 @@ class Application implements PluginRegister
     protected $pluginName = '{name}';
 
     /**
+     * @var Container
+     */
+    protected $container;
+
+    /**
      * @var Router
      */
     protected $router;
 
     public function __construct()
     {
-        $this->router = resolve('router');
+        $this->container = container();
+        $this->router = $this->container->make('router');
+
+        // 定义插件名常量
+        define('{pluginConstName}', '{name}');
     }
 
     /**
