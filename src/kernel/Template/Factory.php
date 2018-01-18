@@ -36,6 +36,7 @@ class Factory
         }
 
         $this->setupNamespaces();
+        fire('view.factory.resoving', [$this]);
     }
 
     /**

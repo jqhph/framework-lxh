@@ -76,6 +76,13 @@ define('EVENT_RESPONSE_AFTER', 'response.send.after');
 define('EVENT_MENU_RESOLVING', 'menu.resolving');
 
 /**
+ * 模板适配器类被实例化时触发，监听此事件可以注册模板别名
+ *
+ * @param Lxh\Template\Factory
+ */
+define('EVENT_VIEW_FACTORY_RESOLVING', 'view.factory.resoving');
+
+/**
  * 加载后台首页时触发
  *
  * @param Lxh\Admin\Index

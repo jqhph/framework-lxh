@@ -6,6 +6,7 @@ use Lxh\Auth\Menu;
 use Lxh\Container\Container;
 use Lxh\Contracts\PluginRegister;
 use Lxh\Router\Dispatcher as Router;
+use Lxh\Template\Factory as ViewFactory;
 
 class Application implements PluginRegister
 {
@@ -50,7 +51,9 @@ class Application implements PluginRegister
      */
     protected function registerViewsNamespace()
     {
-        add_view_namespace($this->pluginName, dirname(__DIR__) . '/views');
+        listen(EVENT_VIEW_FACTORY_RESOLVING, function (ViewFactory $factory) {
+            $factory->addNamespace($this->pluginName, dirname(__DIR__) . '/views');
+        });
     }
 
     /**
