@@ -8,6 +8,9 @@ use Lxh\Router\Dispatcher as Router;
 use Lxh\Template\Factory as ViewFactory;
 use Lxh\Contracts\Container\Container;
 
+define('{pluginConstName}', '{name}');
+define('{pluginConstName}_NAMESPACE', '{namespace}');
+
 class Application implements PluginRegister
 {
     /**
@@ -28,10 +31,6 @@ class Application implements PluginRegister
     public function __construct()
     {
         $this->router = resolve('router');
-
-        // 定义插件名常量
-        define('{pluginConstName}', $this->pluginName);
-        define('{pluginConstName}_NAMESPACE', $this->namespace);
     }
 
     /**
