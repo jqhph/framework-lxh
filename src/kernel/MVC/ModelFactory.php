@@ -13,7 +13,8 @@ class ModelFactory extends Factory
 	{
 		if (strpos($name, "\\")) {
 			$className = $name;
-
+			$name = explode('\\', $name);
+			$name = end($name);
 		} else {
 			$className = 'Lxh\\' . __MODULE__ . '\\Models\\' . $name;
 
