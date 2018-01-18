@@ -16,6 +16,11 @@ class Application implements PluginRegister
     protected $pluginName = '{name}';
 
     /**
+     * @var string
+     */
+    protected $namespace = '{namespace}';
+
+    /**
      * @var Container
      */
     protected $container;
@@ -32,7 +37,7 @@ class Application implements PluginRegister
 
         // 定义插件名常量
         define('{pluginConstName}', $this->pluginName);
-        define('{pluginConstName}_NAMESPACE', '{namespace}');
+        define('{pluginConstName}_NAMESPACE', $this->namespace);
     }
 
     /**
@@ -92,7 +97,7 @@ class Application implements PluginRegister
         $prefix = $this->pluginName;
         // 定义为后台模块
         $module = admin_name();
-        $namespace = "{namespace}\\Http\\Controllers";
+        $namespace = "{$this->namespace}\\Http\\Controllers";
 
         $this->router->attach([
             [
