@@ -217,6 +217,20 @@ function lc_dash($name)
 }
 
 /**
+ * 转化为驼峰
+ *
+ * @param $name
+ * @param string $symbol
+ * @return mixed|string
+ */
+function camel_case($name, $symbol = '_')
+{
+    return preg_replace_callback("/{$symbol}([a-z])/", function (&$matches) {
+        return ucfirst($matches[1]);
+    }, $name);
+}
+
+/**
  * Translate label/labels
  *
  * @param  string $label name of label

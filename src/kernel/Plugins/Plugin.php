@@ -78,6 +78,22 @@ class Plugin
     /**
      * @return string
      */
+    public function getApplicationPath()
+    {
+        return $this->appPath;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInstallerPath()
+    {
+        return $this->installerPath;
+    }
+
+    /**
+     * @return string
+     */
     public function getSrcPath()
     {
         return "plugins/{$this->name}/src";
@@ -92,6 +108,30 @@ class Plugin
     }
 
     /**
+     * 禁用插件
+     *
+     * @return mixed
+     */
+    public function disable()
+    {
+        return resolve('config')->delete("plugins.{$this->name}");
+    }
+
+    /**
+     * 启用插件
+     *
+     * @return mixed
+     */
+    public function enable()
+    {
+        $plugins = config('plugins');
+        $namespace = $this->getNamespace();
+        $plugins[$this->name] = $namespace;
+
+        return resolve('config')->save(['plugins' => &$plugins,]);
+    }
+
+    /**
      * 获取插件路径
      *
      * @return string
@@ -99,6 +139,14 @@ class Plugin
     public function getPath()
     {
         return $this->path;
+    }
+
+    /**
+     * @return string
+     */
+    public function getConfigPath()
+    {
+        return $this->configPath;
     }
 
     /**

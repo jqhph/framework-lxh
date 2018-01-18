@@ -138,12 +138,8 @@ class Installer
      */
     protected function saveConfig($name)
     {
-        $plugins = config('plugins');
-        $namespace = $this->plugin->getNamespace();
-        $plugins[$name] = $namespace;
-
-        if (!resolve('config')->save(['plugins' => &$plugins,])) {
-            $this->composer->deletePsr4Namespace($namespace);
+        if (!$this->plugin()->enable()) {
+            $this->composer->deletePsr4Namespace($this->plugin()->getNamespace());
             throw new InvalidArgumentException("Save plugin in config failed!");
         }
 //        $this->line("保存插件到配置文件成功");
@@ -230,14 +226,14 @@ class Installer
         $namespace = $this->plugin->getNamespace();
 
         files()->removeInDir($this->assetsInstallPath . '/' . $name, true);
-        $this->line("Remove assets success!");
+        $this->info("Remove assets success!");
 
         $this->composer->deletePsr4Namespace($namespace);
         $this->composer->dumpOptimized();
-        $this->line("Remove namespace success!");
+        $this->info("Remove namespace success!");
 
 
-        if (!resolve('config')->delete("plugins.$name")) {
+        if (!$this->plugin()->disable()) {
             throw new InvalidArgumentException("Uninstall plugin fialed!");
         }
 

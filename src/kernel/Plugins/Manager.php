@@ -68,6 +68,15 @@ class Manager
     }
 
     /**
+     * @param $name
+     * @return Plugin
+     */
+    public function plugin($name)
+    {
+        return new Plugin($this, $name);
+    }
+
+    /**
      * 获取所有插件名称
      *
      * @return array

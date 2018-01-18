@@ -279,7 +279,7 @@ class FileManager
      *
      * @return bool
      */
-    public function putContents($path, & $data, $lock = false, $context = null)
+    public function putContents($path, $data, $lock = false, $context = null)
     {
         $fullPath = $this->concatPaths($path); //todo remove after changing the params
 

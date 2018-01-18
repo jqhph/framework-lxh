@@ -1,6 +1,6 @@
 <?php
 
-namespace GetsWhatsApp\Installer;
+namespace {namespace}\Installer;
 
 use Lxh\Contracts\PluginInstaller;
 use Lxh\Plugins\Plugin;

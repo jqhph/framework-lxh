@@ -6,29 +6,29 @@
 
 return [
     // 插件名称，与文件夹相同
-    'name' => 'gets-whatsapp',
+    'name' => '{name}',
     // 插件描述
     'description' => '',
     // 主页
     'homepage' => '',
 
     // 插件类型
-    'type' => PLUGIN_FUNCTION,
+//    'type' => PLUGIN_FUNCTION,
 
     // 插件所属模块定义（前台、后台、前后台）
-    'belong' => PLUGIN_BELONG_ADMIN,
+//    'belong' => PLUGIN_BELONG_ADMIN,
 
     'authors' => [
         [
-            'name' => 'Jqh',
-            'email' => '841324345@qq.com',
-            'homepage' => ''
+//            'name' => 'Jqh',
+//            'email' => '841324345@qq.com',
+//            'homepage' => ''
         ]
     ],
 
     // 命名空间前缀
-    'namespace' => 'GetsWhatsApp',
+    'namespace' => '{namespace}',
 
     // 插件创建时间
-    'date' => '2018-01-17',
+    'date' => '{date}',
 ];

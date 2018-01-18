@@ -1,12 +1,10 @@
 <?php
 
-namespace GetsWhatsApp;
+namespace {namespace};
 
-use Lxh\Auth\AuthManager;
 use Lxh\Auth\Menu;
 use Lxh\Container\Container;
 use Lxh\Contracts\PluginRegister;
-use Lxh\Plugins\Dispatcher;
 use Lxh\Router\Dispatcher as Router;
 
 class Application implements PluginRegister
@@ -28,16 +26,22 @@ class Application implements PluginRegister
      */
     public function register()
     {
-        $this->registerRouter();
+        // 注册路由示例，如不需要请删除
+//        $this->registerRouter();
 
-        // 创建菜单
+        // 创建菜单示例，如不需要请删除
+//        $this->registerMenu();
+
+    }
+
+    protected function registerMenu()
+    {
         listen(EVENT_MENU_RESOLVING, function (Menu $menu) {
             // 权限判断
-            if (auth()->can('whatsapp')) {
-                $menu->addPlugin($menu->buildRow('test', '/whatsapp/test'));
+            if (auth()->can('{name}')) {
+                $menu->addPlugin($menu->buildRow('test', '/{name}/test'));
             }
         });
-
     }
 
     /**
@@ -48,10 +52,10 @@ class Application implements PluginRegister
      */
     protected function registerRouter()
     {
-        $prefix = 'whatsapp';
-        // 后台模块
+        $prefix = '{name}';
+        // 定义为后台模块
         $module = admin_name();
-        $namespace = "GetsWhatsApp\\Http\\Controllers";
+        $namespace = "{namespace}\\Http\\Controllers";
 
         $this->router->attach([
             [
@@ -61,7 +65,7 @@ class Application implements PluginRegister
                     'auth' => false,
                     'module' => $module,
                     'namespace' => &$namespace,
-                    'controller' => 'Message',
+                    'controller' => 'Test',
                     'action' => 'Test'
                 ]
             ],
