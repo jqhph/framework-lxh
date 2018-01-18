@@ -174,8 +174,8 @@ class PluginCommand extends Command
 
         $name = explode('\\', $name);
         $name = ucfirst(
-            camel_case(
-                camel_case(end($name)), '-'
+            __camel_case__(
+                __camel_case__(end($name)), '-'
             )
         );
 
@@ -331,7 +331,7 @@ class PluginCommand extends Command
         return strtr(
             file_get_contents($this->getRegisterStub()),
             array_merge($this->variables($name, $namespace), [
-                '{pluginConstName}' => strtoupper(lc_underline(camel_case($name, '-'))),
+                '{pluginConstName}' => strtoupper(lc_underline(__camel_case__($name, '-'))),
             ])
         );
     }
@@ -372,7 +372,7 @@ class PluginCommand extends Command
      */
     protected function formatPluginName()
     {
-        return lc_dash(camel_case($this->argument('name')));
+        return lc_dash(__camel_case__($this->argument('name')));
     }
 
     /**
@@ -382,7 +382,7 @@ class PluginCommand extends Command
      */
     protected function formatNamespace()
     {
-        return ucfirst(camel_case($this->formatPluginName(), '-'));
+        return ucfirst(__camel_case__($this->formatPluginName(), '-'));
     }
 
     /**

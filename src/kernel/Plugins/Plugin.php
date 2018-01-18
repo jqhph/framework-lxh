@@ -150,6 +150,16 @@ class Plugin
     }
 
     /**
+     * 获取composer依赖插件包
+     *
+     * @return array|mixed
+     */
+    public function getComposerRequire()
+    {
+        return (array)$this->config('composer-require');
+    }
+
+    /**
      * @return string
      */
     public function getAssetsPath()

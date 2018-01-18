@@ -67,7 +67,7 @@ class Installer
      */
     public function isInstalled()
     {
-        $namespace = ucfirst(camel_case($this->plugin->getName(), '-'));
+        $namespace = ucfirst(__camel_case__($this->plugin->getName(), '-'));
 
         if ($this->composer->psr4NamespaceExist($namespace)) {
             return true;
@@ -105,6 +105,13 @@ class Installer
         }
     }
 
+    public function warn($msg)
+    {
+        if ($this->output) {
+            $this->output->warn($msg);
+        }
+    }
+
     public function info($msg)
     {
         if ($this->output) {
@@ -124,7 +131,7 @@ class Installer
         $namespace = $this->plugin->getNamespace();
         if ($this->composer->psr4NamespaceExist($namespace)) {
             // 已存在同样命名空间，插件已安装或存在同名插件
-            throw new InvalidArgumentException("Namespace[{$namespace}] already exist!");
+            throw new InvalidArgumentException("Namespace[{$namespace}] already existed!");
         }
         if (!$this->composer->addPsr4Namespace($namespace, $this->plugin->getSrcPath())) {
             throw new InvalidArgumentException("Add namespace[$namespace] failed!");
@@ -158,6 +165,30 @@ class Installer
             throw new InvalidArgumentException("Save plugin in config failed!");
         }
 //        $this->line("保存插件到配置文件成功");
+    }
+
+    /**
+     * 安装composer依赖包
+     */
+    protected function requireComposerDependences()
+    {
+        if (!$dependences = $this->plugin->getComposerRequire()) {
+            return;
+        }
+        $required = (array)$this->composer->getConfig('require');
+        foreach ($dependences as $name => $version) {
+            if (is_int($name) || empty($version)) {
+                continue;
+            }
+            if (isset($required[$name])) {
+                $this->warn("Composer dependence \"$name\" already existed!");
+                continue;
+            }
+
+            // 安装composer插件
+            $this->composer->require($name, $version);
+        }
+
     }
 
     /**
@@ -198,6 +229,9 @@ class Installer
         if ($installer = $this->plugin->getInstaller()) {
             $installer->install($this->plugin);
         }
+
+        // 最后一步安装composer插件
+        $this->requireComposerDependences();
 
         $this->info("Installed!");
     }

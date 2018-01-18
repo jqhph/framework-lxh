@@ -5,10 +5,11 @@
  */
 
 return [
-    // 插件名称，与文件夹相同
+    // 插件名称，请使用小写中划线风格命名。为避免重名情况，插件名称不宜过短
+    // 如果是同个系列插件（父子插件，相互依赖的插件），请使用相同的前缀命名
     'name' => '{name}',
 
-    // 插件描述
+    // 插件用途描述
     'description' => '',
 
     // 主页
@@ -25,12 +26,14 @@ return [
 
     // 插件需要安装的composer依赖包
     // 安装插件时会自动安装，卸载插件时则需要手动卸载（如果其他插件也依赖了此composer包，自动卸载则会导致程序出错）
-//    'composer-require' => ['包名' => '版本号'],
+    'composer-require' => [
+//        '包名' => '版本号',
+    ],
 
     // 如果插件依赖了依赖了[src/application]目录下的类库或依赖了其他插件的类库（本框架核心类库除外），请在此说明
-//    'dependencies' => '
+    'dependencies' => '
 //            登录检查用户有效性 [GetsRtxAuth\Http\Models\Admin::allowedLogin] ===> [gets-chats][GetsChats\Http\Models\Admin::isAllowed]
-//      ',
+    ',
 
     'authors' => [
         [

@@ -2,6 +2,7 @@
 
 namespace Lxh\Support;
 
+use Lxh\Exceptions\Exception;
 use Lxh\Exceptions\InvalidArgumentException;
 use Lxh\File\FileManager;
 use Symfony\Component\Process\Process;
@@ -9,6 +10,11 @@ use Symfony\Component\Process\ProcessUtils;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Lxh\Helper\Util;
 
+/**
+ * Class Composer
+ * @package Lxh\Support
+ * @method static require($name, $version = null);
+ */
 class Composer
 {
     /**
@@ -241,9 +247,18 @@ class Composer
 
     public function __call($method, $arguments)
     {
-        if ($method == 'require' && !empty($arguments[0])) {
+        if ($method == 'require') {
+            if (empty($arguments[0])) {
+                return false;
+            }
+            $version = '';
+            if (! empty($arguments[1])) {
+                $version = ':' . $arguments[1];
+            }
 
-            exec(trim($this->findComposer().' require '.$arguments[0]));
+            return exec(trim($this->findComposer().' require '.$arguments[0] . $version));
         }
+
+        throw new Exception("Call to class method " . __CLASS__ . '::' . __METHOD__ . ' undefined!');
     }
 }

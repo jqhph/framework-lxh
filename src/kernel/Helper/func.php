@@ -251,7 +251,7 @@ function lc_underline($name)
  * @param string $symbol
  * @return mixed|string
  */
-function camel_case($name, $symbol = '_')
+function __camel_case__($name, $symbol = '_')
 {
     return preg_replace_callback("/{$symbol}([a-z])/", function (&$matches) {
         return ucfirst($matches[1]);

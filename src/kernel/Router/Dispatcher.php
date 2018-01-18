@@ -304,7 +304,7 @@ class Dispatcher implements Router
 
         // 控制器命名空间
         if ($namespace = get_value($params, 'namespace')) {
-            $realContr = $namespace . '\\' . ucfirst(camel_case($realContr, '-'));
+            $realContr = $namespace . '\\' . ucfirst(__camel_case__($realContr, '-'));
         }
 
         // 控制器文件夹
