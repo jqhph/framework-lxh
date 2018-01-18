@@ -123,9 +123,9 @@ class Installer
      *
      * @param $name
      */
-    protected function copyAssets($name)
+    public function copyAssets()
     {
-        $result = $this->recurseCopy($this->plugin->getAssetsPath(), "{$this->assetsInstallPath}/$name");
+        $result = $this->recurseCopy($this->plugin->getAssetsPath(), "{$this->assetsInstallPath}/{$this->plugin->getName()}");
         if (! $result) {
             $this->error("Copy assets failed!");
         }

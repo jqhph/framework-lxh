@@ -27,13 +27,6 @@ class PluginCommand extends Command
     protected $description = 'Manage plugins.';
 
     /**
-     * @var array
-     */
-//    protected $allowedOperations = [
-//        'list', 'install', 'uninstall', 'installed'
-//    ];
-
-    /**
      * Execute the console command.
      *
      * @return void
@@ -43,29 +36,44 @@ class PluginCommand extends Command
         $installer = $this->installer();
         $installer->setOutput($this);
 
-        // 创建插件
-        if ($this->option('create')) {
-            return $this->create();
+        // 同步资源文件
+        if ($this->option('sync')) {
+            $installer->copyAssets();
+            return;
         }
 
         // 禁用插件
         if ($this->option('disable')) {
-            return $this->disable();
+            $this->disable();
+            return;
         }
 
         // 启用插件
         if ($this->option('enable')) {
-            return $this->enable();
+            $this->enable();
+            return;
+        }
+
+        // 创建插件
+        if ($this->option('create')) {
+            $this->create();
+
+            if ($this->option('install')) {
+                $installer->install();
+            }
+            return;
         }
 
         // 安装插件
-        if ($install = $this->option('install')) {
-            return $installer->install();
+        if ($this->option('install')) {
+            $installer->install();
+            return;
         }
 
         // 卸载插件
-        if ($uninstall = $this->option('uninstall')) {
-            return $installer->uninstall();
+        if ($this->option('uninstall')) {
+            $installer->uninstall();
+            return;
         }
 
         $this->info(
@@ -85,7 +93,8 @@ class PluginCommand extends Command
         $plugin = resolve('plugin.manager')->plugin($name);
 
         if ($plugin->disable()) {
-            return $this->info('Success!');
+            $this->info('Success!');
+            return;
         }
         $this->error('Failed!');
     }
@@ -105,11 +114,13 @@ class PluginCommand extends Command
 
         $composer = new Composer();
         if (!$composer->psr4NamespaceExist($namespace)) {
-            return $this->error('Please install the plugin first!');
+            $this->error('Please install the plugin first!');
+            return;
         }
 
         if ($plugin->enable()) {
-            return $this->line('Success!');
+            $this->line('Success!');
+            return;
         }
         $this->error('Failed!');
     }
@@ -295,6 +306,7 @@ class PluginCommand extends Command
             ['create', '', InputOption::VALUE_NONE, 'Create a empty value template.'],
             ['disable', '', InputOption::VALUE_NONE, 'Disable use the plugin.'],
             ['enable', '', InputOption::VALUE_NONE, 'Enable use the plugin.'],
+            ['sync', '', InputOption::VALUE_NONE, 'Copy assets to webserver path.'],
         ];
     }
 
