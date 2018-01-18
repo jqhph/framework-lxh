@@ -10,6 +10,11 @@ use Lxh\Router\Dispatcher as Router;
 class Application implements PluginRegister
 {
     /**
+     * @var string
+     */
+    protected $pluginName = '{name}';
+
+    /**
      * @var Router
      */
     protected $router;
@@ -26,6 +31,9 @@ class Application implements PluginRegister
      */
     public function register()
     {
+        // 注册视图命名空间
+//        $this->registerViewsNamespace();
+
         // 注册路由示例，如不需要请删除
 //        $this->registerRouter();
 
@@ -34,11 +42,27 @@ class Application implements PluginRegister
 
     }
 
+    /**
+     * 注册视图命名空间
+     * 如果你的插件没有使用模板，则无需注册
+     *
+     * @return void
+     */
+    protected function registerViewsNamespace()
+    {
+        add_view_namespace($this->pluginName, dirname(__DIR__) . '/views');
+    }
+
+    /**
+     * 注册插件菜单示例
+     *
+     * @return void
+     */
     protected function registerMenu()
     {
         listen(EVENT_MENU_RESOLVING, function (Menu $menu) {
             // 权限判断
-            if (auth()->can('{name}')) {
+            if (auth()->can($this->pluginName)) {
                 $menu->addPlugin($menu->buildRow('test', '/{name}/test'));
             }
         });
@@ -52,7 +76,7 @@ class Application implements PluginRegister
      */
     protected function registerRouter()
     {
-        $prefix = '{name}';
+        $prefix = $this->pluginName;
         // 定义为后台模块
         $module = admin_name();
         $namespace = "{namespace}\\Http\\Controllers";

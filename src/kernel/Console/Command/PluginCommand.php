@@ -168,6 +168,10 @@ class PluginCommand extends Command
         $files->mkdir($basePath . '/src/Http/Middlewares');
         $this->info('Build Http class dir success!');
 
+        // 创建模板文件夹
+        $files->mkdir($basePath . '/views');
+        $this->info('Build views dir success!');
+
         $this->info('Created!');
     }
 
