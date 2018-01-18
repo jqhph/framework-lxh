@@ -186,8 +186,7 @@ function load_plugin_js($plugin, $name)
 // 加载插件css
 function load_plugin_css($plugin, $name)
 {
-    return "<script src=\"{$GLOBALS['resource-server']}/assets/plugins/$plugin/css/$name.css?v={$GLOBALS['css-version']}\"></script>";
-
+    return "<link href=\"{$GLOBALS['resource-server']}/assets/plugins/$plugin/css/$name.css?v={$GLOBALS['css-version']}\"  rel=\"stylesheet\" type=\"text/css\"/>";
 }
 
 // 加载插件图片
