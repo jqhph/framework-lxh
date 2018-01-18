@@ -186,14 +186,14 @@ function load_plugin_js($plugin, $name)
 // 加载插件css
 function load_plugin_css($plugin, $name)
 {
-    return "<script src=\"{$GLOBALS['resource-server']}/assets/plugins/$plugin/css/$name.js?v={$GLOBALS['js-version']}\"></script>";
+    return "<script src=\"{$GLOBALS['resource-server']}/assets/plugins/$plugin/css/$name.css?v={$GLOBALS['css-version']}\"></script>";
 
 }
 
 // 加载插件图片
 function load_plugin_img($plugin, $name)
 {
-    return "<script src=\"{$GLOBALS['resource-server']}/assets/plugins/$plugin/images/$name.js?v={$GLOBALS['js-version']}\"></script>";
+    return "<script src=\"{$GLOBALS['resource-server']}/assets/plugins/$plugin/images/$name\"></script>";
 
 }
 
