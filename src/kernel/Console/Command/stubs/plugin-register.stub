@@ -91,19 +91,73 @@ class Application implements PluginRegister
         // 定义为后台模块
         $module = admin_name();
         $namespace = "{$this->namespace}\\Http\\Controllers";
+        $apiNamespace = "{$this->namespace}\\Http\\Controllers\\Api";
 
+        // 常用路由规则注册示例
+        // 如不需要请删除
         $this->router->attach([
+            // 访问 => /{name}
             [
-                'pattern' => "/$prefix/test",
-                'method' => 'GET',
+                'pattern' => "/$prefix",
+                'method' => '*',
                 'params' => [
-                    'auth' => false,
                     'module' => $module,
                     'namespace' => &$namespace,
-                    'controller' => 'Test',
-                    'action' => 'Test'
+                    'controller' => 'Index',
+                    'action' => 'Index',
+                ]
+            ],
+
+            // 访问 => /{name}/user/action/create
+            [
+                'pattern' => "/$prefix/:lc@c/action/:lc@a",
+                'method' => '*',
+                'params' => [
+                    'module' => $module,
+                    'namespace' => &$namespace,
+                    'controller' => ':lc@c',
+                    'action' => ':lc@a',
+                ]
+            ],
+
+            // 访问 => /{name}/user/view/12
+            [
+                'pattern' => "/$prefix/:lc@c/:lc@a/:int@id",
+                'method' => '*',
+                'params' => [
+                    'module' => $module,
+                    'namespace' => &$namespace,
+                    'controller' => ':lc@c',
+                    'action' => ':lc@a',
+                    'id' => ':int@id',
+                ]
+            ],
+
+            // 访问 => /{name}/api/user/view/12
+            [
+                'pattern' => "/$prefix/api/:lc@c/:lc@a/:int@id",
+                'method' => '*',
+                'params' => [
+                    'module' => $module,
+                    'namespace' => &$apiNamespace,
+                    'controller' => ':lc@c',
+                    'action' => ':lc@a',
+                    'id' => ':int@id',
+                ]
+            ],
+
+            // 访问 => /{name}/api/user/create
+            [
+                'pattern' => "/$prefix/api/:lc@c/:lc@a",
+                'method' => '*',
+                'params' => [
+                    'module' => $module,
+                    'namespace' => &$apiNamespace,
+                    'controller' => ':lc@c',
+                    'action' => ':lc@a',
                 ]
             ],
         ]);
+
     }
 }

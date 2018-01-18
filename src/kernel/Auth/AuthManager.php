@@ -57,6 +57,11 @@ class AuthManager
      */
     protected $menu;
 
+    /**
+     * @var bool
+     */
+    protected $enable = true;
+
     public function __construct(Model $user = null)
     {
         $this->user = $user ?: admin();
@@ -70,6 +75,8 @@ class AuthManager
         if ($this->usesCached) {
             $this->cache = new Store($this->createCacheStore());
         }
+
+        $this->enable = config('use-rbac', true);
     }
 
     protected function createCacheStore()
@@ -327,6 +334,10 @@ class AuthManager
      */
     public function can($ability)
     {
+        if (! $this->enable) {
+            return true;
+        }
+
         if ($this->isAdministrator()) {
             return true;
         }
@@ -453,6 +464,10 @@ class AuthManager
      */
     public function forbidden($ability)
     {
+        if (! $this->enable) {
+            return false;
+        }
+
         if ($this->isAdministrator()) {
             return false;
         }

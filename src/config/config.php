@@ -16,8 +16,8 @@ $config = [
     // 如果composer是全局安装，则无需配置此参数
     'composer.working-path' => '',
 
-    // 登录验证模型设置
-    'admin.auth.model' => 'Admin',
+    // 使用RBAC权限管理
+    'use-rbac' => true,
 
     'view' => [
         // 模板文件路径

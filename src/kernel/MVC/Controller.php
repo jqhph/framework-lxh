@@ -14,6 +14,7 @@ use Lxh\Config\Config;
 use Lxh\Contracts\Container\Container;
 use Lxh\Events\Dispatcher;
 use Lxh\Helper\Util;
+use Lxh\Helper\Valitron\Validator;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
 use Lxh\MVC\ControllerManager;
@@ -269,6 +270,28 @@ abstract class Controller
     public function getMiddleware()
     {
         return $this->middleware;
+    }
+
+    /**
+     * 获取字段验证处理器
+     * 用法清请参考：https://github.com/vlucas/valitron
+     *
+     *  $v->fill(['name' => '张三', 'email' => 'jqh@163.com'])
+        ->rule('required', array('name', 'email'))
+        ->rule('email', 'email');
+
+        if ($v->validate()) {
+            echo "Yay! We're all good!<br>";
+        } else {
+            // Errors
+            debug($v->errors());
+        }
+     *
+     * @return Validator
+     */
+    protected function validator()
+    {
+        return $this->container['validator'];
     }
 
     /**

@@ -419,7 +419,7 @@ class PluginCommand extends Command
             ['create', '', InputOption::VALUE_NONE, 'Create a empty value template.'],
             ['disable', '', InputOption::VALUE_NONE, 'Disable use the plugin.'],
             ['enable', '', InputOption::VALUE_NONE, 'Enable use the plugin.'],
-            ['sync', '', InputOption::VALUE_NONE, 'Copy assets to webserver path.'],
+            ['sync', 's', InputOption::VALUE_NONE, 'Copy assets to webserver path.'],
             ['controller', 'c', InputOption::VALUE_REQUIRED, 'Create a controller class.'],
             ['model', 'm', InputOption::VALUE_REQUIRED, 'Create model class.'],
         ];
