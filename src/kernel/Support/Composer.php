@@ -238,4 +238,12 @@ class Composer
 
         return $this;
     }
+
+    public function __call($method, $arguments)
+    {
+        if ($method == 'require' && !empty($arguments[0])) {
+
+            exec(trim($this->findComposer().' require '.$arguments[0]));
+        }
+    }
 }
