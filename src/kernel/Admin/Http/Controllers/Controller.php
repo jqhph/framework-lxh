@@ -488,46 +488,4 @@ class Controller extends Base
         return $this->container['validator'];
     }
 
-    /**
-     * 返回成功信息
-     *
-     * @return array
-     */
-    protected function success($msg = 'Success', array $options = [])
-    {
-        return $this->message($msg, Status::SUCCESS, $options);
-    }
-
-    /**
-     * 返回失败信息
-     *
-     * @return array
-     */
-    protected function failed($msg = 'Failed', array $options = [])
-    {
-        return $this->message($msg, Status::FAILED, $options);
-    }
-
-    /**
-     * 返回错误信息
-     *
-     * @return array
-     */
-    protected function error($msg = 'Invalid arguments', $status = Status::INVALID_ARGUMENTS)
-    {
-        return $this->message($msg, $status);
-    }
-
-    /**
-     * 返回数据到web
-     *
-     * @return array
-     */
-    protected function message($msg, $status, array $options = [])
-    {
-        if (is_array($msg)) {
-            return ['status' => & $status] + $msg;
-        }
-        return (['status' => & $status, 'msg' => & $msg] + $options);
-    }
 }

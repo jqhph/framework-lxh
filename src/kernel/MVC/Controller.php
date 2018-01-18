@@ -25,6 +25,14 @@ use Lxh\Cookie\Store as Cookie;
 
 abstract class Controller
 {
+    const SUCCESS = 10001;
+    const FAILED  = 10002;
+    // 参数错误
+    const INVALID_ARGUMENTS = 10003;
+
+    // 用户身份鉴权失败
+    const NOT_AUTH = 10008;
+
     /**
      * 控制器名称
      *
@@ -261,6 +269,49 @@ abstract class Controller
     public function getMiddleware()
     {
         return $this->middleware;
+    }
+
+    /**
+     * 返回成功信息
+     *
+     * @return array
+     */
+    protected function success($msg = 'Success', array $options = [])
+    {
+        return $this->message($msg, static::SUCCESS, $options);
+    }
+
+    /**
+     * 返回失败信息
+     *
+     * @return array
+     */
+    protected function failed($msg = 'Failed', array $options = [])
+    {
+        return $this->message($msg, static::FAILED, $options);
+    }
+
+    /**
+     * 返回错误信息
+     *
+     * @return array
+     */
+    protected function error($msg = 'Invalid arguments', $status = self::INVALID_ARGUMENTS)
+    {
+        return $this->message($msg, $status);
+    }
+
+    /**
+     * 返回数据到web
+     *
+     * @return array
+     */
+    protected function message($msg, $status, array $options = [])
+    {
+        if (is_array($msg)) {
+            return ['status' => & $status] + $msg;
+        }
+        return (['status' => & $status, 'msg' => & $msg] + $options);
     }
 
     /**
