@@ -105,12 +105,6 @@ function resolve($abstract)
     return $GLOBALS['CONTAINER']->make($abstract);
 }
 
-function make($abstract)
-{
-    return $GLOBALS['CONTAINER']->make($abstract);
-}
-
-
 /**
  * 获取单例模型
  *
@@ -180,6 +174,27 @@ function load_css($name, $dir = 'css', $module = __MODULE__)
 function load_img($name, $dir = 'images', $module = __MODULE__)
 {
     return "{$GLOBALS['resource-server']}/assets/{$GLOBALS['resource-version']}/{$module}/$dir/$name";
+}
+
+// 加载插件js
+function load_plugin_js($plugin, $name)
+{
+    return "<script src=\"{$GLOBALS['resource-server']}/assets/plugins/$plugin/js/$name.js?v={$GLOBALS['js-version']}\"></script>";
+
+}
+
+// 加载插件css
+function load_plugin_css($plugin, $name)
+{
+    return "<script src=\"{$GLOBALS['resource-server']}/assets/plugins/$plugin/css/$name.js?v={$GLOBALS['js-version']}\"></script>";
+
+}
+
+// 加载插件图片
+function load_plugin_img($plugin, $name)
+{
+    return "<script src=\"{$GLOBALS['resource-server']}/assets/plugins/$plugin/images/$name.js?v={$GLOBALS['js-version']}\"></script>";
+
 }
 
 /**

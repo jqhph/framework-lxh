@@ -8,4 +8,6 @@ return [
         'cache-expire' => 259200000,
         'lang-package-expire' => 259200000,
     ],
+    'plugins' => [
+    ],
 ];
