@@ -308,7 +308,7 @@ function admin()
 
     if ($instance) return $instance;
 
-    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->create(config('admin.auth.model'))->setupSession();
+    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->create(config('admin.auth.model', 'Admin'))->setupSession();
 
 }
 
