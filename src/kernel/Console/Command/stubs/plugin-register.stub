@@ -21,19 +21,13 @@ class Application implements PluginRegister
     protected $namespace = '{namespace}';
 
     /**
-     * @var Container
-     */
-    protected $container;
-
-    /**
      * @var Router
      */
     protected $router;
 
     public function __construct()
     {
-        $this->container = container();
-        $this->router = $this->container->make('router');
+        $this->router = resolve('router');
 
         // 定义插件名常量
         define('{pluginConstName}', $this->pluginName);
