@@ -34,6 +34,7 @@ $config['sea-config'] = [
         'view' => "$base/view",
         'module' => "$base/view/module",
         'css' => "$base/css",
+        'plugins' => "{$config['resource-server']}/assets/plugins",
     ],
     // 设置别名，方便调用
     'alias' => [
