@@ -321,7 +321,7 @@ function admin()
  */
 function http()
 {
-    return make('http.client');
+    return resolve('http.client');
 }
 
 /**

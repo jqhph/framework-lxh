@@ -71,7 +71,7 @@ class Plugin
         $this->path = __PLUGINS__ . $this->name;
         $this->configPath = "{$this->path}/config/app.php";
         $this->appPath = "{$this->path}/src/Application.php";
-        $this->installerPath = "{$this->path}/src/installer/Handler.php";
+        $this->installerPath = "{$this->path}/src/Installer/Handler.php";
         $this->assetsPath = "{$this->path}/assets";
     }
 
