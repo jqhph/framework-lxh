@@ -127,7 +127,7 @@ class Application
      */
     protected function registerPlugins()
     {
-        foreach (config('plugins') as $name => &$namespace) {
+        foreach ((array)config('plugins') as $name => &$namespace) {
             Plugin::createApplication($namespace)->register();
         }
     }

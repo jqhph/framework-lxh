@@ -54,6 +54,11 @@ class Plugin
      */
     protected $application;
 
+    /**
+     * @var string
+     */
+    protected $srcPath = '';
+
     public function __construct(Manager $manager, $plugin)
     {
         $this->manager = $manager;
@@ -65,9 +70,17 @@ class Plugin
     {
         $this->path = __PLUGINS__ . $this->name;
         $this->configPath = "{$this->path}/config/app.php";
-        $this->appPath = "{$this->path}/Application.php";
-        $this->installerPath = "{$this->path}/installer/Handler.php";
+        $this->appPath = "{$this->path}/src/Application.php";
+        $this->installerPath = "{$this->path}/src/installer/Handler.php";
         $this->assetsPath = "{$this->path}/assets";
+    }
+
+    /**
+     * @return string
+     */
+    public function getSrcPath()
+    {
+        return "plugins/{$this->name}/src";
     }
 
     /**

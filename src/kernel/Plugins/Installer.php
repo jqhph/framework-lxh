@@ -111,7 +111,7 @@ class Installer
             // 已存在同样命名空间，插件已安装或存在同名插件
             throw new InvalidArgumentException("Namespace[{$namespace}] already exist!");
         }
-        if (!$this->composer->addPsr4Namespace($namespace, "plugins/$name")) {
+        if (!$this->composer->addPsr4Namespace($namespace, $this->plugin->getSrcPath())) {
             throw new InvalidArgumentException("Add namespace[$namespace] failed!");
         }
         $this->composer->dumpOptimized();

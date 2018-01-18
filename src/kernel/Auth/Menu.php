@@ -253,11 +253,7 @@ class Menu
         $lis = '';
 
         foreach ($this->pluginsMenus as &$menu) {
-            if ($menu instanceof \Closure) {
-                $lis .= '<li>' . $menu() . '</li>';
-            } else {
-                $lis .= '<li>' . $menu . '</li>';
-            }
+            $lis .= '<li>' . $menu . '</li>';
         }
 
         return $lis;

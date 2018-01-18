@@ -21,7 +21,7 @@
                 "application\/"
             ],
             "GetsWhatsApp\\": [
-                "plugins\/gets-whatsapp"
+                "plugins\/gets-whatsapp\/src"
             ]
         }
     },
