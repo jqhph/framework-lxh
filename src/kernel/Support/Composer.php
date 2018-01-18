@@ -114,8 +114,16 @@ class Composer
      */
     public function deletePsr4Namespace($namespace)
     {
-        $namespace = trim($namespace, "\\") . "\\";
-        return $this->delete('autoload.psr-4.' . $namespace);
+        return $this->delete('autoload.psr-4.' . $this->normalizeNamespace($namespace));
+    }
+
+    /**
+     * @param $namespace
+     * @return string
+     */
+    protected function normalizeNamespace($namespace)
+    {
+        return trim($namespace, "\\") . "\\";
     }
 
     /**
@@ -129,12 +137,10 @@ class Composer
             throw new InvalidArgumentException('不支持的自动加载类型');
         }
 
-        $namespace = trim($namespace, "\\") . "\\";
-
         return $this->merge([
             'autoload' => [
                 $type => [
-                    $namespace => (array) $paths
+                    $this->normalizeNamespace($namespace) => (array) $paths
                 ]
             ]
         ]);
@@ -157,7 +163,7 @@ class Composer
      */
     public function psr4NamespaceExist($namespace)
     {
-        return $this->getConfig("autoload.psr-4.$namespace") ? true : false;
+        return $this->getConfig("autoload.psr-4.{$this->normalizeNamespace($namespace)}") ? true : false;
     }
 
     /**

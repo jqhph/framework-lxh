@@ -42,6 +42,18 @@ class PluginCommand extends Command
             return;
         }
 
+        // 创建控制器
+        if ($controller = $this->option('controller')) {
+            $this->createController($installer, $controller);
+            return;
+        }
+
+        // 创建模型
+        if ($model = $this->option('model')) {
+            $this->createModel($installer, $model);
+            return;
+        }
+
         // 禁用插件
         if ($this->option('disable')) {
             $this->disable();
@@ -50,7 +62,7 @@ class PluginCommand extends Command
 
         // 启用插件
         if ($this->option('enable')) {
-            $this->enable();
+            $this->enable($installer);
             return;
         }
 
@@ -82,6 +94,99 @@ class PluginCommand extends Command
     }
 
     /**
+     * 创建控制器
+     *
+     * @param Installer $installer
+     * @param $controller
+     */
+    public function createController(Installer $installer, $controller)
+    {
+        if (!$installer->isInstalled()) {
+            $this->error('Please install the plugin first!');
+            return;
+        }
+
+        list($namespace, $path) = $this->formatHttpClass($controller, 'Controllers');
+
+        $this->createHttpClass($controller, $path, $namespace, 'controller');
+    }
+
+    /**
+     * @param $name
+     * @param $type
+     * @return array
+     */
+    protected function formatHttpClass($name, $type)
+    {
+        list($sub, $controller) = $this->parseClassName($name);
+
+        $plugin = resolve('plugin.manager')->plugin($this->formatPluginName());
+
+        $namespace = $this->formatNamespace() . "\\Http\\{$type}{$sub}";
+        $path = $plugin->getPath() . "/src/Http/{$type}{$sub}/$controller.php";
+
+        return [$namespace, $path];
+    }
+
+    /**
+     * @param $name
+     * @return string
+     */
+    protected function parseClassName($name)
+    {
+        $names = explode('\\', $name);
+        if (count($names) < 2) {
+            return ['', $name];
+        }
+
+        $name = array_pop($names);
+
+        return ['\\' . implode('\\', $names), $name];
+    }
+
+    /**
+     * 创建模型
+     */
+    public function createModel(Installer $installer, $model)
+    {
+        if (!$installer->isInstalled()) {
+            $this->error('Please install the plugin first!');
+            return;
+        }
+
+        list($namespace, $path) = $this->formatHttpClass($model, 'Models');
+
+        $this->createHttpClass($model, $path, $namespace, 'model');
+    }
+
+    /**
+     * @param string $name 控制器、模型名称
+     * @param string $path 路径
+     * @param string $namespace 命名空间
+     * @param string $type 类型
+     */
+    protected function createHttpClass($name, $path, $namespace, $type)
+    {
+        if (file_exists($path)) {
+            $this->error('File already exist!');
+            return;
+        }
+
+        $name = explode('\\', $name);
+
+        $content = strtr(
+            file_get_contents(__DIR__ . "/stubs/plugin-{$type}.stub"),
+            $this->variables(end($name), $namespace)
+        );
+
+        if (files()->putContents($path, $content)) {
+            $this->info('Created!');
+        } else {
+            $this->error('Failed!');
+        }
+    }
+
+    /**
      * 禁用插件
      *
      * @return void
@@ -104,16 +209,13 @@ class PluginCommand extends Command
      *
      * @return void
      */
-    protected function enable()
+    protected function enable(Installer $installer)
     {
         $name = $this->formatPluginName();
 
         $plugin = resolve('plugin.manager')->plugin($name);
 
-        $namespace = $this->formatNamespace();
-
-        $composer = new Composer();
-        if (!$composer->psr4NamespaceExist($namespace)) {
+        if (!$installer->isInstalled()) {
             $this->error('Please install the plugin first!');
             return;
         }
@@ -196,11 +298,22 @@ class PluginCommand extends Command
     {
         return strtr(
             file_get_contents($this->getInstallerStub()),
-            [
-                '{namespace}' => $namespace,
-                '{name}'      => $name,
-            ]
+            $this->variables($name, $namespace)
         );
+    }
+
+    /**
+     * @param string $name
+     * @param string $namepace
+     * @return array
+     */
+    protected function variables($name = null, $namepace = null)
+    {
+        return [
+            '{namespace}' => $namepace ?: $this->formatNamespace(),
+            '{name}'      => $name ?: $this->formatPluginName(),
+            '{date}'      => date('Y-m-d H:i:s'),
+        ];
     }
 
     /**
@@ -212,10 +325,7 @@ class PluginCommand extends Command
     {
         return strtr(
             file_get_contents($this->getRegisterStub()),
-            [
-                '{namespace}' => $namespace,
-                '{name}'      => $name,
-            ]
+            $this->variables($name, $namespace)
         );
     }
 
@@ -229,11 +339,7 @@ class PluginCommand extends Command
     {
         return strtr(
             file_get_contents($this->getConfigStub()),
-            [
-                '{namespace}' => $namespace,
-                '{name}'      => $name,
-                '{date}'      => date('Y-m-d H:i:s'),
-            ]
+            $this->variables($name, $namespace)
         );
     }
 
@@ -307,6 +413,8 @@ class PluginCommand extends Command
             ['disable', '', InputOption::VALUE_NONE, 'Disable use the plugin.'],
             ['enable', '', InputOption::VALUE_NONE, 'Enable use the plugin.'],
             ['sync', '', InputOption::VALUE_NONE, 'Copy assets to webserver path.'],
+            ['controller', 'c', InputOption::VALUE_REQUIRED, 'Create a controller class.'],
+            ['model', 'm', InputOption::VALUE_REQUIRED, 'Create model class.'],
         ];
     }
 

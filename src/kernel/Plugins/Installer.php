@@ -61,6 +61,21 @@ class Installer
     }
 
     /**
+     * 判断插件是否已安装
+     *
+     * @return bool
+     */
+    public function isInstalled()
+    {
+        $namespace = ucfirst(camel_case($this->plugin->getName(), '-'));
+
+        if ($this->composer->psr4NamespaceExist($namespace)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * @param $output
      * @return $this
      */

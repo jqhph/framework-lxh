@@ -1,0 +1,10 @@
+<?php
+
+namespace {namespace};
+
+use Lxh\MVC\Model;
+
+class {name} extends Model
+{
+
+}
