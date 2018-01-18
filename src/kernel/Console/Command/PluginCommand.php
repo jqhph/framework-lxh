@@ -173,10 +173,15 @@ class PluginCommand extends Command
         }
 
         $name = explode('\\', $name);
+        $name = ucfirst(
+            camel_case(
+                camel_case(end($name)), '-'
+            )
+        );
 
         $content = strtr(
             file_get_contents(__DIR__ . "/stubs/plugin-{$type}.stub"),
-            $this->variables(end($name), $namespace)
+            $this->variables($name, $namespace)
         );
 
         if (files()->putContents($path, $content)) {
