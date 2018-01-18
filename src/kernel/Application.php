@@ -62,9 +62,9 @@ class Application
 
         $this->events    = events();
         $this->container = container();
+        $this->response = response();
+        $this->request = request();
         $this->container->instance('app', $this);
-        $this->response = $this->container['http.response'];
-        $this->request = $this->container['http.request'];
         $this->bindRouter();
 
         // 设置时区

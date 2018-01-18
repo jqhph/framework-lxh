@@ -47,7 +47,7 @@ class User
     {
         $admin = admin();
         if (! $admin->getId()) {
-            request()->url()->save();
+            $this->request->url()->save();
 
             return $this->response->redirect(Admin::url()->login());
         }

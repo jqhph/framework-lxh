@@ -30,10 +30,8 @@ $GLOBALS['EVENTS']        = $GLOBALS['CONTAINER']->make('events');
 if ($GLOBALS['CONFIG']->get('use-language')) {
     $GLOBALS['LANGUAGE'] = $GLOBALS['CONTAINER']->make('translator');
 }
-
-//if ($GLOBALS['CONFIG']->get('plugins')) {
-//    $GLOBALS['PLUGINDISPATCHER'] = $GLOBALS['CONTAINER']->make('plugin.manager');
-//}
+$GLOBALS['HTTPREQUEST'] = $GLOBALS['CONTAINER']->make('http.request');
+$GLOBALS['HTTPRESPONSE'] = $GLOBALS['CONTAINER']->make('http.response');
 
 $GLOBALS['resource-server']  = $GLOBALS['CONFIG']->get('client-config.resource-server');
 $GLOBALS['js-version']       = $GLOBALS['CONFIG']->get('js-version');
@@ -310,7 +308,7 @@ function admin()
 
     if ($instance) return $instance;
 
-    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->create('Admin')->setupSession();
+    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->create(config('admin.auth.model'))->setupSession();
 
 }
 
@@ -512,10 +510,32 @@ function add_view_namespace($namespace, $hints)
 }
 
 /**
+ * 指定后台身份鉴权类
+ *
+ * @param $class
+ * @return mixed
+ */
+function admin_auth_class($class)
+{
+    return $GLOBALS['CONTAINER']->make('controller.manager')->setAuthClass(admin_name(), $class);
+}
+
+/**
+ * 指定前台身份鉴权类
+ *
+ * @param $class
+ * @return mixed
+ */
+function homepage_auth_class($class)
+{
+    return $GLOBALS['CONTAINER']->make('controller.manager')->setAuthClass(home_name(), $class);
+}
+
+/**
  * @return \Lxh\Http\Request
  */
 function request() {
-    return $GLOBALS['CONTAINER']['http.request'];
+    return $GLOBALS['HTTPREQUEST'];
 }
 
 /**
@@ -523,7 +543,7 @@ function request() {
  */
 function response()
 {
-    return $GLOBALS['CONTAINER']['http.response'];
+    return $GLOBALS['HTTPRESPONSE'];
 }
 
 /**

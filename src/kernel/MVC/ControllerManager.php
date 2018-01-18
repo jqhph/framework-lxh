@@ -40,6 +40,15 @@ class ControllerManager extends Factory
     protected $controllerClass;
 
     /**
+     * 指定的身份鉴权类
+     *
+     * @var array
+     */
+    protected $authClasses = [
+
+    ];
+
+    /**
      * @var string
      */
     protected $module;
@@ -182,6 +191,20 @@ class ControllerManager extends Factory
         );
 
         $this->first = false;
+    }
+
+    /**
+     * 设置身份鉴权类
+     *
+     * @param string $module
+     * @param string $class
+     * @return $this
+     */
+    public function setAuthClass($module, $class)
+    {
+        $this->authClasses[$module] = &$class;
+
+        return $this;
     }
 
     /**
@@ -364,8 +387,13 @@ class ControllerManager extends Factory
     public function getAuth()
     {
         if (! $this->auth) {
-            $className = strpos($this->authParams, '\\') !== false ? $this->authParams :
-                (is_bool($this->authParams) ? "\\Lxh\\{$this->module}\\Auth\\{$this->defaultAuthClass}" : "\\Lxh\\{$this->module}\\Auth\\{$this->authParams}");
+            if (isset($this->authClasses[__MODULE__])) {
+                $className = $this->authClasses[__MODULE__];
+            } else {
+                $className = strpos($this->authParams, '\\') !== false ? $this->authParams :
+                    (is_bool($this->authParams) ? "\\Lxh\\{$this->module}\\Auth\\{$this->defaultAuthClass}"
+                        : "\\Lxh\\{$this->module}\\Auth\\{$this->authParams}");
+            }
 
             $this->auth = new $className($this->container, $this->request, $this->response);
 
