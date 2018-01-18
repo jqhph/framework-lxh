@@ -1,3 +1,0 @@
-<?php
-// 引入公共list模板
-echo component_view('list/list', ['list' => & $list, 'searchItems' => & $searchItems, 'titles' => & $titles, 'pages' => & $pages]);

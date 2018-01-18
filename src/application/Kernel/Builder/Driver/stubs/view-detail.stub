@@ -1,3 +1,0 @@
-<?php
-// 引入公共detail模板
-echo component_view('detail/detail', ['row' => & $row, 'opts' => & $detailFields, 'width' => 12, 'loadJs' => true]);

@@ -1,6 +1,0 @@
-
-    public function {method}(Request $req, Response $resp, & $params)
-    {
-        // TODO
-        {content}
-    }
