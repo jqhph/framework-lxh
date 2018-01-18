@@ -7,16 +7,30 @@
 return [
     // 插件名称，与文件夹相同
     'name' => '{name}',
+
     // 插件描述
     'description' => '',
+
     // 主页
     'homepage' => '',
+
+    // 定义插件版本号
+    'version' => 'dev',
 
     // 插件类型
 //    'type' => PLUGIN_FUNCTION,
 
     // 插件所属模块定义（前台、后台、前后台）
 //    'belong' => PLUGIN_BELONG_ADMIN,
+
+    // 插件需要安装的composer依赖包
+    // 安装插件时会自动安装，卸载插件时则需要手动卸载（如果其他插件也依赖了此composer包，自动卸载则会导致程序出错）
+//    'composer-require' => ['包名' => '版本号'],
+
+    // 如果插件依赖了依赖了[src/application]目录下的类库或依赖了其他插件的类库（本框架核心类库除外），请在此说明
+//    'dependencies' => '
+//            登录检查用户有效性 [GetsRtxAuth\Http\Models\Admin::allowedLogin] ===> [gets-chats][GetsChats\Http\Models\Admin::isAllowed]
+//      ',
 
     'authors' => [
         [
