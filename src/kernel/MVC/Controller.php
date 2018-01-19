@@ -89,6 +89,9 @@ abstract class Controller
         $this->response = response();
         $this->module = __MODULE__;
 
+        // 触发控制器被实例化事件
+        fire('controller.' . $this->getLowerCaseDashName() . '.resolving', [$this]);
+
         // 初始化
         $this->initialize();
     }

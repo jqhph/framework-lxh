@@ -176,6 +176,7 @@ class ControllerManager extends Factory
 
         if (! defined('__CONTROLLER__')) {
             define('__CONTROLLER__', $this->controllerName);
+            define('__CONTROLLER_DASH__', lc_dash($this->controllerName));
         }
 
         if (! defined('__ACTION__')) {
@@ -184,6 +185,7 @@ class ControllerManager extends Factory
 
         if (! defined('__MODULE__')) {
             define('__MODULE__', $this->module);
+            define('__MODULE_DASH__', lc_dash($this->module));
         }
 
         $this->response->append(
@@ -438,6 +440,16 @@ class ControllerManager extends Factory
     public function moduleName()
     {
         return $this->module ?: $this->getDefaultModule();
+    }
+
+    /**
+     * 获取小写下划线格式模块名
+     *
+     * @return string
+     */
+    public function moduleDash()
+    {
+        return defined('__MODULE_DASH__') ? __MODULE_DASH__ : lc_dash($this->getDefaultModule());
     }
 
     public function getRequestParams()

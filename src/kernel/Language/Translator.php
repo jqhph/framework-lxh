@@ -97,9 +97,7 @@ class Translator
 
         $this->language = config('language', $this->defaultLanguage);
 
-        $c = $container->make('controller.manager');
-
-        $this->moduleName = lc_dash($c->moduleName());
+        $this->moduleName = $container->make('controller.manager')->moduleDash();
 
     }
 
