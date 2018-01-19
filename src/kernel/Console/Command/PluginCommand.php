@@ -42,6 +42,12 @@ class PluginCommand extends Command
             return;
         }
 
+        // 从webserver同步插件资源文件到插件安装目录
+        if ($this->option('isync')) {
+            $installer->copyAssetsInvert();
+            return;
+        }
+
         // 创建控制器
         if ($controller = $this->option('controller')) {
             $this->createController($installer, $controller);
@@ -420,6 +426,7 @@ class PluginCommand extends Command
             ['disable', '', InputOption::VALUE_NONE, 'Disable use the plugin.'],
             ['enable', '', InputOption::VALUE_NONE, 'Enable use the plugin.'],
             ['sync', 's', InputOption::VALUE_NONE, 'Copy assets to webserver path.'],
+            ['isync', 'is', InputOption::VALUE_NONE, 'Copy assets to plugin path.'],
             ['controller', 'c', InputOption::VALUE_REQUIRED, 'Create a controller class.'],
             ['model', 'm', InputOption::VALUE_REQUIRED, 'Create model class.'],
         ];

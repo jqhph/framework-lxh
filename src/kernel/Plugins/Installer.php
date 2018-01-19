@@ -154,6 +154,19 @@ class Installer
     }
 
     /**
+     * 从webserver目录复制插件回自身目录
+     *
+     * @param $name
+     */
+    public function copyAssetsInvert()
+    {
+        $result = $this->recurseCopy("{$this->assetsInstallPath}/{$this->plugin->getName()}", $this->plugin->getAssetsPath());
+        if (! $result) {
+            $this->error("Copy assets failed!");
+        }
+    }
+
+    /**
      * 保存插件名称到配置文件
      *
      * @throws InvalidArgumentException
