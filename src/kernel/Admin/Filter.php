@@ -94,7 +94,7 @@ class Filter extends Widget implements Renderable
         }
 
         $this->attributes = [
-            'method' => 'post',
+            'method' => 'get',
             'action' => &$url
         ];
     }

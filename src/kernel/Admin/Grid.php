@@ -182,7 +182,7 @@ class Grid implements Renderable
         $this->idName = Admin::id();
 
         $this->setupPerPage();
-        $this->url->query($this->pjax, $this->pjaxContainer);
+//        $this->url->query($this->pjax, $this->pjaxContainer);
     }
 
     /**
