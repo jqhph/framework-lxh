@@ -166,7 +166,7 @@ class Model extends Entity
             $res = $this->query()->where(static::$idFieldsName, $ids[0])->delete();
         }
 
-        $this->afterBatchDelete($ids);
+        $this->afterBatchDelete($ids, $res);
 
         return $res;
     }
@@ -179,7 +179,7 @@ class Model extends Entity
         );
     }
 
-    protected function afterBatchDelete(array &$ids)
+    protected function afterBatchDelete(array &$ids, $effect)
     {
         fire(
             "{$this->module}.{$this->modelName}.batch-delete.after",

@@ -147,7 +147,7 @@ class Menu extends Controller
 
         $keyName = Models::getAbilityKeyName();
 
-        foreach ($this->model('Ability')->find() as &$row) {
+        foreach (Models::ability()->find() as &$row) {
             $abilities[] = [
                 'value' => $row[$keyName],
                 'label' => $row['title']

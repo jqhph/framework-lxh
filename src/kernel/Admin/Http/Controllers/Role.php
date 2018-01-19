@@ -109,7 +109,7 @@ class Role extends Controller
     protected function formatAbilities()
     {
         $abilities = [];
-        foreach ($this->model('Ability')->find() as $row) {
+        foreach (Models::ability()->find() as $row) {
             $abilities[] = [
                 'value' => $row['id'],
                 'label' => $row['title']
