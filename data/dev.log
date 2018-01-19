@@ -26,4 +26,6 @@ add_lang_scopes()
 add_js()
 add_css()
 
+contorller.{控制器}.resolving
+
 

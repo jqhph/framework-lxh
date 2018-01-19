@@ -31,9 +31,9 @@ return [
     ],
 
     // 如果插件依赖了依赖了[src/application]目录下的类库或依赖了其他插件的类库（本框架核心类库除外），请在此说明
-    'dependencies' => '
+//    'dependencies' => '
 //            登录检查用户有效性 [GetsRtxAuth\Http\Models\Admin::allowedLogin] ===> [gets-chats][GetsChats\Http\Models\Admin::isAllowed]
-    ',
+//    ',
 
     'authors' => [
         [
