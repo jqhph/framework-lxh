@@ -103,6 +103,18 @@ class ControllerManager extends Factory
     protected $middlewares = [];
 
     /**
+     * @var string
+     */
+    protected $currentSettingMiddleware;
+
+    /**
+     * 额外添加的控制器中间件
+     *
+     * @var array
+     */
+    protected $controllersMiddlewares = [];
+
+    /**
      * 用户登录验证类，默认开启验证
      * false表示不验证
      *
@@ -330,6 +342,9 @@ class ControllerManager extends Factory
             }
         }
 
+        // 保存当前控制器类名
+        $this->controllerClass = trim($className, '//');
+
 //        if (class_exists($className)) {
         return new $className($name, $this->container, $this);
 //        }
@@ -346,12 +361,80 @@ class ControllerManager extends Factory
     {
         $method = strtolower($this->actionName);
 
+        // 优先执行控制器自身添加的中间件
         foreach ($instance->getMiddleware() as $name => & $options) {
             if ($this->methodExcluded($method, $options)) {
                 continue;
             }
             $middleware[] = $name;
         }
+
+        if (!isset($this->controllersMiddlewares[$this->controllerClass])) {
+            return;
+        }
+
+        foreach ($this->controllersMiddlewares[$this->controllerClass] as $name => &$options) {
+            if ($this->methodExcluded($method, $options)) {
+                continue;
+            }
+            $middleware[] = $name;
+        }
+    }
+
+    /**
+     * 添加控制器中间件
+     *
+     * @param string $controller 控制器完整类名
+     * @param string $middleware 类名@方法名 或 类名 或 容器注册的服务名
+     * @return \Lxh\MVC\ControllerManager
+     */
+    public function addControllerMiddleware($controller, $middleware)
+    {
+        // 保存当前设置的中间件
+        $this->currentSettingMiddleware = [$controller, $middleware];
+        // 保存中间件
+        $this->controllersMiddlewares[$controller][$middleware] = [];
+
+        return $this;
+    }
+
+    /**
+     * 只有触发$methods方法中间件才会执行
+     *
+     * @param $controller
+     * @param $middleware
+     * @param $methods
+     * @return $this
+     */
+    public function only($methods)
+    {
+        if (! $this->currentSettingMiddleware) return $this;
+
+        list($c, $m) = $this->currentSettingMiddleware;
+
+        $this->controllersMiddlewares[$c][$m]['only'] = $methods;
+
+        return $this;
+    }
+
+    /**
+     * 除了$methods方法外所有其他action方法都会中心中间件
+     *
+     * @param $controller
+     * @param $middleware
+     * @param $methods
+     * @return $this
+     */
+    public function except($methods)
+    {
+        if (! $this->currentSettingMiddleware) {
+            return $this;
+        }
+
+        list($c, $m) = $this->currentSettingMiddleware;
+        $this->controllersMiddlewares[$c][$m]['except'] = $methods;
+
+        return $this;
     }
 
     /**

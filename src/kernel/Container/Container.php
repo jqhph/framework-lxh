@@ -248,10 +248,33 @@ class Container implements ArrayAccess, ContractsContainer
             // If the class is null, it means the dependency is a string or some other
             // primitive type which we can not resolve since it is not a class and
             // we will just bomb out with an error since we have no-where to go.
-            $dependencies[] = $this->make($parameter->getClass()->name);
+            if ($class = $parameter->getClass()) {
+                $dependencies[] = $this->make($class->name);
+            } else {
+                $dependencies[] = $this->resolvePrimitive($parameter);
+            }
         }
 
         return $dependencies;
+    }
+
+    /**
+     * Resolve a non-class hinted primitive dependency.
+     *
+     * @param  \ReflectionParameter  $parameter
+     * @return mixed
+     *
+     * @throws BindingResolutionException
+     */
+    protected function resolvePrimitive(\ReflectionParameter $parameter)
+    {
+        if ($parameter->isDefaultValueAvailable()) {
+            return $parameter->getDefaultValue();
+        }
+
+        $message = "Unresolvable dependency resolving [$parameter] in class {$parameter->getDeclaringClass()->getName()}";
+
+        throw new BindingResolutionException($message);
     }
 
 

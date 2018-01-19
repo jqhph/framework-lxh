@@ -32,6 +32,7 @@ if ($GLOBALS['CONFIG']->get('use-language')) {
 }
 $GLOBALS['HTTPREQUEST'] = $GLOBALS['CONTAINER']->make('http.request');
 $GLOBALS['HTTPRESPONSE'] = $GLOBALS['CONTAINER']->make('http.response');
+$GLOBALS['CONTROLLERMANAGER'] = $GLOBALS['CONTAINER']->make('controller.manager');
 
 $GLOBALS['resource-server']  = $GLOBALS['CONFIG']->get('client-config.resource-server');
 $GLOBALS['js-version']       = $GLOBALS['CONFIG']->get('js-version');
@@ -143,17 +144,6 @@ function fire($event, $payload = [], $halt = false)
 function listen($event, $listener, $priority = 0)
 {
     $GLOBALS['EVENTS']->listen($event, $listener, $priority);
-}
-
-/**
- * Get the resolve controller with name
- *
- * @param string $name
- * @return \Lxh\MVC\Controller
- */
-function controller($name)
-{
-    return $GLOBALS['CONTAINER']['controller.manager']->get($name);
 }
 
 // 加载js
@@ -533,7 +523,7 @@ function add_view_namespace($namespace, $hints)
  */
 function admin_auth_class($class)
 {
-    return $GLOBALS['CONTAINER']->make('controller.manager')->setAuthClass(admin_name(), $class);
+    return $GLOBALS['CONTROLLERMANAGER']->setAuthClass(admin_name(), $class);
 }
 
 /**
@@ -544,7 +534,7 @@ function admin_auth_class($class)
  */
 function homepage_auth_class($class)
 {
-    return $GLOBALS['CONTAINER']->make('controller.manager')->setAuthClass(home_name(), $class);
+    return $GLOBALS['CONTROLLERMANAGER']->setAuthClass(home_name(), $class);
 }
 
 /**
@@ -607,13 +597,15 @@ function home_name()
 }
 
 /**
- * 手动调用控制器接口
+ * 添加控制器中间件
  *
- * @return mixed
+ * @param string $controller 控制器完整类名
+ * @param string $middleware 类名@方法名 或 类名 或 容器注册的服务名
+ * @return \Lxh\MVC\ControllerManager
  */
-function call($controller, $action, array $params = [])
+function middleware($controller, $middleware)
 {
-    return $GLOBALS['CONTAINER']->make('controller.manager')->call($controller, $action, $params);
+    return $GLOBALS['CONTROLLERMANAGER']->addControllerMiddleware($controller, $middleware);
 }
 
 /**
