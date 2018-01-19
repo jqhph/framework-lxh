@@ -401,40 +401,33 @@ class ControllerManager extends Factory
     /**
      * 只有触发$methods方法中间件才会执行
      *
-     * @param $controller
-     * @param $middleware
-     * @param $methods
-     * @return $this
+     * @param string|array $methods 多个请传数组
+     * @return void
      */
     public function only($methods)
     {
-        if (! $this->currentSettingMiddleware) return $this;
+        if (! $this->currentSettingMiddleware) {
+            return;
+        }
 
         list($c, $m) = $this->currentSettingMiddleware;
-
         $this->controllersMiddlewares[$c][$m]['only'] = $methods;
-
-        return $this;
     }
 
     /**
      * 除了$methods方法外所有其他action方法都会中心中间件
      *
-     * @param $controller
-     * @param $middleware
-     * @param $methods
-     * @return $this
+     * @param $methods string|array $methods 多个请传数组
+     * @return void
      */
     public function except($methods)
     {
         if (! $this->currentSettingMiddleware) {
-            return $this;
+            return;
         }
 
         list($c, $m) = $this->currentSettingMiddleware;
         $this->controllersMiddlewares[$c][$m]['except'] = $methods;
-
-        return $this;
     }
 
     /**
