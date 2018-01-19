@@ -129,10 +129,6 @@ class Installer
     {
         // 插件命名空间
         $namespace = $this->plugin->getNamespace();
-        if ($this->composer->psr4NamespaceExist($namespace)) {
-            // 已存在同样命名空间，插件已安装或存在同名插件
-            throw new InvalidArgumentException("Namespace[{$namespace}] already existed!");
-        }
         if (!$this->composer->addPsr4Namespace($namespace, $this->plugin->getSrcPath())) {
             throw new InvalidArgumentException("Add namespace[$namespace] failed!");
         }
@@ -225,6 +221,11 @@ class Installer
         $this->line("====== Install plugin: {$name} ======");
         $this->line("Check plugin valid...");
 
+        if ($this->composer->psr4NamespaceExist($this->plugin->getNamespace())) {
+            // 已存在同样命名空间，插件已安装或存在同名插件
+            return $this->error('The plugin has been installed!');
+        }
+
         // 检测插件是否有效
         $this->plugin->valid();
         $this->info("The plugin is installable!");
@@ -233,7 +234,7 @@ class Installer
         $this->addNamespace($name);
 
         // 复制资源文件
-        $this->copyAssets($name);
+        $this->copyAssets();
 
         //保 存插件名称到配置文件
         $this->saveConfig($name);

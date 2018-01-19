@@ -236,6 +236,26 @@ class Model extends Entity
     }
 
     /**
+     * where
+     *
+     * @return Query
+     */
+    public function whereOr()
+    {
+        return call_user_func_array([$this->query()->select($this->selectFields), 'whereOr'], func_get_args());
+    }
+
+    /**
+     * where
+     *
+     * @return Query
+     */
+    public function whereOrs()
+    {
+        return call_user_func_array([$this->query()->select($this->selectFields), 'whereOrs'], func_get_args());
+    }
+
+    /**
      * select
      *
      * @return Query

@@ -90,9 +90,6 @@ class Session extends Model
      */
     public function setupSession()
     {
-        $this->session = $this->container['session'];
-        $this->cookie = $this->container['cookie'];
-
         // 检查session是否存在用户数据
         if ($this->session->has($this->sessionKey)) {
             $this->attach($this->session->get($this->sessionKey));
