@@ -118,8 +118,7 @@ return [
             'module' => 'Admin',
             'api' => true,
             'controller' => ':lc@c',
-            'action' => 'Add',
-            'id' => ':int[id]'
+            'action' => 'Add'
         ]
     ],
 

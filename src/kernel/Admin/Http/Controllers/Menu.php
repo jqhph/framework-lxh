@@ -45,6 +45,7 @@ class Menu extends Controller
 
     protected function initialize()
     {
+        Admin::model(\Lxh\Auth\Database\Menu::class);
     }
 
     /**

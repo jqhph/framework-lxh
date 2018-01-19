@@ -159,19 +159,19 @@ class Dispatcher implements Router
      */
     public function __construct(array $config = [])
     {
-        $this->setup($config);
+        $this->rules = &$config;
 
         $this->requestMethod = get_value($_SERVER, 'REQUEST_METHOD');
     }
 
-    protected function setup(array &$config)
-    {
-        if (config('admin.use-admin-routes', true)) {
-            $this->rules = include __DIR__ . '/admin-routes.php';
-        }
-
-        $this->rules = array_merge($this->rules, $config);
-    }
+//    protected function setup(array &$config)
+//    {
+//        if (config('admin.use-admin-routes', true)) {
+//            $this->rules = include __DIR__ . '/admin-routes.php';
+//        }
+//
+//        $this->rules = array_merge($this->rules, $config);
+//    }
 
     /**
      * 添加路由规则配置

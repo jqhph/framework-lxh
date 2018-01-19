@@ -126,7 +126,7 @@ class Track
         $controllerManager = $this->container->make('controller.manager');
         $uri = $request->getUri();
 
-        $requestInfo = ' [Module: ' . $controllerManager->moduleName() . ', Controller: ' . $controllerManager->controllerName()
+        $requestInfo = ' [Module: ' . $controllerManager->moduleName() . ', Controller: ' . $controllerManager->getClass()
                         . ', Action: ' . $controllerManager->actionName() . '] '
                         . $request->date() . ' ' . $request->protocol(). ' ' . $request->getMethod() . ': '
                         . $uri->getPath() . ' ' . $uri->getQuery();

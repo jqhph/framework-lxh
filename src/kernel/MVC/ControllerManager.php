@@ -282,6 +282,14 @@ class ControllerManager extends Factory
     }
 
     /**
+     * @return string
+     */
+    public function getClass()
+    {
+        return $this->controllerClass;
+    }
+
+    /**
      * 添加中间件
      *
      * @return void

@@ -59,17 +59,20 @@ class Menu extends Model
         unset($input['quick_relate_ability']);
 
         // 用户选择了权限，则以此为主
-        if ($input['ability_id'] && is_int($input['ability_id'])) {
+        if ($input['ability_id'] && is_numeric($input['ability_id'])) {
             return;
         }
-        if (! $this->quickAbility) return;
+        if (! $this->quickAbility) {
+            $input['ability_id'] = 0;
+            return;
+        };
 
         $abilityName = $this->quickAbility;
 
         $abilityModel = Models::ability();
         $ability = $abilityModel->findOrCreate($abilityName);
 
-        $input['ability_id'] = current($ability->all())[$abilityModel->getKeyName()];
+        $input['ability_id'] = (int)current($ability->all())[$abilityModel->getKeyName()];
     }
 
     protected function getDefaultSelect($ability)

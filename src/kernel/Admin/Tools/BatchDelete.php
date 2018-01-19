@@ -19,7 +19,7 @@ class BatchDelete implements Renderable
     {
         $btn = new Button($this->label());
 
-        $btn->attribute('data-model', Admin::model());
+        $btn->attribute('data-model', __CONTROLLER__);
         $btn->attribute('id', $this->id);
 
         return $btn->color('danger')->icon('fa fa-trash')->render();

@@ -681,9 +681,7 @@ class Grid implements Renderable
             return;
         }
 
-        $model = Admin::model();
-
-        $label = trans('Create ' . $model);
+        $label = trans('Create ' . __CONTROLLER__);
         $button = new Button($label, Admin::url()->action('create'));
 
         $button->attribute('data-action', 'create-row');
@@ -695,6 +693,6 @@ class Grid implements Renderable
 
     protected function getCreateBtnTabId()
     {
-        return  'create-' . Admin::model();
+        return  'create-' . __CONTROLLER__;
     }
 }

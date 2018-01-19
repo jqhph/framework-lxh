@@ -125,10 +125,14 @@ class Application
     /**
      * 注册插件
      */
-    protected function registerPlugins()
+    protected function registerPlugins($router)
     {
         foreach ((array)config('plugins') as $name => &$namespace) {
             Plugin::createApplication($namespace)->register();
+        }
+
+        foreach ((array)config('providers') as &$provider) {
+            $provider = (new $provider($router))->register();
         }
     }
 
@@ -222,7 +226,7 @@ class Application
         $this->container->instance('router', $router);
 
         // 再注册插件
-        $this->registerPlugins();
+        $this->registerPlugins($router);
 
         // 最后注册路由规则
         $router->attach($this->getRouteRules());
@@ -233,6 +237,11 @@ class Application
      */
     protected function getRouteRules()
     {
+        $routers = [];
+        if (config('admin.use-admin-routes', true)) {
+            $routers = include __DIR__ . '/Router/admin-routes.php';
+        }
+
         $configPath = __CONFIG__ . 'route/route.php';
         // 判断是否开启了子域名部署
         if (config('domain-deploy')) {
@@ -247,7 +256,7 @@ class Application
                 $configPath = & $path;
             }
         }
-        return (array) include $configPath;
+        return $routers + (array) include $configPath;
     }
 
     /**

@@ -76,7 +76,7 @@ class Menu
     public function __construct(AuthManager $auth = null)
     {
         $this->auth = $auth ?: auth();
-        $this->model = model('Menu');
+        $this->model = model(\Lxh\Auth\Database\Menu::class);
         $this->cache = File::create('__menu__');
 
         fire('menu.resolving', [$this]);

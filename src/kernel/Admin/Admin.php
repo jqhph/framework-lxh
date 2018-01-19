@@ -128,7 +128,7 @@ class Admin
      */
     public static function url($scope = null)
     {
-        $scope = $scope ?: static::$scope;
+        $scope = $scope ?: __CONTROLLER__;
 
         return isset(static::$urls[$scope]) ? static::$urls[$scope] : (static::$urls[$scope] = Url::create($scope));
     }

@@ -203,9 +203,9 @@ abstract class Controller
      * @param  string $name 模型名称
      * @return Model
      */
-    protected function model($name = __CONTROLLER__)
+    protected function model($name = null)
     {
-        return $this->container['model.factory']->create($name);
+        return $this->container['model.factory']->create($name ?: Admin::model());
     }
 
     /**

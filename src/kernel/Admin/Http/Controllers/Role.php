@@ -27,6 +27,11 @@ class Role extends Controller
      */
     protected $filter = 'modal';
 
+    protected function initialize()
+    {
+        Admin::model(\Lxh\Auth\Database\Role::class);
+    }
+
     protected function grid(Grid $grid, Content $content)
     {
         $grid->allowBatchDelete();

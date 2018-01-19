@@ -34,6 +34,11 @@ $config = [
         'compiled' => 'resource/blade-cache',
     ],
 
+    // 系统插件使用
+    'providers' => [
+        Lxh\Plugins\Auth\Provider::class,
+    ],
+
     // 是否输出控制台调试信息，默认true
     'response-console-log' => true,
     // 是否输出追踪信息到控制台，默认true

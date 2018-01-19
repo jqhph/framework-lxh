@@ -2,6 +2,7 @@
 
 namespace Lxh\Admin\Http\Controllers;
 
+use Lxh\Admin\Admin;
 use Lxh\Auth\AuthManager;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
@@ -14,6 +15,11 @@ use Lxh\Admin\Table\Table;
 
 class Ability extends Controller
 {
+    protected function initialize()
+    {
+        Admin::model(\Lxh\Auth\Database\Ability::class);
+    }
+
     /**
      * 是否使用过滤器
      *

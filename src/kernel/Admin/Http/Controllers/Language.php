@@ -64,6 +64,31 @@ class Language extends Controller
     }
 
     /**
+     * 清除客户端缓存
+     * 强制更新
+     *
+     * @return bool
+     */
+    public function clearCache()
+    {
+        return resolve('config')->save(['js-version' => time(), 'css-version' => time()]);
+    }
+
+    /**
+     * 更新客户端缓存
+     * 有使用缓存才更新
+     *
+     * @return bool
+     */
+    public function updateCache()
+    {
+        if (config('replica-client-config.use-cache')) {
+            return resolve('config')->save(['js-version' => time()]);
+        }
+        return false;
+    }
+
+    /**
      * 获取语言包接口
      */
     public function actionGetPackage()
@@ -108,7 +133,7 @@ class Language extends Controller
 
         if ($result) {
             // 更新前端缓存
-            resolve('front.client')->updateCache();
+            $this->updateCache();
             return $this->success();
         }
         return $this->error();
@@ -141,7 +166,7 @@ class Language extends Controller
 
         if ($file->putPhpContents($path, $package, true)) {
             // 更新前端缓存
-            resolve('front.client')->updateCache();
+            $this->updateCache();
             return $this->success('success', ['content' => & $package]);
         }
 
@@ -208,7 +233,7 @@ class Language extends Controller
 
         if ($file->mergePhpContents($path, $content)) {
             // 更新前端缓存
-            resolve('front.client')->updateCache();
+            $this->updateCache();
             return $this->success('Success', ['content' => $file->getPhpContents($path)]);
         }
 
@@ -238,7 +263,7 @@ class Language extends Controller
 
         if ($file->mergePhpContents($path, $content)) {
             // 更新前端缓存
-            resolve('front.client')->updateCache();
+            $this->updateCache();
             return $this->success('Success', ['content' => $file->getPhpContents($path)]);
         }
 
@@ -272,7 +297,7 @@ class Language extends Controller
 
         if ($file->putPhpContents($newPath, $data, true)) {
             // 更新前端缓存
-            resolve('front.client')->updateCache();
+            $this->updateCache();
             return $this->success();
         }
 

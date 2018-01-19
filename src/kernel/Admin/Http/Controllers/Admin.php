@@ -20,6 +20,7 @@ use Lxh\Auth\Database\Models;
 use Lxh\Exceptions\Forbidden;
 use Lxh\Helper\Valitron\Validator;
 use Lxh\Http\Url;
+use Lxh\Auth\Database\Admin as AdminModel;
 
 class Admin extends Controller
 {
@@ -30,6 +31,7 @@ class Admin extends Controller
 
     protected function initialize()
     {
+        AdminCreator::model(AdminModel::class);
     }
 
     /**
