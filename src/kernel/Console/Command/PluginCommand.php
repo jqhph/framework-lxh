@@ -37,7 +37,7 @@ class PluginCommand extends Command
         $installer->setOutput($this);
 
         // 同步资源文件
-        if ($this->option('sync')) {
+        if ($this->option('syncAssets')) {
             $installer->copyAssets();
             return;
         }
@@ -425,8 +425,8 @@ class PluginCommand extends Command
             ['create', '', InputOption::VALUE_NONE, 'Create a empty value template.'],
             ['disable', '', InputOption::VALUE_NONE, 'Disable use the plugin.'],
             ['enable', '', InputOption::VALUE_NONE, 'Enable use the plugin.'],
-            ['sync', 's', InputOption::VALUE_NONE, 'Copy assets to webserver path.'],
-            ['isync', 'is', InputOption::VALUE_NONE, 'Copy assets to plugin path.'],
+            ['syncAssets', '', InputOption::VALUE_NONE, 'Copy assets to webserver path.'],
+            ['isync', 's', InputOption::VALUE_NONE, 'Copy assets to plugin path.'],
             ['controller', 'c', InputOption::VALUE_REQUIRED, 'Create a controller class.'],
             ['model', 'm', InputOption::VALUE_REQUIRED, 'Create model class.'],
         ];
