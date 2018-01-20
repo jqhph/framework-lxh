@@ -173,7 +173,7 @@ class Admin extends Controller
     protected function formatRoles()
     {
         $options = [];
-        foreach ($this->model('Role')->find() as &$row) {
+        foreach (Models::role()->find() as &$row) {
             $options[] = [
                 'value' => $row['id'],
                 'label' => $row['title']
