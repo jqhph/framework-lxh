@@ -123,6 +123,17 @@ class Content implements Renderable
     }
 
     /**
+     * 独立的页面，完全不加载任何预定义js和css
+     *
+     * @return $this
+     */
+    public function independentIndex()
+    {
+        $this->view = 'admin::indie-index';
+        return $this;
+    }
+
+    /**
      * 表单
      *
      * @param $callback

@@ -18,12 +18,14 @@ echo load_js('jquery.min');
 
 ?>
 <script>
+    <?php if ((isset($useDefaultAssets) && !empty($useDefaultAssets)) || !isset($useDefaultAssets)) {?>
     require_css('css/bootstrap.min');
     require_css('css/pages.min');
     require_css('css/components.min');
     require_css('css/icon.min');
     require_css('css/core.min');
     require_js('lib/js/bootstrap.min');
+    <?php } ?>
     // 配置
     function get_config() {
         window.APIPREFIX = '/admin/api/';
@@ -50,8 +52,11 @@ echo load_js('jquery.min');
         data.publicCss = data.options.config['public-css'];
         // 需要载入的js
         data.publicJs = data.options.config['public-js'];
+
+        <?php if ((isset($useLanguage) && !empty($useLanguage)) || !isset($useLanguage)) {?>
         // 需要载入的语言包模块
         data.langScopes = <?php echo json_encode(['Global', __CONTROLLER__]);?>
+        <?php };?>
 
         return data
     }
