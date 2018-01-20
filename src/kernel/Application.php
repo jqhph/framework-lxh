@@ -74,7 +74,7 @@ class Application
         register_shutdown_function([$this, 'shutdown']);
         // 记录程序执行开始时间
         debug_track('start');
-        
+
     }
 
     /**
@@ -256,7 +256,7 @@ class Application
                 $configPath = & $path;
             }
         }
-        return $routers + (array) include $configPath;
+        return array_merge($routers, (array) include $configPath);
     }
 
     /**

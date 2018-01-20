@@ -651,6 +651,11 @@ class Query
 		return $this->builder->batchInsert($data);
 	}
 
+	public function batchReplace(array & $data)
+	{
+		return $this->builder->batchReplace($data);
+	}
+
 	public function remove($id = null)
 	{
 		return $this->builder->remove($id);

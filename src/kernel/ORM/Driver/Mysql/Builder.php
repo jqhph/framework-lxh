@@ -291,6 +291,19 @@ class Builder
     }
 
     /**
+     * 批量replace
+     *
+     * @param $data
+     * @return mixed
+     */
+    public function batchReplace(&$data)
+    {
+        $res = $this->query->connection()->options($this->options)->batchAdd($this->tableName, $data, true);
+        $this->clear();
+        return $res;
+    }
+
+    /**
      * @return string
      */
     protected function getOrderBySql()
