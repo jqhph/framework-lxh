@@ -6,7 +6,7 @@
  * @date   2017/7/3 10:30
  */
 
-namespace Lxh\Admin\Controllers;
+namespace Lxh\Admin\Http\Controllers;
 
 use Lxh\Http\Request;
 use Lxh\Http\Response;

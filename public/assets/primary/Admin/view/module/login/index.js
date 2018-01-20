@@ -11,28 +11,28 @@ __then__(function (plugIns) {
 
     ], submit, '.Admin-form')
 
-    var model = $lxh.createModel('Admin')
-    var notify = $lxh.ui().notify()
+    var model = $lxh.createModel('Admin');
+    var notify = $lxh.ui().notify();
 
     function submit(e) {
         if (! model.requestEnded()) {
             return notify.warning(trans('Logging in, please wait a moment'))
         }
 
-        notify.remove()
-        notify.info(trans('loading'))
+        notify.remove();
+        notify.info(trans('loading'));
 
         // 设置成功回调函数
         model.on('success', function (data) {
             // success
-            notify.remove()
-            notify.success(trans('login success'))
+            notify.remove();
+            notify.success(trans('login success'));
 
             // 500豪秒后跳转到首页
             $lxh.redirect(data.target || '/admin', 500)
         })
         // 发起登录请求
-        model.touchAction('login', 'POST')
+        model.request('/admin/api/login', 'POST')
 
     }
 })

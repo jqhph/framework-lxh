@@ -36,7 +36,7 @@ $config = [
 
     // 系统插件使用
     'providers' => [
-        Lxh\Plugins\Auth\Provider::class,
+        Lxh\Plugins\System\Provider::class,
     ],
 
     // 是否输出控制台调试信息，默认true

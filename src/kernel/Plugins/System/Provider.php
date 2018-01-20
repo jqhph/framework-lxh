@@ -1,6 +1,6 @@
 <?php
 
-namespace Lxh\Plugins\Auth;
+namespace Lxh\Plugins\System;
 
 use Lxh\Router\Dispatcher;
 
@@ -23,9 +23,44 @@ class Provider
 
     public function register()
     {
+        $this->registerNotAuthRouter();
+
         // 由于Admin模块和admin前缀冲突，只能单独注册
         $this->registerRouter('Admin', 'admin');
         $this->registerRouter('1', '#(ability|role|menu|language)#');
+    }
+
+    protected function registerNotAuthRouter()
+    {
+        $prefix = 'admin';
+        // 定义为后台模块
+        $module = admin_name();
+        $namespace = "Lxh\\Admin\\Http\\Controllers";
+
+        $this->router->add([
+            'pattern' => '/admin/api/login',
+            'method' => 'POST',
+            'params' => [
+                'auth' => false,
+                'module' => $module,
+                'namespace' => &$namespace,
+                'controller' => 'Admin',
+                'action' => 'Login',
+            ]
+        ]);
+
+        $this->router->add([
+            'pattern' => '/admin/api/js/:lc@type',
+            'method' => 'GET',
+            'params' => [
+                'auth' => false,
+                'module' => $module,
+                'namespace' => &$namespace,
+                'controller' => 'Js',
+                'action' => 'Entrance',
+                'type' => ':lc@type',
+            ]
+        ]);
     }
 
     /**
