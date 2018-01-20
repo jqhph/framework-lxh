@@ -24,7 +24,7 @@ echo load_js('util.min');
 </div>
 
 <?php
-echo view('admin::index.app-js', ['useDefaultAssets' => false, 'useLanguage' => false])->render();
+echo view('admin::index.app-js', ['useDefaultAssets' => false])->render();
 ?>
 <script>
     (function (w) {

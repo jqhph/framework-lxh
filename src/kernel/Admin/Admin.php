@@ -24,6 +24,13 @@ class Admin
     protected static $scope = __CONTROLLER__;
 
     /**
+     * 前端加载的语言包
+     *
+     * @var array
+     */
+    protected static $langs = [];
+
+    /**
      * @var array
      */
     public static $script = [];
@@ -226,6 +233,41 @@ class Admin
 
     }
 
+    /**
+     * 禁用语言包
+     *
+     * @return void
+     */
+    public static function disableLang()
+    {
+        static::$langs = false;
+    }
+
+    /**
+     * 设置语言包
+     *
+     * @param array $langs
+     */
+    public static function setLangs(array $langs)
+    {
+        static::$langs = &$langs;
+    }
+
+    /**
+     * 获取语言包
+     *
+     * @param array $langs
+     * @return array
+     */
+    public static function getLangs()
+    {
+        if (static::$langs !== false && empty(static::$langs)) {
+            // 设置默认语言包
+            static::$langs = ['Global', __CONTROLLER__];
+        }
+
+        return static::$langs;
+    }
 
     /**
      * 使用js异步加载代码

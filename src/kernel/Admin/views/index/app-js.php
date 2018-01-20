@@ -53,9 +53,9 @@ echo load_js('jquery.min');
         // 需要载入的js
         data.publicJs = data.options.config['public-js'];
 
-        <?php if ((isset($useLanguage) && !empty($useLanguage)) || !isset($useLanguage)) {?>
+        <?php if ($langs = \Lxh\Admin\Admin::getLangs()) {?>
         // 需要载入的语言包模块
-        data.langScopes = <?php echo json_encode(['Global', __CONTROLLER__]);?>
+        data.langScopes = <?php echo json_encode($langs);?>
         <?php };?>
 
         return data
