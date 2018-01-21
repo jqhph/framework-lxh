@@ -7,6 +7,7 @@
 
 namespace Lxh\Admin\Controllers;
 
+use Lxh\Admin\Http\Controllers\Admin;
 use Lxh\Admin\Http\Controllers\Controller;
 use Lxh\Admin\Layout\Content;
 use Lxh\Admin\Filter;
@@ -19,6 +20,7 @@ use Lxh\Admin\Table\Th;
 use Lxh\Admin\Table\Tr;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
+use Lxh\MVC\Model;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Product extends Controller
