@@ -40,6 +40,7 @@ class Table extends Widget
         'tag' => Tag::class,
         'checkbox' => Checkbox::class,
         'code' => Code::class,
+        'checked' => 'checked',
     ];
 
 

@@ -97,7 +97,7 @@ class Product extends Controller
         /**
          * 使用field方法添加字段
          */
-        $table->checkbox('timelimit')->sortable();
+        $table->checked('timelimit')->sortable();
 
         /**
          * 自定义字段标题内容
