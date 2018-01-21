@@ -16,8 +16,8 @@ class Select extends Field
 
     protected function setup()
     {
-        $this->css('select', 'lib/plugins/select2/select2.min');
-        $this->js('select', 'lib/plugins/select2/select2.full.min');
+        $this->css('select', '@lxh/plugins/select2/select2.min');
+        $this->js('select', '@lxh/plugins/select2/select2.full.min');
     }
 
     /**

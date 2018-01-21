@@ -121,6 +121,7 @@ class Admin extends Controller
         $form->text('password')->rules($rules)->value(false);
         $form->text('email')->rules('valid_email');
         $form->text('mobile');
+        $form->image('avatar');
         $form->select('status')->options([1, 0]);
 
         if (auth()->isAdministrator()) {

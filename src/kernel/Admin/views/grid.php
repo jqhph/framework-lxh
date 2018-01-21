@@ -11,8 +11,8 @@
 ?></div>
 <script>
     <?php if ($useRWD) {?>
-    require_css('lib/plugins/RWD-Table-Patterns/dist/css/rwd-table.min.css');
-    require_js('lib/plugins/RWD-Table-Patterns/dist/js/rwd-table.min');
+    require_css('@lxh/plugins/RWD-Table-Patterns/dist/css/rwd-table.min');
+    require_js('@lxh/plugins/RWD-Table-Patterns/dist/js/rwd-table.min');
     <?php }?>
     <?php if ($indexScript) {?>
     require_js('<?php echo $indexScript;?>');
@@ -38,7 +38,7 @@
 </script>
 <?php if ($pjax) {?>
 <script>
-    require_js('jquery.pjax.min');
+    require_js('@lxh/js/jquery.pjax.min');
     __then__(function () {
         $.pjax.defaults.timeout = 5000;
         $.pjax.defaults.maxCacheLength = 0;

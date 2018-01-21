@@ -68,6 +68,6 @@
 
 </div>
 <script>
-    require_js('validate');
-    require_js(parse_view_name('login', 'index'))
+    require_js('@lxh/js/validate.min');
+    require_js('@lxh/js/login/index')
 </script>

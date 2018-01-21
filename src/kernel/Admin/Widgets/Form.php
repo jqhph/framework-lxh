@@ -379,7 +379,7 @@ class Form implements Renderable
         }
 
         if ($this->options['editScript']) {
-            $this->async('view/public-detail');
+            $this->async('@lxh/js/public-detail');
         }
 
         foreach ($this->fields as $field) {

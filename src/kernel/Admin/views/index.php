@@ -11,15 +11,15 @@
 
     <?php
     // App css
-    echo load_css('bootstrap.min');
-    echo load_css('menu-light.min');
+    echo admin_css('css/bootstrap.min');
+    echo admin_css('css/menu-light.min');
 
-    //    echo load_css('components');
-    echo load_css('icon.min');
-    echo load_css('core.min');
+    //    echo admin_css('components');
+    echo admin_css('css/icon.min');
+    echo admin_css('css/core.min');
 
-    echo load_js('util.min');
-    echo load_js('jquery.min');
+    echo admin_js('js/util.min');
+    echo admin_js('js/jquery.min');
     ?>
 
     <!-- HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -41,8 +41,8 @@
         // 输出左边导航栏
         echo $sitebar;
 
-        echo load_css('toastr.min', 'lib/plugins/toastr');
-        echo load_js('toastr.min', 'plugins/toastr');
+        echo admin_css('plugins/toastr/toastr.min');
+        echo admin_js('plugins/toastr/toastr.min');
         ?>
     </div>
 </div>
@@ -62,9 +62,9 @@
 ?></section>
 
 <?php
-//echo load_js('fastclick');
-//echo load_js('waves.min');
-echo load_js('jquery.slimscroll.min');
+//echo admin_js('fastclick');
+//echo admin_js('waves.min');
+echo admin_js('js/jquery.slimscroll.min');
 ?>
 <script>
     var resizefunc = [];
@@ -80,11 +80,11 @@ echo load_js('jquery.slimscroll.min');
 
 <!-- KNOB JS -->
 <!--[if IE]>
-<?php //echo load_js('excanvas', 'plugins/jquery-knob');?>
+<?php //echo admin_js('excanvas', 'plugins/jquery-knob');?>
 <![endif]-->
 
 <?php
-echo load_js('jquery.app.min');
+echo admin_js('js/jquery.app.min');
 ?>
 </body>
 </html>

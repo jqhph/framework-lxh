@@ -10,7 +10,7 @@
 //echo load_css('core.min');
 //echo load_css('components.min');
 //echo load_css('icon.min');
-echo load_js('jquery.min');
+echo admin_js('js/jquery.min');
 //echo load_js('bootstrap.min');
 //echo load_js('detect');
 //echo load_js('jquery.slimscroll.min');
@@ -19,12 +19,13 @@ echo load_js('jquery.min');
 ?>
 <script>
     <?php if ((isset($useDefaultAssets) && !empty($useDefaultAssets)) || !isset($useDefaultAssets)) {?>
-    require_css('css/bootstrap.min');
-    require_css('css/pages.min');
-    require_css('css/components.min');
-    require_css('css/icon.min');
-    require_css('css/core.min');
-    require_js('lib/js/bootstrap.min');
+    require_css('@lxh/css/responsive.min');
+    require_css('@lxh/css/bootstrap.min');
+    require_css('@lxh/css/pages.min');
+    require_css('@lxh/css/components.min');
+    require_css('@lxh/css/icon.min');
+    require_css('@lxh/css/core.min');
+    require_js('@lxh/js/bootstrap.min');
     <?php } ?>
     // 配置
     function get_config() {
@@ -32,7 +33,9 @@ echo load_js('jquery.min');
         var data = {};
         // 容器配置
         data.options = <?php
-            $config = config('client-config');
+            $default = \Lxh\Assets::config();
+            $client = config('client');
+            $config['sea-config'] = \Lxh\Helper\Util::merge($client['sea-config'], $default, true);
             $config['language'] = config('language');
             $config['js-version'] = & $GLOBALS['js-version'];
             $config['css-version'] = & $GLOBALS['css-version'];
@@ -48,10 +51,13 @@ echo load_js('jquery.min');
             ?>
             // seajs配置
             data.seaConfig = data.options.config['sea-config'];
+            data.seaConfig.alias = data.seaConfig.alias || [];
+            var publics = <?php echo json_encode(\Lxh\Assets::publics())?>;
+
         // 需要载入的css
-        data.publicCss = data.options.config['public-css'];
+        data.publicCss = publics['public-js'];
         // 需要载入的js
-        data.publicJs = data.options.config['public-js'];
+        data.publicJs = publics['public-css'];
 
         <?php if ($langs = \Lxh\Admin\Admin::getLangs()) {?>
         // 需要载入的语言包模块

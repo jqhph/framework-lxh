@@ -3,6 +3,7 @@
 namespace Lxh\Admin\Form\Field;
 
 use Lxh\Admin\Form;
+use Lxh\File\FileManager;
 use Lxh\Support\Facades\Storage;
 use Lxh\Support\Facades\URL;
 use Lxh\Support\MessageBag;
@@ -22,12 +23,12 @@ trait UploadField
      *
      * @var null
      */
-    protected $name = null;
+    protected $filename = null;
 
     /**
      * Storage instance.
      *
-     * @var \Lxh\Filesystem\Filesystem
+     * @var FileManager
      */
     protected $storage = '';
 

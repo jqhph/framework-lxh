@@ -27,14 +27,14 @@ class Image extends File
      */
     public function prepare($image)
     {
-        if (I(static::FILE_DELETE_FLAG)) {
-            return $this->destroy();
-        }
-
-        $this->name = $this->getStoreName($image);
-
-        $this->callInterventionMethods($image->getRealPath());
-
-        return $this->uploadAndDeleteOriginal($image);
+//        if (I(static::FILE_DELETE_FLAG)) {
+//            return $this->destroy();
+//        }
+//
+//        $this->name = $this->getStoreName($image);
+//
+//        $this->callInterventionMethods($image->getRealPath());
+//
+//        return $this->uploadAndDeleteOriginal($image);
     }
 }

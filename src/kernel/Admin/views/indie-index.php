@@ -11,9 +11,9 @@
 </head>
 <body>
 <?php
-//echo load_css('bootstrap.min');
-echo load_js('jquery.min');
-echo load_js('util.min');
+//echo admin_css('bootstrap.min');
+echo admin_js('js/jquery.min');
+echo admin_js('js/util.min');
 ?>
 
 <div class="content-wrapper">
@@ -54,7 +54,7 @@ echo view('admin::index.app-js', ['useDefaultAssets' => false])->render();
 </script>
 <?php
 // 加载sea js，加载所有require_js和require_css加载的文件
-echo load_js('app.min');
+echo admin_js('js/app.min');
 ?>
 </body>
 </html>

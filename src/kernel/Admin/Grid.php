@@ -130,7 +130,7 @@ class Grid implements Renderable
         'allowCreate'      => true,
         'allowBatchDelete' => false,
         'useRWD'           => true,
-        'indexScript'      => 'view/public-index',
+        'indexScript'      => '@lxh/js/public-index',
         'pjax'             => true,
     ];
 

@@ -146,41 +146,59 @@ function listen($event, $listener, $priority = 0)
     $GLOBALS['EVENTS']->listen($event, $listener, $priority);
 }
 
-// 加载js
-function load_js($name, $dir = 'js', $module = __MODULE__)
+// 加载自定义js
+function load_js($name)
 {
-    return "<script src=\"{$GLOBALS['resource-server']}/assets/{$GLOBALS['resource-version']}/{$module}/lib/$dir/$name.js?v={$GLOBALS['js-version']}\"></script>";
+    return "<script src=\"{$GLOBALS['resource-server']}/assets/{$GLOBALS['resource-version']}/$name.js?v={$GLOBALS['js-version']}\"></script>";
 }
 
-// 加载css
-function load_css($name, $dir = 'css', $module = __MODULE__)
+// 加载自定义css
+function load_css($name)
 {
-    return "<link href=\"{$GLOBALS['resource-server']}/assets/{$GLOBALS['resource-version']}/{$module}/$dir/$name.css?v={$GLOBALS['css-version']}\" rel=\"stylesheet\" type=\"text/css\" />";
+    return "<link href=\"{$GLOBALS['resource-server']}/assets/{$GLOBALS['resource-version']}/$name.css?v={$GLOBALS['css-version']}\" rel=\"stylesheet\" type=\"text/css\" />";
 }
 
-// 加载图片
-function load_img($name, $dir = 'images', $module = __MODULE__)
+// 加载自定义图片
+function load_img($name)
 {
-    return "{$GLOBALS['resource-server']}/assets/{$GLOBALS['resource-version']}/{$module}/$dir/$name";
+    return "{$GLOBALS['resource-server']}/assets/{$GLOBALS['resource-version']}/$name";
+}
+
+// 加载系统预定义js
+function admin_js($name)
+{
+    return "<script src=\"{$GLOBALS['resource-server']}/assets/admin/$name.js?v={$GLOBALS['js-version']}\"></script>";
+}
+
+// 加载系统预定义css
+function admin_css($name)
+{
+    return "<link href=\"{$GLOBALS['resource-server']}/assets/admin/$name.css?v={$GLOBALS['css-version']}\" rel=\"stylesheet\" type=\"text/css\" />";
+}
+
+// 加载系统预定义图片
+function admin_img($name)
+{
+    return "{$GLOBALS['resource-server']}/assets/admin/$name";
 }
 
 // 加载插件js
-function load_plugin_js($plugin, $name)
+function plugin_js($plugin, $name)
 {
-    return "<script src=\"{$GLOBALS['resource-server']}/assets/plugins/$plugin/js/$name.js?v={$GLOBALS['js-version']}\"></script>";
+    return "<script src=\"{$GLOBALS['resource-server']}/assets/plugins/$plugin/$name.js?v={$GLOBALS['js-version']}\"></script>";
 
 }
 
 // 加载插件css
-function load_plugin_css($plugin, $name)
+function plugin_css($plugin, $name)
 {
-    return "<link href=\"{$GLOBALS['resource-server']}/assets/plugins/$plugin/css/$name.css?v={$GLOBALS['css-version']}\"  rel=\"stylesheet\" type=\"text/css\"/>";
+    return "<link href=\"{$GLOBALS['resource-server']}/assets/plugins/$plugin/$name.css?v={$GLOBALS['css-version']}\"  rel=\"stylesheet\" type=\"text/css\"/>";
 }
 
 // 加载插件图片
-function load_plugin_img($plugin, $name)
+function plugin_img($plugin, $name)
 {
-    return "<script src=\"{$GLOBALS['resource-server']}/assets/plugins/$plugin/images/$name\"></script>";
+    return "{$GLOBALS['resource-server']}/assets/plugins/$plugin/$name";
 
 }
 

@@ -80,7 +80,7 @@ $config = [
     'add-config' => [
         // 数据库配置文件
         'db' => __ENV__ . '/db/config',
-        'client-config' => __ENV__ . '/client',
+        'client' => __ENV__ . '/client',
         'app' => __ENV__ . '/app',
         'mail' => 'mail',
         'admin' => 'admin',
