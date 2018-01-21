@@ -41,7 +41,7 @@ class Role extends Controller
     {
         $table->text('id')->hide()->sortable();
         $table->text('title');
-        $table->text('name');
+        $table->code('name');
         $table->text('comment');
 
         $this->buildAbilities($table);

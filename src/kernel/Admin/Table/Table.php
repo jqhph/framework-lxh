@@ -3,6 +3,7 @@
 namespace Lxh\Admin\Table;
 
 use Lxh\Admin\Fields\Button;
+use Lxh\Admin\Fields\Code;
 use Lxh\Admin\Fields\Field;
 use Lxh\Admin\Fields\Label;
 use Lxh\Admin\Fields\Link;
@@ -25,6 +26,7 @@ use Lxh\Support\Arr;
  * @method Table tag($field);
  * @method Table checkbox($field);
  * @method Table checked($field);
+ * @method Table code($field);
  */
 class Table extends Widget
 {
@@ -37,7 +39,7 @@ class Table extends Widget
         'label' => Label::class,
         'tag' => Tag::class,
         'checkbox' => Checkbox::class,
-        'checked' => 'checked',
+        'code' => Code::class,
     ];
 
 

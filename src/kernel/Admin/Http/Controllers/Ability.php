@@ -45,7 +45,7 @@ class Ability extends Controller
     {
         $table->text('id')->hide()->sortable();
         $table->text('title');
-        $table->text('name');
+        $table->code('name');
         $table->checked('forbidden');
         $table->text('comment');
         $table->date('created_at')->sortable();
