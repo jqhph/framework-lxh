@@ -221,7 +221,7 @@ class Index
         $name = $user->first_name . $user->last_name;
         $username = $name ?: $user->username;
 
-        $avatar = $user->avatar() ?: load_img('users/avatar-1.jpg');
+        $avatar = $user->avatar() ?: admin_img('/images/users/avatar-1.jpg');
 
         return view($this->views['user'], ['name' => $username, 'avatar' => &$avatar])->render();
 
