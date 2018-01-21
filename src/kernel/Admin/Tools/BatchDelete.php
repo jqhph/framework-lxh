@@ -4,6 +4,7 @@ namespace Lxh\Admin\Tools;
 
 use Lxh\Admin\Admin;
 use Lxh\Admin\Fields\Button;
+use Lxh\Admin\Fields\Code;
 use Lxh\Contracts\Support\Renderable;
 
 class BatchDelete implements Renderable
@@ -17,12 +18,8 @@ class BatchDelete implements Renderable
 
     public function render()
     {
-        $btn = new Button($this->label());
+        $controller = __CONTROLLER__;
 
-        $btn->attribute('data-model', __CONTROLLER__);
-        $btn->attribute('id', $this->id);
-
-        return $btn->color('danger')->icon('fa fa-trash')->render();
-
+        return "<a data-model='{$controller}' id='{$this->id}'>{$this->label()}</a>";
     }
 }

@@ -284,7 +284,8 @@ class Grid implements Renderable
     protected function setupTools()
     {
         if ($this->options['allowBatchDelete']) {
-            $this->tools->append(new BatchDelete());
+//            $this->tools->append(new BatchDelete());
+            $this->actions()->append(new BatchDelete());
         }
 
         if ($this->actions) {
@@ -512,6 +513,16 @@ class Grid implements Renderable
      * @return $this
      */
     public function allowBatchDelete()
+    {
+        $this->options['allowBatchDelete'] = true;
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function disableBatchDelete()
     {
         $this->options['allowBatchDelete'] = true;
 
