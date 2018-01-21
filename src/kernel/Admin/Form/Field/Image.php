@@ -25,6 +25,8 @@ class Image extends File
         //autoReplace
     }
 
+    // allowedFileTypes 'jpg', 'gif', 'png'
+
     //elCaptionText   设置标题栏提示信息
     // minImageWidth minImageHeight maxImageWidth maxImageHeight uploadAsync uploadUrl
 
