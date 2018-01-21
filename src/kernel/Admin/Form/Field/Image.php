@@ -20,6 +20,16 @@ class Image extends File
      */
     protected $rules = 'image';
 
+    public function autoReplace()
+    {
+        //autoReplace
+    }
+
+    //elCaptionText   设置标题栏提示信息
+    // minImageWidth minImageHeight maxImageWidth maxImageHeight uploadAsync uploadUrl
+
+    //method fileuploaded
+
     /**
      * @param array|UploadedFile $image
      *

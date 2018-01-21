@@ -7,3 +7,6 @@
         }?>
     </div>
 </div>
+<script>
+__then__(function () {$('input[type="file"]').on('change', function() {setTimeout('IFRAME.height()',50);})})
+</script>
