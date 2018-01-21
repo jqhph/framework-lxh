@@ -38,7 +38,7 @@ class Menu extends Controller
         'name',
         'controller',
         'action',
-        'show' => ['view' => 'Checkbox'],
+        'show' => ['view' => 'Checked'],
         'type' => ['view' => 'Select'],
         'priority',
     ];

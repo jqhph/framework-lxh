@@ -24,6 +24,7 @@ use Lxh\Support\Arr;
  * @method Table label($field);
  * @method Table tag($field);
  * @method Table checkbox($field);
+ * @method Table checked($field);
  */
 class Table extends Widget
 {
@@ -35,7 +36,8 @@ class Table extends Widget
         'button' => Button::class,
         'label' => Label::class,
         'tag' => Tag::class,
-        'checkbox' => Checkbox::class
+        'checkbox' => Checkbox::class,
+        'checked' => 'checked',
     ];
 
 

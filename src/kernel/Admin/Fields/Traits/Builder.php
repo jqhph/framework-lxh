@@ -19,4 +19,10 @@ trait Builder
         return ($value !== '') ? trans_option($value, $name) : '';
     }
 
+    protected function buildChecked($name, $value)
+    {
+        return $value ? '<i style="font-size:16px;color:#10c469" class=" fa fa-check"></i>'
+            : '<i style="color:#ff5b5b;font-size:16px;" class="zmdi zmdi-close-circle-o"></i>';
+    }
+
 }

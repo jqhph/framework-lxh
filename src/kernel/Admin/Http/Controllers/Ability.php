@@ -46,7 +46,7 @@ class Ability extends Controller
         $table->text('id')->hide()->sortable();
         $table->text('title');
         $table->text('name');
-        $table->checkbox('forbidden');
+        $table->checked('forbidden');
         $table->text('comment');
         $table->date('created_at')->sortable();
         $table->date('modified_at')->sortable();

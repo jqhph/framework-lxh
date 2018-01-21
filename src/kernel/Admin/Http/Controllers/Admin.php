@@ -55,8 +55,8 @@ class Admin extends Controller
 
         $this->buildRoles($table);
 
-        $table->checkbox('status');
-        $table->checkbox('is_admin')->hide();
+        $table->checked('status');
+        $table->checked('is_admin')->hide();
         $table->select('sex');
         $table->date('created_at')->sortable();
         $table->date('modified_at')->sortable()->hide();
