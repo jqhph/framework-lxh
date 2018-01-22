@@ -143,7 +143,7 @@ class Box extends Widget implements Renderable
 
         static::$scripts[0] = <<<EOF
             $('.portlet [data-toggle="remove"]').click(function (e) {
-                $(this).parent().parent().parent().toggle(100)
+                $(this).parent().parent().parent().parent().parent().toggle(100)
             })
 EOF;
         return $this;
