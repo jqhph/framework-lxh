@@ -279,7 +279,7 @@ class Translator
      */
     protected function files()
     {
-        return make('files');
+        return files();
     }
 
     /**

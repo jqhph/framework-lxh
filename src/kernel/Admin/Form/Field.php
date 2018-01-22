@@ -748,7 +748,7 @@ class Field implements Renderable
      */
     public function getPlaceholder()
     {
-        return $this->placeholder ?: trans($this->column . '.input', 'fields');
+        return $this->placeholder ?: trans($this->column . '-input', 'fields');
     }
 
     /**

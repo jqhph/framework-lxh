@@ -231,7 +231,7 @@ class Language extends Controller
 
         $path = $language->getBasePath() . $path;
 
-        if ($file->mergePhpContents($path, $content)) {
+        if ($file->mergePhpContents($path, $content, null, true)) {
             // 更新前端缓存
             $this->updateCache();
             return $this->success('Success', ['content' => $file->getPhpContents($path)]);
@@ -261,7 +261,7 @@ class Language extends Controller
 
         $path = $language->getBasePath() . $path;
 
-        if ($file->mergePhpContents($path, $content)) {
+        if ($file->mergePhpContents($path, $content, null, true)) {
             // 更新前端缓存
             $this->updateCache();
             return $this->success('Success', ['content' => $file->getPhpContents($path)]);
