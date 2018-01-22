@@ -80,10 +80,10 @@ class Controller extends Base
         // 构建网格报表
         $grid = $content->grid($this->grid);
 
+        $this->gridPermit($grid);
+
         // 自定义grid
         $this->grid($grid, $content);
-
-        $this->gridPermit($grid);
 
         if ($this->filter) {
             // 添加过滤器，过滤器会根据搜索表单内容构建Sql where过滤语句

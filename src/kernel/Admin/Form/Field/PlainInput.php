@@ -145,6 +145,24 @@ trait PlainInput
         return $this->attribute('max', $max);
     }
 
+    /**
+     * @param $min
+     * @return mixed
+     */
+    public function minlen($min)
+    {
+        return $this->attribute('minlength', $min);
+    }
+
+    /**
+     * @param $min
+     * @return mixed
+     */
+    public function maxlen($max)
+    {
+        return $this->attribute('maxlength', $max);
+    }
+
     protected function attachOptionsScript()
     {
         $class = $this->getElementClassSelector();

@@ -29,14 +29,14 @@ class Query
 	 */
 	protected $connection;
 
-    /**
-     * @var string
-     */
+	/**
+	 * @var string
+	 */
 	protected $connectionName = 'primary';
 
-    /**
-     * @var string
-     */
+	/**
+	 * @var string
+	 */
 	protected $defaultConnectionType = 'primary';
 
 	public function __construct(Container $container)
@@ -228,83 +228,83 @@ class Query
 		return $this;
 	}
 
-    /**
-     * @param $whereString
-     * @param array $prepareData
-     */
-    public function havingRaw($whereString, array $prepareData = [])
-    {
-        $this->builder->havingRaw($whereString, $prepareData);
+	/**
+	 * @param $whereString
+	 * @param array $prepareData
+	 */
+	public function havingRaw($whereString, array $prepareData = [])
+	{
+		$this->builder->havingRaw($whereString, $prepareData);
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     *
-    ->whereOr([
-        'test' => 1, 'test2' => 2,
-    ])
-     *
-     * @param array $where 必须传入一维数组
-     * @return $this
-     */
+	/**
+	 *
+	->whereOr([
+	'test' => 1, 'test2' => 2,
+	])
+	 *
+	 * @param array $where 必须传入一维数组
+	 * @return $this
+	 */
 	public function whereOr(array $where)
-    {
-        $type = 'OR';
-        $this->builder->where($type, $where);
-        return $this;
-    }
+	{
+		$type = 'OR';
+		$this->builder->where($type, $where);
+		return $this;
+	}
 
-    /**
-     * @param array $where
-     * @return $this
-     */
-    public function havingOr(array $where)
-    {
-        $type = 'OR';
-        $this->builder->having($type, $where);
-        return $this;
-    }
+	/**
+	 * @param array $where
+	 * @return $this
+	 */
+	public function havingOr(array $where)
+	{
+		$type = 'OR';
+		$this->builder->having($type, $where);
+		return $this;
+	}
 
-    /**
-     * Or字句由多个条件合并而成
-     *
-    ->whereOrs([
-        ['test' => 1, 'test2' => 2],
-        ['field1' => 1, 'field2' => 2],
-    ])
+	/**
+	 * Or字句由多个条件合并而成
+	 *
+	->whereOrs([
+	['test' => 1, 'test2' => 2],
+	['field1' => 1, 'field2' => 2],
+	])
 
-    ===>
-    AND ((`table`.`test` = ? AND `table`.`test2` = ?) OR (`table`.`field1` = ? AND `table`.`field2` = ?))
-     *
-     * @param array $where 必须传入二维数组
-     * @return $this
-     */
-    public function whereOrs(array $where)
-    {
-        $where = [
-            'OR+' => $where
-        ];
-        $this->builder->where($where);
-        return $this;
-    }
+	===>
+	AND ((`table`.`test` = ? AND `table`.`test2` = ?) OR (`table`.`field1` = ? AND `table`.`field2` = ?))
+	 *
+	 * @param array $where 必须传入二维数组
+	 * @return $this
+	 */
+	public function whereOrs(array $where)
+	{
+		$where = [
+			'OR+' => $where
+		];
+		$this->builder->where($where);
+		return $this;
+	}
 
-    /**
-     * @param array $where
-     * @return $this
-     */
-    public function havingOrs(array $where)
-    {
-        $where = [
-            'OR+' => $where
-        ];
-        $this->builder->having($where);
-        return $this;
-    }
+	/**
+	 * @param array $where
+	 * @return $this
+	 */
+	public function havingOrs(array $where)
+	{
+		$where = [
+			'OR+' => $where
+		];
+		$this->builder->having($where);
+		return $this;
+	}
 
 	/**
 	 * 使用OR连接子句
-     *
+	 *
 	 * @return static
 	 */
 	public function orWhere($p1, $p2 = '=', $p3 = null, $table = null)
@@ -313,87 +313,92 @@ class Query
 		return $this;
 	}
 
-    /**
-     * @param $field
-     * @return $this
-     */
+	/**
+	 * @param $field
+	 * @return $this
+	 */
 	public function whereNull($field)
-    {
-        $this->builder->where($field, 'IS NULL');
-        return $this;
-    }
+	{
+		$this->builder->where($field, 'IS NULL');
+		return $this;
+	}
 
-    /**
-     * @param $field
-     * @return $this
-     */
-    public function whereNotNull($field)
-    {
-        $this->builder->where($field, 'IS NOT NULL');
-        return $this;
-    }
+	/**
+	 * @param $field
+	 * @return $this
+	 */
+	public function whereNotNull($field)
+	{
+		$this->builder->where($field, 'IS NOT NULL');
+		return $this;
+	}
 
-    /**
-     * @param $field
-     * @param $p1
-     * @param $p2
-     * @return $this
-     */
-    public function whereBetween($field, $p1, $p2)
-    {
-        $this->builder->where($field, 'BETWEEN', [&$p1, &$p2]);
-        return $this;
-    }
+	/**
+	 * @param $field
+	 * @param $p1
+	 * @param $p2
+	 * @return $this
+	 */
+	public function whereBetween($field, $p1, $p2)
+	{
+		$this->builder->where($field, 'BETWEEN', [&$p1, &$p2]);
+		return $this;
+	}
 
-    /**
-     * @param $field
-     * @param $p1
-     * @return $this
-     */
-    public function whereIn($field, array $p1)
-    {
-        $this->builder->where($field, 'IN', $p1);
-        return $this;
-    }
+	/**
+	 * @param $field
+	 * @param $p1
+	 * @return $this
+	 */
+	public function whereIn($field, array $p1)
+	{
+		if (count($p1) > 1) {
+			$this->builder->where($field, 'IN', $p1);
+		} else {
+			$this->builder->where($field, $p1[0]);
+		}
 
-    /**
-     * LIKE "%value%"
-     *
-     * @param $field
-     * @param $p1
-     * @return $this
-     */
-    public function whereLike($field, $p1)
-    {
-        $this->builder->where($field, '%*%', $p1);
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * LIKE "value%"
-     *
-     * @param $field
-     * @param $p1
-     * @return $this
-     */
-    public function whereLikeRight($field, $p1)
-    {
-        $this->builder->where($field, '*%', $p1);
-        return $this;
-    }
+	/**
+	 * LIKE "%value%"
+	 *
+	 * @param $field
+	 * @param $p1
+	 * @return $this
+	 */
+	public function whereLike($field, $p1)
+	{
+		$this->builder->where($field, '%*%', $p1);
+		return $this;
+	}
 
-    /**
-     * LIKE "value%"
-     *
-     * @param $field
-     * @param $p1
-     * @return $this
-     */
-    public function whereLikeLeft($field, $p1)
-    {
-        $this->builder->where($field, '%*', $p1);
-        return $this;
-    }
+	/**
+	 * LIKE "value%"
+	 *
+	 * @param $field
+	 * @param $p1
+	 * @return $this
+	 */
+	public function whereLikeRight($field, $p1)
+	{
+		$this->builder->where($field, '*%', $p1);
+		return $this;
+	}
+
+	/**
+	 * LIKE "value%"
+	 *
+	 * @param $field
+	 * @param $p1
+	 * @return $this
+	 */
+	public function whereLikeLeft($field, $p1)
+	{
+		$this->builder->where($field, '%*', $p1);
+		return $this;
+	}
 
 	/**
 	 *
@@ -603,29 +608,29 @@ class Query
 		return $this;
 	}
 
-    /**
-     * @param $table
-     * @param null $field1
-     * @param null $field2
-     * @param string $condit
-     * @param string $type
-     * @return $this
-     */
+	/**
+	 * @param $table
+	 * @param null $field1
+	 * @param null $field2
+	 * @param string $condit
+	 * @param string $type
+	 * @return $this
+	 */
 	public function join($table, $field1 = null, $field2 = null , $condit = '=', $type = 'LEFT')
 	{
 		$this->builder->join($table, $field1, $field2, $condit, $type);
 		return $this;
 	}
 
-    /**
-     * @param $string
-     * @return $this
-     */
+	/**
+	 * @param $string
+	 * @return $this
+	 */
 	public function joinRaw($string)
-    {
-        $this->builder->joinRaw($string);
-        return $this;
-    }
+	{
+		$this->builder->joinRaw($string);
+		return $this;
+	}
 
 	/**
 	 *

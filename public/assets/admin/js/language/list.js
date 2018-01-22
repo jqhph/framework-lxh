@@ -1,7 +1,7 @@
 /**
  * Created by Jqh on 2017/7/21. , 'css/sweet-twitter.css'
  */
-define(['@lxh/css/sweet-alert.css', '@lxh/js/sweet-alert'], function () {
+define(['@lxh/css/sweet-alert.css', '@lxh/js/sweet-alert', '@lxh/js/validate.min'], function () {
     var currentIframeName = IFRAME.current();
 
     var language = {
@@ -323,11 +323,11 @@ define(['@lxh/css/sweet-alert.css', '@lxh/js/sweet-alert'], function () {
             // 文件树点击事件
             leafClick: function (e, data) {
                 var $this = $(e.currentTarget),
-                    // 父级文件夹字符串
+                // 父级文件夹字符串
                     parentString = $this.find('span').attr('data-parent'),
-                    // 文件夹名或文件名
+                // 文件夹名或文件名
                     name = $this.text(),
-                    // parent表示文件夹，sub表示文件
+                // parent表示文件夹，sub表示文件
                     type = $this.find('span').hasClass('parent') ? 'parent' : 'sub'
 
                 // 只允许点击文件
