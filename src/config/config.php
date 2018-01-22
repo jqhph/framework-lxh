@@ -155,8 +155,8 @@ $config['logger'] = [
         'path'     => '../data/logs/record.log',
         'handlers' => [
             [
-                'handler' 	=> 'DaysFileHandler',
-                'formatter' => 'TextFormatter',
+                'handler' 	=> Lxh\Logger\Handler\DaysFileHandler::class,
+                'formatter' => Lxh\Logger\Formatter\TextFormatter::class,
                 'level' 	=> '100'
             ]
         ],

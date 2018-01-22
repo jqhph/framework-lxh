@@ -118,12 +118,7 @@ class Manager extends Factory
 				continue;
 			}
 
-			$handler = get_value($info, 'handler', $defaultConfig['handlers'][0]['handler']);
-
-			$handelClass = 'Lxh\\Logger\\Handler\\' . $handler;
-			if (! class_exists($handelClass)) {
-				$handelClass = '\\Monolog\\Handler\\' . $handler;
-			}
+			$handelClass = get_value($info, 'handler', $defaultConfig['handlers'][0]['handler']);
 
 			$lowestLevel = get_value($info, 'level', \Monolog\Logger::DEBUG);
 			$bubble      = get_value($info, 'bubble', true);
@@ -140,12 +135,7 @@ class Manager extends Factory
 			}
 
 			if (! empty($info['formatter'])) {
-				$fomatterClass = 'Lxh\\Logger\\Formatter\\' . $info['formatter'];
-				if (! class_exists($fomatterClass)) {
-					$fomatterClass = '\\Monolog\\Formatter\\' . $info['formatter'];
-				}
-
-				$handler->setFormatter(new $fomatterClass());
+				$handler->setFormatter(new $info['formatter']());
 			}
 
 			$channel->pushHandler($handler);//添加handler
