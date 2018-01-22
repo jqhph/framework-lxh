@@ -7,7 +7,6 @@
 
 namespace Lxh\Admin\Controllers;
 
-use Lxh\Admin\Http\Controllers\Admin;
 use Lxh\Admin\Http\Controllers\Controller;
 use Lxh\Admin\Layout\Content;
 use Lxh\Admin\Filter;
@@ -20,7 +19,6 @@ use Lxh\Admin\Table\Th;
 use Lxh\Admin\Table\Tr;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
-use Lxh\MVC\Model;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Product extends Controller
@@ -32,15 +30,15 @@ class Product extends Controller
      */
     protected $grid = [
         'id' => ['hide' => 1, 'sortable' => 1],
-        'name' => ['sortable' => 1,'view' => 'code'],
+        'name' => ['sortable' => 1],
         'price' => ['sortable' => 1,],
         'counter_price',
         'share_price' => ['sortable' => 1,],
         'level',
         'stock',
-        'is_hot' => ['view' => 'checked'],
-        'is_new' => ['view' => 'checked'],
-        'calendar' => ['view' => 'checked'],
+        'is_hot' => ['view' => 'Checkbox'],
+        'is_new' => ['view' => 'Checkbox'],
+        'calendar' => ['view' => 'Checkbox'],
         'order_num',
         'desc' => ['show' => 0],
         'category_id' => ['show' => 0],
@@ -97,7 +95,7 @@ class Product extends Controller
         /**
          * 使用field方法添加字段
          */
-        $table->checked('timelimit')->sortable();
+        $table->checkbox('timelimit')->sortable();
 
         /**
          * 自定义字段标题内容

@@ -28,6 +28,13 @@ use Lxh\Admin\Layout\Row;
 class Menu extends Controller
 {
     /**
+     * 使用权限管理
+     *
+     * @var bool
+     */
+    protected $useAuthorize = true;
+
+    /**
      * 网格字段定义
      *
      * @var array
@@ -46,6 +53,7 @@ class Menu extends Controller
     protected function initialize()
     {
         Admin::model(\Lxh\Auth\Database\Menu::class);
+        $this->useAuthorize = config('use-authorize');
     }
 
     /**
@@ -110,8 +118,10 @@ class Menu extends Controller
         $form->text('action');
         $form->select('show')->options([1, 0])->default(1);
         $form->select('priority')->options(range(0, 30))->help(trans('The smaller the value, the higher the order.'));
-        $this->buildQuickCreateAbilityInput($form);
-        $this->buildAbilitiesInput($form);
+        if ($this->useAuthorize) {
+            $this->buildQuickCreateAbilityInput($form);
+            $this->buildAbilitiesInput($form);
+        }
     }
 
     /**
@@ -176,11 +186,13 @@ class Menu extends Controller
     {
         $table->useTree('subs');
 
-        $table->link('ability_title')->rendering(function (Link $link) {
-            $link->format(
-                Admin::url('Ability')->detail('{value}'), 'ability_id'
-            );
-        });
+        if ($this->useAuthorize) {
+            $table->link('ability_title')->rendering(function (Link $link) {
+                $link->format(
+                    Admin::url('Ability')->detail('{value}'), 'ability_id'
+                );
+            });
+        }
     }
 
 

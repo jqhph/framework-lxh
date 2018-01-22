@@ -76,7 +76,7 @@ class AuthManager
             $this->cache = new Store($this->createCacheStore());
         }
 
-        $this->enable = config('use-rbac', true);
+        $this->enable = config('use-authorize', true);
     }
 
     protected function createCacheStore()

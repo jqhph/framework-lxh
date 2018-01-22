@@ -17,7 +17,7 @@ $config = [
     'composer.working-path' => '',
 
     // 使用RBAC权限管理
-    'use-rbac' => true,
+    'use-authorize' => true,
 
     'view' => [
         // 模板文件路径
