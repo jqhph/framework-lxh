@@ -1,7 +1,7 @@
 /**
  * Created by Jqh on 2017/7/21. , 'css/sweet-twitter.css'
  */
-define(['css/sweet-alert.css', 'lib/js/sweet-alert'], function () {
+define(['@lxh/css/sweet-alert.css', '@lxh/js/sweet-alert'], function () {
     var currentIframeName = IFRAME.current();
 
     var language = {

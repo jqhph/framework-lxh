@@ -40,16 +40,11 @@
 </div>
 
 <script>
-    require_css(['lib/plugins/jstree/style.css', 'lib/plugins/custombox/dist/custombox.min.css']);
+    require_css(['@lxh/plugins/jstree/style.css', '@lxh/plugins/custombox/dist/custombox.min.css']);
     require_js([
-        'lib/plugins/jstree/jstree.min',
-        parse_view_name('Language', 'List'),
-//        'lib/plugins/custombox/dist/custombox.min',
-//        'lib/plugins/custombox/dist/legacy.min'
+        '@lxh/plugins/jstree/jstree.min', '@lxh/js/language/list'
     ]);
 </script>
-
-<?php echo render_view('component.modal.basic');?>
 
 <!-- js 模板 -->
 <script type="text/html" id="row-tpl">
@@ -87,15 +82,15 @@
 
 <script type="text/html" id="createCategoryTpl">
     <hr>
-    <?php echo render_view('component/fields/varchar/edit', ['label' => 'name', 'name' => 'cate_name'])?>
+    <?php echo render_view('component.input', ['label' => 'name', 'name' => 'cate_name'])?>
     <hr>
 </script>
 
 <script type="text/html" id="createFileTpl">
     <hr>
-    <?php echo render_view('component/fields/varchar/edit', ['label' => 'language', 'name' => 'lang_name', 'value' => 'zh'])?>
-    <?php echo render_view('component/fields/varchar/edit', ['label' => 'module', 'name' => 'module_name', 'value' => 'Admin'])?>
-    <?php echo render_view('component/fields/varchar/edit', ['label' => 'filename', 'name' => 'filename', 'placeholder' => 'Avoid the suffix'])?>
+    <?php echo render_view('component.input', ['label' => 'language', 'name' => 'lang_name', 'value' => 'zh'])?>
+    <?php echo render_view('component.input', ['label' => 'module', 'name' => 'module_name', 'value' => 'Admin'])?>
+    <?php echo render_view('component.input', ['label' => 'filename', 'name' => 'filename', 'placeholder' => 'Avoid the suffix'])?>
     <hr>
 </script>
 
