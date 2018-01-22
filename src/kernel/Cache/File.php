@@ -98,9 +98,15 @@ class File extends Cache
         return $this->type ?: $this->defaultType;
     }
 
-    public function getTypePath($name)
+    /**
+     * 获取缓存文件目录
+     *
+     * @param null $name
+     * @return string
+     */
+    public function getTypePath($name = null)
     {
-        return $this->getBasePath() . $name;
+        return $this->getBasePath() . ($name ?: $this->getType());
     }
 
     /**
