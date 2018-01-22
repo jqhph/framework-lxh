@@ -201,7 +201,13 @@ class Tr extends Widget
         }
 
         // 定义了视图
-        $tdString .= $this->renderFiledView($view, $field, $value, $td, get_value($options, 'then'));
+        $tdString .= $this->renderFiledView(
+            $view,
+            $field,
+            $value,
+            $td,
+            get_value($options, 'then')
+        );
     }
 
     /**
@@ -272,7 +278,7 @@ class Tr extends Widget
 
         $view->setTr($this);
 
-        if ($then) $then($view);
+        if ($then) $then($view, $this);
 
         return $td->value($view->render())->render();
     }
