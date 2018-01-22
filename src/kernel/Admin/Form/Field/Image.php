@@ -20,12 +20,13 @@ class Image extends File
      */
     protected $rules = 'image';
 
-    public function autoReplace()
+    protected function setup()
     {
-        //autoReplace
+        $this->options['allowedFileTypes'] = [
+            'jpg', 'gif', 'png'
+        ];
     }
 
-    // allowedFileTypes 'jpg', 'gif', 'png'
 
     //elCaptionText   设置标题栏提示信息
     // minImageWidth minImageHeight maxImageWidth maxImageHeight uploadAsync uploadUrl

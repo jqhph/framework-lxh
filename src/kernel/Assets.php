@@ -40,7 +40,7 @@ class Assets
     {
         return [
             'public-js'=> [
-                '@lxh/js/container.min'
+                '@lxh/js/container.min.js'
             ],
             'public-css' => [
 

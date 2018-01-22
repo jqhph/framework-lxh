@@ -156,9 +156,13 @@ class Model extends Entity
      */
     public function batchDelete(array $ids)
     {
-        if ($this->beforeDelete($ids) === false) {
-            return false;
-        }
+        if (! $ids) return false;
+
+        $this->beforeBatchDelete($ids);
+        fire(
+            "{$this->module}.{$this->modelName}.batch-delete.before",
+            [$ids]
+        );
 
         if (count($ids) > 1) {
             $res = $this->query()->where(static::$idFieldsName, 'IN', $ids)->delete();
@@ -167,24 +171,27 @@ class Model extends Entity
         }
 
         $this->afterBatchDelete($ids, $res);
-
-        return $res;
-    }
-
-    protected function beforeBatchDelete(array &$ids)
-    {
-        fire(
-            "{$this->module}.{$this->modelName}.batch-delete.before",
-            [$ids]
-        );
-    }
-
-    protected function afterBatchDelete(array &$ids, $effect)
-    {
         fire(
             "{$this->module}.{$this->modelName}.batch-delete.after",
             [$ids]
         );
+
+        return $res;
+    }
+
+    /**
+     * @param array $ids
+     */
+    protected function beforeBatchDelete(array &$ids)
+    {
+    }
+
+    /**
+     * @param array $ids
+     * @param $effect
+     */
+    protected function afterBatchDelete(array &$ids, $effect)
+    {
     }
 
     /**
@@ -285,20 +292,28 @@ class Model extends Entity
      */
     public function save()
     {
-        $data = $this->all();
+        $input = $this->all();
 
-        if (empty($data[static::$idFieldsName])) {
+        if (empty($input[static::$idFieldsName])) {
             return $this->add();
         }
-        $id = $data[static::$idFieldsName];
+        $id = $input[static::$idFieldsName];
 
-        unset($data[static::$idFieldsName]);
+        unset($input[static::$idFieldsName]);
 
-        $this->beforeUpdate($id, $data);
+        $this->beforeUpdate($id, $input);
+        fire(
+            "{$this->module}.{$this->modelName}.update.before",
+            [$id, &$input]
+        );
 
-        $result = $this->query()->where(static::$idFieldsName, $id)->update($data);
+        $result = $this->query()->where(static::$idFieldsName, $id)->update($input);
 
-        $this->afterUpdate($id, $data, $result);
+        $this->afterUpdate($id, $input, $result);
+        fire(
+            "{$this->module}.{$this->modelName}.update.after",
+            [$id, &$input, $result]
+        );
 
         return $result;
     }
@@ -314,6 +329,10 @@ class Model extends Entity
         }
 
         $this->beforeAdd($input);
+        fire(
+            "{$this->module}.{$this->modelName}.add.before",
+            [&$input]
+        );
 
         $this->insertId = $this->query()->add($input);
         if ($this->insertId) {
@@ -321,24 +340,45 @@ class Model extends Entity
         }
 
         $this->afterAdd($this->insertId, $input);
+        fire(
+            "{$this->module}.{$this->modelName}.add.after",
+            [$this->insertId, &$input]
+        );
 
         return $this->insertId;
     }
 
+    /**
+     * replace
+     *
+     * @return bool
+     */
     public function replace()
     {
-        $data = $this->all();
+        $input = $this->all();
 
-        $this->beforeAdd($data);
+        $this->beforeAdd($input);
+        fire(
+            "{$this->module}.{$this->modelName}.add.before",
+            [&$input]
+        );
 
-        $this->insertId = $this->query()->replace($data);
+        $this->insertId = $this->query()->replace($input);
 
-        $this->afterAdd($this->insertId, $data);
+        $this->afterAdd($this->insertId, $input);
+        fire(
+            "{$this->module}.{$this->modelName}.add.after",
+            [$this->insertId, &$input]
+        );
 
         return $this->insertId;
     }
 
-    // 删除一条记录
+    /**
+     * 删除一条记录
+     *
+     * @return bool|mixed
+     */
     public function delete()
     {
         $id = $this->getId();
@@ -347,10 +387,18 @@ class Model extends Entity
         }
 
         $this->beforeDelete($id);
+        fire(
+            "{$this->module}.{$this->modelName}.delete.before",
+            [&$id]
+        );
 
         $result = $this->query()->where(static::$idFieldsName, $id)->delete();
 
         $this->afterDelete($id, $result);
+        fire(
+            "{$this->module}.{$this->modelName}.delete.after",
+            [&$id, $result]
+        );
 
         return $result;
     }
@@ -363,10 +411,6 @@ class Model extends Entity
      */
     protected function beforeDelete($id)
     {
-        fire(
-            "{$this->module}.{$this->modelName}.delete.before",
-            [&$id]
-        );
     }
 
     /**
@@ -378,10 +422,6 @@ class Model extends Entity
      */
     protected function afterDelete($id, $result)
     {
-        fire(
-            "{$this->module}.{$this->modelName}.delete.after",
-            [&$id, $result]
-        );
     }
 
     /**
@@ -404,40 +444,44 @@ class Model extends Entity
         return $this->tableName;
     }
 
-    // 新增操作钩子方法，新增前调用
+    /**
+     * 新增操作钩子方法，新增前调用
+     *
+     * @param array $input
+     */
     protected function beforeAdd(array &$input)
     {
-        fire(
-            "{$this->module}.{$this->modelName}.add.before",
-            [&$input]
-        );
     }
 
-    // 新增操作钩子方法
+    /**
+     * 新增操作钩子方法
+     *
+     * @param $insertId
+     * @param array $input
+     */
     protected function afterAdd($insertId, array &$input)
     {
-        fire(
-            "{$this->module}.{$this->modelName}.add.after",
-            [$insertId, &$input]
-        );
     }
 
-    // 修改钩子方法，修改前调用
+    /**
+     * 修改钩子方法，修改前调用
+     *
+     * @param $id
+     * @param array $input
+     */
     protected function beforeUpdate($id, array &$input)
     {
-        fire(
-            "{$this->module}.{$this->modelName}.update.before",
-            [$id, &$input]
-        );
     }
 
-    // 修改钩子方法
+    /**
+     * 修改钩子方法
+     *
+     * @param $id
+     * @param array $input
+     * @param $result
+     */
     protected function afterUpdate($id, array &$input, $result)
     {
-        fire(
-            "{$this->module}.{$this->modelName}.update.after",
-            [$id, &$input, $result]
-        );
     }
 
     /**

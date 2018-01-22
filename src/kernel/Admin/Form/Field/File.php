@@ -63,6 +63,29 @@ class File extends Field
     }
 
     /**
+     * 自动替换文件
+     *
+     * @return $this
+     */
+    public function autoReplace()
+    {
+        $this->options['autoReplace'] = true;
+        return $this;
+    }
+
+    /**
+     * 允许上传的类型
+     *
+     * @param array $types
+     * @return $this
+     */
+    public function allowFileTypes(array $types)
+    {
+        $this->options['allowedFileTypes'] = &$types;
+        return $this;
+    }
+
+    /**
      * Initialize the caption.
      *
      * @param string $caption
