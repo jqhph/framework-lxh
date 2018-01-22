@@ -68,7 +68,7 @@ class Product extends Controller
 
         $filter->multipleSelect('status')->options(range(1, 10));
         $filter->text('stock')->number();
-        $filter->text('name');
+        $filter->text('name')->minlen(3);
         $filter->select('level')->options([1, 2]);
         $filter->text('price');
         $filter->dateRange('created_at')->between()->toTimestamp();

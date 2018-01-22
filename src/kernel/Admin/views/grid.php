@@ -43,10 +43,10 @@
         $.pjax.defaults.timeout = 5000;
         $.pjax.defaults.maxCacheLength = 0;
         $(document).pjax('#pjax-container a:not(a[target="_blank"])', {container: '#pjax-container'});
-        $(document).on('submit', 'form[pjax-container]', function(event) {$.pjax.submit(event, '#pjax-container')});
+        $(document).on('submit', 'form[pjax-container]', function(e) {$.pjax.submit(e, '#pjax-container')});
         $(document).on("pjax:popstate", function() {
-            $(document).one("pjax:end", function(event) {
-                $(event.target).find("script[data-exec-on-popstate]").each(function() {
+            $(document).one("pjax:end", function(e) {
+                $(e.target).find("script[data-exec-on-popstate]").each(function() {
                     $.globalEval(this.text || this.textContent || this.innerHTML || '');
                 });
             });
