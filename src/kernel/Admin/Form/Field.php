@@ -732,7 +732,7 @@ class Field implements Renderable
      *
      * @param string $placeholder
      *
-     * @return Field
+     * @return $this
      */
     public function placeholder($placeholder = '')
     {
@@ -920,7 +920,7 @@ class Field implements Renderable
         if (! $this->rules) {
             return '';
         }
-        
+
         $rule = json_encode([
             'name' => $this->column, 'rules' => &$this->rules
         ]);

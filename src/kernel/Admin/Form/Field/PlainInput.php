@@ -147,7 +147,7 @@ trait PlainInput
 
     /**
      * @param $min
-     * @return mixed
+     * @return $this
      */
     public function minlen($min)
     {
@@ -156,7 +156,7 @@ trait PlainInput
 
     /**
      * @param $min
-     * @return mixed
+     * @return $this
      */
     public function maxlen($max)
     {
