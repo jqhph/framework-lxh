@@ -33,7 +33,8 @@ return [
         'params' => [
             'auth' => false,
             'module' => 'Admin',
-            'controller' => 'App',
+            'namespace' => 'Lxh\Admin\Http\Controllers',
+            'controller' => 'Error',
             'action' => 'NotFound'
         ]
     ]
