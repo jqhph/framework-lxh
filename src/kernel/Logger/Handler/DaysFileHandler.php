@@ -7,7 +7,7 @@ use Lxh\Contracts\Container\Container;
 /**
  * 按日期分日志文件
  */
-class DaysFileHandler extends \Monolog\Handler\StreamHandler 
+class DaysFileHandler extends \Monolog\Handler\StreamHandler
 {
 	/**
 	 * @var string
@@ -17,7 +17,7 @@ class DaysFileHandler extends \Monolog\Handler\StreamHandler
 	/**
 	 * @var string
 	 */
-	protected $filenameFormat = '{filename}-{date}';
+	protected $filepathFormat = '{filepath}-{date}';
 
 	/**
 	 * 项目根目录
@@ -40,16 +40,21 @@ class DaysFileHandler extends \Monolog\Handler\StreamHandler
 	 * @var \Lxh\File\FileManager
 	 */
 	private $files;
-	
-	public function __construct($stream, $level = Logger::DEBUG, $bubble = true, $filePermission = null, $useLocking = false) 
+
+	/**
+	 * @var string
+	 */
+	protected $filepath;
+
+	public function __construct($stream, $level = Logger::DEBUG, $bubble = true, $filePermission = null, $useLocking = false)
 	{
 		$this->files = files();
-		$this->filename = $this->normalizePath($stream);
-		
+		$this->filepath = $this->normalizePath($stream);
+
 		$this->removeExcessFile();//删除超出的文件
-		$this->formatFilename($this->filename);
-		
-		parent::__construct($this->filename, $level, $bubble, $filePermission);
+		$this->formatfilepath($this->filepath);
+
+		parent::__construct($this->filepath, $level, $bubble, $filePermission);
 	}
 
 	/**
@@ -69,74 +74,74 @@ class DaysFileHandler extends \Monolog\Handler\StreamHandler
 	 * @param $stream
 	 * @return bool
 	 */
-	private function formatFilename(& $stream) 
+	private function formatfilepath(& $stream)
 	{
 		if (! is_string($stream)) {
 			return false;
 		}
 		$fileInfo = pathinfo($stream);
 		$glob = str_replace(
-				array('{filename}', '{date}'),
-				array($fileInfo['filename'], date($this->dateFormat)),
-				$this->filenameFormat
+			array('{filepath}', '{date}'),
+			array($fileInfo['filepath'], date($this->dateFormat)),
+			$this->filepathFormat
 		);
-		
+
 		$stream = $fileInfo['dirname'] . $this->separator . $glob . '.' . $fileInfo['extension'];
 	}
-	
-	public function setMaxFiles($maxFiles) 
+
+	public function setMaxFiles($maxFiles)
 	{
 		$this->maxFiles = $maxFiles;
 	}
-	
-	public function setDateFormat($format) 
+
+	public function setDateFormat($format)
 	{
 		$this->dateFormat = $format;
 	}
-	
+
 	/**
-	 * 删除多余的文件 
+	 * 删除多余的文件
 	 * */
-    protected function removeExcessFile() 
-    {
-        if (0 === $this->maxFiles) {
-            return; //unlimited number of files for 0
-        }
+	protected function removeExcessFile()
+	{
+		if (0 === $this->maxFiles) {
+			return; //unlimited number of files for 0
+		}
 
-        $filePattern = $this->getFilePattern();
-        $dirPath = $this->files->getDirName($this->filename);
-        $logFiles = $this->files->getFileList($dirPath, false, $filePattern, true);
+		$filePattern = $this->getFilePattern();
+		$dirPath = $this->files->getDirName($this->filepath);
+		$logFiles = $this->files->getFileList($dirPath, false, $filePattern, true);
 
-        if (! empty( $logFiles) && count($logFiles) > $this->maxFiles) {
+		if (! empty( $logFiles) && count($logFiles) > $this->maxFiles) {
 
-            usort($logFiles, function($a, $b) {
-                return strcmp($b, $a);
-            });
+			usort($logFiles, function($a, $b) {
+				return strcmp($b, $a);
+			});
 
-            $logFilesToBeRemoved = array_slice($logFiles, $this->maxFiles);
+			$logFilesToBeRemoved = array_slice($logFiles, $this->maxFiles);
 
-            $this->files->removeFile($logFilesToBeRemoved, $dirPath);
-        }
-    }
+			$this->files->removeFile($logFilesToBeRemoved, $dirPath);
+		}
+	}
 
 	/**
 	 * @return mixed|string
 	 */
-    protected function getFilePattern() 
-    {
-        $fileInfo = pathinfo($this->filename);
-        $glob = str_replace(
-            array('{filename}', '{date}'),
-            array($fileInfo['filename'], '.*'),
-            $this->filenameFormat
-        );
+	protected function getFilePattern()
+	{
+		$fileInfo = pathinfo($this->filepath);
+		$glob = str_replace(
+			array('{filepath}', '{date}'),
+			array($fileInfo['filepath'], '.*'),
+			$this->filepathFormat
+		);
 
-        if (! empty($fileInfo['extension'])) {
-            $glob .= '\.' . $fileInfo['extension'];
-        }
+		if (! empty($fileInfo['extension'])) {
+			$glob .= '\.' . $fileInfo['extension'];
+		}
 
-        $glob = '^' . $glob . '$';
+		$glob = '^' . $glob . '$';
 
-        return $glob;
-    }
+		return $glob;
+	}
 }
