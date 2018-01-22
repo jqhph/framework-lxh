@@ -27,7 +27,7 @@ class Ability extends Model
 
         if (! $newId) return [];
 
-        $attributes[static::$idFieldsName] = $newId;
+        $attributes[$this->primaryKeyName] = $newId;
 
         return $attributes;
     }

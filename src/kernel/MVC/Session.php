@@ -101,7 +101,7 @@ class Session extends Model
             return $this;
         }
 
-        $this->set(static::$idFieldsName, $this->cookie->get($this->sessionKey));
+        $this->set($this->primaryKeyName, $this->cookie->get($this->sessionKey));
 
         // 查出用户数据
         $this->find();

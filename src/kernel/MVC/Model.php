@@ -17,7 +17,7 @@ class Model extends Entity
      *
      * @var string
      */
-    protected static $idFieldsName = 'id';
+    protected $primaryKeyName = 'id';
 
     /**
      * 默认查询的字段
@@ -108,7 +108,7 @@ class Model extends Entity
      */
     public function setIdName($name)
     {
-        static::$idFieldsName = $name;
+        $this->primaryKeyName = $name;
         return $this;
     }
 
@@ -120,7 +120,7 @@ class Model extends Entity
      */
     public function setId($id)
     {
-        $this->set(static::$idFieldsName, $id);
+        $this->set($this->primaryKeyName, $id);
 
         return $this;
     }
@@ -165,9 +165,9 @@ class Model extends Entity
         );
 
         if (count($ids) > 1) {
-            $res = $this->query()->where(static::$idFieldsName, 'IN', $ids)->delete();
+            $res = $this->query()->where($this->primaryKeyName, 'IN', $ids)->delete();
         } else {
-            $res = $this->query()->where(static::$idFieldsName, $ids[0])->delete();
+            $res = $this->query()->where($this->primaryKeyName, $ids[0])->delete();
         }
 
         $this->afterBatchDelete($ids, $res);
@@ -201,7 +201,7 @@ class Model extends Entity
      */
     public function getId()
     {
-        return $this->get(static::$idFieldsName);
+        return $this->get($this->primaryKeyName);
     }
 
     /**
@@ -209,7 +209,7 @@ class Model extends Entity
      */
     public function getKeyName()
     {
-        return static::$idFieldsName;
+        return $this->primaryKeyName;
     }
 
     /**
@@ -278,7 +278,7 @@ class Model extends Entity
         $id = $this->getId();
 
         if ($id) {
-            $data = $this->query()->select($this->selectFields)->where(static::$idFieldsName, $id)->findOne();
+            $data = $this->query()->select($this->selectFields)->where($this->primaryKeyName, $id)->findOne();
             $this->fill($data);
             return $data;
         }
@@ -294,12 +294,12 @@ class Model extends Entity
     {
         $input = $this->all();
 
-        if (empty($input[static::$idFieldsName])) {
+        if (empty($input[$this->primaryKeyName])) {
             return $this->add();
         }
-        $id = $input[static::$idFieldsName];
+        $id = $input[$this->primaryKeyName];
 
-        unset($input[static::$idFieldsName]);
+        unset($input[$this->primaryKeyName]);
 
         $this->beforeUpdate($id, $input);
         fire(
@@ -307,7 +307,7 @@ class Model extends Entity
             [$id, &$input]
         );
 
-        $result = $this->query()->where(static::$idFieldsName, $id)->update($input);
+        $result = $this->query()->where($this->primaryKeyName, $id)->update($input);
 
         $this->afterUpdate($id, $input, $result);
         fire(
@@ -392,7 +392,7 @@ class Model extends Entity
             [&$id]
         );
 
-        $result = $this->query()->where(static::$idFieldsName, $id)->delete();
+        $result = $this->query()->where($this->primaryKeyName, $id)->delete();
 
         $this->afterDelete($id, $result);
         fire(
