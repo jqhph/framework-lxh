@@ -17,7 +17,7 @@ class DaysFileHandler extends \Monolog\Handler\StreamHandler
 	/**
 	 * @var string
 	 */
-	protected $filepathFormat = '{filepath}-{date}';
+	protected $filepathFormat = '{filename}-{date}';
 
 	/**
 	 * 项目根目录
@@ -81,8 +81,8 @@ class DaysFileHandler extends \Monolog\Handler\StreamHandler
 		}
 		$fileInfo = pathinfo($stream);
 		$glob = str_replace(
-			array('{filepath}', '{date}'),
-			array($fileInfo['filepath'], date($this->dateFormat)),
+			array('{filename}', '{date}'),
+			array($fileInfo['filename'], date($this->dateFormat)),
 			$this->filepathFormat
 		);
 
@@ -131,8 +131,8 @@ class DaysFileHandler extends \Monolog\Handler\StreamHandler
 	{
 		$fileInfo = pathinfo($this->filepath);
 		$glob = str_replace(
-			array('{filepath}', '{date}'),
-			array($fileInfo['filepath'], '.*'),
+			array('{filename}', '{date}'),
+			array($fileInfo['filename'], '.*'),
 			$this->filepathFormat
 		);
 
