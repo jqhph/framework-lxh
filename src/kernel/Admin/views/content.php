@@ -35,18 +35,10 @@ echo render_view('admin::index.app-js');
 (function (w) {
     w.TAB = w.top.TAB;
     w.IFRAME = w.top.IFRAME;;
-    w.open_tab = function (id, url, label) {
-        TAB.switch(id, url, label)
-    };
-    w.close_tab = function (id) {
-        TAB.close(id)
-    };
-    w.reload_tab = function (id, url, label) {
-        TAB.reload(id, url, label)
-    };
-    w.back_tab = function (step) {
-        TAB.back(step)
-    };
+    w.open_tab = function (id, url, label) {TAB.switch(id, url, label)};
+    w.close_tab = function (id) {TAB.close(id)};
+    w.reload_tab = function (id, url, label) {TAB.reload(id, url, label)};
+    w.back_tab = function (step) {TAB.back(step)};
     w.loading = function (el, circle, timeout) {
         el = el || 'body';
         function loading() {
@@ -60,6 +52,14 @@ echo render_view('admin::index.app-js');
             if (timeout) setTimeout(this.close, timeout);
         }
         return new loading();
+    };
+    document.onkeydown = function (e) {
+        if (e.keyCode==116) {
+            e.keyCode = 0;
+            e.cancelBubble = true;
+            IFRAME.reload();
+            return false;
+        }
     }
 })(window);
 
