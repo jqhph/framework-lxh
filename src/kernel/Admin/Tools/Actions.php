@@ -12,11 +12,26 @@ class Actions extends Tools
      */
     protected $label = 'Actions';
 
-    public function __construct($label = null)
-    {
-        if ($label) $this->label = $label;
+    /**
+     * @var \Closure
+     */
+    protected $rendering;
 
+    public function __construct()
+    {
         $this->label = trans($this->label);
+    }
+
+    /**
+     * 设置按钮名称
+     *
+     * @param $label
+     * @return $this
+     */
+    public function label($label)
+    {
+        $this->label = $label;
+        return $this;
     }
 
     /**

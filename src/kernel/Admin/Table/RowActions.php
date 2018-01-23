@@ -9,11 +9,13 @@ use Lxh\Admin\Kernel\Url;
 use Lxh\Admin\Table\Th;
 use Lxh\Admin\Table\Tr;
 use Lxh\Admin\Table\Tree;
+use Lxh\Admin\Tools\Tools;
+use Lxh\Admin\Tools\TrTools;
 use Lxh\Admin\Widgets\Widget;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Support\Arr;
 
-class RowActions
+class RowActions extends TrTools
 {
     /**
      * @var Grid
@@ -21,21 +23,27 @@ class RowActions
     protected $grid;
 
     /**
-     * 当前行数据
-     *
-     * @var array
-     */
-    protected $row = [];
-
-    /**
      * @var \Lxh\Admin\Url
      */
     protected $url;
 
-    public function __construct(Grid $grid)
+    /**
+     * @var bool
+     */
+    protected $allowEdit;
+
+    /**
+     * @var bool
+     */
+    protected $allowDelete;
+
+    public function __construct(Grid $grid, \Closure $rendering = null)
     {
         $this->grid = $grid;
+        $this->allowEdit = $this->grid->option('allowEdit');
+        $this->allowDelete = $this->grid->option('allowDelete');
         $this->url = Admin::url();
+        $this->rendering = $rendering;
     }
 
     public function title()
@@ -43,10 +51,39 @@ class RowActions
         return '';
     }
 
-    public function row(array $row)
+    /**
+     * @return $this
+     */
+    public function allowEdit()
     {
-        $this->row = &$row;
+        $this->allowEdit = true;
+        return $this;
+    }
 
+    /**
+     * @return $this
+     */
+    public function allowDelete()
+    {
+        $this->allowDelete = true;
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function disableDelete()
+    {
+        $this->allowDelete = false;
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function disableEdit()
+    {
+        $this->allowEdit = false;
         return $this;
     }
 
@@ -55,27 +92,40 @@ class RowActions
      */
     public function render()
     {
-        $allowEdit = $this->grid->option('allowEdit');
-        $allowDelete = $this->grid->option('allowDelete');
+        $this->tools = [];
 
-        $id = get_value($this->row, $this->grid->idName());
+        $id = $this->row($this->grid->idName());
 
-        if ($allowEdit && $allowDelete) {
-            return $this->renderEdit($id) . '&nbsp;&nbsp;&nbsp;&nbsp;' . $this->renderDelete($id);
+        if ($this->allowEdit && $this->allowDelete) {
+            $this->prepend($this->renderEdit($id) . '&nbsp;&nbsp;&nbsp;' . $this->renderDelete($id));
+        } elseif ($this->allowEdit) {
+            $this->prepend($this->renderEdit($id));
+        } elseif ($this->allowDelete)
+            $this->prepend($this->renderDelete($id));
+
+        if ($rendering = $this->rendering) {
+            $rendering($this, $this->tr);
         }
 
-        if ($allowEdit) {
-            return $this->renderEdit($id);
+        $end = '&nbsp;&nbsp;&nbsp;';
+        $tools = '';
+        foreach ($this->tools as &$tool) {
+            if ($tool instanceof Renderable) {
+                $tools .= $tool->render() . $end;
+            } elseif ($tool instanceof \Closure) {
+                $tools = $tool($this) . $end;
+            } else {
+                $tools .= $tool . $end;
+            }
         }
 
-        return $this->renderDelete($id);
-
+        return rtrim($tools, $end);
     }
 
     protected function renderEdit($id)
     {
         $url = $this->url->detail($id);
-        $label = trans('detail');
+        $label = '<i class="fa fa-edit" style="font-size:15px;"></i>';//trans('detail');
 
         $name = trim(str_replace('/', '-', $url), '-');
 
@@ -88,7 +138,7 @@ EOF;
 
     protected function normalizeTabLabel($id)
     {
-        $name = get_value($this->row, 'name') ?: $id;
+        $name = $this->row('name') ?: $id;
 
         return trim(str_replace('&nbsp;', '', $name)) . ' - ' . trans(__CONTROLLER__) . trans('Edit');
     }

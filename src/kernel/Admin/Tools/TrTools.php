@@ -2,43 +2,53 @@
 
 namespace Lxh\Admin\Tools;
 
+use Lxh\Admin\Grid;
+use Lxh\Admin\Table\Tr;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Support\Collection;
 
-class Tools implements Renderable
+class TrTools extends Tools
 {
     /**
-     * Collection of tools.
-     *
-     * @var Collection
+     * @var Tr
      */
-    protected $tools = [];
+    protected $tr;
 
     /**
-     * Append tools.
-     *
-     * @param Renderable|string $tool
-     *
+     * @var \Closure
+     */
+    protected $rendering;
+
+    public function __construct(\Closure $closure = null)
+    {
+        $this->rendering = $closure;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function row($key = null)
+    {
+        return $this->tr->row($key);
+    }
+
+    /**
+     * @param Tr $tr
      * @return $this
      */
-    public function append($tool)
+    public function setTr(Tr $tr)
     {
-        $this->tools[] = $tool;
-
+        $this->tr = $tr;
         return $this;
     }
 
     /**
-     * Prepend a tool.
-     *
-     * @param Renderable|string $tool
-     *
+     * @param \Closure $closure
      * @return $this
      */
-    public function prepend($tool)
+    public function rendering(\Closure $closure)
     {
-        array_unshift($this->tools, $tool);
-
+        $this->rendering = $closure;
         return $this;
     }
 
@@ -49,6 +59,10 @@ class Tools implements Renderable
      */
     public function render()
     {
+        if ($rendering = $this->rendering) {
+            $rendering($this, $this->tr);
+        }
+
         $end = '&nbsp;&nbsp;&nbsp;';
         $tools = '';
         foreach ($this->tools as &$tool) {

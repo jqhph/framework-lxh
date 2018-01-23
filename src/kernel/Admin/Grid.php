@@ -14,6 +14,7 @@ use Lxh\Admin\Table\Tr;
 use Lxh\Admin\Tools\Actions;
 use Lxh\Admin\Tools\BatchDelete;
 use Lxh\Admin\Tools\Tools;
+use Lxh\Admin\Tools\TrTools;
 use Lxh\Admin\Widgets\Box;
 use Lxh\Admin\Widgets\Pages;
 use Lxh\Contracts\Support\Renderable;
@@ -167,6 +168,11 @@ class Grid implements Renderable
     protected $url;
 
     /**
+     * @var RowActions
+     */
+    protected $rowActions;
+
+    /**
      * Create a new grid instance.
      *
      * @param array $headers
@@ -222,6 +228,8 @@ class Grid implements Renderable
 
 
     /**
+     * 设置动作按钮
+     *
      * @return \Lxh\Admin\Tools\Actions
      */
     public function actions()
@@ -605,7 +613,7 @@ class Grid implements Renderable
     {
         $list = $this->findList();
 
-        if ($list && $this->options['allowEdit'] || $this->options['allowDelete']) {
+        if ($list && ($this->options['allowEdit'] || $this->options['allowDelete'] || $this->rowActions)) {
             $this->buildRowActions();
         }
 
@@ -623,19 +631,26 @@ class Grid implements Renderable
     }
 
     /**
+     * 获取行 actions对象
+     *
+     * @return RowActions
+     */
+    public function rowActions(\Closure $rendering = null)
+    {
+        return $this->rowActions ?: ($this->rowActions = new RowActions($this, $rendering));
+    }
+
+    /**
      * 创建行action按钮
      * 详情、删除
      */
     protected function buildRowActions()
     {
-        $action = null;
+        $actions = $this->rowActions();
+        $this->table->append(function (array $row, Td $td, Th $th, Tr $tr) use ($actions) {
+            $th->value($actions->title());
 
-        $this->table->append(function (array $row, Td $td, Th $th, Tr $tr) use($action) {
-            if (! $action) $action = new RowActions($this);
-
-            $th->value($action->title());
-
-            return $action->row($row)->render();
+            return $actions->setTr($tr)->render();
         });
     }
 
