@@ -58,6 +58,13 @@ class Index
      */
     protected $topbarContent;
 
+    /**
+     * 刷新按钮
+     *
+     * @var bool
+     */
+    protected $allowRefresh = true;
+
     public function __construct(Closure $content = null)
     {
         if ($content) {
@@ -65,6 +72,17 @@ class Index
         }
 
         $this->maxTab = config('admin.index.max-tab', 10);
+    }
+
+    /**
+     * 禁用刷新按钮
+     *
+     * @return $this
+     */
+    public function disableRefresh()
+    {
+        $this->allowRefresh = false;
+        return $this;
     }
 
     /**
@@ -174,7 +192,7 @@ class Index
      */
     public function addTopbarContent($content)
     {
-        $this->topbarContent = $this->normalizeContent($content);
+        $this->topbarContent[] = $this->normalizeContent($content);
         return $this;
     }
 
@@ -229,7 +247,7 @@ class Index
 
     protected function buildTopbar()
     {
-        return view($this->views['top-bar'], ['content' => &$this->topbarContent])->render();
+        return view($this->views['top-bar'], ['content' => implode('', $this->topbarContent)])->render();
     }
 
     protected function buildSitebar()
@@ -250,6 +268,12 @@ class Index
         $content = '';
         if ($this->content) {
             $content = $this->content->build();
+        }
+
+        if ($this->allowRefresh) {
+            $this->topbarContent[] = <<<EOF
+<li><div class="notification-box"><ul class="list-inline m-b-0"><li><a onclick="IFRAME.reload()" class="right-bar-toggle"><i class="zmdi zmdi-refresh-alt"></i></a></li></ul></div></li>
+EOF;
         }
 
         return array_merge($this->variables, [

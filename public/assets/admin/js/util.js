@@ -201,17 +201,11 @@
         };
 
         // 重新加载iframe
-        this.reload = function (name, url, label) {
+        this.reload = function (name) {
             if (! name) {
                 name = current.name;
-                url = current.url;
-                label = current.label;
             }
-
-            delete store[name];
-            iframe.remove(name);
-            this.open(name, url, label);
-            this.addHistory(name, url, label)
+            iframe.reload(name);
         };
 
         /**
@@ -344,6 +338,13 @@
             current = name
         };
 
+        this.reload = function (name) {
+            name = name || current;
+            var url = this.container(name).attr('url');
+            this.remove(name);
+            this.switch(name, url);
+        };
+
         this.removeStore = function (name) {
             delete store[name]
         };
@@ -377,6 +378,7 @@
             var $iframe = this.container(name);
             // 显示当前iframe
             $iframe.show(220);
+            $iframe.attr('url', url);
 
             $iframe.find('iframe').load(function (e) {
                 this.height($(e.currentTarget));
