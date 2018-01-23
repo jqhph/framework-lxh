@@ -125,7 +125,7 @@ class RowActions extends TrTools
     protected function renderEdit($id)
     {
         $url = $this->url->detail($id);
-        $label = '<i class="fa fa-edit" style="font-size:15px;"></i>';//trans('detail');
+        $label = '<i class="fa fa-edit" style="font-size:14px;"></i>';//trans('detail');
 
         $name = trim(str_replace('/', '-', $url), '-');
 
