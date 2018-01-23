@@ -92,6 +92,7 @@ class RowActions extends TrTools
      */
     public function render()
     {
+        // 重置所有工具
         $this->tools = [];
 
         $id = $this->row($this->grid->idName());
@@ -102,6 +103,10 @@ class RowActions extends TrTools
             $this->prepend($this->renderEdit($id));
         } elseif ($this->allowDelete)
             $this->prepend($this->renderDelete($id));
+
+        // 重置状态
+        $this->allowEdit = $this->grid->option('allowEdit');
+        $this->allowDelete = $this->grid->option('allowDelete');
 
         if ($rendering = $this->rendering) {
             $rendering($this, $this->tr);
