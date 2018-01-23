@@ -125,7 +125,7 @@ class RowActions extends TrTools
     protected function renderEdit($id)
     {
         $url = $this->url->detail($id);
-        $label = '<i class="fa fa-edit" style="font-size:14px;"></i>';//trans('detail');
+        $label = '<i class="fa fa-edit" style="color:#188ae2"></i>';//trans('detail');
 
         $name = trim(str_replace('/', '-', $url), '-');
 
@@ -146,7 +146,7 @@ EOF;
     protected function renderDelete($id)
     {
 //        $url = Url::makeDetail($id, $module);
-        $model = Admin::model();
+        $model = __CONTROLLER__;
 
         return <<<EOF
 <a style="color:#ff5b5b" data-model="$model" data-action="delete-row" data-id="$id" href="javascript:"><i class="zmdi zmdi-close"></i></a>

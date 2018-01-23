@@ -175,6 +175,7 @@ class Menu extends Controller
     {
         $grid->rows(auth()->menu()->all());
         $grid->disablePagination();
+        $grid->disableBatchDelete();
     }
 
     /**
