@@ -32,6 +32,11 @@ class Index extends Controller
 
         $index = $this->admin()->index();
 
+        $index->addTopbarContent(<<<EOF
+<li style="height:auto;"><i class="zmdi zmdi-refresh-alt"></i></li>
+EOF
+);
+
         // 触发加载首页事件
         fire(EVENT_ADMIN_INDEX, $index);
 
