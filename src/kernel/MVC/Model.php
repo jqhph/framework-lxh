@@ -243,6 +243,16 @@ class Model extends Entity
     }
 
     /**
+     * whereIn
+     *
+     * @return Query
+     */
+    public function whereIn()
+    {
+        return call_user_func_array([$this->query()->select($this->selectFields), 'whereIn'], func_get_args());
+    }
+
+    /**
      * where
      *
      * @return Query
