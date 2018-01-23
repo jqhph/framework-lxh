@@ -18,6 +18,7 @@ use Lxh\Admin\Tools\TrTools;
 use Lxh\Admin\Widgets\Box;
 use Lxh\Admin\Widgets\Pages;
 use Lxh\Contracts\Support\Renderable;
+use Lxh\Http\Url;
 use Lxh\MVC\Model;
 
 class Grid implements Renderable
@@ -184,11 +185,11 @@ class Grid implements Renderable
         $this->rows = &$rows;
         $this->table->grid($this);
         $this->tools = new Tools();
-        $this->url = request()->url();
+        $this->url = new Url();
         $this->idName = Admin::id();
 
         $this->setupPerPage();
-//        $this->url->query($this->pjax, $this->pjaxContainer);
+        $this->url->query($this->pjax, $this->pjaxContainer);
     }
 
     /**
@@ -669,7 +670,8 @@ class Grid implements Renderable
             'page'  => &$this->pageString,
             'pages' => &$this->perPages,
             'perPage' => $this->perPage,
-            'perPageKey' => $this->perPageKey
+            'perPageKey' => $this->perPageKey,
+            'url' => $this->url,
         ], $this->options);
 
         if (I($this->pjax)) {

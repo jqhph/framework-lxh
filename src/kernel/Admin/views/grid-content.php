@@ -5,7 +5,6 @@
             <ul class="pagination" style="float:right"><?php echo $page;?></ul>
             <?php if ($pages) {?>
                 <select class="input-sm grid-per-pager" name="per-page"  style="float:right;margin-top:10px;margin-right:10px;background:#fff;"><?php
-                    $url = request()->url();
                 foreach ($pages as &$row) :
                         $string = $url->query($perPageKey, $row)->string();
                 ?><option <?php if ($perPage == $row) echo 'selected';?> value="<?php echo $string?>"><?php echo $row;?></option><?php endforeach;?></select>

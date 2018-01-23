@@ -7,6 +7,7 @@
         'useRWD' => &$useRWD,
         'pjax' => &$pjax,
         'perPage' => &$perPage,
+        'url' => $url
     ])->render();
 ?></div>
 <script>

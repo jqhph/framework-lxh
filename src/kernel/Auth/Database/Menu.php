@@ -45,9 +45,9 @@ class Menu extends Model
         $select = $this->getDefaultSelect($ability);
 
         $q = $this->query()
-                ->select($select)
-                ->where('deleted', 0)
-                ->where('show', 1);
+            ->select($select)
+            ->where('deleted', 0)
+            ->where('show', 1);
 
         if ($this->useAuthorize) {
             $q->leftJoin($ability, 'ability_id', "$ability.id");
