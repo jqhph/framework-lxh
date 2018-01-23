@@ -35,12 +35,30 @@ trait PlainInput
         }
     }
 
+    /**
+     * 设置默认属性
+     *
+     * @param $attribute
+     * @param $value
+     * @return $this
+     */
     protected function defaultAttribute($attribute, $value)
     {
         if (!isset($this->attributes[$attribute])) {
             $this->attribute($attribute, $value);
         }
 
+        return $this;
+    }
+
+    /**
+     * 设置为必填
+     *
+     * @return $this
+     */
+    public function required()
+    {
+        $this->attributes['required'] = 'required';
         return $this;
     }
 
