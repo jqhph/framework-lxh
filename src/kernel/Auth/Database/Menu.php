@@ -147,13 +147,6 @@ class Menu extends Model
             $this->setupAbility($input);
         }
     }
-//
-//    protected function afterAdd($insertId, array & $input)
-//    {
-//        parent::afterAdd($insertId, $input);
-//
-//        if (! $insertId) return;
-//    }
 
     protected function afterUpdate($id, array &$input, $result)
     {
@@ -176,10 +169,8 @@ class Menu extends Model
             }
         }
 
-        if ($this->useAuthorize) {
-            // 刷新缓存
-            auth()->menu()->flush();
-        }
+        // 刷新缓存
+        auth()->menu()->flush();
     }
 
     // 删除后置钩子方法
@@ -196,10 +187,9 @@ class Menu extends Model
             }
         }
 
-        if ($this->useAuthorize) {
-            // 刷新缓存
-            auth()->menu()->refresh();
-        }
+
+        // 刷新缓存
+        auth()->menu()->refresh();
     }
 
     /**
