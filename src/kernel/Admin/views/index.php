@@ -76,6 +76,14 @@ echo admin_js('js/jquery.slimscroll.min');
 
     // 加载首页视图
     IFRAME.switch('home', HOMEURL);
+    document.onkeydown = function (e) {
+        if (e.keyCode==116) {
+            e.keyCode = 0;
+            e.cancelBubble = true;
+            IFRAME.reload();
+            return false;
+        }
+    }
 </script>
 
 <!-- KNOB JS -->
