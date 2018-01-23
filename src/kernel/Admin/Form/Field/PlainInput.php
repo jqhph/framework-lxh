@@ -56,6 +56,17 @@ trait PlainInput
     }
 
     /**
+     * 只允许输入邮箱号
+     *
+     * @param string $type
+     * @return static
+     */
+    public function email()
+    {
+        return $this->attribute('type', 'email');
+    }
+
+    /**
      * 只允许输入数字
      *
      * @return $this
