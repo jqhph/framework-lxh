@@ -26,8 +26,8 @@ class Provider
         $this->registerNotAuthRouter();
 
         // 由于Admin模块和admin前缀冲突，只能单独注册
-        $this->registerRouter('Admin', 'admin');
-        $this->registerRouter('1', '#(ability|role|menu|language)#');
+//        $this->registerRouter('Admin', 'admin');
+//        $this->registerRouter('1', '#(ability|role|menu|language)#');
     }
 
     protected function registerNotAuthRouter()

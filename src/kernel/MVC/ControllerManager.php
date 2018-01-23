@@ -292,12 +292,12 @@ class ControllerManager extends Factory
     /**
      * 添加中间件
      *
-     * @return void
+     * @param array $middleware
      */
-    protected function addMiddleware(array & $middleware)
+    protected function addMiddleware(array &$middleware)
     {
         // 优先执行公共中间件
-        foreach ((array) config('middlewares') as $module => & $mid) {
+        foreach ((array) config('middlewares') as $module => &$mid) {
             if ($module == '*' || $module == $this->module) {
                 $middleware = array_merge($middleware, (array) $mid);
             }
@@ -325,6 +325,7 @@ class ControllerManager extends Factory
     /**
      * 生产一个控制器对象
      *
+     * @param string $name
      * @return Controller
      */
     public function create($name)
@@ -332,21 +333,14 @@ class ControllerManager extends Factory
         if ($this->controllerClass) {
             $className = &$this->controllerClass;
         } else {
-            $className = 'Lxh\\' . $this->module . '\\Controllers\\';
-            if ($this->folder) {
-                $className .= $this->folder . '\\';
-
-                $this->folder = null;
-            }
-            if (get_value($this->requestParams, 'api')) {
-                $apiClass = $className . "Api\\$name";
-                if (class_exists($apiClass)) {
-                    $className = $apiClass;
+            $className = $this->getClassName($name);
+            if (! class_exists($className)) {
+                if (admin_name() != $this->module) {
+                    $namespace = 'Lxh\\Home\\Http\\Controllers\\';
                 } else {
-                    $className .= $name;
+                    $namespace = 'Lxh\\Admin\\Http\\Controllers\\';
                 }
-            } else {
-                $className .= $name;
+                $className = $this->getClassName($name, $namespace);
             }
         }
 
@@ -361,16 +355,41 @@ class ControllerManager extends Factory
     }
 
     /**
+     * @param $name
+     * @param null $namespace
+     * @return string
+     */
+    protected function getClassName(&$name, &$namespace = null)
+    {
+        $className = $namespace ?: 'Lxh\\' . $this->module . '\\Controllers\\';
+        if ($this->folder) {
+            $className .= $this->folder . '\\';
+            $this->folder = null;
+        }
+        if (get_value($this->requestParams, 'api')) {
+            $apiClass = "{$className}Api\\$name";
+            if (class_exists($apiClass)) {
+                $className = &$apiClass;
+            } else {
+                $className .= $name;
+            }
+        } else {
+            $className .= $name;
+        }
+        return $className;
+    }
+
+    /**
      * 获取中间件
      *
-     * @return array
+     * @return void
      */
-    protected function getContrMiddleware(array & $middleware, Controller $instance)
+    protected function getContrMiddleware(array &$middleware, Controller $instance)
     {
         $method = strtolower($this->actionName);
 
         // 优先执行控制器自身添加的中间件
-        foreach ($instance->getMiddleware() as $name => & $options) {
+        foreach ($instance->getMiddleware() as $name => &$options) {
             if ($this->methodExcluded($method, $options)) {
                 continue;
             }
@@ -443,7 +462,7 @@ class ControllerManager extends Factory
      *
      * @return bool
      */
-    public function methodExcluded(& $method, array & $options)
+    protected function methodExcluded(& $method, array & $options)
     {
         return (isset($options['only']) && ! in_array($method, $this->normalizeMiddlewareMethods($options['only']))) ||
         (! empty($options['except']) && in_array($method, $this->normalizeMiddlewareMethods($options['except'])));
