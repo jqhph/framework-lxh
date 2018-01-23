@@ -21,7 +21,7 @@
 
 <div class="content-wrapper">
 <?php if ($header || $description) {?>
-<section class="content-header"><h1><?php echo $header; ?><small> <?php echo $description;?></small></h1></section>
+<section class="content-header"><h1><?php echo $header; ?><small> &nbsp;<?php echo $description;?></small></h1></section>
 <?php } else {
     echo '<div style="height:10px;"></div>';
 }?>
