@@ -633,11 +633,13 @@ class Grid implements Renderable
     /**
      * 获取行 actions对象
      *
-     * @return RowActions
+     * @return $this
      */
     public function rowActions(\Closure $rendering = null)
     {
-        return $this->rowActions ?: ($this->rowActions = new RowActions($this, $rendering));
+        $this->rowActions ?: ($this->rowActions = new RowActions($this, $rendering));
+
+        return $this;
     }
 
     /**
@@ -646,11 +648,11 @@ class Grid implements Renderable
      */
     protected function buildRowActions()
     {
-        $actions = $this->rowActions();
-        $this->table->append(function (array $row, Td $td, Th $th, Tr $tr) use ($actions) {
-            $th->value($actions->title());
+        $this->rowActions();
+        $this->table->append(function (array $row, Td $td, Th $th, Tr $tr) {
+            $th->value($this->rowActions->title());
 
-            return $actions->setTr($tr)->render();
+            return $this->rowActions->setTr($tr)->render();
         });
     }
 
