@@ -150,10 +150,13 @@ class Menu extends Model
 
     protected function afterUpdate($id, array &$input, $result)
     {
-        if ($id) {
-            // 刷新缓存
-            auth()->menu()->refresh();
-        }
+        // 刷新缓存
+        auth()->menu()->refresh();
+    }
+
+    protected function afterAdd($id, array &$input)
+    {
+        auth()->menu()->refresh();
     }
 
     protected function afterBatchDelete(array &$ids, $effect)
@@ -170,7 +173,7 @@ class Menu extends Model
         }
 
         // 刷新缓存
-        auth()->menu()->flush();
+        auth()->menu()->refresh();
     }
 
     // 删除后置钩子方法
