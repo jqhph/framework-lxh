@@ -21,8 +21,8 @@ trait Builder
 
     protected function buildChecked($name, $value)
     {
-        return $value ? '<i style="font-size:16px;" class="green fa fa-check"></i>'
-            : '<i style="font-size:16px;" class="red zmdi zmdi-close-circle-o"></i>';
+        return $value ? '<i style="font-size:16px;font-weight:700" class="green zmdi zmdi-check"></i>'
+            : '<i style="font-size:15px;" class="red zmdi zmdi-close"></i>';
     }
 
 }

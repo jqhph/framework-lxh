@@ -18,7 +18,6 @@ use Lxh\Admin\Tools\TrTools;
 use Lxh\Admin\Widgets\Box;
 use Lxh\Admin\Widgets\Pages;
 use Lxh\Contracts\Support\Renderable;
-use Lxh\Http\Url;
 use Lxh\MVC\Model;
 
 class Grid implements Renderable
@@ -185,7 +184,7 @@ class Grid implements Renderable
         $this->rows = &$rows;
         $this->table->grid($this);
         $this->tools = new Tools();
-        $this->url = new Url();
+        $this->url = new \Lxh\Http\Url();
         $this->idName = Admin::id();
 
         $this->setupPerPage();
