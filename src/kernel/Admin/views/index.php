@@ -45,6 +45,8 @@
         echo admin_js('plugins/toastr/toastr.min');
         ?>
     </div>
+
+    <?php echo view('admin::index.right-bar')->render();?>
 </div>
 
 <footer class="footer text-right"><?php echo config('admin.copyright')?></footer>

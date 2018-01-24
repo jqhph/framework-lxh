@@ -28,7 +28,12 @@
             </div>
 
             <ul class="nav navbar-nav navbar-right">
-                <?php echo $content; ?><li class="hidden-xs"></li>
+                <?php if ($useGlobalSearchInput) {?>
+                <li class="hidden-xs">
+                    <form role="search" class="app-search"><input type="text" placeholder="<?php echo trans('Search...');?>" class="form-control"><a href=""><i class="fa fa-search"></i></a></form>
+                </li>
+                <?php } ?>
+                <?php echo $content; ?>
             </ul>
         </div>
 

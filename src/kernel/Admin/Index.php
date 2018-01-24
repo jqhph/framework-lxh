@@ -65,6 +65,11 @@ class Index
      */
     protected $allowRefresh = true;
 
+    /**
+     * @var bool
+     */
+    protected $useGlobalSearchInput = false;
+
     public function __construct(Closure $content = null)
     {
         if ($content) {
@@ -171,6 +176,17 @@ class Index
     }
 
     /**
+     * 使用全局搜索
+     *
+     * @return $this
+     */
+    public function allowGlobalSearchInput()
+    {
+        $this->useGlobalSearchInput = true;
+        return $this;
+    }
+
+    /**
      * 定义左边菜单栏用户信息
      * 如果调用了此方法，user视图将不会再渲染
      *
@@ -247,7 +263,13 @@ class Index
 
     protected function buildTopbar()
     {
-        return view($this->views['top-bar'], ['content' => implode('', $this->topbarContent)])->render();
+        return view(
+            $this->views['top-bar'],
+            [
+                'content' => implode('', $this->topbarContent),
+                'useGlobalSearchInput' => $this->useGlobalSearchInput,
+            ]
+        )->render();
     }
 
     protected function buildSitebar()
