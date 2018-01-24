@@ -158,20 +158,11 @@ abstract class Controller
      *
      * @param  string  $view
      * @param  array   $data
-     * @param  bool    $compalete
      * @return string
      */
-    protected function render($view, array $data = [], $compalete = false)
+    protected function render($view, array $data = [])
     {
-        $factory = $this->container['view.adaptor'];
-
-        if ($compalete) {
-            return $factory->make('public.header')->render()
-                 . $factory->make($view, $data)->render()
-                 . $factory->make('public.footer')->render();
-        }
-        return $factory->make($view, $data)->render();
-
+        return $this->container['view.adaptor']->make($view, $data)->render();
     }
 
     /**
@@ -182,7 +173,7 @@ abstract class Controller
      */
     public function withConsoleOutput($flag = true)
     {
-        $this->container['http.response']->withConsoleOutput($flag);
+        $this->response->withConsoleOutput($flag);
         return $this;
     }
 
