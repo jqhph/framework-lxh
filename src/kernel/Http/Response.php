@@ -282,7 +282,7 @@ class Response extends PsrResponse
 
 			return $string;
 		} catch (\Exception $e) {
-			$this->events->fire(EVENT_EXCEPTION, [$e]);
+			$this->events->fire(EVENT_EXCEPTION, [$e], true);
 			return false;
 		}
 	}

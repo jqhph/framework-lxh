@@ -176,7 +176,7 @@ class Application
 
             return $this->response;
         } catch (\Exception $e) {
-            $this->events->fire(EVENT_EXCEPTION, [$e]);
+            $this->events->fire(EVENT_EXCEPTION, [$e], true);
             return $this->response;
         }
     }
