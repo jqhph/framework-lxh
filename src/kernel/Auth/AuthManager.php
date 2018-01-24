@@ -358,18 +358,11 @@ class AuthManager
 
         $ability = static::normalizName($ability);
 
-        $keyName = Models::getAbilityKeyName();
+        $abilities = $this->abilities()->all();
 
-        $exists = false;
-        foreach ($this->abilities()->all() as $name => &$row) {
-            if ($name == $ability || get_value($row, $keyName) == $ability) {
-                $exists = $row;
-                break;
-            }
-        }
-        if (! $exists) return false;
+        if (! isset($abilities[$ability])) return false;
 
-        return $exists['forbidden'] == 0 ? true : false;
+        return $abilities[$ability]['forbidden'] == 0 ? true : false;
     }
 
     /**
@@ -486,18 +479,11 @@ class AuthManager
             return false;
         }
 
-        $keyName = Models::getAbilityKeyName();
+        $abilities = $this->abilities()->all();
 
-        $exists = false;
-        foreach ($this->abilities()->all() as $name => &$row) {
-            if ($name == $ability || get_value($row, $keyName) == $ability) {
-                $exists = $row;
-                break;
-            }
-        }
-        if (! $exists) return false;
+        if (! isset($abilities[$ability])) return false;
 
-        return $exists['forbidden'] == 0 ? true : false;
+        return $abilities[$ability] == 1 ? true : false;
     }
 
     /**

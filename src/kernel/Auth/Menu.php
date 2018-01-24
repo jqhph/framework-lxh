@@ -37,7 +37,7 @@ class Menu
     protected $current;
 
     /**
-     * @var \Lxh\Admin\Models\Menu
+     * @var \Lxh\Auth\Database\Menu
      */
     protected $model;
 
