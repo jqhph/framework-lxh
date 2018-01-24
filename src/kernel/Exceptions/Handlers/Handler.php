@@ -6,6 +6,8 @@ use Lxh\Contracts\Container\Container;
 use Lxh\Debug\Code;
 use Lxh\Events\Dispatcher;
 use Lxh\Exceptions\Exception;
+use Lxh\Exceptions\Forbidden;
+use Lxh\Exceptions\NotFound;
 use Lxh\Logger\Manager;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
@@ -40,7 +42,10 @@ class Handler
 	protected $exceptionClasses = [
 		'PDOException' => 'pdo',
 		'RedisException' => 'redis',
-		'Lxh\Exceptions\Exception' => 'system'
+		Forbidden::class => 'forbidden',
+		NotFound::class => 'notFound',
+
+		'Lxh\Exceptions\Exception' => 'system',
 	];
 
 	protected $levels = [
@@ -150,6 +155,25 @@ class Handler
 			}
 		}
 		return $this->normal($e);
+	}
+
+	/**
+	 * 无权访问
+	 *
+	 * @return void
+	 */
+	protected function forbidden(Forbidden $e)
+	{
+		$this->response->data(
+			view('admin::error.403', ['msg' => $e->getMessage()])->render()
+		);
+	}
+
+	protected function notFound(Forbidden $e)
+	{
+		$this->response->data(
+			view('admin::error.404', ['msg' => $e->getMessage()])->render()
+		);
 	}
 
 	/**

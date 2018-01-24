@@ -18,8 +18,7 @@
             <h3 class="text-uppercase font-600">Page not Found</h3>
             <p class="text-muted">
                 It's looking like you may have taken a wrong turn. Don't worry... it happens to
-                the best of us. You might want to check your internet connection. Here's a little tip that might
-                help you get back on track.
+                the best of us. You might want to check your internet connection.
             </p>
             <br>
     <!--        <a class="btn btn-success waves-effect waves-light" href="index.html"> Return Home</a>-->
