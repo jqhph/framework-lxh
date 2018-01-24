@@ -40,6 +40,8 @@ class Session extends Model
     {
         $this->session = $this->container['session'];
         $this->cookie = $this->container['cookie'];
+
+        $this->sessionKey = config('admin.session-key', $this->sessionKey);
     }
 
     /**

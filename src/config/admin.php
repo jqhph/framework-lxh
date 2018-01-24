@@ -15,6 +15,9 @@ return [
     // 使用默认路由
     'use-admin-routes' => true,
 
+    // 登录session保存的key
+    'session-key' => '$admin',
+
     'index' => [
         'sitebar-collapse' => true,
         'max-tab' => 10,

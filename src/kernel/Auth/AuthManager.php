@@ -79,9 +79,34 @@ class AuthManager
         $this->enable = config('use-authorize', true);
     }
 
+    /**
+     * @return File
+     */
     protected function createCacheStore()
     {
         return new File();
+    }
+
+    /**
+     * 手动注入权限
+     *
+     * @param array $abilities
+     * @return $this
+     */
+    public function attach(array $abilities)
+    {
+        foreach ($abilities as &$ability) {
+            $this->abilities[$ability] = [
+                'id' => '',
+                'name' => $ability,
+                'forbidden' => 0,
+            ];
+        }
+
+        $this->abilities = new Collection($this->abilities);
+        $this->enable = true;
+
+        return $this;
     }
 
     /**
@@ -208,17 +233,6 @@ class AuthManager
     }
 
     /**
-     * Start a chain, to sync roles/abilities for the given authority.
-     *
-     * @param  Model|string  $authority
-     * @return \Lxh\Auth\Conductors\SyncsRolesAndAbilities
-     */
-    public function sync($authority)
-    {
-        return new Conductors\SyncsRolesAndAbilities($authority);
-    }
-
-    /**
      * Start a chain, to check if the given authority has a certain role.
      *
      * @return \Lxh\Auth\Conductors\ChecksRoles
@@ -295,7 +309,7 @@ class AuthManager
     public function refreshForAbility(AbilityModel $ability)
     {
         if (! $this->usesCached) {
-           return $this;
+            return $this;
         }
 
         foreach ($ability->findRolesIds()->all() as &$id) {

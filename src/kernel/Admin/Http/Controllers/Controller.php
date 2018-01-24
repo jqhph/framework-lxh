@@ -52,6 +52,10 @@ class Controller extends Base
      */
     public function actionList(array $params)
     {
+        if (! auth()->readable()) {
+            throw new Forbidden();
+        }
+        
         $content = $this->admin()->content();
 
         $content->header(trans(__CONTROLLER__));
@@ -175,6 +179,10 @@ class Controller extends Base
      */
     public function actionCreate(array $params)
     {
+        if (! auth()->createable()) {
+            throw new Forbidden();
+        }
+
         $content = $this->admin()->content();
         $content->header(trans(__CONTROLLER__));
         $content->description(trans(__CONTROLLER__ . ' form'));
