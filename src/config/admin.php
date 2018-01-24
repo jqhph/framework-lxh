@@ -29,6 +29,11 @@ return [
         'handler' => 'operator',
     ],
 
+    // 菜单模型
+    'menu-model' => '',
+    // 是否使用缓存
+    'menu-use-cache' => true,
+
     'upload' => [
         'disk' => 'admin',
 

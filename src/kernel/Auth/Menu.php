@@ -73,33 +73,21 @@ class Menu
      */
     protected $parentKeyName = 'parent_id';
 
-    public function __construct(AuthManager $auth = null)
+    /**
+     * @var bool
+     */
+    protected $useCache = true;
+
+    public function __construct(AuthManager $auth = null, $modelClass = null)
     {
         $this->auth = $auth ?: auth();
-        $this->model = model(\Lxh\Auth\Database\Menu::class);
-        $this->cache = File::create('__menu__');
-
-        fire('menu.resolving', [$this]);
-    }
-
-    /**
-     * 生成顶部导航条
-     *
-     * @return string
-     */
-    public function makeNav()
-    {
-        if (! $this->current) {
-            return trans_with_global('Home');
+        $this->model = model($modelClass ?: config('admin.menu-model', \Lxh\Auth\Database\Menu::class));
+        $this->useCache = config('admin.menu-use-cache', true);
+        if ($this->useCache) {
+            $this->cache = File::create('__menu__');
         }
 
-        return $this->current['name'];
-//        $prevUrl = $this->makeUrl(
-//            $this->data[$this->current[$this->keyName]]['controller'],
-//            $this->data[$this->current[$this->keyName]]['action']
-//        );
-//
-//        return "<a href='$prevUrl'>" . trans_with_global($this->data[$this->current[$this->keyName]]['name'], 'menu') . "</a> / $last";
+        fire('menu.resolving', [$this]);
     }
 
     /**
@@ -271,7 +259,7 @@ class Menu
             return $this->data;
         }
 
-        if ($data = $this->cache->get($this->cacheKey)) {
+        if ($this->useCache && $data = $this->cache->get($this->cacheKey)) {
             $data = $this->makeTree($data);
             // 如果存在子菜单则根据priority字段排序, priority越小越前面
             $this->sort($data);
@@ -281,8 +269,10 @@ class Menu
 
         $this->data = $this->fetch();
 
-        // 缓存数据
-        $this->cache->set($this->cacheKey, $this->data, $this->expireTime);
+        if ($this->useCache) {
+            // 缓存数据
+            $this->cache->set($this->cacheKey, $this->data, $this->expireTime);
+        }
 
         $this->data = $this->makeTree($this->data);
         $this->sort($this->data);
@@ -297,6 +287,9 @@ class Menu
      */
     public function refresh()
     {
+        if (!$this->useCache) {
+            return true;
+        }
         $this->flush();
 
         // 缓存数据
@@ -310,6 +303,9 @@ class Menu
      */
     public function flush()
     {
+        if (!$this->useCache) {
+            return true;
+        }
         return $this->cache->flush();
     }
 

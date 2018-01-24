@@ -62,6 +62,11 @@ class AuthManager
      */
     protected $enable = true;
 
+    /**
+     * @var string
+     */
+    protected $menuModelClass;
+
     public function __construct(Model $user = null)
     {
         $this->user = $user ?: admin();
@@ -366,11 +371,23 @@ class AuthManager
     }
 
     /**
+     * 菜单管理对象
+     *
      * @return Menu
      */
     public function menu()
     {
-        return $this->menu ?: ($this->menu = new Menu($this));
+        return $this->menu ?: ($this->menu = new Menu($this, $this->menuModelClass));
+    }
+
+    /**
+     * @param $class
+     * @return $this
+     */
+    public function setMenuModel($class)
+    {
+        $this->menuModelClass = $class;
+        return $this;
     }
 
     /**
