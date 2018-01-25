@@ -175,7 +175,7 @@ class Handler
 		);
 	}
 
-	protected function notFound(Forbidden $e)
+	protected function notFound(NotFound $e)
 	{
 		$this->response->withStatus($e->getCode());
 		if (is_ajax()) {
