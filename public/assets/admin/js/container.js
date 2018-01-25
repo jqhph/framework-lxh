@@ -959,7 +959,7 @@ window.Lxh = function (options) {
                  */
                 error: function (req, msg, e) {
                     notify.remove();
-                    notify.error(req.status + ' ' + trans(req.statusText) + ' ' + trans(req.responseText));
+                    notify.error(req.status + ' ' + (trans(req.responseText) || trans(req.statusText)));
                     // store.call.error(req, msg, e)
                 },
 

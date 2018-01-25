@@ -164,6 +164,12 @@ class Handler
 	 */
 	protected function forbidden(Forbidden $e)
 	{
+		$this->response->withStatus($e->getCode());
+		if (is_ajax()) {
+			$this->response->data($e->getMessage());
+			return;
+		}
+
 		$this->response->data(
 			view('admin::error.403', ['msg' => $e->getMessage()])->render()
 		);
@@ -171,6 +177,12 @@ class Handler
 
 	protected function notFound(Forbidden $e)
 	{
+		$this->response->withStatus($e->getCode());
+		if (is_ajax()) {
+			$this->response->data($e->getMessage());
+			return;
+		}
+
 		$this->response->data(
 			view('admin::error.404', ['msg' => $e->getMessage()])->render()
 		);

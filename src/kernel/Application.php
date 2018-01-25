@@ -119,7 +119,7 @@ class Application
     {
         // 触发程序终结事件
 //        $this->events->fire('app.shutdown');
-        $this->container['http.response']->send();
+        $this->response->send();
     }
 
     /**
