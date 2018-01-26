@@ -72,7 +72,7 @@ class Model extends Entity
     public function __construct($name = null, Container $container = null)
     {
         $this->modelName = lc_dash($name ?: $this->parseName());
-        $this->module = __MODULE_DASH__;
+        $this->module = defined('__MODULE_DASH__') ? __MODULE_DASH__ : '';
 
         if (! $this->tableName) $this->tableName = Util::convertWith($name, true);
 
