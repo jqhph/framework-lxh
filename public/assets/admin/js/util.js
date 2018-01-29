@@ -355,7 +355,9 @@
 
         this.remove = function (name) {
             delete store[name];
-            this.container(name).remove()
+            this.container(name).remove();
+            // 移除所有loading效果
+            $('.loading').remove();
         };
 
         // 创建iframe弹窗
