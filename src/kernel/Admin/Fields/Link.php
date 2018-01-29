@@ -26,6 +26,10 @@ class Link extends Tag
 
     public function render()
     {
+        if ($this->value === '' || $this->value === null) {
+            return false;
+        }
+
         $this->style('margin-left:0;margin-right:0;padding-top:0');
 
         if (! $this->url && ($format = $this->option('format'))) {
@@ -108,5 +112,5 @@ class Link extends Tag
 
         return parent::url($url);
     }
-    
+
 }

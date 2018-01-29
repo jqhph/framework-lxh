@@ -48,6 +48,27 @@ trait Condition
     }
 
     /**
+     * 使用默认值 =
+     *
+     * @param mixed $value
+     * @return $this
+     */
+    protected function defaultEqual($value)
+    {
+        $this->where(function () use ($value) {
+            if (! isset($_REQUEST[$this->column])) {
+                return $value;
+            }
+            if ($_REQUEST[$this->column] === null || $_REQUEST[$this->column] === '') {
+                return null;
+            }
+
+            return $_REQUEST[$this->column];
+        });
+        return $this;
+    }
+
+    /**
      * @param $call
      * @return Where
      */
@@ -77,7 +98,7 @@ trait Condition
         $class = "Lxh\\Admin\\Filter\\$class";
 
         $this->conditions[$fieldName] = new $class($this, $call);
-        
+
         $this->filter()->condition($this->conditions[$fieldName]);
 
         return $this->conditions[$fieldName];
