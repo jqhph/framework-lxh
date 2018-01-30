@@ -11,6 +11,7 @@ trait Join
 
     /**
      * 多对多关联(不支持AS别名)
+     * 主键字段必须命名为 id
      *
      * @param $mid string 中间表表名
      * @param $relate string 要关联的表
@@ -25,6 +26,7 @@ trait Join
 
     /**
      * 多对多只关联中间表的情况
+     * 主键字段必须命名为 id
      *
      * @date   2016-11-9 下午1:14:31
      * @author jqh
@@ -41,27 +43,12 @@ trait Join
     }
 
     /**
-     * 必须先调用from方法！
+     * 主键字段必须命名为 id
      *
-     * 表结构如下:
-     *  menu 		 --- menu_content_id
-     *  menu_content --- id, menu_type_id
-     *  menu_type	 --- id
-     *
-     * 使用示例:
-     *
-    $q->from('menu')
-    ->leftJoin('menu_content AS u', 'u.id', 'menu_content_id')
-    ->leftJoin('menu_type AS w', 'u.menu_type_id', 'w.id')
-    相当于
-    $q->from('menu')
-    ->belongTo('menu_content', 'u')
-    ->belongTo('menu_type', 'w', 'u')
-
-    SELECT * FROM `menu`
-    LEFT JOIN `menu_content` AS `u` ON u.id = `menu`.`menu_content_id`
-    LEFT JOIN `menu_type` AS `w` ON w.id = `u`.menu_type_id
-     *
+     * @param $table
+     * @param null $as
+     * @param null $table2
+     * @return $this
      */
     public function belongsTo($table, $as = null, $table2 = null)
     {
@@ -80,20 +67,12 @@ trait Join
     }
 
     /**
-     * 跟上面belongsTo刚好相反, 必须先调用from方法！
-     * 表结构如下:
+     * 主键字段必须命名为 id
      *
-     * menu_content --- id
-     * menu			--- menu_content_id
-
-    $q->from('menu_content')
-    ->hasOne('menu')
-    ->readRow();
-
-    SELECT *  FROM `menu_content`
-    LEFT JOIN `menu` ON `menu`.menu_content_id = menu_content.`id` LIMIT 1
-     *
-     *
+     * @param $table
+     * @param null $as
+     * @param null $table2
+     * @return $this
      */
     public function hasOne($table, $as = null, $table2 = null)
     {
@@ -114,13 +93,11 @@ trait Join
     }
 
     /**
-     * 传入：
-     * $this->leftJoin('menu_content AS u', 'u.id', 'menu_content_id')
-    ->leftJoin('wechat_menu_type AS w', 'u.wechat_menu_type_id', 'w.id')
-     *
-     * 返回：
-    LEFT JOIN `menu_content` AS u    ON `table`.`menu_content_id`      = `u`.`id`
-    LEFT JOIN `wechat_menu_type` AS w ON `u`.`wechat_menu_type_id` = `w`.`id`
+     * @param $table
+     * @param null $p1
+     * @param null $p2
+     * @param string $condit
+     * @return $this
      */
     public function leftJoin(& $table, $p1 = null, $p2 = null, $condit = '=')
     {
@@ -140,6 +117,8 @@ trait Join
     }
 
     /**
+     * 必须先调用from方法指定表名ss
+     *
      * @param $table
      * @param null $field1
      * @param null $field2
