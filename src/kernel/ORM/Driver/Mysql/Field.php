@@ -10,15 +10,8 @@ trait Field
     protected $field;
 
     /**
-     *  传入：
-         * [
-            'id', 'parentId', 'name',
-            'MenuContent' => ['content'], 'WechatMenuType' => ['code', 'menuType']
-        ]
-     * 返回:
-        `table`.`id` AS id,`table`.`parent_id` AS parentId,`table`.`name` AS name,
-        `menu_content`.`content` AS content,`wechat_menu_type`.`code` AS code,
-        `wechat_menu_type`.`menu_type` AS menuTyp
+     * @param $data
+     * @return $this
      */
     public function select(& $data)
     {
@@ -32,7 +25,7 @@ trait Field
     public function count()
     {
         $t = 'COUNT(*) AS `TOTAL`';
-        $r = $this->select($t)->readRow();
+        $r = $this->select($t)->findOne();
         return $r ? $r['TOTAL'] : 0;
     }
 

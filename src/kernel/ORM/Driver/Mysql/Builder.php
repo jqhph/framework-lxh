@@ -226,9 +226,7 @@ class Builder
      * 	]);
      *
      *  $this->update('age', '+', 18);
-     *
      *  $this->update('age', '+');
-     *
      *  $this->update('age', '-');
      *
      * @param $p1
@@ -388,11 +386,6 @@ class Builder
         $this->orHaving   = [];
 
         $this->options = [];
-    }
-
-    protected function getGroupBySql()
-    {
-        return $this->groupBy;
     }
 
 }

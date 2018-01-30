@@ -10,12 +10,19 @@ trait GroupBy
     protected $groupBy;
 
     /**
-     * 传入数组或字符串
+     *
+     * @param string|array $data
+     * @return $this
      */
     public function group($data)
     {
         $this->formatGroupString($this->groupBy, $this->tableName, $data);
         return $this;
+    }
+
+    protected function getGroupBySql()
+    {
+        return $this->groupBy;
     }
 
     protected function formatGroupString(& $groupContainer, $table, & $data)
