@@ -37,25 +37,28 @@ class Query
 	/**
 	 * @var string
 	 */
-	protected $defaultConnectionType = 'primary';
+	protected $defaultConnectionName = 'primary';
 
 	public function __construct(Container $container)
 	{
 		$this->builder = new Builder($container, $this);
-
 		$this->container = $container;
 	}
 
+	/**
+	 * @param string $name
+	 * @return $this
+	 */
 	public function setConnectionName($name)
 	{
 		$this->connectionName = $name;
-
 		return $this;
 	}
 
 	/**
 	 * 设置或获取数据库连接实例
 	 *
+	 * @param null $name
 	 * @return PDO
 	 */
 	public function connection($name = null)
@@ -68,7 +71,7 @@ class Query
 			return $this->connection;
 		}
 
-		return $this->connection = pdo($this->defaultConnectionType);
+		return $this->connection = pdo($this->defaultConnectionName);
 	}
 
 	/**
@@ -76,23 +79,7 @@ class Query
 	 *
 	 * @param $mid string 中间表表名
 	 * @param $relate string 要关联的表
-	 *
-	 * 表结构 up      --- id
-	 *     user    --- id
-	 *     user_up --- user_id, up_id
-	->from('up')
-	->manyToMany('user_up', 'user')
-	相当于:
-
-	->from('up')
-	->leftJoin('user_up', 'id', 'user_up.up_id')
-	->leftJoin('user', '`user`.id', 'user_up.user_id')
-
-	SELECT * FROM `up`
-	LEFT JOIN `user_up` ON `user_up`.up_id = `up`.`id`
-	LEFT JOIN `user` ON `user_up`.user_id = `user`.id
-	 *
-	 * @return static
+	 * @return $this
 	 */
 	public function manyToMany($mid, $relate)
 	{
@@ -103,7 +90,7 @@ class Query
 	/**
 	 * INSERT IGNORE INTO `tb` SET ...
 	 *
-	 * @return static
+	 * @return $this
 	 */
 	public function ignore()
 	{
@@ -112,8 +99,9 @@ class Query
 	}
 
 	/**
-	 *
-	 * @return static
+	 * @param $mid
+	 * @param null $as
+	 * @return $this
 	 */
 	public function relateMany($mid, $as = null)
 	{
@@ -131,18 +119,21 @@ class Query
 	 *
 	 * 使用示例:
 	 *
-	Q('menu')
-	->leftJoin('menu_content AS u', 'u.id', 'menu_content_id')
-	->leftJoin('menu_type AS w', 'u.menu_type_id', 'w.id')
-	相当于
-	Q('menu')
-	->belongTo('menu_content', 'u')
-	->belongTo('menu_type', 'w', 'u')
+		->from('menu')
+		->leftJoin('menu_content AS u', 'u.id', 'menu_content_id')
+		->leftJoin('menu_type AS w', 'u.menu_type_id', 'w.id')
+		相当于
+		->from('menu')
+		->belongTo('menu_content', 'u')
+		->belongTo('menu_type', 'w', 'u')
 
-	SELECT * FROM `menu`
-	LEFT JOIN `menu_content` AS `u` ON u.id = `menu`.`menu_content_id`
-	LEFT JOIN `menu_type` AS `w` ON w.id = `u`.menu_type_id
+		SELECT * FROM `menu`
+		LEFT JOIN `menu_content` AS `u` ON u.id = `menu`.`menu_content_id`
+		LEFT JOIN `menu_type` AS `w` ON w.id = `u`.menu_type_id
 	 *
+	 * @param $table
+	 * @param null $as
+	 * @param null $table2
 	 * @return static
 	 */
 	public function belongsTo($table, $as = null, $table2 = null)
@@ -158,13 +149,16 @@ class Query
 	 * menu_content --- id
 	 * menu			--- menu_content_id
 
-	Q('menu_content')
-	->hasOne('menu')
-	->readRow();
+			Q('menu_content')
+			->hasOne('menu')
+			->readRow();
 
-	SELECT *  FROM `menu_content`
-	LEFT JOIN `menu` ON `menu`.menu_content_id = menu_content.`id` LIMIT 1
+			SELECT *  FROM `menu_content`
+			LEFT JOIN `menu` ON `menu`.menu_content_id = menu_content.`id` LIMIT 1
 	 *
+	 * @param $table
+	 * @param null $as
+	 * @param null $table2
 	 * @return static
 	 */
 	public function hasOne($table, $as = null, $table2 = null)
@@ -205,7 +199,6 @@ class Query
 		return $this;
 	}
 
-	//******************************数据库操作方法**************************
 	/**
 	 * 设置sql where and字句
 	 *
@@ -241,9 +234,9 @@ class Query
 
 	/**
 	 *
-	->whereOr([
-	'test' => 1, 'test2' => 2,
-	])
+		->whereOr([
+			'test' => 1, 'test2' => 2,
+		])
 	 *
 	 * @param array $where 必须传入一维数组
 	 * @return $this
@@ -269,13 +262,13 @@ class Query
 	/**
 	 * Or字句由多个条件合并而成
 	 *
-	->whereOrs([
-	['test' => 1, 'test2' => 2],
-	['field1' => 1, 'field2' => 2],
-	])
+		->whereOrs([
+			['test' => 1, 'test2' => 2],
+			['field1' => 1, 'field2' => 2],
+		])
 
-	===>
-	AND ((`table`.`test` = ? AND `table`.`test2` = ?) OR (`table`.`field1` = ? AND `table`.`field2` = ?))
+		===>
+		AND ((`table`.`test` = ? AND `table`.`test2` = ?) OR (`table`.`field1` = ? AND `table`.`field2` = ?))
 	 *
 	 * @param array $where 必须传入二维数组
 	 * @return $this
@@ -420,17 +413,9 @@ class Query
 		return $this;
 	}
 	/**
-	 *  传入：
-	 * [
-	'id', 'parentId', 'name',
-	'MenuContent' => ['content'], 'WechatMenuType' => ['code', 'menuType']
-	]
-	 * 返回:
-	`table`.`id` AS id,`table`.`parent_id` AS parentId,`table`.`name` AS name,
-	`menu_content`.`content` AS content,`wechat_menu_type`.`code` AS code,
-	`wechat_menu_type`.`menu_type` AS menuTyp
 	 *
-	 * @return static
+	 * @param array|string $data
+	 * @return $this
 	 */
 	public function select($data = '*')
 	{
@@ -440,8 +425,8 @@ class Query
 	}
 
 	/**
-	 *
-	 * @return static
+	 * @param array|string $data
+	 * @return $this
 	 */
 	public function field($data = '*')
 	{
@@ -451,12 +436,9 @@ class Query
 	}
 
 	/**
-	 * 用法:
-	 *  $this->limit(0, 5); ===> LIMIT 0, 5
-	 *
-	 *  $this->limit(5);    ===> LIMIT 5
-	 *
-	 * @return static
+	 * @param $p1
+	 * @param int $p2
+	 * @return $this
 	 */
 	public function limit($p1, $p2 = 0)
 	{
@@ -471,47 +453,41 @@ class Query
 	 * 	]);
 	 *
 	 *  $this->update('age', '+', 18);
-	 *
 	 *  $this->update('age', '+');
-	 *
 	 *  $this->update('age', '-');
 	 *
-	 * @return static
+	 * @param $data
+	 * @param null $p2
+	 * @param int $p3
+	 * @return $this
 	 */
 	public function update($data, $p2 = null, $p3 = 1)
 	{
 		return $this->builder->update($data, $p2, $p3);
 	}
 
-	//字段值--
+	/**
+	 * 字段值--
+	 *
+	 * @param $field
+	 * @param int $step
+	 * @return bool
+	 */
 	public function incr($field, $step = 1)
 	{
 		return $this->builder->update($field, '+', $step);
 	}
 
-	//字段值++
+	/**
+	 * 字段值++
+	 *
+	 * @param $field
+	 * @param int $step
+	 * @return bool
+	 */
 	public function decr($field, $step = 1)
 	{
 		return $this->builder->update($field, '-', $step);
-	}
-
-	/**
-	 * 读取单行数据
-	 *
-	 * @return array
-	 */
-	public function readRow()
-	{
-		return $this->builder->readRow();
-	}
-
-	/**
-	 *
-	 * @return array
-	 */
-	public function read()
-	{
-		return $this->builder->read();
 	}
 
 	/**
@@ -520,7 +496,7 @@ class Query
 	 */
 	public function find()
 	{
-		return $this->builder->read();
+		return $this->builder->find();
 	}
 
 	/**
@@ -539,22 +515,30 @@ class Query
 	 */
 	public function findOne()
 	{
-		return $this->builder->readRow();
-	}
-
-	public function one()
-	{
-		return $this->builder->readRow();
-	}
-
-	public function all()
-	{
-		return $this->builder->read();
+		return $this->builder->findOne();
 	}
 
 	/**
-	 *
-	 * @return static
+	 * @return array
+	 * @throws \Lxh\Exceptions\InternalServerError
+	 */
+	public function one()
+	{
+		return $this->builder->findOne();
+	}
+
+	/**
+	 * @return array
+	 * @throws \Lxh\Exceptions\InternalServerError
+	 */
+	public function all()
+	{
+		return $this->builder->find();
+	}
+
+	/**
+	 * @param $orderString
+	 * @return $this
 	 */
 	public function sort($orderString)
 	{
@@ -583,8 +567,8 @@ class Query
 	}
 
 	/**
-	 *
-	 * @return static
+	 * @param $data
+	 * @return $this
 	 */
 	public function group($data)
 	{
@@ -592,15 +576,8 @@ class Query
 		return $this;
 	}
 	/**
-	 * 传入：
-	 * $this->leftJoin('menu_content AS u', 'u.id', 'menu_content_id')
-	->leftJoin('wechat_menu_type AS w', 'u.wechat_menu_type_id', 'w.id')
 	 *
-	 * 返回：
-	LEFT JOIN `menu_content` AS u    ON `table`.`menu_content_id`      = `u`.`id`
-	LEFT JOIN `wechat_menu_type` AS w ON `u`.`wechat_menu_type_id` = `w`.`id`
-	 *
-	 * @return static
+	 * @return $this
 	 */
 	public function leftJoin($table, $field1 = null, $field2 = null, $condit = '=')
 	{
@@ -613,10 +590,10 @@ class Query
 	 * @param null $field1
 	 * @param null $field2
 	 * @param string $condit
-	 * @param string $type
+	 * @param string $type LEFT|RIGHT
 	 * @return $this
 	 */
-	public function join($table, $field1 = null, $field2 = null , $condit = '=', $type = 'LEFT')
+	public function join($table, $field1 = null, $field2 = null , $condit = '=', $type = '')
 	{
 		$this->builder->join($table, $field1, $field2, $condit, $type);
 		return $this;
@@ -641,46 +618,58 @@ class Query
 		return $this->builder->insert($data);
 	}
 
+	/**
+	 * @param array $data
+	 * @return mixed
+	 */
 	public function replace(array $data)
 	{
 		return $this->builder->replace($data);
 	}
 
+	/**
+	 * @param array $data
+	 * @return bool
+	 */
 	public function add(array $data)
 	{
 		return $this->builder->insert($data);
 	}
 
+	/**
+	 * @param array $data
+	 * @return mixed
+	 */
 	public function batchInsert(array & $data)
 	{
 		return $this->builder->batchInsert($data);
 	}
 
+	/**
+	 * @param array $data
+	 * @return mixed
+	 */
 	public function batchReplace(array & $data)
 	{
 		return $this->builder->batchReplace($data);
 	}
 
+	/**
+	 * @param null $id
+	 * @return mixed
+	 */
 	public function remove($id = null)
 	{
 		return $this->builder->remove($id);
 	}
 
+	/**
+	 * @param null $id
+	 * @return mixed
+	 */
 	public function delete($id = null)
 	{
 		return $this->builder->remove($id);
-	}
-
-	public function reset()
-	{
-		$this->builder->clear();
-		return $this;
-	}
-
-	public function __call($name, $arguments)
-	{
-		call_user_func_array([$this->builder, $name], $arguments);
-		return $this;
 	}
 
 }

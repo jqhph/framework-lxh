@@ -98,8 +98,11 @@ class Builder
 
     /**
      * 读取单行数据
+     *
+     * @return array
+     * @throws InternalServerError
      */
-    public function readRow()
+    public function findOne()
     {
         if (! $this->tableName) {
             throw new InternalServerError('Can not found table name.');
@@ -114,8 +117,11 @@ class Builder
 
     /**
      * 读取多行数据
+     *
+     * @return array
+     * @throws InternalServerError
      */
-    public function read()
+    public function find()
     {
         if (! $this->tableName) {
             throw new InternalServerError('Can not found table name.');
