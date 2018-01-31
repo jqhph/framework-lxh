@@ -81,46 +81,33 @@ class Filter
         return $value;
     }
 
+    /**
+     * @param $tag
+     * @return bool
+     */
     public function has($tag)
     {
-
+        return isset($this->filters[$tag]);
     }
 
     /**
-     * Register an event listener with the dispatcher.
+     * Register an event filter with the dispatcher.
      *
      * @param  mixed  $filter
      * @return mixed
      */
     public function resolveFilter($filter)
     {
-        return is_string($filter) ? $this->createClassFilter($filter) : $filter;
-    }
+        if (is_string($filter)) {
+            $segments = explode('@', $filter);
 
-    /**
-     * Create a class based listener using the IoC container.
-     *
-     * @param  mixed  $filter
-     * @return \Closure
-     */
-    public function createClassFilter($filter)
-    {
-        list($class, $method) = $this->parseClassCallable($filter);
+            return [
+                $this->container->make($segments[0]),
+                !empty($segments[1]) ? $segments[1] : 'handle'
+            ];
+        }
 
-        return [$this->container->make($class), $method];
-    }
-
-    /**
-     * Parse the class listener into class and method.
-     *
-     * @param  string  $filter
-     * @return array
-     */
-    protected function parseClassCallable($filter)
-    {
-        $segments = explode('@', $filter);
-
-        return [$segments[0], count($segments) == 2 ? $segments[1] : 'handle'];
+        return $filter;
     }
 
     /**
@@ -131,13 +118,11 @@ class Filter
      */
     public function getFilters($tag)
     {
-        $wildcards = $this->getWildcardFilters($tag);
-
         if (! isset($this->sorted[$tag])) {
             $this->sortFilters($tag);
         }
 
-        return array_merge($this->sorted[$tag], $wildcards);
+        return $this->sorted[$tag];
     }
 
     /**

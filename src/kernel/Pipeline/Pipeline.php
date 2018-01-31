@@ -55,7 +55,7 @@ class Pipeline implements PipelineInterface
 	 */
 	public function send($passable)
 	{
-		$this->passable = $passable;
+		$this->passable = &$passable;
 
 		return $this;
 	}
@@ -94,10 +94,12 @@ class Pipeline implements PipelineInterface
 	 */
 	public function then(Closure $destination)
 	{
-		//$firstSlice = $this->getInitialSlice($destination);
-		$pipes = array_reverse($this->pipes);
-
-		return call_user_func(array_reduce($pipes, [$this, 'getSlice'], $destination), $this->passable);
+		return call_user_func(
+			array_reduce(
+				array_reverse($this->pipes), [$this, 'getSlice'], $destination
+			),
+			$this->passable
+		);
 	}
 
 	/**
@@ -108,8 +110,7 @@ class Pipeline implements PipelineInterface
 	protected function getSlice($stack, $pipe)
 	{
 		return function ($passable) use ($stack, $pipe) {
-			$this->normalize($pipe);
-			return call_user_func($pipe, $passable, $stack);
+			return call_user_func($this->normalize($pipe), $passable, $stack);
 		};
 	}
 	
@@ -117,37 +118,16 @@ class Pipeline implements PipelineInterface
 	 * Get callable pipe.
 	 * 
 	 * @param string|object $pipe 
-	 * @return array
+	 * @return callable
 	 * */
-	protected function normalize(& $pipe)
+	protected function normalize(&$pipe)
 	{
-		if ($pipe instanceof Closure) {
-			
-		} elseif (is_string($pipe)) {
-			$pipe = [$this->container->make($pipe), $this->method];
-			
-		} else {
-			$pipe = [$pipe, $this->method];
-			
+		if (is_string($pipe)) {
+			return [$this->container->make($pipe), $this->method];
+		} elseif (is_object($pipe)) {
+			return [$pipe, $this->method];
 		}
-		
-// 		elseif (is_string($pipe[0])) {
-// 			$pipe[0] = $this->container->make($pipe[0]);
-				
-// 		}
-	}
-
-	/**
-	 * Get the initial slice to begin the stack call.
-	 *
-	 * @param  \Closure  $destination
-	 * @return \Closure
-	 */
-	protected function getInitialSlice(Closure $destination)
-	{
-		return function ($passable) use ($destination) {
-			return call_user_func($destination, $passable);
-		};
+		return $pipe;
 	}
 
 }

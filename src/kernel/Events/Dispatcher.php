@@ -77,32 +77,15 @@ class Dispatcher implements \Lxh\Contracts\Events\Dispatcher
 	 * @param  mixed  $listener
 	 * @return mixed
 	 */
-	public function makeListener($listener)
+	public function resolveListener($listener)
 	{
-		return is_string($listener) ? $this->createClassListener($listener) : $listener;
-	}
-	
-	protected function handlerShouldBeQueued($class)
-	{
-		return false;
-	}
-	
-	protected function createQueuedHandlerCallable($class, $method)
-	{
-	
-	}
-	
-	/**
-	 * Create a class based listener using the IoC container.
-	 *
-	 * @param  mixed  $listener
-	 * @return \Closure
-	 */
-	public function createClassListener($listener)
-	{
-		list($class, $method) = $this->parseClassCallable($listener);
-		
-		return [$this->container->make($class), $method];
+		if (is_string($listener)) {
+			list($class, $method) = $this->parseClassCallable($listener);
+
+			return [$this->container->make($class), $method];
+		}
+
+		return $listener;
 	}
 	
 	/**
@@ -115,7 +98,7 @@ class Dispatcher implements \Lxh\Contracts\Events\Dispatcher
 	{
 		$segments = explode('@', $listener);
 	
-		return [$segments[0], count($segments) == 2 ? $segments[1] : 'handle'];
+		return [$segments[0], !empty($segments[1]) ? $segments[1] : 'handle'];
 	}
 	
 	/**
@@ -153,7 +136,7 @@ class Dispatcher implements \Lxh\Contracts\Events\Dispatcher
 // 		}
 		
 		foreach ($this->getListeners($event) as & $listener) {
-			$response = call_user_func_array($this->makeListener($listener), $payload);
+			$response = call_user_func_array($this->resolveListener($listener), $payload);
 		
 			// If a response is returned from the listener and event halting is enabled
 			// we will just return this response, and not call the rest of the event
@@ -214,7 +197,7 @@ class Dispatcher implements \Lxh\Contracts\Events\Dispatcher
 			krsort($this->listeners[$eventName]);
 	
 			$this->sorted[$eventName] = call_user_func_array(
-					'array_merge', $this->listeners[$eventName]
+				'array_merge', $this->listeners[$eventName]
 			);
 		}
 	}
