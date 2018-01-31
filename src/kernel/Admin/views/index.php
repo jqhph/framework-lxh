@@ -53,7 +53,7 @@
 <script id="iframe-tpl" type="text/html">
     <div id="wrapper-{$name}" class="wrapper lxh-wrapper">
         <div class="content-page">
-            <div class="content"><div class="container"><iframe src="{$url}" scrolling="no"></iframe></div></div>
+            <div class="content"><iframe src="{$url}" scrolling="no"></iframe></div>
         </div>
     </div>
 </script>

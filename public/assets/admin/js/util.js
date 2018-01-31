@@ -400,7 +400,7 @@
             if (iframeWin.document.body) {
                 height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight;
                 height = height > minHeight ? (height) : minHeight;
-                $iframe.css('height', height + 'px')
+                $iframe.animate({height: height + 'px'});
             }
         };
 

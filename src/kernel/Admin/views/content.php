@@ -18,7 +18,7 @@
     cssLibArr = (parent.cssLibArr = []);
     array_unique = parent.array_unique;
 </script>
-
+<div class="container">
 <div class="content-wrapper">
 <?php if ($header || $description) {?>
 <section class="content-header"><h1><?php echo $header; ?><small> &nbsp;<?php echo $description;?></small></h1></section>
@@ -26,6 +26,7 @@
     echo '<div style="height:10px;"></div>';
 }?>
 <section class="content"><?php echo $content;?></section>
+</div>
 </div>
 
 <?php

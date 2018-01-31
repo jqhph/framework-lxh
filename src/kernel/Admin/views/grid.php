@@ -20,7 +20,7 @@
     <?php }?>
     <?php if ($pages) {?>
     __then__(function () {
-        $('.grid-per-pager').change(change)
+        $('.grid-per-pager').change(change);
         function change() {
             <?php if ($pjax) { ?>
             var $loading = loading($('#pjax-container').parent());
@@ -36,42 +36,9 @@
         window.change_pages = change
     });
     <?php }?>
-</script>
-<?php if ($pjax) {?>
-<script>
+    <?php if ($pjax) {
+    // jquery.pjax.min含自定义js
+    ?>
     require_js('@lxh/js/jquery.pjax.min');
-    __then__(function () {
-        $.pjax.defaults.timeout = 5000;
-        $.pjax.defaults.maxCacheLength = 0;
-        $(document).pjax('#pjax-container a:not(a[target="_blank"])', {container: '#pjax-container'});
-        $(document).on('submit', 'form[pjax-container]', function(e) {$.pjax.submit(e, '#pjax-container')});
-        $(document).on("pjax:popstate", function() {
-            $(document).one("pjax:end", function(e) {
-                $(e.target).find("script[data-exec-on-popstate]").each(function() {
-                    $.globalEval(this.text || this.textContent || this.innerHTML || '');
-                });
-            });
-        });
-        var $loading, $current = TAB.currentEl();
-        $(document).on('pjax:send', function(xhr) {
-            $current = TAB.currentEl();
-            if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
-                var $submit_btn = $('form[pjax-container] :submit');
-                if($submit_btn) $submit_btn.button('loading');
-            }
-            $loading = loading($('#pjax-container').parent());
-        })
-        $(document).on('pjax:complete', function(xhr) {
-            if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
-                var $submit_btn = $('form[pjax-container] :submit');
-                if($submit_btn) $submit_btn.button('reset');
-            }
-            $loading && $loading.close();
-            // 重新绑定点击事件
-            $('.grid-per-pager').change(change_pages);
-            // 重新计算iframe高度
-            IFRAME.height($current.iframe.find('iframe'));
-        })
-    })
+    <?php } ?>
 </script>
-<?php } ?>
