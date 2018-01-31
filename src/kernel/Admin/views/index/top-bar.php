@@ -38,7 +38,7 @@
         </div>
 
     </div>
-    <div class="topbar-left"><a></a></div>
+    </div>
 
 </div>
 
