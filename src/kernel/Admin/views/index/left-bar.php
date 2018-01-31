@@ -12,8 +12,7 @@
                 <?php } ?>
 
                 <li>
-                    <a onclick="TAB.switch('home', '<?php echo $home;?>', '<?php echo trans('Home')?>')" class="waves-effect
-                    <?php if ($menu->isActive('Index', 'Dashboard')) echo 'active';?> "><i class="zmdi zmdi-view-dashboard"></i> <span>
+                    <a onclick="TAB.switch('home', '<?php echo $home;?>', '<?php echo trans('Home')?>')" class="waves-effect active "><i class="zmdi zmdi-view-dashboard"></i> <span>
                             <?php echo trans('Dashboard', 'menus');?> </span> </a>
                 </li>
 

@@ -44,7 +44,7 @@ jQuery.extend({
       if($("#wrapper").hasClass("enlarged")) {
         $(".left ul").removeAttr("style");
       } else {
-        $(".subdrop").siblings("ul:first").show();
+        $(".active").siblings("ul:first").show();
       }
 
       toggle_slimscroll(".slimscrollleft");
@@ -52,27 +52,34 @@ jQuery.extend({
     },
     //menu item click
     Sidemenu.prototype.menuItemClick = function(e) {
+        var $sitea = $('#sidebar-menu a'),_t = $(this);
        if(!$("#wrapper").hasClass("enlarged")){
-        if($(this).parent().hasClass("has_sub")) {
+        if(_t.parent().hasClass("has_sub")) {
 
         }
-        if(!$(this).hasClass("subdrop")) {
+        if(!_t.hasClass("active")) {
           // hide any open menus and remove all other classes
-          $("ul",$(this).parents("ul:first")).slideUp(350);
-          $("a",$(this).parents("ul:first")).removeClass("subdrop");
+          $("ul",_t.parents("ul:first")).slideUp(350);
+          $("a",_t.parents("ul:first")).removeClass("active");
           $("#sidebar-menu .pull-right i").removeClass("md-remove").addClass("md-add");
 
           // open our new menu and add the open class
-          $(this).next("ul").slideDown(350);
-          $(this).addClass("subdrop");
-          $(".pull-right i",$(this).parents(".has_sub:last")).removeClass("md-add").addClass("md-remove");
-          $(".pull-right i",$(this).siblings("ul")).removeClass("md-remove").addClass("md-add");
-        }else if($(this).hasClass("subdrop")) {
-          $(this).removeClass("subdrop");
-          $(this).next("ul").slideUp(350);
-          $(".pull-right i",$(this).parent()).removeClass("md-remove").addClass("md-add");
+            _t.next("ul").slideDown(350);
+            _t.addClass("active");
+          $(".pull-right i",_t.parents(".has_sub:last")).removeClass("md-add").addClass("md-remove");
+          $(".pull-right i",_t.siblings("ul")).removeClass("md-remove").addClass("md-add");
+        }else if(_t.hasClass("active")) {
+            _t.removeClass("active");
+            _t.next("ul").slideUp(350);
+          $(".pull-right i",_t.parent()).removeClass("md-remove").addClass("md-add");
         }
-      }
+      } else {
+           if(!_t.parent().hasClass("has_sub")) {
+               $sitea.removeClass('active');
+               _t.addClass('active');
+           }
+           _t.parent().parent().prev().addClass('active');
+       }
     },
 
     //init sidemenu
