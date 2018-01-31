@@ -67,7 +67,7 @@ trait Loader
         'controller.manager' => [
             'shared' => true,
             'class' => 'Lxh\MVC\ControllerManager',
-            'dependencies' => ['container', 'http.request', 'http.response', 'pipeline', 'events']
+            'dependencies' => ['container', 'http.request', 'http.response', 'pipeline', 'events', 'filters']
         ],
         'files' => [
             'shared' => true,
@@ -182,6 +182,11 @@ trait Loader
         'plugin.manager' => [
             'shared' => true,
             'class' => 'Lxh\Plugins\Manager',
+        ],
+        'filters' => [
+            'shared' => true,
+            'class' => 'Lxh\Filters\Filter',
+            'dependencies' => ['container']
         ],
     ];
 

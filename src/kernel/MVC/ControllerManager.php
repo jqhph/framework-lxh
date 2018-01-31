@@ -11,6 +11,7 @@ namespace Lxh\MVC;
 use Lxh\Contracts\Router;
 use Lxh\Exceptions\NotFound;
 use Lxh\Basis\Factory;
+use Lxh\Filters\Filter;
 use Lxh\Helper\Util;
 use Lxh\Http\Response;
 use Lxh\Http\Request;
@@ -153,16 +154,21 @@ class ControllerManager extends Factory
      */
     protected $contrs;
 
+    /**
+     * @var Filter
+     */
+    protected $filters;
+
     public function __construct(
-        Container $container, Request $request, Response $response, Pipeline $pipeline, Dispatcher $events
+        Container $container, Request $request, Response $response, Pipeline $pipeline, Dispatcher $events, Filter $filter
     )
     {
-        parent::__construct($container);
-
+        $this->container = $container;
         $this->request = $request;
         $this->response = $response;
         $this->pipeline = $pipeline;
         $this->events = $events;
+        $this->filters = $filter;
     }
 
     /**
@@ -172,12 +178,12 @@ class ControllerManager extends Factory
      */
     public function handle(Router $router)
     {
-        $this->setControllerName($router->controllerName);
-        $this->setActionName($router->actionName);
+        $this->setModule($router->module, $router);
+        $this->setFolder($router->folder, $router);
+        $this->setControllerName($router->controllerName, $router);
+        $this->setActionName($router->actionName, $router);
         $this->setRequestParams($router->requestParams);
-        $this->setAuthParams($router->auth);
-        $this->setModule($router->module);
-        $this->setFolder($router->folder);
+        $this->setAuthParams($router->auth, $router);
 
         // 初始化语言包
         if (config('use-language')) {
@@ -516,7 +522,9 @@ class ControllerManager extends Factory
     {
 //        var_dump($params);die;
         if ($params === false || $params) {
-            $this->authParams = $params;
+            $this->authParams = $this->filters->apply(
+                'auth', $params
+            );
         }
     }
 
@@ -560,9 +568,11 @@ class ControllerManager extends Factory
         return $this->requestParams;
     }
 
-    protected function setModule($name)
+    protected function setModule($name, $router)
     {
-        $this->module = $name ?: $this->getDefaultModule();
+        $this->module = $this->filters->apply(
+            'module', $name ?: $this->getDefaultModule(), $router
+        );
     }
 
     /**
@@ -584,7 +594,7 @@ class ControllerManager extends Factory
      *
      * @param $name
      */
-    protected function setFolder($name)
+    protected function setFolder($name, $router)
     {
         $this->folder = $name;
     }
@@ -595,7 +605,7 @@ class ControllerManager extends Factory
      *
      * @param $name
      */
-    protected function setControllerName($name)
+    protected function setControllerName($name, $router)
     {
         if (strpos($name, '\\') !== false) {
             // 传递的是完整类名
@@ -604,7 +614,11 @@ class ControllerManager extends Factory
             $name = explode('\\', $name);
             $name = end($name);
         }
-        $this->controllerName = $name ? Util::toCamelCase($name, true, '-') : $this->defaultController;
+        $this->controllerName = $this->filters->apply(
+            'controller',
+            $name ? Util::toCamelCase($name, true, '-') : $this->defaultController,
+            $router
+        );
     }
 
     /**
@@ -613,9 +627,13 @@ class ControllerManager extends Factory
      *
      * @param $name
      */
-    protected function setActionName($name)
+    protected function setActionName($name, $router)
     {
-        $this->actionName = $name ? Util::toCamelCase($name, true, '-') : $this->defaultAction;
+        $this->actionName = $this->filters->apply(
+            'action',
+            $name ? Util::toCamelCase($name, true, '-') : $this->defaultAction,
+            $router
+        );
     }
 
     protected function setRequestParams($params)

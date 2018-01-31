@@ -32,6 +32,7 @@ if ($GLOBALS['CONFIG']->get('use-language')) {
 }
 $GLOBALS['HTTPREQUEST'] = $GLOBALS['CONTAINER']->make('http.request');
 $GLOBALS['HTTPRESPONSE'] = $GLOBALS['CONTAINER']->make('http.response');
+$GLOBALS['FILTERS_'] = $GLOBALS['CONTAINER']->make('filters');
 $GLOBALS['CONTROLLERMANAGER'] = $GLOBALS['CONTAINER']->make('controller.manager');
 
 $GLOBALS['resource-server']  = $GLOBALS['CONFIG']->get('client-config.resource-server');
@@ -624,6 +625,36 @@ function home_name()
 function middleware($controller, $middleware)
 {
     return $GLOBALS['CONTROLLERMANAGER']->addControllerMiddleware($controller, $middleware);
+}
+
+/**
+ * @return \Lxh\Filters\Filter
+ */
+function filters()
+{
+    return $GLOBALS['FILTERS_'];
+}
+
+/**
+ * 添加一个过滤器
+ *
+ * @param $tag
+ * @param $filter
+ * @param int $priority
+ */
+function add_filter($tag, $filter, $priority = 0)
+{
+    $GLOBALS['FILTERS_']->add($tag, $filter, $priority);
+}
+
+/**
+ * @param $tag
+ * @param mixed $value
+ * @return mixed
+ */
+function apply_filters($tag, $value = null)
+{
+    return call_user_func_array([$GLOBALS['FILTERS_'], 'apply'], func_get_args());
 }
 
 /**

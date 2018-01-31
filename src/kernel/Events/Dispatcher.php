@@ -51,15 +51,14 @@ class Dispatcher implements \Lxh\Contracts\Events\Dispatcher
 	{
 		$this->container = $container;
 	}
-	
+
 	/**
-	 * 监听一个事件
+	 * 监听事件
 	 *
-	 * @param string $event   事件名称，多个事件用数组
-	 * @param callable	   $listener 事件
-	 * @param int		   $priority 优先级权重
-	 * @return void
-	 * */
+	 * @param string $event
+	 * @param mixed $listener
+	 * @param int $priority
+	 */
 	public function listen($event, $listener, $priority = 0)
 	{
 		if (strpos($event, '*') !== false) {
@@ -70,23 +69,6 @@ class Dispatcher implements \Lxh\Contracts\Events\Dispatcher
 			unset($this->sorted[$event]);
 		}
 
-	}
-	
-	/**
-	 * Create the class based event callable.
-	 *
-	 * @param  string  $listener
-	 * @return callable
-	 */
-	protected function createClassCallable($listener)
-	{
-		list($class, $method) = $this->parseClassCallable($listener);
-	
-// 		if ($this->handlerShouldBeQueued($class)) {
-// 			return $this->createQueuedHandlerCallable($class, $method);
-// 		} else {
-		return [$this->container->make($class), $method];
-// 		}
 	}
 	
 	/**
@@ -118,12 +100,9 @@ class Dispatcher implements \Lxh\Contracts\Events\Dispatcher
 	 */
 	public function createClassListener($listener)
 	{
-		return $this->createClassCallable($listener);
-// 		return function () use ($listener, $container) {
-// 			return call_user_func_array(
-// 					$this->createClassCallable($listener, $container), func_get_args()
-// 			);
-// 		};
+		list($class, $method) = $this->parseClassCallable($listener);
+		
+		return [$this->container->make($class), $method];
 	}
 	
 	/**
