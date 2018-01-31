@@ -166,6 +166,19 @@
             } else {
                 current = {name: name, url: url, label: label};
             }
+            if (name.indexOf('menu-')!= -1) {
+                var $m = $('#' + name), $p = $m.parent().parent().prev();
+                // 切换tab页时选中对应菜单
+                if (!$m.hasClass('active')) {
+                    if (!$p.hasClass('active')) {
+                        $p.click();
+                    }
+                    $m.click();
+                }
+            }
+            if (name == 'home') {
+                $('#menu-home').click();
+            }
             if (this.show(name, url, label) === false) {
                 return;
             }
@@ -379,7 +392,7 @@
 
             var $iframe = this.container(name);
             // 显示当前iframe
-            $iframe.show(220);
+            $iframe.show();
             $iframe.attr('url', url);
 
             $iframe.find('iframe').load(function (e) {
@@ -400,7 +413,9 @@
             if (iframeWin.document.body) {
                 height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight;
                 height = height > minHeight ? (height) : minHeight;
-                $iframe.animate({height: height + 'px'});
+                // $iframe.animate({height: height + 'px'});
+                $iframe.css('height', height + 'px');
+                $iframe.slideDown(350);
             }
         };
 

@@ -54,9 +54,9 @@ jQuery.extend({
     Sidemenu.prototype.menuItemClick = function(e) {
         var $sitea = $('#sidebar-menu a'),_t = $(this);
        if(!$("#wrapper").hasClass("enlarged")){
-        if(_t.parent().hasClass("has_sub")) {
-
-        }
+        // if(_t.parent().parent().parent().hasClass("has_sub")) {
+        //     return;
+        // }
         if(!_t.hasClass("active")) {
           // hide any open menus and remove all other classes
           $("ul",_t.parents("ul:first")).slideUp(350);
