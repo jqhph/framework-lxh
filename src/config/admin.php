@@ -30,7 +30,7 @@ return [
     ],
 
     // 菜单模型
-    'menu-model' => '',
+//    'menu-model' => '',
     // 是否使用缓存
     'menu-use-cache' => true,
 
