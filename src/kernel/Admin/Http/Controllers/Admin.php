@@ -75,17 +75,16 @@ class Admin extends Controller
         }
 
         $keyName = Models::getUserKeyName();
-        $table->link('roles')
-            ->rendering(function (Link $link) use ($keyName) {
-                $id = $link->row($keyName);
-                $api = AdminCreator::url()->api('roles-list', $id);
+        $table->link('roles', function (Link $link) use ($keyName) {
+            $id = $link->row($keyName);
+            $api = AdminCreator::url()->api('roles-list', $id);
 
-                $link->useAjaxModal()
-                    ->title(trans('Roles'))
-                    ->dataId($id)
-                    ->url($api)
-                    ->label(trans('list'));
-            });
+            $link->useAjaxModal()
+                ->title(trans('Roles'))
+                ->dataId($id)
+                ->url($api)
+                ->label(trans('list'));
+        });
     }
 
     public function filter(Filter $filter)

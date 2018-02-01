@@ -107,30 +107,29 @@ class Product extends Controller
      */
     protected function table(Table $table)
     {
-//        $table->image('stock')->rendering(function (Image $image) {
+//        $table->image('img', function (Image $image) {
 //            $image->value('https://img3.doubanio.com/view/photo/s_ratio_poster/public/p2511434383.jpg');
 //        });
 
-        $table->helper('stock')->rendering(function (Helper $helper) {
+        $table->helper('stock', function (Helper $helper) {
             $helper->content('test');
         });
 
         /**
          * 使用field方法添加字段
          */
-        $table->expand('name')
-            ->sortable()
-            ->rendering(function (Expand $expand) {
-                $table = new \Lxh\Admin\Widgets\Table([], [
-                    ['name' => 'PHP version',       'value' => 'PHP/'.PHP_VERSION],
-                    ['name' => 'Lxh-framework version',   'value' => 'dev'],
-                    ['name' => 'CGI',               'value' => php_sapi_name()],
-                    ['name' => 'Uname',             'value' => php_uname()],
-                    ['name' => 'Server',            'value' => get_value($_SERVER, 'SERVER_SOFTWARE')],
-                ]);
+        $table->expand('name', function (Expand $expand) {
+            $table = new \Lxh\Admin\Widgets\Table([], [
+                ['name' => 'PHP version',       'value' => 'PHP/'.PHP_VERSION],
+                ['name' => 'Lxh-framework version',   'value' => 'dev'],
+                ['name' => 'CGI',               'value' => php_sapi_name()],
+                ['name' => 'Uname',             'value' => php_uname()],
+                ['name' => 'Server',            'value' => get_value($_SERVER, 'SERVER_SOFTWARE')],
+            ]);
 
-                $expand->content($table->render());
-            });
+            $expand->content($table->render());
+        })
+            ->sortable();
 
         /**
          * 自定义字段标题内容

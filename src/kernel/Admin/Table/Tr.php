@@ -267,27 +267,20 @@ class Tr extends Widget
      */
     protected function renderFiledView($view, $field, $value, Td $td, \Closure $then = null)
     {
-        if (is_string($view)) {
-            $method = 'build' . $view;
-            if (method_exists($this, $method)) {
-                return $td->value($this->$method($field, $value))->render();
-            }
-
-            $view = str_replace('.', '\\', $view);
-
-            if (strpos($view, '\\') !== false) {
-                $class = $view;
-            } else {
-                $class  = "Lxh\\Admin\\Fields\\{$view}";
-            }
-
-            $view = new $class($field, $value);
-        } else {
-            $view = $view($this);
-
-            $view->name($field);
-            $view->value($value);
+        $method = 'build' . $view;
+        if (method_exists($this, $method)) {
+            return $td->value($this->$method($field, $value))->render();
         }
+
+        $view = str_replace('.', '\\', $view);
+
+        if (strpos($view, '\\') !== false) {
+            $class = $view;
+        } else {
+            $class  = "Lxh\\Admin\\Fields\\{$view}";
+        }
+
+        $view = new $class($field, $value);
 
         $view->setTr($this);
 

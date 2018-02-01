@@ -188,7 +188,7 @@ class Menu extends Controller
         $table->useTree('subs');
 
         if ($this->useAuthorize) {
-            $table->link('ability_title')->rendering(function (Link $link) {
+            $table->link('ability_title', function (Link $link) {
                 $link->format(
                     Admin::url('Ability')->detail('{value}'), 'ability_id'
                 );

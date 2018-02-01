@@ -48,7 +48,7 @@ class Role extends Controller
 
         $table->date('created_at')->sortable();
         $table->date('modified_at')->sortable();
-        $table->link('created_by')->rendering(function (Link $link) {
+        $table->link('created_by', function (Link $link) {
             $link->format(
                 Admin::url('Admin')->detail('{value}'), 'created_by_id'
             );
@@ -63,16 +63,15 @@ class Role extends Controller
         }
         $keyName = Models::getRoleKeyName();
         $label = trans('Abilities');
-        $table->link('abilities')
-            ->rendering(function (Link $link) use ($keyName, $label) {
-                $id = $link->row($keyName);
+        $table->link('abilities', function (Link $link) use ($keyName, $label) {
+            $id = $link->row($keyName);
 
-                $link->useAjaxModal()
-                    ->title($label)
-                    ->dataId($id)
-                    ->url(Admin::url()->api('abilities', $id))
-                    ->label(trans('list'));
-            });
+            $link->useAjaxModal()
+                ->title($label)
+                ->dataId($id)
+                ->url(Admin::url()->api('abilities', $id))
+                ->label(trans('list'));
+        });
     }
 
     protected function filter(Filter $filter)

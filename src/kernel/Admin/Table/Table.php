@@ -24,17 +24,17 @@ use Lxh\Support\Arr;
 
 /**
  *
- * @method Table link($field);
- * @method Table button($field);
- * @method Table label($field);
- * @method Table tag($field);
- * @method Table checkbox($field);
+ * @method Table link($field, $closure = null);
+ * @method Table button($field, $closure = null);
+ * @method Table label($field, $closure = null);
+ * @method Table tag($field, $closure = null);
+ * @method Table checkbox($field, $closure = null);
+ * @method Table code($field, $closure = null);
+ * @method Table image($field, $closure = null);
+ * @method Table expand($field, $closure = null);
+ * @method Table helper($field, $closure = null);
  * @method Table checked($field);
- * @method Table code($field);
  * @method Table email($field);
- * @method Table image($field);
- * @method Table expand($field);
- * @method Table helper($field);
  */
 class Table extends Widget
 {
@@ -244,21 +244,6 @@ class Table extends Widget
         }
         $this->headers[$this->field]['view'] = &$view;
 
-        return $this;
-    }
-
-    /**
-     * Call when rendering
-     *
-     * @param \Closure $then
-     * @return $this
-     */
-    public function rendering(\Closure $then)
-    {
-        if (! $this->field) {
-            return $this;
-        }
-        $this->headers[$this->field]['then'] = &$then;
         return $this;
     }
 
@@ -717,7 +702,12 @@ EOF;
     public function __call($method, $parameters)
     {
         if (isset(static::$fields[$method])) {
-            return $this->field(get_value($parameters, 0))->setFieldView(static::$fields[$method]);
+            $field = get_value($parameters, 0);
+            if ($then = get_value($parameters, 1)) {
+                $this->headers[$field]['then'] = $then;
+            }
+
+            return $this->field($field)->setFieldView(static::$fields[$method]);
         }
 
         $p = count($parameters) > 0 ? $parameters[0] : true;
