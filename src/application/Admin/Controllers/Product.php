@@ -87,8 +87,8 @@ class Product extends Controller
 
     protected function form(Form $form, Content $content)
     {
-        $form->checked('stock');
-        $form->checked('test');
+        $form->switching('stock');
+        $form->switching('test');
     }
 
     /**

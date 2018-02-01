@@ -4,9 +4,9 @@ namespace Lxh\Admin\Form\Field;
 
 use Lxh\Admin\Form;
 
-class Checked extends Form\Field
+class Switching extends Form\Field
 {
-    protected $view = 'admin::form.checked';
+    protected $view = 'admin::form.switch';
 
     protected function setup()
     {

@@ -15,7 +15,7 @@ use Lxh\Support\Arr;
  * @method Field\Text           text($name, $label = '')
  * @method Field\Password       password($name, $label = '')
  * @method Field\Checkbox       checkbox($name, $label = '')
- * @method Field\Checked        checked($name, $label = '')
+ * @method Field\Switching        switching($name, $label = '')
  * @method Field\Radio          radio($name, $label = '')
  * @method Field\Select         select($name, $label = '')
  * @method Field\MultipleSelect multipleSelect($name, $label = '')
