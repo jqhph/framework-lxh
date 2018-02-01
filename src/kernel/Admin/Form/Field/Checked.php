@@ -12,10 +12,13 @@ class Checked extends Form\Field
     {
         $this->css('checked', '@lxh/plugins/switchery/switchery.min');
         $this->js('checked', '@lxh/plugins/switchery/switchery.min');
+
         $this->script('checked', <<<EOF
- $('[data-plugin="switchery"]').each(function(){new Switchery($(this)[0],$(this).data())});
+        function swty(){\$('[data-plugin="switchery"]').each(function(){new Switchery($(this)[0],$(this).data())});} swty();
 EOF
         );
+        // 监听表单重置事件
+        $this->onFormReset('$(\'.switchery\').remove();swty();', 'checked-reset');
 
         $this->primary();
     }

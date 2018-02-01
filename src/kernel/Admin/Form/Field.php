@@ -307,6 +307,24 @@ class Field implements Renderable
     }
 
     /**
+     * 监听表单重置按钮js
+     *
+     * @param $script
+     * @param string|null $key 同样的key只加载一次，传null则实例化一次加载一次
+     * @return $this
+     */
+    public function onFormReset($script, $key = null)
+    {
+        if ($key) {
+            static::$scripts[$key] = "$(document).on('reset.form',function(){setTimeout(function(){{$script}},20)});";
+        } else {
+            $this->script .= "$(document).on('reset.form',function(){setTimeout(function(){{$script}},20)});";
+        }
+
+        return $this;
+    }
+
+    /**
      * Get assets required by this field.
      *
      * @return array

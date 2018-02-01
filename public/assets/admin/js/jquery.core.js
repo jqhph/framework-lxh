@@ -115,6 +115,7 @@ function($) {
     Components.prototype.initMultiSelect = function() {
         if($('[data-plugin="multiselect"]').length > 0)
             $('[data-plugin="multiselect"]').multiSelect($(this).data());
+        
     },
 
      /* -------------

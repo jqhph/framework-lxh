@@ -57,8 +57,9 @@ class Select extends Field
             $selector = $this->getElementClassSelector();
             $this->script = <<<EOF
 $("{$selector}").select2({allowClear:{$this->clear},placeholder:"{$this->getPlaceholder()}"});
-$(document).on('reset.form', function () {\$('{$selector}').trigger('change.select2');setTimeout("$('{$selector}').trigger('change.select2')",20);})
 EOF;
+            // 监听表单重置事件
+            $this->onFormReset("$('{$selector}').trigger('change.select2')");
         }
 
         if ($this->options instanceof \Closure) {
