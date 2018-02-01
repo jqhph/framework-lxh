@@ -11,7 +11,6 @@
     require_js = parent.require_js;
     require_css = parent.require_css;
     to_under_score = parent.to_under_score;
-    parse_view_name = parent.parse_view_name;
     build_http_params = parent.build_http_params;
     lxhActions = (parent.lxhActions = []);
     jsLibArr = (parent.jsLibArr = []);

@@ -59,17 +59,6 @@
         return str
     };
 
-    /**
-     * 解析视图路径名
-     *
-     * @param c controller
-     * @param a action
-     * @returns {*}
-     */
-    o.parse_view_name = function (c, a) {
-        return 'module/' + to_under_score(c) + '/' + to_under_score(a);
-    };
-
     // 把json对象转化为get字符串
     o.build_http_params = function (param, key) {
         var paramStr = "";
