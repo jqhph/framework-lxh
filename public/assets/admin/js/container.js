@@ -452,11 +452,11 @@ window.Lxh = function (options) {
                 if (typeof modals[options.id] != 'undefined') {
                     return modals[options.id];
                 }
-                var blade = new Blade(options.tpl, options);
+                var blade = new Blade(options.tpl, options), pd = parent.document;
 
-                $('body',parent.document).append(blade.fetch());
-
-                var $container = $(id, parent.document),
+                $('body',pd).append(blade.fetch());
+                $('.modal', pd).css('top', '53px');
+                var $container = $(id, pd),
                     requesting,
                     $loading,
                     self = this,
