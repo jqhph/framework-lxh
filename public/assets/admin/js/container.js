@@ -454,9 +454,9 @@ window.Lxh = function (options) {
                 }
                 var blade = new Blade(options.tpl, options);
 
-                $('body').append(blade.fetch());
+                $('body',parent.document).append(blade.fetch());
 
-                var $container = $(id),
+                var $container = $(id, parent.document),
                     requesting,
                     $loading,
                     self = this,

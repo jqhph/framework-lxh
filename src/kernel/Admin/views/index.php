@@ -17,6 +17,7 @@
     //    echo admin_css('components');
     echo admin_css('css/icon.min');
     echo admin_css('css/core.min');
+    echo admin_css('css/components.min');
 
     echo admin_js('js/util.min');
     echo admin_js('js/jquery.min');

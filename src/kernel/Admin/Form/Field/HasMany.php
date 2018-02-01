@@ -79,66 +79,6 @@ class HasMany extends Field
     }
 
     /**
-     * Get validator for this field.
-     *
-     * @param array $input
-     *
-     * @return bool|Validator
-     */
-    public function getValidator(array $input)
-    {
-        if (!array_key_exists($this->column, $input)) {
-            return false;
-        }
-
-        $input = array_only($input, $this->column);
-
-        $form = $this->buildNestedForm($this->column, $this->builder);
-
-        $rules = $attributes = [];
-
-        /* @var Field $field */
-        foreach ($form->fields() as $field) {
-            if (!$fieldRules = $field->getRules()) {
-                continue;
-            }
-
-            $column = $field->column();
-
-            if (is_array($column)) {
-                foreach ($column as $key => $name) {
-                    $rules[$name.$key] = $fieldRules;
-                }
-
-                $this->resetInputKey($input, $column);
-            } else {
-                $rules[$column] = $fieldRules;
-            }
-
-            $attributes = array_merge(
-                $attributes,
-                $this->formatValidationAttribute($input, $field->label(), $column)
-            );
-        }
-
-        array_forget($rules, NestedForm::REMOVE_FLAG_NAME);
-
-        if (empty($rules)) {
-            return false;
-        }
-
-        $newRules = [];
-
-        foreach ($rules as $column => $rule) {
-            foreach (array_keys($input[$this->column]) as $key) {
-                $newRules["{$this->column}.$key.$column"] = $rule;
-            }
-        }
-
-        return Validator::make($input, $newRules, [], $attributes);
-    }
-
-    /**
      * Format validation attributes.
      *
      * @param array  $input

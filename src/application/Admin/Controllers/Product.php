@@ -7,6 +7,7 @@
 
 namespace Lxh\Admin\Controllers;
 
+use Lxh\Admin\Fields\Image;
 use Lxh\Admin\Http\Controllers\Controller;
 use Lxh\Admin\Layout\Content;
 use Lxh\Admin\Filter;
@@ -88,7 +89,11 @@ class Product extends Controller
     protected function form(Form $form, Content $content)
     {
         $form->switching('stock');
-        $form->switching('test');
+
+        $form->divide();
+        $form->decimal('test');
+        $form->url('level');
+        $form->currency('price');
     }
 
     /**
@@ -99,10 +104,14 @@ class Product extends Controller
      */
     protected function table(Table $table)
     {
+        $table->image('stock')->rendering(function (Image $image) {
+            $image->value('https://img3.doubanio.com/view/photo/s_ratio_poster/public/p2511434383.jpg');
+        });
+
         /**
          * 使用field方法添加字段
          */
-        $table->checked('timelimit')->sortable();
+        $table->email('name')->sortable();
 
         /**
          * 自定义字段标题内容
@@ -191,7 +200,7 @@ class Product extends Controller
 
         // 定义行内容
         $table->tr(function (Tr $tr, $row) {
-           $tr->style('color:green');
+//           $tr->style('color:green');
         });
     }
 
