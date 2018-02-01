@@ -75,6 +75,17 @@ class Tr extends Widget
     }
 
     /**
+     *
+     * @param $content
+     * @return $this
+     */
+    public function next($content)
+    {
+        $this->table->addExtraRow($content);
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function render()
@@ -256,7 +267,7 @@ class Tr extends Widget
      */
     protected function renderFiledView($view, $field, $value, Td $td, \Closure $then = null)
     {
-        if (! is_object($view)) {
+        if (is_string($view)) {
             $method = 'build' . $view;
             if (method_exists($this, $method)) {
                 return $td->value($this->$method($field, $value))->render();
@@ -272,6 +283,8 @@ class Tr extends Widget
 
             $view = new $class($field, $value);
         } else {
+            $view = $view($this);
+
             $view->name($field);
             $view->value($value);
         }

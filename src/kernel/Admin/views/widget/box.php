@@ -7,9 +7,9 @@
             <?php echo $tools; ?>
             </div></div>
         </div>
-        <div style="clear: both"></div>
+        <div style="clear:both"></div>
     </div>
-    <div id="<?php echo $id; ?>" class="panel-collapse collapse in" aria-expanded="true" style="">
+    <div id="<?php echo $id; ?>" class="panel-collapse collapse in">
         <div class="portlet-body">
             <?php echo $content  ?>
         </div>

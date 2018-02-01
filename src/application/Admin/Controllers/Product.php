@@ -7,6 +7,7 @@
 
 namespace Lxh\Admin\Controllers;
 
+use Lxh\Admin\Fields\Expand;
 use Lxh\Admin\Fields\Image;
 use Lxh\Admin\Http\Controllers\Controller;
 use Lxh\Admin\Layout\Content;
@@ -19,6 +20,7 @@ use Lxh\Admin\Table\Td;
 use Lxh\Admin\Table\Th;
 use Lxh\Admin\Table\Tr;
 use Lxh\Admin\Widgets\Form;
+use Lxh\Admin\Widgets\Tab;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -104,14 +106,26 @@ class Product extends Controller
      */
     protected function table(Table $table)
     {
-        $table->image('stock')->rendering(function (Image $image) {
-            $image->value('https://img3.doubanio.com/view/photo/s_ratio_poster/public/p2511434383.jpg');
-        });
+//        $table->image('stock')->rendering(function (Image $image) {
+//            $image->value('https://img3.doubanio.com/view/photo/s_ratio_poster/public/p2511434383.jpg');
+//        });
 
         /**
          * 使用field方法添加字段
          */
-        $table->email('name')->sortable();
+        $table->expand('name')
+            ->sortable()
+            ->rendering(function (Expand $expand) {
+                $table = new \Lxh\Admin\Widgets\Table([], [
+                    ['name' => 'PHP version',       'value' => 'PHP/'.PHP_VERSION],
+                    ['name' => 'Lxh-framework version',   'value' => 'dev'],
+                    ['name' => 'CGI',               'value' => php_sapi_name()],
+                    ['name' => 'Uname',             'value' => php_uname()],
+                    ['name' => 'Server',            'value' => get_value($_SERVER, 'SERVER_SOFTWARE')],
+                ]);
+
+                $expand->content($table->render());
+            });
 
         /**
          * 自定义字段标题内容

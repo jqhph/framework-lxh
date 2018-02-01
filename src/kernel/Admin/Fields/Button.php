@@ -37,6 +37,16 @@ class Button extends Field
         $this->url = &$url;
     }
 
+    public function sm()
+    {
+        return $this->class('btn-sm');
+    }
+
+    public function xs()
+    {
+        return $this->class('btn-xs');
+    }
+
     /**
      * @param $color
      * @return $this|mixed

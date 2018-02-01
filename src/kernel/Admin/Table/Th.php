@@ -130,11 +130,12 @@ class Th extends Widget
     /**
      * Mark this column as sortable.
      *
-     * @return static
+     * @param string|null $field
+     * @return $this
      */
-    public function sortable()
+    public function sortable($field = null)
     {
-        $this->sortable = true;
+        $this->sortable = $field ?: true;
 
         return $this;
     }
@@ -168,8 +169,10 @@ class Th extends Widget
             $desc = !$this->desc;
         }
 
+        $field = is_string($this->sortable) ? $this->sortable : $this->field;
+
         $url->query([
-            'sort' => $this->field,
+            'sort' => $field,
             'desc' => $desc
         ]);
 

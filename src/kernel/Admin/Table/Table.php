@@ -4,10 +4,12 @@ namespace Lxh\Admin\Table;
 
 use Lxh\Admin\Fields\Button;
 use Lxh\Admin\Fields\Code;
+use Lxh\Admin\Fields\Expand;
 use Lxh\Admin\Fields\Field;
 use Lxh\Admin\Fields\Image;
 use Lxh\Admin\Fields\Label;
 use Lxh\Admin\Fields\Link;
+use Lxh\Admin\Fields\Profile;
 use Lxh\Admin\Fields\Tag;
 use Lxh\Admin\Fields\Checkbox;
 use Lxh\Admin\Grid;
@@ -30,6 +32,7 @@ use Lxh\Support\Arr;
  * @method Table code($field);
  * @method Table email($field);
  * @method Table image($field);
+ * @method Table expand($field);
  */
 class Table extends Widget
 {
@@ -44,6 +47,7 @@ class Table extends Widget
         'checkbox' => Checkbox::class,
         'code' => Code::class,
         'image' => Image::class,
+        'expand' => Expand::class,
         'checked' => 'checked',
         'email' => 'email',
     ];
@@ -127,6 +131,16 @@ class Table extends Widget
     protected $rowSelector = null;
 
     /**
+     * @var string
+     */
+    protected $nextRow = '';
+
+    /**
+     * @var int
+     */
+    protected $totalColumns = 0;
+
+    /**
      * Table constructor.
      *
      * @param array $headers
@@ -146,6 +160,8 @@ class Table extends Widget
         $this->setHeaders($headers);
         $this->setRows($rows);
         $this->setStyle($style);
+
+        $this->class('table table-hover responsive');
     }
 
     public function grid(Grid $grid = null)
@@ -173,6 +189,16 @@ class Table extends Widget
     public function idName()
     {
         return $this->grid->idName();
+    }
+
+    /**
+     * @param $content
+     * @return $this
+     */
+    public function addExtraRow($content)
+    {
+        $this->nextRow = &$content;
+        return $this;
     }
 
     /**
@@ -250,14 +276,15 @@ class Table extends Widget
     /**
      * 设置字段为可排序
      *
+     * @param string $field
      * @return $this
      */
-    public function sortable()
+    public function sortable($field = null)
     {
         if (! $this->field) {
             return $this;
         }
-        $this->headers[$this->field]['sortable'] = 1;
+        $this->headers[$this->field]['sortable'] = $field ?: 1;
         return $this;
     }
 
@@ -530,8 +557,8 @@ class Table extends Widget
             $th->hide();
         }
 
-        if (get_isset($options, 'sortable')) {
-            $th->sortable();
+        if ($field = get_isset($options, 'sortable')) {
+            $th->sortable($field);
         }
     
         if (($desc = get_isset($options, 'desc')) !== null) {
@@ -557,6 +584,11 @@ class Table extends Widget
     {
         $trString = '';
         foreach ($this->rows as $k => &$row) {
+            if ($this->nextRow) {
+                $trString .= "<tr><td colspan='{$this->totalColumns()}' style='padding:0;border:0;'>{$this->nextRow}</td></tr>";
+                $this->nextRow = '';
+            }
+
             $tr = $this->buildTr($k, $row);
             if ($this->handlers['tr']) {
                 call_user_func($this->handlers['tr'], $tr, $row);
@@ -565,6 +597,22 @@ class Table extends Widget
             $trString .= $tr->render();
         }
         return $trString;
+    }
+
+    /**
+     *
+     * @return int
+     */
+    public function totalColumns()
+    {
+        if ($this->totalColumns)
+            return $this->totalColumns;
+
+        return $this->totalColumns =
+              count($this->headers)
+            + count($this->columns['mid'])
+            + count($this->columns['front'])
+            + count($this->columns['last']);
     }
 
     /**
