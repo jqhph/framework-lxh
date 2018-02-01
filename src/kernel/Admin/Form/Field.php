@@ -286,12 +286,23 @@ class Field implements Renderable
     /**
      * 加载css（同个key只加载一次）
      *
-     * @return static
+     * @return $this
      */
     public function css($key, $css)
     {
         static::$css[$key] = &$css;
 
+        return $this;
+    }
+
+    /**
+     * javascript（同个key只加载一次）
+     *
+     * @return $this
+     */
+    public function script($key, $script)
+    {
+        static::$scripts[$key] = &$script;
         return $this;
     }
 

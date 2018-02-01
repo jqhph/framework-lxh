@@ -17,6 +17,7 @@ use Lxh\Admin\Table\Table;
 use Lxh\Admin\Table\Td;
 use Lxh\Admin\Table\Th;
 use Lxh\Admin\Table\Tr;
+use Lxh\Admin\Widgets\Form;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -82,6 +83,12 @@ class Product extends Controller
     protected function grid(Grid $grid, Content $content)
     {
         $grid->allowBatchDelete();
+    }
+
+    protected function form(Form $form, Content $content)
+    {
+        $form->checked('stock');
+        $form->checked('test');
     }
 
     /**

@@ -75,5 +75,6 @@ class Form
         'multipleImage'  => \Lxh\Admin\Form\Field\MultipleImage::class,
         'captcha'        => \Lxh\Admin\Form\Field\Captcha::class,
         'tableCheckbox'          => \Lxh\Admin\Form\Field\TableCheckbox::class,
+        'checked'          => \Lxh\Admin\Form\Field\Checked::class,
     ];
 }
