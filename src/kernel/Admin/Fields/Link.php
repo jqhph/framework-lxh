@@ -54,7 +54,12 @@ class Link extends Field
             $this->buildSelectorAttribute();
             $this->attribute('onclick', $url);
         }
-        return $this->buildLinks();
+        $icon = '';
+        if ($this->icon) {
+            $icon = "<i class='{$this->icon}'></i> ";
+        }
+
+        return "<span {$this->formatAttributes()}>{$icon} {$this->label()}</span> ";
     }
 
     /**
@@ -66,25 +71,6 @@ class Link extends Field
     {
         $this->icon = &$icon;
         return $this;
-    }
-
-    protected function buildLinks()
-    {
-        $icon = '';
-        if ($this->icon) {
-            $icon = "<i class='{$this->icon}'></i> ";
-        }
-
-        $tags = '';
-        $counter = 0;
-        $attributes = $this->formatAttributes();
-        foreach ((array)$this->label() as &$value) {
-            $tags .= "<span {$attributes}>{$icon} {$value}</span> ";
-
-            $counter++;
-        }
-
-        return $tags;
     }
 
     /**

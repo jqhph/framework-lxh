@@ -6,7 +6,7 @@ use Lxh\Admin\Admin;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Helper\Util;
 
-class Helper extends Link
+class Helper extends Field
 {
     /**
      * @var string
@@ -15,9 +15,10 @@ class Helper extends Link
 
     public function render()
     {
-//        if ($this->value === '' || $this->value === null) {
-//            return '';
-//        }
+        if ($this->value === '' || $this->value === null) {
+            return '';
+        }
+        $this->class('tag-cloud tag-link');
 
         // 设置js
         $this->script('helper', 'var _p=$(\'[data-toggle="popover"]\');_p.popover();_p.find("i").css("font-size","14px")');
@@ -29,9 +30,7 @@ class Helper extends Link
             $this->attribute('data-placement', 'top');
         }
 
-        $this->value = "<span {$this->formatAttributes()}>{$this->icon} {$this->value}</span>";
-
-        return parent::render();
+        return "<span {$this->formatAttributes()}>{$this->icon} {$this->value}</span>";
     }
 
     /**

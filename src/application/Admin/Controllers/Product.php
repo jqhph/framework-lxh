@@ -126,14 +126,14 @@ class Product extends Controller
 //            $image->value('https://img3.doubanio.com/view/photo/s_ratio_poster/public/p2511434383.jpg');
 //        });
 
-        $table->helper('stock', function (Helper $helper) {
-            $helper->content('test');
+        $table->helper('name', function (Helper $helper) {
+            $helper->content('test')->right();
         });
 
         /**
          * 使用field方法添加字段
          */
-        $table->expand('name', function (Expand $expand) {
+        $table->expand('price', function (Expand $expand) {
             $expand->ajax('/admin/product/action/test');
         })
             ->sortable();
@@ -165,7 +165,7 @@ class Product extends Controller
          * @param Td $td 表格列字段管理对象（Table > Tr > Th, Td）
          * @param Tr $tr Table > Tr
          */
-        $table->field('price')->display(function ($value, Td $td, Tr $tr) {
+        $table->field('stock')->display(function ($value, Td $td, Tr $tr) {
             // 获取当前行数据
 //            $row = $tr->row();
             $data = [
