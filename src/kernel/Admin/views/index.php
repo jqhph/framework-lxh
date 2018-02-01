@@ -86,7 +86,11 @@ echo admin_js('js/jquery.slimscroll.min');
             IFRAME.reload();
             return false;
         }
-    }
+    };
+    var open_tab = function (id, url, label) {TAB.switch(id, url, label)},
+    close_tab = function (id) {TAB.close(id)},
+    reload_tab = function (id, url, label) {TAB.reload(id, url, label)},
+    back_tab = function (step) {TAB.back(step)};
 </script>
 
 <!-- KNOB JS -->

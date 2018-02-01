@@ -15,9 +15,9 @@ class Helper extends Link
 
     public function render()
     {
-        if ($this->value === '' || $this->value === null) {
-            return '';
-        }
+//        if ($this->value === '' || $this->value === null) {
+//            return '';
+//        }
 
         // 设置js
         $this->script('helper', 'var _p=$(\'[data-toggle="popover"]\');_p.popover();_p.find("i").css("font-size","14px")');

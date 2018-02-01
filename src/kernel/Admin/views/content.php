@@ -34,11 +34,11 @@ echo render_view('admin::index.app-js');
 <script>
 (function (w) {
     w.TAB = w.top.TAB;
-    w.IFRAME = w.top.IFRAME;;
-    w.open_tab = function (id, url, label) {TAB.switch(id, url, label)};
-    w.close_tab = function (id) {TAB.close(id)};
-    w.reload_tab = function (id, url, label) {TAB.reload(id, url, label)};
-    w.back_tab = function (step) {TAB.back(step)};
+    w.IFRAME = w.top.IFRAME;
+    w.open_tab = parent.open_tab;
+    w.close_tab = parent.close_tab;
+    w.reload_tab = parent.reload_tab;
+    w.back_tab = parent.back_tab;
     w.loading = function (el, circle, timeout) {
         el = el || 'body';
         function loading() {

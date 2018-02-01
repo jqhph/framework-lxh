@@ -58,6 +58,8 @@ class Button extends Field
 
     /**
      * 添加图标
+     *
+     * @return $this
      */
     public function icon($icon)
     {

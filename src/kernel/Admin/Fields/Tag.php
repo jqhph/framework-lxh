@@ -70,10 +70,11 @@ class Tag extends Button
 
         $tags = '';
         $counter = 0;
+        $attributes = $this->formatAttributes();
         foreach ((array)$this->label() as &$value) {
             $this->setClass("$class ");
 
-            $tags .= "<span {$this->formatAttributes()}>{$icon} {$value}</span> ";
+            $tags .= "<span {$attributes}>{$icon} {$value}</span> ";
 
             $counter++;
         }
