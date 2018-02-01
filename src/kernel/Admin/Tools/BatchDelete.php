@@ -13,7 +13,7 @@ class BatchDelete implements Renderable
 
     public function label()
     {
-        return trans('Batch Remove');
+        return trans('Delete');
     }
 
     public function render()
