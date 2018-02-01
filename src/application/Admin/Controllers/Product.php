@@ -99,6 +99,21 @@ class Product extends Controller
         $form->currency('price');
     }
 
+    public function actionTest()
+    {
+//        sleep(1);
+        $table = new \Lxh\Admin\Widgets\Table([], [
+            ['name' => 'PHP version',       'value' => 'PHP/'.PHP_VERSION],
+            ['name' => 'Lxh-framework version',   'value' => 'dev'],
+            ['name' => 'CGI',               'value' => php_sapi_name()],
+            ['name' => 'Uname',             'value' => php_uname()],
+            ['name' => 'Server',            'value' => get_value($_SERVER, 'SERVER_SOFTWARE')],
+        ]);
+        return $this->success([
+            'content' => $table->render()
+        ]);
+    }
+
     /**
      * 自定义table
      *
@@ -119,15 +134,7 @@ class Product extends Controller
          * 使用field方法添加字段
          */
         $table->expand('name', function (Expand $expand) {
-            $table = new \Lxh\Admin\Widgets\Table([], [
-                ['name' => 'PHP version',       'value' => 'PHP/'.PHP_VERSION],
-                ['name' => 'Lxh-framework version',   'value' => 'dev'],
-                ['name' => 'CGI',               'value' => php_sapi_name()],
-                ['name' => 'Uname',             'value' => php_uname()],
-                ['name' => 'Server',            'value' => get_value($_SERVER, 'SERVER_SOFTWARE')],
-            ]);
-
-            $expand->content($table->render());
+            $expand->ajax('/admin/product/action/test');
         })
             ->sortable();
 

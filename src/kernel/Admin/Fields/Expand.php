@@ -15,6 +15,11 @@ class Expand extends Field
     protected $content;
 
     /**
+     * @var null
+     */
+    protected $ajax = null;
+
+    /**
      * @param $color
      * @return $this|mixed
      */
@@ -25,7 +30,8 @@ class Expand extends Field
 
     public function render()
     {
-        $this->script('expand', "$('.grid-expand').click(function(){var t = $(this), i=t.find('i');i.toggleClass('fa-caret-right');i.toggleClass('fa-caret-down')});");
+
+        $this->setupScript();
 
         $color = $this->option('color') ?: 'custom';
 
@@ -35,6 +41,55 @@ class Expand extends Field
         $this->tr->next("<div id=\"$id\" class=\"panel-collapse collapse out\">{$this->content}</div>");
 
         return "<a class=\"btn btn-xs btn-$color grid-expand\" data-toggle=\"collapse\" data-target=\"#$id\"><i class=\"fa fa-caret-right\"></i> {$this->label()}</a>";
+    }
+
+    protected function setupScript()
+    {
+        $script = '';
+        if ($this->ajax) {
+            $script = <<<EOF
+if (t.attr('ajax')) return; var \$c =$(t.data('target'));t.button('loading');
+$.getJSON('$this->ajax',function(d){
+t.attr('ajax',1);
+    if (d.content) 
+       \$c.html(d.content);
+    else 
+       \$c.html('{$this->noDataTip()}');
+setTimeout(function(){t.button('reset')},200)
+});
+EOF;
+        }
+        $this->script('expand', <<<SCRIPT
+$('.grid-expand').click(function(){
+var t=$(this),i=t.find('i');i.toggleClass('fa-caret-right');i.toggleClass('fa-caret-down');{$script}
+});        
+SCRIPT
+);
+    }
+
+    /**
+     * @return string
+     */
+    protected function noDataTip()
+    {
+        $tip = trans('No Data.');
+        return <<<EOF
+<table class="table"><tr><td><div style="margin:15px 0 0 25px;"><span class="help-block" style="margin-bottom:0"><i class="fa fa-info-circle"></i>&nbsp;{$tip}</span></div></td></tr></table>
+EOF;
+
+    }
+
+    /**
+     * 发送ajax请求获取内容
+     *
+     * @param $api
+     * @return $this
+     */
+    public function ajax($api)
+    {
+        $this->ajax = &$api;
+        $this->content = ' ';
+        return $this;
     }
 
     /**
