@@ -8,8 +8,6 @@ use Lxh\Helper\Util;
 
 class Image extends Field
 {
-    protected static $gridImgScript = null;
-
     /**
      * @var bool
      */
@@ -21,10 +19,8 @@ class Image extends Field
             return '';
         }
 
-        if (static::$gridImgScript === null && $this->useModal) {
-            static::$gridImgScript = 1;
-            $title = trans('Image');
-            Admin::script(<<<EOF
+        $title = trans('Image');
+        $this->script('gimg', <<<EOF
 $('.grid-img').click(function(){
    var t=$(this),s= /style=[\'\"]?([^\'\"]*)[\'\"]?/i, c = t.html().replace(s,''), u=t.find('img').attr('src'),
    m= \$lxh.ui().modal({id:t.attr('id'),title:'$title',confirmBtn:false,content:'<a href="'+ u +'" target="_blank">'+ c +'</a>'});
@@ -32,7 +28,7 @@ $('.grid-img').click(function(){
 });
 EOF
 );
-        }
+
 
         if (empty($this->attributes['style'])) {
             $this->style('max-width:150px');

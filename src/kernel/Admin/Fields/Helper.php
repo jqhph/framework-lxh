@@ -1,0 +1,83 @@
+<?php
+
+namespace Lxh\Admin\Fields;
+
+use Lxh\Admin\Admin;
+use Lxh\Contracts\Support\Renderable;
+use Lxh\Helper\Util;
+
+class Helper extends Link
+{
+    /**
+     * @var string
+     */
+    protected $icon = '<i class="fa fa-eye"></i>';
+
+    public function render()
+    {
+        if ($this->value === '' || $this->value === null) {
+            return '';
+        }
+
+        // 设置js
+        $this->script('helper', 'var _p=$(\'[data-toggle="popover"]\');_p.popover();_p.find("i").css("font-size","14px")');
+
+        $this->attribute('data-container', 'body');
+        $this->attribute('data-toggle', 'popover');
+
+        if (empty($this->attributes['placement'])) {
+            $this->attribute('data-placement', 'top');
+        }
+
+        $this->value = "<span {$this->formatAttributes()}>{$this->icon} {$this->value}</span>";
+
+        return parent::render();
+    }
+
+    /**
+     * @return $this
+     */
+    public function disableIcon()
+    {
+        $this->icon = '';
+        return $this;
+    }
+
+    /**
+     * @param $content
+     * @return $this
+     */
+    public function content($content)
+    {
+        return $this->attribute('data-content', $content);
+    }
+
+    /**
+     * @param $title
+     * @return $this
+     */
+    public function title($title)
+    {
+        return $this->attribute('title', $title);
+    }
+
+    public function top()
+    {
+        return $this->attribute('data-placement', 'top');
+    }
+
+    public function left()
+    {
+        return $this->attribute('data-placement', 'left');
+    }
+
+    public function right()
+    {
+        return $this->attribute('placement', 'right');
+    }
+
+    public function bottom()
+    {
+        return $this->attribute('placement', 'bottom');
+    }
+}

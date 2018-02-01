@@ -8,6 +8,7 @@
 namespace Lxh\Admin\Controllers;
 
 use Lxh\Admin\Fields\Expand;
+use Lxh\Admin\Fields\Helper;
 use Lxh\Admin\Fields\Image;
 use Lxh\Admin\Http\Controllers\Controller;
 use Lxh\Admin\Layout\Content;
@@ -109,6 +110,10 @@ class Product extends Controller
 //        $table->image('stock')->rendering(function (Image $image) {
 //            $image->value('https://img3.doubanio.com/view/photo/s_ratio_poster/public/p2511434383.jpg');
 //        });
+
+        $table->helper('stock')->rendering(function (Helper $helper) {
+            $helper->content('test');
+        });
 
         /**
          * 使用field方法添加字段

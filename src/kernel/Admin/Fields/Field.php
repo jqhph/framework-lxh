@@ -2,6 +2,7 @@
 
 namespace Lxh\Admin\Fields;
 
+use Lxh\Admin\Http\Controllers\Admin;
 use Lxh\Admin\Table\Tr;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Helper\Util;
@@ -11,6 +12,11 @@ use Lxh\Helper\Util;
  */
 class Field implements Renderable
 {
+    /**
+     * @var array
+     */
+    protected static $loadedScripts = [];
+
     /**
      * @var Tr
      */
@@ -91,6 +97,24 @@ class Field implements Renderable
     public function setTr(Tr $tr)
     {
         $this->tr = $tr;
+        return $this;
+    }
+
+    /**
+     * 设置js
+     *
+     * @param string $key
+     * @param string $script
+     * @return $this
+     */
+    public function script($key, $script)
+    {
+        if (empty(static::$loadedScripts[$key])) {
+            \Lxh\Admin\Admin::script($script);
+
+            static::$loadedScripts[$key] = 1;
+        }
+
         return $this;
     }
 

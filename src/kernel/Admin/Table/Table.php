@@ -6,6 +6,7 @@ use Lxh\Admin\Fields\Button;
 use Lxh\Admin\Fields\Code;
 use Lxh\Admin\Fields\Expand;
 use Lxh\Admin\Fields\Field;
+use Lxh\Admin\Fields\Helper;
 use Lxh\Admin\Fields\Image;
 use Lxh\Admin\Fields\Label;
 use Lxh\Admin\Fields\Link;
@@ -33,6 +34,7 @@ use Lxh\Support\Arr;
  * @method Table email($field);
  * @method Table image($field);
  * @method Table expand($field);
+ * @method Table helper($field);
  */
 class Table extends Widget
 {
@@ -48,6 +50,7 @@ class Table extends Widget
         'code' => Code::class,
         'image' => Image::class,
         'expand' => Expand::class,
+        'helper' => Helper::class,
         'checked' => 'checked',
         'email' => 'email',
     ];
@@ -560,7 +563,7 @@ class Table extends Widget
         if ($field = get_isset($options, 'sortable')) {
             $th->sortable($field);
         }
-    
+
         if (($desc = get_isset($options, 'desc')) !== null) {
             $th->desc($desc);
         }

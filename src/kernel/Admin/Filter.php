@@ -42,7 +42,7 @@ class Filter extends Widget implements Renderable
      *
      * @var string
      */
-    protected $modalWidth = '55%';
+    protected $modalWidth = '45%';
 
     /**
      * @var Grid

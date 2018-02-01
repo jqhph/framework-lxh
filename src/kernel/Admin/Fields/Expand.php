@@ -10,11 +10,6 @@ use Lxh\Helper\Util;
 class Expand extends Field
 {
     /**
-     * @var null
-     */
-    protected static $expandScript = null;
-
-    /**
      * @var string
      */
     protected $content;
@@ -30,13 +25,9 @@ class Expand extends Field
 
     public function render()
     {
+        $this->script('expand', "$('.grid-expand').click(function(){var t = $(this), i=t.find('i');i.toggleClass('fa-caret-right');i.toggleClass('fa-caret-down')});");
+
         $color = $this->option('color') ?: 'custom';
-
-        if (static::$expandScript === null) {
-            static::$expandScript = 1;
-            Admin::script("$('.grid-expand').click(function(){var t = $(this), i=t.find('i');i.toggleClass('fa-caret-right');i.toggleClass('fa-caret-down')});");
-
-        }
 
         $id = Util::randomString();
 
