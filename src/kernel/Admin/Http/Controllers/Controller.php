@@ -37,6 +37,13 @@ class Controller extends Base
     protected $grid = [];
 
     /**
+     * 网格宽度
+     *
+     * @var int
+     */
+    protected $gridWidth = 12;
+
+    /**
      * 是否使用过滤器
      *
      * @var bool|string
@@ -82,7 +89,7 @@ class Controller extends Base
         $this->beforeGridCreate($content);
 
         // 构建网格报表
-        $grid = $content->grid($this->grid);
+        $grid = $content->grid($this->grid, $this->gridWidth);
 
         $this->gridPermit($grid);
 
