@@ -48,11 +48,10 @@ class Expand extends Field
         $script = '';
         if ($this->ajax) {
             $script = <<<EOF
-if (t.attr('ajax')) return; var \$c =$(t.data('target'));t.button('loading');
-$.getJSON('$this->ajax',function(d){
-t.attr('ajax',1);
-    if (d.content) 
-       \$c.html(d.content);
+if (t.attr('ajax')) return; var \$c =$(t.data('target'));t.button('loading');t.attr('ajax',1);
+$.get('$this->ajax',function(d){
+    if (d) 
+       \$c.html(d);
     else 
        \$c.html('{$this->noDataTip()}');
 setTimeout(function(){t.button('reset')},200)

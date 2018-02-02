@@ -109,9 +109,8 @@ class Product extends Controller
             ['name' => 'Uname',             'value' => php_uname()],
             ['name' => 'Server',            'value' => get_value($_SERVER, 'SERVER_SOFTWARE')],
         ]);
-        return $this->success([
-            'content' => $table->render()
-        ]);
+        
+        return $table->render();
     }
 
     /**
