@@ -239,7 +239,13 @@ class Controller extends Base
             return $this->message('INVALID ARGUMENTS', false);
         }
         $name = I('name');
-        $value = apply_filters($this->getLowerCaseDashName() . '.update.field', I('value'), $name);
+        $value = I('value');
+
+        // 过滤
+        $this->updateFieldInputFilter($value, $name);
+
+        // 过滤
+        $value = apply_filters($this->getLowerCaseDashName() . '.update.field', $value, $name);
 
         if (empty($value)) {
             return $this->message('INVALID ARGUMENTS', false);
@@ -254,6 +260,14 @@ class Controller extends Base
             return $this->message('Update succeeded', true);
         }
         return $this->message('FIELED', false);
+    }
+
+    /**
+     * @param $value
+     * @param $name
+     */
+    protected function updateFieldInputFilter(&$value, $name)
+    {
     }
 
     /**
