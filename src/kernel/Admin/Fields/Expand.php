@@ -48,8 +48,9 @@ class Expand extends Field
         $script = '';
         if ($this->ajax) {
             $script = <<<EOF
-if (t.attr('ajax')) return; var \$c =$(t.data('target'));t.button('loading');t.attr('ajax',1);
+if (t.attr('ajax')) return; var \$c =$(t.data('target'));t.button('loading');t.attr('ajax',1);NProgress.start();
 $.get('$this->ajax',function(d){
+NProgress.done();
     if (d) 
        \$c.html(d);
     else 

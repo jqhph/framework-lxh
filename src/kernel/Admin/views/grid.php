@@ -23,12 +23,8 @@
         $('.grid-per-pager').change(change);
         function change() {
             <?php if ($pjax) { ?>
-            var $loading = loading($('#pjax-container').parent());
-            $.get($(this).val(), function (data) {
-                $('#pjax-container').html(data);
-                $(document).trigger('pjax:complete', {});
-                $loading.close()
-            });
+            NProgress.start();
+            $.get($(this).val(),function(d){$('#pjax-container').html(d);$(document).trigger('pjax:complete',{});NProgress.done()});
             <?php } else {
             echo 'window.location.href = $(this).val();';
         } ?>

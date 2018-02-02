@@ -499,7 +499,7 @@ window.Lxh = function (options) {
                     }
                     if (requesting) return;
                     requesting = 1;
-                    $loading = loading();
+                    NProgress.start();
                     $.getJSON(url, function (data) {
                         readyclick();
                         // 缓存数据到js对象，不用每次都去服务器取
@@ -510,7 +510,7 @@ window.Lxh = function (options) {
 
                 function readyclick() {
                     requesting = 0;
-                    $loading.close();
+                    NProgress.done();
                 }
 
                 return $container;
