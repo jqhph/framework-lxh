@@ -8,11 +8,6 @@ use Lxh\Helper\Util;
 
 class Helper extends Field
 {
-    /**
-     * @var string
-     */
-    protected $icon = '<i class="fa fa-eye"></i>';
-
     public function render()
     {
         if ($this->value === '' || $this->value === null) {
@@ -21,25 +16,35 @@ class Helper extends Field
         $this->class('tag-cloud tag-link');
 
         // 设置js
-        $this->script('helper', 'var _p=$(\'[data-toggle="popover"]\');_p.popover();_p.find("i").css("font-size","14px")');
+        $this->setupScript();
 
         $this->attribute('data-container', 'body');
         $this->attribute('data-toggle', 'popover');
-
         if (empty($this->attributes['placement'])) {
             $this->attribute('data-placement', 'top');
         }
+        return "<span {$this->formatAttributes()}>{$this->value}</span>";
+    }
 
-        return "<span {$this->formatAttributes()}>{$this->icon} {$this->value}</span>";
+    protected function setupScript()
+    {
+        $this->script('helper', 'var _p=$(\'[data-toggle="popover"]\');_p.popover();_p.find("i").css("font-size","14px");');
     }
 
     /**
      * @return $this
      */
-    public function disableIcon()
+    public function focus()
     {
-        $this->icon = '';
-        return $this;
+        return $this->attribute('data-trigger', 'focus');
+    }
+
+    /**
+     * @return $this
+     */
+    public function html()
+    {
+        return $this->attribute('data-html', 'true');
     }
 
     /**

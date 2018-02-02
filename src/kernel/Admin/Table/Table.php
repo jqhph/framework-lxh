@@ -4,6 +4,7 @@ namespace Lxh\Admin\Table;
 
 use Lxh\Admin\Fields\Button;
 use Lxh\Admin\Fields\Code;
+use Lxh\Admin\Fields\Editable;
 use Lxh\Admin\Fields\Expand;
 use Lxh\Admin\Fields\Field;
 use Lxh\Admin\Fields\Helper;
@@ -33,6 +34,7 @@ use Lxh\Support\Arr;
  * @method Table image($field, $closure = null);
  * @method Table expand($field, $closure = null);
  * @method Table helper($field, $closure = null);
+ * @method Table editable($field, $closure = null);
  * @method Table checked($field);
  * @method Table email($field);
  */
@@ -51,6 +53,7 @@ class Table extends Widget
         'image' => Image::class,
         'expand' => Expand::class,
         'helper' => Helper::class,
+        'editable' => Editable::class,
         'checked' => 'checked',
         'email' => 'email',
     ];

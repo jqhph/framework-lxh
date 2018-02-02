@@ -7,6 +7,7 @@
 
 namespace Lxh\Admin\Controllers;
 
+use Lxh\Admin\Fields\Editable;
 use Lxh\Admin\Fields\Expand;
 use Lxh\Admin\Fields\Helper;
 use Lxh\Admin\Fields\Image;
@@ -125,9 +126,13 @@ class Product extends Controller
 //            $image->value('https://img3.doubanio.com/view/photo/s_ratio_poster/public/p2511434383.jpg');
 //        });
 
-        $table->helper('name', function (Helper $helper) {
-            $helper->content('test')->right();
+        $table->editable('name', function (Editable $editable) {
+            
         });
+
+//        $table->helper('name', function (Helper $helper) {
+//            $helper->content('<div>test</div>')->right()->html(); //
+//        });
 
         /**
          * 使用field方法添加字段

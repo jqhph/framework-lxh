@@ -84,6 +84,17 @@ return [
             'id' => ':int@id'
         ]
     ],
+    [
+        'pattern' => '/admin/api/:lc@c/update/:int@id',
+        'method' => '*',
+        'params' => [
+            'module' => 'Admin',
+            'api' => true,
+            'controller' => ':lc@c',
+            'action' => 'Update',
+            'id' => ':int@id'
+        ]
+    ],
 
     // 删除接口
     [

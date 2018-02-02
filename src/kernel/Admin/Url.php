@@ -118,6 +118,15 @@ class Url
      * @param $id
      * @return string
      */
+    public function update($id)
+    {
+        return "/{$this->prefix}/$this->scope/update/$id";
+    }
+
+    /**
+     * @param $id
+     * @return string
+     */
     public function api($action, $id = null)
     {
         $id = $id ? "/$id" : '';
