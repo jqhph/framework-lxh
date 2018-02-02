@@ -30,9 +30,8 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
 </head>
-<script>
+<style>#nprogress{pointer-events:none}#nprogress .bar{background:#e74430;position:fixed;z-index:1031;top:53px;left:0;width:100%;height:2px}#nprogress .peg{display:block;position:absolute;right:0;width:100px;height:0;box-shadow:0 0 10px #29d,0 0 5px #29d;opacity:1;-webkit-transform:rotate(3deg) translate(0,-4px);-ms-transform:rotate(3deg) translate(0,-4px);transform:rotate(3deg) translate(0,-4px)}#nprogress .spinner{display:block;position:fixed;z-index:1031;top:68px;right:15px}#nprogress .spinner-icon{width:18px;height:18px;box-sizing:border-box;border:solid 2px transparent;border-top-color:#29d;border-left-color:#29d;border-radius:50%;-webkit-animation:nprogress-spinner .4s linear infinite;animation:nprogress-spinner .4s linear infinite}.nprogress-custom-parent{overflow:hidden;position:relative}.nprogress-custom-parent #nprogress .bar,.nprogress-custom-parent #nprogress .spinner{position:absolute}@-webkit-keyframes nprogress-spinner{0%{-webkit-transform:rotate(0)}100%{-webkit-transform:rotate(360deg)}}@keyframes nprogress-spinner{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}</style>
 
-</script>
 <body class="<?php echo ($collapse = config('admin.index.sitebar-collapse')) ? 'fixed-left-void' : ''?>" id="lxh-body">
 <div id="wrapper" class="<?php echo $collapse ? 'forced enlarged' : ''?>">
     <div id="lxh-app">
@@ -68,6 +67,7 @@
 //echo admin_js('fastclick');
 //echo admin_js('waves.min');
 echo admin_js('js/jquery.slimscroll.min');
+echo admin_js('plugins/nprogress/nprogress.min');
 ?>
 <script>
     var resizefunc = [];
@@ -91,6 +91,8 @@ echo admin_js('js/jquery.slimscroll.min');
     close_tab = function (id) {TAB.close(id)},
     reload_tab = function (id, url, label) {TAB.reload(id, url, label)},
     back_tab = function (step) {TAB.back(step)};
+    $(document).on('iframe.creating',function(){NProgress.start();});
+    $(document).on('iframe.created',function(){NProgress.done();});
 </script>
 
 <!-- KNOB JS -->

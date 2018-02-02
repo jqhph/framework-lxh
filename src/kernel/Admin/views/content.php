@@ -16,6 +16,7 @@
     jsLibArr = (parent.jsLibArr = []);
     cssLibArr = (parent.cssLibArr = []);
     array_unique = parent.array_unique;
+    NProgress = parent.NProgress;
 </script>
 <div class="container">
 <div class="content-wrapper">
@@ -62,13 +63,11 @@ echo render_view('admin::index.app-js');
         }
     }
 })(window);
-
 <?php
     echo $js;
     echo $css;
     echo $asyncJs;
-?>;
-__then__(function () {<?php echo $script?>});
+?>; __then__(function(){<?php echo $script?>});
 </script>
 <?php
 // 加载sea js，加载所有require_js和require_css加载的文件

@@ -938,6 +938,7 @@ __then__(function () {
     });
     var $loading, $current = TAB.currentEl();
     $(document).on('pjax:send', function(xhr) {
+        NProgress.start();
         $current = TAB.currentEl();
         if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
             var $submit_btn = $('form[pjax-container] :submit');
@@ -946,6 +947,7 @@ __then__(function () {
         $loading = loading($('#pjax-container').parent());
     });
     $(document).on('pjax:complete', function(xhr) {
+        NProgress.done();
         if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
             var $submit_btn = $('form[pjax-container] :submit');
             if($submit_btn) $submit_btn.button('reset');
