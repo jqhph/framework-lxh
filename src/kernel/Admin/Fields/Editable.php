@@ -8,14 +8,16 @@ use Lxh\Admin\Form\Field\Text;
 class Editable extends Field
 {
     /**
-     * @var mixed
-     */
-    protected static $loadedJs;
-
-    /**
      * @var array
      */
     protected $arguments = [];
+
+    /**
+     * Title of editable.
+     *
+     * @var string
+     */
+    protected $title = '';
 
     /**
      * Type of editable.
@@ -47,17 +49,12 @@ class Editable extends Field
     }
 
     /**
-     * Text type editable.
-     */
-    public function text()
-    {
-    }
-
-    /**
      * Textarea type editable.
      */
     public function textarea()
     {
+        $this->type = 'textarea';
+        return $this;
     }
 
     /**
@@ -69,14 +66,16 @@ class Editable extends Field
     {
         $source = [];
 
-        foreach ($options as $key => $value) {
+        $this->type = 'select';
+
+        foreach ($options as $key => &$value) {
             $source[] = [
                 'value' => $key,
                 'text'  => $value,
             ];
         }
 
-        $this->addOptions(['source' => $source]);
+        $this->addOptions(['source' => &$source]);
     }
 
     /**
@@ -127,6 +126,8 @@ class Editable extends Field
     public function combodate($format = 'YYYY-MM-DD')
     {
         $this->type = 'combodate';
+        // 加载momentjs
+        $this->js('moment', '@lxh/js/moment.min');
 
         $this->addOptions([
             'format'     => $format,
@@ -138,37 +139,68 @@ class Editable extends Field
         ]);
     }
 
-    protected function buildEditableOptions(array $arguments = [])
+    public function number()
     {
-        $this->type = get_value($arguments, 0, 'text');
+        $this->type = 'number';
+        return $this;
+    }
 
-        call_user_func_array([$this, $this->type], array_slice($arguments, 1));
+    public function email()
+    {
+        $this->type = 'email';
+        return $this;
+    }
+
+    public function checklist()
+    {
+        $this->type = 'checklist';
+        return $this;
+    }
+
+    public function url()
+    {
+        $this->type = 'url';
+        return $this;
+    }
+
+    /**
+     * @param $type
+     * @return $this
+     */
+    public function type($type)
+    {
+        $this->type = $type;
+        return $this;
+    }
+
+    /**
+     * @param $title
+     * @return $this
+     */
+    public function title($title)
+    {
+        $this->title = $title;
+        return $this;
     }
 
     public function render()
     {
-        if (!static::$loadedJs) {
-            static::$loadedJs = 1;
-            
-            Admin::js('@lxh/plugins/bootstrap-editable/js/bootstrap-editable.min');
-            Admin::css('@lxh/plugins/bootstrap-editable/css/bootstrap-editable');
-        }
-        
+        $this->js('editable', '@lxh/plugins/bootstrap-editable/js/bootstrap-editable.min');
+        $this->css('editable', '@lxh/plugins/bootstrap-editable/css/bootstrap-editable');
+
         $this->options['name'] = $column = $this->name;
 
         $class = 'grid-editable-'.str_replace(['.', '#', '[', ']'], '-', $column);
-
-        $this->buildEditableOptions(func_get_args());
 
         $options = json_encode($this->options);
 
         Admin::script("$('.$class').editable($options);");
 
-        $id = $this->tr->row(model()->getKeyName());
+        $id = $this->tr->row(Admin::id());
 
         $url = $this->url ?: Admin::url()->updateField($id);
 
-        $attributes = collect([
+        $attributes = [
 //            'href'       => '#',
             'class'      => "$class",
             'data-type'  => $this->type,
@@ -176,7 +208,12 @@ class Editable extends Field
             'data-value' => &$this->value,
             'data-pk' => $id,
             'data-placement' => 'right',
-        ])->map(function ($attribute, $name) {
+        ];
+        if ($this->title) {
+            $attributes['data-title'] = $this->title;
+        }
+
+        $attributes = collect($attributes)->map(function ($attribute, $name) {
             return "$name='$attribute'";
         })->implode(' ');
 

@@ -65,7 +65,7 @@ class Admin
      *
      * @var string
      */
-    protected static $idName = 'id';
+    protected static $idName = '';
 
     /**
      * @param $model
@@ -123,6 +123,9 @@ class Admin
     {
         if ($id) {
             static::$idName = $id;
+        }
+        if (empty(static::$idName)) {
+            static::$idName = model(static::model())->getKeyName();
         }
 
         return static::$idName;

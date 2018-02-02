@@ -127,7 +127,7 @@ class Product extends Controller
 //        });
 
         $table->editable('name', function (Editable $editable) {
-            
+            $editable->datetime();
         });
 
 //        $table->helper('name', function (Helper $helper) {

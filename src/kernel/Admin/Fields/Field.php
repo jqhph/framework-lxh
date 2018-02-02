@@ -18,6 +18,16 @@ class Field implements Renderable
     protected static $loadedScripts = [];
 
     /**
+     * @var array
+     */
+    protected static $loadedJs = [];
+
+    /**
+     * @var array
+     */
+    protected static $loadedCss = [];
+
+    /**
      * @var Tr
      */
     protected $tr;
@@ -113,6 +123,38 @@ class Field implements Renderable
             \Lxh\Admin\Admin::script($script);
 
             static::$loadedScripts[$key] = 1;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param $key
+     * @param $js
+     * @return $this
+     */
+    public function js($key, $js)
+    {
+        if (empty(static::$loadedJs[$key])) {
+            \Lxh\Admin\Admin::js($js);
+
+            static::$loadedJs[$key] = 1;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param $key
+     * @param $css
+     * @return $this
+     */
+    public function css($key, $css)
+    {
+        if (empty(static::$loadedCss[$key])) {
+            \Lxh\Admin\Admin::css($css);
+
+            static::$loadedCss[$key] = 1;
         }
 
         return $this;
