@@ -201,7 +201,8 @@ class Pages
 
     public function header()
     {
-        return "{$this->config['itemEle']}<span class='{$this->config['class']}'>{$this->config['totalText']} {$this->totalRows} / {$this->config['showingText']} {$this->listRows}</span>{$this->config['itemEleEnd']}";
+        //  / {$this->config['showingText']} {$this->listRows}
+        return "{$this->config['itemEle']}<span class='{$this->config['class']}'>{$this->config['totalText']} {$this->totalRows}</span>{$this->config['itemEleEnd']}";
     }
 
     public function pageinfo()
