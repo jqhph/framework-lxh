@@ -85,13 +85,13 @@ return [
         ]
     ],
     [
-        'pattern' => '/admin/api/:lc@c/update/:int@id',
-        'method' => '*',
+        'pattern' => '/admin/api/:lc@c/update-field/:int@id',
+        'method' => 'POST',
         'params' => [
             'module' => 'Admin',
             'api' => true,
             'controller' => ':lc@c',
-            'action' => 'Update',
+            'action' => 'UpdateField',
             'id' => ':int@id'
         ]
     ],

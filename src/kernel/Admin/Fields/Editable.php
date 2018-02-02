@@ -166,7 +166,7 @@ class Editable extends Field
 
         $id = $this->tr->row(model()->getKeyName());
 
-        $url = $this->url ?: Admin::url()->detail($id);
+        $url = $this->url ?: Admin::url()->updateField($id);
 
         $attributes = collect([
 //            'href'       => '#',

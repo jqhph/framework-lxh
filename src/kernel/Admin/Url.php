@@ -107,7 +107,7 @@ class Url
     /**
      * 生成读取视图详情url
      *
-     * @return $this
+     * @return string
      */
     public function detail($id)
     {
@@ -118,9 +118,9 @@ class Url
      * @param $id
      * @return string
      */
-    public function update($id)
+    public function updateField($id)
     {
-        return "/{$this->prefix}/$this->scope/update/$id";
+        return "/{$this->prefix}/api/$this->scope/update-field/$id";
     }
 
     /**

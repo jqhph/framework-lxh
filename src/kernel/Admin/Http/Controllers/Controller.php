@@ -223,6 +223,40 @@ class Controller extends Base
     }
 
     /**
+     * 修改单个字段
+     *
+     * @param array $params
+     * @return array
+     */
+    public function actionUpdateField(array $params)
+    {
+        // 判断是否有权限访问
+        if (! auth()->updateable()) {
+            throw new Forbidden();
+        }
+
+        if (empty($params['id'])) {
+            return $this->message('INVALID ARGUMENTS', false);
+        }
+        $name = I('name');
+        $value = apply_filters($this->getLowerCaseDashName() . '.update.field', I('value'), $name);
+
+        if (empty($value)) {
+            return $this->message('INVALID ARGUMENTS', false);
+        }
+
+        $model = $this->model();
+        $model->setId($params['id']);
+
+        $model->$name = $value;
+
+        if ($model->save()) {
+            return $this->message('Update succeeded', true);
+        }
+        return $this->message('FIELED', false);
+    }
+
+    /**
      * 新增界面
      *
      * @param Request $req
