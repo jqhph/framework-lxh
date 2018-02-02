@@ -99,6 +99,7 @@ echo admin_js('js/jquery.slimscroll.min');
 <![endif]-->
 
 <?php
+// <div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style="display: block;"><div class="toast-progress" style="width: 96.4454%;"></div><button type="button" class="toast-close-button" role="button">×</button><div class="toast-message">Login successful</div></div></div>
 echo admin_js('js/jquery.app.min');
 ?>
 </body>
