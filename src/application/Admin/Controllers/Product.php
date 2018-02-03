@@ -30,29 +30,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class Product extends Controller
 {
     /**
-     * 网格报表配置
-     *
-     * @var array
-     */
-    protected $grid = [
-        'id' => ['hide' => 1, 'sortable' => 1],
-        'name' => ['sortable' => 1],
-        'price' => ['sortable' => 1,],
-        'counter_price',
-        'share_price' => ['sortable' => 1,],
-        'level',
-        'stock',
-        'is_hot' => ['view' => 'checked'],
-        'is_new' => ['view' => 'checked'],
-        'calendar' => ['view' => 'checked'],
-        'order_num',
-        'desc' => ['show' => 0],
-        'category_id' => ['show' => 0],
-        'created_at' => ['view' => 'Date'],
-        'modified_at' => ['view' => 'Date'],
-    ];
-
-    /**
      * 开启过滤器
      *
      * @var bool
@@ -126,8 +103,22 @@ class Product extends Controller
 //            $image->value('https://img3.doubanio.com/view/photo/s_ratio_poster/public/p2511434383.jpg');
 //        });
 
-        $table->editable('name', function (Editable $editable) {
-            $editable->datetime();
+        $table->code('id')->hide()->sortable();
+
+        $table->editable('name', function (Editable $editable, Tr $tr) {
+            switch ($tr->line()) {
+                case 1:
+                    $editable->datetime();
+            }
+            
+        })->th(function (Th $th) {
+            // 设置标题颜色
+            $th->style('color:green;font-weight:600');
+            // 设置属性
+            $th->attribute('data-test', 123);
+
+            // 设置标题显示内容
+            $th->value('<span>NAME</span>');
         });
 
 //        $table->helper('name', function (Helper $helper) {
@@ -142,20 +133,7 @@ class Product extends Controller
         })
             ->sortable();
 
-        /**
-         * 自定义字段标题内容
-         *
-         * @param Th $th 标题对象
-         */
-        $table->text('name')->th(function (Th $th) {
-            // 设置标题颜色
-            $th->style('color:green;font-weight:600');
-            // 设置属性
-            $th->attribute('data-test', 123);
-
-            // 设置标题显示内容
-            $th->value('<span>NAME</span>');
-        });
+        $table->checked('is_new');
 
         // 字段显示内容自定义：直接设置内容
         // 如果一个字段调用了field自定义处理之后，初始配置的字段渲染方法将不再执行
@@ -182,6 +160,8 @@ class Product extends Controller
 
             return $value + 100;
         });
+
+        $table->date('created_at');
 
         /**
          * 追加额外的列到最前面

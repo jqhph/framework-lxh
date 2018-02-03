@@ -185,6 +185,8 @@ class Editable extends Field
 
     public function render()
     {
+        if (empty($this->type)) $this->type = 'text';
+
         $this->js('editable', '@lxh/plugins/bootstrap-editable/js/bootstrap-editable.min');
         $this->css('editable', '@lxh/plugins/bootstrap-editable/css/bootstrap-editable');
 
@@ -193,8 +195,8 @@ class Editable extends Field
         $class = 'grid-editable-'.str_replace(['.', '#', '[', ']'], '-', $column);
 
         $options = json_encode($this->options);
-
-        Admin::script("$('.$class').editable($options);");
+        // 同样的类型只初始化一次
+        $this->script('editable.' . $this->type, "$('.$class').editable($options);");
 
         $id = $this->tr->row(Admin::id());
 
@@ -202,7 +204,7 @@ class Editable extends Field
 
         $attributes = [
 //            'href'       => '#',
-            'class'      => "$class",
+            'class'      => $class,
             'data-type'  => $this->type,
             'data-url'   => &$url,
             'data-value' => &$this->value,

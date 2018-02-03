@@ -548,8 +548,8 @@ class Table extends Widget
             $th->hide();
         }
 
-        if ($field = get_isset($options, 'sortable')) {
-            $th->sortable($field);
+        if ($sortFeild = get_isset($options, 'sortable')) {
+            $th->sortable($sortFeild);
         }
 
         if (($desc = get_isset($options, 'desc')) !== null) {
