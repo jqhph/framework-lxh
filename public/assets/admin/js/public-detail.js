@@ -1,10 +1,9 @@
 define(['@lxh/js/validate.min'], function () {
     // 所有js加载完毕时间
-    __then__(detail);
+    $(document).on('app.completed', detail);
 
     function detail() {
         var v = $lxh.validator(window.formRules || [], submit);
-
         var model = $lxh.createModel();
         var notify = $lxh.ui().notify();
 

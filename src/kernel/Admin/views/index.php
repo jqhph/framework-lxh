@@ -16,8 +16,13 @@
 
     //    echo admin_css('components');
     echo admin_css('css/icon.min');
-    echo admin_css('css/core.min');
+    
+    echo admin_css('css/pages.min');
+
+    echo admin_css('css/responsive.min');
     echo admin_css('css/components.min');
+    echo admin_css('css/core.min');
+
 
     echo admin_js('js/util.min');
     echo admin_js('js/jquery.min');
@@ -52,9 +57,10 @@
 <script id="iframe-tpl" type="text/html">
     <div id="wrapper-{$name}" class="wrapper lxh-wrapper">
         <div class="content-page">
-            <div class="content"><iframe src="{$url}" scrolling="no"></iframe></div>
+            <div class="content"></div>
         </div>
     </div>
+<!--    <iframe src="{$url}" scrolling="no"></iframe>-->
 </script>
 
 <section class="content"><?php
@@ -100,8 +106,15 @@ echo admin_js('plugins/nprogress/nprogress.min');
 <![endif]-->
 
 <?php
+echo render_view('admin::index.app-js');
+
 // <div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style="display: block;"><div class="toast-progress" style="width: 96.4454%;"></div><button type="button" class="toast-close-button" role="button">×</button><div class="toast-message">Login successful</div></div></div>
 echo admin_js('js/jquery.app.min');
+
+// 加载sea js，加载所有require_js和require_css加载的文件
+echo admin_js('js/app.min');
+// js模板
+echo render_view('admin::javascript-tpl');
 ?>
 </body>
 </html>

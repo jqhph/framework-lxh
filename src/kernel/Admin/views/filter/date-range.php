@@ -10,4 +10,3 @@
         </div>
     </div>
 </div>
-<script>__then__(function () {$('.date-search-box input').datetimepicker({format: 'yyyy-mm-dd hh:ii:ss'})})</script>

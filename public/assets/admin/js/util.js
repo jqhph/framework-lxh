@@ -375,40 +375,32 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
             store[name] = true;
 
             var html = tpl.replace('{$name}', name).replace('{$url}', url);
+            if (url.indexOf('?') == -1) {
+                url +='?'
+            }
 
             // 隐藏所有iframe
             this.hide();
 
             $app.append(html);
 
-            var $iframe = this.container(name);
-            // 显示当前iframe
-            $iframe.show();
-            $iframe.attr('url', url);
-
-            $iframe.find('iframe').load(function (e) {
+            var $c = this.container(name);
+            $.get(url+'&_log', function(data) {
                 $(document).trigger('iframe.created');
-                this.height($(e.currentTarget));
-                $loading.close()
-            }.bind(this))
+                $c.find('.content').html(data);
+                $loading.close();
+                console.log('app.reload');
+                $(document).trigger('app.reload');
+            });
+
+            // // 显示当前iframe
+            $c.show();
+            // 保存链接用于刷新操作
+            $c.attr('url', url);
         };
 
         // 自动设置高度
         this.height = function ($iframe) {
-            if (! $iframe) $iframe = this.container(current).find('iframe');
-            if (typeof $iframe != 'object') $iframe = this.container($iframe).find('iframe');
-            if (typeof $iframe[0] == 'undefined') return;
-            var iframe = $iframe[0],
-                iframeWin = (iframe.contentWindow || iframe.contentDocument.parentWindow) || iframe,
-                height,
-                minHeight = 725;
-            if (iframeWin.document.body) {
-                height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight;
-                height = height > minHeight ? (height) : minHeight;
-                // $iframe.animate({height: height + 'px'});
-                $iframe.css('height', height + 'px');
-                $iframe.slideDown(350);
-            }
         };
 
         this.hide = function () {

@@ -123,7 +123,7 @@ class Switcher extends Field
 
         $this->script('Switching', <<<EOF
 (function(){
-var s=\$('[data-plugin="switchery"]'),r=0,list={},checked,_new,__;
+var s=\$('[data-switchery="1"]'),r=0,list={},checked,_new,__;
 function b(){
     s.each(function(k){
         __ = \$(this);
@@ -172,7 +172,7 @@ EOF
         $icd = $checked ? 'icd="1"' : '';
 
         return <<<EOF
-<input li='{$this->tr->line()}' name="{$this->name}" $icd $checked type="checkbox" data-plugin="switchery" {$this->formatAttributes()}/>
+<input li='{$this->tr->line()}' name="{$this->name}" $icd $checked type="checkbox" data-switchery="1" {$this->formatAttributes()}/>
 EOF;
     }
 

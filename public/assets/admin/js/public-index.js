@@ -85,19 +85,25 @@ define(['@lxh/css/sweet-alert.min.css', '@lxh/js/sweet-alert.min'], function () 
 
     };
 
-    // 绑定删除事件
-    $('a[data-action="delete-row"]').click(public.delete);
-    $('#batch-delete').click(public.batchDelete)
-    __then__(function () {
+
+    $(document).on('app.completed', function () {
+        var $deleteRow = $('a[data-action="delete-row"]'), $bd = $('#batch-delete');
+        // 重新绑定删除点击事件，为放置旧tab页内容重复绑定，需要先取消再绑定
+        $deleteRow.off('click');
+        $deleteRow.click(public.delete);
+        $bd.off('click');
+        $bd.click(public.batchDelete);
+
         // 行选择器点击事件
         var allInput = $('input[data-action="select-all"]');
 
         $(document).on('pjax:complete', function () {
             // 绑定删除事件
-            $('a[data-action="delete-row"]').click(public.delete);
+            $deleteRow.click(public.delete);
 
             allInput = $('input[data-action="select-all"]');
             // 反选点击事件
+            allInput.off('click');
             allInput.click(selectall);
             // 单行选中事件
             $('input[name="tb-row[]"]').click(selecone);

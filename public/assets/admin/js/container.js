@@ -14,7 +14,7 @@ window.Lxh = function (options) {
 
         function init() {
             // 配置文件管理
-            config = new Store(options.config || {});
+            config = new Store(options.settings || {});
 
             // 工具函数管理
             util = new Util();
@@ -38,9 +38,9 @@ window.Lxh = function (options) {
             env = new Env();
 
             function setup_ajax_modal() {
-                $('.ajax-modal').click(show_modal_btn);
-                $(document).on('pjax:complete', function(xhr) {$('.ajax-modal').click(show_modal_btn);});
-
+                var $am = $('.ajax-modal');
+                $am.click(show_modal_btn);
+                $(document).on('pjax:complete',function(xhr){$am.off('click');$am.click(show_modal_btn);});
 
                 // 点击查看角色列表按钮事件
                 function show_modal_btn(e) {
@@ -61,16 +61,8 @@ window.Lxh = function (options) {
                     })
                 }
             }
-            setup_ajax_modal();
+            $(document).on('app.completed', setup_ajax_modal);
         }
-
-        // 获取父窗口对象
-        this.parentDocument = function () {
-            if (typeof window.parent != 'undefined' && typeof window.parent.document != 'undefined') {
-                return window.parent.document
-            }
-            return document
-        };
 
         /**
          * 获取控制器名称
@@ -78,7 +70,7 @@ window.Lxh = function (options) {
          * @returns {null|*|Chart.Controller}
          */
         this.controllerName = function () {
-            return options.controller;
+            return options.controller || __CONTROLLER__;
         };
 
         /**
@@ -87,7 +79,7 @@ window.Lxh = function (options) {
          * @returns {string|handlers.module}
          */
         this.moduleName = function () {
-            return options.module
+            return options.module || __MODULE__;
         };
 
         /**
@@ -96,7 +88,7 @@ window.Lxh = function (options) {
          * @returns {*}
          */
         this.actionName = function () {
-            return options.action
+            return options.action || __ACTION__;
         };
 
         /**
@@ -452,11 +444,11 @@ window.Lxh = function (options) {
                 if (typeof modals[options.id] != 'undefined') {
                     return modals[options.id];
                 }
-                var blade = new Blade(options.tpl, options), pd = parent.document;
+                var blade = new Blade(options.tpl, options);
 
-                $('body',pd).append(blade.fetch());
-                $('.modal', pd).css('top', '53px');
-                var $container = $(id, pd),
+                $('body').append(blade.fetch());
+                $('.modal').css('top', '53px');
+                var $container = $(id),
                     requesting,
                     $loading,
                     self = this,

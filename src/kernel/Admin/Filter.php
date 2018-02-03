@@ -15,6 +15,7 @@ use Lxh\Admin\Widgets\Modal;
 use Lxh\Admin\Widgets\Widget;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Admin\Kernel\Url;
+use Lxh\Helper\Util;
 use Lxh\MVC\Model;
 
 /**
@@ -42,7 +43,7 @@ class Filter extends Widget implements Renderable
      *
      * @var string
      */
-    protected $modalWidth = '45%';
+    protected $modalWidth = '42%';
 
     /**
      * @var Grid
@@ -70,6 +71,11 @@ class Filter extends Widget implements Renderable
      * @var array
      */
     protected $conditions = [];
+
+    /**
+     * @var string
+     */
+    protected $modalId;
 
     protected static $availableFields = [
         'text' => Text::class,
@@ -128,7 +134,11 @@ class Filter extends Widget implements Renderable
      */
     public function getModalId()
     {
-        return 'filter-modal';
+        if (! $this->modalId) {
+            $this->modalId = Util::randomString(6);
+        }
+
+        return $this->modalId;
     }
 
     /**
@@ -183,7 +193,7 @@ class Filter extends Widget implements Renderable
         if (! $this->options['useBox'] && ! $this->options['useModal']) {
             return view($this->view, $this->vars())->render();
         }
-
+//ddd(htmlspecialchars($this->buildModal()));
         return $this->options['useModal'] ? $this->buildModal() : $this->buildBox();
     }
 
