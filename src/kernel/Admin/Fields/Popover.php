@@ -6,7 +6,7 @@ use Lxh\Admin\Admin;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Helper\Util;
 
-class Helper extends Field
+class Popover extends Field
 {
     public function render()
     {

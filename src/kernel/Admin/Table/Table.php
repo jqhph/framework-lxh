@@ -7,11 +7,10 @@ use Lxh\Admin\Fields\Code;
 use Lxh\Admin\Fields\Editable;
 use Lxh\Admin\Fields\Expand;
 use Lxh\Admin\Fields\Field;
-use Lxh\Admin\Fields\Helper;
 use Lxh\Admin\Fields\Image;
 use Lxh\Admin\Fields\Label;
 use Lxh\Admin\Fields\Link;
-use Lxh\Admin\Fields\Profile;
+use Lxh\Admin\Fields\Popover;
 use Lxh\Admin\Fields\Tag;
 use Lxh\Admin\Fields\Checkbox;
 use Lxh\Admin\Grid;
@@ -33,7 +32,7 @@ use Lxh\Support\Arr;
  * @method Table code($field, $closure = null);
  * @method Table image($field, $closure = null);
  * @method Table expand($field, $closure = null);
- * @method Table helper($field, $closure = null);
+ * @method Table popover($field, $closure = null);
  * @method Table editable($field, $closure = null);
  * @method Table checked($field);
  * @method Table email($field);
@@ -52,7 +51,7 @@ class Table extends Widget
         'code' => Code::class,
         'image' => Image::class,
         'expand' => Expand::class,
-        'helper' => Helper::class,
+        'popover' => Popover::class,
         'editable' => Editable::class,
         'checked' => 'checked',
         'email' => 'email',

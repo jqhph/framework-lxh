@@ -9,7 +9,7 @@ namespace Lxh\Admin\Controllers;
 
 use Lxh\Admin\Fields\Editable;
 use Lxh\Admin\Fields\Expand;
-use Lxh\Admin\Fields\Helper;
+use Lxh\Admin\Fields\Popover;
 use Lxh\Admin\Fields\Image;
 use Lxh\Admin\Http\Controllers\Controller;
 use Lxh\Admin\Layout\Content;
@@ -133,8 +133,8 @@ class Product extends Controller
             $th->value('<span>NAME</span>');
         });
 
-//        $table->helper('name', function (Helper $helper) {
-//            $helper->content('<div>test</div>')->right()->html(); //
+//        $table->popover('name', function (Popover $popover) {
+//            $popover->content('<div>test</div>')->right()->html(); //
 //        });
 
         /**
