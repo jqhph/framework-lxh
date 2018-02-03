@@ -4,7 +4,7 @@ namespace Lxh\Admin\Form\Field;
 
 use Lxh\Admin\Form;
 
-class Switching extends Form\Field
+class Switcher extends Form\Field
 {
     protected $view = 'admin::form.switch';
 
@@ -14,7 +14,7 @@ class Switching extends Form\Field
         $this->js('checked', '@lxh/plugins/switchery/switchery.min');
 
         $this->script('checked', <<<EOF
-        function swty(){\$('[data-plugin="switchery"]').each(function(){new Switchery($(this)[0],$(this).data())});} swty();
+function swty(){\$('[data-plugin="switchery"]').each(function(){new Switchery($(this)[0],$(this).data())})} swty();
 EOF
         );
         // 监听表单重置事件

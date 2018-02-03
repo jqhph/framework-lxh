@@ -88,6 +88,14 @@ class Field implements Renderable
     }
 
     /**
+     * @return mixed
+     */
+    protected function getModelId()
+    {
+        return $this->tr->row(\Lxh\Admin\Admin::id());
+    }
+
+    /**
      * @param $label
      * @return $this|string
      */

@@ -293,7 +293,7 @@ abstract class Controller
      *
      * @return array
      */
-    protected function success($msg = 'Success', array $options = [])
+    protected function success($msg = 'Succeeded', array $options = [])
     {
         return $this->message($msg, static::SUCCESS, $options);
     }

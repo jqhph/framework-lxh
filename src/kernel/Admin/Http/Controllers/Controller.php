@@ -247,7 +247,7 @@ class Controller extends Base
         // 过滤
         $value = apply_filters($this->getLowerCaseDashName() . '.update.field', $value, $name);
 
-        if (empty($value)) {
+        if (empty($name)) {
             return $this->message('INVALID ARGUMENTS', false);
         }
 

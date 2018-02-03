@@ -4,6 +4,7 @@ namespace Lxh\Admin\Fields;
 
 use Lxh\Admin\Admin;
 use Lxh\Admin\Form\Field\Text;
+use Lxh\Exceptions\InvalidArgumentException;
 
 class Editable extends Field
 {
@@ -42,6 +43,11 @@ class Editable extends Field
      * @var string
      */
     protected $url = '';
+
+    /**
+     * @var string
+     */
+    protected $placement = 'right';
 
     /**
      * Add options for editable.
@@ -209,6 +215,15 @@ class Editable extends Field
         return $this;
     }
 
+    /**
+     * @return $this
+     */
+    public function left()
+    {
+        $this->placement = 'left';
+        return $this;
+    }
+
     public function render()
     {
         if (empty($this->type)) $this->type = 'text';
@@ -225,18 +240,20 @@ class Editable extends Field
         // 同样的类型只初始化一次
         $this->script('editable.' . $this->type, "$('.$class').editable($options);");
 
-        $id = $this->tr->row(Admin::id());
+        if (!$id = $this->getModelId()) {
+            throw new InvalidArgumentException("Id not found!");
+        }
 
         $url = $this->url ?: Admin::url()->updateField($id);
 
         $attributes = [
 //            'href'       => '#',
-            'class'      => $class,
+            'class'      => &$class,
             'data-type'  => $this->type,
             'data-url'   => &$url,
             'data-value' => &$this->value,
             'data-pk' => $id,
-            'data-placement' => 'right',
+            'data-placement' => &$this->placement,
         ];
         if ($this->title) {
             $attributes['data-title'] = $this->title;

@@ -69,7 +69,7 @@ class Product extends Controller
 
     protected function form(Form $form, Content $content)
     {
-        $form->switching('stock');
+        $form->switch('stock');
 
         $form->divide();
         $form->decimal('test');
@@ -144,6 +144,8 @@ class Product extends Controller
             $expand->ajax('/admin/product/action/test');
         })
             ->sortable();
+
+        $table->switch('is_hot');
 
         $table->checked('is_new');
 

@@ -61,7 +61,6 @@ class Form
         'select'         => \Lxh\Admin\Form\Field\Select::class,
         'selectTree'     => \Lxh\Admin\Form\Field\SelectTree::class,
         'slider'         => \Lxh\Admin\Form\Field\Slider::class,
-        'switch'         => \Lxh\Admin\Form\Field\SwitchField::class,
         'text'           => \Lxh\Admin\Form\Field\Text::class,
         'textarea'       => \Lxh\Admin\Form\Field\Textarea::class,
         'time'           => \Lxh\Admin\Form\Field\Time::class,
@@ -75,6 +74,6 @@ class Form
         'multipleImage'  => \Lxh\Admin\Form\Field\MultipleImage::class,
         'captcha'        => \Lxh\Admin\Form\Field\Captcha::class,
         'tableCheckbox'          => \Lxh\Admin\Form\Field\TableCheckbox::class,
-        'switching'          => \Lxh\Admin\Form\Field\Switching::class,
+        'switch'          => \Lxh\Admin\Form\Field\Switcher::class,
     ];
 }
