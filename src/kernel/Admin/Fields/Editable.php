@@ -8,6 +8,11 @@ use Lxh\Admin\Form\Field\Text;
 class Editable extends Field
 {
     /**
+     * @var bool
+     */
+    protected static $setedOptions = false;
+
+    /**
      * @var array
      */
     protected $arguments = [];
@@ -62,20 +67,41 @@ class Editable extends Field
      *
      * @param array $options
      */
-    public function select($options = [])
+    public function select(array $options = [])
     {
         $source = [];
 
         $this->type = 'select';
 
-        foreach ($options as $key => &$value) {
-            $source[] = [
-                'value' => $key,
-                'text'  => $value,
+        if (static::$setedOptions === false) {
+            static::$setedOptions = true;
+            $this->addOptions(['source' => $this->formatOptions($options)]);
+        }
+    }
+
+    protected function formatOptions(array &$options)
+    {
+        $new = [];
+        foreach ($options as $k => &$v) {
+            if (is_array($v) && !empty($v['text'])) {
+                $new[] = $v;
+                continue;
+            }
+            $value = $v;
+            if (is_string($k)) {
+                $new[] = [
+                    'value' => $value,
+                    'text' => $k
+                ];
+                continue;
+            }
+            $new[] = [
+                'value' => $value,
+                'text' => trans_option($value, $this->name)
             ];
         }
 
-        $this->addOptions(['source' => &$source]);
+        return $new;
     }
 
     /**
@@ -192,9 +218,10 @@ class Editable extends Field
 
         $this->options['name'] = $column = $this->name;
 
-        $class = 'grid-editable-'.str_replace(['.', '#', '[', ']'], '-', $column);
+        $class = 'grid-edit-'.$this->type.str_replace(['.', '#', '[', ']'], '-', $column);
 
         $options = json_encode($this->options);
+
         // 同样的类型只初始化一次
         $this->script('editable.' . $this->type, "$('.$class').editable($options);");
 

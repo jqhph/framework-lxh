@@ -113,48 +113,48 @@ class Field implements Renderable
     /**
      * 设置js
      *
-     * @param string $key
+     * @param string $unique
      * @param string $script
      * @return $this
      */
-    public function script($key, $script)
+    public function script($unique, $script)
     {
-        if (empty(static::$loadedScripts[$key])) {
+        if (empty(static::$loadedScripts[$unique])) {
             \Lxh\Admin\Admin::script($script);
 
-            static::$loadedScripts[$key] = 1;
+            static::$loadedScripts[$unique] = 1;
         }
 
         return $this;
     }
 
     /**
-     * @param $key
+     * @param $unique
      * @param $js
      * @return $this
      */
-    public function js($key, $js)
+    public function js($unique, $js)
     {
-        if (empty(static::$loadedJs[$key])) {
+        if (empty(static::$loadedJs[$unique])) {
             \Lxh\Admin\Admin::js($js);
 
-            static::$loadedJs[$key] = 1;
+            static::$loadedJs[$unique] = 1;
         }
 
         return $this;
     }
 
     /**
-     * @param $key
+     * @param $unique
      * @param $css
      * @return $this
      */
-    public function css($key, $css)
+    public function css($unique, $css)
     {
-        if (empty(static::$loadedCss[$key])) {
+        if (empty(static::$loadedCss[$unique])) {
             \Lxh\Admin\Admin::css($css);
 
-            static::$loadedCss[$key] = 1;
+            static::$loadedCss[$unique] = 1;
         }
 
         return $this;

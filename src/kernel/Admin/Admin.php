@@ -201,8 +201,7 @@ class Admin
         }
 
         $script = '';
-        foreach (static::$css as &$css) {
-//            $script .= call_user_func_array('load_css', (array) $css);
+        foreach (array_unique(static::$css) as &$css) {
             $script .= "require_css('$css.css');";
         }
         return $script;
@@ -224,8 +223,7 @@ class Admin
         }
 
         $script = '';
-        foreach (static::$js as &$js) {
-//            $script .= call_user_func_array('load_js', (array) $js);
+        foreach (array_unique(static::$js) as &$js) {
             $script .= "require_js('$js');";
         }
         return $script;

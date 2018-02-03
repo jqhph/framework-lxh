@@ -109,8 +109,20 @@ class Product extends Controller
             switch ($tr->line()) {
                 case 1:
                     $editable->datetime();
+                    break;
+                case 2:
+                    $editable->url();
+                    break;
+                case 3:
+                    $editable->number();
+                    break;
+                case 4:
+                    $editable->email();
+                    break;
+                case 5:
+                    $editable->select([1, 2, 3]);
             }
-            
+
         })->th(function (Th $th) {
             // 设置标题颜色
             $th->style('color:green;font-weight:600');
