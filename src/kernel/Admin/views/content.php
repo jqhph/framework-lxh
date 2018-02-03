@@ -1,5 +1,6 @@
 <script>window.formRules = [];
-var __CONTROLLER__ = '<?php echo __CONTROLLER__?>', __ACTION__ = '<?php echo __ACTION__?>', __MODULE__ = '<?php echo __MODULE__;?>';</script>
+var SPAID = '<?php echo Lxh\Admin\Admin::SPAID();?>', __CONTROLLER__ = '<?php echo __CONTROLLER__?>',
+    __ACTION__ = '<?php echo __ACTION__?>', __MODULE__ = '<?php echo __MODULE__;?>';</script>
 <div class="container">
 <div class="content-wrapper">
 <?php if ($header || $description) {?>

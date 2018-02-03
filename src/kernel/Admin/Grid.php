@@ -156,11 +156,6 @@ class Grid implements Renderable
     protected $pjax = '_pjax';
 
     /**
-     * @var string
-     */
-    protected $pjaxContainer = '#pjax-container';
-
-    /**
      * current url
      *
      * @var \Lxh\Http\Url
@@ -188,7 +183,7 @@ class Grid implements Renderable
         $this->idName = Admin::id();
 
         $this->setupPerPage();
-        $this->url->query($this->pjax, $this->pjaxContainer);
+        $this->url->query($this->pjax, static::getPjaxContainerId());
     }
 
     /**
@@ -199,6 +194,14 @@ class Grid implements Renderable
     public function idName()
     {
         return $this->idName;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getPjaxContainerId()
+    {
+        return 'pjax-' . Admin::SPAID();
     }
 
     /**

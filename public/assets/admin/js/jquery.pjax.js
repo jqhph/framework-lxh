@@ -926,12 +926,12 @@
 
 })(jQuery);
 
-$(document).on('app.completed', function () {
-    var $d = $(document);
+__complete__(function () {
+    var $d = $(document), cid = '#' + PJAXID;
     $.pjax.defaults.timeout = 10000;
     $.pjax.defaults.maxCacheLength = 0;
-    $d.pjax('#pjax-container a:not(a[target="_blank"])', {container: '#pjax-container'});
-    $d.on('submit', 'form[pjax-container]', function(e) {$.pjax.submit(e, '#pjax-container')});
+    $d.pjax(cid + ' a:not(a[target="_blank"])', {container: cid});
+    $d.on('submit', 'form[pjax-container]', function(e) {$.pjax.submit(e, cid)});
     $d.on("pjax:popstate", function() {
         $d.one("pjax:end", function(e) {
             $(e.target).find("script[data-exec-on-popstate]").each(function() {

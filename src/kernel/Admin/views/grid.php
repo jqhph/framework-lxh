@@ -1,4 +1,4 @@
-<div id="pjax-container"><?php
+<div id="<?php echo ($pjid = Lxh\Admin\Grid::getPjaxContainerId());?>"><?php
     echo view('admin::grid-content', [
         'table' => &$table,
         'page' => &$page,
@@ -11,6 +11,7 @@
     ])->render();
 ?></div>
 <script>
+    var PJAXID = '<?php echo $pjid?>';
     <?php if ($useRWD) {?>
     require_css('@lxh/plugins/RWD-Table-Patterns/dist/css/rwd-table.min');
     require_js('@lxh/plugins/RWD-Table-Patterns/dist/js/rwd-table.min');
@@ -24,7 +25,7 @@
         function change() {
             <?php if ($pjax) { ?>
             NProgress.start();
-            $.get($(this).val(),function(d){$('#pjax-container').html(d);$(document).trigger('pjax:complete',{});NProgress.done()});
+            $.get($(this).val(),function(d){$('#<?php echo $pjid;?>').html(d);$(document).trigger('pjax:complete',{});NProgress.done()});
             <?php } else {
             echo 'window.location.href = $(this).val();';
         } ?>

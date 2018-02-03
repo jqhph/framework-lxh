@@ -569,7 +569,7 @@ window.Lxh = function (options) {
      * @returns {FormValidator}
      */
     function validator(options, call, selector) {
-        selector = selector || ('.' + window.$lxh.controllerName() + '-form');
+        selector = selector || ('.' + SPAID + '-form');
 
         $(selector).submit(function () {
             return false;

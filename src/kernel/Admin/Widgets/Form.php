@@ -4,6 +4,7 @@ namespace Lxh\Admin\Widgets;
 
 use Lxh\Admin\Admin;
 use Lxh\Admin\Form\Field;
+use Lxh\Admin\Grid;
 use Lxh\Contracts\Support\Arrayable;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Exceptions\InvalidArgumentException;
@@ -100,7 +101,7 @@ class Form implements Renderable
      */
     public function __construct($data = [])
     {
-        $this->name = __CONTROLLER__;
+        $this->name = Admin::SPAID();
 
         if ($data instanceof Arrayable) {
             $data = $data->toArray();
@@ -139,7 +140,7 @@ class Form implements Renderable
     public function find()
     {
         if (! $this->id) {
-            throw new InvalidArgumentException('缺少id');
+            throw new InvalidArgumentException('Miss id');
         }
 
         if (! $this->data) {
@@ -292,7 +293,7 @@ class Form implements Renderable
      */
     public function disablePjax()
     {
-        Arr::forget($this->attributes, 'pjax-container');
+        Arr::forget($this->attributes, Grid::getPjaxContainerId());
 
         return $this;
     }

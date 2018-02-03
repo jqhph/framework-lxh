@@ -5,6 +5,7 @@ namespace Lxh\Admin;
 use Closure;
 use Lxh\Admin\Layout\Content;
 use Lxh\Admin\Widgets\Navbar;
+use Lxh\Helper\Util;
 use Lxh\MVC\Model;
 use InvalidArgumentException;
 
@@ -13,6 +14,11 @@ use InvalidArgumentException;
  */
 class Admin
 {
+    /**
+     * @var string
+     */
+    protected static $uniqueWarpperId = '';
+
     /**
      * @var array
      */
@@ -96,6 +102,20 @@ class Admin
     public function form($model)
     {
         return new Form($this->getModel($model));
+    }
+
+
+    /**
+     * 获取单页应用id
+     *
+     * @return string
+     */
+    public static function SPAID()
+    {
+        if (!static::$uniqueWarpperId) {
+            static::$uniqueWarpperId = Util::randomString(7);
+        }
+        return static::$uniqueWarpperId;
     }
 
     /**
