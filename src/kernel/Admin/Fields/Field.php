@@ -2,6 +2,7 @@
 
 namespace Lxh\Admin\Fields;
 
+use Lxh\Admin\Grid;
 use Lxh\Admin\Http\Controllers\Admin;
 use Lxh\Admin\Table\Tr;
 use Lxh\Contracts\Support\Renderable;
@@ -143,7 +144,7 @@ class Field implements Renderable
      */
     public function js($unique, $js)
     {
-        if (empty(static::$loadedJs[$unique])) {
+        if (empty(static::$loadedJs[$unique]) && !Grid::isPjaxRequest()) {
             \Lxh\Admin\Admin::js($js);
 
             static::$loadedJs[$unique] = 1;
@@ -159,7 +160,7 @@ class Field implements Renderable
      */
     public function css($unique, $css)
     {
-        if (empty(static::$loadedCss[$unique])) {
+        if (empty(static::$loadedCss[$unique]) && !Grid::isPjaxRequest()) {
             \Lxh\Admin\Admin::css($css);
 
             static::$loadedCss[$unique] = 1;
