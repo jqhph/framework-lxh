@@ -1334,7 +1334,7 @@ console.log('request data', data);
             if (element.checked) {
                 return [element.name, element.value]
             }
-            return [element.name, '']
+            return [element.name,window.defaultUncheckedValue||0]
         }
 
         function input(element) {

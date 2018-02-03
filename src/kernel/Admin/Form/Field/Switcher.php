@@ -23,6 +23,17 @@ EOF
         $this->primary();
     }
 
+    /**
+     * 设置未选中的值，默认0
+     *
+     * @param $value
+     * @return $this
+     */
+    public function uncheckedValue($value)
+    {
+        return $this->script('unchecked', "window.defaultUncheckedValue='{$value}';");
+    }
+
     public function primary()
     {
         return $this->attribute('data-color', '#00b19d');
