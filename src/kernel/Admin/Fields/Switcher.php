@@ -127,7 +127,7 @@ var s=\$('[data-plugin="switchery"]'),r=0,list={},checked,_new,__;
 function b(){
     s.each(function(k){
         __ = \$(this);
-        if (__.attr('ichecked'))
+        if (__.attr('icd'))
             __.prop('checked',true);
         else
             __.prop('checked',false);
@@ -145,9 +145,9 @@ s.change(function(e) {
     $.post(u.replace('{id}',id), {name:'{$this->name}',value:val}, function (d) {
         r=0; NProgress.done(); all.removeClass('disabled');
         if (checked) 
-            t.attr('ichecked',1);
+            t.attr('icd',1);
         else 
-            t.removeAttr('ichecked');
+            t.removeAttr('icd');
         all.remove(); b();
             
         if (d.status)
@@ -169,9 +169,10 @@ EOF
         }
 
         $checked = $this->value ? 'checked' : '';
+        $icd = $checked ? 'icd="1"' : '';
 
         return <<<EOF
-<input li='{$this->tr->line()}' name="{$this->name}" ichecked="$checked" $checked type="checkbox" data-plugin="switchery" {$this->formatAttributes()}/>
+<input li='{$this->tr->line()}' name="{$this->name}" $icd $checked type="checkbox" data-plugin="switchery" {$this->formatAttributes()}/>
 EOF;
     }
 
