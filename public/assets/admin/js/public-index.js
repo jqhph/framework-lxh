@@ -138,7 +138,6 @@ define(['@lxh/css/sweet-alert.min.css', '@lxh/js/sweet-alert.min'], function () 
         function set_all_input(val) {
             listids = val;
             allInput.val(val);
-            console.log(444,val);
             $(document).trigger('grid.selected', val);
         }
         function selecone() {
