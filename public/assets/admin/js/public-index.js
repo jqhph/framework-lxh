@@ -114,11 +114,11 @@ define(['@lxh/css/sweet-alert.min.css', '@lxh/js/sweet-alert.min'], function () 
                 // 选中所有行，并把所有行的id存储到本按钮value中
                 inputs.prop('checked', true);
                 var ids = [], i, id;
-                for (i in inputs) {
-                    if (! (id = notinvalid(inputs[i]))) continue;
+                inputs.each(function(i, input) {
+                    if (! (id = notinvalid(input))) return;
                     ids.push(id);
-                    active($(inputs[i])); // 添加选中效果
-                }
+                    active($(input)); // 添加选中效果
+                });
                 set_all_input(ids.join(','));
 
             } else {
@@ -138,6 +138,7 @@ define(['@lxh/css/sweet-alert.min.css', '@lxh/js/sweet-alert.min'], function () 
         function set_all_input(val) {
             listids = val;
             allInput.val(val);
+            console.log(444,val);
             $(document).trigger('grid.selected', val);
         }
         function selecone() {
