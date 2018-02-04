@@ -67,7 +67,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         console.log('app.completed');
         lxhActions = [];
         $d.trigger('app.completed');
-        $d.trigger(SPAID +'.' + 'app.completed');
+        window.SPAID && $d.trigger(SPAID +'.' + 'app.completed');
     }
 
     /**

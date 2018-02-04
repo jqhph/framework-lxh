@@ -29,9 +29,11 @@
 // the options object.
 //
 // Returns the jQuery object
+    var selectors = {};
     function fnPjax(selector, container, options) {
+        if (typeof selectors[selector] != 'undefined') return;
+        selectors[selector] = 1;
         var context = this;
-        this.off('click.pjax');
         return this.on('click.pjax', selector, function(event) {
             var opts = $.extend({}, optionsFor(container, options))
             if (!opts.container)
@@ -925,40 +927,3 @@
     $.support.pjax ? enable() : disable()
 
 })(jQuery);
-
-__complete__(function () {
-    var $d = $(document), cid = '#' + PJAXID;
-    $.pjax.defaults.timeout = 10000;
-    $.pjax.defaults.maxCacheLength = 0;
-    $d.pjax(cid + ' a:not(a[target="_blank"])', {container: cid});
-    $d.on('submit', 'form[pjax-container]', function(e) {$.pjax.submit(e, cid)});
-    $d.on("pjax:popstate", function() {
-        $d.one("pjax:end", function(e) {
-            $(e.target).find("script[data-exec-on-popstate]").each(function() {
-                $.globalEval(this.text || this.textContent || this.innerHTML || '');
-            });
-        });
-    });
-    var $loading, $current = TAB.currentEl();
-    $d.on('pjax:send', function(xhr) {
-        NProgress.start();
-        $current = TAB.currentEl();
-        if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
-            var $submit_btn = $('form[pjax-container] :submit');
-            if($submit_btn) $submit_btn.button('loading');
-        }
-        $loading = loading($('#pjax-container').parent());
-    });
-    $d.on('pjax:complete', function(xhr) {
-        NProgress.done();
-        if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
-            var $submit_btn = $('form[pjax-container] :submit');
-            if($submit_btn) $submit_btn.button('reset');
-        }
-        $loading && $loading.close();
-        // 重新绑定点击事件
-        $('.grid-per-pager').change(change_pages);
-        // 重新计算iframe高度
-        IFRAME.height($current.iframe.find('iframe'));
-    })
-});

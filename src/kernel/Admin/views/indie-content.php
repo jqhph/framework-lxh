@@ -11,7 +11,10 @@
 </head>
 <body>
 <?php
-//echo admin_css('css/bootstrap.min');
+echo admin_css('css/bootstrap.min');
+echo admin_css('css/core.min');
+echo admin_css('css/pages.min');
+echo admin_css('css/components.min');
 echo admin_js('js/jquery.min');
 echo admin_js('js/util.min');
 ?>

@@ -96,7 +96,7 @@ class Pages
             'itemEleEnd' => '</li>',
             'class' => '',
             'currentClass' => 'active',
-            'pagekey' => 'page',
+            'pagekey' => '_p',
             'theme' => '%header%%pageinfo%%first%%upPage%%linkPage%%downPage%%end%'
         ];
     }
@@ -115,7 +115,7 @@ class Pages
         $this->listRows = $listRows;
         $this->totalPages = ceil($this->totalRows / $this->listRows);     //总页数
         $this->coolPages = ceil($this->totalPages / $this->rollPage);
-        $this->currentPage = !empty($_GET['page']) ? intval($_GET['page']) : 1;
+        $this->currentPage = !empty($_GET[$this->config['pagekey']]) ? intval($_GET[$this->config['pagekey']]) : 1;
 
         if ($this->currentPage > $this->totalPages) {
             $this->currentPage = $this->totalPages;
@@ -165,7 +165,7 @@ class Pages
         $parse = parse_url($url);
         if (isset($parse['query'])) {
             parse_str($parse['query'], $params);
-            unset($params[$p]);
+            unset($params[$p], $params['_pjax']);
             $url = $parse['path'] . '?' . http_build_query($params);
 
         }
