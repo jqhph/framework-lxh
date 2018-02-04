@@ -72,7 +72,6 @@
 //echo admin_js('fastclick');
 //echo admin_js('waves.min');
 echo admin_js('js/jquery.slimscroll.min');
-echo admin_js('plugins/nprogress/nprogress.min');
 ?>
 <script>
     var resizefunc = [];
