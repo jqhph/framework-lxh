@@ -390,8 +390,9 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         // 创建iframe弹窗
         this.create = function (name, url) {
             if (typeof store[name] != 'undefined') return true;
-            $(document).trigger('iframe.creating');
-            var $loading = w.loading($app), self = this;
+            $(document).trigger('app.creating');
+            var self = this;
+            NProgress.start();
             current = name;
             url = url || name;
 
@@ -409,9 +410,8 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 
             var $c = this.container(name);
             $.get(url+'&_log', function(data) {
-                $(document).trigger('iframe.created');
+                NProgress.done();
                 $c.find('.content').html(data);
-                $loading.close();
                 $c.attr('SPAID', SPAID);
                 console.log('app.created', SPAID);
                 if (current != name) {

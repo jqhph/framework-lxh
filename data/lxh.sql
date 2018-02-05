@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2018-01-12 20:51:50
+Date: 2018-02-05 20:33:50
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -45,7 +45,7 @@ INSERT INTO `abilities` VALUES ('6', 'menu.add', '菜单新增', '1515207911', '
 INSERT INTO `abilities` VALUES ('7', 'menu.edit', '菜单编辑', '1515207928', '0', '1', '0', '1', '');
 INSERT INTO `abilities` VALUES ('8', 'menu.delete', '菜单删除', '1515207953', '0', '1', '0', '1', '');
 INSERT INTO `abilities` VALUES ('9', 'system.manager', '系统管理', '1515213159', '1515760393', '1', '0', '1', '系统设置菜单进入权限');
-INSERT INTO `abilities` VALUES ('17', 'admin.read', '管理员查看', '1515230219', '1515758593', '0', '0', '1', '');
+INSERT INTO `abilities` VALUES ('17', 'admin.read', '管理员查看', '1515230219', '1517649417', '0', '0', '1', '测试');
 INSERT INTO `abilities` VALUES ('30', 'language.read', '语言包查看', '1515760352', '1515760370', '1', '0', '1', '');
 INSERT INTO `abilities` VALUES ('23', 'user.manager', '用户管理', '1515758278', '1515758633', '1', '0', '1', '');
 INSERT INTO `abilities` VALUES ('24', 'product.manager', '产品系统', '1515758654', '1515758671', '1', '0', '1', '');
@@ -78,15 +78,17 @@ CREATE TABLE `admin` (
   `reg_ip` char(15) NOT NULL DEFAULT '',
   `is_admin` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1激活，0禁用',
+  `created_by_id` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of admin
 -- ----------------------------
-INSERT INTO `admin` VALUES ('1', 'admin', '$2y$10$IK.HGNDMOV9LYHIG7jMxb.0iEV85SSkf6Lv8GN9aaAuAIFbsVnaSS', '841324345@qq.com', '', 'J', 'qh', '', '1', '0', '1499568986', '1515587793', '127.0.0.1', '0', '127.0.0.1', '1', '1');
-INSERT INTO `admin` VALUES ('2', 'haha', '$2y$10$kKdgtSsVsZrP4X2RzsHhVuUmqdgJhSmp2AmA/iKp00XeYkpgnpP5q', '', '', '', '', '', '0', '0', '0', '1515760484', '', '0', '', '0', '1');
+INSERT INTO `admin` VALUES ('1', 'admin', '$2y$10$IK.HGNDMOV9LYHIG7jMxb.0iEV85SSkf6Lv8GN9aaAuAIFbsVnaSS', '841324345@qq.com', '', 'J', 'qh', '', '1', '0', '1499568986', '1515761930', '127.0.0.1', '0', '127.0.0.1', '1', '1', '0');
+INSERT INTO `admin` VALUES ('2', 'haha', '$2y$10$kKdgtSsVsZrP4X2RzsHhVuUmqdgJhSmp2AmA/iKp00XeYkpgnpP5q', '', '', '', '', '', '0', '0', '0', '1515761954', '', '0', '', '0', '1', '0');
+INSERT INTO `admin` VALUES ('3', 'test', '$2y$10$anUpfaFdxve9b9mzmkCdfOEgoDpEss1glWk6.T5M2JnMnMh/3XvOO', '87@qq.com', '1333', '', '', '', '1', '0', '1517654504', '1517654518', '', '0', '', '0', '1', '1');
 
 -- ----------------------------
 -- Table structure for assigned_abilities
@@ -130,9 +132,8 @@ CREATE TABLE `assigned_roles` (
 -- ----------------------------
 -- Records of assigned_roles
 -- ----------------------------
-INSERT INTO `assigned_roles` VALUES ('33', '1', '1');
 INSERT INTO `assigned_roles` VALUES ('33', '2', '1');
-INSERT INTO `assigned_roles` VALUES ('36', '1', '1');
+INSERT INTO `assigned_roles` VALUES ('33', '3', '1');
 
 -- ----------------------------
 -- Table structure for category
@@ -199,7 +200,7 @@ CREATE TABLE `menu` (
   `priority` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '排序权重值，值越小排序越靠前',
   `ability_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '权限id',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of menu
@@ -207,6 +208,7 @@ CREATE TABLE `menu` (
 INSERT INTO `menu` VALUES ('1', 'Menu management', 'zmdi zmdi-menu', '1', '13', '1', 'Menu', 'List', '0', '1500180853', '1', '2', '0', '5');
 INSERT INTO `menu` VALUES ('13', 'System', 'fa fa-gears', '1', '0', '1', '', '', '0', '1500466810', '1', '1', '2', '9');
 INSERT INTO `menu` VALUES ('14', 'Making modules', 'zmdi zmdi-widgets', '1', '13', '1', 'System', 'MakeModules', '0', '1500467096', '1', '1', '0', '29');
+INSERT INTO `menu` VALUES ('45', 'Posts Manager', 'fa fa-file-text', '1', '0', '1', 'Post', '', '0', '1517833547', '1', '1', '0', '0');
 INSERT INTO `menu` VALUES ('16', 'Language Management', '', '1', '13', '1', 'Language', 'List', '0', '1500644030', '1', '1', '3', '30');
 INSERT INTO `menu` VALUES ('17', 'Setting', '', '1', '13', '1', 'System', 'Setting', '0', '1501244109', '1', '1', '4', '31');
 INSERT INTO `menu` VALUES ('18', 'Permissions', 'fa fa-pencil fa-fw', '1', '0', '1', '', '', '0', '1501583290', '1', '1', '1', '26');
@@ -216,6 +218,7 @@ INSERT INTO `menu` VALUES ('43', 'User Manager', 'fa fa-users', '1', '0', '1', '
 INSERT INTO `menu` VALUES ('44', 'Admin', '', '1', '43', '1', 'Admin', 'List', '0', '1515230219', '1', '1', '0', '17');
 INSERT INTO `menu` VALUES ('35', 'Products', '', '1', '34', '1', 'Product', 'List', '0', '1508157865', '1', '1', '0', '25');
 INSERT INTO `menu` VALUES ('37', 'Abilities', '', '1', '18', '1', 'Ability', 'List', '0', '1515206612', '1', '1', '1', '28');
+INSERT INTO `menu` VALUES ('46', 'Posts', '', '1', '45', '1', 'Post', 'List', '0', '1517833575', '1', '1', '0', '0');
 
 -- ----------------------------
 -- Table structure for order
@@ -260,6 +263,30 @@ CREATE TABLE `order_product` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for post
+-- ----------------------------
+DROP TABLE IF EXISTS `post`;
+CREATE TABLE `post` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(100) NOT NULL,
+  `content` varchar(255) NOT NULL,
+  `author` varchar(100) NOT NULL,
+  `author_created_at` int(11) unsigned NOT NULL,
+  `type` tinyint(2) unsigned NOT NULL,
+  `status` tinyint(2) unsigned NOT NULL,
+  `created_at` int(11) NOT NULL,
+  `modified_at` int(11) NOT NULL,
+  `created_by_id` int(11) NOT NULL,
+  `comment_count` int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `title` (`title`) USING BTREE
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of post
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for product
 -- ----------------------------
 DROP TABLE IF EXISTS `product`;
@@ -287,7 +314,7 @@ CREATE TABLE `product` (
   `category_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '产品分类id',
   `deleted` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of product
@@ -305,32 +332,28 @@ INSERT INTO `product` VALUES ('10', 'test5', '0', '0', '0', '0', '0', '0', '0', 
 INSERT INTO `product` VALUES ('13', '测试1', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
 INSERT INTO `product` VALUES ('14', 'test2', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
 INSERT INTO `product` VALUES ('15', 'test3', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
-INSERT INTO `product` VALUES ('16', 'test4', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
+INSERT INTO `product` VALUES ('16', 'test4', '0', '0', '0', '1', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
 INSERT INTO `product` VALUES ('17', 'test5', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
-INSERT INTO `product` VALUES ('18', '测试1', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
-INSERT INTO `product` VALUES ('19', 'test2', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
-INSERT INTO `product` VALUES ('20', 'test3', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
-INSERT INTO `product` VALUES ('21', 'test4', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
-INSERT INTO `product` VALUES ('22', 'test5', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
-INSERT INTO `product` VALUES ('28', '测试1', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
-INSERT INTO `product` VALUES ('29', 'test2', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
+INSERT INTO `product` VALUES ('18', '测试1', '0', '0', '0', '1', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
+INSERT INTO `product` VALUES ('19', 'test2', '0', '0', '0', '1', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
+INSERT INTO `product` VALUES ('20', 'test3', '0', '0', '0', '1', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
+INSERT INTO `product` VALUES ('21', 'test478', '0', '0', '0', '1', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
+INSERT INTO `product` VALUES ('22', 'test5', '0', '0', '0', '1', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
+INSERT INTO `product` VALUES ('28', '测试1', '0', '0', '0', '1', '1', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
+INSERT INTO `product` VALUES ('29', 'test2', '0', '0', '0', '1', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
 INSERT INTO `product` VALUES ('30', 'test3', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
-INSERT INTO `product` VALUES ('31', 'test4', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
+INSERT INTO `product` VALUES ('31', 'test4', '0', '0', '0', '1', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
 INSERT INTO `product` VALUES ('32', 'test5', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
-INSERT INTO `product` VALUES ('33', '测试1', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
-INSERT INTO `product` VALUES ('34', 'test2', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
-INSERT INTO `product` VALUES ('35', 'test3', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
-INSERT INTO `product` VALUES ('36', 'test4', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
-INSERT INTO `product` VALUES ('37', 'test5', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
-INSERT INTO `product` VALUES ('38', '测试1', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
-INSERT INTO `product` VALUES ('39', 'test2', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
-INSERT INTO `product` VALUES ('40', 'test3', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
-INSERT INTO `product` VALUES ('41', 'test4', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
-INSERT INTO `product` VALUES ('42', 'test5', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
-INSERT INTO `product` VALUES ('43', '测试1', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
-INSERT INTO `product` VALUES ('44', 'test2', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
-INSERT INTO `product` VALUES ('45', 'test3', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
-INSERT INTO `product` VALUES ('46', 'test4', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
+INSERT INTO `product` VALUES ('33', '测试1', '0', '0', '0', '1', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
+INSERT INTO `product` VALUES ('34', 'test2', '0', '0', '0', '1', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
+INSERT INTO `product` VALUES ('36', 'test4', '0', '0', '0', '1', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
+INSERT INTO `product` VALUES ('37', 'test5', '0', '0', '0', '1', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
+INSERT INTO `product` VALUES ('38', '测试', '0', '0', '0', '0', '1', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
+INSERT INTO `product` VALUES ('40', '1', '0', '0', '0', '1', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
+INSERT INTO `product` VALUES ('41', 'test4@qq.com', '0', '0', '0', '1', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
+INSERT INTO `product` VALUES ('42', '787', '0', '0', '0', '0', '1', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
+INSERT INTO `product` VALUES ('43', 'https://baidu.com', '0', '0', '0', '0', '1', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
+INSERT INTO `product` VALUES ('44', '2028-07-05 05:25:08', '0', '0', '0', '1', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
 
 -- ----------------------------
 -- Table structure for role

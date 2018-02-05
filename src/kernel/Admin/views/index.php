@@ -95,8 +95,6 @@ echo admin_js('js/jquery.slimscroll.min');
     close_tab = function (id) {TAB.close(id)},
     reload_tab = function (id, url, label) {TAB.reload(id, url, label)},
     back_tab = function (step) {TAB.back(step)};
-    $(document).on('iframe.creating',function(){NProgress.start();});
-    $(document).on('iframe.created',function(){NProgress.done();});
 </script>
 
 <!-- KNOB JS -->

@@ -1292,7 +1292,7 @@ console.log('request data', data);
          * @returns {string}
          */
         function get_form_selector () {
-            return store.formSelector || (store.formSelector = '.' + store.name + '-form')
+            return store.formSelector || (store.formSelector = '.' + SPAID + '-form')
         }
     }
     // --------------------------------------Model END-----------------------------------------------
