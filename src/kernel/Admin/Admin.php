@@ -113,7 +113,7 @@ class Admin
     public static function SPAID()
     {
         if (!static::$uniqueWarpperId) {
-            static::$uniqueWarpperId = Util::randomString(7);
+            static::$uniqueWarpperId = 's' . Util::randomString(7);
         }
         return static::$uniqueWarpperId;
     }

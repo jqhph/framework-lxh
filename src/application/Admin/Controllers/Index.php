@@ -28,7 +28,7 @@ class Index extends Controller
     public function actionIndex()
     {
         // 关闭输出控制台调试信息
-        $this->withConsoleOutput(false);
+//        $this->withConsoleOutput(false);
 
         $index = $this->admin()->index();
 

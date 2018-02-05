@@ -217,6 +217,16 @@ class Field implements Renderable
     }
 
     /**
+     * 获取单页容器id选择器
+     *
+     * @return string
+     */
+    protected function getSpaContainerSelector()
+    {
+        return '#' . Admin::SPAID();
+    }
+
+    /**
      * @return $this
      */
     public function disabled()
