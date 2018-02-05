@@ -44,7 +44,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 
         });
 
-        $d.on('app.reload', function () {
+        $d.on('app.created', function () {
             // 加载css
             seajs.use(get_used_css([], cssversion));
             seajs.use(get_used_js([], jsversion), function () {

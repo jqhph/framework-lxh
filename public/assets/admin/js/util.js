@@ -344,19 +344,24 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         var tpl = $('#iframe-tpl').html(),
             store = {},
             $app = $('#lxh-app'),
-            current;
+            current,
+            spaid;
 
         // 切换显示iframe
         this.switch = function (name, url) {
             this.hide();
-            var $iframe = this.container(name);
+            var $c = this.container(name);
 
-            if ($iframe.length < 1) {
+            if ($c.length < 1) {
                 return this.create(name, url)
             }
 
             // 显示当前iframe
-            $iframe.show();
+            $c.show();
+            if (spaid = $c.attr('SPAID')) {
+                SPAID = spaid;
+            }
+            // console.log('switch tab', SPAID);
             current = name
         };
 
@@ -407,8 +412,9 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
                 $(document).trigger('iframe.created');
                 $c.find('.content').html(data);
                 $loading.close();
-                console.log('app.reload');
-                $(document).trigger('app.reload');
+                $c.attr('SPAID', SPAID);
+                console.log('app.created', SPAID);
+                $(document).trigger('app.created');
             });
 
             // // 显示当前iframe
@@ -418,7 +424,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         };
 
         // 自动设置高度
-        this.height = function ($iframe) {
+        this.height = function ($c) {
         };
 
         this.hide = function () {
