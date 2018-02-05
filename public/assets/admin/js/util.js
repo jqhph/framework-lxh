@@ -391,7 +391,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         this.create = function (name, url) {
             if (typeof store[name] != 'undefined') return true;
             $(document).trigger('iframe.creating');
-            var $loading = w.loading($app);
+            var $loading = w.loading($app), self = this;
             current = name;
             url = url || name;
 
@@ -414,6 +414,10 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
                 $loading.close();
                 $c.attr('SPAID', SPAID);
                 console.log('app.created', SPAID);
+                if (current != name) {
+                    // 如果当tab页非此页，则需切换SPAID的值到当前打开的tab页
+                    SPAID = self.container(current).attr('SPAID');
+                }
                 $(document).trigger('app.created');
             });
 
