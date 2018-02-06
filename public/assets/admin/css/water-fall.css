@@ -4,28 +4,32 @@
     margin: 0;
     padding: 0;
 }
-.wtf-wrapper  .tiles li.inactive {
+.wtf-wrapper li.inactive {
     visibility: hidden;
     opacity: 0;
 }
-.wtf-wrapper .tiles li p {
-    color: #666;
-    font-size: 12px;
-    margin: 7px 0 0 7px;
+.wtf-wrapper li.item-card .content{
+    margin: 7px 7px 0;
 }
+.wtf-wrapper .content .row{margin:2px 0 0;}
+.item-card strong {
+    border-bottom: 1px solid #ccc;
+    margin: 8px 7px;color:#444;
+    display: block;
+    padding: 0 0 5px;
+    font-size: 15px;
+}
+.item-card .meta {color: #666;text-align: right;font-style: italic;margin:2px 0 0;}
+.item-card .img{padding:4px}
 
-.wtf-wrapper .tiles li {
+.wtf-wrapper li.item-card {
     width: 200px;
     float: left;
     background-color: #ffffff;
-    border:0px solid #f9f9f9;
-    border-radius: 2px;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-
-    box-shadow: 0 1px 3px rgba(34,25,25,0.4);
-    -moz-box-shadow: 0 1px 2px 1px rgba(34,25,25,0.4);
-    -webkit-box-shadow: 0 1px 2px 1px rgba(34,25,25,0.4);
+    font-size:13px;
+    box-shadow: 0 1px 3px rgba(34,25,25,0.3);
+    -moz-box-shadow: 0 1px 3px 1px rgba(34,25,25,0.3);
+    -webkit-box-shadow: 0 1px 3px 1px rgba(34,25,25,0.3);
 
     cursor: pointer;
     padding: 4px;
@@ -37,7 +41,7 @@
     -o-transition: top 0.5s ease, left 0.5s ease;
     -ms-transition: top 0.5s ease, left 0.5s ease;
 }
-.tiles img {
+.wtf-wrapper .tiles img {
     display: block;height: auto;width:100%;
 }
 .wookmark-placeholder {

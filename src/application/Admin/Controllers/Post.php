@@ -37,7 +37,13 @@ class Post extends Controller
             $wf = new WaterFall();
 
             foreach (range(1, 10) as $i) {
-                $wf->card("<div style='padding:4px'><img src='/test/image_{$i}.jpg'/></div> <p>test</p>");
+                $wf->card(function (WaterFall\Card $card) use ($i) {
+                    $card->image("<img src='/test/image_{$i}.jpg'/>")
+                        ->title('标题')
+                        ->row('行内容')
+                        ->row('左', '右')
+                        ->meta('LXH');
+                });
             }
 
             $box = new Box();

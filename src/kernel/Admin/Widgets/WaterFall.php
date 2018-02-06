@@ -16,14 +16,14 @@ class WaterFall extends Widget implements Renderable
     /**
      * @var array
      */
-    protected $cards = [];
+    protected $items = [];
 
     /**
      * @var array
      */
     protected $options = [
         'itemWidth' => 200,
-        'offset' => 10,
+        'offset' => 12,
         'align' => 'center',
         'autoResize' => true,
         'fillEmptySpace' => false,
@@ -63,34 +63,46 @@ class WaterFall extends Widget implements Renderable
     }
 
     /**
+     *
      * @param mixed $content
      * @param array $filterClasses
-     */
-    public function card($content, array $filterClasses = [])
-    {
-        if (is_callable($content)) {
-            $card['content'] = call_user_func($content, $this);
-        } else {
-            $card['content'] = &$content;
-        }
-        $card['filters'] = &$filterClasses;
-
-        $this->cards[] = &$card;
-
-        return $this;
-    }
-
-    /**
-     * @param array $cards
      * @return $this
      */
-    public function setCards(array $cards)
+    public function card($content)
     {
-        $this->cards = &$cards;
+        $card = new Card();
+        if (is_callable($content)) {
+            $content($card, $this);
+        } else {
+            $card->row($content);
+        }
+
+        return $this->item(
+            $card->render(), $card->filters()
+        );
+    }
+
+    /**
+     *
+     * @param mixed $content
+     * @param array $filterClasses
+     * @return $this
+     */
+    public function item($content, array $filterClasses = [])
+    {
+        if (is_callable($content)) {
+            $item['content'] = call_user_func($content, $this);
+        } else {
+            $item['content'] = &$content;
+        }
+        $item['filters'] = &$filterClasses;
+
+        $this->items[] = &$item;
         return $this;
     }
 
     /**
+     * 设置间距
      *
      * @param $offset
      * @return $this
@@ -105,7 +117,7 @@ class WaterFall extends Widget implements Renderable
     {
         return [
             'options' => &$this->options,
-            'cards' => &$this->cards,
+            'items' => &$this->items,
         ];
     }
 

@@ -6,8 +6,8 @@
 <!--        <li data-filter="amsterdam">Amsterdam</li>-->
 <!--    </ol>-->
     <ul class="tiles">
-        <?php foreach ($cards as &$card) { ?>
-        <li data-filter-class='<?php echo json_encode($card['filters'])?>'><?php echo $card['content'];?></li>
+        <?php foreach ($items as &$item) { ?>
+        <li class="item-card" <?php echo $item['filters'] ? 'data-filter-class="' . json_encode($item['filters']) . '"' : '';?>><?php echo $item['content'];?></li>
         <?php } ?>
     </ul>
 </div>
@@ -26,7 +26,7 @@
         handler.wookmark(options);
         setTimeout(function () {
             handler.wookmark(options);
-        }, 1200);
+        }, 1500);
 
         var onClickFilter = function(event) {
             var item = $(event.currentTarget),
