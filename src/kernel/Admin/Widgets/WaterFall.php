@@ -12,11 +12,33 @@ class WaterFall extends Widget implements Renderable
      */
     protected $view = 'admin::widget.water-fall';
 
+    /**
+     * Grid item width
+     *
+     * @var int
+     */
+    protected $width = 250;
+
     public function __construct($attributes = [])
     {
         parent::__construct($attributes);
 
         Admin::js('@lxh/js/jquery.wookmark.min');
+    }
+
+    /**
+     * @param $width
+     * @return $this
+     */
+    public function width($width)
+    {
+        $this->width = $width;
+        return $this;
+    }
+
+    public function height()
+    {
+        
     }
 
     protected function vars()

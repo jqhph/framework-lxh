@@ -1,14 +1,14 @@
 /*!
-  jQuery Wookmark plugin
-  @name jquery.wookmark.js
-  @author Christoph Ono (chri@sto.ph or @gbks)
-  @author Sebastian Helzle (sebastian@helzle.net or @sebobo)
-  @version 1.4.5
-  @date 11/22/2013
-  @category jQuery plugin
-  @copyright (c) 2009-2013 Christoph Ono (www.wookmark.com)
-  @license Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
-*/
+ jQuery Wookmark plugin
+ @name jquery.wookmark.js
+ @author Christoph Ono (chri@sto.ph or @gbks)
+ @author Sebastian Helzle (sebastian@helzle.net or @sebobo)
+ @version 1.4.5
+ @date 11/22/2013
+ @category jQuery plugin
+ @copyright (c) 2009-2013 Christoph Ono (www.wookmark.com)
+ @license Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
+ */
 (function (factory) {
   if (typeof define === 'function' && define.amd)
     define(['jquery'], factory);

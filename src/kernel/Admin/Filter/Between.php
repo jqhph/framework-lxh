@@ -63,7 +63,7 @@ class Between extends AbstractFilter
      *
      * @return static
      */
-    public function toTimestamp()
+    public function time()
     {
         $this->toTimestamp = true;
 

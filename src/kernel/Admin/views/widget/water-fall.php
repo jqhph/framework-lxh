@@ -13,7 +13,7 @@
      * Grid items
      */
     .tiles li {
-        width: 200px;    float: left;
+        width: 160px;    float: left;
         background-color: #ffffff;
         border: 1px solid #dedede;
         border-radius: 2px;
@@ -47,15 +47,14 @@
         cursor: pointer;
         position: absolute;
         margin: 0;
-        -webkit-transition: top 1s ease, left 1s ease;
-        -moz-transition: top 1s ease, left 1s ease;
-        -o-transition: top 1s ease, left 1s ease;
-        -ms-transition: top 1s ease, left 1s ease;
+        -webkit-transition: top 0.5s ease, left 0.5s ease;
+        -moz-transition: top 0.5s ease, left 0.5s ease;
+        -o-transition: top 0.5s ease, left 0.5s ease;
+        -ms-transition: top 0.5s ease, left 0.5s ease;
     }
     .tiles img {
         display: block;
-        height: auto;
-        width: 100%;
+        height: auto;width:100%;
     }
     .wookmark-placeholder {
         -webkit-transition: all 0.3s ease-out;
@@ -114,123 +113,123 @@
     <br/><br/><br/>
     <ul class="tiles">
         <li data-filter-class='["all", "london", "art"]'>
-            <img src="/test/image_1.jpg" height="283" width="200">
+            <img src="/test/image_1.jpg"  >
             <p>London Art</p>
         </li>
         <li data-filter-class='["all", "berlin", "art"]'>
-            <img src="/test/image_2.jpg" height="300" width="200">
+            <img src="/test/image_2.jpg"  >
             <p>Berlin Art</p>
         </li>
         <li data-filter-class='["all", "berlin", "video"]'>
-            <img src="/test/image_3.jpg" height="252" width="200">
+            <img src="/test/image_3.jpg"  >
             <p>Berlin Video</p>
         </li>
         <li data-filter-class='["all", "tokyo", "fashion"]'>
-            <img src="/test/image_4.jpg" height="158" width="200">
+            <img src="/test/image_4.jpg"  >
             <p>Tokyo Fashion</p>
         </li>
         <li data-filter-class='["all", "berlin", "art"]'>
-            <img src="/test/image_5.jpg" height="300" width="200">
+            <img src="/test/image_5.jpg"  >
             <p>Berlin Art</p>
         </li>
         <li data-filter-class='["all", "tokyo", "fashion"]'>
-            <img src="/test/image_6.jpg" height="297" width="200">
+            <img src="/test/image_6.jpg"  >
             <p>Tokyo Fashion</p>
         </li>
         <li data-filter-class='["all", "london", "art"]'>
-            <img src="/test/image_7.jpg" height="200" width="200">
+            <img src="/test/image_7.jpg"  >
             <p>London Art</p>
         </li>
         <li data-filter-class='["all", "tokyo", "video"]'>
-            <img src="/test/image_8.jpg" height="200" width="200">
+            <img src="/test/image_8.jpg" >
             <p>Tokyo Video</p>
         </li>
         <li data-filter-class='["all", "tokyo", "art"]'>
-            <img src="/test/image_9.jpg" height="398" width="200">
+            <img src="/test/image_9.jpg"  >
             <p>Tokyo Art</p>
         </li>
         <li data-filter-class='["all", "berlin", "fashion"]'>
-            <img src="/test/image_10.jpg" height="267" width="200">
+            <img src="/test/image_10.jpg"  >
             <p>Berlin Fashion</p>
         </li>
         <li data-filter-class='["all", "amsterdam", "art"]'>
-            <img src="/test/image_1.jpg" height="283" width="200">
+            <img src="/test/image_1.jpg"  >
             <p>Amsterdam Art</p>
         </li>
         <li data-filter-class='["all", "paris", "video"]'>
-            <img src="/test/image_2.jpg" height="300" width="200">
+            <img src="/test/image_2.jpg"  >
             <p>Paris Video</p>
         </li>
         <li data-filter-class='["all", "london", "video"]'>
-            <img src="/test/image_3.jpg" height="252" width="200">
+            <img src="/test/image_3.jpg"  >
             <p>London Video</p>
         </li>
         <li data-filter-class='["all", "london", "video"]'>
-            <img src="/test/image_4.jpg" height="158" width="200">
+            <img src="/test/image_4.jpg"  >
             <p>London Video</p>
         </li>
         <li data-filter-class='["all", "amsterdam"," video"]'>
-            <img src="/test/image_5.jpg" height="300" width="200">
+            <img src="/test/image_5.jpg"  >
             <p>Amsterdam Video</p>
         </li>
         <li data-filter-class='["all", "tokyo", "fashion"]'>
-            <img src="/test/image_6.jpg" height="297" width="200">
+            <img src="/test/image_6.jpg"  >
             <p>Tokyo Fashion</p>
         </li>
         <li data-filter-class='["all", "tokyo", "sport"]'>
-            <img src="/test/image_7.jpg" height="200" width="200">
+            <img src="/test/image_7.jpg"  >
             <p>Tokyo Sport</p>
         </li>
         <li data-filter-class='["all", "berlin", "video"]'>
-            <img src="/test/image_8.jpg" height="200" width="200">
+            <img src="/test/image_8.jpg"  >
             <p>Berlin Video</p>
         </li>
         <li data-filter-class='["all", "amsterdam", "fashion"]'>
-            <img src="/test/image_9.jpg" height="398" width="200">
+            <img src="/test/image_9.jpg"  >
             <p>Amsterdam Fashion</p>
         </li>
         <li data-filter-class='["all", "berlin", "sport"]'>
-            <img src="/test/image_10.jpg" height="267" width="200">
+            <img src="/test/image_10.jpg"  >
             <p>Berlin Sport</p>
         </li>
         <li data-filter-class='["all", "paris", "video"]'>
-            <img src="/test/image_1.jpg" height="283" width="200">
+            <img src="/test/image_1.jpg"  >
             <p>Paris Video</p>
         </li>
         <li data-filter-class='["all", "tokyo", "sport"]'>
-            <img src="/test/image_2.jpg" height="300" width="200">
+            <img src="/test/image_2.jpg"  >
             <p>Tokyo Sport</p>
         </li>
         <li data-filter-class='["all", "amsterdam", "art"]'>
-            <img src="/test/image_3.jpg" height="252" width="200">
+            <img src="/test/image_3.jpg" >
             <p>Amsterdam Art</p>
         </li>
         <li data-filter-class='["all", "berlin", "sport"]'>
-            <img src="/test/image_4.jpg" height="158" width="200">
+            <img src="/test/image_4.jpg"  >
             <p>Berlin Sport</p>
         </li>
         <li data-filter-class='["all", "paris", "art"]'>
-            <img src="/test/image_5.jpg" height="300" width="200">
+            <img src="/test/image_5.jpg"  >
             <p>Paris Art</p>
         </li>
         <li data-filter-class='["all", "berlin", "art"]'>
-            <img src="/test/image_6.jpg" height="297" width="200">
+            <img src="/test/image_6.jpg"  >
             <p>Berlin Art</p>
         </li>
         <li data-filter-class='["all", "london", "art"]'>
-            <img src="/test/image_7.jpg" height="200" width="200">
+            <img src="/test/image_7.jpg"  >
             <p>London Art</p>
         </li>
         <li data-filter-class='["all", "london", "video"]'>
-            <img src="/test/image_8.jpg" height="200" width="200">
+            <img src="/test/image_8.jpg"  >
             <p>London Video</p>
         </li>
         <li data-filter-class='["all", "london", "video"]'>
-            <img src="/test/image_9.jpg" height="398" width="200">
+            <img src="/test/image_9.jpg"  >
             <p>London Video</p>
         </li>
         <li data-filter-class='["all", "paris", "video"]'>
-            <img src="/test/image_10.jpg" height="267" width="200">
+            <img src="/test/image_10.jpg"  >
             <p>Paris Video</p>
         </li>
         <!-- End of grid blocks -->
@@ -243,18 +242,20 @@
         // Prepare layout options.
         var options = {
             autoResize: true, // This will auto-update the layout when the browser window is resized.
-            container: $('.wtf-wrapper .tiles'), // Optional, used for some extra CSS styling
-            offset: 2, // Optional, the distance between grid items
-            itemWidth: 210, // Optional, the width of a grid item
+            container: $spa.find('.wtf-wrapper .tiles'), // Optional, used for some extra CSS styling
+            offset: 1, // Optional, the distance between grid items
+            itemWidth: 160, // Optional, the width of a grid item
             fillEmptySpace: false // Optional, fill the bottom of each column with widths of flexible height
         };
 
         // Get a reference to your grid items.
         var handler = $spa.find('.tiles li'),
             filters = $spa.find('#filters li');
-
-        // Call the layout function.
         handler.wookmark(options);
+        // Call the layout function.
+        setTimeout(function () {
+            handler.wookmark(options);
+        }, 10);
 
         /**
          * When a filter is clicked, toggle it's active state and refresh.

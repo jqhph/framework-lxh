@@ -1,7 +1,7 @@
 <?php 
 return [
-    'js-version' => 1514519758,
-    'css-version' => 1514519758,
+    'js-version' => time(),
+    'css-version' => time(),
     'language' => 'zh',
     'client-config' => [
         'use-cache' => false,

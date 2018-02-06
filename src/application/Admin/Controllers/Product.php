@@ -53,7 +53,7 @@ class Product extends Controller
         $filter->text('name')->minlen(3);
         $filter->select('level')->options([1, 2]);
         $filter->text('price');
-        $filter->dateRange('created_at')->between()->toTimestamp();
+        $filter->dateRange('created_at')->between()->time();
     }
 
     /**

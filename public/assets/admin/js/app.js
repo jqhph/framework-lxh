@@ -36,11 +36,13 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         // seajs.use('jquery', function (q) {
         seajs.use(config.publicJs, function () {
             var plugIns = arguments; // 所有加载进来的js插件变量数组
-            init(function () {
-                $(function () {
-                    call_actions(plugIns);
+            setTimeout(function () {
+                init(function () {
+                    $(function () {
+                        call_actions(plugIns);
+                    })
                 })
-            })
+            }, 10);
 
         });
 
