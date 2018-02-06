@@ -75,7 +75,7 @@ class Filter extends Widget implements Renderable
     /**
      * @var string
      */
-    protected $modalId;
+    protected $containerId;
 
     protected static $availableFields = [
         'text' => Text::class,
@@ -132,13 +132,13 @@ class Filter extends Widget implements Renderable
     /**
      * @return string
      */
-    public function getModalId()
+    public function getContainerId()
     {
-        if (! $this->modalId) {
-            $this->modalId = Util::randomString(6);
+        if (! $this->containerId) {
+            $this->containerId = Util::randomString(6);
         }
 
-        return $this->modalId;
+        return $this->containerId;
     }
 
     /**
@@ -193,7 +193,7 @@ class Filter extends Widget implements Renderable
         if (! $this->options['useBox'] && ! $this->options['useModal']) {
             return view($this->view, $this->vars())->render();
         }
-//ddd(htmlspecialchars($this->buildModal()));
+
         return $this->options['useModal'] ? $this->buildModal() : $this->buildBox();
     }
 
@@ -205,7 +205,7 @@ class Filter extends Widget implements Renderable
 
         $modal = new Modal(trans($this->title), view($this->view, $this->vars())->render());
 
-        $modal->id($this->getModalId());
+        $modal->id($this->getContainerId());
         $modal->width($this->modalWidth);
         $modal->disableCloseBtn();
 
@@ -215,6 +215,8 @@ class Filter extends Widget implements Renderable
     protected function buildBox()
     {
         $box = new Box($this->title);
+
+        $box->attribute('id', $this->getContainerId());
 
         $box->content(view($this->view, $this->vars())->render())->style('primary');
 
@@ -264,6 +266,7 @@ class Filter extends Widget implements Renderable
             'fields' => $this->fields,
             'filterOptions' => &$this->options,
             'footer' => $this->buildFooter(),
+            'useModal' => $this->options['useModal']
         ];
     }
 
@@ -296,7 +299,7 @@ class Filter extends Widget implements Renderable
 
         if ($this->options['useModal']) {
             Admin::script(<<<EOF
-$(document).on('pjax:send', function () {\$('#{$this->getModalId()}').modal('hide')});
+$(document).on('pjax:send', function () {\$('#{$this->getContainerId()}').modal('hide')});
 EOF
 );
         }

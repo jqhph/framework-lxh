@@ -683,8 +683,8 @@ class Grid implements Renderable
 
         $this->setupTools();
 
-        if ($this->filter && $this->filter->allowedUseModal()) {
-            $vars['filterId'] = $this->filter->getModalId();
+        if ($this->filter) {
+            $vars['filterId'] = $this->filter->getContainerId();
         }
 
         return $this->renderBox($vars);
@@ -703,7 +703,7 @@ class Grid implements Renderable
 
         if ($this->filter && $this->filter->allowedUseModal()) {
             $btn = new Button('<i class="fa fa-filter"></i> &nbsp;' . trans('Filter'));
-            $btn->attribute('data-target', '#' . $this->filter->getModalId());
+            $btn->attribute('data-target', '#' . $this->filter->getContainerId());
             $btn->attribute('data-toggle', 'modal');
 
             $box->rightTools()->prepend($btn);

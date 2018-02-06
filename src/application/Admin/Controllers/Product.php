@@ -48,7 +48,7 @@ class Product extends Controller
      */
     protected function filter(Filter $filter)
     {
-        $filter->useModal();
+//        $filter->useModal();
 
         $filter->multipleSelect('status')->options(range(1, 10));
         $filter->text('stock')->number();

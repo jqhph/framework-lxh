@@ -80,7 +80,7 @@ class Controller extends Base
             // 自定义filter
             $this->filter($filter);
             // 开启弹窗模式
-            $this->filter == 'modal' && $filter->useModal();
+//            $this->filter == 'modal' && $filter->useModal();
 
             // 列表页创建filter后
             fire($list . '.filter', [$filter]);
