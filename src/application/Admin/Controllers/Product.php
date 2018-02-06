@@ -7,6 +7,7 @@
 
 namespace Lxh\Admin\Controllers;
 
+use Lxh\Admin\Data\Items;
 use Lxh\Admin\Fields\Editable;
 use Lxh\Admin\Fields\Expand;
 use Lxh\Admin\Fields\Popover;
@@ -163,7 +164,7 @@ class Product extends Controller
          */
         $table->field('stock')->display(function ($value, Td $td, Tr $tr) {
             // 获取当前行数据
-//            $row = $tr->row();
+//            $row = $tr->items()->all();
             $data = [
                 1 => 'color:red',
                 2 => 'color:blue'
@@ -185,7 +186,7 @@ class Product extends Controller
          * @param Th $th 追加的列Th对象
          * @paran Tr $tr 追加的列Tr对象
          */
-        $table->prepend('序号', function (array $row, Td $td, Th $th, Tr $tr) {
+        $table->prepend('序号', function (Items $items, Td $td, Th $th, Tr $tr) {
             if (($line = $tr->line()) == 3) {
                 // 给第三行添加active样式
                 $tr->class('active');
@@ -197,7 +198,7 @@ class Product extends Controller
         // 增加额外的行
         $table->append('下班了', '真的嘛？！');
 
-        $table->append('呵呵', function (array $row, Td $td, Th $th, Tr $tr) {
+        $table->append('呵呵', function (Items $items, Td $td, Th $th, Tr $tr) {
             // 设置标题样式
             $th->style('color:red;font-weight:600');
             $th->class('test-class');
@@ -207,7 +208,7 @@ class Product extends Controller
             return '#' . $tr->line();
         });
 
-        $table->append(function (array $row, Td $td, Th $th) {
+        $table->append(function (Items $items, Td $td, Th $th) {
             $th->value('叫什么好呢？');
             return '演示一下而已~';
         });
@@ -215,14 +216,14 @@ class Product extends Controller
         // 添加列到指定位置
         // [column]方法添加的列一定在[prepend]和[append]方法中间
         $table->column(1, '元旦', '放假1天');
-        $table->column(5, '王者荣耀', function (array $row, Td $td, Th $th, Tr $tr) {
+        $table->column(5, '王者荣耀', function (Items $items, Td $td, Th $th, Tr $tr) {
             return '<b style="">李白</b> ';
         });
         $table->column(6, '王者荣耀', '韩信');
         $table->column(100, '王者荣耀', '大乔');
 
         // 定义行内容
-        $table->tr(function (Tr $tr, $row) {
+        $table->tr(function (Tr $tr) {
 //           $tr->style('color:green');
         });
     }

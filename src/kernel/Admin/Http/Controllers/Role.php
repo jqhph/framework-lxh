@@ -64,7 +64,7 @@ class Role extends Controller
         $keyName = Models::getRoleKeyName();
         $label = trans('Abilities');
         $table->link('abilities', function (Link $link) use ($keyName, $label) {
-            $id = $link->row($keyName);
+            $id = $link->item($keyName);
 
             $link->useAjaxModal()
                 ->title($label)

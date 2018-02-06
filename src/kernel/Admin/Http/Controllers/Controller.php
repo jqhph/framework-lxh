@@ -63,10 +63,10 @@ class Controller extends Base
             throw new Forbidden();
         }
         
-        $content = $this->admin()->content();
-
-        $content->header(trans(__CONTROLLER__));
-        $content->description(trans(__CONTROLLER__ . ' list'));
+        $content = $this->admin()
+            ->content()
+            ->header(trans(__CONTROLLER__))
+            ->description(trans(__CONTROLLER__ . ' list'));
 
         $evt = $this->getLowerCaseDashName();
         $list = "admin.$evt.list";

@@ -41,7 +41,7 @@ class Link extends Field
         }
 
         if (! $this->url && ($format = $this->option('format'))) {
-            $replace = $this->options['formatKey'] ? $this->tr->row($this->options['formatKey']) : $this->value;
+            $replace = $this->options['formatKey'] ? $this->item($this->options['formatKey']) : $this->value;
 
             if (! $replace) return '';
 

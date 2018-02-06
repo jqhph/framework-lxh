@@ -30,7 +30,6 @@ class Expand extends Field
 
     public function render()
     {
-
         $this->setupScript();
 
         $color = $this->option('color') ?: 'custom';

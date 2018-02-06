@@ -446,7 +446,7 @@ class Field implements Renderable
      * @param null $key
      * @return mixed
      */
-    public function row($key = null)
+    public function item($key = null)
     {
         if ($key === null) return $this->row;
 

@@ -2,6 +2,7 @@
 
 namespace Lxh\Admin\Table;
 
+use Lxh\Admin\Data\Items;
 use Lxh\Admin\Fields\Button;
 use Lxh\Admin\Fields\Code;
 use Lxh\Admin\Fields\Editable;
@@ -578,13 +579,14 @@ class Table extends Widget
         $trString = '';
         foreach ($this->rows as $k => &$row) {
             if ($this->nextRow) {
-                $trString .= "<tr><td colspan='{$this->totalColumns()}' style='padding:0;border:0;'>{$this->nextRow}</td></tr>";
+                $trString .= 
+                    "<tr><td colspan='{$this->totalColumns()}' style='padding:0;border:0;'>{$this->nextRow}</td></tr>";
                 $this->nextRow = '';
             }
 
             $tr = $this->buildTr($k, $row);
             if ($this->handlers['tr']) {
-                call_user_func($this->handlers['tr'], $tr, $row);
+                call_user_func($this->handlers['tr'], $tr);
             }
 
             $trString .= $tr->render();
@@ -615,7 +617,13 @@ class Table extends Widget
      */
     protected function buildTr($k, &$row)
     {
-        return $this->trs[] = new Tr($this, $k, $row, $this->columns, $this->handlers);
+        return $this->trs[] = new Tr(
+            $this,
+            $k,
+            $row,
+            $this->columns, 
+            $this->handlers
+        );
     }
 
     /**
@@ -627,9 +635,9 @@ class Table extends Widget
     {
         if ($this->allowRowSelector()) {
             // 添加行选择器到列最前面
-            array_unshift($this->columns['front'], new Column(function (array $row, Td $td, Th $th) {
+            array_unshift($this->columns['front'], new Column(function (Items $items, Td $td, Th $th) {
                 $selector = $this->selector();
-                $selector->row($row);
+                $selector->setItems($items);
 
                 $th->value($selector->renderHead());
 

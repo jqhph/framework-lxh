@@ -2,6 +2,7 @@
 
 namespace Lxh\Admin;
 
+use Lxh\Admin\Data\Items;
 use Lxh\Admin\Fields\Button;
 use Lxh\Admin\Filter\AbstractFilter;
 use Lxh\Admin\Layout\Row;
@@ -652,7 +653,7 @@ class Grid implements Renderable
     protected function buildRowActions()
     {
         $this->rowActions();
-        $this->table->append(function (array $row, Td $td, Th $th, Tr $tr) {
+        $this->table->append(function (Items $items, Td $td, Th $th, Tr $tr) {
             $th->value($this->rowActions->title());
 
             return $this->rowActions->setTr($tr)->render();

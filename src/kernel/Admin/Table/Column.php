@@ -25,13 +25,6 @@ class Column extends Widget
     protected $th;
 
     /**
-     * 当前行数据
-     *
-     * @var array
-     */
-    protected $row = [];
-
-    /**
      * @var string
      */
     protected $content = '';
@@ -57,22 +50,6 @@ class Column extends Widget
     }
 
     /**
-     * 设置或获取当前行数据
-     *
-     * @param array $row
-     * @return static | array
-     */
-    public function row(array $row = null)
-    {
-        if ($row !== null) {
-            $this->row = &$row;
-
-            return $this;
-        }
-        return $this->row;
-    }
-
-    /**
      * 获取列标题
      *
      * @return string
@@ -87,7 +64,13 @@ class Column extends Widget
         $td = new Td();
 
         if (!is_string($this->content) && is_callable($this->content)) {
-            $td->value(call_user_func($this->content, $this->row, $td, $this->th, $this->tr));
+            $td->value(call_user_func(
+                $this->content,
+                $this->tr->items(),
+                $td,
+                $this->th,
+                $this->tr
+            ));
             return $td->render();
         }
         $td->value($this->content);

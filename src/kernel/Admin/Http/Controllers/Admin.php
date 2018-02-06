@@ -3,6 +3,7 @@
 namespace Lxh\Admin\Http\Controllers;
 
 use Lxh\Admin\Admin as AdminCreator;
+use Lxh\Admin\Data\Items;
 use Lxh\Admin\Fields\Link;
 use Lxh\Admin\Fields\Tag;
 use Lxh\Admin\Filter;
@@ -63,8 +64,8 @@ class Admin extends Controller
         $table->text('last_login_ip')->hide();
         $table->date('last_login_time')->hide();
 
-        $table->column(3, 'name', function (array $row, Td $td, Th $th, Tr $tr) {
-            return $row['first_name'] . $row['last_name'];
+        $table->column(3, 'name', function (Items $items, Td $td, Th $th, Tr $tr) {
+            return $items->column('first_name') . $items->column('last_name');
         });
     }
 
@@ -76,7 +77,7 @@ class Admin extends Controller
 
         $keyName = Models::getUserKeyName();
         $table->link('roles', function (Link $link) use ($keyName) {
-            $id = $link->row($keyName);
+            $id = $link->item($keyName);
             $api = AdminCreator::url()->api('roles-list', $id);
 
             $link->useAjaxModal()
@@ -132,7 +133,7 @@ class Admin extends Controller
             ->options($this->formatRoles())
             ->help($this->getRolesHelp())
             ->attaching(function (MultipleSelect $select) {
-                if ($select->row('is_admin')) {
+                if ($select->item('is_admin')) {
                     $select->disabled();
                 }
             });

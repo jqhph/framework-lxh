@@ -25,14 +25,6 @@ class TrTools extends Tools
     }
 
     /**
-     * @return mixed
-     */
-    public function row($key = null)
-    {
-        return $this->tr->row($key);
-    }
-
-    /**
      * @param Tr $tr
      * @return $this
      */
@@ -60,7 +52,7 @@ class TrTools extends Tools
     public function render()
     {
         if ($rendering = $this->rendering) {
-            $rendering($this, $this->tr);
+            $rendering($this, $this->tr->items());
         }
 
         $end = '&nbsp;&nbsp;&nbsp;';

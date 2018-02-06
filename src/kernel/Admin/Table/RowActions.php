@@ -95,10 +95,17 @@ class RowActions extends TrTools
         // 重置所有工具
         $this->tools = [];
 
-        $id = $this->row($this->grid->idName());
+        $id = $this->tr
+            ->items()
+            ->get(
+                $this->grid->idName()
+            );
 
         if ($this->allowEdit && $this->allowDelete) {
-            $this->prepend($this->renderEdit($id) . '&nbsp;&nbsp;&nbsp;' . $this->renderDelete($id));
+            $this->prepend(
+                $this->renderEdit($id)
+                . '&nbsp;&nbsp;&nbsp;' . $this->renderDelete($id)
+            );
         } elseif ($this->allowEdit) {
             $this->prepend($this->renderEdit($id));
         } elseif ($this->allowDelete)
@@ -143,14 +150,14 @@ EOF;
 
     protected function normalizeTabLabel($id)
     {
-        $name = $this->row('name') ?: $id;
+        $name = $this->tr->items()->get('name', $id);
 
-        return trim(str_replace('&nbsp;', '', $name)) . ' - ' . trans(__CONTROLLER__) . trans('Edit');
+        return trim(str_replace('&nbsp;', '', $name))
+        . ' - ' . trans(__CONTROLLER__) . trans('Edit');
     }
 
     protected function renderDelete($id)
     {
-//        $url = Url::makeDetail($id, $module);
         $model = __CONTROLLER__;
 
         return <<<EOF

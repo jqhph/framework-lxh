@@ -2,6 +2,7 @@
 
 namespace Lxh\Admin\Fields;
 
+use Lxh\Admin\Data\Items;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Http\Controllers\Admin;
 use Lxh\Admin\Table\Tr;
@@ -32,6 +33,11 @@ class Field implements Renderable
      * @var Tr
      */
     protected $tr;
+
+    /**
+     * @var Items
+     */
+    protected $items;
 
     /**
      * @var \Closure
@@ -93,7 +99,7 @@ class Field implements Renderable
      */
     protected function getModelId()
     {
-        return $this->tr->row(\Lxh\Admin\Admin::id());
+        return $this->items->get(\Lxh\Admin\Admin::id());
     }
 
     /**
@@ -110,12 +116,25 @@ class Field implements Renderable
     }
 
     /**
+     *
      * @param Tr $tr
      * @return $this
      */
     public function setTr(Tr $tr)
     {
         $this->tr = $tr;
+        return $this;
+    }
+
+    /**
+     * 行数据
+     *
+     * @param Items $items
+     * @return $this
+     */
+    public function setItems(Items $items)
+    {
+        $this->items = $items;
         return $this;
     }
 
@@ -172,11 +191,11 @@ class Field implements Renderable
     /**
      * 获取当前行其他字段
      *
-     * @param $key
+     * @param string $key
      */
-    public function row($key = null)
+    public function item($key)
     {
-        return $this->tr->row($key);
+        return $this->items->column($key);
     }
 
     /**

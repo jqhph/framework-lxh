@@ -2,6 +2,7 @@
 
 namespace Lxh\Admin\Table;
 
+use Lxh\Admin\Data\Items;
 use Lxh\Admin\Fields\Field;
 use Lxh\Admin\Fields\Traits\Builder;
 use Lxh\Admin\Table\Table;
@@ -32,9 +33,9 @@ class Tr extends Widget
     /**
      * 行数据
      *
-     * @var array
+     * @var Items
      */
-    protected $row;
+    protected $items;
 
     /**
      * 额外的字段
@@ -54,7 +55,7 @@ class Tr extends Widget
     {
         $this->table = $table;
         $this->offset = $offset;
-        $this->row = &$row;
+        $this->items = new Items($row, $offset);
         $this->columns = &$columns;
     }
 
@@ -90,7 +91,7 @@ class Tr extends Widget
      */
     public function render()
     {
-        $columns = $this->buildColumns($this->row);
+        $columns = $this->buildColumns();
 
         $tr = "<tr {$this->formatAttributes()}>{$columns}</tr>";
 
@@ -106,15 +107,13 @@ class Tr extends Widget
     }
 
     /**
+     * 获取当前行的某一列数据
+     *
      * @return mixed
      */
-    public function row($key = null)
+    public function item($key)
     {
-        if ($key) {
-            return get_value($this->row, $key);
-        }
-
-        return $this->row;
+        return $this->items->get($key);
     }
 
     /**
@@ -141,47 +140,46 @@ class Tr extends Widget
      * @param array $row
      * @return string
      */
-    protected function buildColumns(array &$row)
+    protected function buildColumns()
     {
         $tdString = '';
 
-        $this->prependColumns($tdString, $row);
+        $this->prependColumns($tdString);
 
         $headers = $this->table->headers();
         $counter = 1;
         foreach ($headers as $field => &$options) {
             if (isset($this->columns['mid'][$counter])) {
                 while ($column = get_value($this->columns['mid'], $counter)) {
-                    $tdString .= $this->columns['mid'][$counter]->tr($this)->row($row)->render();
+                    $tdString .= $this->columns['mid'][$counter]->tr($this)->render();
                     $counter++;
                 }
             }
 
-            $this->renderColumns($tdString, $row, $field, $options);
+            $this->renderColumns($tdString, $field, $options);
 
             $counter ++;
         }
 
         foreach ($this->columns['mid'] as $k => $column) {
             if ($k > $counter) {
-                $tdString .= $column->tr($this)->row($row)->render();
+                $tdString .= $column->tr($this)->render();
             }
         }
 
-        $this->appendColumns($tdString, $row);
+        $this->appendColumns($tdString);
 
         return $tdString;
     }
 
     /**
      * @param $tdString
-     * @param $row
      * @param $field
      * @param $options
      */
-    protected function renderColumns(&$tdString, &$row, &$field, &$options)
+    protected function renderColumns(&$tdString, &$field, &$options)
     {
-        $value = get_value($row, $field);
+        $value = $this->items->get($field);
 
         $td = $this->buildTd($field, $value);
 
@@ -237,11 +235,19 @@ class Tr extends Widget
      * @param $tdString
      * @param $row
      */
-    protected function prependColumns(&$tdString, &$row)
+    protected function prependColumns(&$tdString)
     {
         foreach ($this->columns['front'] as $column) {
-            $tdString .= $column->tr($this)->row($row)->render();
+            $tdString .= $column->tr($this)->render();
         }
+    }
+
+    /**
+     * @return Items
+     */
+    public function items()
+    {
+        return $this->items;
     }
 
     /**
@@ -249,10 +255,10 @@ class Tr extends Widget
      *
      * @return void
      */
-    protected function appendColumns(&$tdString, &$row)
+    protected function appendColumns(&$tdString)
     {
         foreach ($this->columns['last'] as $column) {
-            $tdString .= $column->tr($this)->row($row)->render();
+            $tdString .= $column->tr($this)->render();
         }
     }
 
@@ -282,7 +288,8 @@ class Tr extends Widget
 
         $view = new $class($field, $value);
 
-        $view->setTr($this);
+        $view->setTr($this)
+            ->setItems($this->items);
 
         if ($then) $then($view, $this);
 
