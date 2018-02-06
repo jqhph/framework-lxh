@@ -21,7 +21,7 @@ class Image extends Field
 
         $title = trans('Image');
         $this->script('gimg', <<<EOF
-$('.grid-img').click(function(){
+$('{$this->getTableIdSelector()}').find('.grid-img').click(function(){
    var t=$(this),s= /style=[\'\"]?([^\'\"]*)[\'\"]?/i, c = t.html().replace(s,''), u=t.find('img').attr('src'),
    m= \$lxh.ui().modal({id:t.attr('id'),title:'$title',confirmBtn:false,content:'<a href="'+ u +'" target="_blank">'+ c +'</a>'});
    m.modal('show');

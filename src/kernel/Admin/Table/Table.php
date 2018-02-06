@@ -571,7 +571,7 @@ class Table extends Widget
     /**
      * @return string
      */
-    protected function buildRows()
+    protected function &buildRows()
     {
         $trString = '';
         foreach ($this->rows as $k => &$row) {

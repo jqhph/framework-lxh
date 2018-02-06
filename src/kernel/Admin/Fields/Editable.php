@@ -233,12 +233,16 @@ class Editable extends Field
 
         $this->options['name'] = $column = $this->name;
 
-        $class = 'grid-edit-'.$this->type.str_replace(['.', '#', '[', ']'], '-', $column);
+        $class = 'grid-edit-'.
+            $this->type.str_replace(['.', '#', '[', ']'], '-', $column);
 
         $options = json_encode($this->options);
 
         // 同样的类型只初始化一次
-        $this->script('editable.' . $this->type, "$('.$class').editable($options);");
+        $this->script(
+            'editable.' . $this->type,
+            "$('{$this->getTableIdSelector()}').find('.$class').editable($options);"
+        );
 
         if (!$id = $this->getModelId()) {
             throw new InvalidArgumentException("Id not found!");
