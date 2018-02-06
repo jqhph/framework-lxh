@@ -670,8 +670,8 @@ class Grid implements Renderable
 
         $vars = array_merge([
             'table' => &$table,
-            'page'  => &$this->pageString,
-            'pages' => &$this->perPages,
+            'pageString'  => &$this->pageString,
+            'pageOptions' => &$this->perPages,
             'perPage' => $this->perPage,
             'perPageKey' => $this->perPageKey,
             'url' => $this->url,

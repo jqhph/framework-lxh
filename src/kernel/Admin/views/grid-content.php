@@ -1,11 +1,11 @@
 <div class="table-rep-plugin"><div class="table-responsive" data-pattern="priority-columns"><?php echo $table?></div></div>
-<?php if ($page) { ?>
+<?php if ($pageString) { ?>
     <div class="box-footer">
         <div class="dataTables_paginate paging_simple_numbers pull-center" style="float:right">
-            <ul class="pagination" style="float:right"><?php echo $page;?></ul>
-            <?php if ($pages) {?>
+            <ul class="pagination" style="float:right"><?php echo $pageString;?></ul>
+            <?php if ($pageOptions) {?>
                 <select class="input-sm grid-per-pager" name="per-page"  style="float:right;margin-top:10px;margin-right:10px;background:#fff;"><?php
-                foreach ($pages as &$row) :
+                foreach ($pageOptions as &$row) :
                         $string = $url->query($perPageKey, $row)->string();
                 ?><option <?php if ($perPage == $row) echo 'selected';?> value="<?php echo $string?>"><?php echo $row;?></option><?php endforeach;?></select>
             <?php }?>

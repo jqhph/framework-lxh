@@ -1,8 +1,8 @@
 <div id="<?php echo ($pjid = Lxh\Admin\Grid::getPjaxContainerId());?>"><?php
     echo view('admin::grid-content', [
         'table' => &$table,
-        'page' => &$page,
-        'pages' => &$pages,
+        'pageString' => &$pageString,
+        'pageOptions' => &$pageOptions,
         'perPageKey' => &$perPageKey,
         'useRWD' => &$useRWD,
         'pjax' => &$pjax,
@@ -19,7 +19,7 @@
     <?php if ($indexScript) {?>
     require_js('<?php echo $indexScript;?>');
     <?php }?>
-    <?php if ($pages) {?>
+    <?php if ($pageOptions) {?>
     __then__(function () {
         var _p = $('.grid-per-pager');
         _p.off('change');
