@@ -16,6 +16,7 @@ use Lxh\Admin\Table\Table;
 use Lxh\Admin\Table\Td;
 use Lxh\Admin\Table\Th;
 use Lxh\Admin\Table\Tr;
+use Lxh\Admin\Widgets\Box;
 use Lxh\Admin\Widgets\Form;
 use Lxh\Admin\Widgets\Tab;
 use Lxh\Admin\Widgets\WaterFall;
@@ -35,7 +36,14 @@ class Post extends Controller
         $content->row(function (Row $row) {
             $wf = new WaterFall();
 
-            $row->column(12, $wf);
+            foreach (range(1, 10) as $i) {
+                $wf->card("<div style='padding:4px'><img src='/test/image_{$i}.jpg'/></div> <p>test</p>");
+            }
+
+            $box = new Box();
+            $box->content($wf->render())->style('inverse');
+
+            $row->column(12, $box->render());
         });
 
         return $content->render();

@@ -1,0 +1,79 @@
+.wtf-wrapper .tiles {
+    list-style-type: none;
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+.wtf-wrapper  .tiles li.inactive {
+    visibility: hidden;
+    opacity: 0;
+}
+.wtf-wrapper .tiles li p {
+    color: #666;
+    font-size: 12px;
+    margin: 7px 0 0 7px;
+}
+
+.wtf-wrapper .tiles li {
+    width: 200px;
+    float: left;
+    background-color: #ffffff;
+    border:0px solid #f9f9f9;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+
+    box-shadow: 0 1px 3px rgba(34,25,25,0.4);
+    -moz-box-shadow: 0 1px 2px 1px rgba(34,25,25,0.4);
+    -webkit-box-shadow: 0 1px 2px 1px rgba(34,25,25,0.4);
+
+    cursor: pointer;
+    padding: 4px;
+    display: block;
+    position: absolute;
+    margin: 0;
+    -webkit-transition: top 0.5s ease, left 0.5s ease;
+    -moz-transition: top 0.5s ease, left 0.5s ease;
+    -o-transition: top 0.5s ease, left 0.5s ease;
+    -ms-transition: top 0.5s ease, left 0.5s ease;
+}
+.tiles img {
+    display: block;height: auto;width:100%;
+}
+.wookmark-placeholder {
+    -webkit-transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+}
+
+.wtf-filters {
+    list-style-type: none;
+    text-align: center;
+    margin: 0 5% 0 5%;
+}
+
+.wtf-filters li {
+    font-size: 12px;
+    float: left;
+    padding: 6px 0 4px 0;
+    cursor: pointer;
+    margin: 0 1% 0 1%;
+    width: 8%;
+    -webkit-transition: all 0.15s ease-out;
+    -moz-transition: all 0.15s ease-out;
+    -o-transition: all 0.15s ease-out;
+    transition: all 0.15s ease-out;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.wtf-filters li:hover {
+    background: #dedede;
+}
+
+.wtf-filters li.active {
+    background: #333333;
+    color: #ffffff;
+}
