@@ -35,7 +35,7 @@ class Product extends Controller
      *
      * @var bool
      */
-    protected $filter = true;
+    protected $filter = 'modal';
 
     public function initialize()
     {
@@ -48,8 +48,6 @@ class Product extends Controller
      */
     protected function filter(Filter $filter)
     {
-//        $filter->useModal();
-
         $filter->multipleSelect('status')->options(range(1, 10));
         $filter->text('stock')->number();
         $filter->text('name')->minlen(3);
