@@ -22,6 +22,7 @@ use Lxh\Admin\Table\Tree;
 use Lxh\Admin\Widgets\Widget;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Exceptions\InvalidArgumentException;
+use Lxh\Helper\Util;
 use Lxh\Support\Arr;
 
 /**
@@ -66,11 +67,6 @@ class Table extends Widget
      * @var Grid
      */
     protected $grid;
-
-    /**
-     * @var string
-     */
-    protected $view = 'admin::table';
 
     /**
      * @var array
@@ -169,6 +165,7 @@ class Table extends Widget
         $this->setHeaders($headers);
         $this->setRows($rows);
         $this->setStyle($style);
+        $this->attribute('id', 't'.Util::randomString(7));
 
         $this->class('table table-hover responsive');
     }
@@ -654,13 +651,9 @@ class Table extends Widget
         $rows = $this->buildRows();
         $nodata = $rows ? '' : $this->noDataTip();
 
-        $vars = [
-            'attributes' => $this->formatAttributes(),
-            'headers' => $this->buildHeaders(),
-            'rows' => &$rows,
-            'nodata' => &$nodata
-        ];
-        return view($this->view, $vars)->render();
+        return <<<EOF
+<table {$this->formatAttributes()}><thead><tr>{$this->buildHeaders()}</tr></thead><tbody>{$rows}</tbody></table>$nodata       
+EOF;
     }
 
     /**

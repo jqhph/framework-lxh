@@ -5,6 +5,7 @@ namespace Lxh\Admin\Fields;
 use Lxh\Admin\Data\Items;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Http\Controllers\Admin;
+use Lxh\Admin\Table\Table;
 use Lxh\Admin\Table\Tr;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Helper\Util;
@@ -28,6 +29,11 @@ class Field implements Renderable
      * @var array
      */
     protected static $loadedCss = [];
+
+    /**
+     * @var Table
+     */
+    protected $table;
 
     /**
      * @var Tr
@@ -113,6 +119,12 @@ class Field implements Renderable
             return $this;
         }
         return $this->label ?: ($this->value ?: $this->name);
+    }
+
+    public function setTable(Table $table)
+    {
+        $this->table = $table;
+        return $this;
     }
 
     /**
@@ -221,6 +233,14 @@ class Field implements Renderable
     {
         $this->attributes['style'] = &$style;
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTableIdSelector()
+    {
+        return '#'.$this->table->getAttribute('id');
     }
 
     /**

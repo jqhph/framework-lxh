@@ -37,7 +37,7 @@ class Expand extends Field
         $id = Util::randomString();
 
         // 增加一行
-        $this->tr->next("<div id=\"$id\" class=\"panel-collapse collapse out\">{$this->content}</div>");
+        $this->table->addExtraRow("<div id=\"$id\" class=\"panel-collapse collapse out\">{$this->content}</div>");
 
         return "<a class=\"btn btn-xs btn-$color grid-expand\" data-toggle=\"collapse\" data-target=\"#$id\"><i class=\"fa fa-caret-right\"></i> {$this->label()}</a>";
     }

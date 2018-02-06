@@ -288,7 +288,8 @@ class Tr extends Widget
 
         $view = new $class($field, $value);
 
-        $view->setTr($this)
+        $view->setTable($this->table)
+            ->setTr($this)
             ->setItems($this->items);
 
         if ($then) $then($view, $this);

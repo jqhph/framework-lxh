@@ -683,6 +683,10 @@ class Grid implements Renderable
 
         $this->setupTools();
 
+        if ($this->filter && $this->filter->allowedUseModal()) {
+            $vars['filterId'] = $this->filter->getModalId();
+        }
+
         return $this->renderBox($vars);
     }
 

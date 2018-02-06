@@ -44,7 +44,7 @@
         $.pjax.defaults.timeout = 10000;
         $.pjax.defaults.maxCacheLength = 0;
         $d.pjax(cid + ' a:not(a[target="_blank"])', {container: cid});
-        $d.on('submit', 'form[pjax-container]', function(e) {$.pjax.submit(e, cid)});
+        $d.on('submit', '#<?php echo $filterId;?> form[pjax-container]', function(e) {$.pjax.submit(e, cid)});
         $d.on("pjax:popstate", function() {
             $d.one("pjax:end", function(e) {
                 $(e.target).find("script[data-exec-on-popstate]").each(function() {
@@ -52,7 +52,6 @@
                 });
             });
         });
-        var $loading, $current = TAB.currentEl();
         $d.on('pjax:send', function(xhr) {
             NProgress.start();
             $current = TAB.currentEl();
@@ -60,7 +59,6 @@
                 var $submit_btn = $('form[pjax-container] :submit');
                 if($submit_btn) $submit_btn.button('loading');
             }
-            $loading = loading($('#pjax-container').parent());
         });
         $d.on('pjax:complete', function(xhr) {
             NProgress.done();
@@ -68,13 +66,10 @@
                 var $submit_btn = $('form[pjax-container] :submit');
                 if($submit_btn) $submit_btn.button('reset');
             }
-            $loading && $loading.close();
             // 重新绑定点击事件
             var _p = $('.grid-per-pager');
             _p.off('change');
             _p.change(change_pages);
-            // 重新计算iframe高度
-            IFRAME.height($current.iframe.find('iframe'));
         })
     });
 
