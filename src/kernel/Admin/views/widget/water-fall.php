@@ -23,7 +23,7 @@
         }, <?php echo json_encode($options)?>);
 
         var handler = $spa.find('.tiles li'),
-            filters = $spa.find('a');
+            filters = $spa.find('.wtf-filters a');
 
         handler.wookmark(options);
         setTimeout(function () {handler.wookmark(options)}, 1500);

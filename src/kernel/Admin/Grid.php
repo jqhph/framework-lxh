@@ -791,6 +791,12 @@ class Grid implements Renderable
      */
     public function render()
     {
+        $isPjaxRequest = static::isPjaxRequest();
+
+        if (! $isPjaxRequest) {
+            $this->setupTools();
+        }
+
         if ($this->layout == 'card') {
             $content = $this->renderCard();
         } else {
@@ -810,11 +816,9 @@ class Grid implements Renderable
             'url' => $this->url,
         ], $this->options);
 
-        if (I($this->pjax)) {
+        if ($isPjaxRequest) {
             return view('admin::grid-content', $vars)->render();
         }
-
-        $this->setupTools();
 
         $vars['filterId'] = '';
         if ($this->filter) {
