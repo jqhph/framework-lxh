@@ -25,6 +25,9 @@ use Lxh\MVC\Model;
 
 class Grid implements Renderable
 {
+    const LAYOUT_TABLE = 'table';
+    const LAYOUT_CARD = 'card';
+
     /**
      * @var Model
      */
@@ -201,6 +204,14 @@ class Grid implements Renderable
     }
 
     /**
+     * @return \Lxh\Http\Url
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
      * 获取id键名
      *
      * @return string
@@ -236,7 +247,7 @@ class Grid implements Renderable
         if (! empty(I('view'))) {
             return $this;
         }
-        $this->layout = 'card';
+        $this->layout = static::LAYOUT_CARD;
         $this->disableResponsive();
         return $this;
     }
@@ -251,7 +262,7 @@ class Grid implements Renderable
         if (! empty(I('view'))) {
             return $this;
         }
-        $this->layout = 'table';
+        $this->layout = static::LAYOUT_TABLE;
         return $this;
     }
 
@@ -316,7 +327,7 @@ class Grid implements Renderable
      */
     public function rows(array $rows)
     {
-        if ($this->layout == 'card') {
+        if ($this->layout == static::LAYOUT_CARD) {
             $this->card()->setRows($rows);
         } else {
             $this->table()->setRows($rows);
@@ -335,7 +346,7 @@ class Grid implements Renderable
      */
     public function headers(array $headers)
     {
-        if ($this->layout == 'card') {
+        if ($this->layout == static::LAYOUT_CARD) {
             $this->card()->setFields($headers);
         } else {
             $this->table()->setHeaders($headers);
@@ -786,10 +797,11 @@ class Grid implements Renderable
      */
     public function setupLayoutForRequestParams()
     {
-        if (I('view') == 'card') {
-            $this->useCard();
+        if (I('view') == static::LAYOUT_CARD) {
+            $this->layout = static::LAYOUT_CARD;
+            $this->disableResponsive();
         } else {
-            $this->useTable();
+            $this->layout = static::LAYOUT_TABLE;
         }
     }
 
@@ -804,7 +816,7 @@ class Grid implements Renderable
             $this->setupTools();
         }
 
-        if ($this->layout == 'card') {
+        if ($this->layout == static::LAYOUT_CARD) {
             $content = $this->renderCard();
         } else {
             $content = $this->renderTable();

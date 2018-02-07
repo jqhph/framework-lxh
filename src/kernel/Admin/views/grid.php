@@ -11,6 +11,9 @@
     ])->render();
 ?></div>
 <script>
+    if (!pjax_reloads) {
+        var pjax_reloads = {};
+    }
     var PJAXID = '<?php echo $pjid?>';
     <?php if ($useRWD) {?>
     require_css('@lxh/plugins/RWD-Table-Patterns/dist/css/rwd-table.min');
@@ -23,16 +26,16 @@
     __then__(function () {
         var _p = $('.grid-per-pager'), $d = $(document);
         _p.off('change');
-        _p.change(change);
-        function change() {
+        _p.change(pjax_reload);
+        function pjax_reload(e, url) {
             <?php if ($pjax) { ?>
             NProgress.start();
-            $.get($(this).val(),function(d){$('#<?php echo $pjid;?>').html(d);$d.trigger('pjax:complete',{});NProgress.done()});
+            $.get(url||$(this).val(),function(d){$('#<?php echo $pjid;?>').html(d);$d.trigger('pjax:complete',{});NProgress.done()});
             <?php } else {
             echo 'window.location.href = $(this).val();';
         } ?>
         }
-        window.change_pages = change
+        pjax_reloads['<?php echo $pjid?>'] = pjax_reload
     });
     <?php }?>
     <?php if ($pjax) {
@@ -69,7 +72,7 @@
             // 重新绑定点击事件
             var _p = $('.grid-per-pager');
             _p.off('change');
-            _p.change(change_pages);
+            _p.change(pjax_reloads['<?php echo $pjid?>']);
             $d.trigger('app.created');
         })
     });

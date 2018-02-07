@@ -35,11 +35,10 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         // 优先加载jquery
         // seajs.use('jquery', function (q) {
         seajs.use(config.publicJs, function () {
-            var plugIns = arguments; // 所有加载进来的js插件变量数组
             setTimeout(function () {
                 init(function () {
                     $(function () {
-                        call_actions(plugIns);
+                        call_actions();
                     })
                 })
             }, 10);
@@ -50,9 +49,9 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
             // 加载css
             seajs.use(get_used_css([], cssversion));
             seajs.use(get_used_js([], jsversion), function () {
-                var plugIns = arguments, trpv = $('.table-responsive');
+                var trpv = $('.table-responsive');
                 $(function () {
-                    call_actions(plugIns);
+                    call_actions();
                     trpv.responsiveTable && $('.table-responsive').responsiveTable();
                 })
             });
@@ -60,14 +59,15 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
     }
 
     // 初始化完成，执行动作
-    function call_actions(plugIns) {
+    function call_actions() {
         for (var i in lxhActions) {
             if (typeof lxhActions[i] == 'function') {
-                lxhActions[i].apply(this, plugIns);
+                lxhActions[i].apply(this);
             }
         }
-        console.log('app.completed');
+
         lxhActions = [];
+        console.log('app.completed');
         $d.trigger('app.completed');
         window.SPAID && $d.trigger(SPAID +'.' + 'app.completed');
     }
