@@ -833,13 +833,13 @@ class Grid implements Renderable
             'perPage' => $this->perPage,
             'perPageKey' => $this->perPageKey,
             'url' => $this->url,
+            'filterId' => '',
         ], $this->options);
 
         if ($isPjaxRequest) {
             return view('admin::grid-content', $vars)->render();
         }
 
-        $vars['filterId'] = '';
         if ($this->filter) {
             $vars['filterId'] = $this->filter->getContainerId();
         }

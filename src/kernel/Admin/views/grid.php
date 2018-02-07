@@ -47,7 +47,9 @@
         $.pjax.defaults.timeout = 10000;
         $.pjax.defaults.maxCacheLength = 0;
         $d.pjax(cid + ' a:not(a[target="_blank"])', {container: cid});
+        <?php if ($filterId) {?>
         $d.on('submit', '#<?php echo $filterId;?> form[pjax-container]', function(e) {$.pjax.submit(e, cid)});
+        <?php } ?>
         $d.on("pjax:popstate", function() {
             $d.one("pjax:end", function(e) {
                 $(e.target).find("script[data-exec-on-popstate]").each(function() {
@@ -57,7 +59,6 @@
         });
         $d.on('pjax:send', function(xhr) {
             NProgress.start();
-            $current = TAB.currentEl();
             if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
                 var $submit_btn = $('form[pjax-container] :submit');
                 if($submit_btn) $submit_btn.button('loading');
