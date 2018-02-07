@@ -19,7 +19,8 @@
     padding: 0 0 5px;
     font-size: 15px;
 }
-.wtf-wrapper .item-card .meta {color: #666;text-align: right;font-style: italic;margin:2px 0 0;}
+.wtf-wrapper .item-card .meta {color: #555;text-align: right;font-style: italic;margin:2px 0 0;}
+.wtf-wrapper .item-card b{color:#444}
 .wtf-wrapper .item-card .img{padding:4px}
 .wtf-wrapper li.item-card {
     width: 200px;

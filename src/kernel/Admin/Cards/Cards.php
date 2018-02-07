@@ -123,6 +123,16 @@ class Cards extends Widget
     }
 
     /**
+     * @param $field
+     * @return string
+     */
+    public function fieldLabel($field)
+    {
+        $field = trans($field, 'fields');
+        return "<b>$field</b>";
+    }
+
+    /**
      * Set card fields.
      *
      * @param array $headers header

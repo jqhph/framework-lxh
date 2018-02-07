@@ -52,10 +52,10 @@ class Post extends Controller
         );
 
         $card->row(
-            $cards->code('id')
+            $cards->fieldLabel('id'), $cards->code('id')
         );
         $card->row(
-            $cards->text('content')
+            $cards->fieldLabel('content'), $cards->text('content')
         );
     }
 

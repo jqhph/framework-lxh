@@ -117,6 +117,11 @@ class Card
         }
 
         if ($right) {
+            if ($right instanceof Renderable) {
+                $right = $right->render();
+            } elseif ($right instanceof \Closure) {
+                $right = $right($this);
+            }
             $right = "<span class='pull-right'>$right</span>";
         }
         $this->rows[] = "<div class='row'>{$row}{$right}</div>";

@@ -20,6 +20,6 @@ class BatchDelete implements Renderable
     {
         $controller = __CONTROLLER__;
 
-        return "<a data-model='{$controller}' id='{$this->id}'>{$this->label()}</a>";
+        return "<a data-model='{$controller}' class='{$this->id}'>{$this->label()}</a>";
     }
 }
