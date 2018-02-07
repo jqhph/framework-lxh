@@ -281,7 +281,7 @@ class Cards extends Widget
      * @param callable $then
      * @return $this
      */
-    public function resolving(callable $then)
+    public function resolving($then)
     {
         $this->resolving = $then;
         return $this;
@@ -324,7 +324,7 @@ class Cards extends Widget
 
         $view->setContainerId(
             $this->warterFall->getId()
-        )->setItems($this->items);
+        )->setItems($this->currentItems);
 
         if ($then) $then($view, $this);
 

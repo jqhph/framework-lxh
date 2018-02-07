@@ -3,6 +3,7 @@
 namespace Lxh\Admin\Http\Controllers;
 
 use Lxh\Admin\Admin;
+use Lxh\Admin\Cards\Cards;
 use Lxh\Admin\Filter;
 use Lxh\Admin\Layout\Content;
 use Lxh\Admin\Widgets\Box;
@@ -102,12 +103,16 @@ class Controller extends Base
             $grid->filter($filter);
         }
 
-        // 自定义表格
-        // 可以自定义行、列、表头的内容和样式等，也可以追加列
-        $this->table($table = $grid->table());
+        if ($grid->getLayout() == 'card') {
+            $grid->card()->resolving([$this, 'card']);
+        } else {
+            // 自定义表格
+            // 可以自定义行、列、表头的内容和样式等，也可以追加列
+            $this->table($table = $grid->table());
+        }
 
         // 列表页创建grid后
-        fire($list . '.grid.after', [$grid, $table]);
+        fire($list . '.grid.after', [$grid]);
 
         // 渲染模板
         return $content->render();
@@ -156,6 +161,15 @@ class Controller extends Base
      * @param Grid $grid
      */
     protected function grid(Grid $grid, Content $content)
+    {
+    }
+
+    /**
+     * 瀑布流卡片布局渲染方法
+     *
+     * @param Cards $cards
+     */
+    public function card(Cards $cards)
     {
     }
 

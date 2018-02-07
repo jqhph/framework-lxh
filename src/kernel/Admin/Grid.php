@@ -218,11 +218,19 @@ class Grid implements Renderable
     }
 
     /**
+     * @return string
+     */
+    public function getLayout()
+    {
+        return $this->layout;
+    }
+
+    /**
      * 使用瀑布流卡片布局
      *
      * @return $this
      */
-    public function cardLayout()
+    public function useCard()
     {
         if (! empty(I('view'))) {
             return $this;
@@ -237,7 +245,7 @@ class Grid implements Renderable
      *
      * @return $this
      */
-    public function tableLayout()
+    public function useTable()
     {
         if (! empty(I('view'))) {
             return $this;
@@ -709,7 +717,9 @@ class Grid implements Renderable
             $this->buildRowActions();
         }
 
-        return $this->table()->setRows($list)->render();
+        $table = $this->table()->setRows($list)->render();
+
+        return "<div class=\"table-rep-plugin\"><div class=\"table-responsive\" data-pattern=\"priority-columns\">$table</div></div>";
     }
 
     /**
@@ -770,9 +780,9 @@ class Grid implements Renderable
     public function setupLayoutForRequestParams()
     {
         if (I('view') == 'card') {
-            $this->cardLayout();
+            $this->useCard();
         } else {
-            $this->tableLayout();
+            $this->useTable();
         }
     }
 

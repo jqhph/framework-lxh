@@ -2,6 +2,7 @@
 
 namespace Lxh\Admin\Controllers;
 
+use Lxh\Admin\Cards\Cards;
 use Lxh\Admin\Fields\Editable;
 use Lxh\Admin\Fields\Expand;
 use Lxh\Admin\Fields\Popover;
@@ -26,7 +27,39 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Post extends Controller
 {
-    public function actionList(array $params)
+    /**
+     * @param Grid $grid
+     * @param Content $content
+     */
+    protected function grid(Grid $grid, Content $content)
+    {
+        $grid->useCard();
+    }
+
+    /**
+     * @param Cards $cards
+     */
+    public function card(Cards $cards)
+    {
+        $card = $cards->card();
+
+        $card->image(
+            "<img src='https://img3.doubanio.com/view/photo/s_ratio_poster/public/p2511434383.jpg'>"
+        );
+
+        $card->title(
+            $cards->text('title')
+        );
+
+        $card->row(
+            $cards->code('id')
+        );
+        $card->row(
+            $cards->text('content')
+        );
+    }
+
+    public function actionList111(array $params)
     {
         $content = $this->admin()->content();
 
