@@ -34,6 +34,7 @@ class Post extends Controller
     protected function grid(Grid $grid, Content $content)
     {
         $grid->useCard();
+        $grid->useLayoutSwitcher();
     }
 
     /**

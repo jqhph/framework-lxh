@@ -208,12 +208,12 @@ class Table extends Widget
     }
 
     /**
-     * @return RowSelector
+     * @return Grid\RowSelector
      */
     protected function selector()
     {
         if (! $this->rowSelector) {
-            $this->rowSelector = new RowSelector($this->grid);
+            $this->rowSelector = new Grid\RowSelector($this->grid);
         }
 
         return $this->rowSelector;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Lxh\Admin\Table;
+namespace Lxh\Admin\Grid;
 
 use Lxh\Admin\Admin;
 use Lxh\Admin\Data\Items;

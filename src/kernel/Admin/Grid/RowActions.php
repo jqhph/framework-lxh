@@ -1,11 +1,10 @@
 <?php
 
-namespace Lxh\Admin\Table;
+namespace Lxh\Admin\Grid;
 
 use Lxh\Admin\Admin;
 use Lxh\Admin\Fields\Field;
 use Lxh\Admin\Grid;
-use Lxh\Admin\Kernel\Url;
 use Lxh\Admin\Table\Th;
 use Lxh\Admin\Table\Tr;
 use Lxh\Admin\Table\Tree;
@@ -96,8 +95,8 @@ class RowActions extends TrTools
         $this->tools = [];
 
         $id = $this->items->get(
-                $this->grid->idName()
-            );
+            $this->grid->idName()
+        );
 
         if ($this->allowEdit && $this->allowDelete) {
             $this->prepend(

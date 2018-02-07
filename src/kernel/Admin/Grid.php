@@ -6,9 +6,10 @@ use Lxh\Admin\Cards\Cards;
 use Lxh\Admin\Data\Items;
 use Lxh\Admin\Fields\Button;
 use Lxh\Admin\Filter\AbstractFilter;
+use Lxh\Admin\Grid\LayoutSwitcher;
 use Lxh\Admin\Layout\Row;
 use Lxh\Admin\Table\Column;
-use Lxh\Admin\Table\RowActions;
+use Lxh\Admin\Grid\RowActions;
 use Lxh\Admin\Table\Table;
 use Lxh\Admin\Table\Td;
 use Lxh\Admin\Table\Th;
@@ -364,6 +365,12 @@ class Grid implements Renderable
      */
     protected function setupTools()
     {
+        if ($this->options['useLayoutSwitcher']) {
+            $this->tools->prepend(
+                (new LayoutSwitcher($this))->render()
+            );
+        }
+
         if ($this->options['allowBatchDelete']) {
             $this->actions();
             $this->actions->append(new BatchDelete());
