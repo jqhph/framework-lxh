@@ -55,12 +55,7 @@
 
 <footer class="footer text-right"><?php echo config('admin.copyright')?></footer>
 <script id="iframe-tpl" type="text/html">
-    <div id="wrapper-{$name}" class="wrapper lxh-wrapper">
-        <div class="content-page">
-            <div class="content"></div>
-        </div>
-    </div>
-<!--    <iframe src="{$url}" scrolling="no"></iframe>-->
+<div id="wrapper-{$name}" class="wrapper lxh-wrapper"><div class="content-page"><div class="content"></div></div></div>
 </script>
 
 <section class="content"><?php
@@ -69,6 +64,7 @@
 ?></section>
 
 <?php
+// <!--    <iframe src="{$url}" scrolling="no"></iframe>-->
 //echo admin_js('fastclick');
 //echo admin_js('waves.min');
 echo admin_js('js/jquery.slimscroll.min');

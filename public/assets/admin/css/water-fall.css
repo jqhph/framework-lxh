@@ -12,16 +12,15 @@
     margin: 7px 7px 0;
 }
 .wtf-wrapper .content .row{margin:2px 0 0;}
-.item-card strong {
+.wtf-wrapper .item-card strong {
     border-bottom: 1px solid #ccc;
     margin: 8px 7px;color:#444;
     display: block;
     padding: 0 0 5px;
     font-size: 15px;
 }
-.item-card .meta {color: #666;text-align: right;font-style: italic;margin:2px 0 0;}
-.item-card .img{padding:4px}
-
+.wtf-wrapper .item-card .meta {color: #666;text-align: right;font-style: italic;margin:2px 0 0;}
+.wtf-wrapper .item-card .img{padding:4px}
 .wtf-wrapper li.item-card {
     width: 200px;
     float: left;
@@ -49,35 +48,4 @@
     -moz-transition: all 0.3s ease-out;
     -o-transition: all 0.3s ease-out;
     transition: all 0.3s ease-out;
-}
-
-.wtf-filters {
-    list-style-type: none;
-    text-align: center;
-    margin: 0 5% 0 5%;
-}
-
-.wtf-filters li {
-    font-size: 12px;
-    float: left;
-    padding: 6px 0 4px 0;
-    cursor: pointer;
-    margin: 0 1% 0 1%;
-    width: 8%;
-    -webkit-transition: all 0.15s ease-out;
-    -moz-transition: all 0.15s ease-out;
-    -o-transition: all 0.15s ease-out;
-    transition: all 0.15s ease-out;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-}
-
-.wtf-filters li:hover {
-    background: #dedede;
-}
-
-.wtf-filters li.active {
-    background: #333333;
-    color: #ffffff;
 }
