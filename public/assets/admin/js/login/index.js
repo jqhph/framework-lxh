@@ -9,9 +9,9 @@ __then__(function (plugIns) {
             rules: 'required|length_between[4-30]'
         },
 
-    ], submit, '.Admin-form')
+    ], submit, '.login-form');
 
-    var model = $lxh.createModel('Admin');
+    var model = $lxh.createModel('Admin', '.login-form');
     var notify = $lxh.ui().notify();
 
     function submit(e) {

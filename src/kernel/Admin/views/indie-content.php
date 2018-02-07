@@ -19,7 +19,7 @@ echo admin_js('js/jquery.min');
 echo admin_js('js/util.min');
 ?>
 
-<div class="content-wrapper">
+<div class="content-wrapper" id="<?php echo \Lxh\Admin\Admin::SPAID()?>">
     <?php if ($header || $description) {?>
         <section class="content-header"><h1><?php echo $header; ?><small><?php echo $description;?></small></h1></section>
     <?php }?>
@@ -30,6 +30,7 @@ echo admin_js('js/util.min');
 echo view('admin::index.app-js')->render();
 ?>
 <script>
+    var SPAID = '<?php echo \Lxh\Admin\Admin::SPAID()?>';
     (function (w) {
         w.loading = function (el, circle, timeout) {
             el = el || 'body';

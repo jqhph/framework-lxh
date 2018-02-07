@@ -225,9 +225,9 @@ window.Lxh = function (options) {
          * @param module  项目模块名称
          * @returns {Model}
          */
-        createModel: function (name, module) {
+        createModel: function (name, formSelector) {
             name = name || this.controllerName();
-            return new Model(name, module, this);
+            return new Model(name, null, this, formSelector);
         },
 
         /**
@@ -831,7 +831,7 @@ window.Lxh = function (options) {
      * -------------------------------------------------------------------------------------
      * Created by Jqh on 2017/6/27.
      */
-    function Model(name, module, container) {
+    function Model(name, module, container, formSelector) {
         var notify = container.ui().notify(), globalUtil = container.util(), idkey = '__id__', id = 0;
 
         var store = {
@@ -889,7 +889,7 @@ window.Lxh = function (options) {
              *
              * @type {string}
              */
-            formSelector: '',
+            formSelector: formSelector,
 
             /**
              * api前缀
