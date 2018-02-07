@@ -36,11 +36,6 @@ class Field implements Renderable
     protected $table;
 
     /**
-     * @var Tr
-     */
-    protected $tr;
-
-    /**
      * @var Items
      */
     protected $items;
@@ -85,6 +80,11 @@ class Field implements Renderable
     protected $label = '';
 
     /**
+     * @var string
+     */
+    protected $containerId = '';
+
+    /**
      * Field constructor.
      *
      * @param null $name
@@ -124,17 +124,6 @@ class Field implements Renderable
     public function setTable(Table $table)
     {
         $this->table = $table;
-        return $this;
-    }
-
-    /**
-     *
-     * @param Tr $tr
-     * @return $this
-     */
-    public function setTr(Tr $tr)
-    {
-        $this->tr = $tr;
         return $this;
     }
 
@@ -238,9 +227,19 @@ class Field implements Renderable
     /**
      * @return mixed
      */
-    public function getTableIdSelector()
+    public function getContainerIdSelector()
     {
-        return '#'.$this->table->getAttribute('id');
+        return '#'.$this->containerId;
+    }
+
+    /**
+     * @param $id
+     * @return $this
+     */
+    public function setContainerId($id)
+    {
+        $this->containerId = $id;
+        return $this;
     }
 
     /**

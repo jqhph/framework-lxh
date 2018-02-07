@@ -212,7 +212,9 @@
           }
         }
         // Hide inactive items
-        this.handler.not(activeItems).addClass('inactive');
+        var inactives = this.handler.not(activeItems);
+        inactives.addClass('inactive');
+        inactives.css({left:0,top:0});
       } else {
         // Show all items if no filter is selected
         activeItems = this.handler;

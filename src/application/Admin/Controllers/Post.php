@@ -41,10 +41,18 @@ class Post extends Controller
             foreach (array_merge(range(1, 10), range(1, 10)) as $i) {
                 $wf->card(function (WaterFall\Card $card) use ($i) {
                     $filter = [];
-                    if ($i == 1) {
+                    if ($i == 1 || $i == 3) {
                         $filter = ['art'];
                     }
-
+                    if ($i == 2) {
+                        $filter = ['tokyo', 'art'];
+                    }
+                    if ($i == 9 || $i == 3) {
+                        $filter = ['amsterdam', 'art'];
+                    }
+                    if ($i == 2 || $i == 7) {
+                        $filter = ['london', 'tokyo'];
+                    }
                     $card->image("<img src='/test/image_{$i}.jpg'/>")
                         ->title('标题')
                         ->row('行内容')

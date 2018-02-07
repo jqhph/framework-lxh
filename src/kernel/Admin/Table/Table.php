@@ -46,7 +46,7 @@ class Table extends Widget
     /**
      * @var array
      */
-    protected static $fields = [
+    protected static $fieldsClass = [
         'link' => Link::class,
         'button' => Button::class,
         'label' => Label::class,
@@ -213,7 +213,7 @@ class Table extends Widget
     protected function selector()
     {
         if (! $this->rowSelector) {
-            $this->rowSelector = new RowSelector($this);
+            $this->rowSelector = new RowSelector($this->grid);
         }
 
         return $this->rowSelector;
@@ -707,13 +707,13 @@ EOF;
 
     public function __call($method, $parameters)
     {
-        if (isset(static::$fields[$method])) {
+        if (isset(static::$fieldsClass[$method])) {
             $field = get_value($parameters, 0);
             if ($then = get_value($parameters, 1)) {
                 $this->headers[$field]['then'] = $then;
             }
 
-            return $this->field($field)->setFieldView(static::$fields[$method]);
+            return $this->field($field)->setFieldView(static::$fieldsClass[$method]);
         }
 
         $p = count($parameters) > 0 ? $parameters[0] : true;

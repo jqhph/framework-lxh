@@ -78,7 +78,13 @@ class Card
      */
     public function title($title)
     {
-        $this->title = $title;
+        if ($title instanceof Renderable) {
+            $title = $title->render();
+        } elseif ($title instanceof \Closure) {
+            $title = $title($this);
+        }
+
+        $this->title = &$title;
         return $this;
     }
 
@@ -88,6 +94,11 @@ class Card
      */
     public function meta($meta)
     {
+        if ($meta instanceof Renderable) {
+            $meta = $meta->render();
+        } elseif ($meta instanceof \Closure) {
+            $meta = $meta($this);
+        }
         $this->rows[] = "<div class='meta'>$meta</div>";
         return $this;
     }

@@ -123,7 +123,7 @@ class Switcher extends Field
 
         $this->script('Switching', <<<EOF
 (function(){
-var tb = $('{$this->getTableIdSelector()}');
+var tb = $('{$this->getContainerIdSelector()}');
 var s=tb.find('[data-switchery="1"]'),r=0,list={},checked,_new,__;
 function b(){
     s.each(function(k){
@@ -173,7 +173,7 @@ EOF
         $icd = $checked ? 'icd="1"' : '';
 
         return <<<EOF
-<input li='{$this->tr->line()}' name="{$this->name}" $icd $checked type="checkbox" data-switchery="1" {$this->formatAttributes()}/>
+<input li='{$this->items->offset()}' name="{$this->name}" $icd $checked type="checkbox" data-switchery="1" {$this->formatAttributes()}/>
 EOF;
     }
 

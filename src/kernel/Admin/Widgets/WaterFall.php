@@ -5,6 +5,7 @@ namespace Lxh\Admin\Widgets;
 use Lxh\Admin\Admin;
 use Lxh\Admin\Widgets\WaterFall\Card;
 use Lxh\Contracts\Support\Renderable;
+use Lxh\Helper\Util;
 
 class WaterFall extends Widget implements Renderable
 {
@@ -37,6 +38,11 @@ class WaterFall extends Widget implements Renderable
     /**
      * @var string
      */
+    protected $id;
+
+    /**
+     * @var string
+     */
     protected $filterMode = 'and';
 
     public function __construct($attributes = [])
@@ -45,6 +51,16 @@ class WaterFall extends Widget implements Renderable
 
         Admin::css('@lxh/css/water-fall');
         Admin::js('@lxh/js/jquery.wookmark.min');
+
+        $this->id = 'w'.Util::randomString(7);
+    }
+
+    /**
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
@@ -190,6 +206,7 @@ class WaterFall extends Widget implements Renderable
             'items' => &$this->items,
             'filterMode' => $this->filterMode,
             'filters' => &$this->filters,
+            'id' => $this->id,
         ];
     }
 

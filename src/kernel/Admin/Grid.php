@@ -2,6 +2,7 @@
 
 namespace Lxh\Admin;
 
+use Lxh\Admin\Cards\Cards;
 use Lxh\Admin\Data\Items;
 use Lxh\Admin\Fields\Button;
 use Lxh\Admin\Filter\AbstractFilter;
@@ -32,6 +33,11 @@ class Grid implements Renderable
      * @var Table
      */
     protected $table;
+
+    /**
+     * @var Cards
+     */
+    protected $cards;
 
     /**
      * Collection of all data rows.
@@ -122,18 +128,19 @@ class Grid implements Renderable
      * @var array
      */
     protected $options = [
-        'usePagination'    => true,
-        'useFilter'        => false,
-        'useExporter'      => true,
-        'useActions'       => true,
-        'useRowSelector'   => true,
-        'allowEdit'        => true,
-        'allowDelete'      => true,
-        'allowCreate'      => true,
+        'usePagination' => true,
+        'useFilter' => false,
+        'useExporter' => true,
+        'useActions' => true,
+        'useRowSelector' => true,
+        'allowEdit' => true,
+        'allowDelete' => true,
+        'allowCreate' => true,
         'allowBatchDelete' => false,
-        'useRWD'           => true,
-        'indexScript'      => '@lxh/js/public-index',
-        'pjax'             => true,
+        'useRWD' => true,
+        'indexScript' => '@lxh/js/public-index',
+        'pjax' => true,
+        'useLayoutSwitcher' => false,
     ];
 
     /**
@@ -169,22 +176,27 @@ class Grid implements Renderable
     protected $rowActions;
 
     /**
+     * @var string
+     */
+    protected $layout = 'table';
+
+    /**
      * Create a new grid instance.
      *
      * @param array $headers
      * @param array $rows
      */
-    public function __construct(array $headers = [], array &$rows = [])
+    public function __construct(array &$rows = [])
     {
-        $this->table = new Table($headers);
         $this->rows = &$rows;
-        $this->table->grid($this);
         $this->tools = new Tools();
         $this->url = new \Lxh\Http\Url();
         $this->idName = Admin::id();
 
         $this->setupPerPage();
         $this->url->query($this->pjax, static::getPjaxContainerId());
+
+        $this->setupLayoutForRequestParams();
     }
 
     /**
@@ -203,6 +215,46 @@ class Grid implements Renderable
     public static function getPjaxContainerId()
     {
         return 'pjax-' . Admin::SPAID();
+    }
+
+    /**
+     * 使用瀑布流卡片布局
+     *
+     * @return $this
+     */
+    public function cardLayout()
+    {
+        if (! empty(I('view'))) {
+            return $this;
+        }
+        $this->layout = 'card';
+        $this->disableResponsive();
+        return $this;
+    }
+
+    /**
+     * 使用表格布局
+     *
+     * @return $this
+     */
+    public function tableLayout()
+    {
+        if (! empty(I('view'))) {
+            return $this;
+        }
+        $this->layout = 'table';
+        return $this;
+    }
+
+    /**
+     * 使用布局切换按钮
+     *
+     * @return $this
+     */
+    public function useLayoutSwitcher()
+    {
+        $this->options['useLayoutSwitcher'] = true;
+        return $this;
     }
 
     /**
@@ -234,13 +286,15 @@ class Grid implements Renderable
     /**
      * 设置动作按钮
      *
-     * @return \Lxh\Admin\Tools\Actions
+     * @return Actions
      */
-    public function actions()
+    public function actions(\Closure $callback = null)
     {
         if (! $this->actions) {
             $this->actions = new Actions();
         }
+
+        $callback && $callback($this->actions);
 
         return $this->actions;
     }
@@ -253,34 +307,37 @@ class Grid implements Renderable
      */
     public function rows(array $rows)
     {
-        $this->table()->setRows($rows);
+        if ($this->layout == 'card') {
+            $this->card()->setRows($rows);
+        } else {
+            $this->table()->setRows($rows);
+        }
+
         $this->rows = &$rows;
 
         return $this;
     }
 
     /**
+     * 数组方式配置渲染table字段
      *
      * @param array $headers 支持参数说明
-    [
-    '字段名' => [
-    'view' => '处理值显示方法参数',
-    'th' => '头部属性配置',
-    'options' => ['view的配置参数'],
-    'sortable' => '是否支持排序',
-    'desc' => '默认显示倒序，注意只有当sortable设置为true才有效，且不能多个字段同时设置为true',
-    'show' => '默认是显示，传0或false则隐藏字段，注意当使用RWD-table插件时此值才有效'
-    ],
-    ]
+     * @return $this
      */
     public function headers(array $headers)
     {
-        $this->table->setHeaders($headers);
+        if ($this->layout == 'card') {
+            $this->card()->setFields($headers);
+        } else {
+            $this->table()->setHeaders($headers);
+        }
+
         return $this;
     }
 
     /**
      * 初始化每页显示行数
+     *
      */
     protected function setupPerPage()
     {
@@ -293,11 +350,15 @@ class Grid implements Renderable
         $this->perPage = $maxSize;
     }
 
+    /**
+     * 初始化工具按钮
+     *
+     */
     protected function setupTools()
     {
         if ($this->options['allowBatchDelete']) {
-//            $this->tools->append(new BatchDelete());
-            $this->actions()->append(new BatchDelete());
+            $this->actions();
+            $this->actions->append(new BatchDelete());
         }
 
         if ($this->actions) {
@@ -308,7 +369,7 @@ class Grid implements Renderable
     /**
      * 设置或获取过滤器
      *
-     * @return static | Filter
+     * @return $this | Filter
      */
     public function filter(Filter $filter = null)
     {
@@ -365,8 +426,10 @@ class Grid implements Renderable
     /**
      * @return Tools
      */
-    public function tool()
+    public function tools(\Closure $callback = null)
     {
+        $callback && $callback($this->tools);
+
         return $this->tools;
     }
 
@@ -411,7 +474,7 @@ class Grid implements Renderable
         // 分页管理
         $pages = $this->paginator();
 
-        if ($total && $this->usePagination()) {
+        if ($total && $this->allowedPagination()) {
             $this->pageString($pages->make($total, $this->perPage));
         }
 
@@ -443,6 +506,10 @@ class Grid implements Renderable
         return $this->pageString;
     }
 
+    /**
+     * @param null $total
+     * @return $this|int
+     */
     public function total($total = null)
     {
         if ($total !== null) {
@@ -458,7 +525,25 @@ class Grid implements Renderable
      */
     public function table()
     {
+        if (!$this->table) {
+            $this->table = new Table();
+            $this->table->grid($this);
+        }
+
         return $this->table;
+    }
+
+    /**
+     * @return Cards
+     */
+    public function card()
+    {
+        if (!$this->cards) {
+            $this->cards = new Cards();
+            $this->cards->grid($this);
+        }
+
+        return $this->cards;
     }
 
     /**
@@ -466,7 +551,7 @@ class Grid implements Renderable
      *
      * @return bool
      */
-    public function usePagination()
+    public function allowedPagination()
     {
         return $this->options['usePagination'];
     }
@@ -542,7 +627,7 @@ class Grid implements Renderable
     }
 
     /**
-     * @return static
+     * @return $this
      */
     public function disableDelete()
     {
@@ -554,7 +639,7 @@ class Grid implements Renderable
     /**
      * Disable row selector.
      *
-     * @return static
+     * @return $this
      */
     public function disableRowSelector()
     {
@@ -564,7 +649,7 @@ class Grid implements Renderable
     /**
      * 禁止响应式输出table
      *
-     * @return static
+     * @return $this
      */
     public function disableResponsive()
     {
@@ -613,7 +698,10 @@ class Grid implements Renderable
         return $this;
     }
 
-    protected function getTableString()
+    /**
+     * @return string
+     */
+    protected function renderTable()
     {
         $list = $this->findList();
 
@@ -621,7 +709,23 @@ class Grid implements Renderable
             $this->buildRowActions();
         }
 
-        return $this->table->setRows($list)->render();
+        return $this->table()->setRows($list)->render();
+    }
+
+    /**
+     * @return string
+     */
+    protected function renderCard()
+    {
+        $list = $this->findList();
+
+        $card = $this->card();
+
+        if ($list && ($this->options['allowEdit'] || $this->options['allowDelete'] || $this->rowActions)) {
+            $card->setRowActions($this->rowActions());
+        }
+
+        return $card->setRows($list)->render();
     }
 
     /**
@@ -631,19 +735,17 @@ class Grid implements Renderable
      */
     public static function isPjaxRequest()
     {
-        return (bool) I('_pjax');
+        return isset($_GET['_pjax']);
     }
 
     /**
      * 获取行 actions对象
      *
-     * @return $this
+     * @return RowActions
      */
     public function rowActions(\Closure $rendering = null)
     {
-        $this->rowActions ?: ($this->rowActions = new RowActions($this, $rendering));
-
-        return $this;
+        return $this->rowActions ?: ($this->rowActions = new RowActions($this, $rendering));
     }
 
     /**
@@ -653,23 +755,44 @@ class Grid implements Renderable
     protected function buildRowActions()
     {
         $this->rowActions();
-        $this->table->append(function (Items $items, Td $td, Th $th, Tr $tr) {
+        $this->table()->append(function (Items $items, Td $td, Th $th, Tr $tr) {
             $th->value($this->rowActions->title());
 
-            return $this->rowActions->setTr($tr)->render();
+            return $this->rowActions->setItems($items)->render();
         });
     }
 
+    /**
+     * 根据请求判断应该使用哪种布局
+     *
+     * @return void
+     */
+    public function setupLayoutForRequestParams()
+    {
+        if (I('view') == 'card') {
+            $this->cardLayout();
+        } else {
+            $this->tableLayout();
+        }
+    }
+
+    /**
+     * @return array|string
+     */
     public function render()
     {
-        $table = $this->getTableString();
+        if ($this->layout == 'card') {
+            $content = $this->renderCard();
+        } else {
+            $content = $this->renderTable();
+        }
 
         if (!$this->options['allowDelete'] && !$this->options['useRowSelector']) {
             $this->disableGridScript();
         }
 
         $vars = array_merge([
-            'table' => &$table,
+            'content' => &$content,
             'pageString'  => &$this->pageString,
             'pageOptions' => &$this->perPages,
             'perPage' => $this->perPage,
@@ -683,6 +806,7 @@ class Grid implements Renderable
 
         $this->setupTools();
 
+        $vars['filterId'] = '';
         if ($this->filter) {
             $vars['filterId'] = $this->filter->getContainerId();
         }
@@ -690,6 +814,12 @@ class Grid implements Renderable
         return $this->renderBox($vars);
     }
 
+    /**
+     * 渲染盒子
+     *
+     * @param array $vars
+     * @return string
+     */
     protected function renderBox(array &$vars)
     {
         $box = new Box();
@@ -728,8 +858,12 @@ class Grid implements Renderable
         return $button->color('success')->render();
     }
 
+    /**
+     * @return string
+     */
     protected function getCreateBtnTabId()
     {
         return  'create-' . __CONTROLLER__;
     }
+
 }

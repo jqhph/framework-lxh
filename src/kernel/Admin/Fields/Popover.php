@@ -29,7 +29,7 @@ class Popover extends Field
     protected function setupScript()
     {
         $this->script('helper',
-            "var _p=$('{$this->getTableIdSelector()}').find('[data-toggle=\"popover\"]');_p.popover();_p.find(\"i\").css(\"font-size","14px\");"
+            "var _p=$('{$this->getContainerIdSelector()}').find('[data-toggle=\"popover\"]');_p.popover();_p.find(\"i\").css(\"font-size","14px\");"
         );
     }
 

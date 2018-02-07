@@ -1,4 +1,4 @@
-<div class="table-rep-plugin"><div class="table-responsive" data-pattern="priority-columns"><?php echo $table?></div></div>
+<div class="table-rep-plugin"><div class="table-responsive" data-pattern="priority-columns"><?php echo $content?></div></div>
 <?php if ($pageString) { ?>
     <div class="box-footer">
         <div class="dataTables_paginate paging_simple_numbers pull-center" style="float:right">

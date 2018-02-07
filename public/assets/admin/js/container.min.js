@@ -37,6 +37,7 @@ window.Lxh = function (options) {
             // 环境管理
             env = new Env();
 
+            var modal;
             function setup_ajax_modal() {
                 var $am = $('.ajax-modal');
                 $am.click(show_modal_btn);
@@ -53,7 +54,7 @@ window.Lxh = function (options) {
 
                     tag.addClass('disabled');
 
-                    var modal = ui.modal({title: title, confirmBtn: false, url: url, id: id, dataId: dataId});
+                    modal = ui.modal({title: title, confirmBtn: false, url: url, id: id, dataId: dataId});
 
                     // 开始抓取数据，并附加到弹窗展示
                     modal.then(url, dataId, function () {
@@ -61,7 +62,10 @@ window.Lxh = function (options) {
                     })
                 }
             }
-            $(document).on('app.completed', setup_ajax_modal);
+            $(document).on('app.completed', function () {
+                modal && modal.modal('hide');
+                setup_ajax_modal();
+            });
         }
 
         /**

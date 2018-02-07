@@ -59,7 +59,7 @@ setTimeout(function(){t.button('reset')},200)
 EOF;
         }
         $this->script('expand', <<<SCRIPT
-$('{$this->getTableIdSelector()}').find('.grid-expand').click(function(){
+$('{$this->getContainerIdSelector()}').find('.grid-expand').click(function(){
 var t=$(this),i=t.find('i');i.toggleClass('fa-caret-right');i.toggleClass('fa-caret-down');{$script}
 });        
 SCRIPT

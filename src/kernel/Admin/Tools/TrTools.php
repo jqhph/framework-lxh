@@ -2,6 +2,7 @@
 
 namespace Lxh\Admin\Tools;
 
+use Lxh\Admin\Data\Items;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Table\Tr;
 use Lxh\Contracts\Support\Renderable;
@@ -10,9 +11,9 @@ use Lxh\Support\Collection;
 class TrTools extends Tools
 {
     /**
-     * @var Tr
+     * @var Items
      */
-    protected $tr;
+    protected $items;
 
     /**
      * @var \Closure
@@ -28,9 +29,9 @@ class TrTools extends Tools
      * @param Tr $tr
      * @return $this
      */
-    public function setTr(Tr $tr)
+    public function setItems(Items $items)
     {
-        $this->tr = $tr;
+        $this->items = $items;
         return $this;
     }
 
@@ -52,7 +53,7 @@ class TrTools extends Tools
     public function render()
     {
         if ($rendering = $this->rendering) {
-            $rendering($this, $this->tr->items());
+            $rendering($this, $this->items);
         }
 
         $end = '&nbsp;&nbsp;&nbsp;';

@@ -1,6 +1,6 @@
 <div id="<?php echo ($pjid = Lxh\Admin\Grid::getPjaxContainerId());?>"><?php
     echo view('admin::grid-content', [
-        'table' => &$table,
+        'content' => &$content,
         'pageString' => &$pageString,
         'pageOptions' => &$pageOptions,
         'perPageKey' => &$perPageKey,

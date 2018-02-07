@@ -16,9 +16,9 @@ use Lxh\Support\Arr;
 class RowSelector extends Widget
 {
     /**
-     * @var Table
+     * @var Grid
      */
-    protected $table;
+    protected $grid;
 
     /**
      * @var Items
@@ -30,9 +30,9 @@ class RowSelector extends Widget
      */
     public static $scripts = [];
 
-    public function __construct(Table $table)
+    public function __construct(Grid $grid)
     {
-        $this->table = $table;
+        $this->grid = $grid;
     }
 
     /**
@@ -40,7 +40,7 @@ class RowSelector extends Widget
      */
     public function render()
     {
-        $id = $this->items->get($this->table->idName());
+        $id = $this->items->get($this->grid->idName());
 
         $attr = $this->formatAttributes();
 
@@ -59,6 +59,9 @@ class RowSelector extends Widget
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function renderHead()
     {
         $attr = $this->formatAttributes();
