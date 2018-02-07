@@ -3,6 +3,7 @@
 namespace Lxh\Admin\Widgets;
 
 use Lxh\Admin\Admin;
+use Lxh\Admin\Grid;
 use Lxh\Admin\Widgets\WaterFall\Card;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Helper\Util;
@@ -49,8 +50,10 @@ class WaterFall extends Widget implements Renderable
     {
         parent::__construct($attributes);
 
-        Admin::css('@lxh/css/water-fall');
-        Admin::js('@lxh/js/jquery.wookmark.min');
+        if (!Grid::isPjaxRequest()) {
+            Admin::css('@lxh/css/water-fall');
+            Admin::js('@lxh/js/jquery.wookmark.min');
+        }
 
         $this->id = 'w'.Util::randomString(7);
     }

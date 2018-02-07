@@ -21,13 +21,13 @@
     <?php }?>
     <?php if ($pageOptions) {?>
     __then__(function () {
-        var _p = $('.grid-per-pager');
+        var _p = $('.grid-per-pager'), $d = $(document);
         _p.off('change');
         _p.change(change);
         function change() {
             <?php if ($pjax) { ?>
             NProgress.start();
-            $.get($(this).val(),function(d){$('#<?php echo $pjid;?>').html(d);$(document).trigger('pjax:complete',{});NProgress.done()});
+            $.get($(this).val(),function(d){$('#<?php echo $pjid;?>').html(d);$d.trigger('pjax:complete',{});NProgress.done()});
             <?php } else {
             echo 'window.location.href = $(this).val();';
         } ?>
@@ -70,6 +70,7 @@
             var _p = $('.grid-per-pager');
             _p.off('change');
             _p.change(change_pages);
+            $d.trigger('app.created');
         })
     });
 
