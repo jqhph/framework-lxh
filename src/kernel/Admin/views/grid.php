@@ -26,7 +26,7 @@
         function pjax_reload(e, url) {
             <?php if ($pjax) { ?>
             NProgress.start();
-            $.get(url||$(this).val(),function(d){$('#<?php echo $pjid;?>').html(d);$d.trigger('pjax:complete',{});NProgress.done()});
+            $.get(url||$(this).val(),function(d){$('#<?php echo $pjid;?>').html(d);$d.trigger('pjax:complete',{});NProgress.done();$d.trigger('app.created');});
             <?php } else {
             echo 'window.location.href = $(this).val();';
         } ?>
@@ -70,7 +70,6 @@
             var _p = $('.grid-per-pager');
             _p.off('change');
             _p.change(pjax_reloads['<?php echo $pjid?>']);
-            $d.trigger('app.created');
         })
     });
 

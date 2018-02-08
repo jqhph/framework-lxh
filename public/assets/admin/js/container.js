@@ -39,7 +39,8 @@ window.Lxh = function (options) {
 
             var modal;
             function setup_ajax_modal() {
-                var $am = $('.ajax-modal');
+                var $am = $('#'+SPAID+' .ajax-modal');
+                $am.off('click');
                 $am.click(show_modal_btn);
                 $(document).on('pjax:complete',function(xhr){$am.off('click');$am.click(show_modal_btn);});
 
