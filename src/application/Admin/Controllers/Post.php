@@ -37,6 +37,12 @@ class Post extends Controller
         $grid->useLayoutSwitcher();
     }
 
+    protected function table(Table $table)
+    {
+        $table->code('id');
+        $table->text('title');
+    }
+
     /**
      * @param Cards $cards
      */
