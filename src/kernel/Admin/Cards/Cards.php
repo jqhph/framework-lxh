@@ -6,7 +6,6 @@ use Lxh\Admin\Data\Items;
 use Lxh\Admin\Fields\Button;
 use Lxh\Admin\Fields\Code;
 use Lxh\Admin\Fields\Editable;
-use Lxh\Admin\Fields\Expand;
 use Lxh\Admin\Fields\Field;
 use Lxh\Admin\Fields\Image;
 use Lxh\Admin\Fields\Label;
@@ -19,9 +18,6 @@ use Lxh\Admin\Fields\Traits\Builder;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Grid\RowActions;
 use Lxh\Admin\Grid\RowSelector;
-use Lxh\Admin\Table\Th;
-use Lxh\Admin\Table\Tr;
-use Lxh\Admin\Table\Tree;
 use Lxh\Admin\Widgets\WaterFall;
 use Lxh\Admin\Widgets\Widget;
 use Lxh\Contracts\Support\Renderable;
@@ -105,6 +101,11 @@ class Cards extends Widget
      * @var RowActions
      */
     protected $rowActions;
+
+    /**
+     * @var bool
+     */
+    protected $rowSelectorRendered = false;
 
     /**
      * @var array
@@ -367,8 +368,11 @@ class Cards extends Widget
                 $left = '';
                 if ($this->grid->option('useRowSelector')) {
                     $selector = $this->selector();
-                    // 全选按钮
-                    $this->grid->tools()->prepend($selector->renderHead() . '&nbsp;');
+                    if (! $this->rowSelectorRendered) {
+                        // 全选按钮
+                        $this->grid->tools()->prepend($selector->renderHead() . '&nbsp;');
+                        $this->rowSelectorRendered = true;
+                    }
 
                     $left = $selector->setItems($items)->render();
                 }

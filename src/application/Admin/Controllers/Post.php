@@ -94,6 +94,9 @@ class Post extends Controller
         $card->row(
             $cards->fieldLabel('content'), $cards->text('content')
         );
+
+        // 设置当前卡片过滤属性
+        $card->setFilters([$cards->item('author')]);
     }
 
     public function actionList111(array $params)
