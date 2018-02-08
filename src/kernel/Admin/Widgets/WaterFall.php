@@ -50,10 +50,10 @@ class WaterFall extends Widget implements Renderable
     {
         parent::__construct($attributes);
 
-        if (!Grid::isPjaxRequest()) {
+//        if (!Grid::isPjaxRequest()) {
             Admin::css('@lxh/css/water-fall');
             Admin::js('@lxh/js/jquery.wookmark.min');
-        }
+//        }
 
         $this->id = 'w'.Util::randomString(7);
     }

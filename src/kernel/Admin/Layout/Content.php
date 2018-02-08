@@ -291,7 +291,7 @@ class Content implements Renderable
             $css = Admin::css();
             $asyncJs = Admin::async();
 
-            return "{$content}{$css}{$asyncJs}{$js}<script>{$script}</script>";
+            return "{$content}<script>{$css}{$asyncJs}{$js}{$script}</script>";
         }
 
         Admin::collectFieldAssets();

@@ -15,10 +15,6 @@
         var pjax_reloads = {};
     }
     var PJAXID = '<?php echo $pjid?>';
-    <?php if ($useRWD) {?>
-    require_css('@lxh/plugins/RWD-Table-Patterns/dist/css/rwd-table.min');
-    require_js('@lxh/plugins/RWD-Table-Patterns/dist/js/rwd-table.min');
-    <?php }?>
     <?php if ($indexScript) {?>
     require_js('<?php echo $indexScript;?>');
     <?php }?>

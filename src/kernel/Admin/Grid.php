@@ -826,6 +826,11 @@ class Grid implements Renderable
             $this->disableGridScript();
         }
 
+        if ($this->options['useRWD']) {
+            Admin::css('@lxh/plugins/RWD-Table-Patterns/dist/css/rwd-table.min');
+            Admin::js('@lxh/plugins/RWD-Table-Patterns/dist/js/rwd-table.min');
+        }
+
         $vars = array_merge([
             'content' => &$content,
             'pageString'  => &$this->pageString,

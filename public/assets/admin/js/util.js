@@ -398,9 +398,14 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 
             store[name] = true;
 
-            var html = tpl.replace('{$name}', name).replace('{$url}', url);
+            var html = tpl.replace('{$name}', name).replace('{$url}', url), view;
+            if (typeof $lxh != 'undefined') view = $lxh.cache().get(url);
+
             if (url.indexOf('?') == -1) {
                 url +='?'
+            }
+            if (view) {
+                url +='&view=' + view;
             }
 
             // 隐藏所有iframe
