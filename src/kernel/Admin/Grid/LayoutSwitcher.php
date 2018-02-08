@@ -26,15 +26,23 @@ class LayoutSwitcher
 
         $spaid = Admin::SPAID();
         $pjaxid = Grid::getPjaxContainerId();
+
+        $filterId = '';
+        if ($filter = $this->grid->filter()) {
+            $filterId = $filter->getContainerId();
+        }
         Admin::script(<<<EOF
 (function () {
-var \$g = $('#{$spaid}').find('.grid-switcher');
+var \$g = $('#{$spaid}').find('.grid-switcher'), 
+form = $('#{$filterId} form'), 
+formUrl = form.attr('action').replace(/[&]*view=.*/i, '');
 \$g.click(function () {
     \$g.removeClass('active');
-    var t = $(this); t.addClass('active');
+    var t = $(this), v = t.data('view'); t.addClass('active');
     pjax_reloads['$pjaxid'](null,t.data('url'));
     // 缓存
-    \$lxh.cache().set(t.data('path'), t.data('view'));
+    \$lxh.cache().set(t.data('path'), v);
+    form.attr('action', formUrl + '&view=' + v);
 });
 })();
 EOF

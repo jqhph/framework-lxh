@@ -399,7 +399,7 @@ class Grid implements Renderable
      */
     public function filter(Filter $filter = null)
     {
-        if (! $this->filter) {
+        if ($filter) {
             $this->filter = $filter;
             $filter->grid($this);
             return $this;
