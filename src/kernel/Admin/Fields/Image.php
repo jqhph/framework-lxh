@@ -23,7 +23,7 @@ class Image extends Field
         $this->script('gimg', <<<EOF
 $('{$this->getContainerIdSelector()}').find('.grid-img').click(function(){
    var t=$(this),s= /style=[\'\"]?([^\'\"]*)[\'\"]?/i, c = t.html().replace(s,''), u=t.find('img').attr('src'),
-   m= \$lxh.ui().modal({id:t.attr('id'),title:'$title',confirmBtn:false,content:'<a href="'+ u +'" target="_blank">'+ c +'</a>'});
+   m= \$lxh.ui().modal({id:'modal'+t.attr('id'),title:'$title',confirmBtn:false,content:'<a href="'+ u +'" target="_blank">'+ c +'</a>'});
    m.modal('show');
 });
 EOF

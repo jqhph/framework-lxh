@@ -270,6 +270,8 @@ class Cards extends Widget
     }
 
     /**
+     * 设置瀑布流卡片过滤选项
+     *
      * @param array $filters
      * @return $this
      */

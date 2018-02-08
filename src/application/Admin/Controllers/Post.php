@@ -44,11 +44,22 @@ class Post extends Controller
         $grid->useLayoutSwitcher();
     }
 
+    /**
+     * 过滤器
+     *
+     * @param Filter $filter
+     */
     protected function filter(Filter $filter)
     {
         $filter->text('id')->number();
+        $filter->text('title')->minlen(3)->like();
     }
 
+    /**
+     * 表格布局
+     *
+     * @param Table $table
+     */
     protected function table(Table $table)
     {
         $table->code('id');
@@ -56,14 +67,21 @@ class Post extends Controller
     }
 
     /**
+     * 瀑布流卡片布局
+     *
      * @param Cards $cards
      */
     public function card(Cards $cards)
     {
         $card = $cards->card();
 
+        // 设置瀑布流卡片过滤选项
+        $cards->setFilterOptions(['Lxh', 'Jqh']);
+
         $card->image(
-            "<img src='https://img3.doubanio.com/view/photo/s_ratio_poster/public/p2511434383.jpg'>"
+            $cards->image('img')
+                ->width('auto')
+                ->value("https://img3.doubanio.com/view/photo/s_ratio_poster/public/p2511434383.jpg")
         );
 
         $card->title(
