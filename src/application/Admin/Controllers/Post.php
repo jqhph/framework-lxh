@@ -73,30 +73,31 @@ class Post extends Controller
      */
     public function card(Cards $cards)
     {
-        $card = $cards->card();
+        // 获取当前卡片
+        $each = $cards->each();
 
         // 设置瀑布流卡片过滤选项
         $cards->setFilterOptions(['Lxh', 'Jqh']);
 
-        $card->image(
+        $each->image(
             $cards->image('img')
                 ->width('auto')
                 ->value("https://img3.doubanio.com/view/photo/s_ratio_poster/public/p2511434383.jpg")
         );
 
-        $card->title(
+        $each->title(
             $cards->text('title')
         );
 
-        $card->row(
+        $each->row(
             $cards->fieldLabel('id'), $cards->code('id')
         );
-        $card->row(
+        $each->row(
             $cards->fieldLabel('content'), $cards->text('content')
         );
 
         // 设置当前卡片过滤属性
-        $card->setFilters([$cards->item('author')]);
+        $each->setFilters([$cards->item('author')]);
     }
 
     public function actionList111(array $params)

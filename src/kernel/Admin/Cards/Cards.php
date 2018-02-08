@@ -255,9 +255,11 @@ class Cards extends Widget
     }
 
     /**
+     * 获取当前卡片类
+     *
      * @return WaterFall\Card
      */
-    public function card()
+    public function each()
     {
         return $this->currentCard;
     }
