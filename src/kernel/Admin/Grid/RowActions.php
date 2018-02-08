@@ -45,6 +45,14 @@ class RowActions extends TrTools
         $this->rendering = $rendering;
     }
 
+    /**
+     * @return \Lxh\Admin\Data\Items
+     */
+    public function items()
+    {
+        return $this->items;
+    }
+
     public function title()
     {
         return '';
@@ -87,6 +95,16 @@ class RowActions extends TrTools
     }
 
     /**
+     * @return mixed|null
+     */
+    public function getId()
+    {
+        return $this->items->get(
+            $this->grid->idName()
+        );
+    }
+
+    /**
      * @return string
      */
     public function render()
@@ -94,9 +112,11 @@ class RowActions extends TrTools
         // 重置所有工具
         $this->tools = [];
 
-        $id = $this->items->get(
-            $this->grid->idName()
-        );
+        $id = $this->getId();
+
+        if ($rendering = $this->rendering) {
+            $rendering($this, $this->items);
+        }
 
         if ($this->allowEdit && $this->allowDelete) {
             $this->prepend(
@@ -105,16 +125,13 @@ class RowActions extends TrTools
             );
         } elseif ($this->allowEdit) {
             $this->prepend($this->renderEdit($id));
-        } elseif ($this->allowDelete)
+        } elseif ($this->allowDelete) {
             $this->prepend($this->renderDelete($id));
+        }
 
         // 重置状态
         $this->allowEdit = $this->grid->option('allowEdit');
         $this->allowDelete = $this->grid->option('allowDelete');
-
-        if ($rendering = $this->rendering) {
-            $rendering($this, $this->items);
-        }
 
         $end = '&nbsp;&nbsp;&nbsp;';
         $tools = '';

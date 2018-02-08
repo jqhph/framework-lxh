@@ -41,6 +41,11 @@ class Admin extends Controller
      */
     public function grid(Grid $grid, Content $content)
     {
+        $grid->rowActions(function (Grid\RowActions $rowActions) {
+            if ($rowActions->getId() == 1) {
+                $rowActions->disableDelete();
+            }
+        });
     }
 
     protected function createModalId()
@@ -49,7 +54,7 @@ class Admin extends Controller
 
     public function table(Table $table)
     {
-        $table->text('id')->sortable();
+        $table->code('id')->sortable();
         $table->text('username');
         $table->text('email');
         $table->text('mobile');
