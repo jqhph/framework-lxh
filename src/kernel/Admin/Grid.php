@@ -817,8 +817,10 @@ class Grid implements Renderable
         }
 
         if ($this->layout == static::LAYOUT_CARD) {
+            $this->url->query('view', static::LAYOUT_CARD);
             $content = $this->renderCard();
         } else {
+            $this->url->query('view', static::LAYOUT_TABLE);
             $content = $this->renderTable();
         }
 

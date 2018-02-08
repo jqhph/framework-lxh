@@ -28,6 +28,13 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class Post extends Controller
 {
     /**
+     * 使用过滤器
+     *
+     * @var string
+     */
+    protected $filter = 'modal';
+
+    /**
      * @param Grid $grid
      * @param Content $content
      */
@@ -35,6 +42,11 @@ class Post extends Controller
     {
         $grid->useCard();
         $grid->useLayoutSwitcher();
+    }
+
+    protected function filter(Filter $filter)
+    {
+        $filter->text('id')->number();
     }
 
     protected function table(Table $table)

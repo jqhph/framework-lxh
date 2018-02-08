@@ -21,41 +21,31 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         $cache.setToken(jsversion);
 
         config.options.cache = $cache;
-        // 处理需要加载的js数组
-        config.publicJs = get_used_js(config.publicJs, jsversion);
-        // 处理需要加载的js数组
-        config.publicCss = get_used_css(config.publicCss, cssversion);
 
         config.seaConfig = get_sea_config(config.seaConfig, jsversion);
 
         seajs.config(config.seaConfig);
-        // 加载css
-        seajs.use(config.publicCss);
 
-        // 优先加载jquery
-        // seajs.use('jquery', function (q) {
-        seajs.use(config.publicJs, function () {
-            setTimeout(function () {
-                init(function () {
-                    $(function () {
-                        call_actions();
-                    })
-                })
-            }, 10);
+        $d.on('app.created', load);
+        load();
 
-        });
-
-        $d.on('app.created', function () {
+        function load() {
             // 加载css
-            seajs.use(get_used_css([], cssversion));
-            seajs.use(get_used_js([], jsversion), function () {
-                var trpv = $('.table-responsive');
-                $(function () {
-                    call_actions();
-                    trpv.responsiveTable && $('.table-responsive').responsiveTable();
-                })
+            seajs.use(get_used_css(config.publicCss, cssversion));
+            // 加载js
+            seajs.use(get_used_js(config.publicJs, jsversion), function () {
+                setTimeout(function () {
+                    init(function () {
+                        $(function () {
+                            call_actions();
+                            var trpv = $('.table-responsive');
+                            trpv.responsiveTable && trpv.responsiveTable();
+                        })
+                    })
+                }, 10);
+
             });
-        });
+        }
     }
 
     // 初始化完成，执行动作
