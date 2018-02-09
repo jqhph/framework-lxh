@@ -327,14 +327,7 @@ class Grid implements Renderable
      */
     public function rows(array $rows)
     {
-        if ($this->layout == static::LAYOUT_CARD) {
-            $this->card()->setRows($rows);
-        } else {
-            $this->table()->setRows($rows);
-        }
-
         $this->rows = &$rows;
-
         return $this;
     }
 
@@ -734,7 +727,7 @@ class Grid implements Renderable
         if ($list && ($this->options['allowEdit'] || $this->options['allowDelete'] || $this->rowActions)) {
             $this->buildRowActions();
         }
-
+       
         $table = $this->table()->setRows($list)->render();
 
         return "<div class=\"table-rep-plugin\"><div class=\"table-responsive\" data-pattern=\"priority-columns\">$table</div></div>";

@@ -9,6 +9,7 @@
 namespace Lxh\Admin\Http\Controllers;
 
 use Lxh\Admin\Admin;
+use Lxh\Admin\Fields\Editable;
 use Lxh\Admin\Fields\Link;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Kernel\Url;
@@ -33,22 +34,6 @@ class Menu extends Controller
      * @var bool
      */
     protected $useAuthorize = true;
-
-    /**
-     * 网格字段定义
-     *
-     * @var array
-     */
-    protected $grid = [
-        'id' => ['hide' => 1, 'sortable' => 1, 'desc' => 1],
-        'icon' => ['view' => 'Icon'],
-        'name',
-        'controller',
-        'action',
-        'show' => ['view' => 'Checked'],
-        'type' => ['view' => 'Select'],
-        'priority',
-    ];
 
     protected function initialize()
     {
@@ -114,8 +99,7 @@ class Menu extends Controller
         $form->selectTree('parent_id')->options(auth()->menu()->all())->defaultOption(0, trans('Top'));
         $form->text('name')->rules('required');
         $form->text('icon')->help($this->iconHelp());
-        $form->text('controller');
-        $form->text('action');
+        $form->text('route')->prepend('<i class="fa fa-internet-explorer"></i>');
         $form->select('show')->options([1, 0])->default(1);
         $form->select('priority')->options(range(0, 30))->help(trans('The smaller the value, the higher the order.'));
         if ($this->useAuthorize) {
@@ -187,6 +171,16 @@ class Menu extends Controller
     {
         $table->useTree('subs');
 
+        $table->code('id')->sortable();
+        $table->icon('icon');
+        $table->text('name');
+        $table->editable('route');
+        $table->switch('show');
+        $table->select('type');
+        $table->editable('priority', function (Editable $editable) {
+            $editable->select(range(0, 30));
+        });
+
         if ($this->useAuthorize) {
             $table->link('ability_title', function (Link $link) {
                 $link->format(
@@ -194,6 +188,7 @@ class Menu extends Controller
                 );
             });
         }
+
     }
 
 

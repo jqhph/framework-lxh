@@ -30,13 +30,6 @@ class Menu
     protected $list;
 
     /**
-     * 当前菜单数据
-     *
-     * @var array
-     */
-    protected $current;
-
-    /**
      * @var \Lxh\Auth\Database\Menu
      */
     protected $model;
@@ -106,9 +99,7 @@ class Menu
             }
         }
 
-        $url = $this->makeUrl($select['controller'], $select['action']);
-
-        $nav = "<a href='$url'>" . $select['name'] . "</a>";
+        $nav = "<a href='{$m['route']}'>" . $select['name'] . "</a>";
 
         if ($select[$this->parentKeyName]) {
             $parent = $this->makeNavByNameOrId($select[$this->parentKeyName]);
@@ -117,30 +108,6 @@ class Menu
         }
 
         return $nav;
-    }
-
-    /**
-     * 根据控制器和action生成url
-     *
-     * @param $controller
-     * @param $action
-     * @return string
-     */
-    public function makeUrl($controller, $action)
-    {
-        return Admin::url($controller)->action($action);
-    }
-
-    /**
-     * 判断当前菜单是否被选中
-     *
-     * @param $controller
-     * @param $action
-     * @return bool
-     */
-    public function isActive($controller, $action)
-    {
-        return __CONTROLLER__ == $controller && strtoupper($action) == strtoupper(__ACTION__);
     }
 
     /**
@@ -167,13 +134,6 @@ class Menu
             if ($trans) {
                 $v['originName'] = $v['name'];
                 $v['name'] = trans_with_global($v['name'], 'menus');
-            }
-
-            $v['url'] = $this->makeUrl($v['controller'], $v['action']);
-
-            // 存储当前菜单
-            if (! $this->current && $this->isActive($v['controller'], $v['action'])) {
-                $this->current = $v;
             }
 
             if ($v[$this->parentKeyName] == $id) {

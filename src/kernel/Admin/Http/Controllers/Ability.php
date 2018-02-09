@@ -61,7 +61,7 @@ class Ability extends Controller
     {
         $filter->text('name')->like();
         $filter->text('title')->like();
-        $filter->dateRange('created_at')->between()->toTimestamp();
+        $filter->dateRange('created_at')->between()->time();
     }
 
     /**

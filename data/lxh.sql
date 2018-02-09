@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2018-02-08 20:19:14
+Date: 2018-02-09 11:54:53
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -48,7 +48,7 @@ INSERT INTO `abilities` VALUES ('9', 'system.manager', '系统管理', '15152131
 INSERT INTO `abilities` VALUES ('17', 'admin.read', '管理员查看', '1515230219', '1517881473', '0', '0', '1', '测试123');
 INSERT INTO `abilities` VALUES ('30', 'language.read', '语言包查看', '1515760352', '1515760370', '1', '0', '1', '');
 INSERT INTO `abilities` VALUES ('23', 'user.manager', '用户管理', '1515758278', '1515758633', '1', '0', '1', '');
-INSERT INTO `abilities` VALUES ('24', 'product.manager', '产品系统', '1515758654', '1515758671', '1', '0', '1', '');
+INSERT INTO `abilities` VALUES ('24', 'product.manager', '产品系统', '1515758654', '1518144506', '1', '0', '1', '123');
 INSERT INTO `abilities` VALUES ('25', 'product.read', '产品查看', '1515758687', '1515758698', '1', '0', '1', '');
 INSERT INTO `abilities` VALUES ('26', 'permissions.manager', '权限管理', '1515758747', '1515758758', '1', '0', '1', '');
 INSERT INTO `abilities` VALUES ('27', 'role.read', '角色查看', '1515758787', '0', '1', '0', '1', '');
@@ -191,34 +191,33 @@ CREATE TABLE `menu` (
   `show` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1显示，0不显示',
   `parent_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '上级菜单id',
   `layer` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '菜单层级',
-  `controller` varchar(20) NOT NULL DEFAULT '',
-  `action` varchar(20) NOT NULL DEFAULT '' COMMENT 'action',
   `deleted` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `created_at` int(11) unsigned NOT NULL DEFAULT '0',
   `created_by_id` int(11) unsigned NOT NULL,
   `type` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1普通菜单，2系统菜单，不能被删除或修改',
   `priority` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '排序权重值，值越小排序越靠前',
   `ability_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '权限id',
+  `route` varchar(100) NOT NULL DEFAULT '' COMMENT '路由',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of menu
 -- ----------------------------
-INSERT INTO `menu` VALUES ('1', 'Menu management', 'zmdi zmdi-menu', '1', '13', '1', 'Menu', 'List', '0', '1500180853', '1', '2', '0', '5');
-INSERT INTO `menu` VALUES ('13', 'System', 'fa fa-gears', '1', '0', '1', '', '', '0', '1500466810', '1', '1', '2', '9');
-INSERT INTO `menu` VALUES ('14', 'Making modules', 'zmdi zmdi-widgets', '1', '13', '1', 'System', 'MakeModules', '0', '1500467096', '1', '1', '0', '29');
-INSERT INTO `menu` VALUES ('45', 'Posts Manager', 'fa fa-file-text', '1', '0', '1', 'Post', '', '0', '1517833547', '1', '1', '0', '0');
-INSERT INTO `menu` VALUES ('16', 'Language Management', '', '1', '13', '1', 'Language', 'List', '0', '1500644030', '1', '1', '3', '30');
-INSERT INTO `menu` VALUES ('17', 'Setting', '', '1', '13', '1', 'System', 'Setting', '0', '1501244109', '1', '1', '4', '31');
-INSERT INTO `menu` VALUES ('18', 'Permissions', 'fa fa-pencil fa-fw', '1', '0', '1', '', '', '0', '1501583290', '1', '1', '1', '26');
-INSERT INTO `menu` VALUES ('19', 'Role', 'fa fa-user-plus', '1', '18', '1', 'Role', 'List', '0', '1501592174', '1', '1', '0', '27');
-INSERT INTO `menu` VALUES ('34', 'Products system', 'fa fa-opencart', '1', '0', '1', '', '', '0', '1508157506', '1', '1', '0', '24');
-INSERT INTO `menu` VALUES ('43', 'User Manager', 'fa fa-users', '1', '0', '1', '', '', '0', '1515230163', '1', '1', '0', '23');
-INSERT INTO `menu` VALUES ('44', 'Admin', '', '1', '43', '1', 'Admin', 'List', '0', '1515230219', '1', '1', '0', '17');
-INSERT INTO `menu` VALUES ('35', 'Products', '', '1', '34', '1', 'Product', 'List', '0', '1508157865', '1', '1', '0', '25');
-INSERT INTO `menu` VALUES ('37', 'Abilities', '', '1', '18', '1', 'Ability', 'List', '0', '1515206612', '1', '1', '1', '28');
-INSERT INTO `menu` VALUES ('46', 'Posts', '', '1', '45', '1', 'Post', 'List', '0', '1517833575', '1', '1', '0', '0');
+INSERT INTO `menu` VALUES ('1', 'Menu management', 'zmdi zmdi-menu', '1', '13', '1', '0', '1500180853', '1', '2', '0', '5', '/admin/menu/action/list');
+INSERT INTO `menu` VALUES ('13', 'System', 'fa fa-gears', '1', '0', '1', '0', '1500466810', '1', '1', '2', '9', '');
+INSERT INTO `menu` VALUES ('14', 'Making modules', 'zmdi zmdi-widgets', '1', '13', '1', '0', '1500467096', '1', '1', '0', '29', '/admin/system/action/make-modules');
+INSERT INTO `menu` VALUES ('45', 'Posts Manager', 'fa fa-file-text', '1', '0', '1', '0', '1517833547', '1', '1', '0', '0', '');
+INSERT INTO `menu` VALUES ('16', 'Language Management', '', '1', '13', '1', '0', '1500644030', '1', '1', '3', '30', '/admin/language/action/list');
+INSERT INTO `menu` VALUES ('17', 'Setting', '', '1', '13', '1', '0', '1501244109', '1', '1', '4', '31', '/admin/system/action/setting');
+INSERT INTO `menu` VALUES ('18', 'Permissions', 'fa fa-pencil fa-fw', '1', '0', '1', '0', '1501583290', '1', '1', '1', '26', '');
+INSERT INTO `menu` VALUES ('19', 'Role', 'fa fa-user-plus', '1', '18', '1', '0', '1501592174', '1', '1', '0', '27', '/admin/role/action/list');
+INSERT INTO `menu` VALUES ('34', 'Products system', 'fa fa-opencart', '1', '0', '1', '0', '1508157506', '1', '1', '0', '24', '');
+INSERT INTO `menu` VALUES ('43', 'User Manager', 'fa fa-users', '1', '0', '1', '0', '1515230163', '1', '1', '0', '23', '');
+INSERT INTO `menu` VALUES ('44', 'Admin', '', '1', '43', '1', '0', '1515230219', '1', '1', '0', '17', '/admin/admin/action/list');
+INSERT INTO `menu` VALUES ('35', 'Products', '', '1', '34', '1', '0', '1508157865', '1', '1', '0', '0', '/admin/product/action/list');
+INSERT INTO `menu` VALUES ('37', 'Abilities', '', '1', '18', '1', '0', '1515206612', '1', '1', '1', '28', '/admin/ability/action/list');
+INSERT INTO `menu` VALUES ('46', 'Posts', '', '1', '45', '1', '0', '1517833575', '1', '1', '0', '0', '/admin/post/action/list');
 
 -- ----------------------------
 -- Table structure for order
@@ -356,7 +355,7 @@ INSERT INTO `product` VALUES ('40', '1', '0', '0', '0', '0', '0', '0', '0', '', 
 INSERT INTO `product` VALUES ('41', 'test4@qq.com', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
 INSERT INTO `product` VALUES ('42', '7122244', '0', '0', '0', '1', '1', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
 INSERT INTO `product` VALUES ('43', 'https://ai.baidu.com', '0', '0', '0', '1', '1', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
-INSERT INTO `product` VALUES ('44', '2028-07-05 05:25:08', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
+INSERT INTO `product` VALUES ('44', '2028-07-05 05:25:08', '0', '0', '0', '1', '0', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '0', '0');
 
 -- ----------------------------
 -- Table structure for role

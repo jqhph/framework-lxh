@@ -391,7 +391,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         this.create = function (name, url) {
             if (typeof store[name] != 'undefined') return true;
             $(document).trigger('app.creating');
-            var self = this, ori = url;
+            var self = this, ori = url.split('?')[0];
             NProgress.start();
             current = name;
             url = url || name;
@@ -399,7 +399,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
             store[name] = true;
 
             var html = tpl.replace('{$name}', name).replace('{$url}', url), view;
-            if (typeof $lxh != 'undefined') view = $lxh.cache().get(url);
+            if (typeof $lxh != 'undefined') view = $lxh.cache().get(ori);
 
             if (url.indexOf('?') == -1) {
                 url +='?'

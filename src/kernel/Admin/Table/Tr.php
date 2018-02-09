@@ -97,11 +97,12 @@ class Tr extends Widget
 
         $name = $this->table->treeName();
 
-        if (!$name || empty($this->row[$name]) || !is_array($this->row[$name])) {
+        $datas = $this->items->get($name);
+        if (!$name || empty($datas) || !is_array($datas)) {
             return $tr;
         }
 
-        $tr .= $this->buildTree($name, $this->row[$name])->render();
+        $tr .= $this->buildTree($name, $datas)->render();
 
         return $tr;
     }

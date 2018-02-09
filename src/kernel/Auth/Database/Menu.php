@@ -64,7 +64,7 @@ class Menu extends Model
         if (empty($input['show'])) {
             $input['show'] = 0;
         }
-        if ($this->useAuthorize) {
+        if ($this->useAuthorize && isset($input['quick_relate_ability'])) {
             $this->setupAbility($input);
         }
     }
@@ -73,7 +73,6 @@ class Menu extends Model
     {
         $this->quickAbility = $input['quick_relate_ability'];
         unset($input['quick_relate_ability']);
-
         // 用户选择了权限，则以此为主
         if ($input['ability_id'] && is_numeric($input['ability_id'])) {
             return;
@@ -143,7 +142,7 @@ class Menu extends Model
         if (isset($input['show'])) {
             if (! $input['show']) $input['show'] = 0;
         }
-        if ($this->useAuthorize) {
+        if ($this->useAuthorize && isset($input['quick_relate_ability']) && isset($input['ability_id'])) {
             $this->setupAbility($input);
         }
     }
