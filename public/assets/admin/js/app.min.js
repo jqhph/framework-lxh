@@ -57,9 +57,12 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         }
 
         lxhActions = [];
+        if (LXHSTORE.SPAID) {
+            $('#'+LXHSTORE.SPAID).trigger('app.completed');
+        } else {
+            $d.trigger('app.completed');
+        }
         console.log('app.completed');
-        $d.trigger('app.completed');
-        LXHSTORE.SPAID && $('#'+LXHSTORE.SPAID).trigger('app.completed');
     }
 
     /**
