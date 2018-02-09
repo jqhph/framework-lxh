@@ -18,9 +18,16 @@
     <?php if ($indexScript) {?>
     require_js('<?php echo $indexScript;?>');
     <?php }?>
-    <?php if ($pageOptions) {?>
+
+    <?php if ($pjax) {
+    // jquery.pjax.min含自定义js
+    ?>
+    require_js('@lxh/js/jquery.pjax.min');
     __then__(function () {
-        var _p = $('.grid-per-pager'), $d = $(document);
+        var cid = '#<?php echo $pjid?>', $c = $(cid);
+
+        <?php if ($pageOptions) {?>
+        var _p = $('#<?php echo $pjid;?> .grid-per-pager'), $d = $(document);
         _p.off('change');
         _p.change(pjax_reload);
         function pjax_reload(e, url) {
@@ -31,15 +38,9 @@
             echo 'window.location.href = $(this).val();';
         } ?>
         }
-        LXHSTORE.pjax_reloads['<?php echo $pjid?>'] = pjax_reload
-    });
-    <?php }?>
-    <?php if ($pjax) {
-    // jquery.pjax.min含自定义js
-    ?>
-    require_js('@lxh/js/jquery.pjax.min');
-    __then__(function () {
-        var $d = $(document), cid = '#<?php echo $pjid?>', $c = $(cid);
+        LXHSTORE.pjax_reloads['<?php echo $pjid?>'] = pjax_reload;
+        <?php }?>
+
         $.pjax.defaults.timeout = 10000;
         $.pjax.defaults.maxCacheLength = 0;
         $d.pjax(cid + ' a:not(a[target="_blank"])', {container: cid});
@@ -67,12 +68,11 @@
                 if($submit_btn) $submit_btn.button('reset');
             }
             // 重新绑定点击事件
-            var _p = $('.grid-per-pager');
+            var _p = $c.find('.grid-per-pager');
             _p.off('change');
             _p.change(LXHSTORE.pjax_reloads['<?php echo $pjid?>']);
             $d.trigger('app.created');
         })
     });
-
     <?php } ?>
 </script>

@@ -150,6 +150,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
             histories = [def],
             current = def,
             max = 10;
+        iframe.setTab(this);
 
         this.current = function () {
             return current.name;
@@ -344,7 +345,12 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
             store = {},
             $app = $('#lxh-app'),
             current,
-            spaid;
+            spaid,
+            tab;
+
+        this.setTab = function (t) {
+            tab = t
+        };
 
         // 切换显示iframe
         this.switch = function (name, url) {
@@ -415,19 +421,19 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
                 // 隐藏所有iframe
                 self.hide();
                 NProgress.done();
-                $c.find('.content').html(data);
-                $c.attr('SPAID', LXHSTORE.SPAID);
-                console.log('app.created', LXHSTORE.SPAID);
-                if (current != name) {
-                    // 如果当tab页非此页，则需切换SPAID的值到当前打开的tab页
-                    LXHSTORE.SPAID = self.container(current).attr('SPAID');
-                }
-                $('#'+LXHSTORE.SPAID).trigger('app.created');
+
                 // // 显示当前iframe
                 $c.show();
 
                 // 保存链接用于刷新操作
                 $c.attr('url', ori);
+                // 如果在这加载之前切换到了其他tab页，需要切换回来
+                current = name;
+                tab.show(name);
+                $c.find('.content').html(data);
+                $c.attr('SPAID', LXHSTORE.SPAID);
+                console.log('app.created', LXHSTORE.SPAID);
+                $('#'+LXHSTORE.SPAID).trigger('app.created');
             });
 
 
