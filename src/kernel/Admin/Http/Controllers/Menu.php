@@ -115,9 +115,9 @@ class Menu extends Controller
      */
     protected function buildQuickCreateAbilityInput(Form $form)
     {
-        $form->text('quick_relate_ability')
-            ->options(Ability::getAbilitiesSupport())
-            ->help(trans('Please fill the ability name.the ablity will be create if no exists.'));
+//        $form->text('quick_relate_ability')
+//            ->options(Ability::getAbilitiesSupport())
+//            ->help(trans('Please fill the ability name.the ablity will be create if no exists.'));
     }
 
     protected function buildAbilitiesInput(Form $form)
