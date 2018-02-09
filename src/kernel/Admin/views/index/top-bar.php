@@ -19,9 +19,9 @@
             <div class="header-flex-box">
                 <nav class="header-tag">
                     <ul class="header-tag-list a tab-menu">
-                        <li class="ticket-tab active tab" onclick="TAB.switch('home')" data-action="tab-home" data-name="home" style="min-width:100px;">
+                        <li class="ticket-tab active tab" onclick="LXHSTORE.TAB.switch('home')" data-action="tab-home" data-name="home" style="min-width:100px;">
                             <a><?php echo trans('Home')?></a>
-                            <i class="zmdi zmdi-refresh icon-refresh" onclick='TAB.reload("home", HOMEURL, "<?php echo trans('Home')?>");' style="right:0;"></i>
+                            <i class="zmdi zmdi-refresh icon-refresh" onclick='LXHSTORE.TAB.reload("home", LXHSTORE.HOMEURL, "<?php echo trans('Home')?>");' style="right:0;"></i>
                         </li>
                     </ul>
                 </nav>

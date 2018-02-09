@@ -1,9 +1,7 @@
 /**
  * Created by Jqh on 2017/7/21. , 'css/sweet-twitter.css'
  */
-define(['@lxh/css/sweet-alert.css', '@lxh/js/sweet-alert', '@lxh/js/validate.min'], function () {
-    var currentIframeName = IFRAME.current();
-
+define(['@lxh/css/sweet-alert.css', '@lxh/js/sweet-alert', '@lxh/js/validate.min'], function ()
     var language = {
         // 初始化方法
         init: function () {
@@ -461,9 +459,6 @@ define(['@lxh/css/sweet-alert.css', '@lxh/js/sweet-alert', '@lxh/js/validate.min
 
             this.$languageTable.find('i[data-action="remove-edit-row"]').unbind('click');
             this.$languageTable.find('i[data-action="remove-edit-row"]').click(this.events.removeRow.bind(this));
-
-            // 重新设置iframe高度
-            IFRAME.height(currentIframeName);
         }
     }
 

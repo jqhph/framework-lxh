@@ -30,7 +30,7 @@ echo admin_js('js/util.min');
 echo view('admin::index.app-js')->render();
 ?>
 <script>
-    var SPAID = '<?php echo \Lxh\Admin\Admin::SPAID()?>';
+    LXHSTORE.SPAID = '<?php echo \Lxh\Admin\Admin::SPAID()?>';
     (function (w) {
         w.loading = function (el, circle, timeout) {
             el = el || 'body';

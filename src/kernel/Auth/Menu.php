@@ -226,7 +226,7 @@ class Menu
         $tab = '';
         if ($url) {
             $id = str_replace('/', '-', $url);
-            $tab = "onclick=\"TAB.switch('$id', '$url', '$label')\"";
+            $tab = "onclick=\"LXHSTORE.TAB.switch('$id', '$url', '$label')\"";
         }
 
         return "<a $tab>$label</a>";

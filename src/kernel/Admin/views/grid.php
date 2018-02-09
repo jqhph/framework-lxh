@@ -11,8 +11,8 @@
     ])->render();
 ?></div>
 <script>
-    if (!pjax_reloads) {
-        var pjax_reloads = {};
+    if (!LXHSTORE.pjax_reloads) {
+        LXHSTORE.pjax_reloads = {};
     }
     var PJAXID = '<?php echo $pjid?>';
     <?php if ($indexScript) {?>
@@ -31,7 +31,7 @@
             echo 'window.location.href = $(this).val();';
         } ?>
         }
-        pjax_reloads['<?php echo $pjid?>'] = pjax_reload
+        LXHSTORE.pjax_reloads['<?php echo $pjid?>'] = pjax_reload
     });
     <?php }?>
     <?php if ($pjax) {
@@ -69,7 +69,7 @@
             // 重新绑定点击事件
             var _p = $('.grid-per-pager');
             _p.off('change');
-            _p.change(pjax_reloads['<?php echo $pjid?>']);
+            _p.change(LXHSTORE.pjax_reloads['<?php echo $pjid?>']);
             $d.trigger('app.created');
         })
     });

@@ -359,7 +359,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
             // 显示当前iframe
             $c.show();
             if (spaid = $c.attr('SPAID')) {
-                SPAID = spaid;
+                LXHSTORE.SPAID = spaid;
             }
             // console.log('switch tab', SPAID);
             current = name
@@ -417,11 +417,11 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
             $.get(url+'&_log', function(data) {
                 NProgress.done();
                 $c.find('.content').html(data);
-                $c.attr('SPAID', SPAID);
-                console.log('app.created', SPAID);
+                $c.attr('SPAID', LXHSTORE.SPAID);
+                console.log('app.created', LXHSTORE.SPAID);
                 if (current != name) {
                     // 如果当tab页非此页，则需切换SPAID的值到当前打开的tab页
-                    SPAID = self.container(current).attr('SPAID');
+                    LXHSTORE.SPAID = self.container(current).attr('SPAID');
                 }
                 $(document).trigger('app.created');
             });

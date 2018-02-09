@@ -39,7 +39,7 @@ window.Lxh = function (options) {
 
             var modal;
             function setup_ajax_modal() {
-                var $am = $('#'+SPAID+' .ajax-modal');
+                var $am = $('#'+LXHSTORE.SPAID+' .ajax-modal');
                 $am.off('click');
                 $am.click(show_modal_btn);
                 $(document).on('pjax:complete',function(xhr){$am.off('click');$am.click(show_modal_btn);});
@@ -574,7 +574,7 @@ window.Lxh = function (options) {
      * @returns {FormValidator}
      */
     function validator(options, call, selector) {
-        selector = selector || ('.' + SPAID + '-form');
+        selector = selector || ('.' + LXHSTORE.SPAID + '-form');
 
         $(selector).submit(function () {
             return false;
@@ -1297,7 +1297,7 @@ console.log('request data', data);
          * @returns {string}
          */
         function get_form_selector () {
-            return store.formSelector || (store.formSelector = '.' + SPAID + '-form')
+            return store.formSelector || (store.formSelector = '.' + LXHSTORE.SPAID + '-form')
         }
     }
     // --------------------------------------Model END-----------------------------------------------

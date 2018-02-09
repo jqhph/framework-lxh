@@ -6,7 +6,7 @@
 
 define(['@lxh/css/sweet-alert.min.css', '@lxh/js/sweet-alert.min'], function () {
     var model = null, listids;
-    window.SELECTEDIDS = {};
+    LXHSTORE.SELECTEDIDS = {};
     var public = {
         delete: function (e) {
             var $this = $(e.currentTarget),
@@ -52,7 +52,7 @@ define(['@lxh/css/sweet-alert.min.css', '@lxh/js/sweet-alert.min'], function () 
         },
         // 批量删除
         batchDelete: function (e) {
-            var listids = SELECTEDIDS[SPAID];
+            var listids = LXHSTORE.SELECTEDIDS[LXHSTORE.SPAID];
             if (! listids) {
                 return $lxh.ui().notify().error(trans('Unchecked!', 'tip'));
             }
@@ -89,7 +89,7 @@ define(['@lxh/css/sweet-alert.min.css', '@lxh/js/sweet-alert.min'], function () 
 
 
     $(document).on('app.completed', function () {
-        var $spa = $('#' + SPAID);
+        var $spa = $('#' + LXHSTORE.SPAID);
         var $deleteRow = $spa.find('a[data-action="delete-row"]'), $bd = $spa.find('.batch-delete');
         // 重新绑定删除点击事件，为放置旧tab页内容重复绑定，需要先取消再绑定
         $deleteRow.off('click');
@@ -145,8 +145,8 @@ define(['@lxh/css/sweet-alert.min.css', '@lxh/js/sweet-alert.min'], function () 
             return input
         }
         function set_all_input(val) {
-            SELECTEDIDS[SPAID] = val;
-            $(document).trigger(SPAID + '.grid.selected', val);
+            LXHSTORE.SELECTEDIDS[LXHSTORE.SPAID] = val;
+            $(document).trigger(LXHSTORE.SPAID + '.grid.selected', val);
         }
         function selecone() {
             var ids = allInput.val(), $this = $(this), id = $this.val();

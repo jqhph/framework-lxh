@@ -70,27 +70,33 @@
 echo admin_js('js/jquery.slimscroll.min');
 ?>
 <script>
+    // 全局变量容器，所有全局变量都应该放置到此容器，便于管理
+    var LXHSTORE = {};
     var resizefunc = [];
-    var IFRAME = new Iframe(),
-        TAB = new Tab(IFRAME),
-        HOMEURL = '<?php echo $homeUrl?>';
+    LXHSTORE.IFRAME = new Iframe();
+    LXHSTORE.TAB = new Tab(LXHSTORE.IFRAME);
+    LXHSTORE.HOMEURL = '<?php echo $homeUrl?>';
 
-    TAB.setMax(<?php echo $maxTab;?>);
+    LXHSTORE.TAB.setMax(<?php echo $maxTab;?>);
 
     // 加载首页视图
-    IFRAME.switch('home', HOMEURL);
+    LXHSTORE.IFRAME.switch('home', LXHSTORE.HOMEURL);
     document.onkeydown = function (e) {
         if (e.keyCode==116) {
             e.keyCode = 0;
             e.cancelBubble = true;
-            IFRAME.reload();
+            LXHSTORE.IFRAME.reload();
             return false;
         }
     };
-    var open_tab = function (id, url, label) {TAB.switch(id, url, label)},
-    close_tab = function (id) {TAB.close(id)},
-    reload_tab = function (id, url, label) {TAB.reload(id, url, label)},
-    back_tab = function (step) {TAB.back(step)};
+    var open_tab = function (id, url, label) {LXHSTORE.TAB.switch(id, url, label)},
+    close_tab = function (id) {LXHSTORE.TAB.close(id)},
+    reload_tab = function (id, url, label) {LXHSTORE.TAB.reload(id, url, label)},
+    back_tab = function (step) {LXHSTORE.TAB.back(step)};
+
+    setTimeout(function () {
+        console.log(LXHSTORE,window);
+    }, 10000);
 </script>
 
 <!-- KNOB JS -->
