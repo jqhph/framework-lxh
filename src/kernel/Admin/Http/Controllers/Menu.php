@@ -171,7 +171,7 @@ class Menu extends Controller
     {
         $table->useTree('subs');
 
-        $table->code('id')->sortable();
+        $table->code('id');
         $table->icon('icon');
         $table->text('name');
         $table->editable('route');
