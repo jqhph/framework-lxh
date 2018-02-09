@@ -20,6 +20,7 @@ use Lxh\Admin\Widgets\Form;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Table\Table;
 use Lxh\Admin\Http\Models\Logs as LogsModel;
+use Lxh\Support\Collection;
 
 /**
  * 系统操作日志模块
@@ -49,6 +50,18 @@ class Logs extends Controller
         $grid->disableEdit();
         $grid->disableCreate();
         $grid->disableResponsive();
+    }
+
+    /**
+     * @param Filter $filter
+     */
+    protected function filter(Filter $filter)
+    {
+        $admins = (new Collection((new \Lxh\Auth\Database\Admin())->find()))->pluck(['']);
+        
+        $filter->select('admin_id')->options();
+        $filter->text('table')->minlen(3)->like();
+        $filter->text('input')->minlen(5)->like();
     }
 
     /**
