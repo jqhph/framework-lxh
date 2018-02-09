@@ -349,12 +349,12 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 
         // 切换显示iframe
         this.switch = function (name, url) {
-            this.hide();
             var $c = this.container(name);
 
             if ($c.length < 1) {
                 return this.create(name, url)
             }
+            this.hide();
 
             // 显示当前iframe
             $c.show();
@@ -368,8 +368,8 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         this.reload = function (name, url) {
             name = name || current;
             url = url || this.container(name).attr('url');
-            this.remove(name);
-            this.switch(name, url);
+            delete store[name];
+            this.create(name, url);
         };
 
         this.removeStore = function (name) {
@@ -408,13 +408,13 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
                 url +='&view=' + view;
             }
 
-            // 隐藏所有iframe
-            this.hide();
 
-            $app.append(html);
-
-            var $c = this.container(name);
             $.get(url+'&_log', function(data) {
+                self.container(name).remove();
+                $app.append(html);
+                var $c = self.container(name);
+                // 隐藏所有iframe
+                self.hide();
                 NProgress.done();
                 $c.find('.content').html(data);
                 $c.attr('SPAID', LXHSTORE.SPAID);
@@ -423,13 +423,16 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
                     // 如果当tab页非此页，则需切换SPAID的值到当前打开的tab页
                     LXHSTORE.SPAID = self.container(current).attr('SPAID');
                 }
+                $('#'+LXHSTORE.SPAID).trigger('app.created');
                 $(document).trigger('app.created');
+                // // 显示当前iframe
+                $c.show();
+
+                // 保存链接用于刷新操作
+                $c.attr('url', ori);
             });
 
-            // // 显示当前iframe
-            $c.show();
-            // 保存链接用于刷新操作
-            $c.attr('url', ori);
+
         };
 
         // 自动设置高度

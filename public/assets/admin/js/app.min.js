@@ -59,7 +59,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         lxhActions = [];
         console.log('app.completed');
         $d.trigger('app.completed');
-        LXHSTORE.SPAID && $d.trigger(LXHSTORE.SPAID +'.' + 'app.completed');
+        LXHSTORE.SPAID && $('#'+LXHSTORE.SPAID).trigger('app.completed');
     }
 
     /**
