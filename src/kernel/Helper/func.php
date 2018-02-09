@@ -111,9 +111,23 @@ function resolve($abstract)
  * @param  string $name
  * @return Model
  */
-function model($name = __CONTROLLER__)
+function model($name = null)
 {
     return $GLOBALS['MODEL_FACTORY']->create($name);
+}
+
+/**
+ * 设置或获取默认模型名称
+ *
+ * @param null|string $name
+ * @return \Lxh\MVC\ModelFactory|string
+ */
+function default_model_name($name = null)
+{
+    if ($name) {
+        return $GLOBALS['MODEL_FACTORY']->setDefaultName($name);
+    }
+    return $GLOBALS['MODEL_FACTORY']->getDefaultName();
 }
 
 /**

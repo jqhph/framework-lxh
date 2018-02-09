@@ -36,7 +36,7 @@ class Model extends Entity
      *
      * @var string
      */
-    protected $modelName;
+    protected $name;
 
     /**
      * 表名
@@ -71,22 +71,27 @@ class Model extends Entity
 
     public function __construct($name = null, Container $container = null)
     {
-        $this->modelName = lc_dash($name ?: $this->parseName());
+        $name = $name ?: $this->parseName();
+
+        $this->name = lc_dash($name);
         $this->module = defined('__MODULE_DASH__') ? __MODULE_DASH__ : '';
-
-        if (! $this->tableName) $this->tableName = Util::convertWith($name, true);
-
         $this->container = $container ?: container();
-
         $this->events = $container['events'];
+
+        if (! $this->tableName)
+            $this->tableName = __camel_case__($name);
 
         $this->initialize();
     }
 
+    /**
+     * 获取当前模型类名
+     *
+     * @return mixed
+     */
     protected function parseName()
     {
-        $names = explode('\\', __CLASS__);
-
+        $names = explode('\\', static::class);
         return end($names);
     }
 
@@ -160,7 +165,7 @@ class Model extends Entity
 
         $this->beforeBatchDelete($ids);
         fire(
-            "{$this->module}.{$this->modelName}.batch-delete.before",
+            "{$this->module}.{$this->name}.batch-delete.before",
             [$ids]
         );
 
@@ -172,7 +177,7 @@ class Model extends Entity
 
         $this->afterBatchDelete($ids, $res);
         fire(
-            "{$this->module}.{$this->modelName}.batch-delete.after",
+            "{$this->module}.{$this->name}.batch-delete.after",
             [$ids]
         );
 
@@ -253,6 +258,15 @@ class Model extends Entity
     }
 
     /**
+     * @param array $ids
+     * @return Query
+     */
+    public function whereInIds(array $ids)
+    {
+        return $this->query()->select($this->selectFields)->whereIn($this->getKeyName(), $ids);
+    }
+
+    /**
      * where
      *
      * @return Query
@@ -313,7 +327,7 @@ class Model extends Entity
 
         $this->beforeUpdate($id, $input);
         fire(
-            "{$this->module}.{$this->modelName}.update.before",
+            "{$this->module}.{$this->name}.update.before",
             [$id, &$input]
         );
 
@@ -321,7 +335,7 @@ class Model extends Entity
 
         $this->afterUpdate($id, $input, $result);
         fire(
-            "{$this->module}.{$this->modelName}.update.after",
+            "{$this->module}.{$this->name}.update.after",
             [$id, &$input, $result]
         );
 
@@ -340,7 +354,7 @@ class Model extends Entity
 
         $this->beforeAdd($input);
         fire(
-            "{$this->module}.{$this->modelName}.add.before",
+            "{$this->module}.{$this->name}.add.before",
             [&$input]
         );
 
@@ -351,7 +365,7 @@ class Model extends Entity
 
         $this->afterAdd($this->insertId, $input);
         fire(
-            "{$this->module}.{$this->modelName}.add.after",
+            "{$this->module}.{$this->name}.add.after",
             [$this->insertId, &$input]
         );
 
@@ -369,7 +383,7 @@ class Model extends Entity
 
         $this->beforeAdd($input);
         fire(
-            "{$this->module}.{$this->modelName}.add.before",
+            "{$this->module}.{$this->name}.add.before",
             [&$input]
         );
 
@@ -377,7 +391,7 @@ class Model extends Entity
 
         $this->afterAdd($this->insertId, $input);
         fire(
-            "{$this->module}.{$this->modelName}.add.after",
+            "{$this->module}.{$this->name}.add.after",
             [$this->insertId, &$input]
         );
 
@@ -398,7 +412,7 @@ class Model extends Entity
 
         $this->beforeDelete($id);
         fire(
-            "{$this->module}.{$this->modelName}.delete.before",
+            "{$this->module}.{$this->name}.delete.before",
             [&$id]
         );
 
@@ -406,7 +420,7 @@ class Model extends Entity
 
         $this->afterDelete($id, $result);
         fire(
-            "{$this->module}.{$this->modelName}.delete.after",
+            "{$this->module}.{$this->name}.delete.after",
             [&$id, $result]
         );
 

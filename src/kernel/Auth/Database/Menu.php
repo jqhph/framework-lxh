@@ -64,7 +64,7 @@ class Menu extends Model
         if (empty($input['show'])) {
             $input['show'] = 0;
         }
-        if ($this->useAuthorize && isset($input['quick_relate_ability'])) {
+        if ($this->useAuthorize && isset($input['ability_id'])) {
             $this->setupAbility($input);
         }
     }
@@ -142,7 +142,7 @@ class Menu extends Model
         if (isset($input['show'])) {
             if (! $input['show']) $input['show'] = 0;
         }
-        if ($this->useAuthorize && isset($input['quick_relate_ability']) && isset($input['ability_id'])) {
+        if ($this->useAuthorize && isset($input['ability_id'])) {
             $this->setupAbility($input);
         }
     }

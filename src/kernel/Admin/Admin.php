@@ -128,6 +128,7 @@ class Admin
     {
         if ($scope) {
             static::$scope = $scope;
+            default_model_name($scope);
         }
 
         return static::$scope;

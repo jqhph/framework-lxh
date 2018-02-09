@@ -7,10 +7,19 @@ use ArrayAccess;
 
 abstract class Factory implements ArrayAccess
 {
+    /**
+     * @var Container
+     */
     protected $container;
 
+    /**
+     * @var string
+     */
     protected $defaultName;
 
+    /**
+     * @var array
+     */
     protected $instances = [];
 
     public function __construct(Container $container)
@@ -27,7 +36,7 @@ abstract class Factory implements ArrayAccess
     final public function get($name = null)
     {
         if (! $name) {
-            $name = & $this->defaultName;
+            $name = $this->getDefaultName();
         }
         if (! isset($this->instances[$name])) {
             $this->instances[$name] = $this->create($name);
@@ -42,11 +51,9 @@ abstract class Factory implements ArrayAccess
      * */
     abstract public function create($name);
 
-    protected function getContainer()
-    {
-        return $this->container;
-    }
-
+    /**
+     * @return array
+     */
     public function keys()
     {
         return array_keys($this->instances);
@@ -58,6 +65,26 @@ abstract class Factory implements ArrayAccess
             $this->instances[$name] = $this->create($name);
         }
         return $this->instances[$name];
+    }
+
+    /**
+     * 设置默认名称
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function setDefaultName($name)
+    {
+        $this->defaultName = &$name;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultName()
+    {
+        return $this->defaultName;
     }
 
     /**
