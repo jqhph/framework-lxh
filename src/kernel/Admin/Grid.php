@@ -727,10 +727,15 @@ class Grid implements Renderable
         if ($list && ($this->options['allowEdit'] || $this->options['allowDelete'] || $this->rowActions)) {
             $this->buildRowActions();
         }
-       
+
         $table = $this->table()->setRows($list)->render();
 
-        return "<div class=\"table-rep-plugin\"><div class=\"table-responsive\" data-pattern=\"priority-columns\">$table</div></div>";
+        $class = 'table-responsive';
+        if (!$this->options['useRWD']) {
+            $class = '';
+        }
+
+        return "<div class=\"table-rep-plugin\"><div class=\"$class\" data-pattern=\"priority-columns\">$table</div></div>";
     }
 
     /**

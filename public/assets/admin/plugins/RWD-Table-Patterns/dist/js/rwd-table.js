@@ -119,7 +119,7 @@
     ResponsiveTable.prototype.createButtonToolbar = function() {
         var that = this;
 
-        this.$btnToolbar = $('.btn-toolbar')//$('<div class="btn-toolbar" />');
+        this.$btnToolbar = $('#'+LXHSTORE.SPAID+' .btn-toolbar');//$('<div class="btn-toolbar" />');
 
         this.$dropdownGroup = $('<div class="btn-group dropdown-btn-group pull-right" />');
         this.$dropdownBtn = $('<button data-rwd="1" class="btn btn-default dropdown-toggle  waves-effect waves-float" data-toggle="dropdown">' + trans('Display') + ' <span class="caret"></span></button>');
