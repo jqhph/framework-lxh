@@ -26,7 +26,7 @@
         function pjax_reload(e, url) {
             <?php if ($pjax) { ?>
             NProgress.start();
-            $.get(url||$(this).val(),function(d){$('#<?php echo $pjid;?>').html(d);$d.trigger('pjax:complete',{});NProgress.done();$d.trigger('app.created');});
+            $.get(url||$(this).val(),function(d){$('#<?php echo $pjid;?>').html(d);$('#<?php echo $pjid?>').trigger('pjax:complete',{});NProgress.done();});
             <?php } else {
             echo 'window.location.href = $(this).val();';
         } ?>
@@ -39,28 +39,28 @@
     ?>
     require_js('@lxh/js/jquery.pjax.min');
     __then__(function () {
-        var $d = $(document), cid = '#<?php echo $pjid?>';
+        var $d = $(document), cid = '#<?php echo $pjid?>', $c = $(cid);
         $.pjax.defaults.timeout = 10000;
         $.pjax.defaults.maxCacheLength = 0;
         $d.pjax(cid + ' a:not(a[target="_blank"])', {container: cid});
         <?php if ($filterId) {?>
-        $d.on('submit', '#<?php echo $filterId;?> form[pjax-container]', function(e) {$.pjax.submit(e, cid)});
+        $d.on('submit', '#<?php echo $filterId;?> form[pjax-container]', function(e) {$.pjax.submit(e, cid);});
         <?php } ?>
-        $d.on("pjax:popstate", function() {
+        $c.on("pjax:popstate", function() {
             $d.one("pjax:end", function(e) {
                 $(e.target).find("script[data-exec-on-popstate]").each(function() {
                     $.globalEval(this.text || this.textContent || this.innerHTML || '');
                 });
             });
         });
-        $d.on('pjax:send', function(xhr) {
+        $c.on('pjax:send', function(xhr) {
             NProgress.start();
             if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
                 var $submit_btn = $('form[pjax-container] :submit');
                 if($submit_btn) $submit_btn.button('loading');
             }
         });
-        $d.on('pjax:complete', function(xhr) {
+        $c.on('pjax:complete', function(xhr) {
             NProgress.done();
             if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
                 var $submit_btn = $('form[pjax-container] :submit');
@@ -70,6 +70,7 @@
             var _p = $('.grid-per-pager');
             _p.off('change');
             _p.change(pjax_reloads['<?php echo $pjid?>']);
+            $d.trigger('app.created');
         })
     });
 
