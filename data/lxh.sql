@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2018-02-09 11:54:53
+Date: 2018-02-09 15:25:39
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -89,6 +89,30 @@ CREATE TABLE `admin` (
 INSERT INTO `admin` VALUES ('1', 'admin', '$2y$10$IK.HGNDMOV9LYHIG7jMxb.0iEV85SSkf6Lv8GN9aaAuAIFbsVnaSS', '841324345@qq.com', '', 'J', 'qh', '', '1', '0', '1499568986', '1515761930', '127.0.0.1', '0', '127.0.0.1', '1', '1', '0');
 INSERT INTO `admin` VALUES ('2', 'haha', '$2y$10$kKdgtSsVsZrP4X2RzsHhVuUmqdgJhSmp2AmA/iKp00XeYkpgnpP5q', '', '', '', '', '', '0', '0', '0', '1515761954', '', '0', '', '0', '1', '0');
 INSERT INTO `admin` VALUES ('3', 'test', '$2y$10$anUpfaFdxve9b9mzmkCdfOEgoDpEss1glWk6.T5M2JnMnMh/3XvOO', '87@qq.com', '1333', '', '', '', '1', '0', '1517654504', '1517654518', '', '0', '', '0', '1', '1');
+
+-- ----------------------------
+-- Table structure for admin_operation_log
+-- ----------------------------
+DROP TABLE IF EXISTS `admin_operation_log`;
+CREATE TABLE `admin_operation_log` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `admin_id` int(11) NOT NULL,
+  `path` varchar(101) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `method` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 GET, 2POST, 3PUT, 4DELETE, 5OPTION',
+  `ip` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `input` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` int(11) unsigned NOT NULL DEFAULT '0',
+  `table` varchar(50) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  KEY `admin_operation_log_user_id_index` (`admin_id`),
+  KEY `table` (`table`) USING BTREE,
+  KEY `created_at` (`created_at`) USING BTREE
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of admin_operation_log
+-- ----------------------------
+INSERT INTO `admin_operation_log` VALUES ('1', '1', '/test', '1', '127.0.0.1', '{ \"name\": \"Administrator\", \"password\": \"$2y$10$JWwBpjZmoMqD7PPkjUotIu22dsCIT9mh.ttxH6Lop3u4pogvgqKYO\", \"password_confirmation\": \"$2y$10$JWwBpjZmoMqD7PPkjUotIu22dsCIT9mh.ttxH6Lop3u4pogvgqKYO\", \"_token\": \"qnvNxqktM7WQagJVZ2MG8LSTEkjRDr7N8rgbwIn3\", \"_method\": \"PUT\", \"_previous_\": \"http:\\/\\/www.l.com\\/admin\" }', '0', '');
 
 -- ----------------------------
 -- Table structure for assigned_abilities
@@ -199,7 +223,7 @@ CREATE TABLE `menu` (
   `ability_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '权限id',
   `route` varchar(100) NOT NULL DEFAULT '' COMMENT '路由',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of menu
@@ -218,6 +242,7 @@ INSERT INTO `menu` VALUES ('44', 'Admin', '', '1', '43', '1', '0', '1515230219',
 INSERT INTO `menu` VALUES ('35', 'Products', '', '1', '34', '1', '0', '1508157865', '1', '1', '0', '0', '/admin/product/action/list');
 INSERT INTO `menu` VALUES ('37', 'Abilities', '', '1', '18', '1', '0', '1515206612', '1', '1', '1', '28', '/admin/ability/action/list');
 INSERT INTO `menu` VALUES ('46', 'Posts', '', '1', '45', '1', '0', '1517833575', '1', '1', '0', '0', '/admin/post/action/list');
+INSERT INTO `menu` VALUES ('47', 'Operation log', '', '1', '13', '1', '0', '1518157762', '1', '1', '0', '0', '/admin/logs/action/list');
 
 -- ----------------------------
 -- Table structure for order
