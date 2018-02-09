@@ -153,7 +153,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
             max = 10;
 
         this.current = function () {
-            return this.switch()
+            return current.name;
         };
 
         this.setMax = function (num) {
@@ -223,11 +223,11 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         };
 
         // 重新加载iframe
-        this.reload = function (name) {
+        this.reload = function (name, url) {
             if (! name) {
                 name = current.name;
             }
-            iframe.reload(name);
+            iframe.reload(name, url);
         };
 
         /**
@@ -365,9 +365,9 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
             current = name
         };
 
-        this.reload = function (name) {
+        this.reload = function (name, url) {
             name = name || current;
-            var url = this.container(name).attr('url');
+            url = url || this.container(name).attr('url');
             this.remove(name);
             this.switch(name, url);
         };

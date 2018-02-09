@@ -93,10 +93,6 @@ echo admin_js('js/jquery.slimscroll.min');
     close_tab = function (id) {LXHSTORE.TAB.close(id)},
     reload_tab = function (id, url, label) {LXHSTORE.TAB.reload(id, url, label)},
     back_tab = function (step) {LXHSTORE.TAB.back(step)};
-
-    setTimeout(function () {
-        console.log(LXHSTORE,window);
-    }, 10000);
 </script>
 
 <!-- KNOB JS -->

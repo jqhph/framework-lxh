@@ -33,17 +33,17 @@ class LayoutSwitcher
         }
         Admin::script(<<<EOF
 (function () {
-var \$g = $('#{$spaid}').find('.grid-switcher'), 
+var \$g = $('#{$spaid}').find('.grid-switcher'), crt = LXHSTORE.IFRAME.current(), 
 form = $('#{$filterId} form'), 
 formUrl = form.attr('action').replace(/[&]*view=.*/i, '');
 \$g.click(function () {
     \$g.removeClass('btn-custom');
     \$g.addClass('btn-default');
     var t = $(this), v = t.data('view'); t.addClass('btn-custom');t.removeClass('btn-default');
-    LXHSTORE.pjax_reloads['$pjaxid'](null,t.data('url'));
     // 缓存
     \$lxh.cache().set(t.data('path'), v);
     form.attr('action', formUrl + '&view=' + v);
+    LXHSTORE.TAB.reload(crt, t.data('url').replace(/[&]*_pjax=.*/i, ''));
 });
 })();
 EOF
