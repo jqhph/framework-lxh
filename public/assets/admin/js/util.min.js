@@ -137,6 +137,172 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         }
         return format;
     };
+
+    /**
+     * 缓存管理类
+     *
+     * @constructor
+     */
+    function Cache() {
+        this.storage = window.localStorage || {};
+
+        /**
+         * token值，用于跟服务器的token进行对比，如两值不同则刷新缓存
+         *
+         * @type {null|int|string}
+         */
+        this.token = null;
+
+        /**
+         * 缓存前缀
+         *
+         * @type {{general: string, timeout: string}}
+         */
+        this.prefix = {
+            general: "$lxh_",
+            timeout: "@lxh_"
+        };
+
+        /**
+         * 设置token
+         *
+         * @param token
+         */
+        this.setToken = function (token) {
+            this.token = token
+        };
+
+        /**
+         * 缓存token
+         *
+         * @param token
+         */
+        this.saveToken = function (token) {
+            this.set('$$token', token || this.token);
+        };
+
+        /**
+         * 设置缓存
+         *
+         * @param key
+         * @param val
+         */
+        this.set = function (key, val) {
+            if (val instanceof Object) {
+                val = JSON.stringify(val);
+            }
+            this.storage.setItem(this.prefix.general + key, val);
+        };
+
+        /**
+         * 获取缓存
+         *
+         * @param key
+         * @param def
+         * @returns {*}
+         */
+        this.get = function (key, def) {
+            if (! this.checkTokenValid(key)) {
+                return def || null;
+            }
+            //检测是否过期
+            if (this.clearTimeout(key)) return null;
+            var val = this.storage.getItem(this.prefix.general + key);
+
+            if (val) {
+                if (val.indexOf("{") === 0 || val.indexOf("[") === 0) {
+                    return JSON.parse(val);
+                }
+                return val;
+            }
+            return (def || null);
+        };
+
+        /**
+         * 检查是否应该更新缓存，是则返回false，否则返回true
+         *
+         * @param key
+         * @returns {boolean}
+         */
+        this.checkTokenValid = function (key) {
+            if (key == '$$token') {
+                return true;
+            }
+            if (this.token != this.get('$$token')) {
+                this.clearAll();
+                this.saveToken();
+                return false;
+            }
+            return true;
+        };
+
+        /**
+         * 清除所有过期的key
+         *
+         */
+        this.clearPastDueKey = function () {
+            for (var key in this.storage) {
+                if (key.indexOf(this.prefix.timeout) == -1) {
+                    continue;
+                }
+                this.clearTimeout(key.replace(this.prefix.timeout, ""));
+            }
+        };
+
+        /**
+         * 检查key是否过期，是则清除并返回true，否则返回false
+         *
+         * @param key
+         * @returns {boolean}
+         */
+        this.clearTimeout = function (key) {
+            var d, timeoutKey = this.prefix.timeout + key, timeout = this.storage.getItem(timeoutKey);
+
+            if (timeout) {
+                d = new Date().getTime();
+                if (timeout < d) {//已过期
+                    delete this.storage[this.prefix.general + key];
+                    delete this.storage[timeoutKey];
+                    return true;
+                }
+            }
+            return false
+        };
+
+        /**
+         * 设置缓存时间，tiemeout毫秒后过期
+         *
+         * @param key
+         * @param timeout
+         */
+        this.expire = function (key, timeout) {
+            var d = new Date().getTime() + (parseInt(timeout));
+            this.storage.setItem(this.prefix.timeout + key, d);
+        };
+
+        /**
+         * 具体某一时间点过期
+         *
+         * @param key
+         * @param timeout
+         */
+        this.expireAt = function (key, timeout) {
+            this.storage.setItem(this.prefix.timeout + key, timeout);
+        };
+
+        /**
+         * 清除所有缓存
+         *
+         */
+        this.clearAll = function () {
+            for (var i in this.storage) {
+                delete this.storage[i];
+            }
+        };
+
+        this.clearPastDueKey()
+    }
+    o.Cache = Cache;
 })(window);
 
 (function (w) {
@@ -393,17 +559,17 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         // 创建iframe弹窗
         this.create = function (name, url) {
             if (typeof store[name] != 'undefined') return true;
-            var $loading = w.loading($app), n = NProgress;
+            var $loading = w.loading($app),
+                n = NProgress,
+                self = this,
+                ori = url.split('?')[0],
+                view = LXHSTORE.cache.get(ori);
             $d.trigger('app.creating');
-            var self = this, ori = url.split('?')[0];
             n.start();
             current = name;
             url = url || name;
 
             store[name] = true;
-
-            var html = tpl.replace('{$name}', name).replace('{$url}', url), view;
-            if (typeof $lxh != 'undefined') view = $lxh.cache().get(ori);
 
             if (url.indexOf('?') == -1) {
                 url +='?'
@@ -413,7 +579,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
             }
 
             self.container(name).remove();
-            $app.append(html);
+            $app.append(tpl.replace('{$name}', name).replace('{$url}', url));
             var $c = self.container(name);
 
             // 隐藏所有iframe

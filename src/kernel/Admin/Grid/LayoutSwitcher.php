@@ -32,15 +32,16 @@ class LayoutSwitcher
 (function () {
 var \$g = $('.grid-switcher'), crt = LXHSTORE.IFRAME.current(), 
 form = $('#{$filterId} form'), 
-formUrl = form.attr('action').replace(/[&]*view=.*/i, '');
+formUrl = form.attr('action').replace(/[&]*view=[-\w\d]*/i, '');
 \$g.click(function () {
     \$g.removeClass('btn-custom');
     \$g.addClass('btn-default');
     var t = $(this), v = t.data('view'); t.addClass('btn-custom');t.removeClass('btn-default');
     // 缓存
-    \$lxh.cache().set(t.data('path'), v);
+    LXHSTORE.cache.set(t.data('path'), v);
+//    console.log(123, t.data('path'), LXHSTORE.cache.get(t.data('path')));
     form.attr('action', formUrl + '&view=' + v);
-    LXHSTORE.TAB.reload(crt, t.data('url').replace(/[&]*_pjax=.*/i, ''));
+    LXHSTORE.TAB.reload(crt, t.data('url').replace(/[&]*_pjax=[-\w\d]*/i, ''));
 });
 })();
 EOF

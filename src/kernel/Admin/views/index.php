@@ -67,6 +67,12 @@ echo admin_js('plugins/toastr/toastr.min');
     // 全局变量容器，所有全局变量都应该放置到此容器，便于管理
     var LXHSTORE = {};
     var resizefunc = [];
+    LXHSTORE.cache = new Cache();
+    LXHSTORE.cache.setToken('<?php
+        // 设置缓存token，token刷新则会刷新所有缓存
+        echo $GLOBALS['js-version'];
+    ?>');
+
     LXHSTORE.IFRAME = new Iframe();
     LXHSTORE.TAB = new Tab(LXHSTORE.IFRAME);
     LXHSTORE.HOMEURL = '<?php echo $homeUrl?>';
