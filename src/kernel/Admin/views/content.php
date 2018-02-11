@@ -55,6 +55,7 @@ echo render_view('admin::index.app-js');
     echo $css;
     echo $asyncJs;
 ?>; __then__(function(){<?php echo $script?>});
+$(document).on('pjax:complete', function () {$(parent.window).scrollTop(0);});
 </script>
 <?php
 echo admin_js('js/app.min');

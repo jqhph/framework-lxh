@@ -30,7 +30,7 @@ class LayoutSwitcher
         }
         Admin::script(<<<EOF
 (function () {
-var \$g = $('.grid-switcher'), crt = LXHSTORE.IFRAME.current(), 
+var st = LXHSTORE, \$g = $('.grid-switcher'), crt = st.IFRAME.current(), 
 form = $('#{$filterId} form'), 
 formUrl = form.attr('action').replace(/[&]*view=[-\w\d]*/i, '');
 \$g.click(function () {
@@ -38,9 +38,9 @@ formUrl = form.attr('action').replace(/[&]*view=[-\w\d]*/i, '');
     \$g.addClass('btn-default');
     var t = $(this), v = t.data('view'); t.addClass('btn-custom');t.removeClass('btn-default');
     // 缓存
-    LXHSTORE.cache.set(t.data('path'), v);
+    st.cache.set(t.data('path'), v);
     form.attr('action', formUrl + '&view=' + v);
-    LXHSTORE.TAB.reload(crt, t.data('url').replace(/[&]*_pjax=[-\w\d]*/i, ''));
+    st.TAB.reload(crt, t.data('url').replace(/[&]*_pjax=[-\w\d]*/i, ''));
 });
 })();
 EOF
