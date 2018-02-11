@@ -43,7 +43,7 @@ class Track
     /**
      * @var array
      */
-    protected $records = [];
+    protected $stores = [];
 
     public function __construct(Container $container)
     {
@@ -113,13 +113,13 @@ class Track
      */
     protected function store($name)
     {
-        if (isset($this->records[$name])) {
-            return $this->records[$name];
+        if (isset($this->stores[$name])) {
+            return $this->stores[$name];
         }
         if ($name == 'db') {
-            return $this->records[$name] = new Database();
+            return $this->stores[$name] = new Database();
         }
-        return $this->records[$name] = new Record();
+        return $this->stores[$name] = new Record();
     }
 
     /**
@@ -187,7 +187,7 @@ class Track
     protected function getCustomTrackInfos()
     {
         $records = [];
-        foreach ($this->records as $k => &$v) {
+        foreach ($this->stores as $k => &$v) {
             if ($k == 'db') {
                 continue;
             }
