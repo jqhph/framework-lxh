@@ -79,9 +79,9 @@ class File extends Field
      * @param array $types
      * @return $this
      */
-    public function allowFileTypes(array $types)
+    public function allowFileExtensions(array $types)
     {
-        $this->options['allowedFileTypes'] = &$types;
+        $this->options['allowedFileExtensions'] = &$types;
         return $this;
     }
 

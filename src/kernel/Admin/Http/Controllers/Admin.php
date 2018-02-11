@@ -148,11 +148,10 @@ class Admin extends Controller
     {
         $url = AdminCreator::url('Role')->action('Create');
         $tabid = str_replace('/', '-', $url);
-        $tablabel = trans('Create Ability');
 
         $help = trans('Create Role');
 
-        return "<a onclick=\"open_tab('$tabid','$url','$tablabel')\">$help</a>";
+        return "<a onclick=\"open_tab('$tabid','$url','$help')\">$help</a>";
     }
 
     /**
