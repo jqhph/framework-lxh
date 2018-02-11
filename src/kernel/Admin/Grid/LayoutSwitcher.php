@@ -39,7 +39,6 @@ formUrl = form.attr('action').replace(/[&]*view=[-\w\d]*/i, '');
     var t = $(this), v = t.data('view'); t.addClass('btn-custom');t.removeClass('btn-default');
     // 缓存
     LXHSTORE.cache.set(t.data('path'), v);
-//    console.log(123, t.data('path'), LXHSTORE.cache.get(t.data('path')));
     form.attr('action', formUrl + '&view=' + v);
     LXHSTORE.TAB.reload(crt, t.data('url').replace(/[&]*_pjax=[-\w\d]*/i, ''));
 });
