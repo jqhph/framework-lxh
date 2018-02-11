@@ -87,7 +87,7 @@ define(['@lxh/css/sweet-alert.min.css', '@lxh/js/sweet-alert.min'], function () 
 
     // 绑定删除事件
     $('a[data-action="delete-row"]').click(public.delete);
-    $('#batch-delete').click(public.batchDelete)
+    $('.batch-delete').click(public.batchDelete);
     __then__(function () {
         // 行选择器点击事件
         var allInput = $('input[data-action="select-all"]');

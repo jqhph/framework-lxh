@@ -376,8 +376,7 @@ class Grid implements Renderable
         }
 
         if ($this->options['allowBatchDelete']) {
-            $this->actions();
-            $this->actions->append(new BatchDelete());
+            $this->actions()->append(new BatchDelete());
         }
 
         if ($this->actions) {
