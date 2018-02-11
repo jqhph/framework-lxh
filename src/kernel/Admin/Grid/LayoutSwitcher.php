@@ -24,16 +24,13 @@ class LayoutSwitcher
         $this->grid = $grid;
         $this->url = $grid->getUrl();
 
-        $spaid = Admin::SPAID();
-        $pjaxid = Grid::getPjaxContainerId();
-
         $filterId = '';
         if ($filter = $this->grid->filter()) {
             $filterId = $filter->getContainerId();
         }
         Admin::script(<<<EOF
 (function () {
-var \$g = $('#{$spaid}').find('.grid-switcher'), crt = LXHSTORE.IFRAME.current(), 
+var \$g = $('.grid-switcher'), crt = LXHSTORE.IFRAME.current(), 
 form = $('#{$filterId} form'), 
 formUrl = form.attr('action').replace(/[&]*view=.*/i, '');
 \$g.click(function () {

@@ -225,34 +225,6 @@ class Field implements Renderable
     }
 
     /**
-     * @return mixed
-     */
-    public function getContainerIdSelector()
-    {
-        return '#'.$this->containerId;
-    }
-
-    /**
-     * @param $id
-     * @return $this
-     */
-    public function setContainerId($id)
-    {
-        $this->containerId = $id;
-        return $this;
-    }
-
-    /**
-     * 获取单页容器id选择器
-     *
-     * @return string
-     */
-    protected function getSpaContainerSelector()
-    {
-        return '#' . \Lxh\Admin\Admin::SPAID();
-    }
-
-    /**
      * 当字段调用render方法时会触发此回调函数
      *
      * @param \Closure $then

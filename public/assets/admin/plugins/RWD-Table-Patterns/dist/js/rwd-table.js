@@ -9,10 +9,10 @@
 
     // RESPONSIVE TABLE CLASS DEFINITION
     // ==========================
-    var $spa = '';
+
     var ResponsiveTable = function(element, options) {
         var that = this;
-        $spa = $('#'+LXHSTORE.SPAID);
+
         this.options = options;
         this.$tableWrapper = null; //defined later in wrapTable
         this.$tableScrollWrapper = $(element); //defined later in wrapTable
@@ -57,10 +57,10 @@
         // Check if iOS
         // property to save performance
         this.iOS = isIOS();
-      
+
         // Setup table
         // -------------------------
-      
+
         //wrap table
         this.wrapTable();
 
@@ -110,7 +110,7 @@
     };
 
     // Wrap table
-    ResponsiveTable.prototype.wrapTable = function() {        
+    ResponsiveTable.prototype.wrapTable = function() {
         // this.$tableScrollWrapper.wrap('<div class="table-wrapper"/>');
         this.$tableWrapper = this.$tableScrollWrapper.parent();
     };
@@ -119,7 +119,7 @@
     ResponsiveTable.prototype.createButtonToolbar = function() {
         var that = this;
 
-        this.$btnToolbar = $spa.find('.btn-toolbar');//$('<div class="btn-toolbar" />');
+        this.$btnToolbar = $('.btn-toolbar')//$('<div class="btn-toolbar" />');
 
         this.$dropdownGroup = $('<div class="btn-group dropdown-btn-group pull-right" />');
         this.$dropdownBtn = $('<button data-rwd="1" class="btn btn-default dropdown-toggle  waves-effect waves-float" data-toggle="dropdown">' + trans('Display') + ' <span class="caret"></span></button>');
@@ -128,12 +128,12 @@
         // Focus btn
 
 
-         // Display-all btn
+        // Display-all btn
         if(this.options.addDisplayAllBtn) {
             // Create display-all btn
             this.$displayAllBtn = $('<button data-rwd="2" class="btn btn-default  waves-effect waves-float">' + trans('Display all') + '</button>');
 
-            $spa.find('button[data-rwd="2"]').remove();
+            $('button[data-rwd="2"]').remove()
             // Add display-all btn to dropdown-btn-group
             this.$dropdownGroup.append(this.$displayAllBtn);
 
@@ -149,7 +149,7 @@
             });
         }
 
-        $spa.find('button[data-rwd="1"]').remove();
+        $('button[data-rwd="1"]').remove()
         //add dropdown btn and menu to dropdown-btn-group
         this.$dropdownGroup.append(this.$dropdownBtn).append(this.$dropdownContainer);
 
@@ -237,14 +237,14 @@
     // Help function for sticky table header
     ResponsiveTable.prototype.updateStickyTableHeader = function() {
         var that              = this,
-          top               = 0,
-          offsetTop         = that.$table.offset().top,
-          scrollTop         = $(window).scrollTop() -1, //-1 to accomodate for top border
-          maxTop            = that.$table.height() - that.$stickyTableHeader.height(),
-          rubberBandOffset  = (scrollTop + $(window).height()) - $(document).height(),
+            top               = 0,
+            offsetTop         = that.$table.offset().top,
+            scrollTop         = $(window).scrollTop() -1, //-1 to accomodate for top border
+            maxTop            = that.$table.height() - that.$stickyTableHeader.height(),
+            rubberBandOffset  = (scrollTop + $(window).height()) - $(document).height(),
         //          useFixedSolution  = that.$table.parent().prop('scrollWidth') === that.$table.parent().width();
-          useFixedSolution  = !that.iOS,
-          navbarHeight      = 0;
+            useFixedSolution  = !that.iOS,
+            navbarHeight      = 0;
 
         //Is there a fixed navbar?
         if($(that.options.fixedNavbar).length) {
@@ -374,65 +374,65 @@
                     .click(function(event){
                         event.stopPropagation();
                     })
-                .change(function(){ // bind change event on checkbox
-                    var $checkbox = $(this),
-                        val = $checkbox.val(),
+                    .change(function(){ // bind change event on checkbox
+                        var $checkbox = $(this),
+                            val = $checkbox.val(),
                         //all cells under the column, including the header and its clone
-                        $cells = that.$tableWrapper.find('#' + val + ', #' + val + '-clone, [data-columns~='+ val +']');
+                            $cells = that.$tableWrapper.find('#' + val + ', #' + val + '-clone, [data-columns~='+ val +']');
 
-                    //if display-all is on - save state and carry on
-                    if(that.$table.hasClass('display-all')){
-                        //save state
-                        $.proxy(that.preserveDisplayAll(), that);
-                        //remove display all class
-                        that.$table.removeClass('display-all');
-                        if(that.$tableClone){
-                            that.$tableClone.removeClass('display-all');
-                        }
-                        //switch off button
-                        that.$displayAllBtn.removeClass('btn-primary');
-                    }
-
-                    // loop through the cells
-                    $cells.each(function(){
-                        var $cell = $(this);
-
-                        // is the checkbox checked now?
-                        if ($checkbox.is(':checked')) {
-
-                            // if the cell was already visible, it means its original colspan was >1
-                            // so let's increment the colspan
-                            if($cell.css('display') !== 'none'){
-                                $cell.prop('colSpan', parseInt($cell.prop('colSpan')) + 1);
+                        //if display-all is on - save state and carry on
+                        if(that.$table.hasClass('display-all')){
+                            //save state
+                            $.proxy(that.preserveDisplayAll(), that);
+                            //remove display all class
+                            that.$table.removeClass('display-all');
+                            if(that.$tableClone){
+                                that.$tableClone.removeClass('display-all');
                             }
-
-                            // show cell
-                            $cell.show();
-
+                            //switch off button
+                            that.$displayAllBtn.removeClass('btn-primary');
                         }
-                      // checkbox has been unchecked
-                      else {
 
-                            // decrement colSpan if it's not 1 (because colSpan should not be 0)
-                            if(parseInt($cell.prop('colSpan'))>1){
-                                $cell.prop('colSpan', parseInt($cell.prop('colSpan')) - 1);
+                        // loop through the cells
+                        $cells.each(function(){
+                            var $cell = $(this);
+
+                            // is the checkbox checked now?
+                            if ($checkbox.is(':checked')) {
+
+                                // if the cell was already visible, it means its original colspan was >1
+                                // so let's increment the colspan
+                                if($cell.css('display') !== 'none'){
+                                    $cell.prop('colSpan', parseInt($cell.prop('colSpan')) + 1);
+                                }
+
+                                // show cell
+                                $cell.show();
+
                             }
-                            // otherwise, hide the cell
+                            // checkbox has been unchecked
                             else {
-                                $cell.hide();
+
+                                // decrement colSpan if it's not 1 (because colSpan should not be 0)
+                                if(parseInt($cell.prop('colSpan'))>1){
+                                    $cell.prop('colSpan', parseInt($cell.prop('colSpan')) - 1);
+                                }
+                                // otherwise, hide the cell
+                                else {
+                                    $cell.hide();
+                                }
                             }
+                        });
+                    })
+                    .bind('updateCheck', function(){
+                        if ( $th.css('display') !== 'none') {
+                            $(this).prop('checked', true);
                         }
-                    });
-                })
-                .bind('updateCheck', function(){
-                    if ( $th.css('display') !== 'none') {
-                        $(this).prop('checked', true);
-                    }
-                    else {
-                        $(this).prop('checked', false);
-                    }
-                })
-                .trigger('updateCheck');
+                        else {
+                            $(this).prop('checked', false);
+                        }
+                    })
+                    .trigger('updateCheck');
             } // end if
         }); // end hdrCells loop 
     };
@@ -606,21 +606,21 @@
 
 
     // $(document).ready(function() {
-        // Change `no-js` to `js`
-        $('html').removeClass('no-js').addClass('js');
+    // Change `no-js` to `js`
+    $('html').removeClass('no-js').addClass('js');
 
-        // Add mq/no-mq class to html
-        if(mediaQueriesSupported()) {
-            $('html').addClass('mq');
-        } else {
-            $('html').addClass('no-mq');
-        }
+    // Add mq/no-mq class to html
+    if(mediaQueriesSupported()) {
+        $('html').addClass('mq');
+    } else {
+        $('html').addClass('no-mq');
+    }
 
-        // Add touch/no-touch class to html
-        if(hasTouch()) {
-            $('html').addClass('touch');
-        } else {
-            $('html').addClass('no-touch');
-        }
+    // Add touch/no-touch class to html
+    if(hasTouch()) {
+        $('html').addClass('touch');
+    } else {
+        $('html').addClass('no-touch');
+    }
     // });
 })(jQuery);

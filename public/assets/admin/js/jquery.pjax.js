@@ -29,11 +29,8 @@
 // the options object.
 //
 // Returns the jQuery object
-    var selectors = {};
     function fnPjax(selector, container, options) {
-        if (typeof selectors[selector] != 'undefined') return;
-        selectors[selector] = 1;
-        var context = this;
+        var context = this
         return this.on('click.pjax', selector, function(event) {
             var opts = $.extend({}, optionsFor(container, options))
             if (!opts.container)
@@ -148,7 +145,7 @@
             defaults.data = $(form).serializeArray();
         }
 
-        pjax($.extend({}, defaults, options));
+        pjax($.extend({}, defaults, options))
 
         event.preventDefault()
     }
@@ -173,23 +170,23 @@
 //
 // Returns whatever $.ajax returns.
     function pjax(options) {
-        options = $.extend(true, {}, $.ajaxSettings, pjax.defaults, options);
+        options = $.extend(true, {}, $.ajaxSettings, pjax.defaults, options)
 
         if ($.isFunction(options.url)) {
             options.url = options.url()
         }
 
-        var target = options.target;
+        var target = options.target
 
-        var hash = parseURL(options.url).hash;
+        var hash = parseURL(options.url).hash
 
-        var context = options.context = findContainerFor(options.container);
+        var context = options.context = findContainerFor(options.container)
 
         // We want the browser to maintain two separate internal caches: one
         // for pjax'd partial page loads and one for normal page loads.
         // Without adding this secret parameter, some browsers will often
         // confuse the two.
-        if (!options.data) options.data = {};
+        if (!options.data) options.data = {}
         if ($.isArray(options.data)) {
             options.data.push({name: '_pjax', value: context.selector})
         } else {
@@ -197,14 +194,14 @@
         }
 
         function fire(type, args, props) {
-            if (!props) props = {};
-            props.relatedTarget = target;
-            var event = $.Event(type, props);
-            context.trigger(event, args);
+            if (!props) props = {}
+            props.relatedTarget = target
+            var event = $.Event(type, props)
+            context.trigger(event, args)
             return !event.isDefaultPrevented()
         }
 
-        var timeoutTimer;
+        var timeoutTimer
 
         options.beforeSend = function(xhr, settings) {
             // No timeout for non-GET requests
@@ -213,44 +210,44 @@
                 settings.timeout = 0
             }
 
-            xhr.setRequestHeader('X-PJAX', 'true');
-            xhr.setRequestHeader('X-PJAX-Container', context.selector);
+            xhr.setRequestHeader('X-PJAX', 'true')
+            xhr.setRequestHeader('X-PJAX-Container', context.selector)
 
             if (!fire('pjax:beforeSend', [xhr, settings]))
-                return false;
+                return false
 
             if (settings.timeout > 0) {
                 timeoutTimer = setTimeout(function() {
                     if (fire('pjax:timeout', [xhr, options]))
                         xhr.abort('timeout')
-                }, settings.timeout);
+                }, settings.timeout)
 
                 // Clear timeout setting so jquerys internal timeout isn't invoked
                 settings.timeout = 0
             }
 
-            var url = parseURL(settings.url);
-            if (hash) url.hash = hash;
-            // options.requestUrl = stripInternalParams(url)
-        };
+            var url = parseURL(settings.url)
+            if (hash) url.hash = hash
+            options.requestUrl = stripInternalParams(url)
+        }
 
         options.complete = function(xhr, textStatus) {
             if (timeoutTimer)
-                clearTimeout(timeoutTimer);
+                clearTimeout(timeoutTimer)
 
-            fire('pjax:complete', [xhr, textStatus, options]);
+            fire('pjax:complete', [xhr, textStatus, options])
 
             fire('pjax:end', [xhr, options])
-        };
+        }
 
         options.error = function(xhr, textStatus, errorThrown) {
-            var container = extractContainer("", xhr, options);
+            var container = extractContainer("", xhr, options)
 
-            var allowed = fire('pjax:error', [xhr, textStatus, errorThrown, options]);
+            var allowed = fire('pjax:error', [xhr, textStatus, errorThrown, options])
             if (options.type == 'GET' && textStatus !== 'abort' && allowed) {
                 locationReplace(container.url)
             }
-        };
+        }
 
         options.success = function(data, status, xhr) {
             var previousState = pjax.state;
@@ -259,27 +256,27 @@
             // Otherwise it can be a static string.
             var currentVersion = (typeof $.pjax.defaults.version === 'function') ?
                 $.pjax.defaults.version() :
-                $.pjax.defaults.version;
+                $.pjax.defaults.version
 
             var latestVersion = xhr.getResponseHeader('X-PJAX-Version')
 
             var container = extractContainer(data, xhr, options)
 
-            var url = parseURL(container.url);
+            var url = parseURL(container.url)
             if (hash) {
-                url.hash = hash;
+                url.hash = hash
                 container.url = url.href
             }
 
             // If there is a layout version mismatch, hard load the new url
             if (currentVersion && latestVersion && currentVersion !== latestVersion) {
-                locationReplace(container.url);
+                locationReplace(container.url)
                 return
             }
 
             // If the new response is missing a body, hard load the page
             if (!container.contents) {
-                locationReplace(container.url);
+                locationReplace(container.url)
                 return
             }
 
@@ -290,7 +287,7 @@
                 container: context.selector,
                 fragment: options.fragment,
                 timeout: options.timeout
-            };
+            }
 
             if (options.push || options.replace) {
                 window.history.replaceState(pjax.state, container.title, container.url)
@@ -885,7 +882,6 @@
             maxCacheLength: 20,
             version: findVersion
         }
-        $(window).off('popstate.pjax');
         $(window).on('popstate.pjax', onPjaxPopstate)
     }
 
@@ -927,3 +923,39 @@
     $.support.pjax ? enable() : disable()
 
 })(jQuery);
+
+__then__(function () {
+    $.pjax.defaults.timeout = 10000;
+    $.pjax.defaults.maxCacheLength = 0;
+    $(document).pjax('#pjax-container a:not(a[target="_blank"])', {container: '#pjax-container'});
+    $(document).on('submit', 'form[pjax-container]', function(e) {$.pjax.submit(e, '#pjax-container')});
+    $(document).on("pjax:popstate", function() {
+        $(document).one("pjax:end", function(e) {
+            $(e.target).find("script[data-exec-on-popstate]").each(function() {
+                $.globalEval(this.text || this.textContent || this.innerHTML || '');
+            });
+        });
+    });
+    var $loading, $current = LXHSTORE.TAB.currentEl();
+    $(document).on('pjax:send', function(xhr) {
+        NProgress.start();
+        $current = LXHSTORE.TAB.currentEl();
+        if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
+            var $submit_btn = $('form[pjax-container] :submit');
+            if($submit_btn) $submit_btn.button('loading');
+        }
+        $loading = loading($('#pjax-container').parent());
+    });
+    $(document).on('pjax:complete', function(xhr) {
+        NProgress.done();
+        if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
+            var $submit_btn = $('form[pjax-container] :submit');
+            if($submit_btn) $submit_btn.button('reset');
+        }
+        $loading && $loading.close();
+        // 重新绑定点击事件
+        $('.grid-per-pager').change(change_pages);
+        // 重新计算iframe高度
+        LXHSTORE.IFRAME.height($current.iframe.find('iframe'));
+    })
+});

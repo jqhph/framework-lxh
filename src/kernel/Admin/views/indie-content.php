@@ -11,15 +11,15 @@
 </head>
 <body>
 <?php
-echo admin_css('css/bootstrap.min');
-echo admin_css('css/core.min');
-echo admin_css('css/pages.min');
-echo admin_css('css/components.min');
+//echo admin_css('css/bootstrap.min');
+//echo admin_css('css/core.min');
+//echo admin_css('css/pages.min');
+//echo admin_css('css/components.min');
 echo admin_js('js/jquery.min');
 echo admin_js('js/util.min');
 ?>
 
-<div class="content-wrapper" id="<?php echo \Lxh\Admin\Admin::SPAID()?>">
+<div class="content-wrapper">
     <?php if ($header || $description) {?>
         <section class="content-header"><h1><?php echo $header; ?><small><?php echo $description;?></small></h1></section>
     <?php }?>
@@ -30,7 +30,6 @@ echo admin_js('js/util.min');
 echo view('admin::index.app-js')->render();
 ?>
 <script>
-    LXHSTORE.SPAID = '<?php echo \Lxh\Admin\Admin::SPAID()?>';
     (function (w) {
         w.loading = function (el, circle, timeout) {
             el = el || 'body';

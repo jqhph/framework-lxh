@@ -56,10 +56,10 @@ class Select extends Field
         if (empty($this->script)) {
             $selector = $this->getElementClassSelector();
             $this->script = <<<EOF
-$('{$this->getSpaContainerSelector()}').find("{$selector}").select2({allowClear:{$this->clear},placeholder:"{$this->getPlaceholder()}"});
+$("{$selector}").select2({allowClear:{$this->clear},placeholder:"{$this->getPlaceholder()}"});
 EOF;
             // 监听表单重置事件
-            $this->onFormReset("$('{$this->getSpaContainerSelector()}').find('{$selector}').trigger('change.select2')");
+            $this->onFormReset("$('{$selector}').trigger('change.select2')");
         }
 
         if ($this->options instanceof \Closure) {

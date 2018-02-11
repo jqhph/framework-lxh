@@ -123,8 +123,7 @@ class Switcher extends Field
 
         $this->script('Switching', <<<EOF
 (function(){
-var tb = $('{$this->getContainerIdSelector()}');
-var s=tb.find('[data-switchery="1"]'),r=0,list={},checked,_new,__;
+var s=$('[data-switchery="1"]'),r=0,list={},checked,_new,__;
 function b(){
     s.each(function(k){
         __ = \$(this);
@@ -139,7 +138,7 @@ b();
 s.change(function(e) {
     if (r) return;
     r=1; NProgress.start();
-    var t=$(this);val = t.val(),ntf=\$lxh.ui().notify(),id=t.data('pk'),u='{$url}',all=tb.find('.switchery'),checked=t.is(':checked');
+    var t=$(this);val = t.val(),ntf=\$lxh.ui().notify(),id=t.data('pk'),u='{$url}',all=$('.switchery'),checked=t.is(':checked');
     all.addClass('disabled');
     if (!checked)
         val = '{$this->uncheckedValue}';

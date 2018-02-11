@@ -42,7 +42,7 @@ class DateRange extends Field
         $this->js('date-range', '@lxh/js/bootstrap-datetimepicker.min');
         $this->css('date-range',  '@lxh/css/bootstrap-datetimepicker.min');
 
-        $this->script('date-range', "$('{$this->getSpaContainerSelector()}').find('.date-search-box input').datetimepicker({format: 'yyyy-mm-dd hh:ii:ss'});");
+        $this->script('date-range', "$('.date-search-box input').datetimepicker({format: 'yyyy-mm-dd hh:ii:ss'});");
     }
 
     protected function setupValue($name)

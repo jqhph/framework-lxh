@@ -13,4 +13,6 @@
         <div style="clear:both"></div>
     </div>
 <?php }?>
-<?php //if ($useRWD && $pjax && Lxh\Admin\Grid::isPjaxRequest()) {} ?>
+<?php if ($useRWD && $pjax && \Lxh\Admin\Grid::isPjaxRequest()) { ?>
+<script>setTimeout("$('.table-responsive').responsiveTable({adddisplayallbtn: true});",200)</script>
+<?php } ?>

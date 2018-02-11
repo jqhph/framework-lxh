@@ -346,7 +346,8 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
             $app = $('#lxh-app'),
             current,
             spaid,
-            tab;
+            tab,
+            $d = $(document);
 
         this.setTab = function (t) {
             tab = t
@@ -363,10 +364,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 
             // 显示当前iframe
             $c.show();
-            if (spaid = $c.attr('SPAID')) {
-                LXHSTORE.SPAID = spaid;
-            }
-            // console.log('switch tab', SPAID);
+
             current = name
         };
 
@@ -395,9 +393,10 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         // 创建iframe弹窗
         this.create = function (name, url) {
             if (typeof store[name] != 'undefined') return true;
-            $(document).trigger('app.creating');
+            var $loading = w.loading($app), n = NProgress;
+            $d.trigger('app.creating');
             var self = this, ori = url.split('?')[0];
-            NProgress.start();
+            n.start();
             current = name;
             url = url || name;
 
@@ -413,34 +412,46 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
                 url +='&view=' + view;
             }
 
+            self.container(name).remove();
+            $app.append(html);
+            var $c = self.container(name);
 
-            $.get(url+'&_log', function(data) {
-                self.container(name).remove();
-                $app.append(html);
-                var $c = self.container(name);
-                // 隐藏所有iframe
-                self.hide();
-                NProgress.done();
+            // 隐藏所有iframe
+            self.hide();
+            // // 显示当前iframe
+            $c.show();
 
-                // // 显示当前iframe
-                $c.show();
-
-                // 保存链接用于刷新操作
-                $c.attr('url', ori);
-                // 如果在这加载之前切换到了其他tab页，需要切换回来
+            $c.find('iframe').load(function (e) {
+                $d.trigger('app.created');
+                this.height($(e.currentTarget));
+                // 关闭加载效果
+                n.done();
+                $loading.close();
+                // 如果在iframe页创建期间切换到了其他的tab窗口，需要切换回当前窗口
                 current = name;
                 tab.show(name);
-                $c.find('.content').html(data);
-                $c.attr('SPAID', LXHSTORE.SPAID);
-                console.log('app.created', LXHSTORE.SPAID);
-                $('#'+LXHSTORE.SPAID).trigger('app.created');
-            });
+            }.bind(this));
 
-
+            // 保存链接用于刷新操作
+            $c.attr('url', ori);
         };
 
         // 自动设置高度
         this.height = function ($c) {
+            if (! $c) $c = this.container(current).find('iframe');
+            if (typeof $c != 'object') $c = this.container($c).find('iframe');
+            if (typeof $c[0] == 'undefined') return;
+            var iframe = $c[0],
+                iframeWin = (iframe.contentWindow || iframe.contentDocument.parentWindow) || iframe,
+                height,
+                minHeight = 725;
+            if (iframeWin.document.body) {
+                height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight;
+                height = height > minHeight ? (height) : minHeight;
+                // $c.animate({height: height + 'px'});
+                $c.css('height', height + 'px');
+                $c.slideDown(350);
+            }
         };
 
         this.hide = function () {

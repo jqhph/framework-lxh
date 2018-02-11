@@ -101,7 +101,7 @@ class Form implements Renderable
      */
     public function __construct($data = [])
     {
-        $this->name = Admin::SPAID();
+        $this->name = __CONTROLLER__;
 
         if ($data instanceof Arrayable) {
             $data = $data->toArray();

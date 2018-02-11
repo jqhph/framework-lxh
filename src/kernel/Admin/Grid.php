@@ -226,7 +226,7 @@ class Grid implements Renderable
      */
     public static function getPjaxContainerId()
     {
-        return 'pjax-' . Admin::SPAID();
+        return 'pjax-container';
     }
 
     /**

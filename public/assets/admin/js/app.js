@@ -12,38 +12,25 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 (function (window) {
     var config = __ini__(), $cache = new Cache(), $d = $(document);
 
-    dispatcher();
+    dispatch();
 
-    function dispatcher() {
+    function dispatch() {
         var jsversion = config.options.settings['js-version'],
             cssversion = config.options.settings['css-version'];
         // 设置缓存token
         $cache.setToken(jsversion);
 
         config.options.cache = $cache;
-
         config.seaConfig = get_sea_config(config.seaConfig, jsversion);
 
         seajs.config(config.seaConfig);
 
-        $d.on('app.created', load);
-        load();
-
-        function load() {
-            // 加载css
-            seajs.use(get_used_css(config.publicCss, cssversion));
-            // 加载js
-            seajs.use(get_used_js(config.publicJs, jsversion), function () {
-                setTimeout(function () {
-                    init(function () {
-                        $(function () {
-                            call_actions();
-                        })
-                    })
-                }, 10);
-
-            });
-        }
+        // 加载css
+        seajs.use(get_used_css(config.publicCss, cssversion));
+        // 加载js
+        seajs.use(get_used_js(config.publicJs, jsversion), function () {
+            setTimeout(init, 10);
+        });
     }
 
     // 初始化完成，执行动作
@@ -53,22 +40,14 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
                 lxhActions[i].apply(this);
             }
         }
-
-        lxhActions = [];
-        if (LXHSTORE.SPAID) {
-            $('#'+LXHSTORE.SPAID).trigger('app.completed');
-        } else {
-            $d.trigger('app.completed');
-        }
+        $d.trigger('app.completed');
         console.log('app.completed');
     }
 
     /**
      * 初始化
-     *
-     * @param call
      */
-    function init(call) {
+    function init() {
         window.$lxh = new Lxh(config.options);
 
         var lang = $lxh.config().get('language');
@@ -91,7 +70,8 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
             }
         });
 
-        call()
+        // 初始化完毕，加载钩子
+        $(call_actions);
     }
 
     function get_lang_cache_key(lang) {

@@ -14,11 +14,11 @@ class Switcher extends Form\Field
         $this->js('checked', '@lxh/plugins/switchery/switchery.min');
 
         $this->script('checked', <<<EOF
-function swty(){\$('{$this->getSpaContainerSelector()}').find('[data-plugin="switchery"]').each(function(){new Switchery($(this)[0],$(this).data())})} swty();
+function swty(){\$('[data-plugin="switchery"]').each(function(){new Switchery($(this)[0],$(this).data())})} swty();
 EOF
         );
         // 监听表单重置事件
-        $this->onFormReset("$('{$this->getSpaContainerSelector()}').find('.switchery').remove();swty();", 'checked-reset');
+        $this->onFormReset("$('.switchery').remove();swty();", 'checked-reset');
 
         $this->primary();
     }

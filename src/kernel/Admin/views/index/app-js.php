@@ -1,9 +1,13 @@
-<?php
-?>
+<?php echo admin_js('js/bootstrap.min');?>
 <script>
     var __CONTROLLER__ = '<?php echo __CONTROLLER__?>', __ACTION__ = '<?php echo __ACTION__?>', __MODULE__ = '<?php echo __MODULE__;?>';
     <?php if ((isset($useDefaultAssets) && !empty($useDefaultAssets)) || !isset($useDefaultAssets)) {?>
-    require_js('@lxh/js/bootstrap.min');
+    require_css('@lxh/css/responsive.min');
+    require_css('@lxh/css/bootstrap.min');
+    require_css('@lxh/css/pages.min');
+    require_css('@lxh/css/components.min');
+    require_css('@lxh/css/icon.min');
+    require_css('@lxh/css/core.min');
     <?php } ?>
     // 配置
     function __ini__() {

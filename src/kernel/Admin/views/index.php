@@ -16,16 +16,11 @@
 
     //    echo admin_css('components');
     echo admin_css('css/icon.min');
-    
-    echo admin_css('css/pages.min');
-
-    echo admin_css('css/responsive.min');
-    echo admin_css('css/components.min');
     echo admin_css('css/core.min');
+    echo admin_css('css/components.min');
 
-
-    echo admin_js('js/util.min');
     echo admin_js('js/jquery.min');
+    echo admin_js('js/util.min');
     ?>
 
     <!-- HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -44,9 +39,6 @@
         echo $topbar;
         // 输出左边导航栏
         echo $sitebar;
-
-        echo admin_css('plugins/toastr/toastr.min');
-        echo admin_js('plugins/toastr/toastr.min');
         ?>
     </div>
 
@@ -55,7 +47,7 @@
 
 <footer class="footer text-right"><?php echo config('admin.copyright')?></footer>
 <script id="iframe-tpl" type="text/html">
-<div id="wrapper-{$name}" class="wrapper lxh-wrapper"><div class="content-page"><div class="content"></div></div></div>
+<div id="wrapper-{$name}" class="wrapper lxh-wrapper"><div class="content-page"><div class="content"><iframe src="{$url}" scrolling="no"></iframe></div></div></div>
 </script>
 
 <section class="content"><?php
@@ -68,6 +60,8 @@
 //echo admin_js('fastclick');
 //echo admin_js('waves.min');
 echo admin_js('js/jquery.slimscroll.min');
+echo admin_css('plugins/toastr/toastr.min');
+echo admin_js('plugins/toastr/toastr.min');
 ?>
 <script>
     // 全局变量容器，所有全局变量都应该放置到此容器，便于管理
@@ -97,17 +91,17 @@ echo admin_js('js/jquery.slimscroll.min');
 
 <!-- KNOB JS -->
 <!--[if IE]>
-<?php //echo admin_js('excanvas', 'plugins/jquery-knob');?>
+<?php //echo admin_js('plugins/jquery-knob/excanvas');?>
 <![endif]-->
 
 <?php
-echo render_view('admin::index.app-js');
+//echo render_view('admin::index.app-js');
 
 // <div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style="display: block;"><div class="toast-progress" style="width: 96.4454%;"></div><button type="button" class="toast-close-button" role="button">×</button><div class="toast-message">Login successful</div></div></div>
 echo admin_js('js/jquery.app.min');
 
 // 加载sea js，加载所有require_js和require_css加载的文件
-echo admin_js('js/app.min');
+//echo admin_js('js/app.min');
 // js模板
 echo render_view('admin::javascript-tpl');
 ?>

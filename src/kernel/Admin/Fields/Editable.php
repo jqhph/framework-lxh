@@ -241,7 +241,7 @@ class Editable extends Field
         // 同样的类型只初始化一次
         $this->script(
             'editable.' . $this->type,
-            "$('{$this->getContainerIdSelector()}').find('.$class').editable($options);"
+            "$('.$class').editable($options);"
         );
 
         if (!$id = $this->getModelId()) {

@@ -104,20 +104,6 @@ class Admin
         return new Form($this->getModel($model));
     }
 
-
-    /**
-     * 获取单页应用id
-     *
-     * @return string
-     */
-    public static function SPAID()
-    {
-        if (!static::$uniqueWarpperId) {
-            static::$uniqueWarpperId = 's' . Util::randomString(7);
-        }
-        return static::$uniqueWarpperId;
-    }
-
     /**
      * 设置或获取模型名称
      *

@@ -6,7 +6,6 @@
 
 define(['@lxh/css/sweet-alert.min.css', '@lxh/js/sweet-alert.min'], function () {
     var model = null, listids;
-    LXHSTORE.SELECTEDIDS = {};
     var public = {
         delete: function (e) {
             var $this = $(e.currentTarget),
@@ -52,7 +51,6 @@ define(['@lxh/css/sweet-alert.min.css', '@lxh/js/sweet-alert.min'], function () 
         },
         // 批量删除
         batchDelete: function (e) {
-            var listids = LXHSTORE.SELECTEDIDS[LXHSTORE.SPAID];
             if (! listids) {
                 return $lxh.ui().notify().error(trans('Unchecked!', 'tip'));
             }
@@ -87,35 +85,28 @@ define(['@lxh/css/sweet-alert.min.css', '@lxh/js/sweet-alert.min'], function () 
 
     };
 
-
-    $(document).on('app.completed', function () {
-        var $spa = $('#' + LXHSTORE.SPAID);
-        var $deleteRow = $spa.find('a[data-action="delete-row"]'), $bd = $spa.find('.batch-delete');
-        // 重新绑定删除点击事件，为放置旧tab页内容重复绑定，需要先取消再绑定
-        $deleteRow.off('click');
-        $deleteRow.click(public.delete);
-        $bd.off('click');
-        $bd.click(public.batchDelete);
-
+    // 绑定删除事件
+    $('a[data-action="delete-row"]').click(public.delete);
+    $('#batch-delete').click(public.batchDelete)
+    __then__(function () {
         // 行选择器点击事件
-        var allInput = $spa.find('input[data-action="select-all"]');
+        var allInput = $('input[data-action="select-all"]');
 
         $(document).on('pjax:complete', function () {
             // 绑定删除事件
-            $deleteRow.click(public.delete);
+            $('a[data-action="delete-row"]').click(public.delete);
 
-            allInput = $spa.find('input[data-action="select-all"]');
+            allInput = $('input[data-action="select-all"]');
             // 反选点击事件
-            allInput.off('click');
             allInput.click(selectall);
             // 单行选中事件
-            $spa.find('input[name="tb-row[]"]').click(selecone);
+            $('input[name="tb-row[]"]').click(selecone);
         });
 
         // 反选点击事件
         allInput.click(selectall);
         // 单行选中事件
-        $spa.find('input[name="tb-row[]"]').click(selecone);
+        $('input[name="tb-row[]"]').click(selecone);
 
         function selectall() {
             var _this = $(this), tb = _this.parent().parent().parent().parent(), inputs = tb.find('input[name="tb-row[]"]');
@@ -145,8 +136,9 @@ define(['@lxh/css/sweet-alert.min.css', '@lxh/js/sweet-alert.min'], function () 
             return input
         }
         function set_all_input(val) {
-            LXHSTORE.SELECTEDIDS[LXHSTORE.SPAID] = val;
-            $(document).trigger(LXHSTORE.SPAID + '.grid.selected', val);
+            listids = val;
+            allInput.val(val);
+            $(document).trigger('grid.selected', val);
         }
         function selecone() {
             var ids = allInput.val(), $this = $(this), id = $this.val();

@@ -337,9 +337,7 @@ class Cards extends Widget
 
         $view = new $class($field, $value);
 
-        $view->setContainerId(
-            $this->warterFall->getId()
-        )->setItems($this->currentItems);
+        $view->setItems($this->currentItems);
 
         if ($then) $then($view, $this);
 

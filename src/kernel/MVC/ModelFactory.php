@@ -15,6 +15,10 @@ class ModelFactory extends Factory
 	 */
 	public function create($name)
 	{
+		if (! $name) {
+			$name = $this->getDefaultName();
+		}
+
 		if (strpos($name, "\\")) {
 			$className = $name;
 			$name = explode('\\', $name);
