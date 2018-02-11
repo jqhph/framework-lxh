@@ -101,15 +101,8 @@ echo admin_js('plugins/toastr/toastr.min');
 <![endif]-->
 
 <?php
-//echo render_view('admin::index.app-js');
-
 // <div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style="display: block;"><div class="toast-progress" style="width: 96.4454%;"></div><button type="button" class="toast-close-button" role="button">×</button><div class="toast-message">Login successful</div></div></div>
 echo admin_js('js/jquery.app.min');
-
-// 加载sea js，加载所有require_js和require_css加载的文件
-//echo admin_js('js/app.min');
-// js模板
-echo render_view('admin::javascript-tpl');
 ?>
 </body>
 </html>

@@ -59,4 +59,6 @@ $(document).on('pjax:complete', function () {$(parent.window).scrollTop(0);});
 </script>
 <?php
 echo admin_js('js/app.min');
+// js模板
+echo render_view('admin::javascript-tpl');
 ?>
