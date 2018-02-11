@@ -47,6 +47,7 @@
 </div>
 <?php
 echo admin_js('js/jquery.min');
+echo render_view('admin::index.app-js');
 ?>
 <script>
 <?php
@@ -56,6 +57,5 @@ echo admin_js('js/jquery.min');
 ?>; __then__(function(){<?php echo $script?>});
 </script>
 <?php
-echo render_view('admin::index.app-js');
 echo admin_js('js/app.min');
 ?>
