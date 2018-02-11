@@ -16,11 +16,14 @@
     </ul>
 </div>
 <script>
-    __then__(function (){
+(function () {
+    __then__(init);
+    (typeof $ != 'undefined') && $(document).on('pjax:complete', init);
+    function init() {
         var $spa = $('#<?php echo $id?>'),
             options = $.extend({
-            container: $spa.find('.tiles')
-        }, <?php echo json_encode($options)?>);
+                container: $spa.find('.tiles')
+            }, <?php echo json_encode($options)?>);
 
         var handler = $spa.find('.tiles li'),
             filters = $spa.find('.wtf-filters a');
@@ -40,5 +43,6 @@
             handler.wookmarkInstance.filter(activeFilters, '<?php echo $filterMode;?>');
         };
         filters.click(onClickFilter);
-    });
+    }
+})();
 </script>
