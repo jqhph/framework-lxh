@@ -21,10 +21,18 @@ use Lxh\Helper\ChromePhp;
 
 class Track
 {
-    // 项目开始执行时间
+    /**
+     * 项目开始执行时间
+     *
+     * @var float
+     */
     protected $startTime;
 
-    // 项目总运行时间
+    /**
+     * 项目总运行时间
+     *
+     * @var float
+     */
     protected $runTime;
 
     /**
@@ -32,6 +40,9 @@ class Track
      */
     protected $container;
 
+    /**
+     * @var array
+     */
     protected $records = [];
 
     public function __construct(Container $container)
@@ -39,7 +50,11 @@ class Track
         $this->container = $container;
     }
 
-    // 设置程序运行时间
+    /**
+     * 设置程序运行时间
+     *
+     * @param $time
+     */
     public function setStartTime($time)
     {
         $this->startTime = $time;
@@ -66,7 +81,7 @@ class Track
                 $this->startTime = $options ? $options : microtime(true);
                 break;
             default:
-                $store = $this->getRecordStore($name);
+                $store = $this->store($name);
                 if (empty($options['command'])) {
                     return;
                 }
@@ -78,7 +93,12 @@ class Track
         }
     }
 
-    // 输出调试信息权限检测
+    /**
+     * 输出调试信息权限检测
+     *
+     * @param Request $request
+     * @return bool
+     */
     protected function checkResponseAccess(Request $request)
     {
         // 生产环境，不记录任何信息
@@ -91,7 +111,7 @@ class Track
      * @param $name
      * @return Record
      */
-    protected function getRecordStore($name)
+    protected function store($name)
     {
         if (isset($this->records[$name])) {
             return $this->records[$name];
@@ -122,13 +142,15 @@ class Track
      */
     protected function response(Request $request)
     {
-        $db = $this->getRecordStore('db');
+        $db = $this->store('db');
         $controllerManager = $this->container->make('controller.manager');
         $uri = $request->getUri();
 
-        $requestInfo = ' [Module: ' . $controllerManager->moduleName() . ', Controller: ' . $controllerManager->getClass()
+        $requestInfo = ' [Module: ' . $controllerManager->moduleName()
+                        . ', Controller: ' . $controllerManager->getClass()
                         . ', Action: ' . $controllerManager->actionName() . '] '
-                        . $request->date() . ' ' . $request->protocol(). ' ' . $request->getMethod() . ': '
+                        . $request->date() . ' ' . $request->protocol()
+                        . ' ' . $request->getMethod() . ': '
                         . $uri->getPath() . ' ' . $uri->getQuery();
 
         $allFiles = get_included_files();
@@ -142,9 +164,9 @@ class Track
 //            '吞吐率'	    => number_format(1 / $this->getRunTime(), 2) . 'req/s',
             '内存开销'      => number_format((memory_get_usage()) / 1024, 2) . 'kb',
             '最后执行SQL' 	=> $db->last(),
-            '数据库信息'     => $db->computeTypeTimes('r') . ' queries ' . $db->computeTypeTimes('w') . ' writes ' . $db->computeTypeTimes('c') . ' connected',
+            '数据库信息'     => $db->typesCount('r') . ' queries ' . $db->typesCount('w') . ' writes ' . $db->typesCount('c') . ' connected',
             '数据库操作详情' => $db->all(),
-            '自定义追踪'     => $this->getAllRecords(),
+            '自定义追踪'     => $this->getCustomTrackInfos(),
             '缓存信息'       => ' gets ' . ' writes ' . ' connected',
             '文件加载数量'   => count($allFiles),
             '文件加载详情'   => & $allFiles,
@@ -159,15 +181,17 @@ class Track
 
     }
 
-    protected function getAllRecords()
+    /**
+     * @return array
+     */
+    protected function getCustomTrackInfos()
     {
         $records = [];
-
-        foreach ($this->records as $k => & $v) {
+        foreach ($this->records as $k => &$v) {
             if ($k == 'db') {
                 continue;
             }
-            $records[$k] = $v->full();
+            $records[$k] = $v->computes();
         }
 
         return $records;
@@ -181,6 +205,8 @@ class Track
 
     /**
      * 项目运行时间
+     *
+     * @return float
      */
     public function usetime()
     {

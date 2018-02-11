@@ -16,6 +16,9 @@ class Record
     const READ = 'r';
     const CONNECT = 'c';
 
+    /**
+     * @var Entity
+     */
     protected $data;
 
     /**
@@ -69,23 +72,23 @@ class Record
         return $this;
     }
 
+    /**
+     * @param array $params
+     * @return $this
+     */
     public function params(array $params)
     {
         $this->data->append('params', $params);
         return $this;
     }
 
-    // 获取总耗时
-    public function allUseageTime()
-    {
-        if (empty($this->records)) {
-            $this->compute();
-        }
-        return $this->records['all-useage-time'];
-    }
-
-    // 获取类型次数
-    public function computeTypeTimes($type)
+    /**
+     * 获取类型次数
+     *
+     * @param $type
+     * @return int|mixed
+     */
+    public function typesCount($type)
     {
         if (empty($this->records)) {
             $this->compute();
@@ -95,6 +98,9 @@ class Record
         return ! empty($this->records[$k]) ? $this->records[$k] : 0;
     }
 
+    /**
+     * @return $this
+     */
     public function compute()
     {
         $this->records['all-useage-time'] = 0;
@@ -117,8 +123,12 @@ class Record
                 $this->records[$typeTimesKey] = empty($this->records[$typeTimesKey]) ? 1 : ($this->records[$typeTimesKey] + 1);
             }
         }
+        return $this;
     }
 
+    /**
+     * @return array|mixed
+     */
     public function all()
     {
         if (empty($this->records)) {
@@ -127,7 +137,10 @@ class Record
         return ! empty($this->records['info']) ? $this->records['info'] : [];
     }
 
-    public function full()
+    /**
+     * @return array
+     */
+    public function computes()
     {
         if (empty($this->records)) {
             $this->compute();

@@ -109,4 +109,9 @@ class Index extends Controller
         ];
     }
 
+    public function actionTest(array $params)
+    {
+        return $params;
+    }
+
 }
