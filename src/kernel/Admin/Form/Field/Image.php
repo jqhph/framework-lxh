@@ -22,9 +22,14 @@ class Image extends File
 
     protected function setup()
     {
-        $this->options['allowedFileTypes'] = [
-            'jpg', 'gif', 'png'
+        $this->options['allowedFileExtensions'] = [
+            'bmp', 'jpg', 'png', 'tiff', 'gif', 'jpeg', 'pcx', 'tga', 'exif', 'fpx', 'svg', 'psd', 'cdr', 'pcd', 'dxf', 'ufo', 'eps', 'ai', 'raw', 'WMF'
         ];
+        
+        $this->script('image', <<<EOF
+$('input[type="file"]').on('change', function() {var c = LXHSTORE.IFRAME.current();setTimeout(function () {LXHSTORE.IFRAME.height(c)},50);})
+EOF
+);
     }
 
 
