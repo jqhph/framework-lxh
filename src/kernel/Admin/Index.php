@@ -206,7 +206,7 @@ class Index
      * @param $content
      * @return $this
      */
-    public function addTopbarContent($content)
+    public function appendTopbarContent($content)
     {
         $this->topbarContent[] = $this->normalizeContent($content);
         return $this;

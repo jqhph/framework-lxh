@@ -168,14 +168,8 @@ class Cards extends Widget
      */
     public function setRows(&$rows = [])
     {
-        if (Arr::isAssoc($rows)) {
-            foreach ($rows as $key => &$item) {
-                $this->rows[] = [$key, $item];
-            }
-            return $this;
-        }
-
         $this->rows = &$rows;
+
         return $this;
     }
 
@@ -329,13 +323,7 @@ class Cards extends Widget
 
         $view = str_replace('.', '\\', $view);
 
-        if (strpos($view, '\\') !== false) {
-            $class = $view;
-        } else {
-            $class  = "Lxh\\Admin\\Fields\\{$view}";
-        }
-
-        $view = new $class($field, $value);
+        $view = new $view($field, $value);
 
         $view->setItems($this->currentItems);
 
@@ -352,13 +340,11 @@ class Cards extends Widget
         if (empty($this->rows) || ! $this->resolving) {
             return $this->renderNoDataTip();
         }
-        // 使用瀑布流布局渲染
-        $wf = $this->warterFall;
 
         foreach ($this->rows as $k => &$row) {
             $this->currentItems = $items = new Items($row, $k);
 
-            $wf->card(function (WaterFall\Card $card) use ($wf, $items) {
+            $this->warterFall->card(function (WaterFall\Card $card) use ($items) {
                 // 保存当前行卡片
                 $this->currentCard = $card;
 
@@ -386,7 +372,7 @@ class Cards extends Widget
             });
         }
 
-        return $wf->render();
+        return $this->warterFall->render();
     }
 
     /**

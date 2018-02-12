@@ -187,13 +187,12 @@ class Tr extends Widget
         if ($handler = $this->table->handler('field', $field)) {
             // 自定义处理器
             if (!is_string($handler) && is_callable($handler)) {
-                $this->setupTdWithOptions($td, $options);
                 $td->value(
                     $handler($value, $td, $this)
                 );
                 $tdString .= $td->render();
             } else {
-                $tdString .=  $this->setupTdWithOptions($td, $options)->value($handler)->render();
+                $tdString .=  $td->value($handler)->render();
             }
             return;
         }
@@ -206,7 +205,7 @@ class Tr extends Widget
 
         $view = get_value($options, 'view');
         if (! $view) {
-            $tdString .= $this->setupTdWithOptions($td, $options)->render();
+            $tdString .= $td->render();
             return;
         }
 
@@ -218,18 +217,6 @@ class Tr extends Widget
             $td,
             get_value($options, 'then')
         );
-    }
-
-    /**
-     * 设置td配置
-     *
-     * @param Td $td
-     * @param $options
-     * @return Td
-     */
-    protected function setupTdWithOptions(Td $td, &$options)
-    {
-        return $td;
     }
 
     /**
@@ -281,13 +268,7 @@ class Tr extends Widget
 
         $view = str_replace('.', '\\', $view);
 
-        if (strpos($view, '\\') !== false) {
-            $class = $view;
-        } else {
-            $class  = "Lxh\\Admin\\Fields\\{$view}";
-        }
-
-        $view = new $class($field, $value);
+        $view = new $view($field, $value);
 
         $view->setTable($this->table)
             ->setItems($this->items);
@@ -300,7 +281,6 @@ class Tr extends Widget
     /**
      * @param $field
      * @param $value
-     * @param array $options
      * @return Td
      */
     protected function buildTd($field, $value)

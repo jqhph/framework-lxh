@@ -15,11 +15,6 @@ use InvalidArgumentException;
 class Admin
 {
     /**
-     * @var string
-     */
-    protected static $uniqueWarpperId = '';
-
-    /**
      * @var array
      */
     protected static $urls = [];
@@ -181,21 +176,6 @@ class Admin
         }
 
         throw new InvalidArgumentException("$model is not a valid model");
-    }
-
-    /**
-     * Get namespace of controllers.
-     *
-     * @return string
-     */
-    public function controllerNamespace()
-    {
-        $directory = config('admin.directory');
-
-        return ltrim(implode('\\',
-              array_map('ucfirst',
-                  explode(DIRECTORY_SEPARATOR, str_replace(__ROOT__, '', $directory)))), '\\')
-              .'\\Controllers';
     }
 
     /**

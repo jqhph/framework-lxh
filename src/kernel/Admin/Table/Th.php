@@ -47,18 +47,14 @@ class Th extends Widget
      */
     protected $desc = null;
 
-    public function __construct(Table $table = null, $name = null, $attributes = null)
+    public function __construct(Table $table = null, $name = null, array $attributes = [])
     {
         $this->table = $table;
+        $this->field = $name;
+        $this->attributes = &$attributes;
 
-        $this->field = &$name;
         $this->value($name);
-
         $this->show();
-
-        if ($attributes) {
-            parent::__construct((array) $attributes);
-        }
     }
 
     public function disableResponsive()
@@ -120,6 +116,10 @@ class Th extends Widget
         return $this;
     }
 
+    /**
+     * @param string $desc
+     * @return $this
+     */
     public function desc($desc)
     {
         $this->desc = $desc;

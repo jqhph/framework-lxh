@@ -131,7 +131,7 @@ class Table extends Widget
     protected $field;
 
     /**
-     * @var RowSelector
+     * @var Grid\RowSelector
      */
     protected $rowSelector = null;
 
@@ -154,7 +154,6 @@ class Table extends Widget
                         'view' => '处理值显示方法参数',
                         'sortable' => '是否支持排序',
                         'desc' => '默认显示倒序，注意只有当sortable设置为true才有效，且不能多个字段同时设置为true',
-                        'show' => '默认是显示，传0或false则隐藏字段，注意当使用RWD-table插件时此值才有效'
                     ],
                 ]
      * @param array $rows
@@ -328,10 +327,10 @@ class Table extends Widget
     public function column($position, $title, $content = null)
     {
         if ($position < 1) {
-            throw new InvalidArgumentException('位置参数错误，请传入大于0的整数');
+            throw new InvalidArgumentException('Error of position.');
         }
         if (isset($this->columns['mid'][$position])) {
-            throw new InvalidArgumentException('该位置己存在其他列');
+            throw new InvalidArgumentException('Column already exists.');
         }
 
         return $this->columns['mid'][intval($position)] = new Column($title, $content);
@@ -361,6 +360,11 @@ class Table extends Widget
         return $this->columns['last'][] = new Column($title, $content);
     }
 
+    /**
+     *
+     *
+     * @return bool
+     */
     public function allowRowSelector()
     {
         return $this->grid->option('useRowSelector');
@@ -470,14 +474,6 @@ class Table extends Widget
      */
     public function setRows(&$rows = [])
     {
-        if (Arr::isAssoc($rows)) {
-            foreach ($rows as $key => &$item) {
-                $this->rows[] = [$key, $item];
-            }
-
-            return $this;
-        }
-
         $this->rows = &$rows;
 
         return $this;

@@ -14,6 +14,9 @@ use Lxh\Support\Arr;
  */
 class Td extends Widget
 {
+    /**
+     * @var mixed
+     */
     protected $value;
 
     public function __construct($value = null)
@@ -21,7 +24,10 @@ class Td extends Widget
         $this->value = &$value;
     }
 
-
+    /**
+     * @param mixed $value
+     * @return $this|null
+     */
     public function value($value = null)
     {
         if ($value === null) {
