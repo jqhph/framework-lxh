@@ -60,6 +60,6 @@ class RowSelector extends Widget
      */
     public function renderHead()
     {
-        return "<input type='checkbox' data-action='select-all' {$this->formatAttributes()}/><input type='hidden'>";
+        return "<input type='checkbox' data-action='select-all' {$this->formatAttributes()}/>";
     }
 }

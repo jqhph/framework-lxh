@@ -79,11 +79,7 @@ class Post extends Controller
         // 设置瀑布流卡片过滤选项
         $cards->setFilterOptions(['Lxh', 'Jqh']);
 
-        $each->image(
-            $cards->image('img')
-                ->width('auto')
-                ->value("https://img3.doubanio.com/view/photo/s_ratio_poster/public/p2511434383.jpg")
-        );
+        $each->image("https://img3.doubanio.com/view/photo/s_ratio_poster/public/p2511434383.jpg");
 
         $each->title(
             $cards->text('title')

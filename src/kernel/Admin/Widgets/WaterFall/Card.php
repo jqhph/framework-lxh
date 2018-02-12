@@ -2,14 +2,15 @@
 
 namespace Lxh\Admin\Widgets\WaterFall;
 
+use Lxh\Admin\Fields\Image;
 use Lxh\Contracts\Support\Renderable;
 
 class Card
 {
     /**
-     * @var string
+     * @var array
      */
-    protected $image;
+    protected $top = [];
 
     /**
      * @var array
@@ -38,17 +39,34 @@ class Card
     }
 
     /**
+     * 在卡片顶部插入图片
+     *
      * @param $image
      * @return $this
      */
-    public function image($image)
+    public function image($src)
     {
-        if ($image instanceof Renderable) {
-            $image = $image->render();
-        } elseif ($image instanceof \Closure) {
-            $image = $image($this);
+        $image = new Image();
+        $image->width('auto')->value($src);
+
+        return $this->top($image);
+    }
+
+    /**
+     * 卡片顶部内容
+     *
+     * @param $value
+     * @return $this
+     */
+    public function top($value)
+    {
+        if ($value instanceof Renderable) {
+            $value = $value->render();
+        } elseif ($value instanceof \Closure) {
+            $value = $value($this);
         }
-        $this->image = &$image;
+        
+        $this->top[] = "<div class='top-content'>$value</div>";
         return $this;
     }
 
@@ -133,19 +151,15 @@ class Card
      */
     public function render()
     {
-        $image = '';
-        if ($this->image) {
-            $image = "<div class='img'>{$this->image}</div>";
-        }
-
         $title = '';
         if ($this->title) {
             $title = "<strong>{$this->title}</strong>";
         }
 
+        $top = implode('', $this->top);
         $rows = implode('', $this->rows);
 
-        return "{$image}{$title}<div class=\"content\">$rows</div>";
+        return "{$top}{$title}<div class=\"content\">$rows</div>";
     }
 
 }
