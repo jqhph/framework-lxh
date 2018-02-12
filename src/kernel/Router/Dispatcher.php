@@ -1,17 +1,21 @@
 <?php
+
+namespace Lxh\Router;
+
+use Lxh\Container\Container;
+use Lxh\Contracts\Router;
+
 /**
  * 路由管理
  *
  * @author Jqh
  * @date   2017/5/22 10:47
  */
-
-namespace Lxh\Router;
-
-use Lxh\Contracts\Router;
-
 class Dispatcher implements Router
 {
+    /**
+     * @var Container
+     */
     protected $container;
 
     /**
@@ -71,7 +75,7 @@ class Dispatcher implements Router
      *
      * @var bool
      */
-    protected $matchResult;
+    protected $result;
 
     /**
      * 控制器名称
@@ -160,18 +164,8 @@ class Dispatcher implements Router
     public function __construct(array $config = [])
     {
         $this->rules = &$config;
-
         $this->requestMethod = get_value($_SERVER, 'REQUEST_METHOD');
     }
-
-//    protected function setup(array &$config)
-//    {
-//        if (config('admin.use-admin-routes', true)) {
-//            $this->rules = include __DIR__ . '/admin-routes.php';
-//        }
-//
-//        $this->rules = array_merge($this->rules, $config);
-//    }
 
     /**
      * 添加路由规则配置
@@ -203,34 +197,22 @@ class Dispatcher implements Router
      */
     public function handle()
     {
-        $patharr = $this->getPathArr();
-
+        $patharr = explode('/', $this->getPath());
+        $this->arrayFilter($patharr);
         $pathlen = count($patharr);
 
         // 匹配路由
-        foreach ($this->rules() as & $rule) {
+        foreach ($this->rules as &$rule) {
             if (empty($rule['pattern'])) continue;
 
             if ($this->matchingPattern($rule, $patharr, $pathlen)) {
                 // 匹配成功，保存路由信息
                 $this->save($rule, $patharr);
-                return $this->matchResult = true;
+                return $this->result = true;
             }
         }
 
-        return $this->matchResult = false;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getPathArr()
-    {
-        $patharr = explode('/', $this->getPath());
-
-        $this->arrayFilter($patharr);
-
-        return $patharr;
+        return $this->result = false;
     }
 
     /**
@@ -240,40 +222,40 @@ class Dispatcher implements Router
      * @param array $patharr
      * @return void
      */
-    protected function save(array & $rule, array & $patharr)
+    protected function save(array &$rule, array &$patharr)
     {
         // 验证配置
         $contr = $action = '';
 
         $params = [];// 参数
 
-        foreach ((array)get_value($rule, 'params') as $k => & $p) {
+        foreach ((array)get_value($rule, 'params') as $k => &$p) {
             switch ($k) {
                 case 'controller':
-                    $contr = & $p;
+                    $contr = &$p;
                     break;
                 case 'action':
-                    $action = & $p;
+                    $action = &$p;
                     break;
                 case 'module':
-                    $this->module = & $p;
+                    $this->module = &$p;
                     break;
                 case 'auth':
-                    $this->auth = & $p;
+                    $this->auth = &$p;
                     break;
                 default:
-                    $params[$k] = & $p;
+                    $params[$k] = &$p;
             }
         }
 
         $realContr = $realAction = '';
-        foreach ((array) $rule['pattern'] as $k => & $r) {
+        foreach ((array) $rule['pattern'] as $k => &$r) {
             if ($r == $contr) {
-                $realContr = & $patharr[$k];
+                $realContr = &$patharr[$k];
             }
 
             if ($r == $action) {
-                $realAction = & $patharr[$k];
+                $realAction = &$patharr[$k];
             }
 
             // 存在正则匹配
@@ -284,7 +266,7 @@ class Dispatcher implements Router
                 $realAction = $this->regResultData[$action];
             }
 
-            foreach ($params as $pn => & $param) {
+            foreach ($params as $pn => &$param) {
                 if ($param == $r) {
                     $param = $patharr[$k];
                 }
@@ -296,10 +278,10 @@ class Dispatcher implements Router
         }
 
         if (! $realContr) {
-            $realContr = & $contr;
+            $realContr = &$contr;
         }
         if (! $realAction) {
-            $realAction = & $action;
+            $realAction = &$action;
         }
 
         // 控制器命名空间
@@ -318,9 +300,12 @@ class Dispatcher implements Router
     /**
      * 匹配路由模式
      *
+     * @param array $rule
+     * @param array $patharr
+     * @param int $pathlen
      * @return bool
      */
-    protected function matchingPattern(& $rule, & $patharr, $pathlen)
+    protected function matchingPattern(array &$rule, array &$patharr, $pathlen)
     {
         if ($rule['pattern'] === $this->anySymbol) {
             return true;
@@ -353,12 +338,18 @@ class Dispatcher implements Router
         return $this->compareString($rule, $patharr);
     }
 
-    // 正则匹配
-    protected function compareReg(& $rule, & $patharr)
+    /**
+     * 正则匹配
+     *
+     * @param array $rule
+     * @param array $patharr
+     * @return bool
+     */
+    protected function compareReg(array &$rule, array &$patharr)
     {
         $uri = $this->getPath();
 
-        foreach ($rule['pattern'] as $k => & $p) {
+        foreach ($rule['pattern'] as $k => &$p) {
             if ($this->hasReg($p)) {
                 if (! preg_match($p, $uri, $data)) {
                     return false;
@@ -370,15 +361,21 @@ class Dispatcher implements Router
             }
         }
 
-        $this->regResultData = & $data;
+        $this->regResultData = &$data;
 
         return true;
     }
 
-    // 字符串比较
-    protected function compareString(& $rule, & $patharr)
+    /**
+     * 字符串比较
+     *
+     * @param array $rule
+     * @param array $patharr
+     * @return bool
+     */
+    protected function compareString(array &$rule, array &$patharr)
     {
-        foreach ($rule['pattern'] as $k => & $p) {
+        foreach ($rule['pattern'] as $k => &$p) {
             // 特殊占位符匹配
             $t = explode($this->placeholderDelimiter, $p);
             if (isset($this->placeholderPatterns[$t[0]])) {
@@ -395,12 +392,21 @@ class Dispatcher implements Router
         return true;
     }
 
-    // 判断是否含有正则字符
+    /**
+     * 判断是否含有正则字符
+     *
+     * @param string $str
+     * @return bool
+     */
     protected function hasReg($str)
     {
         return (strpos($str, $this->regularSymbol) === false) ? false : true;
     }
 
+    /**
+     *
+     * @return mixed|string
+     */
     public function getPath()
     {
         if ($this->requestPath) {
@@ -410,33 +416,43 @@ class Dispatcher implements Router
         $uri = get_value($_SERVER, 'PATH_INFO');
 
         if (empty($uri)) {
-            $uri = $_SERVER['REQUEST_URI'];
-            $uri = explode('?', $uri)[0];
+            $uri = explode('?', $_SERVER['REQUEST_URI'])[0];
         }
 
-        return $this->requestPath = & $uri;
+        return $this->requestPath = &$uri;
     }
 
-    // 获取路由解析结果
-    public function getDispatchResult()
+    /**
+     * 获取路由解析结果
+     *
+     * @return bool
+     */
+    public function result()
     {
-        return $this->matchResult;
+        return $this->result;
     }
 
-    // 获取路由规则
+    /**
+     * 获取路由规则配置数组
+     *
+     * @return array
+     */
     public function rules()
     {
         return $this->rules;
     }
 
-    // 去除空值并重置key  array_values(array_filter($arr))
-    protected function arrayFilter(& $arr)
+    /**
+     * 去除空值并重置key  array_values(array_filter($arr))
+     *
+     * @param array $arr
+     */
+    protected function arrayFilter(array &$arr)
     {
         $new = [];
-        foreach ($arr as & $row) {
+        foreach ($arr as &$row) {
             if (empty($row)) continue;
-
-            $new[] = $row;
+            $new[] = &$row;
         }
         $arr = $new;
     }

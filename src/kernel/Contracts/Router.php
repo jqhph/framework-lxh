@@ -42,5 +42,5 @@ interface Router
      * @param
      * @return mixed
      */
-    public function getDispatchResult();
+    public function result();
 }
