@@ -6,21 +6,6 @@
  * @date   2017/6/13 20:14
  */
 
-$config = [];
-
-$config['front.client'] = [
-    'shared' => true,
-    'class' => 'Lxh\Kernel\Client'
+return [
+    
 ];
-
-$config['page'] = [
-    'shared' => true,
-    'class' => 'Lxh\Kernel\Support\Page'
-];
-
-$config['code.generator'] = [
-    'shared' => true,
-    'class' => 'Lxh\Kernel\Builder\CodeGenerator'
-];
-
-return $config;

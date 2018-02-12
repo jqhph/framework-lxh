@@ -187,9 +187,7 @@ class ControllerManager extends Factory
 
         // 初始化语言包
         if (config('use-language')) {
-            $language = language();
-            $language->loadPackage('Global');
-            $language->scope($this->controllerName);
+            translator()->scope($this->controllerName);
         }
 
         if (! defined('__CONTROLLER__')) {

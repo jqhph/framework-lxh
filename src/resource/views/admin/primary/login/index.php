@@ -1,4 +1,4 @@
-<?php $language = language();?>
+<?php $language = translator();?>
 <div class="account-pages"></div>
 <div class="clearfix"></div>
 <div class="wrapper-page">

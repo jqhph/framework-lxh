@@ -222,7 +222,7 @@ function plugin_img($plugin, $name)
  *
  * @return \Lxh\Language\Translator
  */
-function language()
+function translator()
 {
     return $GLOBALS['LANGUAGE'];
 }
@@ -313,11 +313,12 @@ function trans_with_global($label, $category = 'labels', array $sprints = [])
  *
  * @param  string|int $value 选项值
  * @param  string     $field 选项名称
+ * @param  string     $scope 模块名称
  * @return string|int
  */
-function trans_option($value, $field)
+function trans_option($value, $field, $scope = null)
 {
-    return $GLOBALS['LANGUAGE']->translateOption($value, $field);
+    return $GLOBALS['LANGUAGE']->translateOption($value, $field, $scope);
 }
 
 /**

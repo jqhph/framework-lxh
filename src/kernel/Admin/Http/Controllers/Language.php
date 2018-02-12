@@ -35,7 +35,7 @@ class Language extends Controller
 
         $lang = I('lang', 'en');
 
-        return $this->success('sucess', ['list' => language()->getPackages($scopes, $lang)]);
+        return $this->success('sucess', ['list' => translator()->getPackages($scopes, $lang)]);
     }
 
     /**
@@ -51,7 +51,7 @@ class Language extends Controller
 
         $file = files();
 
-        $languagePackDir = language()->getBasePath();
+        $languagePackDir = translator()->getBasePath();
 
         // 获取语言包目录
         $fileList = $file->getFileList($languagePackDir, true);
@@ -102,7 +102,7 @@ class Language extends Controller
         if (empty($path)) {
             return $this->error();
         }
-        $languagePackDir = language()->getBasePath();
+        $languagePackDir = translator()->getBasePath();
 
 //        print_r($languagePackDir . ltrim($path, '/'));
 
@@ -127,7 +127,7 @@ class Language extends Controller
 
         $_POST['content'] = json_decode($_POST['content'], true);
 
-        $languagePackDir = language()->getBasePath();
+        $languagePackDir = translator()->getBasePath();
 
         $result = files()->putPhpContents($languagePackDir . $_POST['path'], $_POST['content'], true);
 
@@ -152,7 +152,7 @@ class Language extends Controller
             return $this->error();
         }
         $file = files();
-        $languagePackDir = language()->getBasePath();
+        $languagePackDir = translator()->getBasePath();
 
         $path = $languagePackDir . $_POST['path'];
 
@@ -193,7 +193,7 @@ class Language extends Controller
             return $this->error();
         }
 
-        $path = language()->getPackagePath($file, $lang);
+        $path = translator()->getPackagePath($file, $lang);
 
         if (is_file($path)) {
             return $this->error('File already exists');
@@ -226,7 +226,7 @@ class Language extends Controller
         $path = $_POST['path'];
         $content = $_POST['content'];
 
-        $language = language();
+        $language = translator();
         $file     = files();
 
         $path = $language->getBasePath() . $path;
@@ -256,7 +256,7 @@ class Language extends Controller
         $path = $_POST['path'];
         $content = ['options' => & $_POST['content']];
 
-        $language = language();
+        $language = translator();
         $file     = files();
 
         $path = $language->getBasePath() . $path;
@@ -283,7 +283,7 @@ class Language extends Controller
             return $this->error();
         }
 
-        $base = language()->getBasePath();
+        $base = translator()->getBasePath();
 
         $file = files();
 

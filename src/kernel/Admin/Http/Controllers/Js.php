@@ -93,7 +93,7 @@ EOF;
      */
     protected function loadDataLanguage(array $scopes)
     {
-        return language()->getPackages($scopes);
+        return translator()->getPackages($scopes);
     }
 
     // 加载语言包
@@ -108,7 +108,7 @@ EOF;
         $lang = I('lang', 'en');
 
         $data = json_encode(
-            language()->getPackages($scopes, $lang)
+            translator()->getPackages($scopes, $lang)
         );
 
         return "window.languagePackages = {$data};";

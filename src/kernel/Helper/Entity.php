@@ -93,10 +93,30 @@ class Entity implements ArrayAccess, Arrayable, Jsonable
     {
         if (isset($this->items[$key])) return $this->items[$key];
 
-        $lastItem = & $this->items;
-        foreach (explode('.', $key) as & $keyName) {
+        $lastItem = &$this->items;
+        foreach (explode('.', $key) as &$keyName) {
             if (isset($lastItem[$keyName])) {
-                $lastItem = & $lastItem[$keyName];
+                $lastItem = &$lastItem[$keyName];
+            } else {
+                return$default;
+            }
+        }
+
+        return $lastItem;
+    }
+
+    /**
+     *
+     * @param array $keys
+     * @param null $default
+     * @return array|mixed|null
+     */
+    public function getForArray(array $keys, $default = null)
+    {
+        $lastItem = &$this->items;
+        foreach ($keys as &$keyName) {
+            if (isset($lastItem[$keyName])) {
+                $lastItem = &$lastItem[$keyName];
             } else {
                 return $default;
             }
@@ -114,7 +134,7 @@ class Entity implements ArrayAccess, Arrayable, Jsonable
      */
     public function set($name, $value)
     {
-        $this->items[$name] = & $value;
+        $this->items[$name] = &$value;
         return $this;
     }
 

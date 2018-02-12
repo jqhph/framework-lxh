@@ -55,9 +55,7 @@ class Translator
      *
      * @var array
      */
-    protected $loadedScopes = [
-
-    ];
+    protected $loadedScopes = [];
 
     /**
      * 语言包路径
@@ -94,25 +92,21 @@ class Translator
     public function __construct(Container $container)
     {
         $this->container = $container;
-
         $this->language = config('language', $this->defaultLanguage);
-
         $this->moduleName = $container->make('controller.manager')->moduleDash();
 
+        $this->loadPackage('Global');
     }
 
     /**
      * 设置语言包模块
      *
      * @param string $name
-     * @return static
+     * @return $this
      */
     public function scope($name)
     {
         $this->scopeName = $name;
-
-        $this->loadPackage($name);
-
         return $this;
     }
 
@@ -138,12 +132,13 @@ class Translator
     /**
      * 设置语言类型
      *
-     * @param
-     * @return void
+     * @param string $lang
+     * @return $this
      */
-    public function type($lang)
+    public function setLanguage($lang)
     {
         $this->language = $lang;
+        return $this;
     }
 
     /**
@@ -172,7 +167,7 @@ class Translator
 
             $result = true;
             // 保存
-            $this->packages[$lang]->$scope = (array) include $file;
+            $this->packages[$lang]->set($scope, (array)include $file);
         }
 
         // 记录语言包载入结果
@@ -233,6 +228,14 @@ class Translator
         return "{$this->root}{$this->dir}/";
     }
 
+    /**
+     * @param $scope
+     * @return mixed
+     */
+    public function packagesLoaded($scope)
+    {
+        return $this->loadedScopes[$this->language][$scope];
+    }
 
     /**
      * Translate label/labels
@@ -241,28 +244,29 @@ class Translator
      * @param  string $category
      * @param  mixed $default
      * @param  array $sprints format fields array
+     * @param  string $scope
      * @return string | array
      */
-    public function translate($label, $category = 'labels', array $sprints = [])
+    public function translate($label, $category = 'labels', array $sprints = [], $scope = null)
     {
         if (! isset($this->packages[$this->language])) {
             return $label;
         }
 
-        if (is_array($label)) {
-            $translated = array();
-
-            foreach ($label as & $subLabel) {
-                $translated[$subLabel] = $this->translate($subLabel, $category);
-            }
-
-            return $translated;
+        $scope = $scope ?: $this->scopeName;
+        // 没有载入模块
+        if (! isset($this->loadedScopes[$this->language][$scope])) {
+            $this->loadPackage($scope);
         }
-        //console_error("{$this->scopeName}.{$category}.$label");
-        $translated = $this->packages[$this->language]->get("{$this->scopeName}.{$category}.$label");
+
+        $translated = $this->packages[$this->language]->getForArray(
+            [&$scope, &$category, &$label]
+        );
 
         if (empty($translated)) {
-            $translated = $this->packages[$this->language]->get("Global.{$category}.$label");
+            $translated = $this->packages[$this->language]->getForArray(
+                ['Global', &$category, &$label]
+            );
         }
 
         $result = $translated ?: $label;
@@ -295,7 +299,9 @@ class Translator
         if (! isset($this->packages[$this->language])) {
             return $label;
         }
-        $translated = $this->packages[$this->language]->get("Global.{$category}.$label", $label);
+        $translated = $this->packages[$this->language]->getForArray(
+            ['Global', $category, $label], $label
+        );
         if ($sprints && $translated) {
             $translated = vsprintf($translated, $sprints);
         }
@@ -307,16 +313,23 @@ class Translator
      * 选项翻译
      *
      * @param  string|int $value 选项值
-     * @param  string     $value 选项名称
+     * @param  string     $field 选项名称
+     * @param  string     $scope 模块名称
      * @return string|int
      */
-    public function translateOption($value, $field)
+    public function translateOption($value, $field, $scope = null)
     {
         if (! isset($this->packages[$this->language])) {
             return $value;
         }
 
-        $options = $this->packages[$this->language]->get($this->scopeName. '.options.' . $field);
+        $scope = $scope ?: $this->scopeName;
+        // 没有载入模块
+        if (! isset($this->loadedScopes[$this->language][$scope])) {
+            $this->loadPackage($scope);
+        }
+
+        $options = $this->packages[$this->language]->getForArray([$scope, 'options', $field]);
 
         return isset($options[$value]) ? $options[$value] : $value;
     }
