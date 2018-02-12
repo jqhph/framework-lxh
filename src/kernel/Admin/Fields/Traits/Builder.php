@@ -9,34 +9,75 @@ trait Builder
     /**
      * @var null
      */
-    static $setGridEmailCss = null;
+    static $setGridEmailStyle = null;
 
+    /**
+     * 时间戳转日期
+     *
+     * @param $name
+     * @param $value
+     * @return bool|string
+     */
     protected function buildDate($name, $value)
     {
         return $value ? date('Y-m-d H:i:s', $value) : '';
     }
 
+    /**
+     * 字体图标
+     *
+     * @param $name
+     * @param $value
+     * @return string
+     */
     protected function buildIcon($name, $value)
     {
         return $value ? "<i class=\"{$value}\"></i>" : '';
     }
 
+    /**
+     * 选项翻译
+     *
+     * @param $name
+     * @param $value
+     * @return int|string
+     */
     protected function buildSelect($name, $value)
     {
-        return ($value !== '') ? trans_option($value, $name) : '';
+        return ($value !== '' && $value !== null) ? trans_option($value, $name) : '';
     }
 
+    protected static $checkedStyle = false;
+    /**
+     * 选中效果
+     *
+     * @param $name
+     * @param $value
+     * @return string
+     */
     protected function buildChecked($name, $value)
     {
-        return $value ? '<i style="font-size:16px;font-weight:700" class="green zmdi zmdi-check"></i>'
-            : '<i style="font-size:15px;" class="red zmdi zmdi-close"></i>';
+        if (static::$checkedStyle === false) {
+            static::$checkedStyle = true;
+            Admin::style('.grid-checked{font-size:16px;font-weight:700}.grid-unchecked{font-size:15px;font-weight:700}');
+        }
+
+        return $value ? '<i class="green grid-checked zmdi zmdi-check"></i>'
+            : '<i class="red grid-unchecked zmdi zmdi-close"></i>';
     }
 
+    /**
+     * 邮箱
+     *
+     * @param $name
+     * @param $value
+     * @return string
+     */
     protected function buildEmail($name, $value)
     {
-        if (static::$setGridEmailCss === null) {
-            static::$setGridEmailCss = 1;
-            Admin::script('$(\'.grid-email\').css({color:\'#666\'});');
+        if (static::$setGridEmailStyle === null) {
+            static::$setGridEmailStyle = 1;
+            Admin::style('.grid-email{color:#666}');
         }
 
         return ($value !== '' && $value !== null) ? '<i class="fa fa-envelope grid-email"></i> ' . $value : '';

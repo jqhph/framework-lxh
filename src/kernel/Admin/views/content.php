@@ -35,6 +35,9 @@
         }
     }
 </script>
+<?php if ($style) {?>
+<style><?php echo $style?></style>
+<?php } ?>
 <div class="container">
     <div class="content-wrapper">
         <?php if ($header || $description) {?>

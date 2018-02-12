@@ -39,11 +39,11 @@ class User
     }
 
     /**
-     * @param array $options
+     * @param mixed $options
      * @param Closure $next
      * @return mixed
      */
-    public function handle(array $options, Closure $next)
+    public function handle($options, Closure $next)
     {
         $admin = admin();
         if (! $admin->getId()) {

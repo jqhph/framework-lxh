@@ -302,6 +302,7 @@ class Content implements Renderable
             'js'          => Admin::js(),
             'css'         => Admin::css(),
             'script'      => Admin::script(),
+            'style'       => Admin::style(),
             'asyncJs'     => Admin::async(),
         ];
 

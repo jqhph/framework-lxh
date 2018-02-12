@@ -56,7 +56,7 @@ class Admin extends Controller
     {
         $table->code('id')->sortable();
         $table->text('username');
-        $table->text('email');
+        $table->email('email');
         $table->text('mobile');
 
         $this->buildRoles($table);

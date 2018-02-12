@@ -492,8 +492,8 @@ class Grid implements Renderable
         // 分页管理
         $pages = $this->paginator();
 
-        if ($total && $this->allowedPagination()) {
-            $this->pageString($pages->make($total, $this->perPage));
+        if ($total && $this->options['usePagination']) {
+            $this->pageString = $pages->make($total, $this->perPage);
         }
 
         // 生成分页字符串后获取当前分页（做过安全判断）
@@ -831,13 +831,13 @@ class Grid implements Renderable
         }
 
         $vars = array_merge([
-            'content' => &$content,
+            'content'     => &$content,
             'pageString'  => &$this->pageString,
             'pageOptions' => &$this->perPages,
-            'perPage' => $this->perPage,
-            'perPageKey' => $this->perPageKey,
-            'url' => $this->url,
-            'filterId' => '',
+            'perPage'     => &$this->perPage,
+            'perPageKey'  => &$this->perPageKey,
+            'url'         => $this->url,
+            'filterId'    => '',
         ], $this->options);
 
         if ($isPjaxRequest) {
@@ -860,9 +860,10 @@ class Grid implements Renderable
     protected function renderBox(array &$vars)
     {
         $box = new Box();
-        $box->setTools($this->tools);
-
-        $box->content(view($this->view, $vars)->render())->style('inverse')->btnToolbar();
+        $box->setTools($this->tools)
+            ->content(view($this->view, $vars)->render())
+            ->style('inverse')
+            ->btnToolbar();
 
         if ($btn = $this->buildCreateBtn()) {
             $box->rightTools()->append($btn);
@@ -870,8 +871,8 @@ class Grid implements Renderable
 
         if ($this->filter && $this->filter->allowedUseModal()) {
             $btn = new Button('<i class="fa fa-filter"></i> &nbsp;' . trans('Filter'));
-            $btn->attribute('data-target', '#' . $this->filter->getContainerId());
-            $btn->attribute('data-toggle', 'modal');
+            $btn->attribute('data-target', '#' . $this->filter->getContainerId())
+                ->attribute('data-toggle', 'modal');
 
             $box->rightTools()->prepend($btn);
         }
@@ -881,26 +882,20 @@ class Grid implements Renderable
 
     protected function buildCreateBtn()
     {
-        if (!$this->option('allowCreate')) {
+        if (!$this->options['allowCreate']) {
             return;
         }
 
-        $label = trans('Create ' . __CONTROLLER__);
-        $button = new Button($label, Admin::url()->action('create'));
+        $button = new Button(
+            trans('Create ' . __CONTROLLER__), Admin::url()->action('create')
+        );
 
-        $button->attribute('data-action', 'create-row');
-        $button->name($this->getCreateBtnTabId());
-        $button->icon('zmdi zmdi-playlist-plus');
-
-        return $button->color('success')->render();
-    }
-
-    /**
-     * @return string
-     */
-    protected function getCreateBtnTabId()
-    {
-        return  'create-' . __CONTROLLER__;
+        return $button
+            ->attribute('data-action', 'create-row')
+            ->name('create-' . __CONTROLLER__)
+            ->icon('zmdi zmdi-playlist-plus')
+            ->color('success')
+            ->render();
     }
 
 }

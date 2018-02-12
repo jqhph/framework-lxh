@@ -44,6 +44,11 @@ class Admin
     /**
      * @var array
      */
+    public static $style = [];
+
+    /**
+     * @var array
+     */
     public static $css = [];
 
     /**
@@ -236,11 +241,6 @@ class Admin
         return $script;
     }
 
-    public function indie()
-    {
-
-    }
-
     /**
      * 禁用语言包
      *
@@ -299,7 +299,6 @@ class Admin
 
     /**
      * @param string $script
-     *
      * @return array
      */
     public static function script($script = '')
@@ -310,6 +309,21 @@ class Admin
         }
 
         return implode(';', static::$script);
+    }
+
+    /**
+     *
+     * @param null $css
+     * @return array
+     */
+    public static function style($style = null)
+    {
+        if (!is_null($style)) {
+            self::$style = array_merge(self::$style, (array) $style);
+            return;
+        }
+
+        return implode('', self::$style);
     }
 
     public static function collectFieldAssets()
