@@ -242,7 +242,12 @@ class ControllerManager extends Factory
 
         // 检测action是否存在
         if (! method_exists($contr, $action)) {
-            throw new NotFound("Call to undefined method " . get_class($contr) . "::{$action}().", false);
+            if (is_prod()) {
+                $msg = null;
+            } else {
+                $msg = "Call to undefined method " . get_class($contr) . "::{$action}().";
+            }
+            throw new NotFound($msg, false);
         }
 
         // 分派控制器前中间件
@@ -257,13 +262,9 @@ class ControllerManager extends Factory
         $this->getContrMiddleware($middleware, $contr);
 
         return $this->pipeline
-            ->send([])
             ->through($middleware)
-            ->then(function ($middlewareParams) use ($contr, $action, $params) {
+            ->then(function () use ($contr, $action, $params) {
                 if ($this->first) {
-                    // 存储中间件传递的参数
-                    $this->request->setMiddlewaresParams($middlewareParams);
-
                     $this->events->fire(EVENT_AUTH_SUCCESS);
 
                     // 注册当前控制器
@@ -332,11 +333,11 @@ class ControllerManager extends Factory
         // 保存当前控制器类名
         $this->controllerClass = trim($className, '//');
 
-//        if (class_exists($className)) {
-        return new $className($name, $this->container, $this);
-//        }
+        if (class_exists($className)) {
+            return new $className($name, $this->container, $this);
+        }
 
-//        throw new NotFound("Controller '$className' not exists.", false);
+        throw new NotFound(null, false);
     }
 
     /**
