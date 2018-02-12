@@ -87,7 +87,14 @@ class Content implements Renderable
      */
     public function body($content)
     {
-        return $this->row($content);
+        if (is_callable($content)) {
+            $this->rows[] = $row = new Row();
+            call_user_func($content, $row);
+        } else {
+            $this->rows[] = new Row($content);
+        }
+
+        return $this;
     }
 
     /**
@@ -98,13 +105,11 @@ class Content implements Renderable
      */
     public function filter(callable $callback = null, $width = 12)
     {
-        $row = new Row();
+        $this->rows[] = $row = new Row();
 
         $filter = new Filter();
 
         $column = $row->column($width, $filter);
-
-        $this->addRow($row);
 
         if ($callback) {
             call_user_func($callback, $filter, $column);
@@ -141,7 +146,7 @@ class Content implements Renderable
      */
     public function form(callable $callback = null, $width = 12)
     {
-        $row = new Row();
+        $this->rows[] = $row = new Row();
 
         $form = new Form();
 
@@ -152,8 +157,6 @@ class Content implements Renderable
         if ($callback) {
             call_user_func($callback, $form, $column);
         }
-
-        $this->addRow($row);
 
         return $box;
     }
@@ -170,9 +173,8 @@ class Content implements Renderable
             $callback($modal);
         }
 
-        $row = new Row();
+        $this->rows[] = $row = new Row();
         $row->column(12, $modal);
-        $this->addRow($row);
 
         return $modal;
     }
@@ -185,16 +187,13 @@ class Content implements Renderable
     public function grid($params = null, $width = 12)
     {
         // 行
-        $row = new Row();
+        $this->rows[] = $row = new Row();
 
         // 网格
         $grid = new Grid();
 
         // 添加列
         $column = $row->column($width, $grid);
-
-        // 添加行
-        $this->addRow($row);
 
         if (is_array($params)) {
             // 添加网格配置
@@ -217,25 +216,13 @@ class Content implements Renderable
     public function row($content = '')
     {
         if (is_callable($content)) {
-            $row = new Row();
+            $this->rows[] = $row = new Row();
             call_user_func($content, $row);
-            $this->addRow($row);
         } else {
-            $row = new Row($content);
-            $this->addRow($row);
+            $this->rows[] = new Row($content);
         }
 
         return $this;
-    }
-
-    /**
-     * Add Row.
-     *
-     * @param Row $row
-     */
-    protected function addRow(Row $row)
-    {
-        $this->rows[] = $row;
     }
 
     /**
@@ -243,7 +230,7 @@ class Content implements Renderable
      *
      * @return string
      */
-    public function build()
+    public function &build()
     {
         ob_start();
 
@@ -280,33 +267,35 @@ class Content implements Renderable
      */
     public function render()
     {
+        // 注入所有字段静态资源
+        Admin::collectFieldAssets();
+
+        // 必须先调用build方法
+        $content = $this->build();
+
+        $js = Admin::js();
+        $css = Admin::css();
+        $script = Admin::script();
+        $asyncJs = Admin::async();
+
         // 异步加载table，无需加载整个内容
         if (Grid::isPjaxRequest()) {
-            // 必须先调用build方法
-            // 否则可能导致加载不到相关js
-            $content = $this->build();
-
-            $script = Admin::script();
-            $js = Admin::js();
-            $css = Admin::css();
-            $asyncJs = Admin::async();
-
             return "{$content}<script>{$css}{$asyncJs}{$js}{$script}</script>";
         }
 
-        Admin::collectFieldAssets();
-        $items = [
-            'header'      => $this->header,
-            'description' => $this->description,
-            'content'     => $this->build(),
-            'js'          => Admin::js(),
-            'css'         => Admin::css(),
-            'script'      => Admin::script(),
-            'style'       => Admin::style(),
-            'asyncJs'     => Admin::async(),
-        ];
-
-        return view($this->view, $items)->render();
+        return view(
+            $this->view,
+            [
+                'header'      => &$this->header,
+                'description' => &$this->description,
+                'content'     => &$content,
+                'js'          => &$js,
+                'css'         => &$css,
+                'script'      => &$script,
+                'style'       => Admin::style(),
+                'asyncJs'     => &$asyncJs,
+            ]
+        )->render();
     }
 
     /**
