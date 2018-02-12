@@ -3,11 +3,9 @@
 namespace Lxh\Admin\Table;
 
 use Lxh\Admin\Table\Table;
-use Lxh\Admin\Widgets\Widget;
 use Lxh\Contracts\Support\Renderable;
-use Lxh\Support\Arr;
 
-class Column extends Widget
+class Column implements Renderable
 {
     /**
      * @var string
@@ -40,9 +38,13 @@ class Column extends Widget
         }
 
         $this->th = new Th(null, $title ?: $this->defaultTitle);
-        $this->content = $content;
+        $this->content = &$content;
     }
 
+    /**
+     * @param Tr $tr
+     * @return $this
+     */
     public function tr(Tr $tr)
     {
         $this->tr = $tr;
@@ -59,6 +61,10 @@ class Column extends Widget
         return $this->th->render();
     }
 
+    /**
+     *
+     * @return mixed|string
+     */
     public function render()
     {
         $td = new Td();
@@ -73,7 +79,9 @@ class Column extends Widget
             ));
             return $td->render();
         }
+
         $td->value($this->content);
+
         return $td->render();
     }
 }

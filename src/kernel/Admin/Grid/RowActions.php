@@ -151,25 +151,28 @@ class RowActions extends TrTools
     protected function renderEdit($id)
     {
         $url = $this->url->detail($id);
-        $label = '<i class="fa fa-edit" style="color:green"></i>';//trans('detail');
 
         $name = trim(str_replace('/', '-', $url), '-');
 
-        $tabLabel = $this->normalizeTabLabel($id);
-
-        return <<<EOF
-<a onclick="open_tab('$name', '$url', '$tabLabel')">{$label}</a>
-EOF;
+        return "<a onclick=\"open_tab('$name', '$url', '{$this->normalizeTabLabel($id)}')\"><i class=\"fa fa-edit\" style=\"color:green\"></i></a>";
     }
 
+    /**
+     * @param $id
+     * @return string
+     */
     protected function normalizeTabLabel($id)
     {
-        $name = $this->items->get('name', $id);
+        $name = $this->items->get('name') ?: $this->items->get('title', $id);
 
         return trim(str_replace('&nbsp;', '', $name))
         . ' - ' . trans(__CONTROLLER__) . trans('Edit');
     }
 
+    /**
+     * @param $id
+     * @return string
+     */
     protected function renderDelete($id)
     {
         $model = __CONTROLLER__;

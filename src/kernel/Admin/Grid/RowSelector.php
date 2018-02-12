@@ -40,11 +40,7 @@ class RowSelector extends Widget
      */
     public function render()
     {
-        $id = $this->items->get($this->grid->idName());
-
-        $attr = $this->formatAttributes();
-
-        return "<input name='tb-row[]' type='checkbox' value='$id' {$attr} />";
+        return "<input name='tb-row[]' type='checkbox' value='{$this->items->get($this->grid->idName())}' {$this->formatAttributes()}/>";
     }
 
     /**
@@ -64,8 +60,6 @@ class RowSelector extends Widget
      */
     public function renderHead()
     {
-        $attr = $this->formatAttributes();
-
-        return "<input type='checkbox' data-action='select-all' {$attr} /><input type='hidden' id='select-all' value=''>";
+        return "<input type='checkbox' data-action='select-all' {$this->formatAttributes()}/><input type='hidden'>";
     }
 }
