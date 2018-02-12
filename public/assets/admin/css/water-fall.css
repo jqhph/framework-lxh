@@ -11,7 +11,7 @@
 .wtf-wrapper li.item-card .content{
     margin: 7px 7px 0;
 }
-.wtf-wrapper .content .row{margin:2px 0 0;display:block}
+.wtf-wrapper .content .row{margin:2px 0 0;}
 .wtf-wrapper .item-card strong {
     border-bottom: 1px solid #ccc;
     margin: 8px 7px;color:#444;
@@ -21,7 +21,7 @@
 }
 .wtf-wrapper .item-card .meta {color: #555;text-align: right;font-style: italic;margin:2px 0 0;}
 .wtf-wrapper .item-card b{color:#444}
-.wtf-wrapper .item-card .top-content{padding:4px;display:block}
+.wtf-wrapper .item-card .top-content{padding:4px;}
 .wtf-wrapper .item-card .img-thumbnail{border:0;padding:0;border-radius:0}
 .wtf-wrapper li.item-card {
     width: 200px;
