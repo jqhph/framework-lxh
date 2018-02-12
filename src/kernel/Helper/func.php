@@ -282,17 +282,18 @@ function __camel_case__($name, $symbol = '_')
 }
 
 /**
- * Translate label/labels
+ * 翻译
  *
- * @param  string $label name of label
+ * @param  string $label
  * @param  string $category
  * @param  mixed $default
- * @param  array $sprints format fields array
+ * @param  array $sprints 
+ * @param  string $scope 模块名称
  * @return string | array
  */
-function trans($label, $category = 'labels', array $sprints = [])
+function trans($label, $category = 'labels', array $sprints = [], $scope = null)
 {
-    return ($label !== '' && $label !== null) ? $GLOBALS['LANGUAGE']->translate($label, $category, $sprints) : '';
+    return $GLOBALS['LANGUAGE']->translate($label, $category, $sprints, $scope);
 }
 
 /**

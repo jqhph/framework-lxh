@@ -238,7 +238,7 @@ class ControllerManager extends Factory
         // 获取控制器
         $contr = $this->get($controller);
 
-        $action = $this->getActionMethod($action);
+        $action = 'action' . $action;
 
         // 检测action是否存在
         if (! method_exists($contr, $action)) {
@@ -272,17 +272,6 @@ class ControllerManager extends Factory
 
                 return $contr->$action($params);
             });
-    }
-
-    /**
-     * 获取action方法
-     *
-     * @param  string $action
-     * @return string
-     */
-    public function getActionMethod($action = null)
-    {
-        return 'action' . ($action ?: $this->actionName);
     }
 
     /**
