@@ -36,9 +36,13 @@ $config = [
 
     // 系统插件使用
     'providers' => [
+        // 使用菜单功能插件
         Lxh\Plugins\Providers\Menu::class,
+        // 权限系统管理功能
         Lxh\Plugins\Providers\Auths::class,
+        // 默认管理员功能
         Lxh\Plugins\Providers\Admins::class,
+        // 系统操作日志功能
         Lxh\Plugins\Providers\OperationLogs::class,
     ],
 
