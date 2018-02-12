@@ -2,9 +2,6 @@
 
 namespace Lxh\Router;
 
-use Lxh\Container\Container;
-use Lxh\Contracts\Router;
-
 /**
  * 路由管理
  *
@@ -13,11 +10,6 @@ use Lxh\Contracts\Router;
  */
 class Dispatcher
 {
-    /**
-     * @var Container
-     */
-    protected $container;
-
     /**
      * 路由规则配置数组
      *
