@@ -33,6 +33,11 @@ class Filter
      */
     protected $sorted = [];
 
+    /**
+     * @var array
+     */
+    protected $latests = [];
+
     public function __construct(Container $container)
     {
         $this->container = $container;
@@ -40,7 +45,7 @@ class Filter
 
     /**
      * @param string $tag
-     * @param string|callable $filter
+     * @param string|callable $filter ($value, $latestValue ...)
      * @param int $priority
      * @return $this
      */
@@ -57,7 +62,7 @@ class Filter
     }
 
     /**
-     * @param $tag
+     * @param string $tag
      * @return array|mixed|null
      */
     public function apply($tag)
@@ -66,45 +71,29 @@ class Filter
         
         $args = func_get_args();
         // 第二个参数为需要过滤的值
-        $value = get_value($args, 1);
-
-        array_shift($args);
+        $args[0] = $this->latests[$tag] = get_value($args, 1);
 
         foreach ($this->getFilters($tag) as &$filter) {
-            $value = call_user_func_array($this->resolveFilter($filter), $args);
+            $this->latests[$tag] = call_user_func_array($this->resolveFilter($filter), $args);
+            $args[1] = $this->latests[$tag];
 
-            if ($value === false) {
-                return $value;
+            if ($this->latests[$tag] === false) {
+                return $this->latests[$tag];
             }
         }
 
-        return $value;
+        return $this->latests[$tag];
     }
 
     /**
+     * 获取最后一次过滤器过滤后的内容
+     *
      * @param $tag
-     * @return array|mixed|null
+     * @return bool|mixed
      */
-    public function applyForLast($tag)
+    public function getLatestValue($tag)
     {
-        if (! $tag) return null;
-
-        $args = func_get_args();
-        // 第二个参数为需要过滤的值
-        $value = get_value($args, 1);
-
-        array_shift($args);
-
-        foreach ($this->getFilters($tag) as &$filter) {
-            $value = call_user_func_array($this->resolveFilter($filter), $args);
-            $args[0] = $value;
-
-            if ($value === false) {
-                return $value;
-            }
-        }
-
-        return $value;
+        return isset($this->latests[$tag]) ? $this->latests[$tag] : false;
     }
 
     /**

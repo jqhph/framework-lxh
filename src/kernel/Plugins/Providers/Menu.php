@@ -30,14 +30,14 @@ class Menu
      *
      * @return string
      */
-    public function setController($controller)
+    public function setController($controller, $latestValue)
     {
-        switch ($controller) {
+        switch ($latestValue) {
             case 'Menu':
-                $controller = \Lxh\Admin\Http\Controllers\Menu::class;
+                $latestValue = \Lxh\Admin\Http\Controllers\Menu::class;
                 break;
         }
 
-        return $controller;
+        return $latestValue;
     }
 }

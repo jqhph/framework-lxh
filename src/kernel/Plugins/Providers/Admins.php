@@ -33,15 +33,15 @@ class Admins
      *
      * @return string
      */
-    public function setController($controller)
+    public function setController($controller, $latestValue)
     {
-        switch ($controller) {
+        switch ($latestValue) {
             case 'Admin':
-                $controller = \Lxh\Admin\Http\Controllers\Admin::class;
+                $latestValue = \Lxh\Admin\Http\Controllers\Admin::class;
                 break;
         }
 
-        return $controller;
+        return $latestValue;
     }
 
     protected function registerNotAuthRouter()

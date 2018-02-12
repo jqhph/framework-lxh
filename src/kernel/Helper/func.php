@@ -654,8 +654,8 @@ function filters()
 /**
  * 添加一个过滤器
  *
- * @param $tag
- * @param $filter
+ * @param string $tag
+ * @param callable $filter ($value, $latestValue ...)
  * @param int $priority
  */
 function add_filter($tag, $filter, $priority = 0)

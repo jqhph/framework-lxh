@@ -586,7 +586,7 @@ class ControllerManager extends Factory
      */
     protected function setControllerName($name, $router)
     {
-        $name = $this->filters->applyForLast('setting.controller', Util::toCamelCase($name, true, '-'), $router);
+        $name = $this->filters->apply('setting.controller', Util::toCamelCase($name, true, '-'), $router);
 
         if (strpos($name, '\\') !== false) {
             // 传递的是完整类名
@@ -606,7 +606,7 @@ class ControllerManager extends Factory
      */
     protected function setActionName($name, $router)
     {
-        $this->actionName = $this->filters->applyForLast(
+        $this->actionName = $this->filters->apply(
             'setting.action',
             $name ? Util::toCamelCase($name, true, '-') : $this->defaultAction,
             $router

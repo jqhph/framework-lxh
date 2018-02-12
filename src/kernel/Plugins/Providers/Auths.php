@@ -32,17 +32,17 @@ class Auths
      *
      * @return string
      */
-    public function setController($controller)
+    public function setController($controller, $latestValue)
     {
-        switch ($controller) {
+        switch ($latestValue) {
             case 'Ability':
-                $controller = Ability::class;
+                $latestValue = Ability::class;
                 break;
             case 'Role':
-                $controller = Role::class;
+                $latestValue = Role::class;
                 break;
         }
 
-        return $controller;
+        return $latestValue;
     }
 }

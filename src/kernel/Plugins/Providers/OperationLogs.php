@@ -30,15 +30,15 @@ class OperationLogs
      *
      * @return string
      */
-    public function setController($controller)
+    public function setController($controller, $latestValue)
     {
-        switch ($controller) {
+        switch ($latestValue) {
             case 'Logs':
-                $controller = \Lxh\Admin\Http\Controllers\Logs::class;
+                $latestValue = \Lxh\Admin\Http\Controllers\Logs::class;
                 break;
         }
 
-        return $controller;
+        return $latestValue;
     }
 }
 
