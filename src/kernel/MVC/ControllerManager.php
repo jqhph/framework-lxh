@@ -327,14 +327,6 @@ class ControllerManager extends Factory
             $className = &$this->controllerClass;
         } else {
             $className = $this->getClassName($name);
-            if (! class_exists($className)) {
-                if (admin_name() != $this->module) {
-                    $namespace = 'Lxh\\Home\\Http\\Controllers\\';
-                } else {
-                    $namespace = 'Lxh\\Admin\\Http\\Controllers\\';
-                }
-                $className = $this->getClassName($name, $namespace);
-            }
         }
 
         // 保存当前控制器类名
@@ -404,16 +396,16 @@ class ControllerManager extends Factory
     /**
      * 添加控制器中间件
      *
-     * @param string $controller 控制器完整类名
+     * @param string $controllerClass 控制器完整类名
      * @param string $middleware 类名@方法名 或 类名 或 容器注册的服务名
      * @return \Lxh\MVC\ControllerManager
      */
-    public function addControllerMiddleware($controller, $middleware)
+    public function addControllerMiddleware($controllerClass, $middleware)
     {
         // 保存当前设置的中间件
-        $this->currentSettingMiddleware = [$controller, $middleware];
+        $this->currentSettingMiddleware = [$controllerClass, $middleware];
         // 保存中间件
-        $this->controllersMiddlewares[$controller][$middleware] = [];
+        $this->controllersMiddlewares[$controllerClass][$middleware] = [];
 
         return $this;
     }
@@ -594,6 +586,8 @@ class ControllerManager extends Factory
      */
     protected function setControllerName($name, $router)
     {
+        $name = $this->filters->applyForLast('setting.controller', Util::toCamelCase($name, true, '-'), $router);
+
         if (strpos($name, '\\') !== false) {
             // 传递的是完整类名
             $this->controllerClass = $name;
@@ -601,11 +595,7 @@ class ControllerManager extends Factory
             $name = explode('\\', $name);
             $name = end($name);
         }
-        $this->controllerName = $this->filters->apply(
-            'controller',
-            $name ? Util::toCamelCase($name, true, '-') : $this->defaultController,
-            $router
-        );
+        $this->controllerName = $name;
     }
 
     /**
@@ -616,8 +606,8 @@ class ControllerManager extends Factory
      */
     protected function setActionName($name, $router)
     {
-        $this->actionName = $this->filters->apply(
-            'action',
+        $this->actionName = $this->filters->applyForLast(
+            'setting.action',
             $name ? Util::toCamelCase($name, true, '-') : $this->defaultAction,
             $router
         );

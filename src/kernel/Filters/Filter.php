@@ -83,6 +83,32 @@ class Filter
 
     /**
      * @param $tag
+     * @return array|mixed|null
+     */
+    public function applyForLast($tag)
+    {
+        if (! $tag) return null;
+
+        $args = func_get_args();
+        // 第二个参数为需要过滤的值
+        $value = get_value($args, 1);
+
+        array_shift($args);
+
+        foreach ($this->getFilters($tag) as &$filter) {
+            $value = call_user_func_array($this->resolveFilter($filter), $args);
+            $args[0] = $value;
+
+            if ($value === false) {
+                return $value;
+            }
+        }
+
+        return $value;
+    }
+
+    /**
+     * @param $tag
      * @return bool
      */
     public function has($tag)

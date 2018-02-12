@@ -287,7 +287,7 @@ function __camel_case__($name, $symbol = '_')
  * @param  string $label
  * @param  string $category
  * @param  mixed $default
- * @param  array $sprints 
+ * @param  array $sprints
  * @param  string $scope 模块名称
  * @return string | array
  */
@@ -634,13 +634,13 @@ function home_name()
 /**
  * 添加控制器中间件
  *
- * @param string $controller 控制器完整类名
+ * @param string $controllerClass 控制器完整类名
  * @param string $middleware 类名@方法名 或 类名 或 容器注册的服务名
  * @return \Lxh\MVC\ControllerManager
  */
-function middleware($controller, $middleware)
+function middleware($controllerClass, $middleware)
 {
-    return $GLOBALS['CONTROLLERMANAGER']->addControllerMiddleware($controller, $middleware);
+    return $GLOBALS['CONTROLLERMANAGER']->addControllerMiddleware($controllerClass, $middleware);
 }
 
 /**
