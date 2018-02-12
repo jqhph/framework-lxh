@@ -27,7 +27,7 @@ class Column implements Buildable
         if ($content instanceof \Closure) {
             call_user_func($content, $this);
         } else {
-            $this->append($content);
+            $this->contents[] = &$content;
         }
 
         $this->width = $width;
@@ -42,7 +42,7 @@ class Column implements Buildable
      */
     public function append($content)
     {
-        $this->contents[] = $content;
+        $this->contents[] = &$content;
 
         return $this;
     }
@@ -52,7 +52,7 @@ class Column implements Buildable
      *
      * @param $content
      *
-     * @return Column
+     * @return $this
      */
     public function row($content)
     {
@@ -64,11 +64,11 @@ class Column implements Buildable
 
         $row->build();
 
-        $contents = ob_get_contents();
+        $this->contents[] = ob_get_contents();
 
         ob_end_clean();
 
-        return $this->append($contents);
+        return $this;
     }
 
     /**
@@ -76,7 +76,7 @@ class Column implements Buildable
      */
     public function build()
     {
-        $this->startColumn();
+        echo "<div class=\"col-md-{$this->width}\">";
 
         foreach ($this->contents as &$content) {
             if ($content instanceof Renderable) {
@@ -86,22 +86,7 @@ class Column implements Buildable
             }
         }
 
-        $this->endColumn();
-    }
-
-    /**
-     * Start column.
-     */
-    protected function startColumn()
-    {
-        echo "<div class=\"col-md-{$this->width}\">";
-    }
-
-    /**
-     * End column.
-     */
-    protected function endColumn()
-    {
         echo '</div>';
     }
+
 }

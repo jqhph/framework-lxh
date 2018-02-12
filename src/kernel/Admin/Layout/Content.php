@@ -59,7 +59,7 @@ class Content implements Renderable
      */
     public function header($header = '')
     {
-        $this->header = $header;
+        $this->header = &$header;
 
         return $this;
     }
@@ -73,7 +73,7 @@ class Content implements Renderable
      */
     public function description($description = '')
     {
-        $this->description = $description;
+        $this->description = &$description;
 
         return $this;
     }

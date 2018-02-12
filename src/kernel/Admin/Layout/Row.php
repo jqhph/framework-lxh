@@ -29,19 +29,7 @@ class Row implements Buildable
      */
     public function column($width, $content)
     {
-        $column = new Column($content, $width);
-
-        $this->addColumn($column);
-
-        return $column;
-    }
-
-    /**
-     * @param Column $column
-     */
-    protected function addColumn(Column $column)
-    {
-        $this->columns[] = $column;
+        return $this->columns[] = new Column($content, $width);
     }
 
     /**
@@ -49,28 +37,13 @@ class Row implements Buildable
      */
     public function build()
     {
-        $this->startRow();
+        echo '<div class="row">';
 
         foreach ($this->columns as $column) {
             $column->build();
         }
 
-        $this->endRow();
-    }
-
-    /**
-     * Start row.
-     */
-    protected function startRow()
-    {
-        echo '<div class="row">';
-    }
-
-    /**
-     * End column.
-     */
-    protected function endRow()
-    {
         echo '</div>';
     }
+
 }
