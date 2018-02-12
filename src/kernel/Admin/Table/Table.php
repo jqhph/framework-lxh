@@ -169,6 +169,10 @@ class Table extends Widget
         $this->class('table table-hover responsive');
     }
 
+    /**
+     * @param Grid|null $grid
+     * @return $this|Grid
+     */
     public function grid(Grid $grid = null)
     {
         if ($grid !== null) {

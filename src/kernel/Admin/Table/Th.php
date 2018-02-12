@@ -162,7 +162,7 @@ class Th extends Widget
             $icon = $this->desc ? 'fa-sort-amount-desc' : 'fa-sort-amount-asc';
         }
 
-        $url = url();
+        $url = $this->table->grid()->getUrl();
 
         $desc = $this->defaultDesc;// 默认升序排序
         if ($this->desc !== null) {
