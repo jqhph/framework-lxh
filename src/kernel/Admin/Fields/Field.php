@@ -121,6 +121,10 @@ class Field implements Renderable
         return $this->label ?: ($this->value ?: $this->name);
     }
 
+    /**
+     * @param Table $table
+     * @return $this
+     */
     public function setTable(Table $table)
     {
         $this->table = $table;

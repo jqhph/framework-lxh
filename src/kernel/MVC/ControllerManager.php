@@ -8,7 +8,6 @@
 
 namespace Lxh\MVC;
 
-use Lxh\Contracts\Router;
 use Lxh\Exceptions\NotFound;
 use Lxh\Basis\Factory;
 use Lxh\Filters\Filter;
@@ -16,11 +15,12 @@ use Lxh\Helper\Util;
 use Lxh\Http\Response;
 use Lxh\Http\Request;
 use Lxh\Contracts\Container\Container;
-use Lxh\Contracts\Pipeline;
 use Lxh\Contracts\Events\Dispatcher;
 use Lxh\MVC\Controller;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Lxh\Events\Dispatcher as Events;
+use Lxh\Router\Dispatcher as Router;
+use Lxh\Pipeline\Pipeline;
 
 class ControllerManager extends Factory
 {

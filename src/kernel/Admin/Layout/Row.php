@@ -2,7 +2,7 @@
 
 namespace Lxh\Admin\Layout;
 
-class Row implements Buildable
+class Row
 {
     /**
      * @var Column[]

@@ -11,7 +11,7 @@ use Lxh\Contracts\Router;
  * @author Jqh
  * @date   2017/5/22 10:47
  */
-class Dispatcher implements Router
+class Dispatcher
 {
     /**
      * @var Container

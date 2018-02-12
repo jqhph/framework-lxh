@@ -4,7 +4,7 @@ namespace Lxh\Admin\Layout;
 
 use Lxh\Contracts\Support\Renderable;
 
-class Column implements Buildable
+class Column
 {
     /**
      * @var int

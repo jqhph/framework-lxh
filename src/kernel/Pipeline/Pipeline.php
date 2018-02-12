@@ -6,7 +6,7 @@ use Lxh\Contracts\Pipeline as PipelineInterface;
 use Lxh\Contracts\Container\Container;
 use Closure;
 
-class Pipeline implements PipelineInterface
+class Pipeline
 {
 	/**
 	 * The container implementation.
