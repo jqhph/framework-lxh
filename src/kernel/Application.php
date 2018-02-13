@@ -105,10 +105,7 @@ class Application
      */
     public function getDataPath()
     {
-        if (defined('__DATA_ROOT__')) {
-            return __DATA_ROOT__;
-        }
-        return dirname($this->root) . '/data/';
+        return __DATA_ROOT__;
     }
     /**
      * 程序异常终结
@@ -204,6 +201,10 @@ class Application
             define('__ENV__', ENV_DEV);
         }
         require __CONFIG__ . __ENV__ . '/ini.php';
+
+        if (! defined('__DATA_ROOT__')) {
+            define('__DATA_ROOT__', dirname($this->root) . '/data/');
+        }
     }
 
     /**
