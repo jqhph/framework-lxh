@@ -27,6 +27,12 @@ echo admin_js('js/util.min');
 echo view('admin::index.app-js', ['useDefaultAssets' => false])->render();
 ?>
 <script>
+    var LXHSTORE = {};
+    LXHSTORE.cache = new Cache();
+    LXHSTORE.cache.setToken('<?php
+        // 设置缓存token，token刷新则会刷新所有缓存
+        echo $GLOBALS['js-version'];
+        ?>');
     (function (w) {
         w.loading = function (el, circle, timeout) {
             el = el || 'body';
