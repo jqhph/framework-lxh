@@ -383,12 +383,16 @@ function auth()
     return $GLOBALS['CONTAINER']['auth.manager'];
 }
 
-// 获取request参数
-function I($name = null, $default = null, $isEmpty = false)
+/**
+ *
+ * @param mixed $name
+ * @param mixed $default
+ * @return string
+ */
+function I($name = null, $default = null)
 {
-    if ($name === null) return file_get_contents('php://input');
-
-    if ($isEmpty) return empty($_REQUEST[$name]) ? $default : $_REQUEST[$name];
+    if ($name === null)
+        return file_get_contents('php://input');
 
     return isset($_REQUEST[$name]) ? $_REQUEST[$name] : $default;
 }
@@ -397,10 +401,10 @@ function I($name = null, $default = null, $isEmpty = false)
  * Call the given Closure with the given value then return the value.
  *
  * @param  mixed  $value
- * @param  callable|null  $callback
+ * @param  callable  $callback
  * @return mixed
  */
-function tap($value, $callback = null)
+function tap($value, Closure $callback)
 {
     $callback($value);
 
@@ -713,6 +717,11 @@ function config($key = null, $default = null)
     return $GLOBALS['CONFIG']->get($key, $default);
 }
 
+/**
+ * 判断是否是命令行环境
+ *
+ * @return bool
+ */
 function is_cli()
 {
     return PHP_SAPI == 'cli';
@@ -782,11 +791,23 @@ function get_value(& $data, $key, $default = null)
     return isset($data[$key]) ? $data[$key] : $default;
 }
 
+/**
+ * @param $data
+ * @param $key
+ * @param mixed $default
+ * @return mixed
+ */
 function get_isset(& $data, $key, $default = null)
 {
     return isset($data[$key]) ? $data[$key] : $default;
 }
 
+/**
+ * @param $data
+ * @param $key
+ * @param mixed $default
+ * @return mixed
+ */
 function get_not_empty(& $data, $key, $default = null)
 {
     return !empty($data[$key]) ? $data[$key] : $default;
@@ -972,6 +993,10 @@ function debug($data, $print = true, $json = false)
     }
 }
 
+/**
+ * 打印一个或多个变量
+ *
+ */
 function dd()
 {
     foreach (func_get_args() as $x) {
@@ -979,6 +1004,11 @@ function dd()
     }
 }
 
+
+/**
+ * 打印一个或多个变量，并结束
+ *
+ */
 function ddd() {
     call_user_func_array('dd', func_get_args());
     die;
