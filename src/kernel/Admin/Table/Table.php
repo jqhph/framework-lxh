@@ -618,8 +618,7 @@ class Table extends Widget
             $this,
             $k,
             $row,
-            $this->columns, 
-            $this->handlers
+            $this->columns
         );
     }
 

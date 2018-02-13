@@ -145,7 +145,9 @@ class Tr extends Widget
     {
         $tdString = '';
 
-        $this->prependColumns($tdString);
+        foreach ($this->columns['front'] as $column) {
+            $tdString .= $column->tr($this)->render();
+        }
 
         $headers = $this->table->headers();
         $counter = 1;
@@ -168,7 +170,9 @@ class Tr extends Widget
             }
         }
 
-        $this->appendColumns($tdString);
+        foreach ($this->columns['last'] as $column) {
+            $tdString .= $column->tr($this)->render();
+        }
 
         return $tdString;
     }
@@ -210,24 +214,13 @@ class Tr extends Widget
         }
 
         // 定义了视图
-        $tdString .= $this->renderFiledView(
+        $tdString .= $this->resolveFiledView(
             $view,
             $field,
             $value,
             $td,
             get_value($options, 'then')
         );
-    }
-
-    /**
-     * @param $tdString
-     * @param $row
-     */
-    protected function prependColumns(&$tdString)
-    {
-        foreach ($this->columns['front'] as $column) {
-            $tdString .= $column->tr($this)->render();
-        }
     }
 
     /**
@@ -239,19 +232,6 @@ class Tr extends Widget
     }
 
     /**
-     * 新建额外的列
-     *
-     * @return void
-     */
-    protected function appendColumns(&$tdString)
-    {
-        foreach ($this->columns['last'] as $column) {
-            $tdString .= $column->tr($this)->render();
-        }
-    }
-
-
-    /**
      * @param string|object $view
      * @param string $field
      * @param mixed $value
@@ -259,7 +239,7 @@ class Tr extends Widget
      * @param \Closure $then
      * @return mixed|string
      */
-    protected function renderFiledView($view, $field, $value, Td $td, \Closure $then = null)
+    protected function resolveFiledView($view, $field, $value, Td $td, \Closure $then = null)
     {
         $method = 'build' . $view;
         if (method_exists($this, $method)) {
