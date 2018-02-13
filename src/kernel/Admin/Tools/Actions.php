@@ -60,8 +60,10 @@ class Actions extends Tools
         Admin::script('$(\'.dropdown-toggle\').dropdown()');
 
         return <<<EOF
+<div class="btn-group">
 <button class="btn btn-default dropdown-toggle waves-effect" data-toggle="dropdown" aria-expanded="false">{$this->label}&nbsp;<span class="caret"></span></button>
-<ul class="dropdown-menu" style="margin-top:9px;">$tools</ul>
+<ul class="dropdown-menu">$tools</ul>
+</div>
 EOF;
 
     }

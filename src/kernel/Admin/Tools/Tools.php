@@ -15,6 +15,11 @@ class Tools implements Renderable
     protected $tools = [];
 
     /**
+     * @var string
+     */
+    protected $delimiter = '&nbsp;&nbsp;&nbsp;';
+
+    /**
      * Append tools.
      *
      * @param Renderable|string $tool
@@ -43,24 +48,33 @@ class Tools implements Renderable
     }
 
     /**
+     * @param string $d
+     * @return $this
+     */
+    public function setDelimiter($d)
+    {
+        $this->delimiter = $d;
+        return $this;
+    }
+
+    /**
      * Render header tools bar.
      *
      * @return string
      */
     public function render()
     {
-        $end = '&nbsp;&nbsp;&nbsp;';
         $tools = '';
         foreach ($this->tools as &$tool) {
             if ($tool instanceof Renderable) {
-                $tools .= $tool->render() . $end;
+                $tools .= $tool->render() . $this->delimiter;
             } elseif ($tool instanceof \Closure) {
-                $tools = $tool($this) . $end;
+                $tools = $tool($this) . $this->delimiter;
             } else {
-                $tools .= $tool . $end;
+                $tools .= $tool . $this->delimiter;
             }
         }
 
-        return rtrim($tools, $end);
+        return rtrim($tools, $this->delimiter);
     }
 }

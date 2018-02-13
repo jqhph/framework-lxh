@@ -169,6 +169,7 @@ EOF;
     {
         if (! $this->rightTools) {
             $this->rightTools = new Tools();
+            $this->rightTools->setDelimiter('');
         }
 
         return $this->rightTools;
