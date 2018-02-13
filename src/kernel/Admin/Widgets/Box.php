@@ -162,6 +162,9 @@ EOF;
         return $this;
     }
 
+    /**
+     * @return Tools
+     */
     public function rightTools()
     {
         if (! $this->rightTools) {
@@ -171,6 +174,9 @@ EOF;
         return $this->rightTools;
     }
 
+    /**
+     * @return Tools
+     */
     public function leftTools()
     {
         if (! $this->leftTools) {
@@ -197,9 +203,7 @@ EOF;
             . trans('back') . '</button>'
         );
 
-        static::$scripts[2] = <<<EOF
-             $('.portlet [data-toggle="back"]').click(function(){back_tab();})
-EOF;
+        static::$scripts[2] = '$(\'.portlet [data-toggle="back"]\').click(back_tab);';
         return $this;
     }
 

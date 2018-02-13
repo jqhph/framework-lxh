@@ -96,7 +96,7 @@ class Filter extends Widget implements Renderable
     {
         $url = '';
         if ($this->grid->allowPjax()) {
-            $url = request()->url()->string();
+            $url = $this->grid->getUrl()->string();
         }
 
         $this->attributes = [
@@ -191,19 +191,54 @@ class Filter extends Widget implements Renderable
         }
 
         if (! $this->options['useBox'] && ! $this->options['useModal']) {
-            return view($this->view, $this->vars())->render();
+            return $this->buildHtml();
         }
 
         return $this->options['useModal'] ? $this->buildModal() : $this->buildBox();
     }
 
+    /**
+     * @return string
+     */
+    protected function buildHtml()
+    {
+        $fields = '';
+        foreach ($this->fields as $field) {
+            $fields .= $field->render();
+        }
+
+        $footers = $this->buildFooter();
+        if ($footers) {
+            $style = '';
+            if (!$this->options['useModal']) {
+                $style = 'height:5px;';
+            }
+
+            $footers = <<<EOF
+<div class="box-footer" style="padding:10px 0 0;"><div class="col-sm-12">$footers</div><div style="clear:both;$style"></div></div>
+EOF;
+        }
+
+        return <<<EOF
+<form {$this->formatAttributes()} pjax-container>
+    <div class="box-body fields-group">$fields<div style="clear:both;"></div></div>$footers
+</form>
+EOF;
+
+    }
+
+    /**
+     * 弹窗
+     *
+     * @return array|mixed
+     */
     protected function buildModal()
     {
         foreach ($this->fields as &$field) {
             $field->multipleFieldWidth(2.5);
         }
 
-        $modal = new Modal(trans($this->title), view($this->view, $this->vars())->render());
+        $modal = new Modal(trans($this->title), $this->buildHtml());
 
         $modal->id($this->getContainerId());
         $modal->width($this->modalWidth);
@@ -212,13 +247,18 @@ class Filter extends Widget implements Renderable
         return $modal->render();
     }
 
+    /**
+     * 盒子
+     *
+     * @return string
+     */
     protected function buildBox()
     {
         $box = new Box($this->title);
 
         $box->attribute('id', $this->getContainerId());
 
-        $box->content(view($this->view, $this->vars())->render())->style('primary');
+        $box->content($this->buildHtml())->style('primary');
 
         if ($this->options['collapsable']) {
             $box->collapsable();
@@ -259,17 +299,6 @@ class Filter extends Widget implements Renderable
         return $this->conditions;
     }
 
-    protected function vars()
-    {
-        return [
-            'attributes' => $this->formatAttributes(),
-            'fields' => $this->fields,
-            'filterOptions' => &$this->options,
-            'footer' => $this->buildFooter(),
-            'useModal' => $this->options['useModal']
-        ];
-    }
-
     protected function buildFooter()
     {
         $submit = $this->buildSubmitBtn();
@@ -290,6 +319,9 @@ class Filter extends Widget implements Renderable
         return $submit->render() . ' ' . $reset . ' ' . $close;
     }
 
+    /**
+     * @return Button
+     */
     protected function buildSubmitBtn()
     {
         $submit = new Button(trans('Search'));

@@ -349,6 +349,10 @@ class Field implements Renderable
         return str_replace('.', '_', $column);
     }
 
+    /**
+     * @param $filter
+     * @return $this
+     */
     public function setFilter($filter)
     {
         $this->filter = $filter;

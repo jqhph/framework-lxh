@@ -391,9 +391,8 @@ EOF;
     {
         if (isset(static::$fieldsClass[$method])) {
             $field = get_value($parameters, 0);
-            $then = get_value($parameters, 1);
             return $this->resolveFiledView(
-                static::$fieldsClass[$method], $field, $this->item($field), $then
+                static::$fieldsClass[$method], $field, $this->item($field), get_value($parameters, 1)
             );
         }
 

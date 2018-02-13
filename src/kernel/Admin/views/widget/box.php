@@ -10,8 +10,6 @@
         <div style="clear:both"></div>
     </div>
     <div id="<?php echo $id; ?>" class="panel-collapse collapse in">
-        <div class="portlet-body">
-            <?php echo $content  ?>
-        </div>
+        <div class="portlet-body"><?php echo $content  ?></div>
     </div>
 </div>
