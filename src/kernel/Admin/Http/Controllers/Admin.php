@@ -268,12 +268,10 @@ class Admin extends Controller
         if (empty($_POST)) {
             return $this->error();
         }
-        $v = $this->validator();
-
-        $v->fill($_POST);
-
-        $v->rule('username', 'lengthBetween', 4, 20);
-        $v->rule('password', 'lengthBetween', 4, 30);
+        $v = $this->validator($_POST, [
+            'username' => 'required|lengthBetween:4,20',
+            'password' => 'required|lengthBetween:4,30',
+        ]);
 
         if (! $v->validate()) {
             return $this->error($v->errors());
@@ -298,13 +296,10 @@ class Admin extends Controller
         if (empty($_POST)) {
             return $this->error();
         }
-        $v = $this->validator();
-
-        $v->fill($_POST);
-
-        $v->rule('username', 'lengthBetween', 4, 20);
-        $v->rule('password', 'lengthBetween', 4, 30);
-        $v->rule('password', 'equals', 'repassword');
+        $v = $this->validator($_POST, [
+            'username' => 'required|lengthBetween:4,20',
+            'password' => 'required|lengthBetween:4,30|equals:repassword',
+        ]);
 
         if (! $v->validate()) {
             return $this->error($v->errors());

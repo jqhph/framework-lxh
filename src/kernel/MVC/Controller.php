@@ -272,9 +272,15 @@ abstract class Controller
      *
      * @return Validator
      */
-    protected function validator()
+    protected function validator(array $input = [], array $rules = [])
     {
-        return $this->container['validator'];
+        $v = $this->container['validator']->fill($input);
+
+        if ($rules) {
+            $v->rules($rules);
+        }
+
+        return $v;
     }
 
     /**

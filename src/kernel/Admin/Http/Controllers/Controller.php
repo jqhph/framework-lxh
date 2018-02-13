@@ -416,9 +416,7 @@ class Controller extends Base
         $this->inputFilter($input);
 
         if ($rules = $this->rules()) {
-            $validator = $this->validator();
-            $validator->fill($input);
-            $validator->rules($rules);
+            $validator = $this->validator($input, $rules);
         }
 
         // 验证表单数据
@@ -476,20 +474,17 @@ class Controller extends Base
         $this->id = $params['id'];
 
         // 获取表单数据
-        $data = json_decode(file_get_contents('php://input'), true);
+        $input = json_decode(file_get_contents('php://input'), true);
 
-        if (! $data || !is_array($data)) {
+        if (! $input || !is_array($input)) {
             return $this->error();
         }
 
         // 过滤用户输入数据
-        $this->inputFilter($data);
+        $this->inputFilter($input);
 
         if ($rules = $this->rules()) {
-            $validator = $this->validator();
-
-            $validator->fill($data);
-            $validator->rules($rules);
+            $validator = $this->validator($input, $rules);
         }
 
         // 验证表单数据

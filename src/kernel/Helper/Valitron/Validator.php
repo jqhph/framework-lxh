@@ -80,18 +80,18 @@ class Validator
     /**
      * Setup validation
      *
-     * @param  array                     $data
-     * @param  array                     $fields
-     * @param  string                    $lang
-     * @param  string                    $langDir
+     * @param  array  $input
+     * @param  array  $fields
+     * @param  string $lang
+     * @param  string $langDir
      * @throws \InvalidArgumentException
      */
-    public function fill(array & $data)
+    public function fill(array &$input)
     {
     	$this->reset();
     	// Allows filtering of used input fields against optional second array of field names allowed
     	// This is useful for limiting raw $_POST or $_GET data to only known fields
-    	$this->_fields = & $data;
+    	$this->_fields = & $input;
     	
     	// set lang in the follow order: constructor param, static::$_lang, default to en
     	$lang = self::$_lang;
@@ -702,7 +702,6 @@ class Validator
         $numberIsValid = function () use ($value) {
             $number = preg_replace('/[^0-9]+/', '', $value);
             $sum = 0;
-
             $strlen = strlen($number);
             if ($strlen < 13) {
                 return false;
@@ -720,33 +719,28 @@ class Validator
                 $sum += $sub_total;
             }
             if ($sum > 0 && $sum % 10 == 0) {
-                    return true;
+                return true;
             }
-
             return false;
         };
-
         if ($numberIsValid()) {
             if (!isset($cards)) {
                 return true;
             } else {
                 $cardRegex = array(
                     'visa'          => '#^4[0-9]{12}(?:[0-9]{3})?$#',
-                    'mastercard'    => '#^5[1-5][0-9]{14}$#',
+                    'mastercard'    => '#^(5[1-5]|2[2-7])[0-9]{14}$#',
                     'amex'          => '#^3[47][0-9]{13}$#',
                     'dinersclub'    => '#^3(?:0[0-5]|[68][0-9])[0-9]{11}$#',
                     'discover'      => '#^6(?:011|5[0-9]{2})[0-9]{12}$#',
                 );
-
                 if (isset($cardType)) {
                     // if we don't have any valid cards specified and the card we've been given isn't in our regex array
                     if (!isset($cards) && !in_array($cardType, array_keys($cardRegex))) {
                         return false;
                     }
-
                     // we only need to test against one card type
                     return (preg_match($cardRegex[$cardType], $value) === 1);
-
                 } elseif (isset($cards)) {
                     // if we have cards, check our users card against only the ones we have
                     foreach ($cards as $card) {
@@ -768,7 +762,6 @@ class Validator
                 }
             }
         }
-
         // if we've got this far, the card has passed no validation so it's invalid!
         return false;
     }
@@ -942,11 +935,13 @@ class Validator
              list($values, $multiple) = $this->getPart($this->_fields, explode('.', $field));
 
             // Don't validate if the field is not required and the value is empty
-//                 if ($this->hasRule('optional', $field) && isset($values)) {
-//                     //Continue with execution below if statement
-//                 } else
-            if ($v['rule'] !== 'required' && !$this->hasRule('required', $field)
-                    && (empty($values) || ($multiple && count($values) == 0))) {
+            if ($this->hasRule('optional', $field) && isset($values)) {
+                //Continue with execution below if statement
+            } elseif (
+                $v['rule'] !== 'required' && !$this->hasRule('required', $field) &&
+                $v['rule'] !== 'accepted' &&
+                (! isset($values) || $values === '' || ($multiple && count($values) == 0))
+            ) {
                 continue;
             }
 
@@ -1109,7 +1104,7 @@ class Validator
      * );
      *
      * @param array $rules
-     * @return static
+     * @return $this
      */
     public function rules(array $rules)
     {
