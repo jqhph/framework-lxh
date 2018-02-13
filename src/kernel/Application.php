@@ -28,26 +28,32 @@ class Application
      * @var string
      */
     protected $root;
+
     /**
      * @var Container
      */
     protected $container;
+
     /**
      * @var Response
      */
     public $response;
+
     /**
      * @var Request
      */
     public $request;
+
     /**
      * @var Dispatcher
      */
     protected $events;
+
     /**
      * @var array
      */
     protected $commands = [];
+
     /**
      * Application constructor.
      * @param string $rootDir 项目根目录
@@ -114,8 +120,6 @@ class Application
      */
     public function shutdown()
     {
-        // 触发程序终结事件
-//        $this->events->fire('app.shutdown');
         $this->response->send();
     }
 
