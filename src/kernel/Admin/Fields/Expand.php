@@ -32,7 +32,7 @@ class Expand extends Field
     {
         $this->setupScript();
 
-        $color = $this->option('color') ?: 'custom';
+        $color = $this->option('color') ?: 'default';
 
         $id = Util::randomString();
 
