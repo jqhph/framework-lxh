@@ -132,7 +132,7 @@ class Field implements Renderable
     }
 
     /**
-     * 行数据
+     * 设置行数据对象
      *
      * @param Items $items
      * @return $this
@@ -141,6 +141,26 @@ class Field implements Renderable
     {
         $this->items = $items;
         return $this;
+    }
+
+    /**
+     * 获取行数据对象
+     *
+     * @return Items
+     */
+    public function items()
+    {
+        return $this->items;
+    }
+
+    /**
+     * 获取行数
+     *
+     * @return int
+     */
+    public function line()
+    {
+        return $this->items->offset() + 1;
     }
 
     /**

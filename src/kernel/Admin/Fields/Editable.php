@@ -5,6 +5,7 @@ namespace Lxh\Admin\Fields;
 use Lxh\Admin\Admin;
 use Lxh\Admin\Form\Field\Text;
 use Lxh\Exceptions\InvalidArgumentException;
+use Lxh\Support\Collection;
 
 class Editable extends Field
 {
@@ -115,7 +116,7 @@ class Editable extends Field
      */
     public function date()
     {
-        $this->combodate();
+        return $this->combodate();
     }
 
     /**
@@ -123,7 +124,7 @@ class Editable extends Field
      */
     public function datetime()
     {
-        $this->combodate('YYYY-MM-DD HH:mm:ss');
+        return $this->combodate('YYYY-MM-DD HH:mm:ss');
     }
 
     /**
@@ -139,7 +140,7 @@ class Editable extends Field
      */
     public function month()
     {
-        $this->combodate('MM');
+        return $this->combodate('MM');
     }
 
     /**
@@ -147,13 +148,14 @@ class Editable extends Field
      */
     public function day()
     {
-        $this->combodate('DD');
+        return $this->combodate('DD');
     }
 
     /**
      * Combodate type editable.
      *
      * @param string $format
+     * @return $this
      */
     public function combodate($format = 'YYYY-MM-DD')
     {
@@ -169,6 +171,8 @@ class Editable extends Field
                 'maxYear' => 2035,
             ],
         ]);
+
+        return $this;
     }
 
     public function number()
@@ -224,6 +228,11 @@ class Editable extends Field
         return $this;
     }
 
+    /**
+     *
+     * @return string
+     * @throws InvalidArgumentException
+     */
     public function render()
     {
         if (empty($this->type)) $this->type = 'text';
@@ -263,7 +272,7 @@ class Editable extends Field
             $attributes['data-title'] = $this->title;
         }
 
-        $attributes = collect($attributes)->map(function ($attribute, $name) {
+        $attributes = (new Collection($attributes))->map(function ($attribute, $name) {
             return "$name='$attribute'";
         })->implode(' ');
 

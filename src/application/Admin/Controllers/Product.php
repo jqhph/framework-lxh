@@ -105,8 +105,8 @@ class Product extends Controller
 
         $table->code('id')->hide()->sortable();
 
-        $table->editable('name', function (Editable $editable, Tr $tr) {
-            switch ($tr->line()) {
+        $table->editable('name', function (Editable $editable) {
+            switch ($editable->line()) {
                 case 1:
                     $editable->datetime();
                     break;

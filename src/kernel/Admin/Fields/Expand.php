@@ -34,7 +34,7 @@ class Expand extends Field
 
         $color = $this->option('color') ?: 'default';
 
-        $id = Util::randomString();
+        $id = 'e'.Util::randomString();
 
         // 增加一行
         $this->table->addExtraRow("<div id=\"$id\" class=\"panel-collapse collapse out\">{$this->content}</div>");

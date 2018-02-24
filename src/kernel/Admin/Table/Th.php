@@ -152,6 +152,7 @@ class Th extends Widget
         }
 
         $icon = 'fa-arrows-v';
+        $desc = $this->defaultDesc;// 默认升序排序
 
         if ($this->isSorted()) {
             $this->desc = I('desc', $this->desc);
@@ -159,26 +160,20 @@ class Th extends Widget
             $icon = $this->desc ? 'fa-sort-amount-desc' : 'fa-sort-amount-asc';
         }
         if ($this->desc !== null) {
+            $desc = !$this->desc;
+
             $icon = $this->desc ? 'fa-sort-amount-desc' : 'fa-sort-amount-asc';
         }
 
-        $url = $this->table->grid()->getUrl();
-
-        $desc = $this->defaultDesc;// 默认升序排序
-        if ($this->desc !== null) {
-            $desc = !$this->desc;
-        }
-
-        $field = is_string($this->sortable) ? $this->sortable : $this->field;
+        // 此处必须使用clone创建一个新的对象
+        $url = clone $this->table->grid()->getUrl();
 
         $url->query([
-            'sort' => $field,
+            'sort' => is_string($this->sortable) ? $this->sortable : $this->field,
             'desc' => $desc
         ]);
-
-        $url = $url->string();
         
-        return "&nbsp;&nbsp;<a class=\"fa $icon\" href=\"$url\" style='color:#fe8f81'></a>";
+        return "&nbsp;&nbsp;<a class=\"fa $icon\" href=\"{$url->string()}\" style='color:#fe8f81'></a>";
     }
 
     /**

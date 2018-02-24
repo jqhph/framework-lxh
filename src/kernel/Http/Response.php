@@ -90,15 +90,9 @@ class Response extends PsrResponse
 		if ($this->request->isCli() || $this->headerSent) return;
 
 		//Send status
-		if (strpos(PHP_SAPI, 'cgi') === 0) {
-			header(sprintf('Status: %s', $this->getReasonPhrase()));
+		header(sprintf('%s %s, %s', $this->request->protocol(), $this->getStatusCode(), $this->getReasonPhrase()));
 
-		} else {
-			header(sprintf('%s %s, %s', $this->request->protocol(), $this->getStatusCode(), $this->getReasonPhrase()));
-
-		}
-
-		foreach ($this->getHeaders() as $name => & $value) {
+		foreach ($this->getHeaders() as $name => &$value) {
 			header($name . ': ' . implode('; ', $value), false);
 		}
 
@@ -234,7 +228,6 @@ class Response extends PsrResponse
 		$this->sendHeader();
 
 		if (($data = $this->normalizeContent()) !== false) {
-
 			$this->sent = true;
 
 			echo ob_get_clean();
@@ -299,7 +292,8 @@ class Response extends PsrResponse
 		// 非生产环境和非命令行环境则输出控制台调试日志
 		if (
 			$this->outputConsoleLog && !is_prod()
-			&& !$this->request->isCli() && config('response-console-log', true) && (!$this->request->isAjax() || Grid::isPjaxRequest() || isset($_GET['_log']))
+			&& !$this->request->isCli() && config('response-console-log', true) && (!$this->request->isAjax()
+			|| Grid::isPjaxRequest() || isset($_GET['_log']))
 		) {
 			echo Console::fetch();
 		}

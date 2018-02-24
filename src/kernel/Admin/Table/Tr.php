@@ -253,7 +253,7 @@ class Tr extends Widget
         $view->setTable($this->table)
             ->setItems($this->items);
 
-        if ($then) $then($view, $this);
+        $then && $then($view);
 
         return $td->value($view->render())->render();
     }
