@@ -143,33 +143,6 @@ class Builder
     }
 
     /**
-     * Set resource Id.
-     *
-     * @param $id
-     *
-     * @return void
-     */
-    public function setResourceId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getResource($slice = null)
-    {
-        if ($this->mode == self::MODE_CREATE) {
-            return $this->form->resource(-1);
-        }
-        if ($slice !== null) {
-            return $this->form->resource($slice);
-        }
-
-        return $this->form->resource();
-    }
-
-    /**
      * @param int $field
      * @param int $label
      *
@@ -183,38 +156,6 @@ class Builder
         ];
 
         return $this;
-    }
-
-    /**
-     * Set form action.
-     *
-     * @param string $action
-     */
-    public function setAction($action)
-    {
-        $this->action = $action;
-    }
-
-    /**
-     * Get Form action.
-     *
-     * @return string
-     */
-    public function getAction()
-    {
-        if ($this->action) {
-            return $this->action;
-        }
-
-        if ($this->isMode(static::MODE_EDIT)) {
-            return $this->form->resource().'/'.$this->id;
-        }
-
-        if ($this->isMode(static::MODE_CREATE)) {
-            return $this->form->resource(-1);
-        }
-
-        return '';
     }
 
     /**
@@ -347,7 +288,7 @@ class Builder
             $this->addHiddenField((new Form\Field\Hidden('_method'))->value('PUT'));
         }
 
-        $attributes['action'] = $this->getAction();
+        $attributes['action'] = '';
         $attributes['method'] = get_value($options, 'method', 'post');
         $attributes['accept-charset'] = 'UTF-8';
 

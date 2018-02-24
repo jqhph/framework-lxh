@@ -37,6 +37,11 @@ class Product extends Controller
      */
     protected $filter = 'modal';
 
+    /**
+     * @var int
+     */
+    protected $createFormWidth = 8;
+
     public function initialize()
     {
 //        sleep(3);

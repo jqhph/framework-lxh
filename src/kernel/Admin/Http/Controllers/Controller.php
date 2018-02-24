@@ -6,6 +6,7 @@ use Lxh\Admin\Admin;
 use Lxh\Admin\Cards\Cards;
 use Lxh\Admin\Filter;
 use Lxh\Admin\Layout\Content;
+use Lxh\Admin\Layout\Row;
 use Lxh\Admin\Widgets\Box;
 use Lxh\Admin\Widgets\Form;
 use Lxh\Admin\Grid;
@@ -43,6 +44,20 @@ class Controller extends Base
      * @var int
      */
     protected $gridWidth = 12;
+
+    /**
+     * 创建页面表单宽度
+     *
+     * @var int
+     */
+    protected $createFormWidth = 12;
+
+    /**
+     * 编辑页面表单宽度
+     *
+     * @var int
+     */
+    protected $detailFormWidth = 12;
 
     /**
      * 是否使用过滤器
@@ -208,19 +223,34 @@ class Controller extends Base
         $content->header(trans(__CONTROLLER__));
         $content->description(trans(__CONTROLLER__ . ' form'));
 
-        $evt = $this->getLowerCaseDashName();
-        $evt = "admin.$evt.create";
+        $evt = "admin.{$this->getLowerCaseDashName()}.create";
 
         // 新建页创建from前
         fire($evt . '.form.before', [$content]);
 
-        $this->beforeFormCreate($content);
-
         $form = '';
-        $box = $content->form(function (Form $f) use ($content, $form) {
-            $form = $f;
-            $this->form($f, $content);
+        $box = new Box(null, $form);
+        $content->row(function (Row $row) use ($content, $form, $box) {
+            // 表单创建前
+            $this->beforeFormResolved($content, $row, $box);
+
+            $form = new Form();
+
+            // 自定义form表单
+            $this->form($form, $content);
+
+            $box->content($form);
+
+            if (! auth()->createable()) {
+                $form->disableSubmit();
+            }
+
+            $column = $row->column($this->createFormWidth, $box->backable());
+
+            // 表单创建后
+            $this->afterFormResolved($content, $row, $box);
         });
+
 
         $box->title(trans('Create ' . __CONTROLLER__));
 
@@ -230,10 +260,6 @@ class Controller extends Base
         fire($evt . '.form.after', [$content, $form, $box]);
 
         return $content->render();
-    }
-
-    protected function beforeFormCreate(Content $content)
-    {
     }
 
     /**
@@ -307,23 +333,34 @@ class Controller extends Base
         $content->header(trans(__CONTROLLER__));
         $content->description(trans(__CONTROLLER__ . ' form'));
 
-        $evt = $this->getLowerCaseDashName();
-        $evt = "admin.$evt.detail";
+        $evt = "admin.{$this->getLowerCaseDashName()}.detail";
 
         // 详情页创建from前
         fire($evt . '.form.before', [$this->id, $content]);
 
         $form = '';
-        $box = $content->form(function (Form $f) use ($id, $content, $form) {
-            $form = $f;
-            // 设置id，用于查询当前行数据
+        $box = new Box(null, $form);
+        $content->row(function (Row $row) use ($id, $content, $form, $box) {
+            // 表单创建前
+            $this->beforeFormResolved($content, $row, $box);
+
+            $form = new Form();
+
             $form->setId($id);
+
             // 自定义form表单
             $this->form($form, $content);
+
+            $box->content($form);
 
             if (! auth()->updateable()) {
                 $form->disableSubmit();
             }
+
+            $column = $row->column($this->detailFormWidth, $box->backable());
+
+            // 表单创建后
+            $this->afterFormResolved($content, $row, $box);
         });
 
         $box->title(trans('Edit ' . __CONTROLLER__));
@@ -334,6 +371,24 @@ class Controller extends Base
         fire($evt . '.form.after', [$this->id, $content, $form, $box]);
 
         return $content->render();
+    }
+
+    /**
+     * @param Content $content
+     * @param Row $row
+     * @param Box $box
+     */
+    protected function beforeFormResolved(Content $content, Row $row, Box $box)
+    {
+    }
+
+    /**
+     * @param Content $content
+     * @param Row $row
+     * @param Box $box
+     */
+    protected function afterFormResolved(Content $content, Row $row, Box $box)
+    {
     }
 
     /**
@@ -488,7 +543,7 @@ class Controller extends Base
         }
 
         // 验证表单数据
-        if ($msg = $this->updateFilter($params['id'], $data)) {
+        if ($msg = $this->updateFilter($params['id'], $input)) {
             return $this->error($msg);
         }
 
@@ -504,7 +559,7 @@ class Controller extends Base
         $model->setId($params['id']);
 
         // 注入表单数据
-        $model->attach($data);
+        $model->attach($input);
 
         return $model->save() ? $this->success() : $this->failed();
     }

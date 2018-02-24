@@ -6,9 +6,8 @@
  * Time: 0:47
  */
 
-$config = [];
-
-$config = [
+return [
+    // 默认使用primary
     'primary' => [
         'usepool' => false,
         'type' => 'mysql',
@@ -31,17 +30,4 @@ $config = [
         'name' => 'lxh',
     ],
 
-    'she' => [
-        'usepool' => false,
-        'type' => 'mysql',
-        'host' => '192.168.0.207',
-        'port' => 3306,
-        'user' => 'suitshe',
-        'pwd' => 'suitshe',
-        'charset' => 'utf8',
-        'name' => 'suitshe',
-    ],
-
 ];
-
-return $config;
