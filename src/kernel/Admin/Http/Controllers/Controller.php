@@ -110,7 +110,7 @@ class Controller extends Base
 
         // 权限设置
         $this->gridPermit($grid);
-        
+
         // 网格
         $content->row(function (Row $row) use ($content, $grid) {
             $this->beforeGridColumnResolved($row);
@@ -287,7 +287,7 @@ class Controller extends Base
             $form = new Form();
 
             // 自定义form表单
-            $this->form($form, $content);
+            $this->form($form);
 
             $box->content($form);
 
