@@ -32,7 +32,7 @@ class Ability extends Controller
      *
      * @param Grid $grid
      */
-    protected function grid(Grid $grid, Content $content)
+    protected function grid(Grid $grid)
     {
     }
 
@@ -69,7 +69,7 @@ class Ability extends Controller
      *
      * @param Form $form
      */
-    protected function form(Form $form, Content $content)
+    protected function form(Form $form)
     {
         $support = \Lxh\Auth\Ability::getAbilitiesSupport();
 

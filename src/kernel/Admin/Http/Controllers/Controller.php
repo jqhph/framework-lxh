@@ -102,23 +102,29 @@ class Controller extends Base
             fire($list . '.filter', [$filter]);
         }
 
+        // 网格行创建前
+        $this->beforeGridRowResolved($content);
+
         // 构建网格报表
         $grid = new Grid();
         // 网格
         $content->row(function (Row $row) use ($content, $grid) {
-            $this->beforeGridResolved($content, $row);
+            $this->beforeGridColumnResolved($row);
 
             // 添加网格配置
             $grid->headers($this->grid);
 
             // 自定义grid
-            $this->grid($grid, $content);
+            $this->grid($grid);
 
             // 添加列
             $column = $row->column($this->gridWidth, $grid);
 
-            $this->afterGridResolved($content, $row);
+            $this->afterGridColumnResolved($row);
         });
+
+        // 网格行穿件后
+        $this->afterGridRowResolved($content);
 
         // 权限设置
         $this->gridPermit($grid);
@@ -175,18 +181,38 @@ class Controller extends Base
     }
 
     /**
+     * 网格行创建前
+     *
      * @param Content $content
-     * @param Row $row
      */
-    protected function beforeGridResolved(Content $content, Row $row)
+    protected function beforeGridRowResolved(Content $content)
     {
     }
 
     /**
+     * 网格行创建后
+     *
      * @param Content $content
+     */
+    protected function afterGridRowResolved(Content $content)
+    {
+    }
+
+    /**
+     * 网格列创建前
+     *
      * @param Row $row
      */
-    protected function afterGridResolved(Content $content, Row $row)
+    protected function beforeGridColumnResolved(Row $row)
+    {
+    }
+
+    /**
+     * 网格列创建后
+     *
+     * @param Row $row
+     */
+    protected function afterGridColumnResolved(Row $row)
     {
     }
 
@@ -195,7 +221,7 @@ class Controller extends Base
      *
      * @param Grid $grid
      */
-    protected function grid(Grid $grid, Content $content)
+    protected function grid(Grid $grid)
     {
     }
 
@@ -248,11 +274,14 @@ class Controller extends Base
         // 新建页创建from前
         fire($evt . '.form.before', [$content]);
 
+        // 表单行创建前
+        $this->beforeFormRowResolved($content);
+
         $form = '';
         $box = new Box(null, $form);
         $content->row(function (Row $row) use ($content, $form, $box) {
-            // 表单创建前
-            $this->beforeFormResolved($content, $row, $box);
+            // 表单列创建前
+            $this->beforeFormColumnResolved($row);
 
             $form = new Form();
 
@@ -267,14 +296,13 @@ class Controller extends Base
 
             $column = $row->column($this->createFormWidth, $box->backable());
 
-            // 表单创建后
-            $this->afterFormResolved($content, $row, $box);
+            // 表单列创建后
+            $this->afterFormColumnResolved($row);
         });
-
 
         $box->title(trans('Create ' . __CONTROLLER__));
 
-        $this->formBox($box);
+        $this->afterFormRowResolved($content, $box);
 
         // 列表页创建form后
         fire($evt . '.form.after', [$content, $form, $box]);
@@ -358,18 +386,21 @@ class Controller extends Base
         // 详情页创建from前
         fire($evt . '.form.before', [$this->id, $content]);
 
+        // 表单行创建前
+        $this->beforeFormRowResolved($content);
+
         $form = '';
         $box = new Box(null, $form);
         $content->row(function (Row $row) use ($id, $content, $form, $box) {
-            // 表单创建前
-            $this->beforeFormResolved($content, $row, $box);
+            // 表单列创建前
+            $this->beforeFormColumnResolved($row);
 
             $form = new Form();
 
             $form->setId($id);
 
             // 自定义form表单
-            $this->form($form, $content);
+            $this->form($form);
 
             $box->content($form);
 
@@ -379,13 +410,14 @@ class Controller extends Base
 
             $column = $row->column($this->detailFormWidth, $box->backable());
 
-            // 表单创建后
-            $this->afterFormResolved($content, $row, $box);
+            // 表单列创建后
+            $this->afterFormColumnResolved($row);
         });
 
         $box->title(trans('Edit ' . __CONTROLLER__));
 
-        $this->formBox($box);
+        // 表单行创建后
+        $this->afterFormRowResolved($content, $box);
 
         // 详情页创建from前
         fire($evt . '.form.after', [$this->id, $content, $form, $box]);
@@ -394,27 +426,37 @@ class Controller extends Base
     }
 
     /**
+     * 表单行创建前
+     *
      * @param Content $content
-     * @param Row $row
-     * @param Box $box
      */
-    protected function beforeFormResolved(Content $content, Row $row, Box $box)
+    protected function beforeFormRowResolved(Content $content)
+    {
+    }
+
+    /**
+     * 表单列创建前
+     *
+     * @param Row $row
+     */
+    protected function beforeFormColumnResolved(Row $row)
+    {
+    }
+
+    /**
+     * 表单列创建后
+     *
+     * @param Row $row
+     */
+    protected function afterFormColumnResolved(Row $row)
     {
     }
 
     /**
      * @param Content $content
-     * @param Row $row
      * @param Box $box
      */
-    protected function afterFormResolved(Content $content, Row $row, Box $box)
-    {
-    }
-
-    /**
-     * @param Box $box
-     */
-    protected function formBox(Box $box)
+    protected function afterFormRowResolved(Content $content, Box $box)
     {
     }
 
@@ -423,7 +465,7 @@ class Controller extends Base
      *
      * @param Form $form
      */
-    protected function form(Form $form, Content $content)
+    protected function form(Form $form)
     {
     }
 

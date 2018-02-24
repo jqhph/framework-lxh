@@ -39,7 +39,7 @@ class Admin extends Controller
      * @param Grid $grid
      * @param Content $content
      */
-    public function grid(Grid $grid, Content $content)
+    public function grid(Grid $grid)
     {
         $grid->rowActions(function (Grid\RowActions $rowActions) {
             if ($rowActions->getId() == 1) {
@@ -112,7 +112,7 @@ class Admin extends Controller
             ->formatField(false); // 使用自定义字段名称查询
     }
 
-    protected function form(Form $form, Content $content)
+    protected function form(Form $form)
     {
         $form->text('username')->rules('required|length_between[4-15]');
 

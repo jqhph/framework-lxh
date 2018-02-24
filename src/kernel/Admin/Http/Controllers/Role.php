@@ -32,7 +32,7 @@ class Role extends Controller
         Admin::model(\Lxh\Auth\Database\Role::class);
     }
 
-    protected function grid(Grid $grid, Content $content)
+    protected function grid(Grid $grid)
     {
         $grid->allowBatchDelete();
     }

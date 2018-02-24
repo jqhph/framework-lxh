@@ -63,7 +63,7 @@ class Product extends Controller
         $filter->dateRange('created_at')->between()->time();
     }
 
-    protected function beforeGridResolved(Content $content, Row $row)
+    protected function beforeGridColumnResolved(Content $content, Row $row)
     {
 //        $box = new Box('test', 'test');
 //
@@ -77,12 +77,12 @@ class Product extends Controller
      *
      * @param Grid $grid
      */
-    protected function grid(Grid $grid, Content $content)
+    protected function grid(Grid $grid)
     {
         $grid->allowBatchDelete();
     }
 
-    protected function form(Form $form, Content $content)
+    protected function form(Form $form)
     {
         $form->switch('stock');
 

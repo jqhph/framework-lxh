@@ -94,7 +94,7 @@ class Menu extends Controller
      *
      * @param Form $form
      */
-    protected function form(Form $form, Content $content)
+    protected function form(Form $form)
     {
         $form->selectTree('parent_id')->options(auth()->menu()->all())->defaultOption(0, trans('Top'));
         $form->text('name')->rules('required');
@@ -155,7 +155,7 @@ class Menu extends Controller
      *
      * @param Grid $grid
      */
-    protected function grid(Grid $grid, Content $content)
+    protected function grid(Grid $grid)
     {
         $grid->rows(auth()->menu()->all());
         $grid->disablePagination();
