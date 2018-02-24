@@ -107,6 +107,10 @@ class Controller extends Base
 
         // 构建网格报表
         $grid = new Grid();
+
+        // 权限设置
+        $this->gridPermit($grid);
+        
         // 网格
         $content->row(function (Row $row) use ($content, $grid) {
             $this->beforeGridColumnResolved($row);
@@ -125,9 +129,6 @@ class Controller extends Base
 
         // 网格行穿件后
         $this->afterGridRowResolved($content);
-
-        // 权限设置
-        $this->gridPermit($grid);
 
         if ($this->filter) {
             // 添加过滤器，过滤器会根据搜索表单内容构建Sql where过滤语句
