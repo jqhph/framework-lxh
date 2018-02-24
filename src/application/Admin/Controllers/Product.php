@@ -63,7 +63,7 @@ class Product extends Controller
         $filter->dateRange('created_at')->between()->time();
     }
 
-    protected function beforeGridColumnResolved(Content $content, Row $row)
+    protected function beforeGridColumnResolved(Row $row)
     {
 //        $box = new Box('test', 'test');
 //
