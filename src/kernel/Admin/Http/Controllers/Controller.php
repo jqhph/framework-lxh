@@ -102,15 +102,26 @@ class Controller extends Base
             fire($list . '.filter', [$filter]);
         }
 
-        $this->beforeGridCreate($content);
-
         // 构建网格报表
-        $grid = $content->grid($this->grid, $this->gridWidth);
+        $grid = new Grid();
+        // 网格
+        $content->row(function (Row $row) use ($content, $grid) {
+            $this->beforeGridResolved($content, $row);
 
+            // 添加网格配置
+            $grid->headers($this->grid);
+
+            // 自定义grid
+            $this->grid($grid, $content);
+
+            // 添加列
+            $column = $row->column($this->gridWidth, $grid);
+
+            $this->afterGridResolved($content, $row);
+        });
+
+        // 权限设置
         $this->gridPermit($grid);
-
-        // 自定义grid
-        $this->grid($grid, $content);
 
         if ($this->filter) {
             // 添加过滤器，过滤器会根据搜索表单内容构建Sql where过滤语句
@@ -165,8 +176,17 @@ class Controller extends Base
 
     /**
      * @param Content $content
+     * @param Row $row
      */
-    protected function beforeGridCreate(Content $content)
+    protected function beforeGridResolved(Content $content, Row $row)
+    {
+    }
+
+    /**
+     * @param Content $content
+     * @param Row $row
+     */
+    protected function afterGridResolved(Content $content, Row $row)
     {
     }
 

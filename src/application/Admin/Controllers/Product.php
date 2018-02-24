@@ -22,6 +22,7 @@ use Lxh\Admin\Table\Table;
 use Lxh\Admin\Table\Td;
 use Lxh\Admin\Table\Th;
 use Lxh\Admin\Table\Tr;
+use Lxh\Admin\Widgets\Box;
 use Lxh\Admin\Widgets\Form;
 use Lxh\Admin\Widgets\Tab;
 use Lxh\Http\Request;
@@ -40,7 +41,7 @@ class Product extends Controller
     /**
      * @var int
      */
-    protected $createFormWidth = 8;
+    protected $gridWidth = 12;
 
     public function initialize()
     {
@@ -60,6 +61,15 @@ class Product extends Controller
         $filter->select('level')->options([1, 2]);
         $filter->text('price');
         $filter->dateRange('created_at')->between()->time();
+    }
+
+    protected function beforeGridResolved(Content $content, Row $row)
+    {
+//        $box = new Box('test', 'test');
+//
+//        $box->collapsable()->style('primary');
+//
+//        $row->column(2, $box);
     }
 
     /**
