@@ -865,6 +865,8 @@ class Grid implements Renderable
             ->style('inverse')
             ->btnToolbar();
 
+        Admin::style('.portlet .portlet-heading{border-bottom:0;}');
+
         if ($btn = $this->buildCreateBtn()) {
             $box->rightTools()->append($btn);
         }
