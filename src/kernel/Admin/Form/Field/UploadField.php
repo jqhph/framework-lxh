@@ -61,23 +61,47 @@ trait UploadField
     protected function setupDefaultOptions()
     {
         $defaultOptions = [
+            'uploadAsync'          => false,
             'overwriteInitial'     => false,
             'initialPreviewAsData' => true,
             'browseLabel'          => trans('Browse'),
             'showRemove'           => false,
-            'showUpload'           => false,
+            'showUpload'           => true,
             'initialCaption'       => $this->initialCaption($this->value),
             'deleteExtraData'      => [
                 '_token'                 => '',
                 '_method'                => 'PUT',
             ],
+//            'deleteUrl' => '',
         ];
 
-//        if ($this->form instanceof Form) {
-//            $defaultOptions['deleteUrl'] = $this->form->resource().'/'.$this->form->model()->getKey();
-//        }
-
         $this->options($defaultOptions);
+    }
+
+    /**
+     * 设置删除文件路径url
+     *
+     * @param string $url
+     * @return $this
+     */
+    public function deleteUrl($url)
+    {
+        $this->options['deleteUrl'] = $url;
+
+        return $this;
+    }
+
+    /**
+     * 设置异步文件上传文件url
+     *
+     * @param string $url
+     * @return $this
+     */
+    public function uploadUrl($url)
+    {
+        $this->options['uploadUrl'] = $url;
+
+        return $this;
     }
 
     /**

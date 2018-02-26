@@ -239,11 +239,11 @@ class Form implements Renderable
     public function attribute($attr, $value = '')
     {
         if (is_array($attr)) {
-            foreach ($attr as $key => $value) {
+            foreach ($attr as $key => &$value) {
                 $this->attribute($key, $value);
             }
         } else {
-            $this->attributes[$attr] = $value;
+            $this->attributes[$attr] = &$value;
         }
 
         return $this;

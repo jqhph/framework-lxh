@@ -30,7 +30,7 @@
 
         handler.wookmark(options);
         setTimeout(function () {handler.wookmark(options)}, 1500);
-        setTimeout(function(){handler.wookmark(options)}, 1500);
+        setTimeout(function(){handler.wookmark(options)}, 2500);
         var onClickFilter = function(event) {
             var item = $(event.currentTarget),
                 activeFilters = [];

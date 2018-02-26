@@ -32,11 +32,6 @@ class Role extends Controller
         Admin::model(\Lxh\Auth\Database\Role::class);
     }
 
-    protected function grid(Grid $grid)
-    {
-        $grid->allowBatchDelete();
-    }
-
     protected function table(Table $table)
     {
         $table->text('id')->hide()->sortable();
@@ -53,6 +48,22 @@ class Role extends Controller
                 Admin::url('Admin')->detail('{value}'), 'created_by_id'
             );
         });
+    }
+
+    protected function filter(Filter $filter)
+    {
+        $filter->text('name')->like();
+        $filter->text('title')->like();
+        $filter->dateRange('created_at')->between()->time();
+    }
+
+    protected function form(Form $form, Content $content)
+    {
+        $form->text('title')->rules('required|length_between[2-30]');
+        $form->text('name')->rules('required|length_between[2-20]');
+        $form->text('comment');
+        $this->buildAbilitiesInput($form);
+
     }
 
     protected function buildAbilities(Table $table)
@@ -72,23 +83,6 @@ class Role extends Controller
                 ->url(Admin::url()->api('abilities', $id))
                 ->label(trans('list'));
         });
-    }
-
-    protected function filter(Filter $filter)
-    {
-        $filter->useModal();
-        $filter->text('name')->like();
-        $filter->text('title')->like();
-        $filter->dateRange('created_at')->between()->time();
-    }
-
-    protected function form(Form $form, Content $content)
-    {
-        $form->text('title')->rules('required|length_between[2-30]');
-        $form->text('name')->rules('required|length_between[2-20]');
-        $form->text('comment');
-        $this->buildAbilitiesInput($form);
-
     }
 
     protected function buildAbilitiesInput(Form $form)

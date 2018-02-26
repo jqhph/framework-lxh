@@ -108,6 +108,40 @@ class File extends Field
     }
 
     /**
+     * 选择新图时是否覆盖原图
+     *
+     * @param bool $bool
+     * @return $this
+     */
+    public function overwriteInitial($bool = true)
+    {
+        $this->options['overwriteInitial'] = $bool;
+        return $this;
+    }
+
+    /**
+     * 显示移除按钮
+     *
+     * @param bool $bool
+     * @return $this
+     */
+    public function showRemove($bool = true)
+    {
+        $this->options['showRemove'] = $bool;
+        return $this;
+    }
+
+    /**
+     * @param bool $bool
+     * @return $this
+     */
+    public function showUpload($bool = true)
+    {
+        $this->options['showRemove'] = $bool;
+        return $this;
+    }
+
+    /**
      * Render file upload field.
      *
      * @return \Lxh\Contracts\View\Factory|\Lxh\View\View
@@ -121,8 +155,6 @@ class File extends Field
 
             $this->setupPreviewOptions();
         }
-
-        $this->options(['overwriteInitial' => true]);
 
         $options = json_encode($this->options);
 

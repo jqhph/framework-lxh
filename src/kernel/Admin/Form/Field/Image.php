@@ -13,13 +13,6 @@ class Image extends File
      */
     protected $view = 'admin::form.file';
 
-    /**
-     *  Validation rules.
-     *
-     * @var string
-     */
-    protected $rules = 'image';
-
     protected function setup()
     {
         $this->options['allowedFileExtensions'] = [
@@ -27,7 +20,12 @@ class Image extends File
         ];
         
         $this->script('image', <<<EOF
-$('input[type="file"]').on('change', function() {var c = LXHSTORE.IFRAME.current();setTimeout(function () {LXHSTORE.IFRAME.height(c)},50);})
+(function () {
+    var c = LXHSTORE.IFRAME.current();
+    function rec() { setTimeout(function(){LXHSTORE.IFRAME.height(c)},50) }
+    rec();
+    $('input[type="file"]').on('change', rec)
+})();
 EOF
 );
     }
