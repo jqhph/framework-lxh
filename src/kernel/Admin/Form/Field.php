@@ -237,7 +237,9 @@ class Field implements Renderable
      */
     public function prepend($string)
     {
-        $this->prepend = &$string;
+        if (! $this->prepend) {
+            $this->prepend = &$string;
+        }
 
         return $this;
     }
@@ -249,7 +251,9 @@ class Field implements Renderable
      */
     public function append($string)
     {
-        $this->append = &$string;
+        if (! $this->append) {
+            $this->append = &$string;
+        }
 
         return $this;
     }

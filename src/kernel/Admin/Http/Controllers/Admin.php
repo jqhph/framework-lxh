@@ -112,6 +112,11 @@ class Admin extends Controller
             ->formatField(false); // 使用自定义字段名称查询
     }
 
+    public function actionTest()
+    {
+        dd($_FILES);
+    }
+
     protected function form(Form $form)
     {
         $form->text('username')->rules('required|length_between[4-15]');
@@ -126,8 +131,13 @@ class Admin extends Controller
         $form->text('password')->rules($rules)->value(false);
         $form->text('email')->rules('valid_email');
         $form->text('mobile');
-        $form->image('avatar')->overwriteInitial()->showRemove();
-        $form->select('status')->options([1, 0]);
+
+        $form->image('avatar')
+            ->overwriteInitial()
+            ->showRemove()
+            ->prepend('<i class="fa fa-file-image-o"></i>');
+
+        $form->switch('status')->checked();
 
         if (auth()->isAdministrator()) {
             $form->select('is_admin')->options([0, 1]);

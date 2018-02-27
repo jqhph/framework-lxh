@@ -6,8 +6,15 @@ use Lxh\Helper\Util;
 
 class Url
 {
+    /**
+     *
+     * @var array
+     */
     protected static $instances = [];
 
+    /**
+     * @var string
+     */
     protected $prefix = 'admin';
 
     /**
@@ -66,6 +73,31 @@ class Url
     public function login()
     {
         return "/{$this->prefix}/login";
+    }
+
+    /**
+     * 文件上传路径
+     *
+     * @return string
+     */
+    public function upload()
+    {
+        return "/{$this->prefix}/{$this->scope}/action/upload";
+    }
+
+    /**
+     * 图片上传路径
+     *
+     * @return string
+     */
+    public function uploadImage()
+    {
+        return "/{$this->prefix}/{$this->scope}/action/upload-image";
+    }
+
+    public function deleteFile()
+    {
+        return "/{$this->prefix}/{$this->scope}/action/delete-file";
     }
 
     /**

@@ -98,7 +98,7 @@ class Grid implements Renderable
      *
      * @var array
      */
-    public $perPages = [10, 15, 20, 25, 30, 40, 50, 80, 100];
+    public $perPages = [10, 15, 20, 25, 30, 40, 50, 80, 100, 200, 500];
 
     /**
      * Default items count per-page.
@@ -394,6 +394,7 @@ class Grid implements Renderable
     {
         if ($filter) {
             $this->filter = $filter;
+            $filter->setupConditions();
             $filter->grid($this);
             return $this;
         }

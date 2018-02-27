@@ -2,6 +2,7 @@
 
 namespace Lxh\Admin\Form\Field;
 
+use Lxh\Admin\Admin;
 use Lxh\Admin\Form;
 use Lxh\File\FileManager;
 use Lxh\Support\Facades\Storage;
@@ -60,6 +61,8 @@ trait UploadField
      */
     protected function setupDefaultOptions()
     {
+        $url = Admin::url();
+
         $defaultOptions = [
             'uploadAsync'          => false,
             'overwriteInitial'     => false,
@@ -69,12 +72,13 @@ trait UploadField
             'showUpload'           => true,
             'initialCaption'       => $this->initialCaption($this->value),
             'deleteExtraData'      => [
-                '_token'                 => '',
-                '_method'                => 'PUT',
+                '_token'           => '',
+                '_method'          => 'PUT',
             ],
-//            'deleteUrl' => '',
+            'uploadUrl'            => $url->upload(),
+            'deleteUrl'            => $url->deleteFile(),
         ];
-
+        
         $this->options($defaultOptions);
     }
 

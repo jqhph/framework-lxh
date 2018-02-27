@@ -172,13 +172,21 @@ class Filter extends Widget implements Renderable
         return $this;
     }
 
-    public function render()
+    /**
+     * 初始化条件构建器
+     * 在设置完字段之后，渲染之前触发
+     *
+     */
+    public function setupConditions()
     {
-        $this->setupAttributes();
-
         foreach ($this->fields as $field) {
             $field->condition();
         }
+    }
+
+    public function render()
+    {
+        $this->setupAttributes();
 
         // pjax异步加载，无需重新渲染表单
         if (Grid::isPjaxRequest()) {
@@ -191,9 +199,7 @@ class Filter extends Widget implements Renderable
                 $fields .= $field->render();
             }
 
-            return <<<EOF
-<form {$this->formatAttributes()} pjax-container>{$fields}{$this->buildFooter()}</form>
-EOF;
+            return "<form {$this->formatAttributes()} pjax-container>{$fields}{$this->buildFooter()}</form>";
         }
 
         return $this->buildModal();
