@@ -24,6 +24,17 @@ EOF
     }
 
     /**
+     * 设置默认选中
+     *
+     * @return $this
+     */
+    public function checked()
+    {
+        $this->attribute('checked', true);
+        return $this;
+    }
+
+    /**
      * 设置未选中的值，默认0
      *
      * @param $value

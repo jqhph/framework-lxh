@@ -15,6 +15,7 @@
             <?php }?>
         </div>
         <?php if ($help) {
+            echo ' <div class="clearfix"></div>';
             echo view('admin::form.help-block', ['help' => &$help])->render();
         }?>
     </div>

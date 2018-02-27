@@ -92,12 +92,18 @@ class Controller extends Base
 
         if ($this->filter) {
             // 构建搜索界面
-            $filter = $content->filter();
+            $filter = new Filter();
 
             // 自定义filter
             $this->filter($filter);
             // 开启弹窗模式
-            $this->filter == 'modal' && $filter->useModal();
+            if ($this->filter === 'modal') {
+                $filter->useModal();
+            }
+
+            if (!$filter->allowedInTable()) {
+                $content->row($filter);
+            }
 
             // 列表页创建filter后
             fire($list . '.filter', [$filter]);

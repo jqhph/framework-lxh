@@ -98,27 +98,6 @@ class Content implements Renderable
     }
 
     /**
-     * 过滤器
-     *
-     * @param $callback
-     * @return Filter
-     */
-    public function filter(callable $callback = null, $width = 12)
-    {
-        $this->rows[] = $row = new Row();
-
-        $filter = new Filter();
-
-        $column = $row->column($width, $filter);
-
-        if ($callback) {
-            call_user_func($callback, $filter, $column);
-        }
-        
-        return $filter;
-    }
-
-    /**
      * @return $this
      */
     public function independent()

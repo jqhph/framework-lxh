@@ -839,6 +839,7 @@ class Grid implements Renderable
             'perPageKey'  => &$this->perPageKey,
             'url'         => $this->url,
             'filterId'    => '',
+            'filter'      => '',
         ], $this->options);
 
         if ($isPjaxRequest) {
@@ -847,6 +848,9 @@ class Grid implements Renderable
 
         if ($this->filter) {
             $vars['filterId'] = $this->filter->getContainerId();
+            if ($this->filter->allowedInTable()) {
+                $vars['filter'] = $this->filter->render();
+            }
         }
 
         return $this->renderBox($vars);
@@ -865,8 +869,6 @@ class Grid implements Renderable
             ->content(view($this->view, $vars)->render())
             ->style('inverse')
             ->btnToolbar();
-
-        Admin::style('.portlet .portlet-heading{border-bottom:0;}');
 
         if ($btn = $this->buildCreateBtn()) {
             $box->rightTools()->append($btn);

@@ -12,9 +12,9 @@ use Lxh\Admin\Form\Field;
 use Lxh\Admin\Table\Table;
 use Lxh\Admin\Widgets\Box;
 use Lxh\Admin\Widgets\Modal;
+use Lxh\Admin\Widgets\WaterFall\Card;
 use Lxh\Admin\Widgets\Widget;
 use Lxh\Contracts\Support\Renderable;
-use Lxh\Admin\Kernel\Url;
 use Lxh\Helper\Util;
 use Lxh\MVC\Model;
 
@@ -28,6 +28,9 @@ use Lxh\MVC\Model;
  */
 class Filter extends Widget implements Renderable
 {
+    const LAYOUT_MODAL = 'modal';
+    const LAYOUT_INTABLE = 'inTable';
+
     /**
      * @var string
      */
@@ -56,8 +59,7 @@ class Filter extends Widget implements Renderable
     protected $options = [
         'collapsable' => true,
         'enableReset' => true,
-        'useBox'      => true,
-        'useModal'    => false
+        'layout'      => 'inTable',// 默认表格内
     ];
 
     /**
@@ -116,7 +118,7 @@ class Filter extends Widget implements Renderable
             $this->modalWidth = $width;
         }
 
-        $this->options['useModal'] = true;
+        $this->options['layout'] = static::LAYOUT_MODAL;
 
         return $this;
     }
@@ -126,7 +128,15 @@ class Filter extends Widget implements Renderable
      */
     public function allowedUseModal()
     {
-        return $this->options['useModal'];
+        return $this->options['layout'] == static::LAYOUT_MODAL;
+    }
+
+    /**
+     * @return bool
+     */
+    public function allowedInTable()
+    {
+        return $this->options['layout'] == static::LAYOUT_INTABLE;
     }
 
     /**
@@ -152,28 +162,13 @@ class Filter extends Widget implements Renderable
     }
 
     /**
-     * 禁止使用盒子包含过滤器表单
-     *
-     * @return static
+     * @param null $title
+     * @return $this
      */
-    public function disableBox()
-    {
-        $this->options['useBox'] = false;
-
-        return $this;
-    }
-
     public function title($title = null)
     {
-        if ($title !== null) {
-            $this->title = $title;
-        }
-        return $this;
-    }
+        $this->title = $title;
 
-    public function disableCollaps()
-    {
-        $this->options['collapsable'] = false;
         return $this;
     }
 
@@ -190,11 +185,18 @@ class Filter extends Widget implements Renderable
             return '';
         }
 
-        if (! $this->options['useBox'] && ! $this->options['useModal']) {
-            return $this->buildHtml();
+        if ($this->options['layout'] == static::LAYOUT_INTABLE) {
+            $fields = '';
+            foreach ($this->fields as $field) {
+                $fields .= $field->render();
+            }
+
+            return <<<EOF
+<form {$this->formatAttributes()} pjax-container>{$fields}{$this->buildFooter()}</form>
+EOF;
         }
 
-        return $this->options['useModal'] ? $this->buildModal() : $this->buildBox();
+        return $this->buildModal();
     }
 
     /**
@@ -210,7 +212,7 @@ class Filter extends Widget implements Renderable
         $footers = $this->buildFooter();
         if ($footers) {
             $style = '';
-            if (!$this->options['useModal']) {
+            if (!$this->options['layout'] == static::LAYOUT_MODAL) {
                 $style = 'height:5px;';
             }
 
@@ -248,26 +250,6 @@ EOF;
     }
 
     /**
-     * 盒子
-     *
-     * @return string
-     */
-    protected function buildBox()
-    {
-        $box = new Box($this->title);
-
-        $box->attribute('id', $this->getContainerId());
-
-        $box->content($this->buildHtml())->style('primary');
-
-        if ($this->options['collapsable']) {
-            $box->collapsable();
-        }
-
-        return $box->render();
-    }
-
-    /**
      * 获取字段数组
      *
      * @return array
@@ -301,7 +283,7 @@ EOF;
 
     protected function buildFooter()
     {
-        $submit = $this->buildSubmitBtn();
+        $submit = $this->buildSubmitBtn()->render();
 
         $reset = '';
         if ($this->options['enableReset']) {
@@ -309,14 +291,14 @@ EOF;
         }
 
         $close = '';
-        if ($this->options['useModal']) {
+        if ($this->options['layout'] == static::LAYOUT_MODAL) {
             $close = new Button(trans('Close'));
             $close = $close->color('default')
                 ->attribute('data-dismiss', 'modal')
                 ->render();
         }
 
-        return $submit->render() . ' ' . $reset . ' ' . $close;
+        return "<div class='filter-input'><div class=\"btn-group\">{$submit}</div>&nbsp; <div class=\"btn-group\">{$reset} {$close}</div></div>";
     }
 
     /**
@@ -324,12 +306,10 @@ EOF;
      */
     protected function buildSubmitBtn()
     {
-        $submit = new Button(trans('Search'));
-        $submit->attribute('type', 'submit')
-            ->icon('fa fa-search')
-            ->disableEffect();
+        $submit = new Button('<i class="fa fa-search"></i>&nbsp; ' . trans('Search') );
+        $submit->attribute('type', 'submit');
 
-        if ($this->options['useModal']) {
+        if ($this->options['layout'] == static::LAYOUT_MODAL) {
             Admin::script(<<<EOF
 $(document).on('pjax:send', function () {\$('#{$this->getContainerId()}').modal('hide')});
 EOF

@@ -25,7 +25,7 @@ class Ability extends Controller
      *
      * @var bool
      */
-    protected $filter = 'modal';
+    protected $filter = true;
 
     /**
      * Grid初始化方法

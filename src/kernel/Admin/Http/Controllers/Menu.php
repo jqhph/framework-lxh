@@ -100,7 +100,7 @@ class Menu extends Controller
         $form->text('name')->rules('required');
         $form->text('icon')->help($this->iconHelp());
         $form->text('route')->prepend('<i class="fa fa-internet-explorer"></i>');
-        $form->select('show')->options([1, 0])->default(1);
+        $form->switch('show')->checked()->small();
         $form->select('priority')->options(range(0, 30))->help(trans('The smaller the value, the higher the order.'));
         if ($this->useAuthorize) {
             $this->buildQuickCreateAbilityInput($form);
