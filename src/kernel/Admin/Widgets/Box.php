@@ -36,7 +36,9 @@ class Box extends Widget implements Renderable
      */
     protected $rightTools;
 
-
+    /**
+     * @var string
+     */
     protected $toolClass = '';
 
     /**
@@ -61,7 +63,7 @@ class Box extends Widget implements Renderable
         }
 
         $this->class('box portlet');
-        $this->style('success');
+//        $this->style('success');
 
         Admin::addScriptClass(__CLASS__);
     }
@@ -220,6 +222,8 @@ EOF;
         if (is_string($styles)) {
             return $this->style([$styles]);
         }
+
+        $this->class('box-border');
 
         $styles = array_map(function ($style) {
             return 'box-'.$style;

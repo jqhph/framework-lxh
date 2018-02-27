@@ -8,6 +8,7 @@ use Lxh\Admin\Filter;
 use Lxh\Admin\Layout\Content;
 use Lxh\Admin\Layout\Row;
 use Lxh\Admin\Widgets\Box;
+use Lxh\Admin\Widgets\Card;
 use Lxh\Admin\Widgets\Form;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Table\Table;
@@ -279,7 +280,7 @@ class Controller extends Base
         $this->beforeFormRowResolved($content);
 
         $form = '';
-        $box = new Box(null, $form);
+        $box = new Card(null, $form);
         $content->row(function (Row $row) use ($content, $form, $box) {
             // 表单列创建前
             $this->beforeFormColumnResolved($row);

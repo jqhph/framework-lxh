@@ -19,6 +19,7 @@ use Lxh\Admin\Tools\BatchDelete;
 use Lxh\Admin\Tools\Tools;
 use Lxh\Admin\Tools\TrTools;
 use Lxh\Admin\Widgets\Box;
+use Lxh\Admin\Widgets\Card;
 use Lxh\Admin\Widgets\Pages;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\MVC\Model;
@@ -859,7 +860,7 @@ class Grid implements Renderable
      */
     protected function renderBox(array &$vars)
     {
-        $box = new Box();
+        $box = new Card();
         $box->setTools($this->tools)
             ->content(view($this->view, $vars)->render())
             ->style('inverse')

@@ -8,6 +8,7 @@
 namespace Lxh\Admin\Controllers;
 
 use Lxh\Admin\Widgets\Box;
+use Lxh\Admin\Widgets\Card;
 use Lxh\Admin\Widgets\Tab;
 use Lxh\Admin\Widgets\Table;
 use Lxh\Admin\Layout\Row;
@@ -46,11 +47,11 @@ class Index extends Controller
         $content->row(function (Row $row) {
             $env = (new Table([], $this->environment()))->class('table-striped');
 
-            $row->column(8, (new Box(trans('Environment'), $env))->style('inverse')->collapsable());
+            $row->column(8, (new Box(trans('Environment'), $env))->collapsable());
 
             $dependencies = (new Table([], $this->dependencies()))->class('table-striped');
 
-            $row->column(4, (new Box(trans('Dependencies'), $dependencies))->style('inverse')->collapsable());
+            $row->column(4, (new Box(trans('Dependencies'), $dependencies))->collapsable());
         });
 
         // 触发加载dashboard页事件

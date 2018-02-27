@@ -23,6 +23,7 @@ use Lxh\Admin\Table\Td;
 use Lxh\Admin\Table\Th;
 use Lxh\Admin\Table\Tr;
 use Lxh\Admin\Widgets\Box;
+use Lxh\Admin\Widgets\Card;
 use Lxh\Admin\Widgets\Form;
 use Lxh\Admin\Widgets\Tab;
 use Lxh\Http\Request;
@@ -65,11 +66,9 @@ class Product extends Controller
 
     protected function beforeGridColumnResolved(Row $row)
     {
-//        $box = new Box('test', 'test');
-//
-//        $box->collapsable()->style('primary');
-//
-//        $row->column(2, $box);
+        $card = new Card();
+
+//        $row->column(2, $card);
     }
 
     /**
@@ -102,8 +101,12 @@ class Product extends Controller
             ['name' => 'Uname',             'value' => php_uname()],
             ['name' => 'Server',            'value' => get_value($_SERVER, 'SERVER_SOFTWARE')],
         ]);
-        
+
         return $table->render();
+
+//        $card = new Card();
+//
+//        return $card->render();
     }
 
     /**
@@ -203,7 +206,7 @@ class Product extends Controller
         $table->prepend('序号', function (Items $items, Td $td, Th $th, Tr $tr) {
             if (($line = $tr->line()) == 3) {
                 // 给第三行添加active样式
-                $tr->class('active');
+//                $tr->class('active');
             }
 
             return $line;

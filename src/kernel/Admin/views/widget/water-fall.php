@@ -17,6 +17,7 @@
 </div>
 <script>
 (function () {
+    var c = LXHSTORE.IFRAME.current();
     __then__(init);
     (typeof $ != 'undefined') && $(document).on('pjax:complete', init);
     function init() {
@@ -29,8 +30,8 @@
             filters = $spa.find('.wtf-filters a');
 
         handler.wookmark(options);
-        setTimeout(function () {handler.wookmark(options)}, 1500);
-        setTimeout(function(){handler.wookmark(options)}, 2500);
+        setTimeout(function () {handler.wookmark(options);LXHSTORE.IFRAME.height(c)}, 1500);
+        setTimeout(function(){handler.wookmark(options);LXHSTORE.IFRAME.height(c)}, 2500);
         var onClickFilter = function(event) {
             var item = $(event.currentTarget),
                 activeFilters = [];
