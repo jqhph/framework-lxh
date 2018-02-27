@@ -392,7 +392,7 @@ class Controller extends Base
         $this->beforeFormRowResolved($content);
 
         $form = '';
-        $box = new Box(null, $form);
+        $box = new Card(null, $form);
         $content->row(function (Row $row) use ($id, $content, $form, $box) {
             // 表单列创建前
             $this->beforeFormColumnResolved($row);

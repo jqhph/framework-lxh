@@ -1,7 +1,6 @@
-<div class="form-group <?php // echo !$errors->has($column) ?: 'has-error' ?>">
-    <label for="<?php echo $id ?>" class="col-sm-<?php echo $width['label'] ?> control-label"><?php echo $label ?></label>
+<div class="form-group line">
     <div class="col-sm-<?php echo $width['field'] ?>" id="<?php echo $id ?>">
-<!--        @include('admin::form.error')-->
+        <div class="text"><?php echo $prepend ? $prepend . '&nbsp; ' : ''; ?><?php echo $label ?></div>
         <?php foreach($options as $option => &$label): ?>
         <?php if(!$inline) {?><div class="checkbox"> <?php }?>
             <label <?php if(!$inline) {?>class="checkbox-inline" <?php }?>>

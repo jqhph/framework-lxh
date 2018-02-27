@@ -1,7 +1,6 @@
-<div class="form-group clearfix">
-    <label for="<?php echo $id ?>" class="col-sm-<?php echo $width['label'] ?> control-label"><?php echo $label ?></label>
-
+<div class="form-group clearfix line">
     <div class="col-sm-<?php echo $width['field'] ?>">
+        <div class="text"><?php echo $prepend ? $prepend . '&nbsp; ' : ''; ?><?php echo $label ?></div>
         <table class="table table-bordered m-0">
             <?php foreach ($options as &$r) {
                 if (! empty($r['title'])) {

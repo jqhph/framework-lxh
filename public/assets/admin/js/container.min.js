@@ -630,7 +630,7 @@ window.Lxh = function (options) {
             name = name.replace('[]', '');
             msg = trans(msg);
             e.addClass('parsley-error');
-            e.parent().parent().prepend('<ul class="parsley-errors-list filled validator-error-' + name + '"><li class="parsley-required">' + msg + '</li></ul>')
+            e.parent().parent().append('<ul class="parsley-errors-list filled validator-error-' + name + '"><li class="parsley-required">' + msg + '</li></ul>')
         }
 
         /**

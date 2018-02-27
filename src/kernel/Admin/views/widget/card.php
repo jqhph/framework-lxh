@@ -5,6 +5,7 @@
         <div class="pull-right">
             <div class="<?php echo $toolClass?>"><div class="dropdown-btn-group pull-right" style="margin-left:5px;"><?php echo $tools; ?></div></div>
         </div>
+        <div style="clear:both;"></div>
         <div class="divider"></div>
     </div>
     <?php } ?>

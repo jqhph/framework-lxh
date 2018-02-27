@@ -187,7 +187,7 @@ class Field implements Renderable
      */
     protected $width = [
         'label' => 2,
-        'field' => 8,
+        'field' => 12,
     ];
 
     /**
@@ -195,6 +195,19 @@ class Field implements Renderable
      * @var \Closure
      */
     protected $attaching;
+
+    /**
+     * 附加到label的html
+     *
+     * @var string
+     */
+    protected $prepend;
+
+    /**
+     *
+     * @var string
+     */
+    protected $append;
 
     /**
      * Field constructor.
@@ -214,6 +227,31 @@ class Field implements Renderable
     // 初始化
     protected function setup()
     {
+    }
+
+    /**
+     * 附加html内容到label前
+     *
+     * @param string $string
+     * @return $this
+     */
+    public function prepend($string)
+    {
+        $this->prepend = &$string;
+
+        return $this;
+    }
+
+    /**
+     *
+     * @param string $string
+     * @return $this
+     */
+    public function append($string)
+    {
+        $this->append = &$string;
+
+        return $this;
     }
 
     /**
@@ -924,18 +962,20 @@ class Field implements Renderable
     protected function variables()
     {
         return array_merge($this->variables, [
-            'id' => $this->id,
-            'name' => $this->name(),
-            'help' => &$this->help,
-            'class' => $this->getElementClassString(),
-            'value' => $this->value(),
-            'label' => &$this->label,
-            'width' => &$this->width,
-            'column' => &$this->column,
-            'errorKey' => $this->getErrorKey(),
-            'attributes' => $this->formatAttributes(),
+            'id'          => $this->id,
+            'name'        => $this->name(),
+            'help'        => &$this->help,
+            'class'       => $this->getElementClassString(),
+            'value'       => $this->value(),
+            'label'       => &$this->label,
+            'width'       => &$this->width,
+            'column'      => &$this->column,
+            'errorKey'    => $this->getErrorKey(),
+            'attributes'  => $this->formatAttributes(),
             'placeholder' => $this->getPlaceholder(),
-            'options' => &$this->options
+            'options'     => &$this->options,
+            'prepend'     => &$this->prepend,
+            'append'      => &$this->append
         ]);
     }
 

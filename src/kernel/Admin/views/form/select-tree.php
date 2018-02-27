@@ -1,7 +1,6 @@
-<div class="form-group <?php //echo !$errors->has($errorKey) ?: 'has-error' ?>">
-    <label for="<?php echo $id ?>" class="col-sm-<?php echo $width['label'] ?> control-label"><?php echo $label ?></label>
+<div class="form-group line">
     <div class="col-sm-<?php echo $width['field'] ?>">
-      
+        <div class="text"><?php echo $prepend ? $prepend . '&nbsp; ' : ''; ?><?php echo $label ?></div>
         <select class="form-control <?php echo $class ?>" style="width: 100%;" name="<?php echo $name?>" <?php echo $attributes ?> >
             <?php if ($defaultOption) {?>
                 <option value="<?php echo $defaultOption['value'] ?>" ><?php echo $defaultOption['label']?></option>

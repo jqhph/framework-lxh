@@ -57,7 +57,7 @@ class Role extends Controller
         $filter->dateRange('created_at')->between()->time();
     }
 
-    protected function form(Form $form, Content $content)
+    protected function form(Form $form)
     {
         $form->text('title')->rules('required|length_between[2-30]');
         $form->text('name')->rules('required|length_between[2-20]');
