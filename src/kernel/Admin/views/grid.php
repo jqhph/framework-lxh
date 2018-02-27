@@ -1,4 +1,4 @@
-<?php if ($filter) {?><?php echo $filter;?><div class="clearfix"></div><div style="margin:15px 0"></div><?php } ?>
+<?php if ($filter) {?><div id="<?php echo $filterId?>"><?php echo $filter;?></div><div class="clearfix"></div><div style="margin:15px 0"></div><?php } ?>
 <div id="<?php echo ($pjid = Lxh\Admin\Grid::getPjaxContainerId());?>"><?php
     echo view('admin::grid-content', [
         'content' => &$content,

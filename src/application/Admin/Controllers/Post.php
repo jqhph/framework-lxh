@@ -32,7 +32,7 @@ class Post extends Controller
      *
      * @var string
      */
-    protected $filter = 'modal';
+    protected $filter = true;
 
     /**
      * @param Grid $grid
@@ -41,6 +41,11 @@ class Post extends Controller
     {
         $grid->useCard();
         $grid->useLayoutSwitcher();
+
+        if ($grid->getLayout() == Grid::LAYOUT_CARD) {
+            // 瀑布流卡片布局过滤器使用弹窗模式
+            $grid->filter()->useModal();
+        }
     }
 
     /**

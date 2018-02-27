@@ -145,7 +145,7 @@ class Filter extends Widget implements Renderable
     public function getContainerId()
     {
         if (! $this->containerId) {
-            $this->containerId = Util::randomString(6);
+            $this->containerId = 'f'.Util::randomString(6);
         }
 
         return $this->containerId;

@@ -90,6 +90,15 @@ class Controller extends Base
         // 列表页创建grid前
         fire($list . '.grid.before', [$content]);
 
+        // 网格行创建前
+        $this->beforeGridRowResolved($content);
+
+        // 构建网格报表
+        $grid = new Grid();
+
+        // 权限设置
+        $this->gridPermit($grid);
+
         if ($this->filter) {
             // 构建搜索界面
             $filter = new Filter();
@@ -101,22 +110,22 @@ class Controller extends Base
                 $filter->useModal();
             }
 
+            // 列表页创建filter后
+            fire($list . '.filter', [$filter]);
+
+            // 添加过滤器，过滤器会根据搜索表单内容构建Sql where过滤语句
+            // 当然，你也可以在Model中重新定义where语句内容
+            $grid->filter($filter);
+        }
+
+        // 自定义grid
+        $this->grid($grid);
+
+        if ($this->filter) {
             if (!$filter->allowedInTable()) {
                 $content->row($filter);
             }
-
-            // 列表页创建filter后
-            fire($list . '.filter', [$filter]);
         }
-
-        // 网格行创建前
-        $this->beforeGridRowResolved($content);
-
-        // 构建网格报表
-        $grid = new Grid();
-
-        // 权限设置
-        $this->gridPermit($grid);
 
         // 网格
         $content->row(function (Row $row) use ($content, $grid) {
@@ -124,9 +133,6 @@ class Controller extends Base
 
             // 添加网格配置
             $grid->headers($this->grid);
-
-            // 自定义grid
-            $this->grid($grid);
 
             // 添加列
             $column = $row->column($this->gridWidth, $grid);
@@ -136,12 +142,6 @@ class Controller extends Base
 
         // 网格行穿件后
         $this->afterGridRowResolved($content);
-
-        if ($this->filter) {
-            // 添加过滤器，过滤器会根据搜索表单内容构建Sql where过滤语句
-            // 当然，你也可以在Model中重新定义where语句内容
-            $grid->filter($filter);
-        }
 
         if ($grid->getLayout() == 'card') {
             $grid->card()->resolving([$this, 'card']);
