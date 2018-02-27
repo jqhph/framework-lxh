@@ -31,7 +31,7 @@ class Logs extends Controller
     /**
      * @var string
      */
-    protected $filter = 'modal';
+    protected $filter = true;
 
     protected function initialize()
     {
