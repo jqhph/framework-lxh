@@ -31,8 +31,9 @@ class Assets
         return [
             // 设置路径，方便跨目录调用
             'paths' => &$paths,
-//            'alias' => [
-//            ]
+            'alias' => [
+                'jquery' => '@lxh/js/jquery.min',
+            ]
         ];
     }
 

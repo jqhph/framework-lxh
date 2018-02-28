@@ -35,10 +35,10 @@ $GLOBALS['HTTPRESPONSE'] = $GLOBALS['CONTAINER']->make('http.response');
 $GLOBALS['FILTERS_'] = $GLOBALS['CONTAINER']->make('filters');
 $GLOBALS['CONTROLLERMANAGER'] = $GLOBALS['CONTAINER']->make('controller.manager');
 
-$GLOBALS['resource-server']  = $GLOBALS['CONFIG']->get('client-config.resource-server');
+$GLOBALS['resource-server']  = $GLOBALS['CONFIG']->get('client.resource-server');
 $GLOBALS['js-version']       = $GLOBALS['CONFIG']->get('js-version');
 $GLOBALS['css-version']      = $GLOBALS['CONFIG']->get('css-version');
-$GLOBALS['resource-version'] = $GLOBALS['CONFIG']->get('client-config.resource-version');
+$GLOBALS['resource-version'] = $GLOBALS['CONFIG']->get('client.resource-version');
 $GLOBALS['use-blade-engine'] = $GLOBALS['CONFIG']->get('use-blade-engine');
 $GLOBALS['view.version']     = $GLOBALS['CONFIG']->get('view.version', 'v1.0');
 
