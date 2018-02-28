@@ -83,9 +83,12 @@ class Product extends Controller
 
     protected function form(Form $form)
     {
+        $form->color('color');
+        $form->ip('test1');
         $form->switch('stock');
 
         $form->divide();
+
         $form->decimal('test');
         $form->url('level');
         $form->currency('price');

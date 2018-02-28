@@ -19,6 +19,7 @@ use Lxh\Support\Arr;
  * @method Field\Switcher       switch($name, $label = '')
  * @method Field\Radio          radio($name, $label = '')
  * @method Field\Select         select($name, $label = '')
+ * @method Field\SelectTree     selectTree($name, $label = '')
  * @method Field\MultipleSelect multipleSelect($name, $label = '')
  * @method Field\Textarea       textarea($name, $label = '')
  * @method Field\Hidden         hidden($name, $label = '')

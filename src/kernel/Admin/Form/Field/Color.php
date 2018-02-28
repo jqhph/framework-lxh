@@ -5,11 +5,11 @@ namespace Lxh\Admin\Form\Field;
 class Color extends Text
 {
     protected static $css = [
-        '/packages/admin/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.css',
+        '@lxh/packages/colorpicker/bootstrap-colorpicker.min',
     ];
 
     protected static $js = [
-        '/packages/admin/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.js',
+        '@lxh/packages/colorpicker/bootstrap-colorpicker.min',
     ];
 
     /**
@@ -51,10 +51,11 @@ class Color extends Text
     {
         $options = json_encode($this->options);
 
-        $this->script = "$('{$this->getElementClassSelector()}').parent().colorpicker($options);";
+        $this->script = "$('{$this->getElementClassSelector()}').colorpicker($options);";
 
-        $this->prepend('<i></i>')
-            ->defaultAttribute('style', 'width: 140px');
+        $this->prepend('<i style="background:#222;width:11px;height:11px;display:inline-block"></i>');
+
+        $this->options = [];
 
         return parent::render();
     }

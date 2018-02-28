@@ -4,10 +4,8 @@ namespace Lxh\Admin\Form\Field;
 
 class Ip extends Text
 {
-    protected $rules = 'ip';
-
     protected static $js = [
-        '/packages/admin/AdminLTE/plugins/input-mask/jquery.inputmask.bundle.min.js',
+        '@lxh/packages/input-mask/jquery.inputmask.bundle.min',
     ];
 
     /**
@@ -23,13 +21,12 @@ class Ip extends Text
     {
         $options = json_encode($this->options);
 
-        $this->script = <<<EOT
+        $this->script = "$('{$this->getElementClassSelector()}').inputmask($options);";
 
-$('{$this->getElementClassSelector()}').inputmask($options);
-EOT;
+        $this->options = [];
 
-        $this->prepend('<i class="fa fa-laptop"></i>')
-            ->defaultAttribute('style', 'width: 130px');
+        $this->prepend('<i class="fa fa-laptop"></i>');
+        // ->defaultAttribute('style', 'width: 130px')
 
         return parent::render();
     }
