@@ -63,7 +63,8 @@ window.Lxh = function (options) {
                     })
                 }
             }
-            $(document).on('app.completed', function () {
+            setup_ajax_modal();
+            $(document).on('pjax:complete', function () {
                 modal && modal.modal('hide');
                 setup_ajax_modal();
             });
