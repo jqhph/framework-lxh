@@ -135,7 +135,7 @@ class Admin extends Controller
         $form->image('avatar')
             ->overwriteInitial()
             ->showRemove()
-            ->prepend('<i class="fa fa-file-image-o"></i>');
+            ->prepend('<i class="fa fa-image"></i>');
 
         $form->switch('status')->checked();
 

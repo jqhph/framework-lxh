@@ -1,7 +1,7 @@
 <div class="form-group line">
     <div class="col-sm-<?php echo $width['field'] ?>">
         <div class="text"><?php echo $prepend ? $prepend . '&nbsp; ' : ''; ?><?php echo $label ?></div>
-        <div class="input-group" <?php if (!$append) {echo 'style="display:block"';}?>>
+        <div class="input-group" <?php if (!$append) {echo 'style="width:100%"';}?>>
             <input <?php echo $attributes ?> />
             <?php if ($append) {?>
             <span class="input-group-addon clearfix"><?php echo $append ?></span>

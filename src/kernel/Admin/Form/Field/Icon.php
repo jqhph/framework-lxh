@@ -7,23 +7,18 @@ class Icon extends Text
     protected $default = 'fa-pencil';
 
     protected static $css = [
-        '/packages/admin/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css',
+        '@lxh/packages/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min',
     ];
 
     protected static $js = [
-        '/packages/admin/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js',
+        '@lxh/packages/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min',
     ];
 
     public function render()
     {
-        $this->script = <<<EOT
+        $this->script = "$('{$this->getElementClassSelector()}').iconpicker({placement:'bottomLeft'});";
 
-$('{$this->getElementClassSelector()}').iconpicker({placement:'bottomLeft'});
-
-EOT;
-
-        $this->prepend('<i class="fa fa-pencil"></i>')
-            ->defaultAttribute('style', 'width: 140px');
+        $this->prepend('<i class="fa fa-pencil"></i>');
 
         return parent::render();
     }

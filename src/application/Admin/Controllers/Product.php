@@ -85,7 +85,11 @@ class Product extends Controller
     {
         $form->color('color');
         $form->ip('test1');
+        $form->mobile('mobile');
         $form->switch('stock');
+        $form->icon('icon');
+        // 自定义内容
+        $form->html()->content('<strong>custom html</strong>');
 
         $form->divide();
 

@@ -47,7 +47,7 @@ use Lxh\Support\Arr;
  * @method Field\Rate           rate($name, $label = '')
  * @method Field\Divide         divide()
  * @method Field\Decimal        decimal($column, $label = '')
- * @method Field\Html           html($html)
+ * @method Field\Html           html($column = '', $label = '')
  * @method Field\Tags           tags($column, $label = '')
  * @method Field\Icon           icon($column, $label = '')
  * @method Field\TableCheckbox  tableCheckbox($column, $label = '')

@@ -4,9 +4,9 @@ namespace Lxh\Admin\Form\Field;
 
 class Mobile extends Text
 {
-    protected static $js = [
-        '/packages/admin/AdminLTE/plugins/input-mask/jquery.inputmask.bundle.min.js',
-    ];
+//    protected static $js = [
+//        '@lxh/packages/input-mask/jquery.inputmask.bundle.min',
+//    ];
 
     /**
      * @see https://github.com/RobinHerbots/Inputmask#options
@@ -19,15 +19,12 @@ class Mobile extends Text
 
     public function render()
     {
-        $options = json_encode($this->options);
+//        $options = json_encode($this->options);
+//        $this->script = "$('{$this->getElementClassSelector()}').inputmask($options);";
 
-        $this->script = <<<EOT
+        $this->prepend('<i class="fa fa-phone"></i>');
 
-$('{$this->getElementClassSelector()}').inputmask($options);
-EOT;
-
-        $this->prepend('<i class="fa fa-phone"></i>')
-            ->defaultAttribute('style', 'width: 150px');
+        $this->options = [];
 
         return parent::render();
     }
