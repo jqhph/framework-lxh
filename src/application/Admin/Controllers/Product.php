@@ -91,6 +91,8 @@ class Product extends Controller
         // 自定义内容
         $form->html()->content('<strong>custom html</strong>');
 
+        $form->map('map', 39.916527, 116.397128);
+
         $form->divide();
 
         $form->decimal('test');

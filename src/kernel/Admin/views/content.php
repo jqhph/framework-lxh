@@ -51,6 +51,7 @@
 <?php
 echo admin_js('js/jquery.min');
 echo view('admin::index.app-js')->render();
+echo $loadscripts;
 ?>
 <script>
 <?php

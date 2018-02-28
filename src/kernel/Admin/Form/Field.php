@@ -388,7 +388,7 @@ class Field implements Renderable
      */
     protected function formatId($column)
     {
-        return str_replace('.', '_', $column);
+        return str_replace(['.', '-'], '_', $column);
     }
 
     /**
@@ -823,6 +823,10 @@ class Field implements Renderable
      */
     public function getPlaceholder()
     {
+        if (!is_string($this->column)) {
+            return '';
+        }
+
         return $this->placeholder ?: trans($this->column . '-input', 'fields');
     }
 

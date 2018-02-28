@@ -135,7 +135,11 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         if (typeof jsLibArr != 'undefined') {
             jsLibArr = array_unique(jsLibArr);
             for (var i in jsLibArr) {
-                publicJs.push(jsLibArr[i] + '.js?v=' + version);
+                if (jsLibArr[i].indexOf('.js') == -1 && jsLibArr[i].indexOf('?') == -1) {
+                    publicJs.push(jsLibArr[i] + '.js?v=' + version);
+                } else {
+                    publicJs.push(jsLibArr[i]);
+                }
             }
         }
         jsLibArr = [];

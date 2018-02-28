@@ -59,6 +59,11 @@ class Admin
     /**
      * @var array
      */
+    public static $loadScripts = [];
+
+    /**
+     * @var array
+     */
     protected static $assetsClass = [];
 
     /**
@@ -188,7 +193,7 @@ class Admin
     public static function css($css = null)
     {
         if (!is_null($css)) {
-            self::$css = array_merge(self::$css, (array) $css);
+            self::$css = array_merge(self::$css, (array)$css);
             return;
         }
 
@@ -210,7 +215,7 @@ class Admin
     public static function js($js = null)
     {
         if (!is_null($js)) {
-            self::$js = array_merge(self::$js, (array) $js);
+            self::$js = array_merge(self::$js, (array)$js);
             return;
         }
 
@@ -219,6 +224,29 @@ class Admin
             $script .= "require_js('$js');";
         }
         return $script;
+    }
+
+    /**
+     * 同步载入js
+     *
+     * @param $src
+     */
+    public static function loadScript($src)
+    {
+        static::$loadScripts[] = &$src;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public static function getLoadScripts()
+    {
+        $html = '';
+        foreach (array_unique(static::$loadScripts) as &$src) {
+            $html .= "<script src='{$src}'></script>";
+        }
+        return $html;
     }
 
     /**

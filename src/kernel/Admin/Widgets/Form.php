@@ -30,7 +30,7 @@ use Lxh\Support\Arr;
  * @method Field\Email          email($name, $label = '')
  * @method Field\Mobile         mobile($name, $label = '')
  * @method Field\Slider         slider($name, $label = '')
- * @method Field\Map            map($latitude, $longitude, $label = '')
+ * @method Field\Map            map($name, $latitude = '', $longitude = '')
  * @method Field\Editor         editor($name, $label = '')
  * @method Field\File           file($name, $label = '')
  * @method Field\Image          image($name, $label = '')
