@@ -37,9 +37,9 @@ use Lxh\Support\Arr;
  * @method Field\Date           date($name, $label = '')
  * @method Field\Datetime       datetime($name, $label = '')
  * @method Field\Time           time($name, $label = '')
- * @method Field\DateRange      dateRange($start, $end, $label = '')
- * @method Field\DateTimeRange  dateTimeRange($start, $end, $label = '')
- * @method Field\TimeRange      timeRange($start, $end, $label = '')
+ * @method Field\DateRange      dateRange($name, $start = '', $end = '')
+ * @method Field\DateTimeRange  dateTimeRange($name, $start = '', $end = '')
+ * @method Field\TimeRange      timeRange($name, $start = '', $end = '')
  * @method Field\Month          month($name, $label = '')
  * @method Field\Year           year($name, $label = '')
  * @method Field\Number         number($name, $label = '')
@@ -390,9 +390,11 @@ class Form implements Renderable
             $this->async('@lxh/js/public-detail');
         }
 
-        foreach ($this->fields as $field) {
-            $field->fill($this->data);
-            $field->callAttaching();
+        if ($this->data) {
+            foreach ($this->fields as $field) {
+                $field->fill($this->data);
+                $field->callAttaching();
+            }
         }
 
         return [
@@ -402,6 +404,22 @@ class Form implements Renderable
             'formOptions' => &$this->options,
             'id'          => $this->id,
         ];
+    }
+
+    /**
+     * 获取表单数据
+     *
+     * @param mixed $key
+     * @param mixed $def
+     * @return mixed
+     */
+    public function data($key = null, $def = null)
+    {
+        if ($key === null) {
+            return $this->data;
+        }
+
+        return get_value($this->data, $key, $def);
     }
 
     /**

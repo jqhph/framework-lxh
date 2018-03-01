@@ -224,7 +224,10 @@ class Field implements Renderable
         $this->setup();
     }
 
-    // 初始化
+    /**
+     * 初始化操作
+     *
+     */
     protected function setup()
     {
     }
@@ -690,7 +693,7 @@ class Field implements Renderable
             return is_null($this->value) ? $this->getDefault() : $this->value;
         }
 
-        $this->value = $value;
+        $this->value = &$value;
 
         return $this;
     }
@@ -930,7 +933,14 @@ class Field implements Renderable
             return $classes;
         }
 
-        return '.' . $this->form->getElementClass() . ' .' . implode('.', $elementClass);
+        $prepend = '';
+        if ($this->form) {
+            $prepend = '.' . $this->form->getElementClass();
+        } elseif ($this->filter) {
+            $prepend = '#' . $this->filter->getContainerId();
+        }
+
+        return $prepend . ' .' . implode('.', $elementClass);
     }
 
     /**

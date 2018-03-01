@@ -89,6 +89,10 @@ class Product extends Controller
         $form->time('time');
         $form->year('year');
 
+        $form->dateRange('date-range', 2018, 2019);
+        $form->dateTimeRange('datetime-range');
+        $form->timeRange('time-range');
+
         $form->divide();
 
         $form->color('color');

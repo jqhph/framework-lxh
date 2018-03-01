@@ -246,11 +246,11 @@ class Content implements Renderable
      */
     public function render()
     {
-        // 注入所有字段静态资源
-        Admin::collectFieldAssets();
-
         // 必须先调用build方法
         $content = $this->build();
+
+        // 注入所有字段静态资源
+        Admin::collectFieldAssets();
 
         $js      = Admin::js();
         $css     = Admin::css();
