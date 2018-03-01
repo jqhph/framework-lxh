@@ -10,8 +10,6 @@ class Markdown extends Widget
 {
     protected static $loadedAssets = false;
 
-    protected $view = 'admin::widget.markdown';
-
     /**
      * markdown内容
      *
@@ -33,7 +31,7 @@ class Markdown extends Widget
         'sequenceDiagram' => true,
     ];
 
-    public function __construct($markdown)
+    public function __construct($markdown = '')
     {
         $this->content($markdown);
 
@@ -79,6 +77,14 @@ class Markdown extends Widget
         return $this;
     }
 
+    protected function build()
+    {
+        return <<<EOF
+<div {$this->formatAttributes()}><textarea style="display:none;">{$this->content}</textarea></div>
+EOF;
+
+    }
+
     public function render()
     {
         $id = 'm'.Util::randomString(6);
@@ -89,10 +95,7 @@ class Markdown extends Widget
 
         Admin::script("editormd.markdownToHTML('$id', $opts);");
 
-        return <<<EOF
-<div {$this->formatAttributes()}><textarea style="display:none;">{$this->content}</textarea></div>
-EOF;
-
+        return $this->build();
     }
 
 }

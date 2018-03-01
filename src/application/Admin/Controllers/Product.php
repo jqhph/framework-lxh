@@ -28,6 +28,7 @@ use Lxh\Admin\Widgets\Code;
 use Lxh\Admin\Widgets\Form;
 use Lxh\Admin\Widgets\Markdown;
 use Lxh\Admin\Widgets\Tab;
+use Lxh\Exceptions\InvalidArgumentException;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -92,7 +93,9 @@ class Product extends Controller
 
     protected function afterFormRowResolved(Content $content, Card $card)
     {
-        $content->row(new Code('protected function afterFormRowResolved(Content $content, Card $card)'));
+        $code = new Code(__FILE__, 101, 118);
+
+        $content->row($code);
     }
 
     protected function afterFormColumnResolved(Row $row)
