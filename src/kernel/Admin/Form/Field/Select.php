@@ -75,29 +75,6 @@ EOF;
         return view($this->getView(), $this->variables())->with('options', $options)->render();
     }
 
-    protected function formatOptions()
-    {
-        foreach ($this->options as $k => &$v) {
-            if (is_array($v) && ! empty($v['label'])) {
-                continue;
-            }
-            $value = $v;
-            if (is_string($k)) {
-                $v = [
-                    'value' => $value,
-                    'label' => $k
-                ];
-                continue;
-            }
-            $v = [
-                'value' => $value,
-                'label' => trans_option($value, $this->column)
-            ];
-        }
-
-        return $this->options;
-    }
-
     /**
      * Set options.
      *

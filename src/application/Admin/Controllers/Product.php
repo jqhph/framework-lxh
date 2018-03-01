@@ -95,13 +95,16 @@ class Product extends Controller
 
         $form->divide();
 
+        $form->radio('radio')->options(['value1', 'value2', 'value3']);
+        $form->checkbox('checkbox')->options(['value1', 'value2', 'value3']);
+
         $form->color('color');
         $form->ip('ip');
         $form->mobile('mobile');
         $form->switch('swich');
         $form->icon('icon');
         // 自定义内容
-        $form->html()->content('<strong>custom html</strong>');
+        $form->html('html')->content('HELLO WORLD!')->help('自定义内容');
 
         $form->editor('editor');
 

@@ -70,14 +70,14 @@ class DateRange extends Field
         $class = $this->getElementClassSelector();
 
         $this->script = <<<EOT
-            $('{$class}-start').datetimepicker($startOptions);
-            $('{$class}-end').datetimepicker($endOptions);
-            $("{$class}-start").on("dp.change", function (e) {
-                $('{$class}-end').data("DateTimePicker").minDate(e.date);
-            });
-            $("{$class}-end").on("dp.change", function (e) {
-                $('{$class}-start').data("DateTimePicker").maxDate(e.date);
-            });
+$('{$class}-start').datetimepicker($startOptions);
+$('{$class}-end').datetimepicker($endOptions);
+$("{$class}-start").on("dp.change", function (e) {
+    $('{$class}-end').data("DateTimePicker").minDate(e.date);
+});
+$("{$class}-end").on("dp.change", function (e) {
+    $('{$class}-start').data("DateTimePicker").maxDate(e.date);
+});
 EOT;
         $this->prepend('<i class="fa fa-calendar"></i>');
 

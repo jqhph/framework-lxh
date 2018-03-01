@@ -32,6 +32,7 @@ background-color:#0072C6;border-color:#0072C6;}.btn-xs.btn-primary{border-color:
     z-index: 2;
     top: 15px;
 }
+.checkbox-inline+.checkbox-inline, .radio-inline+.radio-inline{margin-left:15px;}
 .form-group.line{padding:0 5px;}
 .line .input-group .form-control{border-left:0;border-top:0;border-right:0;padding: 7px 12px 7px 1px;}
 .line .form-control:focus{border-bottom:2px solid #0072C6}

@@ -23,9 +23,11 @@
                                     if (in_array($v['value'], (array)$value)) {
                                         $checked = 'checked';
                                     }
-                                    ?><div class="checkbox pull-left"><?php echo trans($v['label'], 'fields')?></div>
+                                    $id = 't'.Lxh\Helper\Util::randomString(6);
+                                    ?>
                                     <div <?php echo $attributes;?>>
-                                        <input <?php if ($checked) echo 'checked';?> name="<?php echo $name ?>[]" type="checkbox" value="<?php echo $v['value']?>" ><label></label></div> <?php } ?></td>
+                                        <input id="<?php echo $id?>" <?php if ($checked) echo 'checked';?> name="<?php echo $name ?>[]" type="checkbox" value="<?php echo $v['value']?>" >
+                                        <label for="<?php echo $id?>"><?php echo trans($v['label'], 'fields')?></label></div> <?php } ?></td>
                         <?php } ?>
                     </tr>
                 <?php }  ?>

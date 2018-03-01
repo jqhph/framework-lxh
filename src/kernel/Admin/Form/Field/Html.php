@@ -32,14 +32,19 @@ class Html extends Field
     public function render()
     {
         if ($this->html instanceof \Closure) {
-            $this->html = call_user_func($this->html, $this->form);
+            $this->html = call_user_func($this->html, $this->value, $this->form);
         }
 
         $prepend = $this->prepend ? $this->prepend . '&nbsp ' : '';
+        
+        $help = '';
+        if ($this->help) {
+            $help = view('admin::form.help-block', ['help' => &$this->help])->render();
+        }
 
         return <<<EOT
 <div class="form-group line">
-    <div class="col-sm-{$this->width['field']}"><div class="text">{$prepend}{$this->label()}</div>{$this->html}</div>
+    <div class="col-sm-{$this->width['field']}"><div class="text">{$prepend}{$this->label()}</div>{$this->html}</div>{$help}
 </div>
 EOT;
     }

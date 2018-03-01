@@ -329,6 +329,34 @@ class Field implements Renderable
     }
 
     /**
+     * 格式化配置数组为label value格式
+     *
+     * @return array
+     */
+    protected function formatOptions()
+    {
+        foreach ($this->options as $k => &$v) {
+            if (is_array($v) && ! empty($v['label'])) {
+                continue;
+            }
+            $value = $v;
+            if (is_string($k)) {
+                $v = [
+                    'value' => $value,
+                    'label' => $k
+                ];
+                continue;
+            }
+            $v = [
+                'value' => $value,
+                'label' => trans_option($value, $this->column)
+            ];
+        }
+
+        return $this->options;
+    }
+
+    /**
      * 加载css（同个key只加载一次）
      *
      * @return $this
