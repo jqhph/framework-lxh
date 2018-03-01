@@ -91,20 +91,20 @@ class Product extends Controller
 
     }
 
-    protected function afterFormRowResolved(Content $content, Card $card)
-    {
-        $code = new Code(__FILE__, 101, 118);
-
-        $content->row($code);
-    }
-
     protected function afterFormColumnResolved(Row $row)
     {
+        // 代码预览
+        $code = new Code(__FILE__, 94, 144);
+
         // 创建子表单
         // 把表单拆分成多块布局
         $form = $this->form->create();
 
-        $row->column(4, new Card('时间日期', $form));
+        $row->column(4, function (\Lxh\Admin\Layout\Column $column) use ($form, $code) {
+            $column->row(new Card('时间日期', $form));
+
+            $column->row($code);
+        });
 
         $form->date('date');
         $form->datetime('datetime');

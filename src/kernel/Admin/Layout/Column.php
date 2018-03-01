@@ -56,17 +56,7 @@ class Column
      */
     public function row($content)
     {
-        $row = new Row();
-
-        call_user_func($content, $row);
-
-        ob_start();
-
-        $row->build();
-
-        $this->contents[] = ob_get_contents();
-
-        ob_end_clean();
+        $this->contents[] = new Row($content);
 
         return $this;
     }
@@ -81,6 +71,8 @@ class Column
         foreach ($this->contents as &$content) {
             if ($content instanceof Renderable) {
                 echo $content->render();
+            } elseif ($content instanceof Row) {
+                echo $content->build();
             } else {
                 echo $content;
             }
