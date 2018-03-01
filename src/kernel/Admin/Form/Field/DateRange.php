@@ -7,15 +7,24 @@ use Lxh\Admin\Form\Field;
 class DateRange extends Field
 {
     protected static $css = [
-        '/packages/admin/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
+        '@lxh/css/bootstrap-datetimepicker.min',
     ];
 
     protected static $js = [
-        '/packages/admin/moment/min/moment-with-locales.min.js',
-        '/packages/admin/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+        '@lxh/js/bootstrap-datetimepicker.min',
     ];
 
-    protected $format = 'YYYY-MM-DD';
+    protected $view = 'admin::form.date-range';
+
+    /**
+     *
+     * @var array
+     */
+    protected $options = [
+        'format' => 'yy-mm-dd',
+        'locale' => 'zh-CH',
+        'minView' => 'month',
+    ];
 
     /**
      * Column name.

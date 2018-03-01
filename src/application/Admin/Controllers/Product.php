@@ -83,10 +83,18 @@ class Product extends Controller
 
     protected function form(Form $form)
     {
+        $form->date('date');
+        $form->datetime('datetime');
+        $form->month('month');
+        $form->time('time');
+        $form->year('year');
+
+        $form->divide();
+
         $form->color('color');
-        $form->ip('test1');
+        $form->ip('ip');
         $form->mobile('mobile');
-        $form->switch('stock');
+        $form->switch('swich');
         $form->icon('icon');
         // 自定义内容
         $form->html()->content('<strong>custom html</strong>');
@@ -97,9 +105,9 @@ class Product extends Controller
 
         $form->divide();
 
-        $form->decimal('test');
-        $form->url('level');
-        $form->currency('price');
+        $form->decimal('decimal');
+        $form->url('url');
+        $form->currency('currency');
     }
 
     public function actionTest()

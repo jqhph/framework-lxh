@@ -5,19 +5,39 @@ namespace Lxh\Admin\Form\Field;
 class Date extends Text
 {
     protected static $css = [
-        '/packages/admin/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
+        '@lxh/css/bootstrap-datetimepicker.min',
     ];
 
     protected static $js = [
-        '/packages/admin/moment/min/moment-with-locales.min.js',
-        '/packages/admin/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+        '@lxh/js/bootstrap-datetimepicker.min',
     ];
 
-    protected $format = 'YYYY-MM-DD';
+    /**
+     * 
+     * @var array
+     */
+    protected $options = [
+        'format' => 'yy-mm-dd',
+        'locale' => 'zh-CH',
+        'minView' => 'month',
+    ];
 
     public function format($format)
     {
-        $this->format = $format;
+        $this->options['format'] = $format;
+
+        return $this;
+    }
+
+    /**
+     * 设置语言
+     *
+     * @param string $locale
+     * @return $this
+     */
+    public function locale($locale)
+    {
+        $this->options['locale'] = $locale;
 
         return $this;
     }
@@ -33,10 +53,9 @@ class Date extends Text
 
     public function render()
     {
-        $this->options['format'] = $this->format;
-        $this->options['locale'] = config('app.locale');
-
         $this->script = "$('{$this->getElementClassSelector()}').datetimepicker(".json_encode($this->options).');';
+
+        $this->options = [];
 
         $this->prepend('<i class="fa fa-calendar"></i>');
 

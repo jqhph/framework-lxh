@@ -4,5 +4,10 @@ namespace Lxh\Admin\Form\Field;
 
 class Month extends Date
 {
-    protected $format = 'MM';
+    protected $options = [
+        'format' => 'mm',
+        'locale' => 'zh-CH',
+        'startView' => 'year',
+        'minView' => 'year',
+    ];
 }

@@ -4,6 +4,9 @@ namespace Lxh\Admin\Form\Field;
 
 class Datetime extends Date
 {
-    protected $format = 'YYYY-MM-DD HH:mm:ss';
+    protected $options = [
+        'format' => 'yy-mm-dd hh:ii:ss',
+        'locale' => 'zh-CH',
+    ];
     
 }

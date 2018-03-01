@@ -2,7 +2,14 @@
 
 namespace Lxh\Admin\Form\Field;
 
-class DatetimeRange extends DateRange
+class DateTimeRange extends DateRange
 {
-    protected $format = 'YYYY-MM-DD HH:mm:ss';
+    /**
+     *
+     * @var array
+     */
+    protected $options = [
+        'format' => 'yy-mm-dd hh:ii:ss',
+        'locale' => 'zh-CH',
+    ];
 }

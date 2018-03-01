@@ -599,6 +599,19 @@ class Field implements Renderable
     }
 
     /**
+     *
+     * @param string $key
+     * @param string $value
+     * @return $this
+     */
+    public function option($key, $value)
+    {
+        $this->options[$key] = &$value;
+
+        return $this;
+    }
+
+    /**
      * Get or set rules.
      *
      * @param null $rules

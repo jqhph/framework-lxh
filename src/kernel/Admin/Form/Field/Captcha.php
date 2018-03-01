@@ -6,8 +6,10 @@ use Lxh\Admin\Form;
 
 class Captcha extends Text
 {
-    protected $rules = 'required|captcha';
-
+    /**
+     *
+     * @var string
+     */
     protected $view = 'admin::form.captcha';
 
     public function __construct($column, $arguments = [])
@@ -20,15 +22,6 @@ class Captcha extends Text
         $this->label = trans('admin::lang.captcha');
     }
 
-    public function setForm(Form $form = null)
-    {
-        $this->form = $form;
-
-        $this->form->ignore($this->column);
-
-        return $this;
-    }
-
     public function render()
     {
         $this->script = <<<EOT
@@ -36,7 +29,6 @@ class Captcha extends Text
 $('#{$this->column}-captcha').click(function () {
     $(this).attr('src', $(this).attr('src')+'?'+Math.random());
 });
-
 EOT;
 
         return parent::render();

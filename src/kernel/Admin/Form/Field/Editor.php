@@ -29,11 +29,20 @@ class Editor extends Field
      * @var array
      */
     protected $options = [
-        'height' => 550,
+        'height' => 600,
         'codeFold' => true,
         'saveHTMLToTextarea' => true, // 保存 HTML 到 Textarea
         'searchReplace' => true,
-
+//        'htmlDecode' => 'style,script,iframe|on*', // 开启 HTML 标签解析，为了安全性，默认不开启
+        'emoji' => true,
+        'taskList' => true,
+        'tocm' => true,         // Using [TOCM]
+        'tex' => true,                   // 开启科学公式TeX语言支持，默认关闭
+        'flowChart' => 'true',             // 开启流程图支持，默认关闭
+        'sequenceDiagram' => true,       // 开启时序/序列图支持，默认关闭,
+        'imageUpload' => true,
+        'imageFormats' => ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'webp'],
+        'imageUploadURL' => '',
     ];
 
     /**
@@ -49,6 +58,33 @@ class Editor extends Field
         return parent::render();
     }
 
+    /**
+     * 开启 HTML 标签解析，为了安全性，默认不开启
+     * style,script,iframe|on*
+     *
+     * @param string $decode
+     * @return $this
+     */
+    public function htmlDecode($decode)
+    {
+        $this->options['htmlDecode'] = &$decode;
+
+        return $this;
+    }
+
+    /**
+     * 设置编辑器容器高度
+     *
+     * @param int $height
+     * @return $this
+     */
+    public function height($height)
+    {
+        $this->options['height'] = $height;
+
+        return $this;
+    }
+
     protected function setupScript()
     {
         $server = config('client.resource-server');
@@ -61,72 +97,40 @@ class Editor extends Field
 
         $this->attribute('id', $id);
 
+        $this->options['path'] = $server.'/assets/admin/packages/editor-md/lib/';
+        $this->options['name'] = $this->column;
+        $this->options['placeholder'] = $this->getPlaceholder();
+
+        $opts = json_encode($this->options);
+
         $this->script = <<<EOF
 (function () {
     var c = LXHSTORE.IFRAME.current()
         formg = $('.form-group'),
         ddg = $('.dropdown-btn-group'),
-        btg = $('.btn-group');
+        btg = $('.btn-group'), 
+        opts = {$opts};
         
-    var editor = editormd("{$id}", {
-        height: 740,
-        path : '{$server}/assets/admin/packages/editor-md/lib/',
-
-//            markdown : md,
-        codeFold : true,
-        //syncScrolling : false,
-        saveHTMLToTextarea : true,    // 保存 HTML 到 Textarea
-        searchReplace : true,
-        //watch : false,                // 关闭实时预览
-        htmlDecode : "style,script,iframe|on*",            // 开启 HTML 标签解析，为了安全性，默认不开启    
-        //toolbar  : false,             //关闭工具栏
-        //previewCodeHighlight : false, // 关闭预览 HTML 的代码块高亮，默认开启
-        emoji : true,
-        taskList : true,
-        placeholder: '{$this->getPlaceholder()}',
-        name: '{$this->column}',
-        tocm            : true,         // Using [TOCM]
-        tex : true,                   // 开启科学公式TeX语言支持，默认关闭
-        flowChart : true,             // 开启流程图支持，默认关闭
-        sequenceDiagram : true,       // 开启时序/序列图支持，默认关闭,
-        //dialogLockScreen : false,   // 设置弹出层对话框不锁屏，全局通用，默认为true
-        //dialogShowMask : false,     // 设置弹出层对话框显示透明遮罩层，全局通用，默认为true
-        //dialogDraggable : false,    // 设置弹出层对话框不可拖动，全局通用，默认为true
-        //dialogMaskOpacity : 0.4,    // 设置透明遮罩层的透明度，全局通用，默认值为0.1
-        //dialogMaskBgColor : "#000", // 设置透明遮罩层的背景颜色，全局通用，默认为#fff
-        imageUpload : true,
-        imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
-        imageUploadURL : "./php/upload.php",
-        onload : function() {
-            console.log('onload', this);
-            
-            LXHSTORE.IFRAME.height(c);
-            //this.fullscreen();
-            //this.unwatch();
-            //this.watch().fullscreen();
-            //this.setMarkdown("#PHP");
-            //this.width("100%");
-            //this.height(480);
-            //this.resize("100%", 640);
-        },
-        onfullscreen : function() {
-            formg.hide();
-            ddg.hide();
-            btg.hide();
-            $('#'+this.id).parents('.form-group').show();
-            $('.CodeMirror').css({'border-left': '1px solid #ddd'})
-        },
-        onfullscreenExit : function() {
-            formg.show();
-            ddg.show();
-            btg.show();
-            $('.CodeMirror').css({'border-left': '0'})
-        }
-    });
-   
-     
-})();
-             
+    opts.onload = function() {
+        console.log('onload', this);   
+        LXHSTORE.IFRAME.height(c);
+        //this.setMarkdown("#PHP");
+    };
+    opts.onfullscreen = function() {
+        formg.hide();
+        ddg.hide();
+        btg.hide();
+        $('#'+this.id).parents('.form-group').show();
+        $('.CodeMirror').css({'border-left': '1px solid #ddd'})
+    };
+    opts.onfullscreenExit = function() {
+        formg.show();
+        ddg.show();
+        btg.show();
+        $('.CodeMirror').css({'border-left': '0'})
+    };
+    editormd("{$id}", opts);
+})();       
 EOF;
 
     }
