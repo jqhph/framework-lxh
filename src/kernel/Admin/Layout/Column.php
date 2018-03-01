@@ -52,13 +52,11 @@ class Column
      *
      * @param $content
      *
-     * @return $this
+     * @return Row
      */
-    public function row($content)
+    public function row($content = '')
     {
-        $this->contents[] = new Row($content);
-
-        return $this;
+        return $this->contents[] = new Row($content);
     }
 
     /**

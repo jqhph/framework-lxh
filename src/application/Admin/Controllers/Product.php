@@ -69,13 +69,6 @@ class Product extends Controller
         $filter->dateRange('created_at')->between()->time();
     }
 
-    protected function beforeGridColumnResolved(Row $row)
-    {
-        $card = new Card();
-
-//        $row->column(2, $card);
-    }
-
     /**
      * 自定义网格配置
      *
@@ -86,25 +79,13 @@ class Product extends Controller
         $grid->allowBatchDelete();
     }
 
-    protected function markdownPreview()
-    {
-
-    }
-
     protected function afterFormColumnResolved(Row $row)
     {
-        // 代码预览
-        $code = new Code(__FILE__, 94, 144);
+        $column = $row->column(4);
 
         // 创建子表单
         // 把表单拆分成多块布局
         $form = $this->form->create();
-
-        $row->column(4, function (\Lxh\Admin\Layout\Column $column) use ($form, $code) {
-            $column->row(new Card('时间日期', $form));
-
-            $column->row($code);
-        });
 
         $form->date('date');
         $form->datetime('datetime');
@@ -115,6 +96,11 @@ class Product extends Controller
         $form->dateRange('date-range', 2018, 2019);
         $form->dateTimeRange('datetime-range');
         $form->timeRange('time-range');
+
+        $column->row(new Card('时间日期', $form));
+
+        // 代码预览
+        $column->row(new Code(__FILE__, 82, 134));
     }
 
     protected function form(Form $form)
@@ -123,7 +109,7 @@ class Product extends Controller
 
         $form->divide();
 
-        $form->radio('radio')->options(['value1', 'value2', 'value3']);
+        $form->radio('radio')->options(['value1', 'value2', 'value3'])->default('value2');
         $form->checkbox('checkbox')->options(['value1', 'value2', 'value3']);
 
         $form->textarea('textarea');
@@ -138,7 +124,7 @@ class Product extends Controller
 
         $form->editor('editor');
 
-//        $form->map('map', 39.916527, 116.397128);
+        $form->map('map', 39.916527, 116.397128);
 
         $form->divide();
 

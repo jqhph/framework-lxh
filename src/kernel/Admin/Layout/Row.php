@@ -26,8 +26,9 @@ class Row
      *
      * @param int $width
      * @param Column
+     * @return Column
      */
-    public function column($width, $content)
+    public function column($width, $content = '')
     {
         return $this->columns[] = new Column($content, $width);
     }

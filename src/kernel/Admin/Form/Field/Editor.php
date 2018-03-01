@@ -114,9 +114,8 @@ class Editor extends Field
         opts = {$opts};
         
     opts.onload = function() {
-        console.log('onload', this);   
+        console.log('editor onload', this);   
         LXHSTORE.IFRAME.height(c);
-        //this.setMarkdown("#PHP");
     };
     opts.onfullscreen = function() {
         formg.hide();
