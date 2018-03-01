@@ -6,7 +6,13 @@
                 $id = 'r'.Lxh\Helper\Util::randomString(6);
                 ?>
             <div class="<?php echo $type?> <?php echo $type?>-<?php echo $color;?> <?php echo $inline?>">
-                <input id="<?php echo $id?>" <?php echo $attributes;?> <?php if ($value == $opt['value']) echo 'checked'; ?> name="<?php echo $name;if ($type == 'checkbox') echo '[]';?>" value="<?php echo $opt['value']?>">
+                <input <?php
+                if ($type == 'checkbox') {
+                    if (in_array($opt['value'], $value)) echo 'checked';
+                } else {
+                    if ($value == $opt['value']) echo 'checked';
+                }
+                ?> id="<?php echo $id?>" <?php echo $attributes;?>  name="<?php echo $name;if ($type == 'checkbox') echo '[]';?>" value="<?php echo $opt['value']?>">
                 <label for="<?php echo $id?>"><?php echo $opt['label']?></label>
             </div>
             <?php } ?>
