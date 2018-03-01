@@ -21,7 +21,7 @@ class DateRange extends Field
      * @var array
      */
     protected $options = [
-        'format' => 'yy-mm-dd',
+        'format' => 'yyyy-mm-dd',
         'locale' => 'zh-CH',
         'minView' => 'month',
     ];

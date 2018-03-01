@@ -195,15 +195,20 @@ class Form implements Renderable
         $this->attributes = [
             'method'         => 'POST',
             'action'         => '',
-            'class'          => 'form-horizontal ' . $this->getElementClassSelector(),
+            'class'          => 'form-horizontal ' . $this->getElementClass(),
             'accept-charset' => 'UTF-8',
             'pjax-container' => true,
         ];
     }
 
-    public function getElementClassSelector()
+    /**
+     * 获取元素
+     *
+     * @return string
+     */
+    public function getElementClass()
     {
-        return ($this->name . '-form');
+        return $this->name . '-form';
     }
 
     /**

@@ -930,7 +930,7 @@ class Field implements Renderable
             return $classes;
         }
 
-        return '.' . implode('.', $elementClass);
+        return '.' . $this->form->getElementClass() . ' .' . implode('.', $elementClass);
     }
 
     /**

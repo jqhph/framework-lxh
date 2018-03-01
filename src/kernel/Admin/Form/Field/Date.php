@@ -13,11 +13,11 @@ class Date extends Text
     ];
 
     /**
-     * 
+     *
      * @var array
      */
     protected $options = [
-        'format' => 'yy-mm-dd',
+        'format' => 'yyyy-mm-dd',
         'locale' => 'zh-CH',
         'minView' => 'month',
     ];
