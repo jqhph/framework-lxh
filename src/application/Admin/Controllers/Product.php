@@ -83,6 +83,8 @@ class Product extends Controller
 
     protected function form(Form $form)
     {
+        $form->slider('slider');
+
         $form->date('date');
         $form->datetime('datetime');
         $form->month('month');
@@ -97,6 +99,8 @@ class Product extends Controller
 
         $form->radio('radio')->options(['value1', 'value2', 'value3']);
         $form->checkbox('checkbox')->options(['value1', 'value2', 'value3']);
+
+        $form->textarea('textarea');
 
         $form->color('color');
         $form->ip('ip');
