@@ -280,11 +280,13 @@ class Content implements Renderable
         $css     = Admin::css();
         $script  = Admin::script();
         $asyncJs = Admin::async();
-        $load    = Admin::getLoadScripts();
+        $syncJs  = Admin::getLoadScripts();
+        $syncCss = Admin::getLoadStyles();
+
 
         // 异步加载table，无需加载整个内容
         if (Grid::isPjaxRequest()) {
-            return "{$content}{$load}<script>{$css}{$asyncJs}{$js}{$script}</script>";
+            return "{$content}{$syncCss}{$syncJs}<script>{$css}{$asyncJs}{$js}{$script}</script>";
         }
 
         return view(
@@ -298,7 +300,8 @@ class Content implements Renderable
                 'script'      => &$script,
                 'style'       => Admin::style(),
                 'asyncJs'     => &$asyncJs,
-                'loadscripts' => &$load,
+                'loadscss'    => &$syncCss,
+                'loadscripts' => &$syncJs,
             ]
         )->render();
     }

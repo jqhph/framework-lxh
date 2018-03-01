@@ -2,13 +2,14 @@
 
 namespace Lxh\Admin\Widgets;
 
+use Lxh\Contracts\Support\Renderable;
 use Lxh\Helper\Util;
 use Lxh\Support\Fluent;
 
 /**
  * @method static class($class)
  */
-abstract class Widget extends Fluent
+abstract class Widget extends Fluent implements Renderable
 {
     /**
      * @var string

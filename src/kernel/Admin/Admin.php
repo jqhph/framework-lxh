@@ -57,9 +57,18 @@ class Admin
     public static $asyncjs = [];
 
     /**
+     * 同步载入的js
+     *
      * @var array
      */
     public static $loadScripts = [];
+
+    /**
+     * 同步载入的css
+     *
+     * @var array
+     */
+    public static $loadStyles = [];
 
     /**
      * @var array
@@ -245,6 +254,29 @@ class Admin
         $html = '';
         foreach (array_unique(static::$loadScripts) as &$src) {
             $html .= "<script src='{$src}'></script>";
+        }
+        return $html;
+    }
+
+    /**
+     * 同步载入js
+     *
+     * @param $src
+     */
+    public static function loadStyles($src)
+    {
+        static::$loadStyles[] = &$src;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public static function getLoadStyles()
+    {
+        $html = '';
+        foreach (array_unique(static::$loadStyles) as &$css) {
+            $html .= "<link href='{$css}' rel=\"stylesheet\" type=\"text/css\" />";
         }
         return $html;
     }

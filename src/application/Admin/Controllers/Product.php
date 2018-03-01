@@ -24,7 +24,9 @@ use Lxh\Admin\Table\Th;
 use Lxh\Admin\Table\Tr;
 use Lxh\Admin\Widgets\Box;
 use Lxh\Admin\Widgets\Card;
+use Lxh\Admin\Widgets\Code;
 use Lxh\Admin\Widgets\Form;
+use Lxh\Admin\Widgets\Markdown;
 use Lxh\Admin\Widgets\Tab;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
@@ -81,6 +83,16 @@ class Product extends Controller
     protected function grid(Grid $grid)
     {
         $grid->allowBatchDelete();
+    }
+
+    protected function markdownPreview()
+    {
+
+    }
+
+    protected function afterFormRowResolved(Content $content, Card $card)
+    {
+        $content->row(new Code('protected function afterFormRowResolved(Content $content, Card $card)'));
     }
 
     protected function afterFormColumnResolved(Row $row)

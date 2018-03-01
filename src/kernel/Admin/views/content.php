@@ -35,7 +35,9 @@
         }
     }
 </script>
-<?php if ($style) {?>
+<?php
+echo $loadscss;
+if ($style) {?>
 <style><?php echo $style?></style>
 <?php } ?>
 <div class="container">
