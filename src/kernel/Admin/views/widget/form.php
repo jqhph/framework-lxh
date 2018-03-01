@@ -1,7 +1,7 @@
 <script>window.formRules = []</script>
-<?php if (! $content) {?>
+<?php if (! $content || ! $multiples) {?>
 <form <?php echo $attributes ?>>
-<?php } else {
+<?php } elseif ($content) {
     $content->prepend("<form $attributes>");
     $content->append("</form>");
 }?>
@@ -22,7 +22,7 @@
         <?php } ?>
         <div style="clear: both;height:5px;"></div>
     </div>
-<?php if (! $content) {?>
+<?php if (! $content || ! $multiples) {?>
 </form>
 <?php }?>
 <script type="text/javascript">

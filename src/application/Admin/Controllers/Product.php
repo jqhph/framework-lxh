@@ -85,13 +85,9 @@ class Product extends Controller
 
     protected function afterFormColumnResolved(Row $row)
     {
-        // 使用主表单数据
-        $form = new Form(
-            $this->form->find()
-        );
-
-        $form->disableSubmit();
-        $form->disableReset();
+        // 创建子表单
+        // 把表单拆分成多块布局
+        $form = $this->form->create();
 
         $row->column(4, new Card('时间日期', $form));
 

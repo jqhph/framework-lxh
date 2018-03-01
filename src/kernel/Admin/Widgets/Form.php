@@ -63,6 +63,13 @@ class Form implements Renderable
     protected $content;
 
     /**
+     * 表单呈多块布局
+     *
+     * @var bool
+     */
+    protected $multiples = false;
+
+    /**
      * 字段id
      *
      * @var mixed
@@ -177,6 +184,35 @@ class Form implements Renderable
         }
 
         $this->options = array_merge($this->options, $options);
+    }
+
+    /**
+     * 允许表单拆分成多块布局
+     *
+     * @return $this
+     */
+    public function multiples()
+    {
+        $this->multiples = true;
+
+        return $this;
+    }
+
+    /**
+     * 创建子表单
+     *
+     * @return $this
+     */
+    public function create()
+    {
+        $this->multiples = true;
+
+        $form = new static($this->find());
+
+        $form->disableReset();
+        $form->disableSubmit();
+
+        return $form;
     }
 
     /**
@@ -415,6 +451,7 @@ class Form implements Renderable
             'formOptions' => &$this->options,
             'id'          => $this->id,
             'content'     => $this->content,
+            'multiples'   => $this->multiples
         ];
     }
 
