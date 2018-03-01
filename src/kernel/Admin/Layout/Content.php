@@ -39,6 +39,16 @@ class Content implements Renderable
     protected $rows = [];
 
     /**
+     * @var array
+     */
+    protected $prepend = [];
+
+    /**
+     * @var array
+     */
+    protected $append = [];
+
+    /**
      * Content constructor.
      *
      * @param Closure|null $callback
@@ -60,6 +70,20 @@ class Content implements Renderable
     public function header($header = '')
     {
         $this->header = &$header;
+
+        return $this;
+    }
+
+    public function prepend($prepend)
+    {
+        $this->prepend[] = &$prepend;
+
+        return $this;
+    }
+
+    public function append($append)
+    {
+        $this->append[] = &$append;
 
         return $this;
     }
@@ -217,7 +241,7 @@ class Content implements Renderable
             $row->build();
         }
 
-        $contents = ob_get_contents();
+        $contents = implode('', $this->prepend).ob_get_contents().implode('', $this->append);
 
         ob_end_clean();
 

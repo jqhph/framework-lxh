@@ -1,5 +1,10 @@
 <script>window.formRules = []</script>
+<?php if (! $content) {?>
 <form <?php echo $attributes ?>>
+<?php } else {
+    $content->prepend("<form $attributes>");
+    $content->append("</form>");
+}?>
     <div class="box-body fields-group">
         <?php foreach($fields as $field): ?>
         <?php echo $field->render();
@@ -17,7 +22,9 @@
         <?php } ?>
         <div style="clear: both;height:5px;"></div>
     </div>
+<?php if (! $content) {?>
 </form>
+<?php }?>
 <script type="text/javascript">
 <?php
 foreach ($asyncJs as &$js) {

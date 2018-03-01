@@ -44,6 +44,8 @@ class Product extends Controller
      */
     protected $gridWidth = 12;
 
+    protected $createFormWidth = 8;
+
     public function initialize()
     {
 //        sleep(3);
@@ -81,9 +83,17 @@ class Product extends Controller
         $grid->allowBatchDelete();
     }
 
-    protected function form(Form $form)
+    protected function afterFormColumnResolved(Row $row)
     {
-        $form->slider('slider');
+        // 使用主表单数据
+        $form = new Form(
+            $this->form->find()
+        );
+
+        $form->disableSubmit();
+        $form->disableReset();
+
+        $row->column(4, new Card('时间日期', $form));
 
         $form->date('date');
         $form->datetime('datetime');
@@ -94,6 +104,11 @@ class Product extends Controller
         $form->dateRange('date-range', 2018, 2019);
         $form->dateTimeRange('datetime-range');
         $form->timeRange('time-range');
+    }
+
+    protected function form(Form $form)
+    {
+        $form->slider('slider');
 
         $form->divide();
 

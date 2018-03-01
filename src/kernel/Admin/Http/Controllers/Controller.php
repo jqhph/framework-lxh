@@ -33,11 +33,15 @@ class Controller extends Base
     protected $id;
 
     /**
-     * 网格字段配置
      *
-     * @var array
+     * @var Grid
      */
-    protected $grid = [];
+    protected $grid;
+
+    /**
+     * @var Form
+     */
+    protected $form;
 
     /**
      * 网格宽度
@@ -90,11 +94,11 @@ class Controller extends Base
         // 列表页创建grid前
         fire($list . '.grid.before', [$content]);
 
+        // 构建网格报表
+        $this->grid = $grid = new Grid();
+
         // 网格行创建前
         $this->beforeGridRowResolved($content);
-
-        // 构建网格报表
-        $grid = new Grid();
 
         // 权限设置
         $this->gridPermit($grid);
@@ -132,7 +136,7 @@ class Controller extends Base
             $this->beforeGridColumnResolved($row);
 
             // 添加网格配置
-            $grid->headers($this->grid);
+//            $grid->headers($this->grid);
 
             // 添加列
             $column = $row->column($this->gridWidth, $grid);
@@ -282,16 +286,16 @@ class Controller extends Base
         // 新建页创建from前
         fire($evt . '.form.before', [$content]);
 
+        $this->form = $form = new Form();
+        $form->setContent($content);
+
         // 表单行创建前
         $this->beforeFormRowResolved($content);
 
-        $form = '';
-        $box = new Card(null, $form);
+        $box = new Card(trans('Create ' . __CONTROLLER__), $form);
         $content->row(function (Row $row) use ($content, $form, $box) {
             // 表单列创建前
             $this->beforeFormColumnResolved($row);
-
-            $form = new Form();
 
             // 自定义form表单
             $this->form($form);
@@ -307,8 +311,6 @@ class Controller extends Base
             // 表单列创建后
             $this->afterFormColumnResolved($row);
         });
-
-        $box->title(trans('Create ' . __CONTROLLER__));
 
         $this->afterFormRowResolved($content, $box);
 
@@ -394,18 +396,17 @@ class Controller extends Base
         // 详情页创建from前
         fire($evt . '.form.before', [$this->id, $content]);
 
+        $this->form = $form = new Form();
+        $form->setId($id);
+        $form->setContent($content);
+
         // 表单行创建前
         $this->beforeFormRowResolved($content);
 
-        $form = '';
-        $box = new Card(null, $form);
+        $box = new Card(trans('Edit ' . __CONTROLLER__), $form);
         $content->row(function (Row $row) use ($id, $content, $form, $box) {
             // 表单列创建前
             $this->beforeFormColumnResolved($row);
-
-            $form = new Form();
-
-            $form->setId($id);
 
             // 自定义form表单
             $this->form($form);
@@ -421,8 +422,6 @@ class Controller extends Base
             // 表单列创建后
             $this->afterFormColumnResolved($row);
         });
-
-        $box->title(trans('Edit ' . __CONTROLLER__));
 
         // 表单行创建后
         $this->afterFormRowResolved($content, $box);
@@ -462,9 +461,9 @@ class Controller extends Base
 
     /**
      * @param Content $content
-     * @param Box $box
+     * @param Card $card
      */
-    protected function afterFormRowResolved(Content $content, Box $box)
+    protected function afterFormRowResolved(Content $content, Card $card)
     {
     }
 

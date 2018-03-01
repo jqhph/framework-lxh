@@ -5,6 +5,7 @@ namespace Lxh\Admin\Widgets;
 use Lxh\Admin\Admin;
 use Lxh\Admin\Form\Field;
 use Lxh\Admin\Grid;
+use Lxh\Admin\Layout\Content;
 use Lxh\Contracts\Support\Arrayable;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Exceptions\InvalidArgumentException;
@@ -55,6 +56,12 @@ use Lxh\Support\Arr;
  */
 class Form implements Renderable
 {
+    /**
+     *
+     * @var Content
+     */
+    protected $content;
+
     /**
      * 字段id
      *
@@ -134,22 +141,26 @@ class Form implements Renderable
         return $this->id;
     }
 
+    public function setContent(Content $content)
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
     /**
      * 查询数据
      *
+     * @return array
      * @throws InvalidArgumentException
      */
     public function find()
     {
-        if (! $this->id) {
-            throw new InvalidArgumentException('Miss id');
-        }
-
-        if (! $this->data) {
+        if (! $this->data && $this->id) {
             $this->data = model(Admin::model())->setId($this->id)->find();
         }
 
-        return $this;
+        return $this->data ;
     }
 
     /**
@@ -403,6 +414,7 @@ class Form implements Renderable
             'asyncJs'     => &$this->asyncJs,
             'formOptions' => &$this->options,
             'id'          => $this->id,
+            'content'     => $this->content,
         ];
     }
 
