@@ -108,7 +108,9 @@ class Editor extends Field
     var c = LXHSTORE.IFRAME.current()
         formg = $('.form-group'),
         ddg = $('.dropdown-btn-group'),
-        btg = $('.btn-group'), 
+        btg = $('.btn-group'),
+        card = $('.card'), 
+        row = $('.row'),
         opts = {$opts};
         
     opts.onload = function() {
@@ -120,13 +122,20 @@ class Editor extends Field
         formg.hide();
         ddg.hide();
         btg.hide();
-        $('#'+this.id).parents('.form-group').show();
+        card.hide();
+        row.hide();
+        var t = $('#'+this.id);
+        t.parents('.card').show()
+        t.parents('.form-group').show();
+        t.parents('.row').show();
         $('.CodeMirror').css({'border-left': '1px solid #ddd'})
     };
     opts.onfullscreenExit = function() {
         formg.show();
         ddg.show();
         btg.show();
+        card.show();
+        row.show();
         $('.CodeMirror').css({'border-left': '0'})
     };
     editormd("{$id}", opts);
