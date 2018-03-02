@@ -159,7 +159,7 @@ class File extends Field
         $options = json_encode($this->options);
 
         $this->script = <<<EOT
-$("input{$this->getElementClassSelector()}").fileinput({$options});
+$("{$this->getElementClassSelector()}").fileinput({$options});
 EOT;
 
         return parent::render();

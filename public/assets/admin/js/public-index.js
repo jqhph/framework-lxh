@@ -58,8 +58,8 @@
             });
 
             // 确认窗
-            layer.confirm(trans("Are you sure delete these rows?", 'tip'), {
-                title: listids + "\n" + trans("You will not be able to recover these rows!", 'tip'),
+            layer.confirm(listids + "\n" + trans("You will not be able to recover these rows!", 'tip'), {
+                title: trans("Are you sure delete these rows?", 'tip'),
                 icon: 0,
                 skin: 'layer-ext-moon',
                 btn: [trans("Done"), trans('Cancel')] //按钮

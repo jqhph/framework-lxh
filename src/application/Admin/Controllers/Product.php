@@ -53,10 +53,6 @@ class Product extends Controller
     public function initialize()
     {
 //        sleep(3);
-        $server = config('client.resource-server');
-
-        Admin::script(
-);
     }
 
     /**
