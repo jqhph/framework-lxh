@@ -62,6 +62,7 @@
 echo admin_js('js/jquery.slimscroll.min');
 echo admin_css('plugins/toastr/toastr.min');
 echo admin_js('plugins/toastr/toastr.min');
+echo admin_js('js/bootstrap.min');
 ?>
 <script>
     // 全局变量容器，所有全局变量都应该放置到此容器，便于管理

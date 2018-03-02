@@ -60,9 +60,19 @@ class Url
      *
      * @return string
      */
-    public function home()
+    public function index()
     {
         return '/' . $this->prefix;
+    }
+
+    /**
+     * 前台主页
+     *
+     * @return string
+     */
+    public function home()
+    {
+        return '/';
     }
 
     /**
@@ -118,6 +128,11 @@ class Url
     public function logout()
     {
         return "/{$this->prefix}/logout";
+    }
+
+    public function profile()
+    {
+        return "/{$this->prefix}/admin/action/profile";
     }
 
     /**

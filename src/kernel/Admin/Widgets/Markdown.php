@@ -42,16 +42,18 @@ class Markdown extends Widget
 
             $server = config('client.resource-server');
 
-            Admin::loadStyles($server.'/assets/admin/packages/editor-md/css/editormd.preview.min.css');
+            Admin::loadStyle($server.'/assets/admin/packages/editor-md/css/editormd.preview.min.css');
 
-            Admin::loadScript($server.'/assets/admin/packages/editor-md/lib/raphael.min.js');
-            Admin::loadScript($server.'/assets/admin/packages/editor-md/lib/marked.min.js');
-            Admin::loadScript($server.'/assets/admin/packages/editor-md/lib/prettify.min.js');
-            Admin::loadScript($server.'/assets/admin/packages/editor-md/lib/underscore.min.js');
-            Admin::loadScript($server.'/assets/admin/packages/editor-md/lib/sequence-diagram.min.js');
-            Admin::loadScript($server.'/assets/admin/packages/editor-md/lib/flowchart.min.js');
-            Admin::loadScript($server.'/assets/admin/packages/editor-md/lib/jquery.flowchart.min.js');
-            Admin::loadScript($server.'/assets/admin/packages/editor-md/editormd.min.js');
+            Admin::loadScript([
+                $server.'/assets/admin/packages/editor-md/lib/raphael.min.js',
+                $server.'/assets/admin/packages/editor-md/lib/marked.min.js',
+                $server.'/assets/admin/packages/editor-md/lib/prettify.min.js',
+                $server.'/assets/admin/packages/editor-md/lib/underscore.min.js',
+                $server.'/assets/admin/packages/editor-md/lib/sequence-diagram.min.js',
+                $server.'/assets/admin/packages/editor-md/lib/flowchart.min.js',
+                $server.'/assets/admin/packages/editor-md/lib/jquery.flowchart.min.js',
+                $server.'/assets/admin/packages/editor-md/editormd.min.js'
+            ]);
         }
     }
 

@@ -291,7 +291,7 @@ class Admin extends Controller
             return $this->failed();
         }
 
-        $target = Url::referer() ?: AdminCreator::url()->home();
+        $target = Url::referer() ?: AdminCreator::url()->index();
 
         return $this->success(['target' => $target]);
     }

@@ -1,6 +1,10 @@
 <div class="left side-menu">
     <div class="sidebar-inner slimscrollleft">
+        <?php if ($users) {?>
         <div class="user-box"><?php echo $users?></div>
+        <?php } else {
+            echo '<div style="height:10px;"></div>';
+        }?>
 
         <div id="sidebar-menu">
             <ul>

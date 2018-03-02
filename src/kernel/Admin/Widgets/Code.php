@@ -2,18 +2,9 @@
 
 namespace Lxh\Admin\Widgets;
 
-use Lxh\Admin\Admin;
-use Lxh\Contracts\Support\Renderable;
-use Lxh\Helper\Util;
-
 class Code extends Markdown
 {
     protected $lang = 'php';
-
-    /**
-     * @var string
-     */
-    protected $code = '';
 
     public function __construct($file = '', $start = 1, $end = 10)
     {
@@ -94,7 +85,7 @@ class Code extends Markdown
         $line = 0;
 
         $source = '';
-        while (($row = fgets($file)) !== FALSE) {
+        while (($row = fgets($file)) !== false) {
             if (++$line > $end)
                 break;
 

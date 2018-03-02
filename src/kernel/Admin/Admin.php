@@ -242,7 +242,11 @@ class Admin
      */
     public static function loadScript($src)
     {
-        static::$loadScripts[] = &$src;
+        if (is_array($src)) {
+            static::$loadScripts = array_merge(static::$loadScripts, $src);
+        } else {
+            static::$loadScripts[] = &$src;
+        }
     }
 
     /**
@@ -261,11 +265,15 @@ class Admin
     /**
      * 同步载入js
      *
-     * @param $src
+     * @param $css
      */
-    public static function loadStyles($src)
+    public static function loadStyle($css)
     {
-        static::$loadStyles[] = &$src;
+        if (is_array($css)) {
+            static::$loadStyles = array_merge(static::$loadStyles, $css);
+        } else {
+            static::$loadStyles[] = &$src;
+        }
     }
 
     /**
