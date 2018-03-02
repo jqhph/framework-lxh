@@ -7,6 +7,7 @@
 <body>
 <script>
     LXHSTORE = parent.LXHSTORE;
+    LXHSTORE.saveScript = '<?php echo config('client.save-script')?>';
     __then__ = parent.__then__;
     require_js = parent.require_js;
     require_css = parent.require_css;
@@ -16,8 +17,10 @@
     jsLibArr = (parent.jsLibArr = []);
     cssLibArr = (parent.cssLibArr = []);
     array_unique = parent.array_unique;
+    array_remove = parent.array_remove;
     loading = parent.loading;
     NProgress = parent.NProgress;
+    layer = parent.layer;
     window.formRules = [];
     open_tab = parent.open_tab;
     close_tab = parent.close_tab;

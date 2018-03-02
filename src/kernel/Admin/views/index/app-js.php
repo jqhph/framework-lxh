@@ -7,6 +7,7 @@
     require_css('@lxh/css/components.min');
     require_css('@lxh/css/icon.min');
     require_css('@lxh/css/core.min');
+    require_js('@lxh/js/container.min');
     require_js('@lxh/js/bootstrap.min');
     <?php } ?>
     // 配置
@@ -15,9 +16,7 @@
         var data = {};
         // 容器配置
         data.options = <?php
-            $default = \Lxh\Assets::config();
             $client = config('client');
-            $setting['sea-config'] = \Lxh\Helper\Util::merge($client['sea-config'], $default, true);
             $setting['language'] = config('language');
             $setting['js-version'] = & $GLOBALS['js-version'];
             $setting['css-version'] = & $GLOBALS['css-version'];
@@ -29,7 +28,7 @@
             ]);
             ?>
             // seajs配置
-            data.seaConfig = data.options.settings['sea-config'];
+            data.seaConfig = LXHSTORE.seaConfig;
             data.seaConfig.alias = data.seaConfig.alias || [];
             var publics = <?php echo json_encode(\Lxh\Assets::publics())?>;
 
@@ -40,7 +39,7 @@
 
         <?php if ($langs = \Lxh\Admin\Admin::getLangs()) {?>
         // 需要载入的语言包模块
-        data.langScopes = <?php echo json_encode($langs);?>
+        data.langScopes = <?php echo json_encode($langs);?>;
         <?php };?>
 
         return data

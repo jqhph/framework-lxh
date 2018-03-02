@@ -15,6 +15,9 @@ $config = [];
 // 语言包缓存时间，单位毫秒 ===> 已移植可写配置文件
 //$config['lang-package-expire'] = 259200 * 1000; // 缓存时间，3天
 
+//
+$config['save-script'] = false;
+
 // 配置资源服务器
 $config['resource-server'] = '';
 

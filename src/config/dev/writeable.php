@@ -1,9 +1,9 @@
 <?php 
 return [
-    'js-version' => 123123,
+    'js-version' => 12345123,
     'css-version' => time(),
     'language' => 'zh',
-    'client-config' => [
+    'client' => [
         'use-cache' => false,
         'cache-expire' => 259200000,
         'lang-package-expire' => 259200000,

@@ -65,9 +65,12 @@ echo admin_js('plugins/toastr/toastr.min');
 echo admin_js('js/bootstrap.min');
 ?>
 <script>
+    var resizefunc = [];
+
     // 全局变量容器，所有全局变量都应该放置到此容器，便于管理
     var LXHSTORE = {};
-    var resizefunc = [];
+    LXHSTORE.saveScript = '<?php echo config('client.save-script')?>';
+    LXHSTORE.seaConfig = <?php echo json_encode(Lxh\Assets::seaConfig())?>;
     LXHSTORE.cache = new Cache();
     LXHSTORE.cache.setToken('<?php
         // 设置缓存token，token刷新则会刷新所有缓存
@@ -104,6 +107,7 @@ echo admin_js('js/bootstrap.min');
 <?php
 // <div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style="display: block;"><div class="toast-progress" style="width: 96.4454%;"></div><button type="button" class="toast-close-button" role="button">×</button><div class="toast-message">Login successful</div></div></div>
 echo admin_js('js/jquery.app.min');
+echo admin_js('packages/layer/layer');
 ?>
 </body>
 </html>

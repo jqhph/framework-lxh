@@ -32,6 +32,18 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         return res;
     };
 
+    // 删除数组中的某个值
+    o.array_remove = function (arr, val) {
+        var res = [], i;
+        for (i in arr) {
+            if (val == arr[i]) {
+                continue;
+            }
+            res[i] = arr[i];
+        }
+        return res;
+    };
+
     // 添加初始化完成后执行的动作
     o.lxhActions = [];
     o.__then__ = function (call) {
@@ -170,6 +182,10 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
          */
         this.setToken = function (token) {
             this.token = token
+        };
+
+        this.getToken = function () {
+            return this.token
         };
 
         /**
@@ -632,3 +648,4 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
     w.Tab = Tab;
     w.Iframe = Iframe;
 })(window);
+

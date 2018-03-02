@@ -4,8 +4,13 @@
  * Created by Jqh on 2017/7/19.
  */
 
-define(['@lxh/css/sweet-alert.min.css', '@lxh/js/sweet-alert.min'], function () {
-    var model = null, listids;
+(function () {
+    var model = null, listids, sut = {
+        anim: 4,
+        icon: 1,
+        offset:'t',
+        skin: 'layer-ext-moon'
+    };
     var public = {
         delete: function (e) {
             var $this = $(e.currentTarget),
@@ -21,29 +26,18 @@ define(['@lxh/css/sweet-alert.min.css', '@lxh/js/sweet-alert.min'], function () 
             model.setId(id);
 
             model.on('success', function () {
-                swal({
-                    title: trans("Deleted!", 'tip'),
-                    text: trans("The row has been deleted.", 'tip'),
-                    type: "success"
-                }, function () {
-                    window.location.reload();
-                });
-
+                layer.msg(trans("Deleted!", 'tip'), sut);
             });
 
             var rowText = $this.parent().parent().text();
             if (rowText) rowText = rowText.replace(/[\n]|[\s]]/gi, ' ') + "\n";
             // 确认窗
-            swal({
-                title: trans("Are you sure to delete the row?", 'tip'),
-                text: rowText + trans("You will not be able to recover this row!", 'tip'),
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonClass: 'btn-danger',
-                confirmButtonText: trans("Yes, delete it!", 'tip'),
-                cancelButtonText: trans('Cancel'),
-                closeOnConfirm: false
-            }, function () {
+            layer.confirm(rowText, {
+                title: trans("Are you sure delete the row?"),
+                icon: 0,
+                skin: 'layer-ext-moon',
+                btn: [trans("Done"), trans('Cancel')] //按钮
+            }, function(){
                 // 发起删除请求
                 model.delete()
             });
@@ -60,25 +54,17 @@ define(['@lxh/css/sweet-alert.min.css', '@lxh/js/sweet-alert.min'], function () 
             model.set('ids', listids);
 
             model.on('success', function () {
-                swal({
-                    title: trans("Deleted!", 'tip'),
-                    type: "success"
-                }, function () {
-                    window.location.reload();
-                });
+                layer.msg(trans("Deleted!", 'tip'), sut);
             });
 
             // 确认窗
-            swal({
-                title: trans("Are you sure to delete these rows?", 'tip'),
-                text: listids + "\n" + trans("You will not be able to recover these rows!", 'tip'),
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonClass: 'btn-danger',
-                confirmButtonText: trans("Yes, delete it!", 'tip'),
-                cancelButtonText: trans('Cancel'),
-                closeOnConfirm: false
-            }, function () {
+            layer.confirm(trans("Are you sure delete these rows?", 'tip'), {
+                title: listids + "\n" + trans("You will not be able to recover these rows!", 'tip'),
+                icon: 0,
+                skin: 'layer-ext-moon',
+                btn: [trans("Done"), trans('Cancel')] //按钮
+            }, function(){
+                // 发起删除请求
                 model.batchDelete()
             });
         }
@@ -165,4 +151,4 @@ define(['@lxh/css/sweet-alert.min.css', '@lxh/js/sweet-alert.min'], function () 
             if (close !== false) tr.addClass('active');
         }
     })
-});
+})();

@@ -2,8 +2,27 @@
 
 namespace Lxh;
 
+use Lxh\Helper\Util;
+
 class Assets
 {
+    protected static $configs = [];
+
+    /**
+     * @return array
+     */
+    public static function seaConfig()
+    {
+        if (static::$configs) {
+            return static::$configs;
+        }
+
+        $syst = self::config();
+        $conf = config('client.sea-config');
+
+        return static::$configs = Util::merge($syst, $conf, true);
+    }
+
     /**
      * seajs配置定义
      *
@@ -41,7 +60,6 @@ class Assets
     {
         return [
             'public-js'=> [
-                '@lxh/js/container.min.js'
             ],
             'public-css' => [
 

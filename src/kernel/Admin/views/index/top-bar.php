@@ -1,7 +1,7 @@
 <div class="topbar">
     <!-- LOGO -->
     <div class="topbar-left">
-        <a class="logo open-left">
+        <a class="logo" href="<?php echo Lxh\Admin\Admin::url()->index()?>">
             <?php echo config('admin.logo')?>
             <i class=""><?php echo config('admin.sm-logo');?></i>
         </a>
