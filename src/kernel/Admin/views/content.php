@@ -7,7 +7,6 @@
 <body>
 <script>
     LXHSTORE = parent.LXHSTORE;
-    LXHSTORE.saveScript = '<?php echo config('client.save-script')?>';
     __then__ = parent.__then__;
     require_js = parent.require_js;
     require_css = parent.require_css;

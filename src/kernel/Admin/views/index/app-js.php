@@ -27,17 +27,15 @@
                 'dataApi' => '/admin/api/js/data'
             ]);
             ?>
-            // seajs配置
-            data.seaConfig = LXHSTORE.seaConfig;
-            data.seaConfig.alias = data.seaConfig.alias || [];
-            var publics = <?php echo json_encode(\Lxh\Assets::publics())?>;
+            // loader配置
+            var publics = <?php echo json_encode(Lxh\Assets::publics())?>;
 
         // 需要载入的css
         data.publicCss = publics['public-js'];
         // 需要载入的js
         data.publicJs = publics['public-css'];
 
-        <?php if ($langs = \Lxh\Admin\Admin::getLangs()) {?>
+        <?php if ($langs = Lxh\Admin\Admin::getLangs()) {?>
         // 需要载入的语言包模块
         data.langScopes = <?php echo json_encode($langs);?>;
         <?php };?>

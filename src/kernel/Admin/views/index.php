@@ -69,8 +69,7 @@ echo admin_js('js/bootstrap.min');
 
     // 全局变量容器，所有全局变量都应该放置到此容器，便于管理
     var LXHSTORE = {};
-    LXHSTORE.saveScript = '<?php echo config('client.save-script')?>';
-    LXHSTORE.seaConfig = <?php echo json_encode(Lxh\Assets::seaConfig())?>;
+    LXHSTORE.loaderConfig = <?php echo json_encode(Lxh\Assets::loaderConfig())?>;
     LXHSTORE.cache = new Cache();
     LXHSTORE.cache.setToken('<?php
         // 设置缓存token，token刷新则会刷新所有缓存

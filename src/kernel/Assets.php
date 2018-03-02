@@ -11,14 +11,14 @@ class Assets
     /**
      * @return array
      */
-    public static function seaConfig()
+    public static function loaderConfig()
     {
         if (static::$configs) {
             return static::$configs;
         }
 
         $syst = self::config();
-        $conf = config('client.sea-config');
+        $conf = config('client.loader');
 
         return static::$configs = Util::merge($syst, $conf, true);
     }

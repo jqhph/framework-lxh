@@ -15,9 +15,6 @@ $config = [];
 // 语言包缓存时间，单位毫秒 ===> 已移植可写配置文件
 //$config['lang-package-expire'] = 259200 * 1000; // 缓存时间，3天
 
-//
-$config['save-script'] = false;
-
 // 配置资源服务器
 $config['resource-server'] = '';
 
@@ -25,7 +22,12 @@ $config['resource-server'] = '';
 $config['resource-version'] = 'primary';
 
 // seajs配置
-$config['sea-config'] = [
+$config['loader'] = [
+    // 是否启用缓存
+    'save' => false,
+    // 缓存时间
+    'lifetime' => 8640000,
+
     // 设置路径，方便跨目录调用
     'paths' => [
 

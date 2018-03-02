@@ -1,4 +1,4 @@
-new LxhLoad(['@lxh/js/validate.min'], function () {
+new LxhLoader(['@lxh/js/validate.min'], function () {
     // 所有js加载完毕时间
     $(document).on('app.completed', detail);
 
