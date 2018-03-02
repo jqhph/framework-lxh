@@ -155,8 +155,9 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
      *
      * @constructor
      */
-    function Cache() {
+    function Cache(prefix) {
         this.storage = window.localStorage || {};
+        prefix = prefix || '';
 
         /**
          * token值，用于跟服务器的token进行对比，如两值不同则刷新缓存
@@ -171,8 +172,8 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
          * @type {{general: string, timeout: string}}
          */
         this.prefix = {
-            general: "$lxh_",
-            timeout: "@lxh_"
+            general: "$_" + prefix + '_',
+            timeout: "@_" + prefix + '_'
         };
 
         /**
@@ -203,11 +204,12 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
          * @param key
          * @param val
          */
-        this.set = function (key, val) {
+        this.set = function (key, val, timeout) {
             if (val instanceof Object) {
                 val = JSON.stringify(val);
             }
             this.storage.setItem(this.prefix.general + key, val);
+            if (timeout = parseInt(timeout)) this.expire(key, timeout);
         };
 
         /**
