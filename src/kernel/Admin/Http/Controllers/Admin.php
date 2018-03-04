@@ -140,7 +140,7 @@ class Admin extends Controller
         $form->switch('status')->checked();
 
         if (auth()->isAdministrator()) {
-            $form->select('is_admin')->options([0, 1]);
+            $form->switch('is_admin');
         }
         $form->select('sex')->options([0, 1, 2]);
 

@@ -9,6 +9,7 @@ namespace Lxh\Admin\Controllers;
 
 use Lxh\Admin\Admin;
 use Lxh\Admin\Data\Items;
+use Lxh\Admin\Fields\Button;
 use Lxh\Admin\Fields\Editable;
 use Lxh\Admin\Fields\Expand;
 use Lxh\Admin\Fields\Popover;
@@ -52,7 +53,106 @@ class Product extends Controller
 
     public function initialize()
     {
-//        sleep(3);
+    }
+
+    protected function form(Form $form)
+    {
+        $form->slider('slider');
+
+        $form->divide();
+
+        $form->radio('radio')->options(['value1', 'value2', 'value3'])->default('value2');
+        $form->checkbox('checkbox')->options(['value1', 'value2', 'value3']);
+
+        $form->textarea('textarea');
+
+        $form->select('select')->options([1, 2, 3])->default(3);
+        $form->multipleSelect('multiple-select')->options([1, 2, 3]);
+
+        $form->color('color');
+        $form->ip('ip');
+        $form->mobile('mobile');
+        $form->switch('swich');
+        $form->icon('icon');
+        // 自定义内容
+        $form->html('html')->content('HELLO WORLD!')->help('自定义内容');
+
+        $form->divide();
+
+        $form->editor('editor');
+    }
+
+    protected function afterFormColumnResolved(Row $row)
+    {
+        $column = $row->column(4);
+
+        // 创建子表单
+        // 把表单拆分成多块布局
+        $form = $this->form->create();
+
+        $form->date('date');
+        $form->datetime('datetime');
+        $form->month('month');
+        $form->time('time');
+        $form->year('year');
+
+        $form->dateRange('date-range', 2018, 2019);
+        $form->dateTimeRange('datetime-range');
+        $form->timeRange('time-range');
+
+        $column->row(new Card('时间日期', $form));
+
+        // 再创建一个子表单
+        $form = $this->form->create();
+
+        $form->decimal('decimal');
+        $form->url('url');
+        $form->currency('currency');
+
+        $form->map('map', 39.916527, 116.397128);
+
+        $column->row(new Card('地图', $form));
+    }
+
+    protected function afterFormRowResolved(Content $content, Card $card)
+    {
+        $preview = new Button('代码预览');
+
+        $preview->on('click', '
+            layer.open({
+              type: 2,
+              title: \'代码预览\',
+              shadeClose: true,
+              shade: false,
+              area: [\'70%\', \'700px\'],
+              content: \'/admin/product/action/form-code-preview\'
+            }); 
+            return false;
+        ');
+
+        $card->rightTools()->prepend($preview);
+    }
+
+    public function actionFormCodePreview()
+    {
+        $content = $this->content();
+
+        $content->row(new Code(__FILE__, 52, 144));
+
+        return $content->render();
+    }
+
+    public function actionTest()
+    {
+        $table = new \Lxh\Admin\Widgets\Table([], [
+            ['name' => 'PHP version',       'value' => 'PHP/'.PHP_VERSION],
+            ['name' => 'Lxh-framework version',   'value' => 'dev'],
+            ['name' => 'CGI',               'value' => php_sapi_name()],
+            ['name' => 'Uname',             'value' => php_uname()],
+            ['name' => 'Server',            'value' => get_value($_SERVER, 'SERVER_SOFTWARE')],
+        ]);
+
+        return $table->render();
     }
 
     /**
@@ -80,78 +180,6 @@ class Product extends Controller
         $grid->allowBatchDelete();
     }
 
-    protected function afterFormColumnResolved(Row $row)
-    {
-        $column = $row->column(4);
-
-        // 创建子表单
-        // 把表单拆分成多块布局
-        $form = $this->form->create();
-
-        $form->date('date');
-        $form->datetime('datetime');
-        $form->month('month');
-        $form->time('time');
-        $form->year('year');
-
-        $form->dateRange('date-range', 2018, 2019);
-        $form->dateTimeRange('datetime-range');
-        $form->timeRange('time-range');
-
-        $column->row(new Card('时间日期', $form));
-
-        // 代码预览
-        $column->row(new Code(__FILE__, 82, 134));
-    }
-
-    protected function form(Form $form)
-    {
-        $form->slider('slider');
-
-        $form->divide();
-
-        $form->radio('radio')->options(['value1', 'value2', 'value3'])->default('value2');
-        $form->checkbox('checkbox')->options(['value1', 'value2', 'value3']);
-
-        $form->textarea('textarea');
-
-        $form->color('color');
-        $form->ip('ip');
-        $form->mobile('mobile');
-        $form->switch('swich');
-        $form->icon('icon');
-        // 自定义内容
-        $form->html('html')->content('HELLO WORLD!')->help('自定义内容');
-
-        $form->editor('editor');
-
-        $form->map('map', 39.916527, 116.397128);
-
-        $form->divide();
-
-        $form->decimal('decimal');
-        $form->url('url');
-        $form->currency('currency');
-    }
-
-    public function actionTest()
-    {
-//        sleep(1);
-        $table = new \Lxh\Admin\Widgets\Table([], [
-            ['name' => 'PHP version',       'value' => 'PHP/'.PHP_VERSION],
-            ['name' => 'Lxh-framework version',   'value' => 'dev'],
-            ['name' => 'CGI',               'value' => php_sapi_name()],
-            ['name' => 'Uname',             'value' => php_uname()],
-            ['name' => 'Server',            'value' => get_value($_SERVER, 'SERVER_SOFTWARE')],
-        ]);
-
-        return $table->render();
-
-//        $card = new Card();
-//
-//        return $card->render();
-    }
-
     /**
      * 自定义table
      *
@@ -160,10 +188,6 @@ class Product extends Controller
      */
     protected function table(Table $table)
     {
-//        $table->image('img', function (Image $image) {
-//            $image->value('https://img3.doubanio.com/view/photo/s_ratio_poster/public/p2511434383.jpg');
-//        });
-
         $table->code('id')->hide()->sortable();
 
         $table->editable('name', function (Editable $editable) {
@@ -193,10 +217,6 @@ class Product extends Controller
             // 设置标题显示内容
             $th->value('<span>NAME</span>');
         });
-
-//        $table->popover('name', function (Popover $popover) {
-//            $popover->content('<div>test</div>')->right()->html(); //
-//        });
 
         /**
          * 使用field方法添加字段
@@ -241,18 +261,13 @@ class Product extends Controller
         /**
          * 追加额外的列到最前面
          *
-         * @param array $row 当前行数据
+         * @param Items $items 当前行数据
          * @param Td $td 追加的列Td对象
          * @param Th $th 追加的列Th对象
          * @paran Tr $tr 追加的列Tr对象
          */
-        $table->prepend('序号', function (Items $items, Td $td, Th $th, Tr $tr) {
-            if (($line = $tr->line()) == 3) {
-                // 给第三行添加active样式
-//                $tr->class('active');
-            }
-
-            return $line;
+        $table->prepend('序号', function (Items $items) {
+            return $items->offset() + 1;
         });
 
         // 增加额外的行
@@ -267,20 +282,6 @@ class Product extends Controller
 
             return '#' . $tr->line();
         });
-
-        $table->append(function (Items $items, Td $td, Th $th) {
-            $th->value('叫什么好呢？');
-            return '演示一下而已~';
-        });
-
-        // 添加列到指定位置
-        // [column]方法添加的列一定在[prepend]和[append]方法中间
-        $table->column(1, '元旦', '放假1天');
-        $table->column(5, '王者荣耀', function (Items $items, Td $td, Th $th, Tr $tr) {
-            return '<b style="">李白</b> ';
-        });
-        $table->column(6, '王者荣耀', '韩信');
-        $table->column(100, '王者荣耀', '大乔');
 
         // 定义行内容
         $table->tr(function (Tr $tr) {
