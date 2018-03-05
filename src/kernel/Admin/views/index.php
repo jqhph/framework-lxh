@@ -10,12 +10,8 @@
     <title><?php echo config('admin.title'); ?></title>
 
     <?php
-    // App css
     echo admin_css('css/bootstrap.min');
     echo admin_css('css/menu-light.min');
-
-    //    echo admin_css('components');
-    echo admin_css('css/icon.min');
     echo admin_css('css/core.min');
     echo admin_css('css/components.min');
 
@@ -55,15 +51,6 @@
     echo $content;
 ?></section>
 
-<?php
-// <!--    <iframe src="{$url}" scrolling="no"></iframe>-->
-//echo admin_js('fastclick');
-//echo admin_js('waves.min');
-echo admin_js('js/jquery.slimscroll.min');
-echo admin_css('plugins/toastr/toastr.min');
-echo admin_js('plugins/toastr/toastr.min');
-echo admin_js('js/bootstrap.min');
-?>
 <script>
     var resizefunc = [];
 
@@ -96,16 +83,23 @@ echo admin_js('js/bootstrap.min');
     close_tab = function (id) {LXHSTORE.TAB.close(id)},
     reload_tab = function (id, url, label) {LXHSTORE.TAB.reload(id, url, label)},
     back_tab = function (step) {LXHSTORE.TAB.back(step)};
+
+    require_css([
+        '@lxh/css/icon.min',
+        '@lxh/plugins/toastr/toastr.min'
+    ]);
+    require_js([
+        '@lxh/js/jquery.app.min',
+        '@lxh/plugins/toastr/toastr.min',
+        '@lxh/js/bootstrap.min',
+        '@lxh/js/jquery.slimscroll.min'
+    ]);
 </script>
 
-<!-- KNOB JS -->
-<!--[if IE]>
-<?php //echo admin_js('plugins/jquery-knob/excanvas');?>
-<![endif]-->
-
 <?php
-// <div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style="display: block;"><div class="toast-progress" style="width: 96.4454%;"></div><button type="button" class="toast-close-button" role="button">×</button><div class="toast-message">Login successful</div></div></div>
-echo admin_js('js/jquery.app.min');
+echo view('admin::index.app-js', ['useDefaultAssets' => false])->render();
+
+echo admin_js('js/app.min');
 echo admin_js('packages/layer/layer');
 ?>
 </body>

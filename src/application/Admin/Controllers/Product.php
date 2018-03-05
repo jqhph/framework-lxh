@@ -156,7 +156,7 @@ class Product extends Controller
     }
 
     /**
-     * 自定义过滤器
+     * 定义过滤器字段
      *
      * @param Filter $filter
      */
@@ -171,17 +171,42 @@ class Product extends Controller
     }
 
     /**
-     * 自定义网格配置
+     * 定义网格配置
      *
      * @param Grid $grid
      */
     protected function grid(Grid $grid)
     {
         $grid->allowBatchDelete();
+
+        $preview = new Button('代码预览');
+
+        $preview->on('click', '
+            layer.open({
+              type: 2,
+              title: \'代码预览\',
+              shadeClose: true,
+              shade: false,
+              area: [\'70%\', \'700px\'],
+              content: \'/admin/product/action/grid-code-preview\'
+            }); 
+            return false;
+        ');
+
+        $grid->tools()->prepend($preview);
+    }
+
+    public function actionGridCodePreview()
+    {
+        $content = $this->content();
+
+        $content->row(new Code(__FILE__, 157, 400));
+
+        return $content->render();
     }
 
     /**
-     * 自定义table
+     * 定义table字段
      *
      * @param Table $table
      * @throws \Lxh\Exceptions\InvalidArgumentException
@@ -218,16 +243,12 @@ class Product extends Controller
             $th->value('<span>NAME</span>');
         });
 
-        /**
-         * 使用field方法添加字段
-         */
         $table->expand('price', function (Expand $expand) {
             $expand->ajax('/admin/product/action/test');
         })
             ->sortable();
 
         $table->switch('is_hot');
-
         $table->checked('is_new');
 
         // 字段显示内容自定义：直接设置内容

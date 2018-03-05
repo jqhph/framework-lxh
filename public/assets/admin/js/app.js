@@ -179,6 +179,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
      * 初始化
      */
     function init() {
+        if (typeof Lxh == 'undefined') return;
         window.$lxh = new Lxh(config.options);
 
         var lang = $lxh.config().get('language');
@@ -250,6 +251,9 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         }
 
         for (i in publicCss) {
+            if (publicCss[i].indexOf('.css') == -1) {
+                publicCss[i] += '.css'
+            }
             publicCss[i] = publicCss[i] + '?v=' + v;
         }
 
