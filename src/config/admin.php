@@ -38,8 +38,8 @@ return [
         'disk' => 'admin',
 
         'directory' => [
-            'image' => 'upload/image',
-            'file'  => 'upload/file',
+            'image' => __ROOT__.'resource/uploads/images',
+            'file'  => __ROOT__.'resource/uploads/files',
         ],
 
         'host' => '',

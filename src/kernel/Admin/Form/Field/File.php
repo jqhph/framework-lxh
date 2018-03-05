@@ -2,8 +2,8 @@
 
 namespace Lxh\Admin\Form\Field;
 
+use Lxh\Admin\Admin;
 use Lxh\Admin\Form\Field;
-use Lxh\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class File extends Field
@@ -29,27 +29,11 @@ class File extends Field
         '@lxh/packages/bootstrap-fileinput/js/fileinput.min',
     ];
 
-    /**
-     * Create a new File instance.
-     *
-     * @param string $column
-     * @param mixed  $label
-     */
-    public function __construct($column, $label = '')
-    {
-        $this->initStorage();
+    protected $view = 'admin::form.file';
 
-        parent::__construct($column, $label);
-    }
-
-    /**
-     * Default directory for file to upload.
-     *
-     * @return mixed
-     */
-    public function defaultDirectory()
+    protected function setup()
     {
-        return config('admin.upload.directory.file');
+        $this->setupDefaultOptions();
     }
 
     /**
@@ -74,14 +58,26 @@ class File extends Field
     }
 
     /**
+     * 允许上传的后缀
+     *
+     * @param array $types
+     * @return $this
+     */
+    public function allowFileExtensions(array $exts)
+    {
+        $this->options['allowedFileExtensions'] = &$exts;
+        return $this;
+    }
+
+    /**
      * 允许上传的类型
      *
      * @param array $types
      * @return $this
      */
-    public function allowFileExtensions(array $types)
+    public function allowedFileTypes(array $types)
     {
-        $this->options['allowedFileExtensions'] = &$types;
+        $this->options['allowedFileTypes'] = &$types;
         return $this;
     }
 
@@ -148,19 +144,31 @@ class File extends Field
      */
     public function render()
     {
-        $this->setupDefaultOptions();
+        if (!isset($this->options['initialCaption'])) {
+            $this->options['initialCaption'] = $this->initialCaption($this->value);
+        }
 
         if (!empty($this->value)) {
-            $this->attribute('data-initial-preview', $this->preview());
-
             $this->setupPreviewOptions();
         }
 
         $options = json_encode($this->options);
 
-        $this->script = <<<EOT
-$("{$this->getElementClassSelector()}").fileinput({$options});
-EOT;
+        $this->class('fileinput');
+
+        $this->script = "$(\"{$this->getElementClassSelector()}\").fileinput({$options}).on(\"fileuploaded\", function(event, data) {
+        console.log(123123,data);
+    });";
+
+        $this->script('file', <<<EOF
+(function () {
+    var c = LXHSTORE.IFRAME.current();
+    function rec() { setTimeout(function(){LXHSTORE.IFRAME.height(c)},50) }
+    rec();
+    $('input[type="file"]').on('change', rec)
+})();
+EOF
+        );
 
         return parent::render();
     }

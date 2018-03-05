@@ -31,9 +31,11 @@ use Lxh\Admin\Widgets\Form;
 use Lxh\Admin\Widgets\Markdown;
 use Lxh\Admin\Widgets\Tab;
 use Lxh\Exceptions\InvalidArgumentException;
+use Lxh\Helper\Util;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Lxh\Admin\Layout;
 
 class Product extends Controller
 {
@@ -59,10 +61,10 @@ class Product extends Controller
     {
         $form->slider('slider');
 
-        $form->divide();
-
         $form->radio('radio')->options(['value1', 'value2', 'value3'])->default('value2');
         $form->checkbox('checkbox')->options(['value1', 'value2', 'value3']);
+
+        $form->divide();
 
         $form->textarea('textarea');
 
@@ -86,21 +88,33 @@ class Product extends Controller
     {
         $column = $row->column(4);
 
-        // 创建子表单
-        // 把表单拆分成多块布局
-        $form = $this->form->create();
+        $column->row(function (Row $row) {
+            // 再创建一个子表单
+            $form = $this->form->create();
 
-        $form->date('date');
-        $form->datetime('datetime');
-        $form->month('month');
-        $form->time('time');
-        $form->year('year');
+            $form->file('files')->allowFileExtensions(['png', 'jpeg']);
+            $form->image('image');
 
-        $form->dateRange('date-range', 2018, 2019);
-        $form->dateTimeRange('datetime-range');
-        $form->timeRange('time-range');
+            $row->column(12, new Card('文件上传', $form));
+        });
 
-        $column->row(new Card('时间日期', $form));
+        $column->row(function (Row $row) {
+            // 创建子表单
+            // 把表单拆分成多块布局
+            $form = $this->form->create();
+
+            $form->date('date');
+            $form->datetime('datetime');
+            $form->month('month');
+            $form->time('time');
+            $form->year('year');
+
+            $form->dateRange('date-range', 2018, 2019);
+            $form->dateTimeRange('datetime-range');
+            $form->timeRange('time-range');
+
+            $row->column(12, new Card('时间日期', $form));
+        });
 
         // 再创建一个子表单
         $form = $this->form->create();
@@ -112,6 +126,88 @@ class Product extends Controller
         $form->map('map', 39.916527, 116.397128);
 
         $column->row(new Card('地图', $form));
+    }
+
+    public function actionUploadImage(array $params)
+    {
+        // 上传路径
+        $directory = $this->getImageUploadDirectory();
+
+        $allowFileExtensions = [];
+
+        return $this->upload($directory, $allowFileExtensions);
+    }
+
+    protected function upload($directory, array $allowFileExtensions = [])
+    {
+        $uploadFiles = [];
+
+        $errors = [];
+        $files = [];
+
+        foreach ($_FILES as $k => &$file) {
+            $files[] = $k;
+
+            $uploadFiles[] = $uploadFile = new UploadedFile(
+                $file['tmp_name'], $file['name'], $file['type'], $file['size'], $file['error']
+            );
+
+            $ext = $uploadFile->guessClientExtension();
+
+            if ($allowFileExtensions && !in_array($ext, $allowFileExtensions)) {
+                $errors[] = sprintf(
+                    trans('Invalid extension for file "%s". Only "%s" files are supported.', 'tip'),
+                    $file['name'],
+                    implode(', ', $allowFileExtensions)
+                );
+
+                continue;
+            }
+
+            try {
+                $targets[$k] = $uploadFile->move(
+                    $directory,
+                    $this->generateUniqueFileName($uploadFile, $ext)
+                );
+            } catch (\Exception $e) {
+                $errors[] = $e->getMessage();
+            }
+
+        }
+
+        return ['error' => implode('<br>', $errors), 'filenames' => &$files];
+    }
+
+    /**
+     * Default directory for file to upload.
+     *
+     * @return mixed
+     */
+    public function getImageUploadDirectory()
+    {
+        return config('admin.upload.directory.image', __ROOT__ . 'uploads/images') . '/' . __CONTROLLER__;
+    }
+
+    /**
+     * Default directory for file to upload.
+     *
+     * @return mixed
+     */
+    public function getFileUploadDirectory()
+    {
+        return config('admin.upload.directory.file', __ROOT__ . 'uploads/files') . '/' . __CONTROLLER__;
+    }
+
+    /**
+     * Generate a unique name for uploaded file.
+     *
+     * @param UploadedFile $file
+     *
+     * @return string
+     */
+    protected function generateUniqueFileName(UploadedFile $file, $ext = null)
+    {
+        return md5(uniqid()).'.'.($ext ?: $file->guessExtension());
     }
 
     protected function afterFormRowResolved(Content $content, Card $card)

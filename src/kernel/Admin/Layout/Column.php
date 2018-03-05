@@ -56,7 +56,15 @@ class Column
      */
     public function row($content = '')
     {
-        return $this->contents[] = new Row($content);
+        if (is_callable($content)) {
+            $row = new Row();
+            call_user_func($content, $row);
+        } else {
+            $row = new Row($content);
+        }
+
+
+        return $this->contents[] = $row;
     }
 
     /**

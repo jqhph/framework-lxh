@@ -45,12 +45,10 @@ use Lxh\Support\Arr;
  * @method Field\Year           year($name, $label = '')
  * @method Field\Number         number($name, $label = '')
  * @method Field\Currency       currency($name, $label = '')
- * @method Field\Display        display($name, $label = '')
  * @method Field\Rate           rate($name, $label = '')
  * @method Field\Divide         divide()
  * @method Field\Decimal        decimal($column, $label = '')
  * @method Field\Html           html($column = '', $label = '')
- * @method Field\Tags           tags($column, $label = '')
  * @method Field\Icon           icon($column, $label = '')
  * @method Field\TableCheckbox  tableCheckbox($column, $label = '')
  */

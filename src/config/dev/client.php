@@ -24,7 +24,7 @@ $config['resource-version'] = 'primary';
 // seajs配置
 $config['loader'] = [
     // 是否启用缓存
-    'save' => true,
+    'save' => false,
     // 缓存时间
     'lifetime' => 8640000,
 

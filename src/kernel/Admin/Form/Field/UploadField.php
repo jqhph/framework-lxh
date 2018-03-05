@@ -46,15 +46,6 @@ trait UploadField
     protected $removable = false;
 
     /**
-     * Initialize the storage instance.
-     *
-     * @return void.
-     */
-    protected function initStorage()
-    {
-    }
-
-    /**
      * Set default options form image field.
      *
      * @return void
@@ -64,19 +55,21 @@ trait UploadField
         $url = Admin::url();
 
         $defaultOptions = [
-            'uploadAsync'          => false,
-            'overwriteInitial'     => false,
+            'uploadAsync'          => true,
+            'overwriteInitial'     => true,
             'initialPreviewAsData' => true,
             'browseLabel'          => trans('Browse'),
             'showRemove'           => false,
             'showUpload'           => true,
-            'initialCaption'       => $this->initialCaption($this->value),
+            'dropZoneEnabled'      => false,
             'deleteExtraData'      => [
                 '_token'           => '',
-                '_method'          => 'PUT',
+                'id'               => '',
             ],
             'uploadUrl'            => $url->upload(),
             'deleteUrl'            => $url->deleteFile(),
+            'autoReplace'          => true,
+            'maxFileCount'         => 1,
         ];
         
         $this->options($defaultOptions);
@@ -120,7 +113,7 @@ trait UploadField
         }
 
         $this->options([
-            //'initialPreview'        => $this->preview(),
+            'initialPreview'        => $this->preview(),
             'initialPreviewConfig' => $this->initialPreviewConfig(),
         ]);
     }
@@ -165,18 +158,6 @@ trait UploadField
         }
 
         return rtrim(config('admin.upload.host'), '/').'/'.trim($path, '/');
-    }
-
-    /**
-     * Generate a unique name for uploaded file.
-     *
-     * @param UploadedFile $file
-     *
-     * @return string
-     */
-    protected function generateUniqueName(UploadedFile $file)
-    {
-        return md5(uniqid()).'.'.$file->guessExtension();
     }
 
     /**
