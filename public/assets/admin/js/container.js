@@ -1098,9 +1098,20 @@ window.Lxh = function (options) {
             data = store.call.start(store.api, store.method, data) || data;
 
 console.log('request data', data);
-            if (store.method.toLocaleUpperCase() == 'PUT') {
-                data = JSON.stringify(data);
+            // if (store.method.toLocaleUpperCase() == 'PUT') {
+            //     data = JSON.stringify(data);
+            // }
+            var form = new FormData($(get_form_selector())[0]);
+            for (var i in data) {
+                form.set(i, data[i]);
             }
+            $('input[type="file"]').each(function (k, v) {
+                var t = $(this);
+                console.log('files ' + t.attr('name'), t[0].files);
+                $(t[0].files).each(function (k) {
+                    form.set(t.attr('name'), t[0].files[k]);
+                })
+            });
 
             $.ajax({
                 url: store.api,
@@ -1108,7 +1119,9 @@ console.log('request data', data);
                 type: store.method,
                 cache: true,
                 async: true,
-                data: data,
+                data: form,
+                processData: false,
+                contentType: false,
                 timeout: store.timeout,
                 dataType: 'JSON',
                 success: function(data) {

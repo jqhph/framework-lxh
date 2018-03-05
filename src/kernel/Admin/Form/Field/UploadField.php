@@ -55,19 +55,19 @@ trait UploadField
         $url = Admin::url();
 
         $defaultOptions = [
-            'uploadAsync'          => true,
+            'uploadAsync'          => false,
             'overwriteInitial'     => true,
             'initialPreviewAsData' => true,
             'browseLabel'          => trans('Browse'),
-            'showRemove'           => false,
-            'showUpload'           => true,
+//            'showRemove'           => false,
+            'showUpload'           => false,
             'dropZoneEnabled'      => false,
             'deleteExtraData'      => [
                 '_token'           => '',
                 'id'               => '',
             ],
-            'uploadUrl'            => $url->upload(),
-            'deleteUrl'            => $url->deleteFile(),
+//            'uploadUrl'            => $url->upload(),
+//            'deleteUrl'            => $url->deleteFile(),
             'autoReplace'          => true,
             'maxFileCount'         => 1,
         ];
