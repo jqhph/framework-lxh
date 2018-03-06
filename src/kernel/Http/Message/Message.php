@@ -69,9 +69,6 @@ class Message implements MessageInterface
      */
     public function withProtocolVersion($version)
     {
-        // TODO: Implement withProtocolVersion() method.
-        $this->backupsOriginServer();
-
         $this->protocolVersion = $version;
         return $this;
     }
@@ -189,9 +186,6 @@ class Message implements MessageInterface
      */
     public function withHeader($name, $value)
     {
-        // TODO: Implement withHeader() method.
-        $this->backupsOriginServer();
-
         $name = strtoupper($name);
 
         $this->headers[$name] = (array) $value;
@@ -214,9 +208,6 @@ class Message implements MessageInterface
      */
     public function withAddedHeader($name, $value)
     {
-        // TODO: Implement withAddedHeader() method.
-        $this->backupsOriginServer();
-
         $name = strtoupper($name);
 
         if (isset($this->headers[$name])) {
@@ -240,9 +231,6 @@ class Message implements MessageInterface
      */
     public function withoutHeader($name)
     {
-        // TODO: Implement withoutHeader() method.
-        $this->backupsOriginServer();
-
         $name = strtoupper($name);
 
         unset($this->headers[$name]);

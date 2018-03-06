@@ -30,6 +30,8 @@ class Admin extends Controller
      */
     protected $filter = true;
 
+    protected $uploads = ['avatar' => 'image', ];
+
     protected function initialize()
     {
         AdminCreator::model(AdminModel::class);
@@ -112,11 +114,6 @@ class Admin extends Controller
             ->formatField(false); // 使用自定义字段名称查询
     }
 
-    public function actionTest()
-    {
-        dd($_FILES);
-    }
-
     protected function form(Form $form)
     {
         $form->text('username')->rules('required|length_between[4-15]');
@@ -132,11 +129,7 @@ class Admin extends Controller
         $form->text('email')->rules('valid_email');
         $form->text('mobile');
 
-        $form->image('avatar')
-            ->overwriteInitial()
-            ->showRemove()
-            ->prepend('<i class="fa fa-image"></i>');
-
+        $form->image('avatar');
         $form->switch('status')->checked();
 
         if (auth()->isAdministrator()) {

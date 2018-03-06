@@ -56,7 +56,6 @@ echo view('admin::index.app-js')->render();
     <?php
         echo $js;
         echo $css;
-        echo $asyncJs;
         ?>;
     require_js('@lxh/plugins/toastr/toastr.min');
     require_css('@lxh/plugins/toastr/toastr.min');

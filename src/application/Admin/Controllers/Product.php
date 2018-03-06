@@ -129,88 +129,6 @@ class Product extends Controller
         $column->row(new Card('地图', $form));
     }
 
-    public function actionUploadImage(array $params)
-    {
-        // 上传路径
-        $directory = $this->getImageUploadDirectory();
-
-        $allowFileExtensions = [];
-
-        return $this->upload($directory, $allowFileExtensions);
-    }
-
-    protected function upload($directory, array $allowFileExtensions = [])
-    {
-        $uploadFiles = [];
-
-        $errors = [];
-        $files = [];
-
-        foreach ($_FILES as $k => &$file) {
-            $files[] = $k;
-
-            $uploadFiles[] = $uploadFile = new UploadedFile(
-                $file['tmp_name'], $file['name'], $file['type'], $file['size'], $file['error']
-            );
-
-            $ext = $uploadFile->guessClientExtension();
-
-            if ($allowFileExtensions && !in_array($ext, $allowFileExtensions)) {
-                $errors[] = sprintf(
-                    trans('Invalid extension for file "%s". Only "%s" files are supported.', 'tip'),
-                    $file['name'],
-                    implode(', ', $allowFileExtensions)
-                );
-
-                continue;
-            }
-
-            try {
-                $targets[$k] = $uploadFile->move(
-                    $directory,
-                    $this->generateUniqueFileName($uploadFile, $ext)
-                );
-            } catch (\Exception $e) {
-                $errors[] = $e->getMessage();
-            }
-
-        }
-
-        return ['error' => implode('<br>', $errors), 'filenames' => &$files];
-    }
-
-    /**
-     * Default directory for file to upload.
-     *
-     * @return mixed
-     */
-    public function getImageUploadDirectory()
-    {
-        return config('admin.upload.directory.image', __ROOT__ . 'uploads/images') . '/' . __CONTROLLER__;
-    }
-
-    /**
-     * Default directory for file to upload.
-     *
-     * @return mixed
-     */
-    public function getFileUploadDirectory()
-    {
-        return config('admin.upload.directory.file', __ROOT__ . 'uploads/files') . '/' . __CONTROLLER__;
-    }
-
-    /**
-     * Generate a unique name for uploaded file.
-     *
-     * @param UploadedFile $file
-     *
-     * @return string
-     */
-    protected function generateUniqueFileName(UploadedFile $file, $ext = null)
-    {
-        return md5(uniqid()).'.'.($ext ?: $file->guessExtension());
-    }
-
     protected function afterFormRowResolved(Content $content, Card $card)
     {
         $preview = new Button('代码预览');
@@ -234,7 +152,7 @@ class Product extends Controller
     {
         $content = $this->content();
 
-        $content->row(new Code(__FILE__, 52, 144));
+        $content->row(new Code(__FILE__, 52, 158));
 
         return $content->render();
     }
@@ -297,7 +215,7 @@ class Product extends Controller
     {
         $content = $this->content();
 
-        $content->row(new Code(__FILE__, 157, 400));
+        $content->row(new Code(__FILE__, 158, 400));
 
         return $content->render();
     }

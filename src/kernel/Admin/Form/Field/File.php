@@ -37,13 +37,25 @@ class File extends Field
     }
 
     /**
+     * Set preview options form image field.
+     *
+     * @return void
+     */
+    protected function setupPreviewOptions()
+    {
+        $this->options([
+            'initialPreview'        => $this->preview(),
+            'initialPreviewConfig' => $this->initialPreviewConfig(),
+        ]);
+    }
+
+    /**
      * Preview html for file-upload plugin.
      *
      * @return string
      */
     protected function preview()
     {
-        return $this->objectUrl($this->value);
     }
 
     /**
@@ -156,9 +168,9 @@ class File extends Field
 
         $this->class('fileinput');
 
-        $this->script = "$(\"{$this->getElementClassSelector()}\").fileinput({$options}).on(\"fileuploaded\", function(event, data) {
-        console.log(123123,data);
-    });";
+        $this->script = "$(\"{$this->getElementClassSelector()}\").fileinput({$options}).on('filecleared', function (e) {
+            $(this).data('value', '');
+        });";
 
         $this->script('file', <<<EOF
 (function () {

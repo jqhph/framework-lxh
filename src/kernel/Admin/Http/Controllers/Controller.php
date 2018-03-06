@@ -15,8 +15,10 @@ use Lxh\Admin\Table\Table;
 use Lxh\Exceptions\Forbidden;
 use Lxh\Helper\Util;
 use Lxh\Helper\Valitron\Validator;
+use Lxh\Http\Files\Image;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
+use Lxh\Http\Uploads\Upload;
 use Lxh\MVC\Controller as Base;
 use Lxh\Status;
 
@@ -70,6 +72,13 @@ class Controller extends Base
      * @var bool|string
      */
     protected $filter = false;
+
+    /**
+     * 文件上传字段
+     *
+     * @var array
+     */
+    protected $uploads = [];
 
     /**
      * 列表界面
@@ -134,9 +143,6 @@ class Controller extends Base
         // 网格
         $content->row(function (Row $row) use ($content, $grid) {
             $this->beforeGridColumnResolved($row);
-
-            // 添加网格配置
-//            $grid->headers($this->grid);
 
             // 添加列
             $column = $row->column($this->gridWidth, $grid);
@@ -537,6 +543,10 @@ class Controller extends Base
         }
         $input = $_POST;
 
+        if ($this->uploads) {
+            $this->upload($input);
+        }
+
         $this->inputFilter($input);
 
         if ($rules = $this->rules()) {
@@ -598,10 +608,14 @@ class Controller extends Base
         $this->id = $params['id'];
 
         // 获取表单数据
-        $input = json_decode(file_get_contents('php://input'), true);
+        $input = &$_POST;
 
         if (! $input || !is_array($input)) {
             return $this->error();
+        }
+
+        if ($this->uploads) {
+            $this->upload($input);
         }
 
         // 过滤用户输入数据
@@ -634,10 +648,53 @@ class Controller extends Base
     }
 
     /**
+     * 文件上传
+     *
+     * @param array $input
+     */
+    protected function upload(array &$input)
+    {
+        foreach ($this->uploads as $column => $type) {
+            $directory = '';
+            switch ($type) {
+                case 'image':
+                    $directory = $this->getImageUploadDirectory();
+                    break;
+                case 'file':
+                    $directory = $this->getFileUploadDirectory();
+                    break;
+            }
+
+            $file = $this->request->getUploadedFile($column);
+
+            // 删除原文件
+            $originColumn = $input[$column.'-origin'];
+            $origin = $directory . '/' . $originColumn;
+
+            if ($file) {
+                $upload = new Upload($file, $directory);
+
+                if ($upload->handle()) {
+                    $input[$column] = $upload->getFormatTarget();
+
+                    if ($originColumn && is_readable($origin)) {
+                        unlink($origin);
+                    }
+                }
+            } else {
+                if ($originColumn && is_readable($origin)) {
+                    unlink($origin);
+                }
+            }
+            unset($input[$column.'-origin']);
+        }
+    }
+
+    /**
      * @param $id
      * @param array $data
      */
-    protected function updateFilter($id, array &$data)
+    protected function updateFilter($id, array &$input)
     {
     }
 
@@ -660,6 +717,26 @@ class Controller extends Base
         }
 
         return $this->model()->batchDelete($ids) ? $this->success() : $this->failed();
+    }
+
+    /**
+     * Default directory for file to upload.
+     *
+     * @return mixed
+     */
+    public function getImageUploadDirectory()
+    {
+        return config('admin.upload.directory.image', __ROOT__ . 'resource/uploads/images');
+    }
+
+    /**
+     * Default directory for file to upload.
+     *
+     * @return mixed
+     */
+    public function getFileUploadDirectory()
+    {
+        return config('admin.upload.directory.file', __ROOT__ . 'resource/uploads/files');
     }
 
 }

@@ -9,9 +9,21 @@ class Image extends File
 {
     public function render()
     {
+        $this->prepend('<i class="fa fa-image"></i>');
+
         $this->options['allowedFileTypes'] = ['image'];
 
         return parent::render();
+    }
+
+    /**
+     * Preview html for file-upload plugin.
+     *
+     * @return string
+     */
+    protected function preview()
+    {
+        return $this->objectUrl(Admin::url()->image($this->value));
     }
 
 }

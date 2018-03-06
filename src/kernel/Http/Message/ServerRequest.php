@@ -6,6 +6,7 @@ use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ServerRequest extends Request implements ServerRequestInterface
 {
@@ -92,7 +93,7 @@ class ServerRequest extends Request implements ServerRequestInterface
     }
 
     /**
-     * @return UploadedFileInterface
+     * @return UploadedFile
      */
     public function getUploadedFile($name)
     {

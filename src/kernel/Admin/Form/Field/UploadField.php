@@ -52,8 +52,6 @@ trait UploadField
      */
     protected function setupDefaultOptions()
     {
-        $url = Admin::url();
-
         $defaultOptions = [
             'uploadAsync'          => false,
             'overwriteInitial'     => true,
@@ -102,23 +100,6 @@ trait UploadField
     }
 
     /**
-     * Set preview options form image field.
-     *
-     * @return void
-     */
-    protected function setupPreviewOptions()
-    {
-        if (!$this->removable) {
-            return;
-        }
-
-        $this->options([
-            'initialPreview'        => $this->preview(),
-            'initialPreviewConfig' => $this->initialPreviewConfig(),
-        ]);
-    }
-
-    /**
      * Allow use to remove file.
      *
      * @return $this
@@ -139,7 +120,7 @@ trait UploadField
      */
     public function options($options = [])
     {
-        $this->options = array_merge($options, $this->options);
+        $this->options = array_merge($this->options, $options);
 
         return $this;
     }

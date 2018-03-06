@@ -53,7 +53,6 @@ echo view('admin::index.app-js', ['useDefaultAssets' => false])->render();
     <?php
         echo $js;
         echo $css;
-        echo $asyncJs;
         ?>;
 //    require_js('lib/plugins/toastr/toastr.min');
 //    require_css('lib/plugins/toastr/toastr.min');

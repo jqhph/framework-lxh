@@ -8,6 +8,7 @@ use Lxh\Http\Message\Uri;
 use Lxh\Http\Message\UploadFile;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * PSR7
@@ -99,16 +100,13 @@ class Request extends Message\ServerRequest
 
 	protected function initUploadFiles()
 	{
-		foreach ($_FILES as $k => & $file) {
-			if (empty($file['tmp_name']) || empty($file['name'])) {
-				continue;
-			}
-			$this->uploadedFiles[$k] = new UploadFile(
+		foreach ($_FILES as $k => &$file) {
+			$this->uploadedFiles[$k] = new UploadedFile(
 				$file['tmp_name'],
-				(int) $file['size'],
-				(int) $file['error'],
 				$file['name'],
-				$file['type']
+				$file['type'],
+				$file['size'],
+				$file['error']
 			);
 		}
 	}

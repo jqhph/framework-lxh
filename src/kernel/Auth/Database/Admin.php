@@ -106,6 +106,18 @@ class Admin extends Session
     }
 
     /**
+     * 获取用户头像
+     *
+     * @return mixed
+     */
+    public function avatar()
+    {
+        if ($avatar = $this->get('avatar')) {
+            return \Lxh\Admin\Admin::url()->image($avatar);
+        }
+    }
+
+    /**
      * 查找数据方法
      *
      * @return array

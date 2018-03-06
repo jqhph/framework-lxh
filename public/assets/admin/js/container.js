@@ -1367,7 +1367,7 @@ console.log('request data', data);
                             return [element.name, val];
                         }
                     }
-                    return [element.name, element.value];
+                    return [element.name, element.value || $(element).data('value')];
             }
             return false;
         }

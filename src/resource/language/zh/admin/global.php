@@ -56,9 +56,10 @@ return array (
     'Are you sure?' => '您确定要继续此操作吗？',
     'You will not be able to recover this row!' => '此操作将无法进行复原',
     'Yes, delete it!' => '是的，删除！',
-    'Invalid arguments' => '参数不合法',
+    'Invalid arguments' => '无效参数',
     'Yes' => '是的',
     'Are you sure to delete the row?' => '您确定要删除这行数据吗？',
+    'done' => '确定'
   ),
   'menus' => 
   array (

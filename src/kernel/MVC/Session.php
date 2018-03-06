@@ -2,6 +2,7 @@
 
 namespace Lxh\MVC;
 
+use Lxh\Auth\Database\Admin;
 use Lxh\MVC\Model;
 use Lxh\Cookie\Store AS Cookie;
 use Lxh\Session\Store AS SessionStore;
@@ -73,16 +74,6 @@ class Session extends Model
         $this->session->set($this->sessionKey, $data);
 
         $this->session->save();
-    }
-
-    /**
-     * 获取用户头像
-     *
-     * @return mixed
-     */
-    public function avatar()
-    {
-
     }
 
     /**

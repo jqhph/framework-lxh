@@ -72,6 +72,20 @@ return [
         ]
     ],
 
+    // 图片阅读
+    [
+        'pattern' => '/image/:word@dir/:filename',
+        'method' => 'GET',
+        'params' => [
+            'auth' => false,
+            'module' => 'Admin',
+            'controller' => 'Image',
+            'action' => 'read',
+            'filename' => ':filename',
+            'dir' => ':word@dir',
+        ]
+    ],
+
     // 修改接口
     [
         'pattern' => '/admin/api/:lc@c/view/:int@id',

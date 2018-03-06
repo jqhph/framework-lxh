@@ -136,7 +136,6 @@ $config = [
         EVENT_RESPONSE_BEFORE => [
         ],
         EVENT_RESPONSE_AFTER => [
-            'track'
         ],
         // 异常报告
         EVENT_EXCEPTION_REPORT => [],

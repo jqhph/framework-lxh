@@ -92,7 +92,7 @@ class Response extends PsrResponse
 		//Send status
 		header(sprintf('%s %s, %s', $this->request->protocol(), $this->getStatusCode(), $this->getReasonPhrase()));
 
-		foreach ($this->getHeaders() as $name => &$value) {
+		foreach ($this->headers as $name => &$value) {
 			header($name . ': ' . implode('; ', $value), false);
 		}
 
@@ -289,6 +289,12 @@ class Response extends PsrResponse
 
 	protected function sendConsole()
 	{
+		$isProd = is_prod();
+
+		if (! $isProd && $this->outputConsoleLog) {
+			$this->container->make('track')->handle();
+		}
+
 		// 非生产环境和非命令行环境则输出控制台调试日志
 		if (
 			$this->outputConsoleLog && !is_prod()

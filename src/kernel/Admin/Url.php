@@ -111,6 +111,17 @@ class Url
     }
 
     /**
+     * 图片查看路径
+     *
+     * @param $filename
+     * @return string
+     */
+    public function image($filename)
+    {
+        return "/image/$filename";
+    }
+
+    /**
      * 注册url
      *
      * @return string
