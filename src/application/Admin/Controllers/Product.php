@@ -278,17 +278,7 @@ class Product extends Controller
          * @param Td $td 表格列字段管理对象（Table > Tr > Th, Td）
          * @param Tr $tr Table > Tr
          */
-        $table->column('stock')->display(function ($value, Td $td, Tr $tr) {
-            // 获取当前行数据
-//            $row = $tr->items()->all();
-            $data = [
-                1 => 'color:red',
-                2 => 'color:blue'
-            ];
-            $default = 'color:#333';
-
-            $td->style(get_value($data, $value, $default));
-
+        $table->column('stock')->display(function ($value, Items $items) {
             return $value + 100;
         });
 

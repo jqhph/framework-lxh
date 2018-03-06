@@ -18,6 +18,7 @@ use Lxh\Admin\Grid;
 use Lxh\Admin\Table\Table;
 use Lxh\Auth\AuthManager;
 use Lxh\Auth\Database\Models;
+use Lxh\Cache\Item;
 use Lxh\Exceptions\Forbidden;
 use Lxh\Helper\Valitron\Validator;
 use Lxh\Http\Url;
@@ -58,9 +59,7 @@ class Admin extends Controller
     {
         $table->code('id')->sortable();
         $table->text('username');
-        $table->column('name')->display(function ($value, Td $td, Tr $tr) {
-            $items = $tr->items();
-
+        $table->column('name')->display(function ($value, Items $items) {
             return $items->column('first_name') . $items->column('last_name');
         });
         $table->email('email');

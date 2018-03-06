@@ -176,7 +176,7 @@ class Tr extends Widget
             // 自定义处理器
             if (!is_string($handler) && is_callable($handler)) {
                 $td->value(
-                    $handler($value, $td, $this)
+                    $handler($value, $this->items)
                 );
                 $tdString .= $td->render();
             } else {
