@@ -58,6 +58,11 @@ class Admin extends Controller
     {
         $table->code('id')->sortable();
         $table->text('username');
+        $table->field('name')->display(function ($value, Td $td, Tr $tr) {
+            $items = $tr->items();
+
+            return $items->column('first_name') . $items->column('last_name');
+        });
         $table->email('email');
         $table->text('mobile');
 
@@ -70,10 +75,6 @@ class Admin extends Controller
         $table->date('modified_at')->sortable()->hide();
         $table->text('last_login_ip')->hide();
         $table->date('last_login_time')->hide();
-
-        $table->column(3, 'name', function (Items $items, Td $td, Th $th, Tr $tr) {
-            return $items->column('first_name') . $items->column('last_name');
-        });
     }
 
     protected function buildRoles(Table $table)
@@ -287,6 +288,15 @@ class Admin extends Controller
         $target = Url::referer() ?: AdminCreator::url()->index();
 
         return $this->success(['target' => $target]);
+    }
+
+    public function actionLogout()
+    {
+        $this->model()->logout();
+
+        $this->response->redirect(
+            AdminCreator::url()->login()
+        );
     }
 
     /**

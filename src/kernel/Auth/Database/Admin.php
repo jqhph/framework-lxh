@@ -190,6 +190,15 @@ class Admin extends Session
         return true;
     }
 
+    /**
+     * 登出
+     *
+     */
+    public function logout()
+    {
+        $this->deleteSession();
+    }
+
 
     /**
      * @return int

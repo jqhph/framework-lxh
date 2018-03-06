@@ -32,6 +32,17 @@ return [
         ]
     ],
 
+    // 登录页面
+    [
+        'pattern' => '/admin/logout',
+        'method' => 'GET',
+        'params' => [
+            'module' => 'Admin',
+            'controller' => 'Admin',
+            'action' => 'Logout'
+        ]
+    ],
+
     // 登录接口
     [
         'pattern' => '/admin/api/login',

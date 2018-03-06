@@ -52,10 +52,13 @@ class Session extends Model
      */
     public function saveCookie()
     {
-        // 默认一个月免登陆
-        setcookie($this->sessionKey, $this->getId(), time() + config('login-time', $this->defaultLoginTime));
+
     }
 
+    protected function deleteSession()
+    {
+        $this->session->delete($this->sessionKey);
+    }
 
     /**
      * 缓存用户数据到session
@@ -86,21 +89,7 @@ class Session extends Model
         // 检查session是否存在用户数据
         if ($this->session->has($this->sessionKey)) {
             $this->attach($this->session->get($this->sessionKey));
-            return $this;
         }
-
-        // 检测cookie是否存在用户数据
-        if (! $this->cookie->has($this->sessionKey)) {
-            return $this;
-        }
-
-        $this->set($this->primaryKeyName, $this->cookie->get($this->sessionKey));
-
-        // 查出用户数据
-        $this->find();
-
-        // 保存到session
-        $this->saveSession();
 
         return $this;
     }
