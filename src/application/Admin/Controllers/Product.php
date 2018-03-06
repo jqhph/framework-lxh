@@ -268,7 +268,7 @@ class Product extends Controller
 
         // 字段显示内容自定义：直接设置内容
         // 如果一个字段调用了field自定义处理之后，初始配置的字段渲染方法将不再执行
-        $table->field('order_num')->display('*****');
+        $table->column('order_num')->display('*****');
 
         /**
          * 字段显示内容自定义：使用匿名函数可以更灵活的定义想要的内容
@@ -278,7 +278,7 @@ class Product extends Controller
          * @param Td $td 表格列字段管理对象（Table > Tr > Th, Td）
          * @param Tr $tr Table > Tr
          */
-        $table->field('stock')->display(function ($value, Td $td, Tr $tr) {
+        $table->column('stock')->display(function ($value, Td $td, Tr $tr) {
             // 获取当前行数据
 //            $row = $tr->items()->all();
             $data = [

@@ -150,24 +150,8 @@ class Tr extends Widget
         }
 
         $headers = $this->table->headers();
-        $counter = 1;
         foreach ($headers as $field => &$options) {
-            if (isset($this->columns['mid'][$counter])) {
-                while ($column = get_value($this->columns['mid'], $counter)) {
-                    $tdString .= $this->columns['mid'][$counter]->tr($this)->render();
-                    $counter++;
-                }
-            }
-
             $this->renderColumns($tdString, $field, $options);
-
-            $counter ++;
-        }
-
-        foreach ($this->columns['mid'] as $k => $column) {
-            if ($k > $counter) {
-                $tdString .= $column->tr($this)->render();
-            }
         }
 
         foreach ($this->columns['last'] as $column) {

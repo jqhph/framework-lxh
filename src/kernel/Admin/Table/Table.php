@@ -228,7 +228,7 @@ class Table extends Widget
      * @param string $field 字段名称
      * @return $this
      */
-    public function field($field)
+    public function column($field)
     {
         if (! isset($this->headers[$field])) {
             $this->headers[$field] = [];
@@ -318,26 +318,6 @@ class Table extends Widget
     public function treeName()
     {
         return $this->treeName;
-    }
-
-    /**
-     * 追加列到指定位置
-     *
-     * @param int $position 位置，从1开始
-     * @param string|callable $title 标题或回调函数
-     * @param string|callable $content 内容或回调函数
-     * @return Column
-     */
-    public function column($position, $title, $content = null)
-    {
-        if ($position < 1) {
-            throw new InvalidArgumentException('Error of position.');
-        }
-        if (isset($this->columns['mid'][$position])) {
-            throw new InvalidArgumentException('Column already exists.');
-        }
-
-        return $this->columns['mid'][intval($position)] = new Column($title, $content);
     }
 
     /**
@@ -506,25 +486,8 @@ class Table extends Widget
             $th .= $column->title();
         }
 
-        $counter = 1;
         foreach ($this->headers as $field => &$options) {
-            if (isset($this->columns['mid'][$counter])) {
-                while ($column = get_value($this->columns['mid'], $counter)) {
-                    $th .= $this->columns['mid'][$counter]->title();
-                    $counter++;
-                }
-            }
-
             $th .= $this->buildTh($field, $options)->render();
-
-            $counter++;
-        }
-
-        // 额外追加的列
-        foreach ($this->columns['mid'] as $k => $column) {
-            if ($k > $counter) {
-                $th .= $column->title();
-            }
         }
 
         // 额外追加的列
@@ -602,7 +565,6 @@ class Table extends Widget
 
         return $this->totalColumns =
               count($this->headers)
-            + count($this->columns['mid'])
             + count($this->columns['front'])
             + count($this->columns['last']);
     }
@@ -642,11 +604,6 @@ class Table extends Widget
             }));
         }
 
-        // 指定位置的额外添加列，需要按键值大小升序排序
-        if ($this->columns['mid']) {
-            ksort($this->columns['mid'], 1);
-        }
-
         $rows = $this->buildRows();
         $nodata = $rows ? '' : $this->noDataTip();
 
@@ -661,7 +618,7 @@ EOF;
      */
     public function text($field)
     {
-        return $this->field($field);
+        return $this->column($field);
     }
 
     /**
@@ -670,7 +627,7 @@ EOF;
      */
     public function date($field)
     {
-        return $this->field($field)->setFieldView('date');
+        return $this->column($field)->setFieldView('date');
     }
 
     /**
@@ -679,7 +636,7 @@ EOF;
      */
     public function icon($field)
     {
-        return $this->field($field)->setFieldView('icon');
+        return $this->column($field)->setFieldView('icon');
     }
 
 
@@ -689,7 +646,7 @@ EOF;
      */
     public function select($field)
     {
-        return $this->field($field)->setFieldView('select');
+        return $this->column($field)->setFieldView('select');
     }
 
     /**
@@ -712,7 +669,7 @@ EOF;
                 $this->headers[$field]['then'] = $then;
             }
 
-            return $this->field($field)->setFieldView(static::$fieldsClass[$method]);
+            return $this->column($field)->setFieldView(static::$fieldsClass[$method]);
         }
 
         $p = count($parameters) > 0 ? $parameters[0] : true;

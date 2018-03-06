@@ -58,7 +58,7 @@ class Admin extends Controller
     {
         $table->code('id')->sortable();
         $table->text('username');
-        $table->field('name')->display(function ($value, Td $td, Tr $tr) {
+        $table->column('name')->display(function ($value, Td $td, Tr $tr) {
             $items = $tr->items();
 
             return $items->column('first_name') . $items->column('last_name');

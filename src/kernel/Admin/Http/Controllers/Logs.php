@@ -83,7 +83,7 @@ class Logs extends Controller
             4 => ['DELETE', 'danger'],
             5 => ['OPTION', 'info'],
         ];
-        $table->field('method')->display(function ($value, Td $td, Tr $tr) use ($methods) {
+        $table->column('method')->display(function ($value, Td $td, Tr $tr) use ($methods) {
             $label = new Label('method', $methods[$value][0]);
 
             $label->color($methods[$value][1]);
