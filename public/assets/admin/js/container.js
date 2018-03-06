@@ -1098,30 +1098,35 @@ window.Lxh = function (options) {
             data = store.call.start(store.api, store.method, data) || data;
 
 console.log('request data', data);
-            // if (store.method.toLocaleUpperCase() == 'PUT') {
-            //     data = JSON.stringify(data);
-            // }
-            var form = new FormData($(get_form_selector())[0]);
-            for (var i in data) {
-                form.set(i, data[i]);
-            }
-            $('input[type="file"]').each(function (k, v) {
-                var t = $(this);
-                console.log('files ' + t.attr('name'), t[0].files);
-                $(t[0].files).each(function (k) {
-                    form.set(t.attr('name'), t[0].files[k]);
-                })
-            });
 
-            $.ajax({
+            var opts = get_request_options(data);
+
+            if (typeof FormData != 'undefined') {
+                var form = new FormData();
+                for (var i in data) {
+                    form.set(i, data[i]);
+                }
+                // js异步上传文件
+                $('input[type="file"]').each(function (k, v) {
+                    var t = $(this);
+                    console.log('files ' + t.attr('name'), t[0].files);
+                    $(t[0].files).each(function (k) {
+                        form.set(t.attr('name'), t[0].files[k]);
+                    })
+                });
+                opts.data = form;
+                opts.processData = false;
+                opts.contentType = false;
+            }
+
+            $.ajax(opts);
+        };
+
+        function get_request_options(form) {
+            return {
                 url: store.api,
-                ifModified: false,
                 type: store.method,
-                cache: true,
-                async: true,
                 data: form,
-                processData: false,
-                contentType: false,
                 timeout: store.timeout,
                 dataType: 'JSON',
                 success: function(data) {
@@ -1143,10 +1148,11 @@ console.log('request data', data);
                 error: function (req, msg, e) {
                     // 标记请求结束
                     store.isRequsting = false;
+                    store.call.any(e);
                     store.call.error(req, msg, e);
                 }
-            });
-        };
+            }
+        }
 
         /**
          * 执行动作（发起一个ajax请求）
@@ -1178,7 +1184,7 @@ console.log('request data', data);
                 return notify.info(trans('Nothing has been change.'));
             }
 
-            return this.request(util.parseApi('edit'), 'PUT');
+            return this.request(util.parseApi('edit'), 'POST');
         };
 
         /**

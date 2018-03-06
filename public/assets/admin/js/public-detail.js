@@ -4,28 +4,28 @@ new LxhLoader(['@lxh/js/validate.min'], function () {
 
     function detail() {
         var v = $lxh.validator(window.formRules || [], submit);
-        var model = $lxh.createModel();
-        var notify = $lxh.ui().notify();
+        var model = $lxh.createModel(),
+            notify = $lxh.ui().notify(),
+            name = LXHSTORE.IFRAME.current(),
+            n = NProgress;
 
         function submit(e) {
             notify.remove();
-            var $loading;
 
             // 设置请求开始回调函数
             model.on('start', function (api, method, data) {
-                $loading = window.loading();
+                n.start();
             });
 
             // 设置成功回调函数
             model.on('success', function (data) {
                 // success
-                $loading.close();
+                n.done();
                 notify.success(trans('success'));
-                // 500豪秒后跳转到菜单编辑界面
                 close_tab(name)
             });
             model.on('any', function () {
-                $loading.close();
+                n.done();
             });
 
             // 发起修改或新增操作

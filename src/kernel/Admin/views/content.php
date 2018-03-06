@@ -61,7 +61,6 @@ echo $loadscripts;
 <?php
     echo $js;
     echo $css;
-    echo $asyncJs;
 ?>; __then__(function(){<?php echo $script?>});
 $(document).on('pjax:complete', function () {$(parent.window).scrollTop(0);});
 </script>

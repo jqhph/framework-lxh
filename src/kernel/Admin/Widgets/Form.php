@@ -324,7 +324,7 @@ class Form implements Renderable
      */
     public function useScript($js)
     {
-        return $this->async($js);
+        return Admin::js($js);
     }
 
     /**
@@ -387,19 +387,6 @@ class Form implements Renderable
     }
 
     /**
-     * 异步加载js
-     *
-     * @param $js
-     * @return $this
-     */
-    public function async($js)
-    {
-        $this->asyncJs[] = &$js;
-
-        return $this;
-    }
-
-    /**
      * Add a form field to form.
      *
      * @param Field $field
@@ -432,7 +419,7 @@ class Form implements Renderable
         }
 
         if ($this->options['editScript']) {
-            $this->async('@lxh/js/public-detail');
+            Admin::js('@lxh/js/public-detail');
         }
 
         if ($this->data) {
@@ -445,7 +432,6 @@ class Form implements Renderable
         return [
             'fields'      => $this->fields,
             'attributes'  => $this->formatAttribute(),
-            'asyncJs'     => &$this->asyncJs,
             'formOptions' => &$this->options,
             'id'          => $this->id,
             'content'     => $this->content,

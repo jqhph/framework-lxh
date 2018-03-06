@@ -52,6 +52,7 @@ class Product extends Controller
     protected $gridWidth = 12;
 
     protected $createFormWidth = 8;
+    protected $detailFormWidth = 8;
 
     public function initialize()
     {

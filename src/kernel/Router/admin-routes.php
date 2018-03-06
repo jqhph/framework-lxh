@@ -75,7 +75,7 @@ return [
     // 修改接口
     [
         'pattern' => '/admin/api/:lc@c/view/:int@id',
-        'method' => 'PUT',
+        'method' => 'POST',
         'params' => [
             'module' => 'Admin',
             'api' => true,

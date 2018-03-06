@@ -52,11 +52,6 @@ class Admin
     public static $js = [];
 
     /**
-     * @var array
-     */
-    public static $asyncjs = [];
-
-    /**
      * 同步载入的js
      *
      * @var array
@@ -323,26 +318,6 @@ class Admin
         }
 
         return static::$langs;
-    }
-
-    /**
-     * 使用js异步加载代码
-     *
-     * @param null $js
-     * @return string|void
-     */
-    public static function async($js = null)
-    {
-        if (!is_null($js)) {
-            self::$asyncjs = array_merge(self::$asyncjs, (array) $js);
-            return;
-        }
-
-        $script = '';
-        foreach (static::$asyncjs as &$js) {
-            $script .= "require_js('$js')";
-        }
-        return $script;
     }
 
     /**
