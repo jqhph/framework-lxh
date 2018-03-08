@@ -26,6 +26,14 @@ class DateRange extends Field
 {
     use Condition;
 
+    protected static $js = [
+        '@lxh/js/bootstrap-datetimepicker.min'
+    ];
+
+    protected static $css = [
+        '@lxh/css/bootstrap-datetimepicker.min'
+    ];
+
     protected $view = 'admin::filter.date-range';
 
     protected $width = [
@@ -39,13 +47,7 @@ class DateRange extends Field
      */
     protected $defaultHandler = 'between';
 
-    protected function setup()
-    {
-        $this->js('date-range', '@lxh/js/bootstrap-datetimepicker.min');
-        $this->css('date-range',  '@lxh/css/bootstrap-datetimepicker.min');
-    }
-
-    protected function setupValue($name)
+    protected function prepare($name)
     {
         $value = [];
         if ($start = I($name . '-start', '')) {
@@ -72,8 +74,7 @@ class DateRange extends Field
     protected function variables()
     {
         $name = $this->name();
-
-        $value = $this->setupValue($name);
+        $value = $this->prepare($name);
 
         return array_merge(parent::variables(), [
             'start' => get_value($value, 'start', ''),

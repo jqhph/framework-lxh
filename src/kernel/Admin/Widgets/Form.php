@@ -57,6 +57,56 @@ use Lxh\Support\Arr;
 class Form implements Renderable
 {
     /**
+     * Available fields.
+     *
+     * @var array
+     */
+    public static $availableFields = [
+        'button'         => \Lxh\Admin\Form\Field\Button::class,
+        'checkbox'       => \Lxh\Admin\Form\Field\Checkbox::class,
+        'color'          => \Lxh\Admin\Form\Field\Color::class,
+        'currency'       => \Lxh\Admin\Form\Field\Currency::class,
+        'date'           => \Lxh\Admin\Form\Field\Date::class,
+        'dateRange'      => \Lxh\Admin\Form\Field\DateRange::class,
+        'datetime'       => \Lxh\Admin\Form\Field\Datetime::class,
+        'dateTimeRange'  => \Lxh\Admin\Form\Field\DatetimeRange::class,
+        'decimal'        => \Lxh\Admin\Form\Field\Decimal::class,
+        'divider'        => \Lxh\Admin\Form\Field\Divide::class,
+        'divide'         => \Lxh\Admin\Form\Field\Divide::class,
+        'embeds'         => \Lxh\Admin\Form\Field\Embeds::class,
+        'editor'         => \Lxh\Admin\Form\Field\Editor::class,
+        'email'          => \Lxh\Admin\Form\Field\Email::class,
+        'file'           => \Lxh\Admin\Form\Field\File::class,
+        'hidden'         => \Lxh\Admin\Form\Field\Hidden::class,
+        'id'             => \Lxh\Admin\Form\Field\Id::class,
+        'image'          => \Lxh\Admin\Form\Field\Image::class,
+        'ip'             => \Lxh\Admin\Form\Field\Ip::class,
+        'map'            => \Lxh\Admin\Form\Field\Map::class,
+        'mobile'         => \Lxh\Admin\Form\Field\Mobile::class,
+        'month'          => \Lxh\Admin\Form\Field\Month::class,
+        'multipleSelect' => \Lxh\Admin\Form\Field\MultipleSelect::class,
+        'number'         => \Lxh\Admin\Form\Field\Number::class,
+        'password'       => \Lxh\Admin\Form\Field\Password::class,
+        'radio'          => \Lxh\Admin\Form\Field\Radio::class,
+        'rate'           => \Lxh\Admin\Form\Field\Rate::class,
+        'select'         => \Lxh\Admin\Form\Field\Select::class,
+        'selectTree'     => \Lxh\Admin\Form\Field\SelectTree::class,
+        'slider'         => \Lxh\Admin\Form\Field\Slider::class,
+        'text'           => \Lxh\Admin\Form\Field\Text::class,
+        'textarea'       => \Lxh\Admin\Form\Field\Textarea::class,
+        'time'           => \Lxh\Admin\Form\Field\Time::class,
+        'timeRange'      => \Lxh\Admin\Form\Field\TimeRange::class,
+        'url'            => \Lxh\Admin\Form\Field\Url::class,
+        'year'           => \Lxh\Admin\Form\Field\Year::class,
+        'html'           => \Lxh\Admin\Form\Field\Html::class,
+        'icon'           => \Lxh\Admin\Form\Field\Icon::class,
+        'multipleFile'   => \Lxh\Admin\Form\Field\MultipleFile::class,
+        'multipleImage'  => \Lxh\Admin\Form\Field\MultipleImage::class,
+        'tableCheckbox'  => \Lxh\Admin\Form\Field\TableCheckbox::class,
+        'switch'         => \Lxh\Admin\Form\Field\Switcher::class,
+    ];
+
+    /**
      *
      * @var Content
      */
@@ -371,24 +421,6 @@ class Form implements Renderable
     }
 
     /**
-     * Find field class with given name.
-     *
-     * @param string $method
-     *
-     * @return bool|string
-     */
-    public static function findFieldClass($method)
-    {
-        $class = get_value(\Lxh\Admin\Form::$availableFields, $method);
-
-        if (class_exists($class)) {
-            return $class;
-        }
-
-        return false;
-    }
-
-    /**
      * Add a form field to form.
      *
      * @param Field $field
@@ -505,6 +537,19 @@ class Form implements Renderable
     }
 
     /**
+     * Register custom field.
+     *
+     * @param string $abstract
+     * @param string $class
+     *
+     * @return void
+     */
+    public static function extend($abstract, $class)
+    {
+        static::$availableFields[$abstract] = $class;
+    }
+
+    /**
      * Determine if form fields has files.
      *
      * @return bool
@@ -530,7 +575,7 @@ class Form implements Renderable
      */
     public function __call($method, $arguments)
     {
-        if ($className = static::findFieldClass($method)) {
+        if ($className = get_value(static::$availableFields, $method)) {
             $name = get_value($arguments, 0, '');
 
             $element = new $className($name, array_slice($arguments, 1));

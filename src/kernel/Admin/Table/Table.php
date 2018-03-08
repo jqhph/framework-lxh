@@ -46,22 +46,21 @@ class Table extends Widget
     /**
      * @var array
      */
-    protected static $fieldsClass = [
-        'link' => Link::class,
-        'button' => Button::class,
-        'label' => Label::class,
-        'tag' => Tag::class,
+    protected static $availableFields = [
+        'link'     => Link::class,
+        'button'   => Button::class,
+        'label'    => Label::class,
+        'tag'      => Tag::class,
         'checkbox' => Checkbox::class,
-        'code' => Code::class,
-        'image' => Image::class,
-        'expand' => Expand::class,
-        'popover' => Popover::class,
+        'code'     => Code::class,
+        'image'    => Image::class,
+        'expand'   => Expand::class,
+        'popover'  => Popover::class,
         'editable' => Editable::class,
-        'switch' => Switcher::class,
-        'checked' => 'checked',
-        'email' => 'email',
+        'switch'   => Switcher::class,
+        'checked'  => 'checked',
+        'email'    => 'email',
     ];
-
 
     /**
      * @var Grid
@@ -167,6 +166,19 @@ class Table extends Widget
         $this->attribute('id', 't'.Util::randomString(7));
 
         $this->class('table table-hover responsive');
+    }
+
+    /**
+     * Register custom field.
+     *
+     * @param string $abstract
+     * @param string $class
+     *
+     * @return void
+     */
+    public static function extend($abstract, $class)
+    {
+        static::$availableFields[$abstract] = $class;
     }
 
     /**
@@ -663,13 +675,13 @@ EOF;
 
     public function __call($method, $parameters)
     {
-        if (isset(static::$fieldsClass[$method])) {
+        if (isset(static::$availableFields[$method])) {
             $field = get_value($parameters, 0);
             if ($then = get_value($parameters, 1)) {
                 $this->headers[$field]['then'] = $then;
             }
 
-            return $this->column($field)->setFieldView(static::$fieldsClass[$method]);
+            return $this->column($field)->setFieldView(static::$availableFields[$method]);
         }
 
         $p = count($parameters) > 0 ? $parameters[0] : true;

@@ -24,7 +24,7 @@ use Lxh\MVC\Model;
  * @method Text           text($name, $label = '')
  * @method Select         select($name, $label = '')
  * @method MultipleSelect multipleSelect($name, $label = '')
- * @method DateRange dateRange($name, $label = '')
+ * @method DateRange      dateRange($name, $label = '')
  */
 class Filter extends Widget implements Renderable
 {
@@ -80,9 +80,9 @@ class Filter extends Widget implements Renderable
     protected $containerId;
 
     protected static $availableFields = [
-        'text' => Text::class,
-        'dateRange' => DateRange::class,
-        'select' => Select::class,
+        'text'           => Text::class,
+        'dateRange'      => DateRange::class,
+        'select'         => Select::class,
         'multipleSelect' => MultipleSelect::class,
     ];
 
@@ -92,6 +92,19 @@ class Filter extends Widget implements Renderable
 
         parent::__construct($attrbutes);
 
+    }
+
+    /**
+     * Register custom field.
+     *
+     * @param string $abstract
+     * @param string $class
+     *
+     * @return void
+     */
+    public static function extend($abstract, $class)
+    {
+        static::$availableFields[$abstract] = $class;
     }
 
     protected function setupAttributes()
@@ -367,7 +380,7 @@ EOF
      */
     public function __call($method, $arguments)
     {
-        if ($className = static::findFieldClass($method)) {
+        if ($className = get_value(static::$availableFields, $method)) {
             $name = get_value($arguments, 0, '');
 
             $element = new $className($name, array_slice($arguments, 1));
@@ -376,24 +389,6 @@ EOF
 
             return $element;
         }
-    }
-
-    /**
-     * Find field class with given name.
-     *
-     * @param string $method
-     *
-     * @return bool|string
-     */
-    public static function findFieldClass($method)
-    {
-        $class = get_value(static::$availableFields, $method);
-
-        if (class_exists($class)) {
-            return $class;
-        }
-
-        return false;
     }
 
 }
