@@ -9,7 +9,7 @@ class Tab extends Widget implements Renderable
     /**
      * @var string
      */
-    protected $view = 'admin::widgets.tab';
+    protected $view = 'admin::widget.tab';
 
     /**
      * @var array
@@ -38,8 +38,8 @@ class Tab extends Widget implements Renderable
     {
         $this->data['tabs'][] = [
             'id'      => mt_rand(),
-            'title'   => $title,
-            'content' => $content,
+            'title'   => &$title,
+            'content' => &$content,
         ];
 
         return $this;
@@ -65,7 +65,7 @@ class Tab extends Widget implements Renderable
     public function dropDown(array $links)
     {
         if (is_array($links[0])) {
-            foreach ($links as $link) {
+            foreach ($links as &$link) {
                 call_user_func([$this, 'dropDown'], $link);
             }
 
@@ -87,8 +87,8 @@ class Tab extends Widget implements Renderable
      */
     public function render()
     {
-        $variables = array_merge($this->data, ['attributes' => $this->formatAttributes()]);
+        $this->data['attributes'] = $this->formatAttributes();
 
-        return view($this->view, $variables)->render();
+        return view($this->view, $this->data)->render();
     }
 }

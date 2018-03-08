@@ -43,6 +43,7 @@ class Editor extends Field
         'imageUpload' => true,
         'imageFormats' => ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'webp'],
         'imageUploadURL' => '',
+        'autoFocus' => false,
     ];
 
     /**
