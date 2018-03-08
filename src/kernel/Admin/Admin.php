@@ -24,6 +24,8 @@ class Admin
      */
     protected static $scope = __CONTROLLER__;
 
+    protected static $html = '';
+
     /**
      * 前端加载的语言包
      *
@@ -83,17 +85,6 @@ class Admin
     protected static $idName = '';
 
     /**
-     * @param $model
-     * @param Closure $callable
-     *
-     * @return \Lxh\Admin\Grid
-     */
-    public function grid($model, Closure $callable)
-    {
-        return new Grid($this->getModel($model), $callable);
-    }
-
-    /**
      * 后台首页内容
      *
      * @return Index
@@ -101,16 +92,6 @@ class Admin
     public function index(Closure $callable = null)
     {
         return new Index($callable);
-    }
-
-    /**
-     * @param $model
-     *
-     * @return \Lxh\Admin\Form
-     */
-    public function form($model)
-    {
-        return new Form($this->getModel($model));
     }
 
     /**
@@ -185,6 +166,14 @@ class Admin
         }
 
         throw new InvalidArgumentException("$model is not a valid model");
+    }
+
+    public static function hidden($html = null)
+    {
+        if (!$html) {
+            return static::$html;
+        }
+        static::$html .= $html;
     }
 
     /**

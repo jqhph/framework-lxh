@@ -11,6 +11,8 @@ class Box extends Widget implements Renderable
 {
     public static $scripts = [];
 
+    protected static $loadScripts = false;
+
     /**
      * @var string
      */
@@ -271,6 +273,21 @@ EOF;
      */
     public function render()
     {
+        if (!static::$loadScripts) {
+            static::$loadScripts = true;
+
+            // 点击时重新计算高度
+            Admin::script(<<<EOF
+(function () {
+var c = LXHSTORE.IFRAME.current();
+$('[data-toggle="collapse"]').click(function () {
+   setTimeout(function(){LXHSTORE.IFRAME.height(c);},250);
+});
+})();
+EOF
+            );
+        }
+
         return view($this->view, $this->variables())->render();
     }
 }

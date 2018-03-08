@@ -19,7 +19,7 @@
     array_remove = parent.array_remove;
     loading = parent.loading;
     NProgress = parent.NProgress;
-    layer = parent.layer;
+    layer = window.layer || parent.layer;
     window.formRules = [];
     open_tab = parent.open_tab;
     close_tab = parent.close_tab;
@@ -67,6 +67,7 @@ $(document).on('pjax:complete', function () {$(parent.window).scrollTop(0);});
 <?php
 echo admin_js('js/app.min');
 ?>
+<?php if ($hidden) {?><div style="display:none"><?php echo $hidden?></div><?php }?>
 <script type="text/html" id="modal-tpl">
     <div id="{id}" class="modal fade {class}" >
         <div class="modal-dialog" style="width:{width};">

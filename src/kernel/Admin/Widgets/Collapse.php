@@ -2,14 +2,16 @@
 
 namespace Lxh\Admin\Widgets;
 
-use Lxh\Contracts\Support\Renderable;
+use Lxh\Admin\Admin;
 
-class Collapse extends Widget implements Renderable
+class Collapse extends Widget
 {
+    protected static $loadScripts = false;
+
     /**
      * @var string
      */
-    protected $view = 'admin::widgets.collapse';
+    protected $view = 'admin::widget.collapse';
 
     /**
      * @var array
@@ -19,11 +21,13 @@ class Collapse extends Widget implements Renderable
     /**
      * Collapse constructor.
      */
-    public function __construct()
+    public function __construct(array $items = [])
     {
         $this->id('accordion-'.uniqid());
-        $this->class('box-group');
+        $this->class('panel-group m-b-0');
         $this->style('margin-bottom: 20px');
+
+        $this->items = &$items;
     }
 
     /**
@@ -31,14 +35,15 @@ class Collapse extends Widget implements Renderable
      *
      * @param string $title
      * @param string $content
-     *
+     * @param bool   $show
      * @return $this
      */
-    public function add($title, $content)
+    public function add($title, $content, $show = false)
     {
         $this->items[] = [
-            'title'   => $title,
-            'content' => $content,
+            'title'   => &$title,
+            'content' => &$content,
+            'show'    => $show
         ];
 
         return $this;
@@ -48,7 +53,7 @@ class Collapse extends Widget implements Renderable
     {
         return [
             'id'         => $this->id,
-            'items'      => $this->items,
+            'items'      => &$this->items,
             'attributes' => $this->formatAttributes(),
         ];
     }
@@ -60,6 +65,21 @@ class Collapse extends Widget implements Renderable
      */
     public function render()
     {
+        if (!static::$loadScripts) {
+            static::$loadScripts = true;
+
+            // 点击时重新计算高度
+            Admin::script(<<<EOF
+(function () {
+var c = LXHSTORE.IFRAME.current();
+$('[data-toggle="collapse"]').click(function () {
+   setTimeout(function(){LXHSTORE.IFRAME.height(c);},250);
+});
+})();
+EOF
+);
+        }
+
         return view($this->view, $this->variables())->render();
     }
 }

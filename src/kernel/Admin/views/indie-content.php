@@ -65,5 +65,6 @@ echo view('admin::index.app-js')->render();
 // 加载sea js，加载所有require_js和require_css加载的文件
 echo admin_js('js/app.min');
 ?>
+<?php if ($hidden) {?><div style="display:none"><?php echo $hidden?></div><?php }?>
 </body>
 </html>

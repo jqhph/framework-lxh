@@ -276,6 +276,7 @@ class Content implements Renderable
         // 注入所有字段静态资源
         Admin::collectFieldAssets();
 
+        $html    = Admin::hidden();
         $js      = Admin::js();
         $css     = Admin::css();
         $script  = Admin::script();
@@ -285,7 +286,7 @@ class Content implements Renderable
 
         // 异步加载table，无需加载整个内容
         if (Grid::isPjaxRequest()) {
-            return "{$content}{$syncCss}{$syncJs}<script>{$css}{$js}{$script}</script>";
+            return "{$content}{$syncCss}{$syncJs}<script>{$css}{$js}{$script}</script><div style='display:none'>{$html}</div>";
         }
 
         return view(
@@ -294,6 +295,7 @@ class Content implements Renderable
                 'header'      => &$this->header,
                 'description' => &$this->description,
                 'content'     => &$content,
+                'hidden'      => &$html,
                 'js'          => &$js,
                 'css'         => &$css,
                 'script'      => &$script,

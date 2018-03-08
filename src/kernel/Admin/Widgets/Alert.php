@@ -9,10 +9,10 @@ class Alert extends Widget implements Renderable
     /**
      * @var string
      */
-    protected $view = 'admin::widgets.alert';
+    protected $view = 'admin::widget.alert';
 
     /**
-     * @var string|\Symfony\Component\Translation\TranslatorInterface
+     * @var string
      */
     protected $title = '';
 
@@ -31,6 +31,8 @@ class Alert extends Widget implements Renderable
      */
     protected $icon = 'ban';
 
+    protected $closeable = true;
+
     /**
      * Alert constructor.
      *
@@ -38,13 +40,27 @@ class Alert extends Widget implements Renderable
      * @param string $title
      * @param string $style
      */
-    public function __construct($content, $title = '', $style = 'danger')
+    public function __construct($content = '', $title = '', $style = 'danger')
     {
-        $this->content = (string) $content;
+        $this->content = &$content;
 
-        $this->title = $title ?: trans('admin::lang.alert');
+        $this->title = $title;
 
         $this->style($style);
+    }
+
+    public function primary()
+    {
+        $this->style = 'primary';
+        $this->icon = '';
+
+        return $this;
+    }
+
+    public function disabledColse()
+    {
+        $this->closeable = false;
+        return $this;
     }
 
     /**
@@ -57,6 +73,9 @@ class Alert extends Widget implements Renderable
     public function style($style = 'info')
     {
         $this->style = $style;
+        if ($style == 'primary') {
+            $this->icon = '';
+        }
 
         return $this;
     }
@@ -87,6 +106,7 @@ class Alert extends Widget implements Renderable
             'content'    => $this->content,
             'icon'       => $this->icon,
             'attributes' => $this->formatAttributes(),
+            'closeable'  => $this->closeable,
         ];
     }
 
