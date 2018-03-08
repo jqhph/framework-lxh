@@ -317,18 +317,6 @@ class Field implements Renderable
     }
 
     /**
-     * 加载js（同个key只加载一次）
-     *
-     * @return static
-     */
-    public function js($key, $js)
-    {
-        static::$js[$key] = &$js;
-
-        return $this;
-    }
-
-    /**
      * 格式化配置数组为label value格式
      *
      * @return array
@@ -354,18 +342,6 @@ class Field implements Renderable
         }
 
         return $this->options;
-    }
-
-    /**
-     * 加载css（同个key只加载一次）
-     *
-     * @return $this
-     */
-    public function css($key, $css)
-    {
-        static::$css[$key] = &$css;
-
-        return $this;
     }
 
     /**

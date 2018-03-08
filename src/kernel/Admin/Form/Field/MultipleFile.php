@@ -6,110 +6,9 @@ use Lxh\Admin\Form\Field;
 use Lxh\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class MultipleFile extends Field
+class MultipleFile extends File
 {
-    use UploadField;
-
-    /**
-     * Css.
-     *
-     * @var array
-     */
-    protected static $css = [
-        '/packages/admin/bootstrap-fileinput/css/fileinput.min.css?v=4.3.7',
-    ];
-
-    /**
-     * Js.
-     *
-     * @var array
-     */
-    protected static $js = [
-        '/packages/admin/bootstrap-fileinput/js/plugins/canvas-to-blob.min.js?v=4.3.7',
-        '/packages/admin/bootstrap-fileinput/js/fileinput.min.js?v=4.3.7',
-    ];
-
-    /**
-     * Create a new File instance.
-     *
-     * @param string $column
-     * @param array  $arguments
-     */
-    public function __construct($column, $arguments = [])
-    {
-        $this->initStorage();
-
-        parent::__construct($column, $arguments);
-    }
-
-    /**
-     * Default directory for file to upload.
-     *
-     * @return mixed
-     */
-    public function defaultDirectory()
-    {
-        return config('admin.upload.directory.file');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getValidator(array $input)
-    {
-        if (request()->has(static::FILE_DELETE_FLAG)) {
-            return false;
-        }
-
-        $attributes = [];
-
-        if (!$fieldRules = $this->getRules()) {
-            return false;
-        }
-
-        $attributes[$this->column] = $this->label;
-
-        list($rules, $input) = $this->hydrateFiles(array_get($input, $this->column, []));
-
-        return Validator::make($input, $rules, [], $attributes);
-    }
-
-    /**
-     * Hydrate the files array.
-     *
-     * @param array $value
-     *
-     * @return array
-     */
-    protected function hydrateFiles(array $value)
-    {
-        $rules = $input = [];
-
-        foreach ($value as $key => $file) {
-            $rules[$this->column.$key] = $this->getRules();
-            $input[$this->column.$key] = $file;
-        }
-
-        return [$rules, $input];
-    }
-
-    /**
-     * Prepare for saving.
-     *
-     * @param UploadedFile|array $files
-     *
-     * @return mixed|string
-     */
-    public function prepare($files)
-    {
-        if ($d = I(static::FILE_DELETE_FLAG)) {
-            return $this->destroy($d);
-        }
-
-        $targets = array_map([$this, 'prepareForeach'], $files);
-
-        return array_merge($this->original(), $targets);
-    }
+    protected $view = 'admin::form.multiple-file';
 
     /**
      * @return array|mixed
@@ -121,20 +20,6 @@ class MultipleFile extends Field
         }
 
         return $this->original;
-    }
-
-    /**
-     * Prepare for each file.
-     *
-     * @param UploadedFile $file
-     *
-     * @return mixed|string
-     */
-    protected function prepareForeach(UploadedFile $file = null)
-    {
-        $this->name = $this->getStoreName($file);
-
-        return $this->upload($file);
     }
 
     /**
@@ -172,11 +57,9 @@ class MultipleFile extends Field
      */
     protected function initialPreviewConfig()
     {
-        $files = $this->value ?: [];
-
         $config = [];
 
-        foreach ($files as $index => $file) {
+        foreach ((array)$this->value as $index => &$file) {
             $config[] = [
                 'caption' => basename($file),
                 'key'     => $index,
@@ -186,6 +69,13 @@ class MultipleFile extends Field
         return $config;
     }
 
+    public function max($max)
+    {
+        $this->options['maxFileCount'] = $max;
+
+        return $this;
+    }
+
     /**
      * Render file upload field.
      *
@@ -193,9 +83,11 @@ class MultipleFile extends Field
      */
     public function render()
     {
+        $this->prepend('<i class="zmdi zmdi-attachment-alt"></i>');
         $this->attribute('multiple', true);
 
-        $this->setupDefaultOptions();
+        $this->options['overwriteInitial'] = false;
+        $this->options['autoReplace'] = false;
 
         if (!empty($this->value)) {
             $this->options(['initialPreview' => $this->preview()]);
@@ -205,29 +97,10 @@ class MultipleFile extends Field
         $options = json_encode($this->options);
 
         $this->script = <<<EOT
-$("input{$this->getElementClassSelector()}").fileinput({$options});
+$("{$this->getElementClassSelector()}").fileinput({$options});
 EOT;
 
         return parent::render();
     }
 
-    /**
-     * Destroy original files.
-     *
-     * @return string.
-     */
-    public function destroy($key)
-    {
-        $files = $this->original ?: [];
-
-        $file = get_value($files, $key);
-
-        if ($this->storage->exists($file)) {
-            $this->storage->delete($file);
-        }
-
-        unset($files[$key]);
-
-        return array_values($files);
-    }
 }

@@ -9,16 +9,18 @@ use Lxh\Support\Str;
 
 class Select extends Field
 {
+    protected static $js = [
+        '@lxh/plugins/select2/select2.full.min'
+    ];
+
+    protected static $css = [
+        '@lxh/plugins/select2/select2.min'
+    ];
+
     /**
      * @var array
      */
     protected $defaultOption = [];
-
-    protected function setup()
-    {
-        $this->css('select', '@lxh/plugins/select2/select2.min');
-        $this->js('select', '@lxh/plugins/select2/select2.full.min');
-    }
 
     /**
      * 是否允许清除单选框

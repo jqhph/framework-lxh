@@ -57,7 +57,7 @@ class Logs extends Controller
      */
     protected function filter(Filter $filter)
     {
-        $admins = (new Collection((new \Lxh\Auth\Database\Admin())->find()))->pluck(['']);
+//        $admins = (new Collection((new \Lxh\Auth\Database\Admin())->find()))->pluck(['']);
         
         $filter->select('admin_id')->options();
         $filter->text('table')->minlen(3)->like();

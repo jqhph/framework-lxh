@@ -8,22 +8,10 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class File extends Field
 {
-    use UploadField;
-
-    /**
-     * Css.
-     *
-     * @var array
-     */
     protected static $css = [
         '@lxh/packages/bootstrap-fileinput/css/fileinput.min',
     ];
 
-    /**
-     * Js.
-     *
-     * @var array
-     */
     protected static $js = [
         '@lxh/packages/bootstrap-fileinput/js/plugins/canvas-to-blob.min',
         '@lxh/packages/bootstrap-fileinput/js/fileinput.min',
@@ -37,6 +25,100 @@ class File extends Field
     }
 
     /**
+     * Set default options form image field.
+     *
+     * @return void
+     */
+    protected function setupDefaultOptions()
+    {
+        $defaultOptions = [
+            'uploadAsync'          => false,
+            'overwriteInitial'     => true,
+            'initialPreviewAsData' => true,
+            'browseLabel'          => trans('Browse'),
+//            'showRemove'           => false,
+            'showUpload'           => false,
+            'dropZoneEnabled'      => false,
+            'deleteExtraData'      => [
+                '_token'           => '',
+                'id'               => '',
+            ],
+//            'uploadUrl'            => $url->upload(),
+//            'deleteUrl'            => $url->deleteFile(),
+            'autoReplace'          => true,
+        ];
+
+        $this->options($defaultOptions);
+    }
+
+    /**
+     * 设置删除文件路径url
+     *
+     * @param string $url
+     * @return $this
+     */
+    public function deleteUrl($url)
+    {
+        $this->options['deleteUrl'] = $url;
+
+        return $this;
+    }
+
+    /**
+     * 设置异步文件上传文件url
+     *
+     * @param string $url
+     * @return $this
+     */
+    public function uploadUrl($url)
+    {
+        $this->options['uploadUrl'] = $url;
+
+        return $this;
+    }
+
+    /**
+     * Allow use to remove file.
+     *
+     * @return $this
+     */
+    public function removable()
+    {
+        
+        return $this;
+    }
+
+    /**
+     * Set options for file-upload plugin.
+     *
+     * @param array $options
+     *
+     * @return $this
+     */
+    public function options($options = [])
+    {
+        $this->options = array_merge($this->options, $options);
+
+        return $this;
+    }
+
+    /**
+     * Get file visit url.
+     *
+     * @param $path
+     *
+     * @return string
+     */
+    public function objectUrl($path)
+    {
+        if (is_valid_url($path)) {
+            return $path;
+        }
+
+        return rtrim(config('admin.upload.host'), '/').'/'.trim($path, '/');
+    }
+
+    /**
      * Set preview options form image field.
      *
      * @return void
@@ -44,7 +126,7 @@ class File extends Field
     protected function setupPreviewOptions()
     {
         $this->options([
-            'initialPreview'        => $this->preview(),
+            'initialPreview'       => $this->preview(),
             'initialPreviewConfig' => $this->initialPreviewConfig(),
         ]);
     }
@@ -149,6 +231,11 @@ class File extends Field
         return $this;
     }
 
+    public function accept($accept)
+    {
+        return $this->attribute('accept', $accept);
+    }
+
     /**
      * Render file upload field.
      *
@@ -156,6 +243,9 @@ class File extends Field
      */
     public function render()
     {
+        $this->prepend('<i class="zmdi zmdi-attachment-alt"></i>');
+        $this->options['maxFileCount'] = 1;
+
         if (!isset($this->options['initialCaption'])) {
             $this->options['initialCaption'] = $this->initialCaption($this->value);
         }

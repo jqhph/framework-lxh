@@ -95,6 +95,8 @@ class Product extends Controller
 
             $form->file('files')->allowFileExtensions(['png', 'jpeg']);
             $form->image('image');
+            
+            $form->multipleFile('multiple-file')->help('多文件上传必须使用异步上传，需要自定义上传接口和删除接口');
 
             $row->column(12, new Card('文件上传', $form));
         });

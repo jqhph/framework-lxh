@@ -118,7 +118,7 @@ class Url
      */
     public function image($filename)
     {
-        return "/image/$filename";
+        return config('admin.upload.host')."/image/$filename";
     }
 
     /**

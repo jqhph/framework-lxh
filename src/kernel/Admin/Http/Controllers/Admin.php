@@ -51,10 +51,6 @@ class Admin extends Controller
         });
     }
 
-    protected function createModalId()
-    {
-    }
-
     public function table(Table $table)
     {
         $table->code('id')->sortable();
@@ -289,6 +285,10 @@ class Admin extends Controller
         return $this->success(['target' => $target]);
     }
 
+    /**
+     * 登出
+     *
+     */
     public function actionLogout()
     {
         $this->model()->logout();
