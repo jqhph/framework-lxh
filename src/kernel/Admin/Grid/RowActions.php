@@ -31,6 +31,11 @@ class RowActions extends TrTools
      */
     protected $allowEdit;
 
+    protected $allowRestore;
+
+    // Delete permanently
+    protected $allowDeletePermanently;
+
     /**
      * @var bool
      */
@@ -43,6 +48,13 @@ class RowActions extends TrTools
         $this->allowDelete = $this->grid->option('allowDelete');
         $this->url = Admin::url();
         $this->rendering = $rendering;
+
+        if ($this->grid->isTrash()) {
+            $auth = auth();
+
+            $this->allowRestore = $auth->can(__CONTROLLER__.'.restore');
+            $this->allowDeletePermanently = $auth->can(__CONTROLLER__.'.delete-permanently');
+        }
     }
 
     /**
@@ -79,6 +91,42 @@ class RowActions extends TrTools
     /**
      * @return $this
      */
+    public function allowRestore()
+    {
+        $this->allowRestore = true;
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function disableRestore()
+    {
+        $this->allowRestore = false;
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function allowDeletePermanently()
+    {
+        $this->allowDeletePermanently = true;
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function disableDeletePermanently()
+    {
+        $this->allowDeletePermanently = false;
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
     public function disableDelete()
     {
         $this->allowDelete = false;
@@ -104,6 +152,20 @@ class RowActions extends TrTools
         );
     }
 
+    protected function buildTrash($id)
+    {
+        if ($this->allowRestore && $this->allowDeletePermanently) {
+            $restore = trans('Restore');
+            $delete = trans('Delete permanently');
+
+            $model = __CONTROLLER__;
+
+            $this->prepend(
+                "<a data-action='restore' data-model='$model'>$restore</a> | <a data-action='delete-permanently' data-model='$model' style='color:#a00'>$delete</a>"
+            );
+        }
+    }
+
     /**
      * @return string
      */
@@ -118,20 +180,26 @@ class RowActions extends TrTools
             $rendering($this, $this->items);
         }
 
-        if ($this->allowEdit && $this->allowDelete) {
-            $this->prepend(
-                $this->renderEdit($id)
-                . '&nbsp;&nbsp;&nbsp;' . $this->renderDelete($id)
-            );
-        } elseif ($this->allowEdit) {
-            $this->prepend($this->renderEdit($id));
-        } elseif ($this->allowDelete) {
-            $this->prepend($this->renderDelete($id));
-        }
+        if ($this->grid->isTrash()) {
+            $this->buildTrash($id);
 
-        // 重置状态
-        $this->allowEdit = $this->grid->option('allowEdit');
-        $this->allowDelete = $this->grid->option('allowDelete');
+        } else {
+            if ($this->allowEdit && $this->allowDelete) {
+                $this->prepend(
+                    $this->renderEdit($id)
+                    . '&nbsp;&nbsp;&nbsp;' . $this->renderDelete($id)
+                );
+            } elseif ($this->allowEdit) {
+                $this->prepend($this->renderEdit($id));
+            } elseif ($this->allowDelete) {
+                $this->prepend($this->renderDelete($id));
+            }
+
+            // 重置状态
+            $this->allowEdit = $this->grid->option('allowEdit');
+            $this->allowDelete = $this->grid->option('allowDelete');
+
+        }
 
         $end = '&nbsp;&nbsp;&nbsp;';
         $tools = '';
@@ -154,7 +222,7 @@ class RowActions extends TrTools
 
         $name = trim(str_replace('/', '-', $url), '-');
 
-        return "<a onclick=\"open_tab('$name', '$url', '{$this->normalizeTabLabel($id)}')\"><i class=\"fa fa-edit\" style=\"color:green\"></i></a>";
+        return "<a onclick=\"open_tab('$name', '$url', '{$this->normalizeTabLabel($id)}')\"><i class=\"fa fa-edit\" style=\"color:#333\"></i></a>";
     }
 
     /**

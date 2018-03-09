@@ -434,7 +434,7 @@ class Grid implements Renderable
             $url->query($this->trashKey, 1);
         }
 
-        $label = trans('Recycled');
+        $label = trans('Trash');
 
         $this->tools->prepend(
             "<div class='btn-group'><a class=\"btn btn-$color\" href=\"{$url->string()}\"><i class=\"fa fa-recycle\"></i>&nbsp; {$label}</a></div>"
