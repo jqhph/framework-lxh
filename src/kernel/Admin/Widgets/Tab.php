@@ -4,7 +4,7 @@ namespace Lxh\Admin\Widgets;
 
 use Lxh\Contracts\Support\Renderable;
 
-class Tab extends Widget implements Renderable
+class Tab extends Widget
 {
     /**
      * @var string

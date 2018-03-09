@@ -22,7 +22,6 @@ new LxhLoader(['@lxh/js/validate.min'], function () {
                 // success
                 n.done();
                 notify.success(trans('success'));
-                close_tab(name)
             });
             model.on('any', function () {
                 n.done();

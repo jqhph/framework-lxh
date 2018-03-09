@@ -146,6 +146,7 @@ class Grid implements Renderable
         'indexScript' => '@lxh/js/public-index',
         'pjax' => true,
         'useLayoutSwitcher' => false,
+        'useTrash' => false,
     ];
 
     /**
@@ -167,6 +168,19 @@ class Grid implements Renderable
      * @var string
      */
     protected $pjax = '_pjax';
+
+    /**
+     *
+     * @var string
+     */
+    protected $trashKey = '_trash';
+
+    /**
+     * 当前页面是否是回收站
+     *
+     * @var bool
+     */
+    protected $isTrash = false;
 
     /**
      * current url
@@ -197,6 +211,7 @@ class Grid implements Renderable
         $this->tools = new Tools();
         $this->url = new \Lxh\Http\Url();
         $this->idName = Admin::id();
+        $this->isTrash = (bool)I($this->trashKey);
 
         $this->setupPerPage();
         $this->url->query($this->pjax, static::getPjaxContainerId());
@@ -220,6 +235,16 @@ class Grid implements Renderable
     public function idName()
     {
         return $this->idName;
+    }
+
+    /**
+     * 判断是否是回收站
+     *
+     * @return bool
+     */
+    public function isTrash()
+    {
+        return $this->isTrash;
     }
 
     /**
@@ -287,6 +312,13 @@ class Grid implements Renderable
     public function useGridScript($script)
     {
         $this->options['indexScript'] = &$script;
+
+        return $this;
+    }
+
+    public function allowTrash()
+    {
+        $this->options['useTrash'] = true;
 
         return $this;
     }
@@ -370,6 +402,10 @@ class Grid implements Renderable
      */
     protected function setupTools()
     {
+        if ($this->options['useTrash']) {
+            $this->buildTrashBtn();
+        }
+
         if ($this->options['useLayoutSwitcher']) {
             $this->tools->prepend(
                 (new LayoutSwitcher($this))->render()
@@ -383,6 +419,26 @@ class Grid implements Renderable
         if ($this->actions) {
             $this->tools->prepend($this->actions);
         }
+    }
+
+    protected function buildTrashBtn()
+    {
+        $url = clone $this->url;
+        $url->unsetQuery($this->pjax);
+
+        if ($this->isTrash) {
+            $color = 'primary';
+            $url->unsetQuery($this->trashKey);
+        } else {
+            $color = 'default';
+            $url->query($this->trashKey, 1);
+        }
+
+        $label = trans('Recycled');
+
+        $this->tools->prepend(
+            "<div class='btn-group'><a class=\"btn btn-$color\" href=\"{$url->string()}\"><i class=\"fa fa-recycle\"></i>&nbsp; {$label}</a></div>"
+        );
     }
 
     /**

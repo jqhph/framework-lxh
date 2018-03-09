@@ -7,7 +7,7 @@ use Lxh\Admin\Widgets\Widget;
 use Lxh\Contracts\Support\Arrayable;
 use Lxh\Contracts\Support\Renderable;
 
-class Chart extends Widget implements Renderable
+class Chart extends Widget
 {
     protected $elementId = '';
 

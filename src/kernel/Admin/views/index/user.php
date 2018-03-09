@@ -11,11 +11,14 @@
     </a>
     <ul class="dropdown-menu dm-icon pull-right" style="text-transform:uppercase">
         <li class="hidden-xs">
-            <a href="javascript:open_tab('admin-setting', '<?php echo $url->profile()?>', '<?php echo trans('Profile')?>')"><i class="zmdi zmdi-account"></i> <?php echo trans('Setting')?></a>
+            <a href="javascript:open_tab('admin-setting','<?php echo $url->profile()?>','<?php echo trans('Profile')?>')"><i class="zmdi zmdi-account"></i> <?php echo trans('Setting')?></a>
         </li>
         <li class="hidden-xs">
             <a target="_blank" href="<?php echo $url->home()?>"><i class="zmdi zmdi-view-web"></i> <?php echo trans('View Site')?></a>
         </li>
+
+        <?php echo apply_filters('user-box.menu');?>
+
         <li class="divider"></li>
         <li class="hidden-xs">
             <a href="<?php echo $url->logout()?>"><i class="zmdi zmdi-power"></i> <?php echo trans('Sign out')?></a>

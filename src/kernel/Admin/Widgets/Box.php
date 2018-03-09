@@ -7,7 +7,7 @@ use Lxh\Admin\Tools\Tools;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Helper\Util;
 
-class Box extends Widget implements Renderable
+class Box extends Widget
 {
     public static $scripts = [];
 
