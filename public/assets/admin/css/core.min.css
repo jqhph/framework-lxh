@@ -78,6 +78,6 @@ background-color:#0072C6;border-color:#0072C6;}.btn-xs.btn-primary{border-color:
 }
 .nav-tabs-custom>.nav-tabs>li.active>a, .nav-tabs-custom>.nav-tabs>li.active:hover>a {
     background-color:#fff;
-    color:#444;
-}
+    color:#444;}
 .nav-tabs-custom>.nav-tabs>li:first-of-type.active>a{border-left-color:transparent !important;}
+.row-action{padding:7px 0 0;display:none}tr:hover .row-action,tr.active .row-action{display:block}

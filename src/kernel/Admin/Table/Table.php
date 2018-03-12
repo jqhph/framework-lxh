@@ -266,6 +266,21 @@ class Table extends Widget
     }
 
     /**
+     * 当光标选中当前行时显示的内容
+     *
+     * @param $content
+     * @return $this
+     */
+    public function hover($content)
+    {
+        if (! $this->field) {
+            return $this;
+        }
+        $this->headers[$this->field]['expand'] = &$content;
+        return $this;
+    }
+
+    /**
      * 自定义字段渲染处理方法
      *
      * @param $content

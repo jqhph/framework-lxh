@@ -222,7 +222,7 @@ class RowActions extends TrTools
 
         $name = trim(str_replace('/', '-', $url), '-');
 
-        return "<a onclick=\"open_tab('$name', '$url', '{$this->normalizeTabLabel($id)}')\"><i class=\"fa fa-edit\" style=\"color:#333\"></i></a>";
+        return "<a onclick=\"open_tab('$name', '$url', '{$this->normalizeTabLabel($id)}')\"><i class=\"fa fa-edit\" ></i></a>";
     }
 
     /**

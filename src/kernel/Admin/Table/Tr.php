@@ -161,6 +161,17 @@ class Tr extends Widget
         return $tdString;
     }
 
+    protected function renderColumnExpand($expand)
+    {
+        if ($expand instanceof \Closure) {
+            $expand = $expand($this->items);
+        } elseif ($expand instanceof Renderable) {
+            $expand = $expand->render();
+        }
+
+        return "<div class='row-action'>$expand</div>";
+    }
+
     /**
      * @param $tdString
      * @param $field
@@ -172,15 +183,20 @@ class Tr extends Widget
 
         $td = $this->buildTd($field, $value);
 
+        $expandContent = '';
+        if ($expand = get_value($options, 'expand')) {
+            $expandContent = $this->renderColumnExpand($expand);
+        }
+
         if ($handler = $this->table->handler('field', $field)) {
             // 自定义处理器
             if (!is_string($handler) && is_callable($handler)) {
                 $td->value(
-                    $handler($value, $this->items)
+                    $handler($value, $this->items) . $expandContent
                 );
                 $tdString .= $td->render();
             } else {
-                $tdString .=  $td->value($handler)->render();
+                $tdString .=  $td->value($handler . $expandContent)->render();
             }
             return;
         }
@@ -203,7 +219,8 @@ class Tr extends Widget
             $field,
             $value,
             $td,
-            get_value($options, 'then')
+            get_value($options, 'then'),
+            $expandContent
         );
     }
 
@@ -223,7 +240,7 @@ class Tr extends Widget
      * @param \Closure $then
      * @return mixed|string
      */
-    protected function resolveFiledView($view, $field, $value, Td $td, \Closure $then = null)
+    protected function resolveFiledView($view, $field, $value, Td $td, \Closure $then = null, $expandContent = '')
     {
         $method = 'build' . $view;
         if (method_exists($this, $method)) {
@@ -239,7 +256,7 @@ class Tr extends Widget
 
         $then && $then($view);
 
-        return $td->value($view->render())->render();
+        return $td->value($view->render() . $expandContent)->render();
     }
 
     /**

@@ -426,18 +426,19 @@ class Grid implements Renderable
         $url = clone $this->url;
         $url->unsetQuery($this->pjax);
 
+        $color = 'default';
         if ($this->isTrash) {
-            $color = 'primary';
+            $label = trans('List');
+            $icon = 'fa fa-mail-reply';
             $url->unsetQuery($this->trashKey);
         } else {
-            $color = 'default';
+            $label = trans('Trash');
+            $icon = 'fa fa-recycle';
             $url->query($this->trashKey, 1);
         }
 
-        $label = trans('Trash');
-
         $this->tools->prepend(
-            "<div class='btn-group'><a class=\"btn btn-$color\" href=\"{$url->string()}\"><i class=\"fa fa-recycle\"></i>&nbsp; {$label}</a></div>"
+            "<div class='btn-group'><a class=\"btn btn-$color\" href=\"{$url->string()}\"><i class=\"$icon\"></i>&nbsp; {$label}</a></div>"
         );
     }
 
