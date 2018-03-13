@@ -67,20 +67,57 @@
                 // 发起删除请求
                 model.batchDelete()
             });
-        }
+        },
+        // 移至回收站
+        moveToTrash: function () {
 
+        },
+        // 还原
+        restore: function () {
+
+        },
+        // 永久删除
+        deletePermanently: function () {
+
+        },
+        // 批量移至回收站
+        batchMoveToTrash: function () {
+
+        },
+        // 批量还原
+        batchRestore: function () {
+
+        },
+        // 批量永久删除
+        batchDeletePermanently: function () {
+
+        }
     };
 
+    var $delete = $('a[data-action="delete-row"]'),
+        $restore = $('a[data-action="restore"]'),
+        $deletePermanently = $('a[data-action="delete-permanently"]'),
+        $moveTrash = $('a[data-action="trash"]');
+
     // 绑定删除事件
-    $('a[data-action="delete-row"]').click(public.delete);
+    $delete.click(public.delete);
+    $restore.click(public.restore);
+    $deletePermanently.click(public.deletePermanently);
+    $moveTrash.click(public.moveToTrash);
     $('.batch-delete').click(public.batchDelete);
+    $('.batch-to-trash').click(public.batchMoveToTrash);
+    $('.batch-restore').click(public.batchRestore);
+    $('.batch-delete-permanently').click(public.batchDeletePermanently);
     __then__(function () {
         // 行选择器点击事件
         var allInput = $('input[data-action="select-all"]');
 
         $(document).on('pjax:complete', function () {
             // 绑定删除事件
-            $('a[data-action="delete-row"]').click(public.delete);
+            $delete.click(public.delete);
+            $restore.click(public.restore);
+            $deletePermanently.click(public.deletePermanently);
+            $moveTrash.click(public.moveToTrash);
 
             allInput = $('input[data-action="select-all"]');
             // 反选点击事件

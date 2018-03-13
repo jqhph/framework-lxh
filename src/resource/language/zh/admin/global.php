@@ -58,6 +58,15 @@ return array (
     'created_by' => '创建人',
     'modified_at' => '修改时间',
     'desc' => '描述',
+      'username' => '用户名',
+      'email' => '邮箱',
+      'mobile' => '手机',
+      'sex' => '性别',
+      'roles' => '角色',
+      'status' => '状态',
+      'type' => '类型',
+      'title' => '标题',
+      'content' => '内容'
   ),
   'tip' => 
   array (

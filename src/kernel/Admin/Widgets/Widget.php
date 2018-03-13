@@ -40,9 +40,13 @@ abstract class Widget extends Fluent implements Renderable
     {
         $html = [];
         foreach ($this->attributes as $key => &$value) {
-            $element = $this->attributeElement($key, $value);
-            if (!is_null($element)) {
-                $html[] = $element;
+            if (is_numeric($key)) {
+                $key = $value;
+            }
+            if (!is_null($value)) {
+                $html[] = $key.'="'.htmlentities($value, ENT_QUOTES, 'UTF-8').'"';
+            } else {
+                $html[] = $key;
             }
         }
 
@@ -154,24 +158,6 @@ abstract class Widget extends Fluent implements Renderable
         $this->attributes[$k] = &$v;
 
         return $this;
-    }
-
-    /**
-     * Build a single attribute element.
-     *
-     * @param string $key
-     * @param string $value
-     *
-     * @return string
-     */
-    protected function attributeElement($key, $value)
-    {
-        if (is_numeric($key)) {
-            $key = $value;
-        }
-        if (!is_null($value)) {
-            return $key.'="'.htmlentities($value, ENT_QUOTES, 'UTF-8').'"';
-        }
     }
 
     /**

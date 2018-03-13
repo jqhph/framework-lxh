@@ -597,6 +597,11 @@ class Table extends Widget
 
             $trString .= $tr->render();
         }
+        if ($this->nextRow) {
+            $trString .=
+                "<tr><td colspan='{$this->totalColumns()}' style='padding:0;border:0;'>{$this->nextRow}</td></tr>";
+            $this->nextRow = '';
+        }
         return $trString;
     }
 

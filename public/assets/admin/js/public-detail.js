@@ -6,7 +6,6 @@ new LxhLoader(['@lxh/js/validate.min'], function () {
         var v = $lxh.validator(window.formRules || [], submit);
         var model = $lxh.createModel(),
             notify = $lxh.ui().notify(),
-            name = LXHSTORE.IFRAME.current(),
             n = NProgress;
 
         function submit(e) {
