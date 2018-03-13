@@ -34,9 +34,7 @@ var st = LXHSTORE, \$g = $('.grid-switcher'), crt = st.IFRAME.current(),
 form = $('#{$filterId} form'), 
 formUrl = form.attr('action').replace(/[&]*view=[-\w\d]*/i, '');
 \$g.click(function () {
-    \$g.removeClass('btn-primary');
-    \$g.addClass('btn-default');
-    var t = $(this), v = t.data('view'); t.addClass('btn-primary');t.removeClass('btn-default');
+    var t = $(this), v = t.data('view');
     // 缓存
     st.cache.set(t.data('path'), v);
     form.attr('action', formUrl + '&view=' + v);
@@ -54,18 +52,19 @@ EOF
     {
         $origin = $this->url->uri()->getPath();
 
-        $tableView = $this->url->query('view', 'table')->string();
-        $cardView = $this->url->query('view', 'card')->string();
-
         $tableActive = $cardActive = 'btn-default';
         if ($this->grid->getLayout() == Grid::LAYOUT_CARD) {
-            $cardActive = 'btn-primary';
+            $url = $this->url->query('view', 'table')->string();
+            $icon = 'fa fa-list';
+            $view = Grid::LAYOUT_TABLE;
         } else {
-            $tableActive = 'btn-primary';
+            $url = $this->url->query('view', 'card')->string();
+            $icon = 'fa fa-th';
+            $view = Grid::LAYOUT_CARD;
+
         }
 
-        $tb = Grid::LAYOUT_TABLE;
-        $card = Grid::LAYOUT_CARD;
-        return "<div class=\"btn-group\"><button data-path='$origin' data-view='$tb' data-url=\"$tableView\" class=\"grid-switcher waves-effect btn $tableActive\"><i class=\"fa fa-list\"></i></button><button data-view='$card' data-path='$origin' data-url=\"$cardView\" class=\"grid-switcher waves-effect btn $cardActive\"><i class=\"fa fa-th\"></i></button></div>";
+        return "<div class=\"btn-group\"><button data-path='$origin' data-view='$view' data-url=\"$url\" class=\"grid-switcher waves-effect btn $tableActive\"><i class=\"$icon\"></i></button></div>";
+
     }
 }
