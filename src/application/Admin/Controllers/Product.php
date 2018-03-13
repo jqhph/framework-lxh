@@ -201,6 +201,11 @@ class Product extends Controller
 
     protected function beforeGridRowResolved(Content $content)
     {
+        // pjax则不加载此部分内容
+        if ($this->request->isPjax()) {
+            return;
+        }
+
         $content->row(
             new Alert('这只是简单的示例代码')
         );

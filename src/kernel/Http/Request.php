@@ -290,6 +290,11 @@ class Request extends Message\ServerRequest
 	{
 		return $this->getHeaderLine('X_REQUESTED_WITH') === 'XMLHttpRequest';
 	}
+
+	public function isPjax()
+	{
+		return $this->getHeaderLine('X_PJAX') || isset($_GET['_pjax']);
+	}
 	
 	public function isSSL()
 	{

@@ -242,7 +242,7 @@ class Grid implements Renderable
         $this->isTrash = (bool)I($this->trashKey);
 
         $this->setupPerPage();
-        $this->url->query($this->pjax, static::getPjaxContainerId());
+        $this->url->query($this->pjax, '#'.static::getPjaxContainerId());
 
         $this->setupLayoutForRequestParams();
     }
@@ -970,7 +970,7 @@ class Grid implements Renderable
      */
     public static function isPjaxRequest()
     {
-        return isset($_GET['_pjax']);
+        return request()->isPjax();
     }
 
     /**
