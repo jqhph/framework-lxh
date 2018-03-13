@@ -457,7 +457,7 @@ class Grid implements Renderable
             $controller = __CONTROLLER__;
             $label = trans('Restore');
 
-            $this->actions()->append("<a data-model='{$controller}' class='batch-restore'>{$label}</a>");
+            $this->actions()->append("<a data-model='{$controller}' class='batch-restore' style='color:darkgreen'>{$label}</a>");
         }
 
         if (
@@ -466,7 +466,7 @@ class Grid implements Renderable
             $controller = __CONTROLLER__;
             $label = trans('Delete permanently');
 
-            $this->actions()->append("<a data-model='{$controller}' class='batch-delete-permanently'>{$label}</a>");
+            $this->actions()->append("<a data-model='{$controller}' class='batch-delete-permanently' style='color:#a00'>{$label}</a>");
         }
 
         if ($this->actions) {
