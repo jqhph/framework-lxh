@@ -12,6 +12,7 @@ use Lxh\Admin\Widgets\Card;
 use Lxh\Admin\Widgets\Form;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Table\Table;
+use Lxh\Auth\Ability;
 use Lxh\Exceptions\Forbidden;
 use Lxh\Helper\Util;
 use Lxh\Helper\Valitron\Validator;
@@ -209,25 +210,25 @@ class Controller extends Base
         }
 
         if ($this->trash) {
-            if (!$auth->can(__CONTROLLER__ . '.trash')) {
+            if (!$auth->can(__CONTROLLER__ . '.' . Ability::TRASH)) {
                 $grid->disableTrash();
             }
 
             // 还原
-            if ($auth->can(__CONTROLLER__ . '.restore')) {
+            if ($auth->can(__CONTROLLER__ . '.' . Ability::RESTORE)) {
                 $grid->allowRestore();
             }
 
             // 彻底删除
-            if ($auth->can(__CONTROLLER__ . '.delete-permanently')) {
+            if ($auth->can(__CONTROLLER__ . '.' . Ability::DELETEPERMANENTLY)) {
                 $grid->allowDeletePermanently();
             }
 
-            if ($auth->can(__CONTROLLER__ . '.batch-restore')) {
+            if ($auth->can(__CONTROLLER__ . '.' . Ability::BATCHRESTORE)) {
                 $grid->allowBatchRestore();
             }
 
-            if ($auth->can(__CONTROLLER__ . '.batch-delete-permanently')) {
+            if ($auth->can(__CONTROLLER__ . '.' . Ability::BATCHDELETEPERMANENTLY)) {
                 $grid->allowBatchDeletePermanently();
             }
         }

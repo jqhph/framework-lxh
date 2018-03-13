@@ -7,7 +7,7 @@
             <span class="input-group-addon clearfix"><?php echo $append ?></span>
             <?php } ?>
             <?php if ($options) {?>
-                <ul class="dropdown-menu col-sm-12">
+                <ul class="dropdown-menu col-sm-12" style="max-height:305px;">
                     <?php foreach ((array)$options as &$v) {?>
                         <li><a><?php echo $v;?></a></li>
                     <?php }?>

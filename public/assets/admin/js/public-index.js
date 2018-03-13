@@ -70,40 +70,35 @@
         },
         // 移至回收站
         moveToTrash: function () {
-
+console.log('moveToTrash');
         },
         // 还原
         restore: function () {
-
+            console.log('restore');
         },
         // 永久删除
         deletePermanently: function () {
-
+            console.log('deletePermanently');
         },
         // 批量移至回收站
         batchMoveToTrash: function () {
-
+            console.log('batchMoveToTrash');
         },
         // 批量还原
         batchRestore: function () {
-
+            console.log('batchRestore');
         },
         // 批量永久删除
         batchDeletePermanently: function () {
-
+            console.log('batchDeletePermanently');
         }
     };
 
-    var $delete = $('a[data-action="delete-row"]'),
-        $restore = $('a[data-action="restore"]'),
-        $deletePermanently = $('a[data-action="delete-permanently"]'),
-        $moveTrash = $('a[data-action="trash"]');
-
     // 绑定删除事件
-    $delete.click(public.delete);
-    $restore.click(public.restore);
-    $deletePermanently.click(public.deletePermanently);
-    $moveTrash.click(public.moveToTrash);
+    $('a[data-action="delete-row"]').click(public.delete);
+    $('a[data-action="restore"]').click(public.restore);
+    $('a[data-action="delete-permanently"]').click(public.deletePermanently);
+    $('a[data-action="trash"]').click(public.moveToTrash);
     $('.batch-delete').click(public.batchDelete);
     $('.batch-to-trash').click(public.batchMoveToTrash);
     $('.batch-restore').click(public.batchRestore);
@@ -114,10 +109,10 @@
 
         $(document).on('pjax:complete', function () {
             // 绑定删除事件
-            $delete.click(public.delete);
-            $restore.click(public.restore);
-            $deletePermanently.click(public.deletePermanently);
-            $moveTrash.click(public.moveToTrash);
+            $('a[data-action="delete-row"]').click(public.delete);
+            $('a[data-action="restore"]').click(public.restore);
+            $('a[data-action="delete-permanently"]').click(public.deletePermanently);
+            $('a[data-action="trash"]').click(public.moveToTrash);
 
             allInput = $('input[data-action="select-all"]');
             // 反选点击事件
