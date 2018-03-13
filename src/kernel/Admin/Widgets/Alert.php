@@ -9,11 +9,6 @@ class Alert extends Widget implements Renderable
     /**
      * @var string
      */
-    protected $view = 'admin::widget.alert';
-
-    /**
-     * @var string
-     */
     protected $title = '';
 
     /**
@@ -29,7 +24,7 @@ class Alert extends Widget implements Renderable
     /**
      * @var string
      */
-    protected $icon = 'ban';
+    protected $icon = 'fa fa-ban';
 
     protected $closeable = true;
 
@@ -40,7 +35,7 @@ class Alert extends Widget implements Renderable
      * @param string $title
      * @param string $style
      */
-    public function __construct($content = '', $title = '', $style = 'danger')
+    public function __construct($content = '', $title = '', $style = 'primary')
     {
         $this->content = &$content;
 
@@ -95,28 +90,30 @@ class Alert extends Widget implements Renderable
     }
 
     /**
-     * @return array
-     */
-    protected function variables()
-    {
-        $this->class("alert alert-{$this->style} alert-dismissable");
-
-        return [
-            'title'      => $this->title,
-            'content'    => $this->content,
-            'icon'       => $this->icon,
-            'attributes' => $this->formatAttributes(),
-            'closeable'  => $this->closeable,
-        ];
-    }
-
-    /**
      * Render alter.
      *
      * @return string
      */
     public function render()
     {
-        return view($this->view, $this->variables())->render();
+        $this->class("alert alert-{$this->style} alert-dismissable");
+
+        if ($this->content instanceof Renderable) {
+            $this->content = $this->content->render();
+        }
+
+        $close = $title = $icon = '';
+        if ($this->closeable) {
+            $close = '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>';
+        }
+        if ($title) {
+            if ($this->icon) {
+                $title = "<h4><i class='icon {$this->icon}'></i> $title</h4>";
+            } else {
+                $title = "<h4>$title</h4>";
+            }
+        }
+
+        return "<div {$this->formatAttributes()}>{$close}{$title}{$this->content}</div>";
     }
 }

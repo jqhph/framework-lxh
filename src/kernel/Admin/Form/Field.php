@@ -831,7 +831,7 @@ class Field implements Renderable
      */
     public function placeholder($placeholder = '')
     {
-        $this->placeholder = $placeholder;
+        $this->placeholder = &$placeholder;
 
         return $this;
     }
@@ -843,11 +843,7 @@ class Field implements Renderable
      */
     public function getPlaceholder()
     {
-        if (!is_string($this->column)) {
-            return '';
-        }
-
-        return $this->placeholder ?: trans($this->column . '-input', 'fields');
+        return $this->placeholder; // trans($this->column . '-input', 'fields');
     }
 
     /**

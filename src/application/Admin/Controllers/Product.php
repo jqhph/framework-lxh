@@ -25,20 +25,12 @@ use Lxh\Admin\Table\Td;
 use Lxh\Admin\Table\Th;
 use Lxh\Admin\Table\Tr;
 use Lxh\Admin\Widgets\Alert;
-use Lxh\Admin\Widgets\Box;
 use Lxh\Admin\Widgets\Card;
-use Lxh\Admin\Widgets\Carousel;
 use Lxh\Admin\Widgets\Code;
 use Lxh\Admin\Widgets\Collapse;
 use Lxh\Admin\Widgets\Form;
-use Lxh\Admin\Widgets\Markdown;
 use Lxh\Admin\Widgets\Popup;
 use Lxh\Admin\Widgets\Tab;
-use Lxh\Exceptions\InvalidArgumentException;
-use Lxh\Helper\Util;
-use Lxh\Http\Request;
-use Lxh\Http\Response;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Lxh\Admin\Layout;
 
 class Product extends Controller
@@ -50,19 +42,33 @@ class Product extends Controller
      */
     protected $filter = 'modal';
 
+    /**
+     * 使用回收站功能
+     *
+     * @var bool
+     */
     protected $trash = true;
 
     /**
+     * 网格列表宽度
+     *
      * @var int
      */
     protected $gridWidth = 12;
 
+    /**
+     * 创建页面表单容器宽度
+     *
+     * @var int
+     */
     protected $createFormWidth = 8;
-    protected $detailFormWidth = 8;
 
-    public function initialize()
-    {
-    }
+    /**
+     * 编辑页面表单容器宽度
+     *
+     * @var int
+     */
+    protected $detailFormWidth = 8;
 
     protected function form(Form $form)
     {
@@ -193,6 +199,13 @@ class Product extends Controller
         $filter->dateRange('created_at')->between()->time();
     }
 
+    protected function beforeGridRowResolved(Content $content)
+    {
+        $content->row(
+            new Alert('这只是简单的示例代码')
+        );
+    }
+
     /**
      * 定义网格配置
      *
@@ -223,7 +236,7 @@ class Product extends Controller
     {
         $content = $this->content();
 
-        $content->row(new Code(__FILE__, 158, 400));
+        $content->row(new Code(__FILE__, 1, 400));
 
         return $content->render();
     }

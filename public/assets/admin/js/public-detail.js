@@ -31,4 +31,4 @@ new LxhLoader(['@lxh/js/validate.min'], function () {
             model.save()
         }
     }
-});
+}).request();
