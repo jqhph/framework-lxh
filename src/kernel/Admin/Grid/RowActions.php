@@ -117,7 +117,7 @@ class RowActions extends TrTools
         if ($rendering = $this->rendering) {
             $rendering($this, $this->items);
         }
-        
+
         if ($this->allowEdit && $this->allowDelete) {
             $this->prepend(
                 $this->renderEdit($id)
@@ -179,8 +179,13 @@ class RowActions extends TrTools
     {
         $model = __CONTROLLER__;
 
+        $action = 'delete-row';
+        if ($this->grid->option('useTrash')) {
+            $action = 'trash';
+        }
+
         return <<<EOF
-<a style="font-size:15px" data-model="$model" data-action="delete-row" data-id="$id" href="javascript:"><i class="red zmdi zmdi-close-circle-o"></i></a>
+<a style="font-size:15px" data-model="$model" data-action="$action" data-id="$id" href="javascript:"><i class="red zmdi zmdi-close-circle-o"></i></a>
 EOF;
 
     }

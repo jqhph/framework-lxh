@@ -50,6 +50,8 @@ class Product extends Controller
      */
     protected $filter = 'modal';
 
+    protected $trash = true;
+
     /**
      * @var int
      */
@@ -199,7 +201,6 @@ class Product extends Controller
     protected function grid(Grid $grid)
     {
         $grid->allowBatchDelete();
-        $grid->allowTrash();
 
         $preview = new Button('代码预览');
 

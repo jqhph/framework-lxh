@@ -116,6 +116,10 @@ class Controller extends Base
         // 网格行创建前
         $this->beforeGridRowResolved($content);
 
+        if ($this->trash) {
+            $grid->allowTrash();
+        }
+
         // 权限设置
         $this->gridPermit($grid);
 
@@ -204,14 +208,28 @@ class Controller extends Base
             $grid->allowBatchDelete();
         }
 
-        // 还原
-        if ($auth->can(__CONTROLLER__.'.restore')) {
-            $grid->allowRestore();
-        }
+        if ($this->trash) {
+            if (!$auth->can(__CONTROLLER__ . '.trash')) {
+                $grid->disableTrash();
+            }
 
-        // 彻底删除
-        if ($auth->can(__CONTROLLER__.'.delete-permanently')) {
-            $grid->allowDeletePermanently();
+            // 还原
+            if ($auth->can(__CONTROLLER__ . '.restore')) {
+                $grid->allowRestore();
+            }
+
+            // 彻底删除
+            if ($auth->can(__CONTROLLER__ . '.delete-permanently')) {
+                $grid->allowDeletePermanently();
+            }
+
+            if ($auth->can(__CONTROLLER__ . '.batch-restore')) {
+                $grid->allowBatchRestore();
+            }
+
+            if ($auth->can(__CONTROLLER__ . '.batch-delete-permanently')) {
+                $grid->allowBatchDeletePermanently();
+            }
         }
     }
 

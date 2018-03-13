@@ -139,22 +139,42 @@ class Grid implements Renderable
      * @var array
      */
     protected $options = [
-        'usePagination' => true,
-        'useFilter' => false,
-        'useExporter' => true,
-        'useActions' => true,
-        'useRowSelector' => true,
-        'allowEdit' => true,
-        'allowDelete' => true,
-        'allowCreate' => true,
-        'allowBatchDelete' => false,
-        'useRWD' => true,
-        'indexScript' => '@lxh/js/public-index',
-        'pjax' => true,
-        'useLayoutSwitcher' => false,
-        'useTrash' => false,
-        'allowedRestore' => false,
-        'allowedDeletePermanently' => false,
+        // 使用分页
+        'usePagination'                 => true,
+        // 使用过滤器
+        'useFilter'                     => false,
+        // 导出
+        'useExporter'                   => true,
+        // 使用行选择器
+        'useRowSelector'                => true,
+        // 编辑
+        'allowEdit'                     => true,
+        // 删除
+        'allowDelete'                   => true,
+        // 创建
+        'allowCreate'                   => true,
+        // 批量删除
+        'allowBatchDelete'              => false,
+        // 表格响应式工具
+        'useRWD'                        => true,
+        // 列表网格加载的js
+        'indexScript'                   => '@lxh/js/public-index',
+        // 使用pjax
+        'pjax'                          => true,
+        // 布局切换
+        'useLayoutSwitcher'             => false,
+        // 使用回收站
+        'useTrash'                      => false,
+        // 回收站删除字段名称
+        'deletedKeyName'                => 'deleted',
+        // 从回收站还原
+        'allowedRestore'                => false,
+        // 永久删除
+        'allowedDeletePermanently'      => false,
+        // 批量永久删除
+        'allowedBatchDeletePermanently' => false,
+        // 批量还原
+        'allowedBatchRestore'           => false,
     ];
 
     /**
@@ -331,6 +351,13 @@ class Grid implements Renderable
         return $this;
     }
 
+    public function disableTrash()
+    {
+        $this->options['useTrash'] = false;
+
+        return $this;
+    }
+
     /**
      * 禁止使用公共js脚本
      *
@@ -421,12 +448,49 @@ class Grid implements Renderable
         }
 
         if ($this->options['allowBatchDelete']) {
-            $this->actions()->append(new BatchDelete());
+            $this->buildBatchDelete();
+        }
+
+        if (
+            $this->options['allowedBatchRestore'] && $this->options['useTrash'] && $this->isTrash
+        ) {
+            $controller = __CONTROLLER__;
+            $label = trans('Restore');
+
+            $this->actions()->append("<a data-model='{$controller}' class='batch-restore'>{$label}</a>");
+        }
+
+        if (
+            $this->options['allowedBatchDeletePermanently'] && $this->options['useTrash'] && $this->isTrash
+        ) {
+            $controller = __CONTROLLER__;
+            $label = trans('Delete permanently');
+
+            $this->actions()->append("<a data-model='{$controller}' class='batch-delete-permanently'>{$label}</a>");
         }
 
         if ($this->actions) {
             $this->tools->prepend($this->actions);
         }
+    }
+
+    protected function buildBatchDelete()
+    {
+        $controller = __CONTROLLER__;
+
+        if ($this->options['useTrash']) {
+            if (!$this->isTrash) {
+                $label = trans('Move to trash');
+                $action = 'batch-to-trash';
+            } else {
+                return;
+            }
+        } else {
+            $action = 'batch-delete';
+            $label = trans('Delete');
+        }
+
+        $this->actions()->append("<a data-model='{$controller}' class='$action'>{$label}</a>");
     }
 
     protected function buildTrashEntry()
@@ -446,7 +510,7 @@ class Grid implements Renderable
         }
 
         $this->tools->prepend(
-            "<div class='btn-group'><a class=\"btn btn-$color\" href=\"{$url->string()}\"><i class=\"$icon\"></i>&nbsp; {$label}</a></div>"
+            "<div class='btn-group'><a class=\"btn btn-$color\" href=\"{$url->string()}\"><i class=\"$icon\"></i> {$label}</a></div>"
         );
     }
 
@@ -502,6 +566,14 @@ class Grid implements Renderable
         foreach ($this->filter->conditions() as $condition) {
             if ($value = $condition->build()) {
                 $where += $value;
+            }
+        }
+
+        if ($this->options['useTrash']) {
+            if ($this->isTrash) {
+                $where[$this->options['deletedKeyName']] = 1;
+            } else {
+                $where[$this->options['deletedKeyName']] = 0;
             }
         }
 
@@ -776,15 +848,39 @@ class Grid implements Renderable
         return $this;
     }
 
-    public function disabledRestore()
+    public function disableRestore()
     {
         $this->options['allowedRestore'] = false;
         return $this;
     }
 
-    public function disabledDeletePermanently()
+    public function disableDeletePermanently()
     {
         $this->options['allowedDeletePermanently'] = false;
+        return $this;
+    }
+
+    public function disableBatchDeletePermanently()
+    {
+        $this->options['allowedBatchDeletePermanently'] = false;
+        return $this;
+    }
+
+    public function allowBatchDeletePermanently()
+    {
+        $this->options['allowedBatchDeletePermanently'] = true;
+        return $this;
+    }
+
+    public function disableBatchRestore()
+    {
+        $this->options['allowedBatchRestore'] = false;
+        return $this;
+    }
+
+    public function allowBatchRestore()
+    {
+        $this->options['allowedBatchRestore'] = true;
         return $this;
     }
 
