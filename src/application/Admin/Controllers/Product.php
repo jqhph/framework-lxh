@@ -263,12 +263,12 @@ class Product extends Controller
 
             // 设置标题显示内容
             $th->value('<span>NAME</span>');
-        })->hover("<a data-action='restore' >还原</a> | <a data-action='delete-permanently' style='color:#a00'>永久删除</a>");
+        });
 
         $table->expand('price', function (Expand $expand) {
             $expand->ajax('/admin/product/action/test');
         })
-            ->sortable()->hover("<a data-action='restore' >还原</a> | <a data-action='delete-permanently' style='color:#a00'>永久删除</a>");;
+            ->sortable();
 
         $table->switch('is_hot');
         $table->checked('is_new');

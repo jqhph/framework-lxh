@@ -81,6 +81,13 @@ class Controller extends Base
     protected $uploads = [];
 
     /**
+     * 是否使用回收站
+     *
+     * @var bool
+     */
+    protected $trash = false;
+
+    /**
      * 列表界面
      *
      * @param Request $req
@@ -195,6 +202,16 @@ class Controller extends Base
         // 检查是否允许批量删除
         if ($auth->batchDeleteable()) {
             $grid->allowBatchDelete();
+        }
+
+        // 还原
+        if ($auth->can(__CONTROLLER__.'.restore')) {
+            $grid->allowRestore();
+        }
+
+        // 彻底删除
+        if ($auth->can(__CONTROLLER__.'.delete-permanently')) {
+            $grid->allowDeletePermanently();
         }
     }
 

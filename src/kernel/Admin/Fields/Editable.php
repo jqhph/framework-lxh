@@ -9,6 +9,14 @@ use Lxh\Support\Collection;
 
 class Editable extends Field
 {
+    protected static $js = [
+        '@lxh/plugins/bootstrap-editable/js/bootstrap-editable.min',
+    ];
+
+    protected static $css = [
+        '@lxh/plugins/bootstrap-editable/css/bootstrap-editable'
+    ];
+
     /**
      * @var bool
      */
@@ -161,7 +169,7 @@ class Editable extends Field
     {
         $this->type = 'combodate';
         // 加载momentjs
-        $this->js('moment', '@lxh/js/moment.min');
+        static::$js['moment'] = '@lxh/js/moment.min';
 
         $this->addOptions([
             'format'     => $format,
@@ -236,9 +244,6 @@ class Editable extends Field
     public function render()
     {
         if (empty($this->type)) $this->type = 'text';
-
-        $this->js('editable', '@lxh/plugins/bootstrap-editable/js/bootstrap-editable.min');
-        $this->css('editable', '@lxh/plugins/bootstrap-editable/css/bootstrap-editable');
 
         $this->options['name'] = $column = $this->name;
 

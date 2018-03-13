@@ -23,12 +23,12 @@ class Field implements Renderable
     /**
      * @var array
      */
-    protected static $loadedJs = [];
+    protected static $js = [];
 
     /**
      * @var array
      */
-    protected static $loadedCss = [];
+    protected static $css = [];
 
     /**
      * @var Table
@@ -176,38 +176,6 @@ class Field implements Renderable
             \Lxh\Admin\Admin::script($script);
 
             static::$loadedScripts[$unique] = 1;
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param $unique
-     * @param $js
-     * @return $this
-     */
-    public function js($unique, $js)
-    {
-        if (empty(static::$loadedJs[$unique]) && !Grid::isPjaxRequest()) {
-            \Lxh\Admin\Admin::js($js);
-
-            static::$loadedJs[$unique] = 1;
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param $unique
-     * @param $css
-     * @return $this
-     */
-    public function css($unique, $css)
-    {
-        if (empty(static::$loadedCss[$unique]) && !Grid::isPjaxRequest()) {
-            \Lxh\Admin\Admin::css($css);
-
-            static::$loadedCss[$unique] = 1;
         }
 
         return $this;
@@ -429,6 +397,11 @@ class Field implements Renderable
         if (!is_null($value)) {
             return $key.'="'.htmlentities($value, ENT_QUOTES, 'UTF-8').'"';
         }
+    }
+
+    public static function getAssets()
+    {
+        return ['js' => &static::$js, 'css' => &static::$css];
     }
 
     public function render()

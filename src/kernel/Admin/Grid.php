@@ -7,6 +7,7 @@ use Lxh\Admin\Data\Items;
 use Lxh\Admin\Fields\Button;
 use Lxh\Admin\Filter\AbstractFilter;
 use Lxh\Admin\Grid\LayoutSwitcher;
+use Lxh\Admin\Grid\TrashButtons;
 use Lxh\Admin\Layout\Row;
 use Lxh\Admin\Table\Column;
 use Lxh\Admin\Grid\RowActions;
@@ -128,6 +129,11 @@ class Grid implements Renderable
     protected $paginator;
 
     /**
+     * @var TrashButtons
+     */
+    protected $trashButtons;
+
+    /**
      * Options for grid.
      *
      * @var array
@@ -147,6 +153,8 @@ class Grid implements Renderable
         'pjax' => true,
         'useLayoutSwitcher' => false,
         'useTrash' => false,
+        'allowedRestore' => false,
+        'allowedDeletePermanently' => false,
     ];
 
     /**
@@ -403,7 +411,7 @@ class Grid implements Renderable
     protected function setupTools()
     {
         if ($this->options['useTrash']) {
-            $this->buildTrashBtn();
+            $this->buildTrashEntry();
         }
 
         if ($this->options['useLayoutSwitcher']) {
@@ -421,7 +429,7 @@ class Grid implements Renderable
         }
     }
 
-    protected function buildTrashBtn()
+    protected function buildTrashEntry()
     {
         $url = clone $this->url;
         $url->unsetQuery($this->pjax);
@@ -756,6 +764,30 @@ class Grid implements Renderable
         return  $this->options['pjax'];
     }
 
+    public function allowRestore()
+    {
+        $this->options['allowedRestore'] = true;
+        return $this;
+    }
+
+    public function allowDeletePermanently()
+    {
+        $this->options['allowedDeletePermanently'] = true;
+        return $this;
+    }
+
+    public function disabledRestore()
+    {
+        $this->options['allowedRestore'] = false;
+        return $this;
+    }
+
+    public function disabledDeletePermanently()
+    {
+        $this->options['allowedDeletePermanently'] = false;
+        return $this;
+    }
+
     /**
      * Get or set option for grid.
      *
@@ -776,13 +808,36 @@ class Grid implements Renderable
     }
 
     /**
+     *
+     * @return TrashButtons
+     */
+    public function trash(\Closure $closure = null)
+    {
+        if (!$this->trashButtons) {
+            $this->trashButtons = new TrashButtons($this, $closure);
+        }
+
+        return $this->trashButtons;
+    }
+
+    /**
      * @return string
      */
     protected function renderTable()
     {
         $list = $this->findList();
 
-        if ($list && ($this->options['allowEdit'] || $this->options['allowDelete'] || $this->rowActions)) {
+        if (
+            $this->isTrash && $list &&
+            ($this->options['allowedRestore'] || $this->options['allowedDeletePermanently'])
+        ) {
+            $this->trash()->build();
+        }
+
+        if (
+            !$this->isTrash && $list &&
+            ($this->options['allowEdit'] || $this->options['allowDelete'] || $this->rowActions)
+        ) {
             $this->buildRowActions();
         }
 

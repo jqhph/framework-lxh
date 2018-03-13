@@ -8,6 +8,14 @@ use Lxh\MVC\Controller;
 
 class Switcher extends Field
 {
+    protected static $js = [
+        '@lxh/plugins/switchery/switchery.min'
+    ];
+
+    protected static $css = [
+        '@lxh/plugins/switchery/switchery.min'
+    ];
+
     /**
      * @var int
      */
@@ -111,9 +119,6 @@ class Switcher extends Field
 
     public function render()
     {
-        $this->css('Switching', '@lxh/plugins/switchery/switchery.min');
-        $this->js('Switching', '@lxh/plugins/switchery/switchery.min');
-
         if (!$id = $this->getModelId()) {
             throw new InvalidArgumentException("Id not found!");
         }

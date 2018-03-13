@@ -91,9 +91,7 @@ class Tr extends Widget
      */
     public function render()
     {
-        $columns = $this->buildColumns();
-
-        $tr = "<tr {$this->formatAttributes()}>{$columns}</tr>";
+        $tr = "<tr {$this->formatAttributes()}>{$this->buildColumns()}</tr>";
 
         $name = $this->table->treeName();
 
@@ -149,8 +147,7 @@ class Tr extends Widget
             $tdString .= $column->tr($this)->render();
         }
 
-        $headers = $this->table->headers();
-        foreach ($headers as $field => &$options) {
+        foreach ($this->table->headers() as $field => &$options) {
             $this->renderColumns($tdString, $field, $options);
         }
 
@@ -163,13 +160,16 @@ class Tr extends Widget
 
     protected function renderColumnExpand($expand)
     {
-        if ($expand instanceof \Closure) {
-            $expand = $expand($this->items);
-        } elseif ($expand instanceof Renderable) {
-            $expand = $expand->render();
+        $content = '';
+        foreach ($expand as &$e) {
+            if ($e instanceof \Closure) {
+                $content .= $e($this->items);
+            } elseif ($e instanceof Renderable) {
+                $content .= $e->render();
+            }
         }
 
-        return "<div class='row-action'>$expand</div>";
+        return "<div class='row-action'>$content</div>";
     }
 
     /**

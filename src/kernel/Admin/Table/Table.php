@@ -2,6 +2,7 @@
 
 namespace Lxh\Admin\Table;
 
+use Lxh\Admin\Admin;
 use Lxh\Admin\Data\Items;
 use Lxh\Admin\Fields\Button;
 use Lxh\Admin\Fields\Code;
@@ -262,6 +263,10 @@ class Table extends Widget
         }
         $this->headers[$this->field]['view'] = &$view;
 
+        if (strpos($view , '\\') !== false) {
+            Admin::addAssetsFieldClass($view);
+        }
+
         return $this;
     }
 
@@ -276,7 +281,21 @@ class Table extends Widget
         if (! $this->field) {
             return $this;
         }
-        $this->headers[$this->field]['expand'] = &$content;
+        $this->headers[$this->field]['expand'][] = &$content;
+        return $this;
+    }
+
+    public function hoverAheadColumn($content)
+    {
+        foreach ($this->headers as $field => &$header) {
+            if (!empty($header['hide'])) {
+                continue;
+            }
+
+            $header['expand'][] = &$content;
+            break;
+        }
+
         return $this;
     }
 
