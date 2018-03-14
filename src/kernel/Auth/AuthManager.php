@@ -447,7 +447,7 @@ class AuthManager
      */
     public function batchDeleteable($controller = __CONTROLLER__)
     {
-        return $this->can($controller . '.' . Ability::BATCHDELETE);
+        return $this->can($controller . '.' . Ability::BATCH_DELETE);
     }
 
     /**

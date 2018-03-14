@@ -26,16 +26,22 @@ class ControllerManager extends Factory
 {
 
     /**
+     * 默认控制器
+     *
      * @var string
      */
-    protected $defaultController = 'Index';// 默认控制器
+    protected $defaultController = 'Index';
 
     /**
+     * 默认方法
+     *
      * @var string
      */
-    protected $defaultAction = 'List';// 默认方法
+    protected $defaultAction = 'List';
 
     /**
+     * 当前控制器完整类名
+     *
      * @var string
      */
     protected $controllerClass;
@@ -45,26 +51,32 @@ class ControllerManager extends Factory
      *
      * @var array
      */
-    protected $authClasses = [
-
-    ];
+    protected $authClasses = [];
 
     /**
+     * 模块名
+     *
      * @var string
      */
     protected $module;
 
     /**
+     * 控制器文件夹
+     *
      * @var string
      */
     protected $folder;
 
     /**
+     * 控制器名
+     *
      * @var string
      */
     protected $controllerName;
 
     /**
+     * 方法名
+     *
      * @var string
      */
     protected $actionName;
@@ -104,6 +116,8 @@ class ControllerManager extends Factory
     protected $middlewares = [];
 
     /**
+     * 中间件
+     *
      * @var string
      */
     protected $currentSettingMiddleware;
@@ -124,14 +138,18 @@ class ControllerManager extends Factory
     protected $authParams = true;// 登录验证相关信息
 
     /**
+     * 默认身份鉴权类名
+     *
      * @var string
      */
     protected $defaultAuthClass = 'User';
 
     /**
+     * 路由解析后的请求参数
+     *
      * @var array
      */
-    protected $requestParams = [];// 请求参数
+    protected $requestParams = [];
 
     /**
      * 认证类实例

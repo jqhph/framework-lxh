@@ -26,11 +26,15 @@ use Lxh\Status;
 class Controller extends Base
 {
     /**
+     * id字段名称
+     *
      * @var string
      */
     protected $idName = 'id';
 
     /**
+     * 编辑页面id
+     *
      * @var int
      */
     protected $id;
@@ -210,8 +214,9 @@ class Controller extends Base
         }
 
         if ($this->trash) {
-            if (!$auth->can(__CONTROLLER__ . '.' . Ability::TRASH)) {
-                $grid->disableTrash();
+            // 回收站入口
+            if ($auth->can(__CONTROLLER__ . '.' . Ability::TRASH)) {
+                $grid->allowTrashEntry();
             }
 
             // 还原
@@ -220,15 +225,17 @@ class Controller extends Base
             }
 
             // 彻底删除
-            if ($auth->can(__CONTROLLER__ . '.' . Ability::DELETEPERMANENTLY)) {
+            if ($auth->can(__CONTROLLER__ . '.' . Ability::DELETE_PERMANENTLY)) {
                 $grid->allowDeletePermanently();
             }
 
-            if ($auth->can(__CONTROLLER__ . '.' . Ability::BATCHRESTORE)) {
+            // 批量还原
+            if ($auth->can(__CONTROLLER__ . '.' . Ability::BATCH_RESTORE)) {
                 $grid->allowBatchRestore();
             }
 
-            if ($auth->can(__CONTROLLER__ . '.' . Ability::BATCHDELETEPERMANENTLY)) {
+            // 批量永久删除
+            if ($auth->can(__CONTROLLER__ . '.' . Ability::BATCH_DELETE_PERMANENTLY)) {
                 $grid->allowBatchDeletePermanently();
             }
         }

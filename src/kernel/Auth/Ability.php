@@ -21,14 +21,14 @@ class Ability
     const EXPORT = 'export';
     const IMPORT = 'import';
     const UPLOAD = 'upload';
-    const BATCHDELETE = 'batch-delete';
-    const BATCHUPDATE = 'batch-update';
-    const BATCHCREATE = 'batch-create';
+    const BATCH_DELETE = 'batch-delete';
+    const BATCH_UPDATE = 'batch-update';
+    const BATCH_CREATE = 'batch-create';
     const TRASH = 'trash';
     const RESTORE = 'restore';
-    const DELETEPERMANENTLY = 'delete-permanently';
-    const BATCHRESTORE = 'batch-restore';
-    const BATCHDELETEPERMANENTLY = 'batch-delete-permanently';
+    const DELETE_PERMANENTLY = 'delete-permanently';
+    const BATCH_RESTORE = 'batch-restore';
+    const BATCH_DELETE_PERMANENTLY = 'batch-delete-permanently';
 
     public static function getAbilitiesSupport()
     {
@@ -41,14 +41,14 @@ class Ability
             '.' . static::EXPORT,
             '.' . static::IMPORT,
             '.' . static::UPLOAD,
-            '.' . static::BATCHDELETE,
-            '.' . static::BATCHCREATE,
-            '.' . static::BATCHUPDATE,
+            '.' . static::BATCH_DELETE,
+            '.' . static::BATCH_CREATE,
+            '.' . static::BATCH_UPDATE,
             '.' . static::TRASH,
             '.' . static::RESTORE,
-            '.' . static::DELETEPERMANENTLY,
-            '.' . static::BATCHRESTORE,
-            '.' . static::BATCHDELETEPERMANENTLY,
+            '.' . static::DELETE_PERMANENTLY,
+            '.' . static::BATCH_RESTORE,
+            '.' . static::BATCH_DELETE_PERMANENTLY,
         ];
     }
 }

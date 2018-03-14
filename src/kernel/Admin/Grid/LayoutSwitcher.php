@@ -22,7 +22,7 @@ class LayoutSwitcher
     public function __construct(Grid $grid)
     {
         $this->grid = $grid;
-        $this->url = $grid->getUrl();
+        $this->url = clone $grid->getUrl();
 
         $filterId = '';
         if ($filter = $this->grid->filter()) {
@@ -38,7 +38,7 @@ formUrl = form.attr('action').replace(/[&]*view=[-\w\d]*/i, '');
     // 缓存
     st.cache.set(t.data('path'), v);
     form.attr('action', formUrl + '&view=' + v);
-    st.TAB.reload(crt, t.data('url').replace(/[&]*_pjax=[-\w\d]*/i, ''));
+    st.TAB.reload(crt, t.data('url').replace(/[&]*_pjax=[#-\w\d]*/i, ''));
 });
 })();
 EOF
@@ -51,6 +51,8 @@ EOF
     public function render()
     {
         $origin = $this->url->uri()->getPath();
+
+        $this->url->unsetQuery($this->grid->pjax);
 
         $tableActive = $cardActive = 'btn-default';
         if ($this->grid->getLayout() == Grid::LAYOUT_CARD) {

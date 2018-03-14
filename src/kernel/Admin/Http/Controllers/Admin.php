@@ -27,11 +27,25 @@ use Lxh\Auth\Database\Admin as AdminModel;
 class Admin extends Controller
 {
     /**
+     * 使用过滤器
+     * 
      * @var string
      */
     protected $filter = true;
 
+    /**
+     * 图片上传字段
+     *
+     * @var array
+     */
     protected $uploads = ['avatar' => 'image', ];
+
+    /**
+     * 使用回收站
+     *
+     * @var bool
+     */
+    protected $trash = true;
 
     protected function initialize()
     {

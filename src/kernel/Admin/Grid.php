@@ -165,6 +165,8 @@ class Grid implements Renderable
         'useLayoutSwitcher'             => false,
         // 使用回收站
         'useTrash'                      => false,
+        // 回收站入口
+        'allowTrashEntry'               => false,
         // 回收站删除字段名称
         'deletedKeyName'                => 'deleted',
         // 从回收站还原
@@ -195,7 +197,7 @@ class Grid implements Renderable
     /**
      * @var string
      */
-    protected $pjax = '_pjax';
+    public $pjax = '_pjax';
 
     /**
      *
@@ -358,6 +360,20 @@ class Grid implements Renderable
         return $this;
     }
 
+    public function allowTrashEntry()
+    {
+        $this->options['allowTrashEntry'] = true;
+
+        return $this;
+    }
+
+    public function disableTrashEntry()
+    {
+        $this->options['allowTrashEntry'] = false;
+
+        return $this;
+    }
+
     /**
      * 禁止使用公共js脚本
      *
@@ -437,7 +453,7 @@ class Grid implements Renderable
      */
     protected function setupTools()
     {
-        if ($this->options['useTrash']) {
+        if ($this->options['useTrash'] && $this->options['allowTrashEntry']) {
             $this->buildTrashEntry();
         }
 
