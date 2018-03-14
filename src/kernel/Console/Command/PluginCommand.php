@@ -337,7 +337,7 @@ class PluginCommand extends Command
         return strtr(
             file_get_contents($this->getRegisterStub()),
             array_merge($this->variables($name, $namespace), [
-                '{pluginConstName}' => strtoupper(lc_underline(__camel_case__($name, '-'))),
+                '{pluginConstName}' => strtoupper(slug(__camel_case__($name, '-'), '_')),
             ])
         );
     }

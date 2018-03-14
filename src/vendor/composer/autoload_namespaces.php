@@ -7,5 +7,4 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Parsedown' => array($vendorDir . '/erusev/parsedown'),
-    'BaconQrCode' => array($vendorDir . '/bacon/bacon-qr-code/src'),
 );

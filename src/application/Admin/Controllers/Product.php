@@ -72,29 +72,29 @@ class Product extends Controller
 
     protected function form(Form $form)
     {
-        $form->slider('slider');
+        $form->slider('slider')->setLabel('滑动条');
 
-        $form->radio('radio')->options(['value1', 'value2', 'value3'])->default('value2');
-        $form->checkbox('checkbox')->options(['value1', 'value2', 'value3']);
+        $form->radio('radio')->setLabel('单选框')->options(['value1', 'value2', 'value3'])->default('value2');
+        $form->checkbox('checkbox')->setLabel('复选框')->options(['value1', 'value2', 'value3']);
 
         $form->divide();
 
-        $form->textarea('textarea');
+        $form->textarea('textarea')->setLabel('文本框');
 
-        $form->select('select')->options([1, 2, 3])->default(3);
-        $form->multipleSelect('multiple-select')->options([1, 2, 3]);
+        $form->select('select')->setLabel('单选框')->options([1, 2, 3])->default(3);
+        $form->multipleSelect('multiple-select')->setLabel('多选框')->options([1, 2, 3]);
 
-        $form->color('color');
+        $form->color('color')->setLabel('颜色');
         $form->ip('ip');
         $form->mobile('mobile');
-        $form->switch('swich');
-        $form->icon('icon');
+        $form->switch('swich')->setLabel('开关切换');
+        $form->icon('icon')->setLabel('图标选择');
         // 自定义内容
         $form->html('html')->content('HELLO WORLD!')->help('自定义内容');
 
         $form->divide();
 
-        $form->editor('editor');
+        $form->editor('editor')->setLabel('在线编辑器');
     }
 
     protected function afterFormColumnResolved(Row $row)

@@ -236,29 +236,13 @@ function files()
 }
 
 /**
- * 驼峰转化为小写中划线
+ * 大写字母为小写中划线
  *
  * @param $name
  * @return string
  */
 function slug($name, $symbol = '-')
 {
-    $text = preg_replace_callback('/([A-Z])/', function (& $text) use ($symbol) {
-        return $symbol . strtolower($text[1]);
-    }, $name);
-
-    return ltrim($text, $symbol);
-}
-
-/**
- * 驼峰转化为小写下划线
- *
- * @param $name
- * @return string
- */
-function lc_underline($name)
-{
-    $symbol = '_';
     $text = preg_replace_callback('/([A-Z])/', function (& $text) use ($symbol) {
         return $symbol . strtolower($text[1]);
     }, $name);

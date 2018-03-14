@@ -36,7 +36,7 @@ background-color:#0072C6;border-color:#0072C6;}.btn-xs.btn-primary{border-color:
 .form-group.line{padding:0 5px;}
 .line .input-group .form-control:not(textarea){border-left:0;border-top:0;border-right:0;padding: 7px 12px 7px 1px;}
 .line .form-control:focus{border-bottom:2px solid #0072C6}
-.line .text{margin:18px 0 10px;color:#333;text-transform:uppercase}.line:first-child .text{margin:5px 0 10px}
+.line .text{margin:18px 0 10px;color:#000;text-transform:uppercase}.line:first-child .text{margin:5px 0 10px}
 .line .select2-container .select2-selection--single,.line .select2-container--default .select2-selection--multiple{border-left:0;border-top:0;border-right:0;}
 .line .select2-container--default.select2-container--focus .select2-selection--multiple{border-left:0;border-top:0;border-right:0;}
 .dropdown-menu {

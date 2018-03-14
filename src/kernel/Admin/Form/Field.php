@@ -756,13 +756,19 @@ class Field implements Renderable
     }
 
     /**
-     * Get label of the field.
+     * 字段名称
      *
      * @return string
      */
     public function label()
     {
         return $this->label;
+    }
+
+    public function setLabel($label)
+    {
+        $this->label = $label;
+        return $this;
     }
 
     /**
@@ -843,7 +849,7 @@ class Field implements Renderable
      */
     public function getPlaceholder()
     {
-        return $this->placeholder; // trans($this->column . '-input', 'fields');
+        return $this->placeholder;
     }
 
     /**
