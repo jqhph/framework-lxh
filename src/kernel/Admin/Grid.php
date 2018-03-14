@@ -177,6 +177,8 @@ class Grid implements Renderable
         'allowedBatchDeletePermanently' => false,
         // 批量还原
         'allowedBatchRestore'           => false,
+        // 刷新按钮
+        'allowedRefresh'                => true,
     ];
 
     /**
@@ -386,6 +388,20 @@ class Grid implements Renderable
         return $this;
     }
 
+    public function allowRefresh()
+    {
+        $this->options['allowedRefresh'] = true;
+
+        return $this;
+    }
+
+    public function disableRefresh()
+    {
+        $this->options['allowedRefresh'] = false;
+
+        return $this;
+    }
+
 
     /**
      * 设置动作按钮
@@ -453,6 +469,17 @@ class Grid implements Renderable
      */
     protected function setupTools()
     {
+        if ($this->options['allowedRefresh'] && $this->options['pjax']) {
+            $label = trans('Refresh');
+
+            $url = clone $this->url;
+            $url->unsetQuery($this->pjax);
+
+            $a = "<a href='{$url->string()}' class=\"pjax btn btn-purple btn-trans waves-effect\" style='top:1px'><i class=\"zmdi zmdi-refresh-alt\"></i> $label</a>";
+
+            $this->tools->prepend($a);
+        }
+
         if ($this->options['useTrash'] && $this->options['allowTrashEntry']) {
             $this->buildTrashEntry();
         }

@@ -242,7 +242,7 @@ class Controller extends Base
     }
 
     /**
-     * 网格行创建前
+     * Grid初始化之前触发
      *
      * @param Content $content
      */
@@ -251,7 +251,7 @@ class Controller extends Base
     }
 
     /**
-     * 网格行创建后
+     * Grid初始化之后
      *
      * @param Content $content
      */

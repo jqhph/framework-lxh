@@ -199,6 +199,11 @@ class Product extends Controller
         $filter->dateRange('created_at')->between()->time();
     }
 
+    /**
+     * Grid初始化之前触发
+     *
+     * @param Content $content
+     */
     protected function beforeGridRowResolved(Content $content)
     {
         // pjax则不加载此部分内容
@@ -206,9 +211,13 @@ class Product extends Controller
             return;
         }
 
-        $content->row(
-            new Alert('这只是简单的示例代码')
-        );
+        if ($this->grid->isTrash()) {
+            $alert = new Alert('这是回收站页网格布局DEMO', '', 'danger');
+        } else {
+            $alert = new Alert('这是列表页网格布局DEMO', '', 'info');
+        }
+
+        $content->row($alert);
     }
 
     /**
