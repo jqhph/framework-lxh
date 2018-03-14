@@ -1080,11 +1080,6 @@ class Grid implements Renderable
             $this->disableGridScript();
         }
 
-        if ($this->options['useRWD']) {
-            Admin::css('@lxh/plugins/RWD-Table-Patterns/dist/css/rwd-table.min');
-            Admin::js('@lxh/plugins/RWD-Table-Patterns/dist/js/rwd-table.min');
-        }
-
         $vars = array_merge([
             'content'     => &$content,
             'pageString'  => &$this->pageString,
@@ -1098,6 +1093,19 @@ class Grid implements Renderable
 
         if ($isPjaxRequest) {
             return view('admin::grid-content', $vars)->render();
+        }
+
+        if ($this->options['useRWD']) {
+            Admin::css('@lxh/plugins/RWD-Table-Patterns/dist/css/rwd-table.min');
+            Admin::js('@lxh/plugins/RWD-Table-Patterns/dist/js/rwd-table.min');
+        }
+
+        if ($this->options['pjax']) {
+            Admin::js('@lxh/js/jquery.pjax.min');
+        }
+
+        if ($this->options['indexScript']) {
+            Admin::js($this->options['indexScript']);
         }
 
         if ($this->filter) {

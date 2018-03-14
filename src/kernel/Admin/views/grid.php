@@ -23,10 +23,7 @@ if ($filter) {?><div style="height:9px"></div><div id="<?php echo $filterId?>"><
         n.start();
         $.get('<?php echo $orginUrl?>',pjax_set);
     };
-
-    <?php if ($indexScript) {?>
-    require_js('<?php echo $indexScript;?>');
-    <?php }?>
+    
     <?php if ($pageString) {?>
     __then__(function () {
         w.change_pages = function () {
@@ -41,13 +38,11 @@ if ($filter) {?><div style="height:9px"></div><div id="<?php echo $filterId?>"><
         $('.grid-per-pager').change(w.change_pages);
     });
     <?php }?>
-    <?php if ($pjax) {
-    ?>
-    require_js('@lxh/js/jquery.pjax.min');
-    <?php } ?>
 
     function pjax_set(d) {
-        $('#pjax-container').html(d);$(document).trigger('pjax:complete',{});n.done()
+        $('#pjax-container').html(d);
+        $(document).trigger('pjax:complete',{});
+        n.done()
     }
 })(window);
 </script>
