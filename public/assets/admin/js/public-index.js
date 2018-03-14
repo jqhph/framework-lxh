@@ -31,7 +31,7 @@
 
             model.on('success', function () {
                 layer.msg(trans("Deleted!"), sut);
-                $('.grid-refresh').click();
+                reload_grid();
             });
 
             var rowText = $this.parent().parent().text();
@@ -63,7 +63,7 @@
 
             model.on('success', function () {
                 layer.msg(trans("Deleted!"), sut);
-                $('.grid-refresh').click();
+                reload_grid();
             });
 
             // 确认窗
@@ -97,7 +97,7 @@
 
             model.on('success', function () {
                 layer.msg(trans("Update succeeded!"), sut);
-                $('.grid-refresh').click();
+                reload_grid();
             });
             model.restore();
         },
@@ -121,7 +121,7 @@
 
             model.on('success', function () {
                 layer.msg(trans("Update succeeded!"), sut);
-                $('.grid-refresh').click();
+                reload_grid();
             });
             model.restore();
         },

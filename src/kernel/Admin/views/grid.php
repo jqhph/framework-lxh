@@ -1,4 +1,7 @@
-<?php if ($filter) {?><div style="height:9px"></div><div id="<?php echo $filterId?>"><?php echo $filter;?></div><div class="clearfix"></div><div style="margin:15px 0"></div><?php } ?>
+<?php
+$orginUrl = $url->string();
+
+if ($filter) {?><div style="height:9px"></div><div id="<?php echo $filterId?>"><?php echo $filter;?></div><div class="clearfix"></div><div style="margin:15px 0"></div><?php } ?>
 <div id="<?php echo ($pjid = Lxh\Admin\Grid::getPjaxContainerId());?>"><?php
     echo view('admin::grid-content', [
         'content' => &$content,
@@ -12,26 +15,39 @@
     ])->render();
 ?></div>
 <script>
+(function (w) {
+    var n = NProgress;
+    w.change_pages = function(){};
+    // 刷新网格列表函数
+    w.reload_grid = function () {
+        n.start();
+        $.get('<?php echo $orginUrl?>',pjax_set);
+    };
+
     <?php if ($indexScript) {?>
     require_js('<?php echo $indexScript;?>');
     <?php }?>
     <?php if ($pageString) {?>
     __then__(function () {
-        $('.grid-per-pager').change(change);
-        function change() {
+        w.change_pages = function () {
             <?php if ($pjax) { ?>
-            NProgress.start();
-            $.get($(this).val(),function(d){$('#pjax-container').html(d);$(document).trigger('pjax:complete',{});NProgress.done()});
+            n.start();
+            $.get($(this).val(),pjax_set);
             <?php } else {
-            echo 'window.location.href = $(this).val();';
+            echo 'w.location.href = $(this).val();';
         } ?>
-        }
-        window.change_pages = change
+        };
+
+        $('.grid-per-pager').change(w.change_pages);
     });
     <?php }?>
     <?php if ($pjax) {
-    // jquery.pjax.min含自定义js
     ?>
     require_js('@lxh/js/jquery.pjax.min');
     <?php } ?>
+
+    function pjax_set(d) {
+        $('#pjax-container').html(d);$(document).trigger('pjax:complete',{});n.done()
+    }
+})(window);
 </script>

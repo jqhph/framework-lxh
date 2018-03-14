@@ -231,6 +231,8 @@ class Grid implements Renderable
      */
     protected $layout = 'table';
 
+    protected $originUrl = '';
+
     /**
      * Create a new grid instance.
      *
