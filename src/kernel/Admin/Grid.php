@@ -471,14 +471,11 @@ class Grid implements Renderable
      */
     protected function setupTools()
     {
-        if ($this->options['allowedRefresh'] && $this->options['pjax']) {
+        if ($this->options['allowedRefresh']) {
             $label = trans('Refresh');
 
-            $url = clone $this->url;
-            $url->unsetQuery($this->pjax);
-
             $this->tools->prepend(
-                "<a href='{$url->string()}' class=\"grid-refresh pjax btn btn-purple btn-trans waves-effect\" style='top:1px'><i class=\"zmdi zmdi-refresh-alt\"></i> $label</a>"
+                "<button onclick='reload_grid()' class=\"btn btn-purple btn-trans waves-effect\"><i class=\"zmdi zmdi-refresh-alt\"></i> $label</button>"
             );
         }
 
