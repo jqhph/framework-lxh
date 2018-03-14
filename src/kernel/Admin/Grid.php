@@ -475,9 +475,9 @@ class Grid implements Renderable
             $url = clone $this->url;
             $url->unsetQuery($this->pjax);
 
-            $a = "<a href='{$url->string()}' class=\"pjax btn btn-purple btn-trans waves-effect\" style='top:1px'><i class=\"zmdi zmdi-refresh-alt\"></i> $label</a>";
-
-            $this->tools->prepend($a);
+            $this->tools->prepend(
+                "<a href='{$url->string()}' class=\"pjax btn btn-purple btn-trans waves-effect\" style='top:1px'><i class=\"zmdi zmdi-refresh-alt\"></i> $label</a>"
+            );
         }
 
         if ($this->options['useTrash'] && $this->options['allowTrashEntry']) {
