@@ -111,7 +111,7 @@ abstract class Controller
      */
     protected function getLowerCaseDashName()
     {
-        return lc_dash($this->name);
+        return slug($this->name);
     }
 
 

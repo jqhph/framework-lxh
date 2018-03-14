@@ -212,7 +212,7 @@ class Translator
     {
         $lang = $lang ?: $this->language;
 
-        $scope = lc_dash($scope);
+        $scope = slug($scope);
 
 //        if ($scope == 'Global') {
 //            return "{$this->root}{$this->dir}/{$lang}/$scope.php";

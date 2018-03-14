@@ -42,13 +42,13 @@ class Util
      * @param  string  $symbol
      * @return string
      */
-    public static function convertWith($name, $trim = false, $symbol = '_')
+    public static function slug($name, $symbol = '-')
     {
         $text = preg_replace_callback('/([A-Z])/', function (& $text) use ($symbol) {
             return $symbol . strtolower($text[1]);
         }, $name);
 
-        return $trim ? ltrim($text, $symbol) : $text;
+        return ltrim($text, $symbol);
     }
 
     /**

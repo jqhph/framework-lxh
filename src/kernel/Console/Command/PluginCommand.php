@@ -378,7 +378,7 @@ class PluginCommand extends Command
      */
     protected function formatPluginName()
     {
-        return lc_dash(__camel_case__($this->argument('name')));
+        return slug(__camel_case__($this->argument('name')));
     }
 
     /**

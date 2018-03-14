@@ -75,7 +75,7 @@ class Model extends Entity
     {
         $name = $name ?: $this->parseName();
 
-        $this->name = lc_dash($name);
+        $this->name = slug($name);
         $this->module = defined('__MODULE_DASH__') ? __MODULE_DASH__ : '';
         $this->container = $container ?: container();
         $this->events = $container['events'];

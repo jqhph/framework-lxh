@@ -16,14 +16,12 @@ use Lxh\Admin\Table\Td;
 use Lxh\Admin\Table\Th;
 use Lxh\Admin\Table\Tr;
 use Lxh\Admin\Tools\Actions;
-use Lxh\Admin\Tools\BatchDelete;
 use Lxh\Admin\Tools\Tools;
-use Lxh\Admin\Tools\TrTools;
-use Lxh\Admin\Widgets\Box;
 use Lxh\Admin\Widgets\Card;
 use Lxh\Admin\Widgets\Pages;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\MVC\Model;
+use Lxh\Http;
 
 class Grid implements Renderable
 {
@@ -217,7 +215,7 @@ class Grid implements Renderable
     /**
      * current url
      *
-     * @var \Lxh\Http\Url
+     * @var Http\Url
      */
     protected $url;
 
@@ -241,20 +239,18 @@ class Grid implements Renderable
      */
     public function __construct(array &$rows = [])
     {
-        $this->rows = &$rows;
-        $this->tools = new Tools();
-        $this->url = new \Lxh\Http\Url();
-        $this->idName = Admin::id();
+        $this->rows    = &$rows;
+        $this->tools   = new Tools();
+        $this->url     = new Http\Url();
+        $this->idName  = Admin::id();
         $this->isTrash = (bool)I($this->trashKey);
 
         $this->setupPerPage();
-        $this->url->query($this->pjax, '#'.static::getPjaxContainerId());
-
         $this->setupLayoutForRequestParams();
     }
 
     /**
-     * @return \Lxh\Http\Url
+     * @return Http\Url
      */
     public function getUrl()
     {
@@ -1077,7 +1073,7 @@ class Grid implements Renderable
             $this->disableGridScript();
         }
 
-        $vars = array_merge([
+        $vars = [
             'content'     => &$content,
             'pageString'  => &$this->pageString,
             'pageOptions' => &$this->perPages,
@@ -1086,7 +1082,9 @@ class Grid implements Renderable
             'url'         => $this->url,
             'filterId'    => '',
             'filter'      => '',
-        ], $this->options);
+            'pjax'        => $this->options['pjax'],
+            'useRWD'      => $this->options['useRWD']
+        ];
 
         if ($isPjaxRequest) {
             return view('admin::grid-content', $vars)->render();

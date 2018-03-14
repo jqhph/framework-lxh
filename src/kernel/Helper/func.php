@@ -241,9 +241,8 @@ function files()
  * @param $name
  * @return string
  */
-function lc_dash($name)
+function slug($name, $symbol = '-')
 {
-    $symbol = '-';
     $text = preg_replace_callback('/([A-Z])/', function (& $text) use ($symbol) {
         return $symbol . strtolower($text[1]);
     }, $name);

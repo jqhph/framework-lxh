@@ -37,7 +37,7 @@ class Assets
 
         // 用户自定义js基本路径
         foreach (config('modules') as &$module) {
-            $module = lc_dash($module);
+            $module = slug($module);
             $paths['@' . $module] = "$server/assets/{$version}/$module";
 
         }

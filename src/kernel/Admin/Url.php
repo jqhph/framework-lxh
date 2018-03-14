@@ -43,7 +43,7 @@ class Url
      */
     protected function scope($scope)
     {
-        $this->scope = lc_dash($scope);
+        $this->scope = slug($scope);
 
         return $this;
     }
@@ -155,7 +155,7 @@ class Url
      */
     public function action($action = __ACTION__, $id = null)
     {
-        $action = lc_dash($action);
+        $action = slug($action);
 
         $id = $id ? "/$id" : '';
 

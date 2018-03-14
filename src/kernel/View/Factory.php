@@ -197,8 +197,6 @@ class Factory implements FactoryContract
     protected function normalizeName(&$name)
     {
         return $name;
-        // str_replace('/', '.', $name)
-//        return Util::convertWith($name, true, '-');
     }
 
     /**

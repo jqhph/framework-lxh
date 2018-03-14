@@ -1,17 +1,18 @@
 <?php
+$url->query('_pjax', 1);
 $orginUrl = $url->string();
 
 if ($filter) {?><div style="height:9px"></div><div id="<?php echo $filterId?>"><?php echo $filter;?></div><div class="clearfix"></div><div style="margin:15px 0"></div><?php } ?>
 <div id="<?php echo ($pjid = Lxh\Admin\Grid::getPjaxContainerId());?>"><?php
     echo view('admin::grid-content', [
-        'content' => &$content,
-        'pageString' => &$pageString,
+        'content'     => &$content,
+        'pageString'  => &$pageString,
         'pageOptions' => &$pageOptions,
-        'perPageKey' => &$perPageKey,
-        'useRWD' => &$useRWD,
-        'pjax' => &$pjax,
-        'perPage' => &$perPage,
-        'url' => $url
+        'perPageKey'  => &$perPageKey,
+        'useRWD'      => &$useRWD,
+        'pjax'        => &$pjax,
+        'perPage'     => &$perPage,
+        'url'         => $url
     ])->render();
 ?></div>
 <script>
@@ -23,7 +24,7 @@ if ($filter) {?><div style="height:9px"></div><div id="<?php echo $filterId?>"><
         n.start();
         $.get('<?php echo $orginUrl?>',pjax_set);
     };
-    
+
     <?php if ($pageString) {?>
     __then__(function () {
         w.change_pages = function () {

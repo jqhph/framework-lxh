@@ -342,7 +342,7 @@ class AuthManager
      */
     public static function normalizName($name)
     {
-        return lc_dash($name);
+        return slug($name);
     }
 
     /**
