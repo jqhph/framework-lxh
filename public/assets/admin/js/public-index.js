@@ -10,9 +10,13 @@
         icon: 1,
         offset:'t',
         skin: 'layer-ext-moon'
-    };
+    },
+        ntf;
     var public = {
-        delete: function (e) {
+        delete: function (e, method, title) {
+            method = method || 'delete';
+            title = title || "Permanently delete";
+
             var $this = $(e.currentTarget),
                 id = $this.attr('data-id'),
                 modelName = $this.attr('data-model') || $lxh.controllerName();
@@ -26,27 +30,31 @@
             model.setId(id);
 
             model.on('success', function () {
-                layer.msg(trans("Deleted!", 'tip'), sut);
+                layer.msg(trans("Deleted!"), sut);
+                $('.grid-refresh').click();
             });
 
             var rowText = $this.parent().parent().text();
             if (rowText) rowText = rowText.replace(/[\n]|[\s]]/gi, ' ') + "\n";
             // 确认窗
             layer.confirm(rowText, {
-                title: trans("Are you sure delete the row?"),
+                title: trans(title),
                 icon: 0,
                 skin: 'layer-ext-moon',
                 btn: [trans("Done"), trans('Cancel')] //按钮
             }, function(){
                 // 发起删除请求
-                model.delete()
+                model[method]()
             });
 
         },
         // 批量删除
-        batchDelete: function (e) {
+        batchDelete: function (e, method, title) {
+            method = method || 'batchDelete';
+            title = title || 'Permanently delete';
+
             if (! listids) {
-                return $lxh.ui().notify().error(trans('Unchecked!', 'tip'));
+                return ntf.error(trans('Unchecked!'));
             }
             var modelName = $(e.currentTarget).attr('data-model'),
                 model = $lxh.createModel(modelName);
@@ -54,65 +62,95 @@
             model.set('ids', listids);
 
             model.on('success', function () {
-                layer.msg(trans("Deleted!", 'tip'), sut);
+                layer.msg(trans("Deleted!"), sut);
+                $('.grid-refresh').click();
             });
 
             // 确认窗
-            layer.confirm(listids + "\n" + trans("You will not be able to recover these rows!", 'tip'), {
-                title: trans("Are you sure delete these rows?", 'tip'),
+            layer.confirm(listids, {
+                title: trans(title),
                 icon: 0,
                 skin: 'layer-ext-moon',
                 btn: [trans("Done"), trans('Cancel')] //按钮
             }, function(){
                 // 发起删除请求
-                model.batchDelete()
+                model[method]()
             });
         },
         // 移至回收站
-        moveToTrash: function () {
-console.log('moveToTrash');
+        moveToTrash: function (e) {
+            this.delete(e, 'moveToTrash', 'Move to trash');
         },
         // 还原
-        restore: function () {
-            console.log('restore');
+        restore: function (e) {
+            var $this = $(e.currentTarget),
+                id = $this.attr('data-id'),
+                modelName = $this.attr('data-model') || $lxh.controllerName();
+            if (! id) {
+                throw new Error('Missing id.')
+            }
+            if (! model) {
+                model = $lxh.createModel(modelName);
+            }
+
+            model.set('ids', id);
+
+            model.on('success', function () {
+                layer.msg(trans("Update succeeded!"), sut);
+                $('.grid-refresh').click();
+            });
+            model.restore();
         },
         // 永久删除
-        deletePermanently: function () {
-            console.log('deletePermanently');
+        deletePermanently: function (e) {
+            this.delete(e);
         },
         // 批量移至回收站
-        batchMoveToTrash: function () {
-            console.log('batchMoveToTrash');
+        batchMoveToTrash: function (e) {
+            this.batchDelete(e, 'batchMoveToTrash', 'Move to trash')
         },
         // 批量还原
-        batchRestore: function () {
-            console.log('batchRestore');
+        batchRestore: function (e) {
+            if (! listids) {
+                return ntf.error(trans('Unchecked!'));
+            }
+            var modelName = $(e.currentTarget).attr('data-model'),
+                model = $lxh.createModel(modelName);
+
+            model.set('ids', listids);
+
+            model.on('success', function () {
+                layer.msg(trans("Update succeeded!"), sut);
+                $('.grid-refresh').click();
+            });
+            model.restore();
         },
         // 批量永久删除
-        batchDeletePermanently: function () {
-            console.log('batchDeletePermanently');
+        batchDeletePermanently: function (e) {
+            this.batchDelete(e)
         }
     };
 
     // 绑定删除事件
-    $('a[data-action="delete-row"]').click(public.delete);
-    $('a[data-action="restore"]').click(public.restore);
-    $('a[data-action="delete-permanently"]').click(public.deletePermanently);
-    $('a[data-action="trash"]').click(public.moveToTrash);
-    $('.batch-delete').click(public.batchDelete);
-    $('.batch-to-trash').click(public.batchMoveToTrash);
-    $('.batch-restore').click(public.batchRestore);
-    $('.batch-delete-permanently').click(public.batchDeletePermanently);
+    $('a[data-action="delete-row"]').click(public.delete.bind(public));
+    $('a[data-action="restore"]').click(public.restore.bind(public));
+    $('a[data-action="delete-permanently"]').click(public.deletePermanently.bind(public));
+    $('a[data-action="trash"]').click(public.moveToTrash.bind(public));
+    $('.batch-delete').click(public.batchDelete.bind(public));
+    $('.batch-to-trash').click(public.batchMoveToTrash.bind(public));
+    $('.batch-restore').click(public.batchRestore.bind(public));
+    $('.batch-delete-permanently').click(public.batchDeletePermanently.bind(public));
     __then__(function () {
+        ntf = $lxh.ui().notify();
         // 行选择器点击事件
         var allInput = $('input[data-action="select-all"]');
 
         $(document).on('pjax:complete', function () {
             // 绑定删除事件
-            $('a[data-action="delete-row"]').click(public.delete);
-            $('a[data-action="restore"]').click(public.restore);
-            $('a[data-action="delete-permanently"]').click(public.deletePermanently);
-            $('a[data-action="trash"]').click(public.moveToTrash);
+            $('a[data-action="delete-row"]').click(public.delete.bind(public));
+            $('a[data-action="restore"]').click(public.restore.bind(public));
+            $('a[data-action="delete-permanently"]').click(public.deletePermanently.bind(public));
+            $('a[data-action="trash"]').click(public.moveToTrash.bind(public));
 
             allInput = $('input[data-action="select-all"]');
             // 反选点击事件

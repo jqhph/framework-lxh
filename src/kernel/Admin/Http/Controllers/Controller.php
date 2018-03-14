@@ -533,8 +533,24 @@ class Controller extends Base
     public function actionDelete(array $params)
     {
         // 判断是否有权限访问
-        if (! auth()->deleteable()) {
-            throw new Forbidden();
+        $isTrash = I('_trash');
+
+        // 判断是否有权限访问
+        if ($this->trash) {
+            if ($isTrash) {
+                // 如果开启了回收站功能，delete权限既是加入回收站权限
+                if (! auth()->deleteable()) {
+                    throw new Forbidden();
+                }
+            } else {
+                if (! auth()->can(__CONTROLLER__ . '.' . Ability::DELETE_PERMANENTLY)) {
+                    throw new Forbidden();
+                }
+            }
+        } else {
+            if (! auth()->deleteable()) {
+                throw new Forbidden();
+            }
         }
 
         if (empty($params['id'])) {
@@ -549,7 +565,34 @@ class Controller extends Base
 
         $model->setId($params['id']);
 
+        if ($isTrash) {
+            return $model->toTrash() ? $this->success() : $this->failed();
+        }
+
         return $model->delete() ? $this->success() : $this->failed();
+    }
+
+    /**
+     * 批量还原接口
+     *
+     * @param array $params
+     * @return array
+     * @throws Forbidden
+     */
+    public function actionRestore(array $params)
+    {
+        // 判断是否有权限访问
+        if (! auth()->can(__CONTROLLER__ . '.' . Ability::RESTORE)) {
+            throw new Forbidden();
+        }
+
+        $ids = explode(',', I('ids'));
+
+        if (empty($ids)) {
+            return $this->error(trans_with_global('Missing id.'));
+        }
+
+        return $this->model()->restore($ids) ? $this->success() : $this->failed();
     }
 
     /**
@@ -748,15 +791,34 @@ class Controller extends Base
      */
     public function actionBatchDelete()
     {
+        $isTrash = I('_trash');
+
         // 判断是否有权限访问
-        if (! auth()->batchDeleteable()) {
-            throw new Forbidden();
+        if ($this->trash) {
+            if ($isTrash) {
+                // 如果开启了回收站功能，delete权限既是加入回收站权限
+                if (! auth()->batchDeleteable()) {
+                    throw new Forbidden();
+                }
+            } else {
+                if (! auth()->can(__CONTROLLER__ . '.' . Ability::BATCH_DELETE_PERMANENTLY)) {
+                    throw new Forbidden();
+                }
+            }
+        } else {
+            if (! auth()->batchDeleteable()) {
+                throw new Forbidden();
+            }
         }
 
         $ids = explode(',', I('ids'));
 
         if (empty($ids)) {
             return $this->error(trans_with_global('Missing id.'));
+        }
+
+        if ($isTrash) {
+            return $this->model()->batchToTrash($ids) ? $this->success() : $this->failed();
         }
 
         return $this->model()->batchDelete($ids) ? $this->success() : $this->failed();

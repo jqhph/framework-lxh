@@ -476,7 +476,7 @@ class Grid implements Renderable
             $url->unsetQuery($this->pjax);
 
             $this->tools->prepend(
-                "<a href='{$url->string()}' class=\"pjax btn btn-purple btn-trans waves-effect\" style='top:1px'><i class=\"zmdi zmdi-refresh-alt\"></i> $label</a>"
+                "<a href='{$url->string()}' class=\"grid-refresh pjax btn btn-purple btn-trans waves-effect\" style='top:1px'><i class=\"zmdi zmdi-refresh-alt\"></i> $label</a>"
             );
         }
 

@@ -83,6 +83,18 @@ return [
         ]
     ],
 
+    // 数据还原接口
+    [
+        'pattern' => '/admin/api/:lc@c/restore',
+        'method' => 'POST',
+        'params' => [
+            'module' => 'Admin',
+            'api' => true,
+            'controller' => ':lc@c',
+            'action' => 'Restore'
+        ]
+    ],
+
     // 图片阅读
     [
         'pattern' => '/image/:word@dir/:filename',

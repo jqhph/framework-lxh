@@ -1208,9 +1208,25 @@ console.log('request data', data);
             return this.request(util.parseApi('delete'), 'DELETE');
         };
 
+        /**
+         * 发起删除一行或多行数据请求
+         *
+         */
+        this.moveToTrash = function () {
+            return this.request(util.parseApi('move-to-trash'), 'DELETE');
+        };
+
         // 批量删除
         this.batchDelete = function () {
             return this.request(util.parseApi('batch-delete'), 'POST');
+        };
+
+        this.batchMoveToTrash = function () {
+            return this.request(util.parseApi('batch-move-to-trash'), 'POST');
+        };
+
+        this.restore = function () {
+            return this.request(util.parseApi('restore'), 'POST');
         };
 
         /**
@@ -1287,6 +1303,8 @@ console.log('request data', data);
                         return store.apiPrefix + scopeName + '/view/' + id;
                     case 'delete':
                         return store.apiPrefix + scopeName + '/' + id;
+                    case 'move-to-trash':
+                        return store.apiPrefix + scopeName + '/' + id + '?_trash=1';
                     case 'list':
                         return store.apiPrefix + scopeName + '/list';
                     case 'detail':
@@ -1295,6 +1313,10 @@ console.log('request data', data);
                         return store.apiPrefix + scopeName + '/' + this.normalizeRequestName(options.action);
                     case 'batch-delete':
                         return store.apiPrefix + scopeName + '/batch-delete';
+                    case 'batch-move-to-trash':
+                        return store.apiPrefix + scopeName + '/batch-delete' + '?_trash=1';
+                    case 'restore':
+                        return store.apiPrefix + scopeName + '/restore';
                 }
             },
 

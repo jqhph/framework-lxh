@@ -76,24 +76,26 @@ class TrashButtons
                 $r($this, $items);
             }
 
+            $id = $items->get($this->grid->idName());
+
             $model = __CONTROLLER__;
 
             if ($this->allowRestore && $this->allowDeletePermanently) {
                 $restore = trans('Restore');
                 $delete = trans('Delete permanently');
 
-                $content = "<a data-action='restore' data-model='$model'  style='color:green;'>$restore</a>
-| <a data-action='delete-permanently' data-model='$model' style='color:#a00'>$delete</a>";
+                $content = "<a data-id='$id' data-action='restore' data-model='$model' style='color:green;'>$restore</a>
+| <a data-id='$id' data-action='delete-permanently' data-model='$model' style='color:#a00'>$delete</a>";
 
             } elseif ($this->allowRestore) {
                 $restore = trans('Restore');
 
-                $content = "<a data-action='restore' data-model='$model' style='color:darkgreen;'>$restore</a>";
+                $content = "<a data-id='$id' data-action='restore' data-model='$model' style='color:darkgreen;'>$restore</a>";
 
             } elseif ($this->allowDeletePermanently) {
                 $delete = trans('Delete permanently');
 
-                $content = "<a data-action='delete-permanently' data-model='$model' style='color:#a00'>$delete</a>";
+                $content = "<a data-id='$id' data-action='delete-permanently' data-model='$model' style='color:#a00'>$delete</a>";
 
             }
 

@@ -19,6 +19,8 @@ class Model extends Entity
      */
     protected $primaryKeyName = 'id';
 
+    protected $deleteKeyName = 'deleted';
+
     /**
      * 默认查询的字段
      *
@@ -117,6 +119,17 @@ class Model extends Entity
         return $this;
     }
 
+    public function setDeleteKeyName($name)
+    {
+        $this->deleteKeyName = $name;
+        return $this;
+    }
+
+    public function getDeleteKeyName()
+    {
+        return $this->deleteKeyName;
+    }
+
     /**
      * 设置id
      *
@@ -183,6 +196,91 @@ class Model extends Entity
 
         return $res;
     }
+
+    /**
+     * 批量还原方法
+     *
+     * @param array $ids
+     */
+    public function restore(array $ids)
+    {
+        if (! $ids) return false;
+
+        $this->beforeRestore($ids);
+        fire(
+            "{$this->module}.{$this->name}.restore.before",
+            [$ids]
+        );
+
+        if (count($ids) > 1) {
+            $res = $this->query()
+                ->where($this->primaryKeyName, 'IN', $ids)
+                ->update([$this->deleteKeyName => 0]);
+        } else {
+            $res = $this->query()
+                ->where($this->primaryKeyName, $ids[0])
+                ->update([$this->deleteKeyName => 0]);
+        }
+
+        $this->afterRestore($ids, $res);
+        fire(
+            "{$this->module}.{$this->name}.restore.after",
+            [$ids]
+        );
+
+        return $res;
+    }
+
+    protected function beforeRestore($ids)
+    {
+    }
+
+    protected function afterRestore($ids, $res)
+    {
+    }
+
+    /**
+     * 批量删除方法
+     *
+     * @param array $ids
+     */
+    public function batchToTrash(array $ids)
+    {
+        if (! $ids) return false;
+
+        $this->beforeBatchToTrash($ids);
+        fire(
+            "{$this->module}.{$this->name}.batch-to-trash.before",
+            [$ids]
+        );
+
+        if (count($ids) > 1) {
+            $res = $this->query()
+                ->where($this->primaryKeyName, 'IN', $ids)
+                ->update([$this->deleteKeyName => 1]);
+        } else {
+            $res = $this->query()
+                ->where($this->primaryKeyName, $ids[0])
+                ->update([$this->deleteKeyName => 1]);
+        }
+
+        $this->afterBatchToTrash($ids, $res);
+        fire(
+            "{$this->module}.{$this->name}.batch-to-trash.after",
+            [$ids]
+        );
+
+        return $res;
+    }
+
+    protected function beforeBatchToTrash($ids)
+    {
+    }
+
+    protected function afterBatchToTrash($ids, $res)
+    {
+    }
+
 
     /**
      * @param array $ids
@@ -396,6 +494,45 @@ class Model extends Entity
         );
 
         return $this->insertId;
+    }
+
+    /**
+     * 把数据移植回收站
+     *
+     * @return bool
+     */
+    public function toTrash()
+    {
+        $id = $this->getId();
+        if (empty($id)) {
+            return false;
+        }
+
+        $this->beforeToTrash($id);
+        fire(
+            "{$this->module}.{$this->name}.to-trash.before",
+            [&$id]
+        );
+
+        $result = $this->query()
+            ->where($this->primaryKeyName, $id)
+            ->update([$this->deleteKeyName => 1]);
+
+        $this->afterToTrash($id, $result);
+        fire(
+            "{$this->module}.{$this->name}.to-trash.after",
+            [&$id, $result]
+        );
+
+        return $result;
+    }
+
+    protected function beforeToTrash($id)
+    {
+    }
+
+    protected function afterToTrash($id, $result)
+    {
     }
 
     /**
