@@ -849,7 +849,7 @@ class Field implements Renderable
      */
     public function getPlaceholder()
     {
-        return $this->placeholder;
+        return $this->placeholder ?: $this->label;
     }
 
     /**
