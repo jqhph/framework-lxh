@@ -581,7 +581,8 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
                 n = NProgress,
                 self = this,
                 ori = url.split('?')[0],
-                view = LXHSTORE.cache.get(ori);
+                view = LXHSTORE.cache.get(ori),
+                viewkey = LXHSTORE.VIEWKEY || '_vw';
             $d.trigger('app.creating');
             n.start();
             current = name;
@@ -593,7 +594,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
                 url +='?'
             }
             if (view) {
-                url +='&view=' + view;
+                url += '&'+ viewkey +'=' + view;
             }
 
             self.container(name).remove();

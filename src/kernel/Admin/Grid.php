@@ -208,7 +208,7 @@ class Grid implements Renderable
      *
      * @var string
      */
-    public static $viewKey = 'view';
+    public static $viewKey = '_vw';
 
     /**
      * 是否是回收站页参数名

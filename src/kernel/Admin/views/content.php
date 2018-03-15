@@ -35,7 +35,9 @@
             LXHSTORE.IFRAME.reload();
             return false;
         }
-    }
+    };
+
+    LXHSTORE.VIEWKEY = '<?php echo Lxh\Admin\Grid::$viewKey?>';
 </script>
 <?php
 echo $loadscss;
