@@ -226,9 +226,9 @@ class Role extends Model
         auth()->refreshForRole($this);
     }
 
-    public function afterDelete($id, $result)
+    public function afterDelete($id, $result, $trash)
     {
-        parent::afterDelete($id, $result);
+        parent::afterDelete($id, $result, $trash);
 
         if (! $result) return;
 

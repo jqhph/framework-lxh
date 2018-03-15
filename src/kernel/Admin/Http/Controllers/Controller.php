@@ -580,7 +580,7 @@ class Controller extends Base
             }
         }
 
-        return $model->delete() ? $this->success() : $this->failed();
+        return $model->delete($this->trash) ? $this->success() : $this->failed();
     }
 
     /**
@@ -851,7 +851,7 @@ class Controller extends Base
             }
         }
 
-        return $this->model()->batchDelete($ids) ? $this->success() : $this->failed();
+        return $this->model()->batchDelete($ids, $this->trash) ? $this->success() : $this->failed();
     }
 
     /**

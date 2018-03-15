@@ -158,7 +158,7 @@ class Menu extends Model
         auth()->menu()->refresh();
     }
 
-    protected function afterBatchDelete(array &$ids, $effect)
+    protected function afterBatchDelete(array &$ids, $effect, $trash)
     {
         if (! $effect) return;
 
@@ -176,9 +176,9 @@ class Menu extends Model
     }
 
     // 删除后置钩子方法
-    protected function afterDelete($id, $result)
+    protected function afterDelete($id, $result, $trash)
     {
-        parent::afterDelete($id, $result);
+        parent::afterDelete($id, $result, $trash);
 
         if (! $result) return;
 

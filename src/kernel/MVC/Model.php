@@ -201,23 +201,28 @@ class Model extends Entity
      *
      * @param array $ids
      */
-    public function batchDelete(array $ids)
+    public function batchDelete(array $ids, $trash = false)
     {
         if (! $ids) return false;
 
-        $this->beforeBatchDelete($ids);
+        $this->beforeBatchDelete($ids, $trash);
         fire(
             "{$this->module}.{$this->name}.batch-delete.before",
             [$ids]
         );
-
-        if (count($ids) > 1) {
-            $res = $this->query()->where($this->primaryKeyName, 'IN', $ids)->delete();
+        if ($trash) {
+            $q = query($this->connectionType)->from($this->trashTableName);
         } else {
-            $res = $this->query()->where($this->primaryKeyName, $ids[0])->delete();
+            $q = $this->query();
         }
 
-        $this->afterBatchDelete($ids, $res);
+        if (count($ids) > 1) {
+            $res = $q->where($this->primaryKeyName, 'IN', $ids)->delete();
+        } else {
+            $res = $q->where($this->primaryKeyName, $ids[0])->delete();
+        }
+
+        $this->afterBatchDelete($ids, $res, $trash);
         fire(
             "{$this->module}.{$this->name}.batch-delete.after",
             [$ids]
@@ -366,16 +371,18 @@ class Model extends Entity
 
     /**
      * @param array $ids
+     * @param $trash
      */
-    protected function beforeBatchDelete(array &$ids)
+    protected function beforeBatchDelete(array &$ids, $trash)
     {
     }
 
     /**
      * @param array $ids
      * @param $effect
+     * @param $trash
      */
-    protected function afterBatchDelete(array &$ids, $effect)
+    protected function afterBatchDelete(array &$ids, $effect, $trash)
     {
     }
 
@@ -668,24 +675,32 @@ class Model extends Entity
     /**
      * 删除一条记录
      *
+     * @param bool $trash 是否从回收站删除
      * @return bool|mixed
      */
-    public function delete()
+    public function delete($trash = false)
     {
         $id = $this->getId();
         if (empty($id)) {
             return false;
         }
 
-        $this->beforeDelete($id);
+        $this->beforeDelete($id, $trash);
         fire(
             "{$this->module}.{$this->name}.delete.before",
             [&$id]
         );
 
-        $result = $this->query()->where($this->primaryKeyName, $id)->delete();
+        if ($trash) {
+            $result = query($this->connectionType)
+                ->from($this->trashTableName)
+                ->where($this->primaryKeyName, $id)
+                ->delete();
+        } else {
+            $result = $this->query()->where($this->primaryKeyName, $id)->delete();
+        }
 
-        $this->afterDelete($id, $result);
+        $this->afterDelete($id, $result, $trash);
         fire(
             "{$this->module}.{$this->name}.delete.after",
             [&$id, $result]
@@ -700,7 +715,7 @@ class Model extends Entity
      * @param  string $id
      * @return mixed
      */
-    protected function beforeDelete($id)
+    protected function beforeDelete($id, $trash)
     {
     }
 
@@ -711,7 +726,7 @@ class Model extends Entity
      * @param  bool   $result 删除结果
      * @return mixed
      */
-    protected function afterDelete($id, $result)
+    protected function afterDelete($id, $result, $trash)
     {
     }
 

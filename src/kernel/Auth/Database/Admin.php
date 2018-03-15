@@ -93,9 +93,9 @@ class Admin extends Session
             ->then(); // 执行
     }
 
-    protected function afterDelete($id, $result)
+    protected function afterDelete($id, $result, $trash)
     {
-        parent::afterDelete($id, $result);
+        parent::afterDelete($id, $result, $trash);
 
         if (! $id) return;
 
