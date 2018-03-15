@@ -13,7 +13,9 @@ use Lxh\Admin\Widgets\Form;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Table\Table;
 use Lxh\Auth\Ability;
+use Lxh\Exceptions\FindModelException;
 use Lxh\Exceptions\Forbidden;
+use Lxh\Exceptions\InsertModelException;
 use Lxh\Helper\Util;
 use Lxh\Helper\Valitron\Validator;
 use Lxh\Http\Files\Image;
@@ -566,7 +568,16 @@ class Controller extends Base
         $model->setId($params['id']);
 
         if ($isTrash) {
-            return $model->toTrash() ? $this->success() : $this->failed();
+            try {
+                return $model->toTrash() ? $this->success() : $this->failed();
+
+            } catch (FindModelException $e) {
+                return $this->failed(trans('Target data does not exist.'));
+
+            } catch (InsertModelException $e) {
+                return $this->failed(trans($e->getMessage()));
+
+            }
         }
 
         return $model->delete() ? $this->success() : $this->failed();
@@ -592,7 +603,17 @@ class Controller extends Base
             return $this->error(trans_with_global('Missing id.'));
         }
 
-        return $this->model()->restore($ids) ? $this->success() : $this->failed();
+        try {
+            return $this->model()->restore($ids) ? $this->success() : $this->failed();
+
+        } catch (FindModelException $e) {
+            return $this->failed(trans('Target data does not exist.'));
+
+        } catch (InsertModelException $e) {
+            return $this->failed(trans($e->getMessage()));
+
+        }
+
     }
 
     /**
@@ -818,7 +839,16 @@ class Controller extends Base
         }
 
         if ($isTrash) {
-            return $this->model()->batchToTrash($ids) ? $this->success() : $this->failed();
+            try {
+                return $this->model()->batchToTrash($ids) ? $this->success() : $this->failed();
+
+            } catch (FindModelException $e) {
+                return $this->failed(trans('Target data does not exist.'));
+
+            } catch (InsertModelException $e) {
+                return $this->failed(trans($e->getMessage()));
+
+            }
         }
 
         return $this->model()->batchDelete($ids) ? $this->success() : $this->failed();

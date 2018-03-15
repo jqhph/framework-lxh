@@ -210,7 +210,7 @@ class ControllerManager extends Factory
 
         if (! defined('__CONTROLLER__')) {
             define('__CONTROLLER__', $this->controllerName);
-            define('__CONTROLLER_DASH__', slug($this->controllerName));
+            define('__CONTROLLERSLUG__', slug($this->controllerName));
         }
 
         if (! defined('__ACTION__')) {
@@ -219,7 +219,7 @@ class ControllerManager extends Factory
 
         if (! defined('__MODULE__')) {
             define('__MODULE__', $this->module);
-            define('__MODULE_DASH__', slug($this->module));
+            define('__MODULESLUG__', slug($this->module));
         }
 
         $this->response->append(
@@ -558,7 +558,7 @@ class ControllerManager extends Factory
      */
     public function moduleDash()
     {
-        return defined('__MODULE_DASH__') ? __MODULE_DASH__ : slug($this->getDefaultModule());
+        return defined('__MODULESLUG__') ? __MODULESLUG__ : slug($this->getDefaultModule());
     }
 
     public function getRequestParams()

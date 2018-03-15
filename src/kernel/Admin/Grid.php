@@ -607,14 +607,6 @@ class Grid implements Renderable
             }
         }
 
-        if ($this->options['useTrash']) {
-            if ($this->isTrash) {
-                $where[$this->options['deletedKeyName']] = 1;
-            } else {
-                $where[$this->options['deletedKeyName']] = 0;
-            }
-        }
-
         return $where;
     }
 
@@ -661,8 +653,15 @@ class Grid implements Renderable
 
         $where = $this->makeWhereContent();
 
+        $countMethod = 'count';
+        $findMethod  = 'findList';
+        if ($this->options['useTrash'] && $this->isTrash) {
+            $countMethod = 'countTrash';
+            $findMethod = 'findTrashList';
+        }
+
         // 获取记录总条数
-        $total = $model->count($where);
+        $total = $model->$countMethod($where);
 
         $this->total($total);
 
@@ -679,7 +678,7 @@ class Grid implements Renderable
         $list = [];
 
         if ($total) {
-            $list = $model->findList(
+            $list = $model->$findMethod(
                 $where, $this->makeOrderContent(), ($currentPage - 1) * $this->perPage, $this->perPage
             );
         }

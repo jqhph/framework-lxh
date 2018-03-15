@@ -2,6 +2,8 @@
 namespace Lxh\MVC;
 
 use Lxh\Exceptions\Exception;
+use Lxh\Exceptions\FindModelException;
+use Lxh\Exceptions\InsertModelException;
 use Lxh\Exceptions\InternalServerError;
 use Lxh\Contracts\Container\Container;
 use Lxh\Exceptions\InvalidArgumentException;
@@ -71,17 +73,28 @@ class Model extends Entity
 
     protected $queries = [];
 
-    public function __construct($name = null, Container $container = null)
+    /**
+     * 回收站表名
+     *
+     * @var string
+     */
+    protected $trashTableName;
+
+    public function __construct($name = null)
     {
         $name = $name ?: $this->parseName();
 
-        $this->name = slug($name);
-        $this->module = defined('__MODULE_DASH__') ? __MODULE_DASH__ : '';
-        $this->container = $container ?: container();
-        $this->events = $container['events'];
+        $this->name      = slug($name);
+        $this->module    = defined('__MODULESLUG__') ? __MODULESLUG__ : '';
+        $this->container = container();
+        $this->events    = events();
 
         if (! $this->tableName)
-            $this->tableName = __camel_case__($name);
+            $this->tableName = slug($name, '_');
+
+        if (! $this->trashTableName) {
+            $this->trashTableName = $this->tableName . '_trash';
+        }
 
         $this->initialize();
     }
@@ -104,7 +117,7 @@ class Model extends Entity
      */
     public function getMorphType()
     {
-        throw new Exception('没有定义类型');
+        throw new Exception('Undefined morph type');
     }
 
     /**
@@ -158,9 +171,25 @@ class Model extends Entity
      * @param array $where
      * @return int
      */
-    public function count(array $where)
+    public function count(array $where = [])
     {
         $q = $this->query();
+
+        if ($where) $q->where($where);
+
+        return $q->count();
+    }
+
+    /**
+     * 获取回收站记录数
+     *
+     * @param array $where
+     * @return int
+     */
+    public function countTrash(array $where = [])
+    {
+        $q = query($this->connectionType)
+            ->from($this->trashTableName);
 
         if ($where) $q->where($where);
 
@@ -200,7 +229,13 @@ class Model extends Entity
     /**
      * 批量还原方法
      *
+     * 先把数据写入原表
+     * 再从回收站表删除数据
+     *
      * @param array $ids
+     * @return bool|mixed
+     * @throws FindModelException
+     * @throws InsertModelException
      */
     public function restore(array $ids)
     {
@@ -213,22 +248,41 @@ class Model extends Entity
         );
 
         if (count($ids) > 1) {
-            $res = $this->query()
-                ->where($this->primaryKeyName, 'IN', $ids)
-                ->update([$this->deleteKeyName => 0]);
+            $where = [$this->primaryKeyName => ['IN', &$ids]];
+
         } else {
-            $res = $this->query()
-                ->where($this->primaryKeyName, $ids[0])
-                ->update([$this->deleteKeyName => 0]);
+            $where = [$this->primaryKeyName => $ids[0]];
+
         }
 
-        $this->afterRestore($ids, $res);
+        $trashQuery = query($this->connectionType)->from($this->trashTableName);
+
+        $trashData = $trashQuery->where($where)->find();
+
+        if (empty($trashData)) {
+            throw new FindModelException('Target data does not exist.');
+        }
+
+        if (!$this->query()->batchInsert($trashData)) {
+            throw new InsertModelException('Failed to write to database.');
+        }
+
+        $result = $trashQuery
+            ->where($where)
+            ->delete();
+
+        if (! $result) {
+            // 从回收站表回滚数据
+            $this->query()->where($where)->delete();
+        }
+
+        $this->afterRestore($ids, $result);
         fire(
             "{$this->module}.{$this->name}.restore.after",
             [$ids]
         );
 
-        return $res;
+        return $result;
     }
 
     protected function beforeRestore($ids)
@@ -242,7 +296,13 @@ class Model extends Entity
     /**
      * 批量删除方法
      *
+     * 先把数据移动到回收站表
+     * 再删除原表数据
+     *
      * @param array $ids
+     * @return bool
+     * @throws FindModelException
+     * @throws InsertModelException
      */
     public function batchToTrash(array $ids)
     {
@@ -255,16 +315,38 @@ class Model extends Entity
         );
 
         if (count($ids) > 1) {
-            $res = $this->query()
-                ->where($this->primaryKeyName, 'IN', $ids)
-                ->update([$this->deleteKeyName => 1]);
+            $where = [$this->primaryKeyName => ['IN', &$ids]];
+
         } else {
-            $res = $this->query()
-                ->where($this->primaryKeyName, $ids[0])
-                ->update([$this->deleteKeyName => 1]);
+            $where = [$this->primaryKeyName => $ids[0]];
+
         }
 
-        $this->afterBatchToTrash($ids, $res);
+        $data = $res = $this->query()
+            ->select('*')
+            ->where($where)
+            ->find();
+
+        if (empty($data)) {
+            throw new FindModelException('Target data does not exist.');
+        }
+
+        $trashQuery = query($this->connectionType)->from($this->trashTableName);
+
+        if (!$trashQuery->batchInsert($data)) {
+            throw new InsertModelException('Failed to write to database.');
+        }
+
+        $result = $this->query()
+            ->where($where)
+            ->delete();
+
+        if (! $result) {
+            // 从回收站表回滚数据
+            $trashQuery->where($where)->delete();
+        }
+
+        $this->afterBatchToTrash($ids, $result);
         fire(
             "{$this->module}.{$this->name}.batch-to-trash.after",
             [$ids]
@@ -326,6 +408,29 @@ class Model extends Entity
     public function findList(array $where, $order = 'id DESC', $offset = 0, $limit = 20)
     {
         $q = $this->query()->select($this->selectFields)->where($where);
+
+        if ($order) $q->sort($order);
+
+        if ($limit) {
+            $q->limit($offset, $limit);
+        }
+        return $q->find();
+    }
+
+    /**
+     * 查找记录列表
+     *
+     * @param array $where
+     * @param string $order
+     * @param int $offset
+     * @param int $limit
+     */
+    public function findTrashList(array $where, $order = 'id DESC', $offset = 0, $limit = 20)
+    {
+        $q = query($this->connectionType)
+            ->from($this->trashTableName)
+            ->select($this->selectFields)
+            ->where($where);
 
         if ($order) $q->sort($order);
 
@@ -499,7 +604,12 @@ class Model extends Entity
     /**
      * 把数据移植回收站
      *
+     * 先把数据移动到回收站表
+     * 再删除原表数据
+     *
      * @return bool
+     * @throws FindModelException
+     * @throws InsertModelException
      */
     public function toTrash()
     {
@@ -514,10 +624,30 @@ class Model extends Entity
             [&$id]
         );
 
+        $data = $this->query()
+            ->select('*')
+            ->where($this->primaryKeyName, $id)
+            ->findOne();
+
+        if (empty($data)) {
+            throw new FindModelException('Target data does not exist.');
+        }
+
+        $trashQuery = query($this->connectionType)->from($this->trashTableName);
+
+        if (!$trashQuery->insert($data)) {
+            throw new InsertModelException('Failed to write to database.');
+        }
+
         $result = $this->query()
             ->where($this->primaryKeyName, $id)
-            ->update([$this->deleteKeyName => 1]);
+            ->delete();
 
+        if (! $result) {
+            // 从回收站表回滚数据
+            $trashQuery->where($this->primaryKeyName, $id)->delete();
+        }
+        
         $this->afterToTrash($id, $result);
         fire(
             "{$this->module}.{$this->name}.to-trash.after",

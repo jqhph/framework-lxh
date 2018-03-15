@@ -67,7 +67,7 @@ class Installer
      */
     public function isInstalled()
     {
-        $namespace = ucfirst(__camel_case__($this->plugin->getName(), '-'));
+        $namespace = ucfirst(camel__case($this->plugin->getName(), '-'));
 
         if ($this->composer->psr4NamespaceExist($namespace)) {
             return true;

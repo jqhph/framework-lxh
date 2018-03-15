@@ -251,15 +251,15 @@ function slug($name, $symbol = '-')
 }
 
 /**
- * 转化为驼峰
+ * 下划线命名转化为驼峰
  *
  * @param $name
  * @param string $symbol
  * @return mixed|string
  */
-function __camel_case__($name, $symbol = '_')
+function camel__case($name, $symbol = '_')
 {
-    return preg_replace_callback("/{$symbol}([a-z])/", function (&$matches) {
+    return preg_replace_callback("/{$symbol}([a-zA-Z])/", function (&$matches) {
         return ucfirst($matches[1]);
     }, $name);
 }

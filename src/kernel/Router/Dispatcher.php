@@ -278,7 +278,7 @@ class Dispatcher
 
         // 控制器命名空间
         if ($namespace = get_value($params, 'namespace')) {
-            $realContr = $namespace . '\\' . ucfirst(__camel_case__($realContr, '-'));
+            $realContr = $namespace . '\\' . ucfirst(camel__case($realContr, '-'));
         }
 
         // 控制器文件夹
