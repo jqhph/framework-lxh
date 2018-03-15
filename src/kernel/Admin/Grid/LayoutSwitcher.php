@@ -22,7 +22,9 @@ class LayoutSwitcher
     public function __construct(Grid $grid)
     {
         $this->grid = $grid;
-        $this->url = clone $grid->getUrl();
+        $this->url  = clone $grid->getUrl();
+        $viewKey    = Grid::$viewKey;
+        $pjaxKey    = Grid::$pjaxKey;
 
         $filterId = '';
         if ($filter = $this->grid->filter()) {
@@ -32,13 +34,13 @@ class LayoutSwitcher
 (function () {
 var st = LXHSTORE, \$g = $('.grid-switcher'), crt = st.IFRAME.current(), 
 form = $('#{$filterId} form'), 
-formUrl = form.attr('action').replace(/[&]*view=[-\w\d]*/i, '');
+formUrl = form.attr('action').replace(/[&]*{$viewKey}=[-\w\d]*/i, '');
 \$g.click(function () {
     var t = $(this), v = t.data('view');
     // 缓存
     st.cache.set(t.data('path'), v);
-    form.attr('action', formUrl + '&view=' + v);
-    st.TAB.reload(crt, t.data('url').replace(/[&]*_pjax=[#-\w\d]*/i, ''));
+    form.attr('action', formUrl + '&{$viewKey}=' + v);
+    st.TAB.reload(crt, t.data('url').replace(/[&]*{$pjaxKey}=[#-\w\d]*/i, ''));
 });
 })();
 EOF
@@ -52,15 +54,15 @@ EOF
     {
         $origin = $this->url->uri()->getPath();
 
-        $this->url->unsetQuery($this->grid->pjax);
+        $this->url->unsetQuery(Grid::$pjaxKey);
 
         $tableActive = $cardActive = 'btn-default';
         if ($this->grid->getLayout() == Grid::LAYOUT_CARD) {
-            $url = $this->url->query('view', 'table')->string();
+            $url = $this->url->query(Grid::$viewKey, 'table')->string();
             $icon = 'fa fa-list';
             $view = Grid::LAYOUT_TABLE;
         } else {
-            $url = $this->url->query('view', 'card')->string();
+            $url = $this->url->query(Grid::$viewKey, 'card')->string();
             $icon = 'fa fa-th';
             $view = Grid::LAYOUT_CARD;
 

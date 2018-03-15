@@ -535,7 +535,7 @@ class Controller extends Base
     public function actionDelete(array $params)
     {
         // 判断是否有权限访问
-        $isTrash = I('_trash');
+        $isTrash = I(Grid::$trashKey);
 
         // 判断是否有权限访问
         if ($this->trash) {
@@ -812,7 +812,7 @@ class Controller extends Base
      */
     public function actionBatchDelete()
     {
-        $isTrash = I('_trash');
+        $isTrash = I(Grid::$trashKey);
 
         // 判断是否有权限访问
         if ($this->trash) {

@@ -24,6 +24,8 @@ class Request extends Message\ServerRequest
 	const METHOD_OPTIONS  = 'OPTIONS';
 	const METHOD_OVERRIDE = '_METHOD';
 
+	const PJAX = '_pjax';
+
 	/**
 	 * 路由调度成功后的参数
 	 *
@@ -293,7 +295,7 @@ class Request extends Message\ServerRequest
 
 	public function isPjax()
 	{
-		return $this->getHeaderLine('X_PJAX') || isset($_GET['_pjax']);
+		return $this->getHeaderLine('X_PJAX') || isset($_GET[static::PJAX]);
 	}
 	
 	public function isSSL()

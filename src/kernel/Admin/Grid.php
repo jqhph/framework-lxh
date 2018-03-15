@@ -29,33 +29,32 @@ class Grid implements Renderable
     const LAYOUT_CARD = 'card';
 
     /**
+     * 数据模型
+     *
      * @var Model
      */
     protected $model;
 
     /**
+     * 表格对象
+     *
      * @var Table
      */
     protected $table;
 
     /**
+     * 瀑布流卡片对象
+     *
      * @var Cards
      */
     protected $cards;
 
     /**
-     * Collection of all data rows.
+     * 数据
      *
      * @var array
      */
     protected $rows;
-
-    /**
-     * All column names of the grid.
-     *
-     * @var array
-     */
-    public $columnNames = [];
 
     /**
      * Mark if the grid is builded.
@@ -63,13 +62,6 @@ class Grid implements Renderable
      * @var bool
      */
     protected $builded = false;
-
-    /**
-     * All variables in grid view.
-     *
-     * @var array
-     */
-    protected $variables = [];
 
     /**
      * The grid Filter.
@@ -112,16 +104,22 @@ class Grid implements Renderable
     protected $perPageKey = 'maxSize';
 
     /**
+     * 左边工具栏
+     *
      * @var Tools
      */
     protected $tools;
 
     /**
+     * 动作按钮
+     *
      * @var \Lxh\Admin\Tools\Actions
      */
     protected $actions;
 
     /**
+     * 分页工具
+     *
      * @var mixed
      */
     protected $paginator;
@@ -132,7 +130,7 @@ class Grid implements Renderable
     protected $trashButtons;
 
     /**
-     * Options for grid.
+     * 配置选项
      *
      * @var array
      */
@@ -180,6 +178,8 @@ class Grid implements Renderable
     ];
 
     /**
+     * 分页html字符串
+     *
      * @var string
      */
     protected $pageString = '';
@@ -190,20 +190,32 @@ class Grid implements Renderable
     protected $total = 0;
 
     /**
+     * 主键字段名
+     *
      * @var string
      */
     protected $idName = 'id';
 
     /**
-     * @var string
-     */
-    public $pjax = '_pjax';
-
-    /**
+     * pjax请求参数名称
      *
      * @var string
      */
-    protected $trashKey = '_trash';
+    public static $pjaxKey = Http\Request::PJAX;
+
+    /**
+     * view布局参数名称
+     *
+     * @var string
+     */
+    public static $viewKey = 'view';
+
+    /**
+     * 是否是回收站页参数名
+     *
+     * @var string
+     */
+    public static $trashKey = '_trash';
 
     /**
      * 当前页面是否是回收站
@@ -229,8 +241,6 @@ class Grid implements Renderable
      */
     protected $layout = 'table';
 
-    protected $originUrl = '';
-
     /**
      * Create a new grid instance.
      *
@@ -243,7 +253,7 @@ class Grid implements Renderable
         $this->tools   = new Tools();
         $this->url     = new Http\Url();
         $this->idName  = Admin::id();
-        $this->isTrash = (bool)I($this->trashKey);
+        $this->isTrash = I(static::$trashKey);
 
         $this->setupPerPage();
         $this->setupLayoutForRequestParams();
@@ -300,7 +310,7 @@ class Grid implements Renderable
      */
     public function useCard()
     {
-        if (! empty(I('view'))) {
+        if (! empty(I(static::$viewKey))) {
             return $this;
         }
         $this->layout = static::LAYOUT_CARD;
@@ -315,7 +325,7 @@ class Grid implements Renderable
      */
     public function useTable()
     {
-        if (! empty(I('view'))) {
+        if (! empty(I(static::$viewKey))) {
             return $this;
         }
         $this->layout = static::LAYOUT_TABLE;
@@ -534,17 +544,17 @@ class Grid implements Renderable
     protected function buildTrashEntry()
     {
         $url = clone $this->url;
-        $url->unsetQuery($this->pjax);
+        $url->unsetQuery(static::$pjaxKey);
 
         $color = 'default';
         if ($this->isTrash) {
             $label = trans('List');
             $icon = 'fa fa-mail-reply';
-            $url->unsetQuery($this->trashKey);
+            $url->unsetQuery(static::$trashKey);
         } else {
             $label = trans('Trash');
             $icon = 'fa fa-recycle';
-            $url->query($this->trashKey, 1);
+            $url->query(static::$trashKey, 1);
         }
 
         $this->tools->prepend(
@@ -860,7 +870,7 @@ class Grid implements Renderable
     {
         $this->options['pjax'] = false;
 
-        $this->url->unsetQuery($this->pjax);
+        $this->url->unsetQuery(static::$pjaxKey);
 
         return $this;
     }
@@ -1041,7 +1051,7 @@ class Grid implements Renderable
      */
     public function setupLayoutForRequestParams()
     {
-        if (I('view') == static::LAYOUT_CARD) {
+        if (I(static::$viewKey) == static::LAYOUT_CARD) {
             $this->layout = static::LAYOUT_CARD;
             $this->disableResponsive();
         } else {
@@ -1049,11 +1059,14 @@ class Grid implements Renderable
         }
     }
 
-    /**
-     * @return array|string
-     */
     public function render()
     {
+        if ($this->builded) {
+            return '';
+        }
+
+        $this->builded = true;
+
         $isPjaxRequest = static::isPjaxRequest();
 
         if (! $isPjaxRequest) {
@@ -1061,10 +1074,10 @@ class Grid implements Renderable
         }
 
         if ($this->layout == static::LAYOUT_CARD) {
-            $this->url->query('view', static::LAYOUT_CARD);
+            $this->url->query(static::$viewKey, static::LAYOUT_CARD);
             $content = $this->renderCard();
         } else {
-            $this->url->query('view', static::LAYOUT_TABLE);
+            $this->url->query(static::$viewKey, static::LAYOUT_TABLE);
             $content = $this->renderTable();
         }
 
