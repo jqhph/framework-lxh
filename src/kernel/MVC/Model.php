@@ -750,6 +750,13 @@ class Model extends Entity
         return $this->tableName;
     }
 
+    public function setTableName($table)
+    {
+        $this->tableName = $table;
+
+        return $this;
+    }
+
     /**
      * 新增操作钩子方法，新增前调用
      *

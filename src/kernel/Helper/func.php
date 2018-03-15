@@ -316,7 +316,7 @@ function user()
 
     if ($instance) return $instance;
 
-    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->create('User')->setupSession();
+    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->create(config('oauth.user.model', 'User'))->setupSession();
 
 }
 
@@ -332,7 +332,7 @@ function admin()
 
     if ($instance) return $instance;
 
-    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->create(config('admin.auth.model', 'Admin'))->setupSession();
+    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->create(config('oauth.admin.model', 'Admin'))->setupSession();
 
 }
 

@@ -19,6 +19,63 @@ $config = [
     // 使用RBAC权限管理
     'use-authorize' => true,
 
+    // OAuth配置
+    'oauth' => [
+        // 前台用户
+        'admin' => [
+            // 用户模型
+            'model' => 'Admin',
+            // 是否允许多端登录
+            'allowed-multiple-logins' => false,
+            // 登录有效期，如果使用session登录，则此参数无效
+            'life'                    => 7200,
+            // 记住登录状态时间，默认7天
+            'long-life'               => 604800,
+            // 启用登录日志
+            'use-log'                 => true,
+            // 登陆日志模型名称
+            'log-model'               => 'UserLoginLog',
+            // 认证类型
+            'isOpen'                  => false,
+            // 日志处理类
+//            'log-handler'             => '',
+            // 缓存驱动
+//            'cache-driver'            => '',
+            // token参数名称
+            'tokenKey'                => 'access_token',
+            // password_hash, sha256
+            'encrypt'                 => 'sha256',
+            // 生成token加密密钥
+            'secretKey'               => '',
+        ],
+        'user' => [
+            // 用户模型
+            'model' => 'User',
+            // 是否允许多端登录
+            'allowed-multiple-logins' => false,
+            // 登录有效期，如果使用session登录，则此参数无效
+            'life'                    => 7200,
+            // 记住登录状态时间，默认7天
+            'long-life'               => 604800,
+            // 启用登录日志
+            'use-log'                 => true,
+            // 登陆日志模型名称
+            'log-model'               => 'user_login_log',
+            // 认证类型
+            'isOpen'                  => false,
+            // 日志处理类
+//            'log-handler'             => '',
+            // 缓存驱动
+//            'cache-driver'            => '',
+            // token参数名称
+            'tokenKey'                => 'access_token',
+            // password_hash, sha256
+            'encrypt'                 => 'sha256',
+            // 生成token加密密钥
+            'secretKey'               => '',
+        ],
+    ],
+
     'view' => [
         // 模板文件路径
         'paths' => 'resource/views',
