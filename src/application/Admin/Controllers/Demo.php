@@ -33,7 +33,7 @@ use Lxh\Admin\Widgets\Popup;
 use Lxh\Admin\Widgets\Tab;
 use Lxh\Admin\Layout;
 
-class Product extends Controller
+class Demo extends Controller
 {
     /**
      * 开启过滤器
@@ -154,7 +154,7 @@ class Product extends Controller
               shadeClose: true,
               shade: false,
               area: [\'70%\', \'700px\'],
-              content: \'/admin/product/action/form-code-preview\'
+              content: \'/admin/demo/action/form-code-preview\'
             }); 
             return false;
         ');
@@ -191,12 +191,14 @@ class Product extends Controller
      */
     protected function filter(Filter $filter)
     {
-        $filter->multipleSelect('status')->options(range(1, 10));
-        $filter->text('stock')->number();
-        $filter->text('name')->minlen(3);
-        $filter->select('level')->options([1, 2]);
-        $filter->text('price');
-        $filter->dateRange('created_at')->between()->time();
+        if (!$this->grid->isTrash()) {
+            $filter->useInTable();
+        }
+
+        $filter->text('text')->minlen(3);
+        $filter->select('select')->options(range(1, 10));
+        $filter->dateRange('date')->between()->time();
+        $filter->multipleSelect('muti_select')->options(range(1, 10));
     }
 
     /**
@@ -238,7 +240,7 @@ class Product extends Controller
               shadeClose: true,
               shade: false,
               area: [\'70%\', \'700px\'],
-              content: \'/admin/product/action/grid-code-preview\'
+              content: \'/admin/demo/action/grid-code-preview\'
             }); 
             return false;
         ');
@@ -264,46 +266,23 @@ class Product extends Controller
     protected function table(Table $table)
     {
         $table->code('id')->hide()->sortable();
-
-        $table->editable('name', function (Editable $editable) {
-            switch ($editable->line()) {
-                case 1:
-                    $editable->datetime();
-                    break;
-                case 2:
-                    $editable->url();
-                    break;
-                case 3:
-                    $editable->number();
-                    break;
-                case 4:
-                    $editable->email();
-                    break;
-                case 5:
-                    $editable->select([1, 2, 3]);
-            }
-
-        })->th(function (Th $th) {
+        $table->editable('text')->th(function (Th $th) {
             // 设置标题颜色
             $th->style('color:green;font-weight:600');
             // 设置属性
             $th->attribute('data-test', 123);
-
             // 设置标题显示内容
-            $th->value('<span>NAME</span>');
+            $th->value('<span>TEXT</span>');
         });
 
-        $table->expand('price', function (Expand $expand) {
-            $expand->ajax('/admin/product/action/test');
-        })
-            ->sortable();
+        $table->expand('expand', function (Expand $expand) {
+            $expand->ajax('/admin/demo/action/test');
+        })->sortable();
 
-        $table->switch('is_hot');
-        $table->checked('is_new');
-
-        // 字段显示内容自定义：直接设置内容
-        // 如果一个字段调用了field自定义处理之后，初始配置的字段渲染方法将不再执行
-        $table->column('order_num')->display('*****');
+        $table->switch('switch');
+        $table->checked('checked');
+        $table->date('date');
+        $table->select('select');
 
         /**
          * 字段显示内容自定义：使用匿名函数可以更灵活的定义想要的内容
@@ -313,11 +292,9 @@ class Product extends Controller
          * @param Td $td 表格列字段管理对象（Table > Tr > Th, Td）
          * @param Tr $tr Table > Tr
          */
-        $table->column('stock')->display(function ($value, Items $items) {
-            return $value + 100;
+        $table->column('display')->display(function ($value, Items $items) {
+            return '自定义内容显示<br>' . date('Y-m-d', $items->get('date'));
         });
-
-        $table->date('created_at');
 
         /**
          * 追加额外的列到最前面

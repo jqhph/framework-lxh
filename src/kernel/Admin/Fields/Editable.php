@@ -84,8 +84,6 @@ class Editable extends Field
      */
     public function select(array $options = [])
     {
-        $source = [];
-
         $this->type = 'select';
 
         if (static::$setedOptions === false) {
@@ -259,13 +257,12 @@ class Editable extends Field
         );
 
         if (!$id = $this->getModelId()) {
-            throw new InvalidArgumentException("Id not found!");
+            throw new InvalidArgumentException("Missing id");
         }
 
         $url = $this->url ?: Admin::url()->updateField($id);
 
         $attributes = [
-//            'href'       => '#',
             'class'      => &$class,
             'data-type'  => $this->type,
             'data-url'   => &$url,
@@ -277,12 +274,13 @@ class Editable extends Field
             $attributes['data-title'] = $this->title;
         }
 
-        $attributes = (new Collection($attributes))->map(function ($attribute, $name) {
-            return "$name='$attribute'";
-        })->implode(' ');
+        $attributesHtml = '';
+        foreach ($attributes as $name => &$attribute) {
+            $attributesHtml .= "$name='$attribute' ";
+        }
 
         $html = $this->type === 'select' ? '' : $this->value;
 
-        return "<a $attributes>{$html}</a>";
+        return "<a $attributesHtml>{$html}</a>";
     }
 }

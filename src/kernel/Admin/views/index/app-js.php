@@ -3,13 +3,12 @@
     <?php if ((isset($useDefaultAssets) && !empty($useDefaultAssets)) || !isset($useDefaultAssets)) {?>
     require_css([
         '@lxh/css/responsive.min',
-        '@lxh/css/bootstrap.min',
         '@lxh/css/pages.min',
         '@lxh/css/components.min',
         '@lxh/css/icon.min',
         '@lxh/css/core.min'
     ]);
-    require_js(['@lxh/js/container.min', '@lxh/js/bootstrap.min']);
+    require_js(['@lxh/js/container.min']);
     <?php } ?>
     // 配置
     function __ini__() {

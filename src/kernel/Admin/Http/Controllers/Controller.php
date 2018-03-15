@@ -134,12 +134,13 @@ class Controller extends Base
             // 构建搜索界面
             $filter = new Filter();
 
-            // 自定义filter
-            $this->filter($filter);
             // 开启弹窗模式
             if ($this->filter === 'modal') {
                 $filter->useModal();
             }
+
+            // 自定义filter
+            $this->filter($filter);
 
             // 列表页创建filter后
             fire($list . '.filter', [$filter]);

@@ -81,3 +81,11 @@ background-color:#0072C6;border-color:#0072C6;}.btn-xs.btn-primary{border-color:
     color:#444;}
 .nav-tabs-custom>.nav-tabs>li:first-of-type.active>a{border-left-color:transparent !important;}
 .row-action{padding:7px 0 0;display:none}tr:hover .row-action,tr.active .row-action{display:block}
+.input-group-sm>.form-control,.input-group-sm>.input-group-addon,.input-group-sm>.input-group-btn>.btn,.btn-group-sm>.btn, .btn-sm{border-radius:0}
+.input-daterange input:last-child{border-radius:0}
+.input-group-sm .select2-selection--single,.input-group-sm .select2-selection--multiple{height:30px;min-height:30px;padding:5px 10px;font-size:12px;line-height: 1.5;}.input-group-sm .select2-selection--multiple{padding:0 5px}
+.input-group-sm .select2-selection--single .select2-selection__rendered{line-height:1.5;}
+.input-group-sm .select2-search--inline .select2-search__field{margin-top:5px;}
+.select2-container .select2-selection--single .select2-selection__rendered{padding-left:2px}
+.input-group-sm .select2-container--default .select2-selection--single .select2-selection__arrow{height:29px}
+.modal-header{padding:12px 15px}

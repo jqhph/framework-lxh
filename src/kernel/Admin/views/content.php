@@ -54,19 +54,23 @@ if ($style) {?>
         <section class="content"><?php echo $content;?></section>
     </div>
 </div>
-<?php
+<?php 
 echo admin_js('js/jquery.min');
-echo view('admin::index.app-js')->render();
-echo $loadscripts;
+echo admin_js('js/bootstrap.min');
 ?>
 <script>
-<?php
-    echo $js;
-    echo $css;
-?>; __then__(function(){<?php echo $script?>});
-$(document).on('pjax:complete', function () {$(parent.window).scrollTop(0);});
+    require_css('@lxh/css/bootstrap.min');
+    <?php
+        echo $js;
+        echo $css;
+        ?>; __then__(function(){<?php echo $script?>});
+    $(document).on('pjax:complete', function () {$(parent.window).scrollTop(0);});
 </script>
+
 <?php
+echo view('admin::index.app-js')->render();
+echo $loadscripts;
+
 echo admin_js('js/app.min');
 ?>
 <?php if ($hidden) {?><div style="display:none"><?php echo $hidden?></div><?php }?>
@@ -76,7 +80,7 @@ echo admin_js('js/app.min');
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" data-action="modal-basic-close" class="close" data-dismiss="modal">×</button>
-                    <h4 class="modal-title" >{title}</h4>
+                    <h5 class="modal-title" >{title}</h5>
                 </div>
                 <div class="modal-body">{content}</div>
                 <div class="modal-footer">

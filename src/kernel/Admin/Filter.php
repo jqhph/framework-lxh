@@ -34,11 +34,6 @@ class Filter extends Widget implements Renderable
     /**
      * @var string
      */
-    protected $view = 'admin::filter';
-
-    /**
-     * @var string
-     */
     protected $title = 'Filter';
 
     /**
@@ -132,6 +127,13 @@ class Filter extends Widget implements Renderable
         }
 
         $this->options['layout'] = static::LAYOUT_MODAL;
+
+        return $this;
+    }
+
+    public function useInTable()
+    {
+        $this->options['layout'] = static::LAYOUT_INTABLE;
 
         return $this;
     }
@@ -309,15 +311,18 @@ EOF;
             $reset = $this->buildResetBtn()->render();
         }
 
+        $style = '';
         $close = '';
         if ($this->options['layout'] == static::LAYOUT_MODAL) {
             $close = new Button(trans('Close'));
             $close = $close->color('default')
                 ->attribute('data-dismiss', 'modal')
                 ->render();
+        } else {
+            $style = 'style="margin-left:10px"';
         }
 
-        return "<div class='filter-input'><div class=\"btn-group\">{$submit}</div>&nbsp; <div class=\"btn-group\">{$reset} {$close}</div></div>";
+        return "<div class='filter-input' $style><div class=\"btn-group btn-group-sm\">{$submit}</div>&nbsp; <div class=\"btn-group btn-group-sm\">{$reset} {$close}</div></div>";
     }
 
     /**

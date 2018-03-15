@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title"><?php echo $title;?></h4>
+                <h5 class="modal-title"><?php echo $title;?></h5>
             </div>
             <div class="modal-body"><?php echo $body;?></div>
             <?php if ($footer) {?>

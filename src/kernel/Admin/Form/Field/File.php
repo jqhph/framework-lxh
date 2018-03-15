@@ -38,6 +38,7 @@ class File extends Field
             'browseLabel'          => trans('Browse'),
 //            'showRemove'           => false,
             'showUpload'           => false,
+            'showCancel'           => false,
             'dropZoneEnabled'      => false,
             'deleteExtraData'      => [
                 '_token'           => '',
