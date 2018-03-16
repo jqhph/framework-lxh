@@ -44,6 +44,33 @@ abstract class Cache
     abstract function delete($key);
 
     /**
+     * 追加数据到缓存
+     *
+     * @param string $key
+     * @param mixed $value
+     * @return mixed
+     */
+    abstract public function append($key, $value);
+
+    /**
+     * 获取追加的缓存数据
+     * 返回一个数组
+     *
+     * @param $key
+     * @return array
+     */
+    abstract public function getArray($key);
+
+    /**
+     * 从删除一个值
+     *
+     * @param string $key
+     * @param mixed $value
+     * @return mixed
+     */
+    abstract public function deleteInArray($key, $value);
+
+    /**
      * 获取保存的key
      *
      * @param $key

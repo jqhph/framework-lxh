@@ -19,7 +19,7 @@ abstract class Driver
     }
 
     /**
-     * 保存用户登录数据
+     * 缓存用户登录数据
      *
      * @param Database\User $user
      * @param $remember
@@ -48,5 +48,18 @@ abstract class Driver
      * @return mixed
      */
     abstract public function logout();
+
+    /**
+     * 把token状态设置为无效
+     *
+     * @param $userId
+     * @param $logId
+     * @param $token
+     * @return mixed
+     */
+    public function inactive($userId, $logId, $token)
+    {
+        $this->user->logs()->inactive($userId, $logId, $token);
+    }
 
 }

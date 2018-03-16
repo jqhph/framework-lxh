@@ -21,11 +21,11 @@ $config = [
 
     // OAuth配置
     'oauth' => [
-        // 前台用户
+        // 后台用户
         'admin' => [
             // 用户模型
             'model' => 'Admin',
-            // 是否允许多端登录
+            // 是否不限制用户使用多个客户端登录
             'allowed-multiple-logins' => false,
             // 登录有效期，如果使用session登录，则此参数无效
             'life'                    => 7200,
@@ -35,7 +35,9 @@ $config = [
             'use-log'                 => true,
             // 登陆日志模型名称
             'log-model'               => 'UserLoginLog',
-            // 认证类型
+            // 是否使用token验证，默认false
+            // 当值为true时，使用token验证用户是否登录，如在接口授权登录的情况下使用
+            // 当值为false时，启用session存储用户登录信息
             'isOpen'                  => false,
             // 日志处理类
 //            'log-handler'             => '',
@@ -47,33 +49,12 @@ $config = [
             'encrypt'                 => 'sha256',
             // 生成token加密密钥
             'secretKey'               => '',
+            // 应用类型，必须是一个0-99的整数
+            // 对于站内session模式登录，此参数用于保证用户在同一类型下的应用只能保留一个有效的登陆状态
+            // 对于开放授权token模式登录，此参数用于保证用户在同一类型下的应用只能获取一个有效授权token
+            'app'                     => 0,
         ],
-        'user' => [
-            // 用户模型
-            'model' => 'User',
-            // 是否允许多端登录
-            'allowed-multiple-logins' => false,
-            // 登录有效期，如果使用session登录，则此参数无效
-            'life'                    => 7200,
-            // 记住登录状态时间，默认7天
-            'long-life'               => 604800,
-            // 启用登录日志
-            'use-log'                 => true,
-            // 登陆日志模型名称
-            'log-model'               => 'user_login_log',
-            // 认证类型
-            'isOpen'                  => false,
-            // 日志处理类
-//            'log-handler'             => '',
-            // 缓存驱动
-//            'cache-driver'            => '',
-            // token参数名称
-            'tokenKey'                => 'access_token',
-            // password_hash, sha256
-            'encrypt'                 => 'sha256',
-            // 生成token加密密钥
-            'secretKey'               => '',
-        ],
+
     ],
 
     'view' => [

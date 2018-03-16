@@ -12,6 +12,8 @@ use Lxh\MVC\Model;
  */
 class Logs implements LogsInterface
 {
+    use CacheLogs, FindLogs;
+
     /**
      * 登录日志字段
      *
@@ -37,6 +39,12 @@ class Logs implements LogsInterface
         'life',
         // 登录用户id
         'user_id',
+        // 应用类型，必须是一个0-99的整数
+        // 对于站内session模式登录，此参数用于保证用户在同一类型下的应用只能保留一个有效的登陆状态
+        // 对于开放授权token模式登录，此参数用于保证用户在同一类型下的应用只能获取一个有效授权token
+        'app',
+        // 1站内session登录，2授权开放登录
+        'type',
     ];
 
     /**
@@ -48,6 +56,11 @@ class Logs implements LogsInterface
      * @var User
      */
     protected $user;
+
+    /**
+     * @var Model
+     */
+    protected $model;
 
     /**
      * 日志模型名称
@@ -63,49 +76,34 @@ class Logs implements LogsInterface
      */
     protected $saveable = true;
 
-    public function __construct(User $user)
+    /**
+     * 判断是否是开放授权登录模式
+     *
+     * @var bool
+     */
+    protected $isOpen = false;
+
+    public function __construct(User $user, array $items = [])
     {
         $this->user      = $user;
+        $this->items     = &$items;
         $this->modelName = $user->option('log-model') ?: 'UserLoginLog';
         $this->saveable  = $user->option('use-log');
+        $this->isOpen    = $user->isOpen();
+        $this->cache     = $user->cache();
     }
 
     /**
-     * 获取登陆日志数据
+     * 判断token是否有效
      *
-     * @param mixed $id
-     * @param mixed $token
-     * @return array
+     * @return bool
      */
-    public function find($id = null, $token = null)
+    public function isActive()
     {
-        if ($this->saveable && ! $this->items && $id && $token) {
-            $this->items = (array)model($this->modelName)
-                ->select('*')
-                ->where(['user_id' => $id, 'token' => $token])
-                ->findOne();
+        if ($this->item('active') == 0 || time() > ($this->item('created_at') + $this->item('life'))) {
+            return false;
         }
-        if (! $this->items && $id && $token && $this->useCache()) {
-            $this->items = (array)$this->user->cache()->get(
-                $this->normalizeKey($id, $token)
-            );
-        }
-
-        return $this->items;
-    }
-
-    /**
-     * 查找token加密随机码
-     *
-     * @param $id
-     * @param $token
-     * @return array|mixed
-     */
-    public function findEncryptCode($id, $token)
-    {
-        $this->find($id, $token);
-
-        return $this->item('key');
+        return true;
     }
 
     /**
@@ -120,18 +118,24 @@ class Logs implements LogsInterface
         return get_value($this->items, $key);
     }
 
+    public function setItems(array $items)
+    {
+        $this->items = &$items;
+
+        return $this;
+    }
+
     /**
      * 登出时把日志状态设置为无效
      *
      * @return void
      */
-    public function inactive()
+    public function logout()
     {
-        $user = $this->user->model();
-
         if ($this->saveable) {
-            if ($id = $user->get('logs.id')) {
-                if (!model($this->modelName)->where('id', $id)->update(['active' => 0, 'logout_at' => time()])) {
+            $user = $this->user->model();
+            if ($id = $user->logs('id')) {
+                if (! $this->updateInactive($id)) {
                     logger('oauth')->error(
                         '登出时修改登陆日志状态出错！', $user->toArray()
                     );
@@ -139,11 +143,39 @@ class Logs implements LogsInterface
             }
         }
 
-        if ($this->useCache()) {
-            $this->user->cache()->delete(
-                $this->normalizeKey($user->getId(), $user->get('logs.token'))
-            );
+        $this->deleteItemsInCache();
+        $this->deleteForUserId();
+        $this->deleteForToken();        
+    }
+
+    /**
+     * 把token状态设置为无效
+     *
+     * @param $userId
+     * @param $logId
+     * @param $token
+     * @return mixed
+     */
+    public function inactive($userId, $logId, $token)
+    {
+        if ($this->saveable) {
+            if (! $this->updateInactive($logId)) {
+                logger('oauth')->error(
+                    '设置授权token无效时出错！', ['uid' => $userId, 'logid' => $logId, 'token' => $token]
+                );
+            }
         }
+
+        $this->deleteForUserId($userId, $token);
+        $this->deleteItemsInCache($userId, $token);
+        $this->deleteForToken($token);
+    }
+
+    protected function updateInactive($id)
+    {
+        return $this->model()
+            ->where('id', $id)
+            ->update(['active' => 0, 'logout_at' => time()]);
     }
 
     /**
@@ -154,14 +186,10 @@ class Logs implements LogsInterface
      */
     public function create(\Lxh\OAuth\Database\User $user, $remember = false)
     {
-        $key = $token = '';
-        if ($this->user->isOpen()) {
-            $key   = $this->user->generateCode();
-            $token = $this->user->generateToken($user, $key);
-        }
-
-        $id   = $user->getId();
-        $life = $this->user->getLife($remember);
+        $key   = $this->user->generateCode();
+        $token = $this->user->generateToken($user, $key);
+        $uid   = $user->getId();
+        $life  = $this->user->getLife($remember);
 
         $this->items = [
             'token'      => &$token,
@@ -169,47 +197,51 @@ class Logs implements LogsInterface
             'created_at' => time(),
             'key'        => &$key,
             'active'     => 1,
-            'user_id'    => $id,
+            'user_id'    => $uid,
             'life'       => $life,
             'device'     => 0,
+            'app'      => $this->user->option('app'),
+            'type'       => $this->isOpen ? 2 : 1,
         ];
 
         if ($this->saveable) {
-            $model = model($this->modelName);
-
-            $model->attach($this->items);
-
-            if (!$id = $model->add()) {
-                logger()->error('保存登录日志失败', $this->items);
-            }
-            // 保存id
-            $this->items['id'] = $id;
+            $this->save();
         }
 
-        if ($token && $this->useCache()) {
-            // 缓存登录日志
-            $this->user->cache()->set(
-                $this->normalizeKey($id, $token), $this->items, $life + 5
-            );
-        }
+        $this->saveCache($uid);
 
         return $this->items;
 
     }
 
-    /**
-     * 判断是否可以缓存登录日志
-     *
-     * @return bool
-     */
-    protected function useCache()
+    protected function save()
     {
-        return $this->user->isOpen() || !$this->saveable;
+        $model = $this->model();
+
+        $model->attach($this->items);
+
+        if (!$id = $model->add()) {
+            logger()->error('保存登录日志失败', $this->items);
+        }
+        // 保存id
+        $this->items['id'] = $id;
     }
 
-    protected function normalizeKey($id, $token)
+    /**
+     * @return Model
+     */
+    public function model()
     {
-        return $id.'_'.$token;
+        if ($this->model) {
+            $this->model = model($this->modelName);
+        }
+
+        return $this->model;
+    }
+
+    protected function normalizeKey($uid, $token)
+    {
+        return $uid.'_'.$token;
     }
 
     public static function columns()

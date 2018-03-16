@@ -51,7 +51,7 @@ class User
      * @var array
      */
     protected $options = [
-        // 是否允许多端登录
+        // 是否不限制用户使用多个客户端登录
         'allowed-multiple-logins' => false,
         // 登录有效期，如果使用session登录，则此参数无效
         'life'                    => 7200,
@@ -61,7 +61,9 @@ class User
         'use-log'                 => true,
         // 登陆日志模型名称
         'log-model'               => 'user_login_log',
-        // 认证类型
+        // 是否使用token验证，默认false
+        // 当值为true时，使用token验证用户是否登录
+        // 当值为false时，启用session存储用户登录信息
         'isOpen'                  => false,
         // 日志处理类
         'log-handler'             => Logs::class,
@@ -73,6 +75,10 @@ class User
         'encrypt'                 => 'sha256',
         // 生成token加密密钥
         'secretKey'               => '',
+        // 应用类型，必须是一个0-99的整数
+        // 对于站内session模式登录，此参数用于保证用户在同一类型下的应用只能保留一个有效的登陆状态
+        // 对于开放授权token模式登录，此参数用于保证用户在同一类型下的应用只能获取一个有效授权token
+        'app'                     => 0,
     ];
 
     /**
@@ -88,12 +94,6 @@ class User
         $this->events  = events();
         $this->options = array_merge($this->options, $options);
 
-        if ($this->options['isOpen']) {
-            $this->driver = new TokenDriver($this);
-        } else {
-            $this->driver = new SessionDriver($this);
-        }
-
         $cache = $this->options['cache-driver'] ?: File::class;
         $this->setCache(new $cache());
 
@@ -101,6 +101,29 @@ class User
         $this->setLogs(new $logs($this));
 
         $this->setModel(user());
+
+        $this->options['app'] = (int)$this->options['app'];
+        if ($this->options['app'] > 99 || $this->options['app'] < 0) {
+            throw new InvalidArgumentException(
+                '应用类型参数必须是一个0-99的整数！'
+            );
+        }
+
+        if ($this->options['isOpen']) {
+            $this->driver = new TokenDriver($this);
+        } else {
+            $this->driver = new SessionDriver($this);
+        }
+    }
+
+    /**
+     * 获取应用类型
+     *
+     * @return int
+     */
+    public function app()
+    {
+        return $this->options['app'];
     }
 
     /**
@@ -108,24 +131,95 @@ class User
      *
      * @param string $username
      * @param string $password
-     * @param bool $remember
+     * @return array|false
+     * @param array $options 可拓展参数
      * @return bool
      */
-    public function login($username, $password, $remember = false)
+    public function login($username, $password, $remember = false, array $options = [])
     {
-        if (!$data = $this->model->login($username, $password)) {
+        if (!$data = $this->model->login($username, $password, $options)) {
             return false;
+        }
+        $this->model->attach($data);
+
+        // 是否应该先把旧token设置为无效
+        if ($log = $this->setInactiveAble($this->model)) {
+            $this->inactive($log['user_id'], $log['id'], $log['token']);
         }
 
         // 生成登录日志
-        $data['logs'] = $this->logs->create($this->model, $remember);
+        $logs = $this->logs->create($this->model, $remember);
 
-        $this->model->attach($data);
+        $this->model->setLogs($logs);
 
-        // 保存用户登录信息
+        // 缓存用户登录信息
         $this->driver->save($this->model, $remember);
 
         return true;
+    }
+
+    /**
+     * 获取token
+     *
+     * @return string
+     */
+    public function token()
+    {
+        return $this->model->logs('token');
+    }
+
+    /**
+     * 判断token是否有效
+     *
+     * @return bool
+     */
+    public function isTokenActive()
+    {
+
+    }
+
+    /**
+     * 把token设置为无效
+     *
+     * @param $userId
+     * @param $logId
+     * @param $token
+     */
+    public function inactive($userId, $logId, $token)
+    {
+        $this->driver->inactive($userId, $logId, $token);
+    }
+
+    /**
+     * 是否应该先设置旧token为无效
+     *
+     * @param Database\User $user
+     * @return bool
+     */
+    protected function setInactiveAble(Database\User $user)
+    {
+        if (
+            $this->options['allowed-multiple-logins'] && ! $this->isOpen()
+        ) {
+            return false;
+        }
+
+        // 保证用户在同一类型下的应用只能获取一个有效授权token
+        if (! $logs = $this->logs->findActiveTokens($user->getId())) {
+            return false;
+        }
+
+        // 获取用户登录入口应用类型
+        $app = $this->app();
+        foreach ($logs as &$v) {
+            if ($app == $v['app']) {
+                // 已存在相同入口
+                // 需要把该用户踢下线
+                return $v;
+            }
+        }
+        return false;
+
     }
 
     /**

@@ -12,8 +12,10 @@ abstract class User extends Model
      * @param string $username
      * @param string $password
      * @return array|false
+     * @param array $options
+     * @return mixed
      */
-    abstract public function login($username, $password);
+    abstract public function login($username, $password, array $options = []);
 
     /**
      * 获取需要保存到登录缓存中的用户数据
@@ -22,4 +24,13 @@ abstract class User extends Model
      */
     abstract public function findForLogined();
 
+    public function setLogs(array $logs)
+    {
+        return $this->set('logs', $logs);
+    }
+
+    public function logs($key = null)
+    {
+        return $this->get($key ? 'logs.'.$key : 'logs');
+    }
 }

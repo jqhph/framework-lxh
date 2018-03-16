@@ -202,7 +202,7 @@ class Query
 	/**
 	 * 设置sql where and字句
 	 *
-	 * @return static
+	 * @return $this
 	 */
 	public function where($p1, $p2 = '=', $p3 = null, $table = null)
 	{

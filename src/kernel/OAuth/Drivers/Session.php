@@ -36,7 +36,7 @@ class Session extends Driver
         // 使用session保存
         if ($remember) {
             // 使用cookie保存token
-            $value = $this->normalize($user->get('logs.token'), $this->getEncryptTarget($user));
+            $value = $this->normalize($this->getEncryptTarget($user), $user->logs('token'));
 
             // 缓存时间
             $life = $this->user->getLife($remember);
@@ -47,7 +47,7 @@ class Session extends Driver
             $cache = $this->user->cache();
             if (! $cache instanceof File) {
                 // 如果用的不是文件缓存，则保存到缓存
-                $cache->set($value, $user->get('logs.key'), $life + 10);
+                $cache->set($user->logs('key'), $value, $life + 10);
             }
 
         }
@@ -55,8 +55,6 @@ class Session extends Driver
         return session()->save($this->key, $user->toArray());
 
     }
-    
-    
 
     protected function normalize($id, $token)
     {
@@ -70,9 +68,17 @@ class Session extends Driver
      */
     public function check()
     {
+        $model = $this->user->model();
         // 使用session保存
         if ($data = session()->get($this->key)) {
-            $this->user->model()->attach($data);
+            $model->attach($data);
+            if (
+             ! $this->user->logs()->isTokenActiveForSession($this->user->token())
+            ) {
+                $this->logout();
+                // token已失效，需要重新登录
+                return false;
+            }
 
             return true;
         }
@@ -82,20 +88,30 @@ class Session extends Driver
             return false;
         }
 
-        $model = $this->user->model();
+        list($uid, $token) = explode(',', $result);
 
-        list($id, $token) = explode(',', $result);
+        if (
+            ! $this->user->logs()->isTokenActiveForSession($token)
+        ) {
+            $this->logout();
+            // token已失效，需要重新登录
+            return false;
+        }
 
-        $model->setId($id);
+        $model->setId($uid);
 
-        $code = $this->findEncryptCode($id, $token);
+        // 返回false表示token失效或过期
+        if (!$code = $this->findEncryptCode($uid, $token)) {
+            return false;
+        }
 
         // 验证token是否正确
         if (! $this->user->vertifyToken($token, $this->getEncryptTarget($model), $code)) {
             return false;
         }
 
-        $logs = $this->user->logs()->find($id, $token);
+        // 获取登录日志数据
+        $logs = $this->user->logs()->find($uid, $token);
 
         // 查找用户数据
         $userData = $model->findForLogined();
@@ -103,12 +119,11 @@ class Session extends Driver
             return false;
         }
 
-        $userData['logs'] = &$logs;
+        $model->attach($userData);
+        $model->setLogs($logs);
 
         // 保存到cookie
-        session()->save($this->key, $userData);
-
-        $model->attach($userData);
+        session()->save($this->key, $model->toArray());
 
         return true;
     }
@@ -121,7 +136,7 @@ class Session extends Driver
     public function logout()
     {
         // 登陆日志状态改为无效
-        $this->user->logs()->inactive();
+        $this->user->logs()->logout();
 
         session()->delete($this->key);
         cookie()->delete($this->key);
@@ -133,16 +148,16 @@ class Session extends Driver
      * @param $id
      * @param $token
      */
-    protected function findEncryptCode($id, $token)
+    protected function findEncryptCode($uid, $token)
     {
         $cache = $this->user->cache();
         if (! $cache instanceof File) {
-            if ($code = $cache->get($this->normalize($id, $token))) {
+            if ($code = $cache->get($this->normalize($uid, $token))) {
                 return $code;
             }
         }
         // 从数据库中查找
-        return $this->user->logs()->findEncryptCode($id, $token);
+        return $this->user->logs()->findEncryptCode($uid, $token);
 
     }
 

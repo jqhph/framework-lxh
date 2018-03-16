@@ -29,13 +29,22 @@ interface LogsInterface
      */
     public function item($key = null);
 
+    /**
+     * 登出操作
+     *
+     * @return mixed
+     */
+    public function logout();
 
     /**
-     * 登出时把日志状态设置为无效
+     * 把token状态设置为无效
      *
-     * @return void
+     * @param $userId
+     * @param $logId
+     * @param $token
+     * @return mixed
      */
-    public function inactive();
+    public function inactive($userId, $logId, $token);
 
     /**
      * 生成日志记录
