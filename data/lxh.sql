@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2018-03-15 14:02:56
+Date: 2018-03-16 19:25:33
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -87,6 +87,34 @@ CREATE TABLE `admin` (
 -- ----------------------------
 INSERT INTO `admin` VALUES ('1', 'admin', '$2y$10$IK.HGNDMOV9LYHIG7jMxb.0iEV85SSkf6Lv8GN9aaAuAIFbsVnaSS', '841324345@qq.com', '', 'J', 'qh', '20180306/1b4267fe836249627de672e0d1795350.jpeg', '1', '0', '1499568986', '1520325431', '127.0.0.1', '0', '127.0.0.1', '1', '1', '0');
 INSERT INTO `admin` VALUES ('5', 'test123', '$2y$10$BGcwPLnwqqxm9O5WzrybweNJRFQM0l88msP6FzkM5JqnZmL6XdGya', '841324345@qq.com', '13076814390', '', '', '', '1', '0', '1519452159', '1520325267', '', '0', '', '0', '1', '1');
+
+-- ----------------------------
+-- Table structure for admin_login_log
+-- ----------------------------
+DROP TABLE IF EXISTS `admin_login_log`;
+CREATE TABLE `admin_login_log` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `token` varchar(150) NOT NULL,
+  `key` varchar(100) NOT NULL DEFAULT '',
+  `created_at` int(11) unsigned NOT NULL DEFAULT '0',
+  `logout_at` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '登出时间，只有当用户手动登出时或被踢下线时才会有值',
+  `ip` varchar(50) NOT NULL DEFAULT '',
+  `device` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '浏览器类型（预留）',
+  `active` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1有效，0无效',
+  `life` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '登录有效期，单位秒，0表示记录无效',
+  `user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '登录用户id',
+  `app` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '用户登录的应用入口，预留字段',
+  `type` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1站内session登录，2授权开放登录',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `token` (`token`) USING BTREE,
+  KEY `user_id` (`user_id`,`active`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of admin_login_log
+-- ----------------------------
+INSERT INTO `admin_login_log` VALUES ('10', '6ec18f33b3b66c6dfdf0f566acd60ca97934bb822805e5ef088939f08514fe1c', '43sWkU1521199337.60655aaba8e994103', '1521199337', '1521199392', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
+INSERT INTO `admin_login_log` VALUES ('11', 'b7195c0101594c4e5edb122e7e832945bf59e5d4fce0d0ec2afc9b04919ac176', '0wJOfd1521199388.09135aaba91c164c9', '1521199388', '1521199502', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
 
 -- ----------------------------
 -- Table structure for admin_operation_log
