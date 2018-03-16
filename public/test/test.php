@@ -1,35 +1,20 @@
-<?php
+<script>
+    var a = {};
 
-/**
- * 加密密码
- *
- * @param $code
- * @return bool|string
- */
-function encrypt($code, $algo = PASSWORD_DEFAULT)
-{
-    return password_hash($code, $algo);
-}
+    a.a = '';
+    a.b = '';
+    a.d = '';
+    a.e = '';
+    a.f = '';
+    a.g = '';
 
-/**
- * 验证密码
- *
- * @param $code
- * @param $hash
- * @return bool
- */
-function verify($code, $hash)
-{
-    return password_verify($code, $hash);
-}
+    a.e = 'e';
+    a.f = 't';
+    a.a = 'a';
+    a.d = 'd';
 
-//$token = password_hash('test', PASSWORD_DEFAULT, ['salt' => md5(time())]);
-//
-//var_dump(password_verify('test', $token));
+    for (var i in a) {
+        console.log(i, a[i])
+    }
 
-$time = time();
-
-$a = hash('sha256', 'test'.$time);
-
-var_dump($a);
-var_dump($a == hash('sha256', 'test'.$time));
+</script>

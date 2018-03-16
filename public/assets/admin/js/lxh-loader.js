@@ -5,8 +5,11 @@
         useCache = configs.save || false,
         lifetime = configs.lifetime || 8640000;
 
-    function Loader(src, completed) {
-        var queue = [], unstores = [];
+    function Loader(srcs, completed) {
+        var queue = [],
+            unstores = [],
+        // 保证代码按顺序执行
+            map = {};
 
         var loader = {
             add: function (src) {
@@ -22,7 +25,9 @@
                     src = src.indexOf('.js') == -1 ? (src+'.js') : src;
                 }
 
-                queue.push(normalize_url(src));
+                src = normalize_url(src);
+                map[src] = '';
+                queue.push(src);
                 return this;
             },
             // 发起请求
@@ -44,8 +49,7 @@
                         dataType: 'text',
                         ifModified: false,
                         success: function (code) {
-                            // 执行代码
-                            run(code);
+                            map[this.url] = code;
                             // 判断队列所有内容是否加载完毕
                             is_completed(this.url);
                             // 保存到缓存
@@ -76,7 +80,7 @@
 
         };
 
-        loader.add(src);
+        loader.add(srcs);
 
         for (var i in loader) {
             this[i] = loader[i].bind(this);
@@ -96,7 +100,6 @@
             //异步延迟加载样式
             var link = $('<link />');
             link.attr('href', css);
-            link.attr('async', true);
             link.attr('rel', 'stylesheet');
             link.load(function () {
                 // 判断队列所有内容是否加载完毕
@@ -119,6 +122,10 @@
         function is_completed(url) {
             queue = array_remove(queue, url);
             if (queue.length < 1 && completed) {
+                for (var i in map) {
+                    run(map[i]);
+                }
+
                 // 加载完毕
                 completed();
             }
