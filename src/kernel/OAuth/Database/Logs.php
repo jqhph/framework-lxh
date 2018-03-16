@@ -2,7 +2,7 @@
 
 namespace Lxh\OAuth\Database;
 
-use Lxh\OAuth\User;
+use Lxh\OAuth\User as OAuth;
 use Lxh\MVC\Model;
 
 /**
@@ -53,7 +53,7 @@ class Logs implements LogsInterface
     protected $items = [];
 
     /**
-     * @var User
+     * @var OAuth
      */
     protected $user;
 
@@ -83,7 +83,7 @@ class Logs implements LogsInterface
      */
     protected $isOpen = false;
 
-    public function __construct(User $user, array $items = [])
+    public function __construct(OAuth $user, array $items = [])
     {
         $this->user      = $user;
         $this->items     = &$items;
@@ -232,11 +232,7 @@ class Logs implements LogsInterface
      */
     public function model()
     {
-        if ($this->model) {
-            $this->model = model($this->modelName);
-        }
-
-        return $this->model;
+        return $this->model ?: ($this->model = model($this->modelName));
     }
 
     protected function normalizeKey($uid, $token)

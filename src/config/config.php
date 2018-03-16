@@ -34,7 +34,7 @@ $config = [
             // 启用登录日志
             'use-log'                 => true,
             // 登陆日志模型名称
-            'log-model'               => 'UserLoginLog',
+            'log-model'               => 'AdminLoginLog',
             // 是否使用token验证，默认false
             // 当值为true时，使用token验证用户是否登录，如在接口授权登录的情况下使用
             // 当值为false时，启用session存储用户登录信息

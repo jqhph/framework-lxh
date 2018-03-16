@@ -877,7 +877,7 @@ window.Lxh = function (options) {
              *
              * @type {int}
              */
-            timeout: 10000,
+            timeout: 30000,
 
             /**
              * 请求返回内容

@@ -308,7 +308,7 @@ function trans_option($value, $field, $scope = null)
 /**
  * 获取用户信息管理对象
  *
- * @return Model
+ * @return \Lxh\OAuth\Database\User
  */
 function user()
 {
@@ -316,7 +316,7 @@ function user()
 
     if ($instance) return $instance;
 
-    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->create(config('oauth.user.model', 'User'))->setupSession();
+    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->create(config('oauth.user.model', 'User'));
 
 }
 
@@ -324,7 +324,7 @@ function user()
 /**
  * 获取用户信息管理对象
  *
- * @return Model
+ * @return \Lxh\OAuth\Database\User
  */
 function admin()
 {
@@ -332,7 +332,7 @@ function admin()
 
     if ($instance) return $instance;
 
-    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->create(config('oauth.admin.model', 'Admin'))->setupSession();
+    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->create(config('oauth.admin.model', 'Admin'));
 
 }
 

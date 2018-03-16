@@ -36,7 +36,7 @@ class Session extends Driver
         // 使用session保存
         if ($remember) {
             // 使用cookie保存token
-            $value = $this->normalize($this->getEncryptTarget($user), $user->logs('token'));
+            $value = $this->normalizeValue($this->getEncryptTarget($user), $user->logs('token'));
 
             // 缓存时间
             $life = $this->user->getLife($remember);
@@ -47,7 +47,7 @@ class Session extends Driver
             $cache = $this->user->cache();
             if (! $cache instanceof File) {
                 // 如果用的不是文件缓存，则保存到缓存
-                $cache->set($user->logs('key'), $value, $life + 10);
+                $cache->set($value, $user->logs('key'), $life + 10);
             }
 
         }
@@ -56,9 +56,9 @@ class Session extends Driver
 
     }
 
-    protected function normalize($id, $token)
+    protected function normalizeValue($uid, $token)
     {
-        return $id.'_'.$token;
+        return $uid.'_'.$token;
     }
 
     /**
@@ -152,7 +152,7 @@ class Session extends Driver
     {
         $cache = $this->user->cache();
         if (! $cache instanceof File) {
-            if ($code = $cache->get($this->normalize($uid, $token))) {
+            if ($code = $cache->get($this->normalizeValue($uid, $token))) {
                 return $code;
             }
         }

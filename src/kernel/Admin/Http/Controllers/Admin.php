@@ -290,7 +290,7 @@ class Admin extends Controller
             return $this->error($v->errors());
         }
 
-        if (! $this->model()->login($_POST['username'], $_POST['password'], I('remember'))) {
+        if (! admin()->oauth()->login($_POST['username'], $_POST['password'], I('remember'))) {
             return $this->failed();
         }
 
@@ -305,7 +305,7 @@ class Admin extends Controller
      */
     public function actionLogout()
     {
-        $this->model()->logout();
+        admin()->oauth()->logout();
 
         $this->response->redirect(
             AdminCreator::url()->login()

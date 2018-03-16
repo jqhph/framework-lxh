@@ -203,6 +203,10 @@ class ControllerManager extends Factory
         $this->setRequestParams($router->requestParams);
         $this->setAuthParams($router->auth, $router);
 
+        if (! is_prod()) {
+            session();
+        }
+
         // 初始化语言包
         if (config('use-language')) {
             translator()->scope($this->controllerName);

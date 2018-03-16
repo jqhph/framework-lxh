@@ -98,7 +98,7 @@ trait CacheLogs
     {
         return $this->items['id'] . '-'
         . $this->items['token'] . '-'
-        . $this->items['entry']
+        . $this->items['app'] . '-'
         . ($this->items['life'] + $this->items['created_at']);
     }
 

@@ -66,7 +66,7 @@ class Entity implements ArrayAccess, Arrayable, Jsonable
      * 注入属性
      *
      * @param array $data
-     * @return static
+     * @return $this
      */
     public function fill(array $data)
     {
@@ -130,7 +130,7 @@ class Entity implements ArrayAccess, Arrayable, Jsonable
      *
      * @param string $name
      * @param mixed $value
-     * @return static
+     * @return $this
      */
     public function set($name, $value)
     {
@@ -141,7 +141,7 @@ class Entity implements ArrayAccess, Arrayable, Jsonable
     /**
      * 追加值到某一属性中
      *
-     * @return static
+     * @return $this
      */
     public function append($name, $k, $v = null)
     {

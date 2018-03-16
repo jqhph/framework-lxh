@@ -45,8 +45,7 @@ class User
      */
     public function handle($options, Closure $next)
     {
-        $admin = admin();
-        if (! $admin->getId()) {
+        if (! admin()->oauth()->check()) {
             $this->request->url()->save();
 
             return $this->response->redirect(Admin::url()->login());

@@ -89,7 +89,14 @@ class User
      */
     protected $cache;
 
-    public function __construct(array $options = [])
+    /**
+     * 计数器
+     *
+     * @var mixed
+     */
+    protected $counter;
+
+    public function __construct(Database\User $user, array $options = [])
     {
         $this->events  = events();
         $this->options = array_merge($this->options, $options);
@@ -100,7 +107,7 @@ class User
         $logs = $this->options['log-handler'] ?: Logs::class;
         $this->setLogs(new $logs($this));
 
-        $this->setModel(user());
+        $this->setModel($user);
 
         $this->options['app'] = (int)$this->options['app'];
         if ($this->options['app'] > 99 || $this->options['app'] < 0) {
@@ -308,6 +315,16 @@ class User
     }
 
     /**
+     * 获取用户登录失败次数
+     *
+     * @return int
+     */
+    public function defeated()
+    {
+        return $this->counter->total();
+    }
+
+    /**
      * 生成加密随机码
      *
      * @return string
@@ -425,6 +442,11 @@ class User
         $this->model = $model;
 
         return $this;
+    }
+
+    public function counter()
+    {
+
     }
 
 }

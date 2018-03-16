@@ -71,13 +71,17 @@ trait FindLogs
             $inactives = [];
             $actives   = [];
             foreach ($data as $k => &$v) {
+                if (! $v) {
+                    unset($data[$k]);
+                    continue;
+                }
                 // 检测token是否过期
                 list($id, $token, $app, $expireAt) = $this->parseUserIdValue($v);
                 if ($expireAt < $time) {
                     $inactives[] = $id;
                     unset($data[$k]);
                 } else {
-                    $actives[] = ['id' => $id, 'token' => $token, 'app' => $app];
+                    $actives[] = ['id' => $id, 'token' => $token, 'app' => $app, 'user_id' => $uid];
                 }
 
             }
@@ -122,7 +126,7 @@ trait FindLogs
                 $inactives[] = $v['id'];
                 unset($data[$k]);
             } else {
-                $actives[] = ['id' => $v['id'], 'token' => $v['token'], 'app' => $v['app']];
+                $actives[] = ['id' => $v['id'], 'token' => $v['token'], 'app' => $v['app'], 'user_id' => $uid];
             }
         }
         

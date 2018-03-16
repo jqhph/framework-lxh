@@ -26,9 +26,6 @@ echo admin_js('js/util.min');
     <section class="content"><?php echo $content;?></section>
 </div>
 
-<?php
-echo view('admin::index.app-js')->render();
-?>
 <script>
     var LXHSTORE = {};
     LXHSTORE.loaderConfig = <?php echo json_encode(Lxh\Assets::loaderConfig())?>;
@@ -53,6 +50,7 @@ echo view('admin::index.app-js')->render();
             return new loading();
         }
     })(window);
+    require_css('@lxh/css/bootstrap.min');
     <?php
         echo $js;
         echo $css;
@@ -62,6 +60,8 @@ echo view('admin::index.app-js')->render();
     __then__(function () {<?php echo $script?>});
 </script>
 <?php
+echo view('admin::index.app-js')->render();
+
 // 加载sea js，加载所有require_js和require_css加载的文件
 echo admin_js('js/app.min');
 ?>
