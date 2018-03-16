@@ -78,7 +78,7 @@ trait CacheLogs
         $token = $token ?: $this->item('token');
         if ($data = $this->cache->getArray($uid)) {
             foreach ($data as $k => &$v) {
-                if (strpos($v, $token) === 0) {
+                if (strpos($v, $token) !== false) {
                     unset($data[$k]);
                     break;
                 }
