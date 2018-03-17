@@ -64,6 +64,7 @@ echo admin_js('js/bootstrap.min');
         echo $js;
         echo $css;
         ?>; __then__(function(){<?php echo $script?>});
+    $(document).on('shown.bs.collapse', function () {LXHSTORE.IFRAME.height()});
     $(document).on('pjax:complete', function () {$(parent.window).scrollTop(0);});
 </script>
 

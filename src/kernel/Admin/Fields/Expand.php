@@ -30,37 +30,55 @@ class Expand extends Field
 
     public function render()
     {
-        $this->setupScript();
+        $id = 'e'.Util::randomString();
+
+        $this->setupScript($id);
 
         $color = $this->option('color') ?: 'default';
 
-        $id = 'e'.Util::randomString();
+        $action = '';
+        if (!$this->ajax) {
+            $action = 'data-toggle="collapse"';
+        }
 
         // 增加一行
-        $this->table->addExtraRow("<div id=\"$id\" class=\"panel-collapse collapse out\">{$this->content}</div>");
+        $this->table->addExtraRow("<div id=\"$id\" class=\"panel-collapse collapse\">{$this->content}</div>");
 
-        return "<a class=\"btn btn-xs btn-$color grid-expand\" data-toggle=\"collapse\" data-target=\"#$id\"><i class=\"fa fa-caret-right\"></i> {$this->label()}</a>";
+        return "<a class=\"btn btn-xs btn-$color grid-expand\" $action data-target=\"#$id\"><i class=\"fa fa-caret-right\"></i> {$this->label()}</a>";
     }
 
-    protected function setupScript()
+    protected function setupScript($id)
     {
         $script = '';
         if ($this->ajax) {
             $script = <<<EOF
-if (t.attr('ajax')) return; var \$c =$(t.data('target'));t.button('loading');t.attr('ajax',1);NProgress.start();
+var \$c =$(t.data('target'));t.button('loading');t.attr('ajax',1);NProgress.start();
 $.get('$this->ajax',function(d){
-NProgress.done();
+    NProgress.done();
     if (d) 
        \$c.html(d);
     else 
        \$c.html('{$this->noDataTip()}');
-setTimeout(function(){t.button('reset')},200)
+       
+       id.collapse('show');
+    setTimeout(function(){
+        t.button('reset');
+    },200)
 });
 EOF;
         }
         $this->script('expand', <<<SCRIPT
 $('.grid-expand').click(function(){
-var t=$(this),i=t.find('i');i.toggleClass('fa-caret-right');i.toggleClass('fa-caret-down');{$script}
+    var t = $(this),
+        i = t.find('i'),
+        id = $(t.data('target'));
+    i.toggleClass('fa-caret-right');
+    i.toggleClass('fa-caret-down');
+    if (t.attr('ajax')) {
+        id.collapse('toggle');
+        return; 
+    }
+    {$script}
 });        
 SCRIPT
 );
