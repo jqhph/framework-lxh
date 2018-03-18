@@ -63,7 +63,8 @@ class User
         // 登陆日志模型名称
         'log-model'               => 'user_login_log',
         // 鉴权认证驱动
-        'driver'                  => SessionDriver::class,
+        // 不填会根据isOpen参数判断使用哪个驱动
+        'driver'                  => '',
         // 是否使用token验证，默认false
         // 当值为true时，使用token验证用户是否登录
         // 当值为false时，启用session存储用户登录信息
@@ -112,7 +113,7 @@ class User
 
         $this->setModel($user);
 
-        $driver = $this->options['driver'] ?: SessionDriver::class;
+        $driver = $this->options['driver'] ?: ($this->options['isOpen'] ? TokenDriver::class : SessionDriver::class);
         $this->setDriver(new $driver($this));
 
         $this->options['app'] = (int)$this->options['app'];
