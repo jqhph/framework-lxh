@@ -11,6 +11,7 @@ use Lxh\OAuth\Database;
 use Lxh\Events\Dispatcher;
 use Lxh\MVC\Model;
 use Lxh\OAuth\Drivers\Driver;
+use Lxh\OAuth\Drivers\Session;
 use Lxh\OAuth\Drivers\Token as TokenDriver;
 use Lxh\OAuth\Drivers\Session as SessionDriver;
 use Lxh\OAuth\Exceptions\UnsupportedEncryptionException;
@@ -61,6 +62,8 @@ class User
         'use-log'                 => true,
         // 登陆日志模型名称
         'log-model'               => 'user_login_log',
+        // 鉴权认证驱动
+        'driver'                  => SessionDriver::class,
         // 是否使用token验证，默认false
         // 当值为true时，使用token验证用户是否登录
         // 当值为false时，启用session存储用户登录信息
@@ -109,17 +112,14 @@ class User
 
         $this->setModel($user);
 
+        $driver = $this->options['driver'] ?: SessionDriver::class;
+        $this->setDriver(new $driver($this));
+
         $this->options['app'] = (int)$this->options['app'];
         if ($this->options['app'] > 99 || $this->options['app'] < 0) {
             throw new InvalidArgumentException(
                 '应用类型参数必须是一个0-99的整数！'
             );
-        }
-
-        if ($this->options['isOpen']) {
-            $this->driver = new TokenDriver($this);
-        } else {
-            $this->driver = new SessionDriver($this);
         }
     }
 
@@ -408,6 +408,12 @@ class User
     {
         $this->cache = $cache;
 
+        return $this;
+    }
+
+    public function setDriver(Driver $driver)
+    {
+        $this->driver = $driver;
         return $this;
     }
 
