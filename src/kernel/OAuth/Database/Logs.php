@@ -178,6 +178,11 @@ class Logs implements LogsInterface
             ->update(['active' => 0, 'logout_at' => time()]);
     }
 
+    protected function getType()
+    {
+        return $this->isOpen ? 2 : 1;
+    }
+
     /**
      * 生成日志记录
      *
@@ -200,9 +205,11 @@ class Logs implements LogsInterface
             'user_id'    => $uid,
             'life'       => $life,
             'device'     => 0,
-            'app'      => $this->user->option('app'),
-            'type'       => $this->isOpen ? 2 : 1,
+            'app'        => $this->user->app(),
+            'type'       => $this->getType(),
         ];
+
+        $this->user->setToken($token);
 
         if ($this->saveable) {
             $this->save();

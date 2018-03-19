@@ -2,7 +2,6 @@
 
 namespace Lxh\OAuth\Drivers;
 
-use Lxh\MVC\Model;
 use Lxh\OAuth\User;
 use Lxh\OAuth\Database;
 
@@ -12,6 +11,11 @@ abstract class Driver
      * @var User
      */
     protected $user;
+
+    /**
+     * @var string
+     */
+    protected $token;
 
     public function __construct(User $user)
     {

@@ -70,6 +70,10 @@ class Demo extends Controller
      */
     protected $detailFormWidth = 8;
 
+    protected function initialize()
+    {
+    }
+
     protected function form(Form $form)
     {
         $form->slider('slider')->setLabel('滑动条');

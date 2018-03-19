@@ -2,6 +2,8 @@
 
 namespace Lxh\OAuth;
 
+use Lxh\Cache\Cache;
+
 class Counter
 {
     /**
@@ -10,10 +12,9 @@ class Counter
     protected $user;
 
     /**
-     *
-     * @var int
+     * @var Cache
      */
-    protected $total = 0;
+    protected $cache;
 
     /**
      * 缓存前缀
@@ -24,18 +25,38 @@ class Counter
 
     public function __construct(User $user)
     {
-        $this->user = $user;
+        $this->user  = $user;
+        $this->cache = $user->cache();
     }
 
-    public function add($key)
+    public function incr($username)
     {
-        $this->total ++;
-
-        $this->user->cache()->set();
+        return $this->cache->set(
+            $this->normalize($username),
+            $this->total($username) + 1,
+            $this->user->option('fail-interval') ?: 600
+        );
     }
 
-    public function total()
+    public function reset($username)
     {
-        return $this->total;
+        return $this->cache->delete($this->normalize($username));
     }
+
+    /**
+     * 获取总次数
+     *
+     * @param $username
+     * @return int
+     */
+    public function total($username)
+    {
+        return $this->cache->get($this->normalize($username)) ?: 0;
+    }
+
+    protected function normalize($username)
+    {
+        return $this->prefix . $username;
+    }
+
 }

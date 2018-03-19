@@ -6,6 +6,7 @@ use Lxh\Exceptions\Exception;
 use Lxh\MVC\Model;
 use Lxh\OAuth\Cache\File;
 use Lxh\OAuth\Exceptions\AuthTokenException;
+use Lxh\OAuth\Exceptions\EncryptCodeException;
 use Lxh\OAuth\Exceptions\UserNotExistEception;
 use Lxh\OAuth\User;
 use Lxh\OAuth\Database;
@@ -63,15 +64,19 @@ class Session extends Driver
 
     protected function checkSession()
     {
+        $model = $this->user->model();
         // 使用session保存
         if ($data = session()->get($this->key)) {
-            $this->user->model()->attach($data);
+            $model->attach($data);
+
+            $this->user->setToken($token = $model->logs('token'));
+
             if (
-            ! $this->user->logs()->isTokenActiveForSession($this->user->token())
+            ! $this->user->logs()->isTokenActiveForSession($token)
             ) {
                 $this->logout();
                 // token已失效，需要重新登录
-                return false;
+                throw new AuthTokenException('token失效，用户可能在其他设备登录！');
             }
 
             return true;
@@ -88,20 +93,23 @@ class Session extends Driver
         }
 
         list($uid, $token) = explode(',', $result);
+        
+        $this->user->setToken($token);
 
         if (
         ! $this->user->logs()->isTokenActiveForSession($token)
         ) {
             $this->logout();
             // token已失效，需要重新登录
-            return false;
+            throw new AuthTokenException('token失效，用户可能在其他设备登录');
         }
 
         $model->setId($uid);
 
         // 返回false表示token失效或过期
         if (!$code = $this->findEncryptCode($uid, $token)) {
-            return false;
+            // token已失效，需要重新登录
+            throw new EncryptCodeException('token失效，获取token加密随机码失败');
         }
 
         // 验证token是否正确
@@ -115,7 +123,7 @@ class Session extends Driver
         // 查找用户数据
         $userData = $model->findForLogined();
         if (! $userData) {
-            return false;
+            throw new UserNotExistEception('用户不存在或未激活');
         }
 
         $model->attach($userData);

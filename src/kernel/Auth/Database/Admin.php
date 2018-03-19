@@ -154,7 +154,14 @@ class Admin extends User
             return false;
         }
 
-        return $this->find();
+        $data = $this->query()
+            ->select($this->selectFields)
+            ->where([$this->primaryKeyName => $id, 'status' => 1])
+            ->findOne();
+
+        $this->fill($data);
+
+        return $data;
     }
 
     /**
@@ -171,7 +178,7 @@ class Admin extends User
 
         $userData = $this->query()
             ->select($this->defaultSelectFields)
-            ->where('deleted', 0)
+            ->where('status', 1)
             ->whereOr(['username' => &$account])
             ->findOne();
 

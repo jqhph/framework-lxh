@@ -13,6 +13,9 @@ use Lxh\Admin\Admin;
 use Lxh\Http\Response;
 use Lxh\Http\Request;
 use Lxh\Contracts\Container\Container;
+use Lxh\OAuth\Exceptions\AuthTokenException;
+use Lxh\OAuth\Exceptions\EncryptCodeException;
+use Lxh\OAuth\Exceptions\UserNotExistEception;
 
 class User
 {
@@ -45,12 +48,33 @@ class User
      */
     public function handle($options, Closure $next)
     {
-        if (! admin()->oauth()->check()) {
-            $this->request->url()->save();
+        $oauth = admin()->oauth();
+        
+        try {
+            if (! $oauth->check()) {
+                $this->notlogin();
+            }
+        } catch (AuthTokenException $e) {
+            // 用户可能在其他客户端重复登录
+            if ($log = $oauth->logs()->findActiveLatestLoginedLog()) {
 
-            return $this->response->redirect(Admin::url()->login());
+            } else {
+                $this->notlogin();
+            }
+
+        } catch (EncryptCodeException $e) {
+
+        } catch (UserNotExistEception $e) {
+
         }
 
         return $next($options);
+    }
+
+    protected function notlogin()
+    {
+        $this->request->url()->save();
+
+        return $this->response->redirect(Admin::url()->login());
     }
 }

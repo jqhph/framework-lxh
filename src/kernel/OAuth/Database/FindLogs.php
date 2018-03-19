@@ -158,4 +158,26 @@ trait FindLogs
         return $this->rows;
     }
 
+
+    /**
+     * 获取最新登录日志
+     *
+     * @return array
+     */
+    public function findActiveLatestLoginedLog($uid)
+    {
+        return $this->model()
+            ->select('life,token,id,created_at,device,ip')
+            ->where(
+                [
+                    'uesr_id' => $uid,
+                    'active' => 1,
+                    'app' => $this->user->app(),
+                    'type' => $this->getType()
+                ]
+            )
+            ->sort('id DESC')
+            ->findOne();
+    }
+
 }

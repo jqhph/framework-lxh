@@ -47,6 +47,11 @@ class User
     protected $logs;
 
     /**
+     * @var string
+     */
+    protected $token;
+
+    /**
      * 配置选项
      *
      * @var array
@@ -83,6 +88,8 @@ class User
         // 对于站内session模式登录，此参数用于保证用户在同一类型下的应用只能保留一个有效的登陆状态
         // 对于开放授权token模式登录，此参数用于保证用户在同一类型下的应用只能获取一个有效授权token
         'app'                     => 0,
+        // 连续登陆错误长间隔时间（秒）
+        'fail-interval'           => 600,
     ];
 
     /**
@@ -96,7 +103,7 @@ class User
     /**
      * 计数器
      *
-     * @var mixed
+     * @var Counter
      */
     protected $counter;
 
@@ -146,6 +153,8 @@ class User
     public function login($username, $password, $remember = false, array $options = [])
     {
         if (!$data = $this->model->login($username, $password, $options)) {
+            $this->counter->incr($username);
+
             return false;
         }
         $this->model->attach($data);
@@ -166,14 +175,17 @@ class User
         return true;
     }
 
-    /**
-     * 获取token
-     *
-     * @return string
-     */
+
     public function token()
     {
-        return $this->model->logs('token');
+        return $this->token;
+    }
+
+    public function setToken($token)
+    {
+        $this->token = $token;
+
+        return $this;
     }
 
     /**
@@ -291,7 +303,7 @@ class User
      *
      * @param string $token
      * @param string $code 随机字符串
-     * @param Database\User $target 
+     * @param Database\User $target
      * @return bool
      * @throws InvalidArgumentException
      * @throws UnsupportedEncryptionException
@@ -324,7 +336,7 @@ class User
      *
      * @return int
      */
-    public function defeated()
+    public function failTimes()
     {
         return $this->counter->total();
     }

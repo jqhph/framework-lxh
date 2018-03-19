@@ -28,6 +28,8 @@ class Token extends Driver
             return false;
         }
 
+        $this->user->setToken($token);
+
         // 如果token存在，则允许登录
         if (
             ! $data = $this->user->cache()->get($this->normalizeKey($token))
