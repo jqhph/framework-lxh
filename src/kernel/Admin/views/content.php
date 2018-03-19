@@ -1,9 +1,16 @@
 <!DOCTYPE html>
 <html>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title><?php echo config('admin.title')?></title>
-<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title><?php echo config('admin.title')?></title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <?php
+    echo $loadscss;
+    if ($style) {?>
+        <style><?php echo $style?></style>
+    <?php } ?>
+</head>
 <body>
 <script>
     LXHSTORE = parent.LXHSTORE;
@@ -39,11 +46,6 @@
 
     LXHSTORE.VIEWKEY = '<?php echo Lxh\Admin\Grid::$viewKey?>';
 </script>
-<?php
-echo $loadscss;
-if ($style) {?>
-<style><?php echo $style?></style>
-<?php } ?>
 <div class="container">
     <div class="content-wrapper">
         <?php if ($header || $description) {?>

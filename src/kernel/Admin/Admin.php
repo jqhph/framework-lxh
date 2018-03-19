@@ -179,9 +179,9 @@ class Admin
     /**
      * Add css or get all css.
      *
-     * @param null $css
+     * @param string|array $css
      *
-     * @return array
+     * @return null|string
      */
     public static function css($css = null)
     {
@@ -190,20 +190,18 @@ class Admin
             return;
         }
 
-        $script = '';
-        foreach (array_unique(static::$css) as &$css) {
-            $script .= "require_css('$css.css');";
-        }
-        return $script;
+        $styles = json_encode(static::$css);
+
+        return "require_css($styles);";
     }
 
 
     /**
      * Add js or get all js.
      *
-     * @param null $js
+     * @param string|array $js
      *
-     * @return array
+     * @return null|string
      */
     public static function js($js = null)
     {
@@ -212,11 +210,9 @@ class Admin
             return;
         }
 
-        $script = '';
-        foreach (array_unique(static::$js) as &$js) {
-            $script .= "require_js('$js');";
-        }
-        return $script;
+        $script = json_encode(static::$js);
+
+        return "require_js($script);";
     }
 
     /**
@@ -239,8 +235,14 @@ class Admin
      */
     public static function getLoadScripts()
     {
+        $server = config('client.resource-server');
+
         $html = '';
         foreach (array_unique(static::$loadScripts) as &$src) {
+            if (strpos($src, '//') === false) {
+                $src .= $server . $src;
+            }
+
             $html .= "<script src='{$src}'></script>";
         }
         return $html;
