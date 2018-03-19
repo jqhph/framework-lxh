@@ -240,7 +240,7 @@ class Admin
         $html = '';
         foreach (array_unique(static::$loadScripts) as &$src) {
             if (strpos($src, '//') === false) {
-                $src .= $server . $src;
+                $src = $server . $src;
             }
 
             $html .= "<script src='{$src}'></script>";
@@ -268,8 +268,14 @@ class Admin
      */
     public static function getLoadStyles()
     {
+        $server = config('client.resource-server');
+
         $html = '';
         foreach (array_unique(static::$loadStyles) as &$css) {
+            if (strpos($css, '//') === false) {
+                $css = $server . $css;
+            }
+
             $html .= "<link href='{$css}' rel=\"stylesheet\" type=\"text/css\" />";
         }
         return $html;
