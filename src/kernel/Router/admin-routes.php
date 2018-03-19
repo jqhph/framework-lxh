@@ -34,6 +34,18 @@ return [
 
     // 登录页面
     [
+        'pattern' => '/admin/captcha',
+        'method' => 'GET',
+        'params' => [
+            'auth' => false,
+            'module' => 'Admin',
+            'controller' => 'Login',
+            'action' => 'Captcha'
+        ]
+    ],
+
+    // 登录页面
+    [
         'pattern' => '/admin/logout',
         'method' => 'GET',
         'params' => [

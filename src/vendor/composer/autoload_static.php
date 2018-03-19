@@ -26,6 +26,7 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
             'Symfony\\Component\\Process\\' => 26,
             'Symfony\\Component\\Inflector\\' => 28,
             'Symfony\\Component\\HttpFoundation\\' => 33,
+            'Symfony\\Component\\Finder\\' => 25,
             'Symfony\\Component\\Debug\\' => 24,
             'Symfony\\Component\\CssSelector\\' => 30,
             'Symfony\\Component\\Console\\' => 26,
@@ -44,6 +45,10 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         'L' => 
         array (
             'Lxh\\' => 4,
+        ),
+        'G' => 
+        array (
+            'Gregwar\\' => 8,
         ),
         'D' => 
         array (
@@ -79,6 +84,10 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         'Symfony\\Component\\HttpFoundation\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/http-foundation',
+        ),
+        'Symfony\\Component\\Finder\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/finder',
         ),
         'Symfony\\Component\\Debug\\' => 
         array (
@@ -116,6 +125,10 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         array (
             0 => __DIR__ . '/../..' . '/kernel',
             1 => __DIR__ . '/../..' . '/application',
+        ),
+        'Gregwar\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/gregwar/captcha/src/Gregwar',
         ),
         'Dotenv\\' => 
         array (

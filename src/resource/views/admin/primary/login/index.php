@@ -27,6 +27,15 @@
                     </div>
                 </div>
 
+                <!-- /admin/captcha -->
+                <div class="form-group m-t-10 captcha" style="">
+                    <div class="col-xs-12">
+                        <img style="float:left;height:36px;width:59%" src="/admin/captcha">
+                        <input style="width:40%" class="form-control" name="captcha" type="text" data-parsley-length="[4, 20]"
+                               placeholder="<?php echo trans('Captcha')?>">
+                    </div>
+                </div>
+
                 <div class="form-group ">
                     <div class="col-xs-12">
                         <div class="checkbox checkbox-custom">
@@ -40,7 +49,7 @@
                     </div>
                 </div>
 
-                <div class="form-group text-center m-t-30">
+                <div class="form-group text-center m-t-30 log-btn">
                     <div class="col-xs-12">
                         <button class="  btn btn-custom btn-bordred btn-block waves-effect waves-light" type="submit">
                             <?php echo $language->translate('log in');?>
@@ -50,7 +59,7 @@
 
                 <div class="form-group m-t-30 m-b-0">
                     <div class="col-sm-12">
-                        <a href="page-recoverpw.html" class="text-muted"><i class="fa fa-lock m-r-5"></i> <?php echo $language->translate('forgot')?></a>
+                        <a href="/page-recoverpw" class="text-muted"><i class="fa fa-lock m-r-5"></i> <?php echo $language->translate('forgot')?></a>
                     </div>
                 </div>
             </form>
@@ -68,6 +77,5 @@
 
 </div>
 <script>
-    require_js('@lxh/js/validate.min');
-    require_js('@lxh/js/login/index')
+    require_js(['@lxh/js/validate.min', '@lxh/js/login/index']);
 </script>

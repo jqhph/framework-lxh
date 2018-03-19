@@ -178,7 +178,9 @@ class Composer
      */
     public function saveConfig(array $config)
     {
-        return $this->files->putContentsJson($this->configPath, $config);
+        return $this->files->putContentsJson(
+            $this->configPath, str_replace('\/', '', json_encode($config))
+        );
     }
 
     /**

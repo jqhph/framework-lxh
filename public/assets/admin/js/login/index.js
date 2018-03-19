@@ -1,5 +1,5 @@
 __then__(function (plugIns) {
-    var v = $lxh.validator([
+    var rules = [
         {
             name: 'username',
             rules: 'required|length_between[4-20]',
@@ -7,11 +7,12 @@ __then__(function (plugIns) {
         {
             name: 'password',
             rules: 'required|length_between[4-30]'
-        },
+        }
+    ],
+        form = '.login-form',
+        v = $lxh.validator(rules, submit, form);
 
-    ], submit, '.login-form');
-
-    var model = $lxh.createModel('Admin', '.login-form');
+    var model = $lxh.createModel('Admin', form);
     var notify = $lxh.ui().notify();
 
     function submit(e) {
@@ -30,7 +31,26 @@ __then__(function (plugIns) {
 
             // 500豪秒后跳转到首页
             $lxh.redirect(data.target || '/admin', 500)
-        })
+        });
+        
+        model.on('failed', function (data) {
+            switch (data.status) {
+                // 失败次数过多，显示验证码
+                case 10047:
+                    var $capt =  $('.captcha'), $img = $capt.find('img'), src = '/admin/captcha';
+
+                    $capt.show();
+                    $img.attr('src', src);
+                    $img.off('click');
+                    $img.click(function () {
+                        $img.attr('src', src + '?_=' + new Date().getTime());
+                    });
+
+                    rules.push({name: 'captcha', rules: 'required'});
+                    v = $lxh.validator(rules, submit, form);
+            }
+        });
+        
         // 发起登录请求
         model.request('/admin/api/login', 'POST')
 
