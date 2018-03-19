@@ -88,17 +88,15 @@ class Editor extends Field
 
     protected function setupScript()
     {
-        $server = config('client.resource-server');
-
-        Admin::loadScript($server.'/assets/admin/packages/editor-md/lib/raphael.min.js');
-        Admin::loadScript($server.'/assets/admin/packages/editor-md/editormd.min.js');
-        Admin::loadScript($server.'/assets/admin/packages/editor-md/languages/en.js');
+        Admin::loadScript('/assets/admin/packages/editor-md/lib/raphael.min.js');
+        Admin::loadScript('/assets/admin/packages/editor-md/editormd.min.js');
+        Admin::loadScript('/assets/admin/packages/editor-md/languages/en.js');
 
         $id = 'e'.Util::randomString(6);
 
         $this->attribute('id', $id);
 
-        $this->options['path'] = $server.'/assets/admin/packages/editor-md/lib/';
+        $this->options['path'] = '/assets/admin/packages/editor-md/lib/';
         $this->options['name'] = $this->column;
         $this->options['placeholder'] = $this->getPlaceholder();
 
@@ -144,15 +142,15 @@ EOF;
 
     }
 
-//        Admin::loadScript($server.'/assets/admin/packages/editor-md/plugins/link-dialog/link-dialog.js');
-//        Admin::loadScript($server.'/assets/admin/packages/editor-md/plugins/reference-link-dialog/reference-link-dialog.js');
-//        Admin::loadScript($server.'/assets/admin/packages/editor-md/plugins/image-dialog/image-dialog.js');
-//        Admin::loadScript($server.'/assets/admin/packages/editor-md/plugins/code-block-dialog/code-block-dialog.js');
-//        Admin::loadScript($server.'/assets/admin/packages/editor-md/plugins/table-dialog/table-dialog.js');
-//        Admin::loadScript($server.'/assets/admin/packages/editor-md/plugins/goto-line-dialog/goto-line-dialog.js');
-//        Admin::loadScript($server.'/assets/admin/packages/editor-md/plugins/preformatted-text-dialog/preformatted-text-dialog.js');
-//        Admin::loadScript($server.'/assets/admin/packages/editor-md/plugins/emoji-dialog/emoji-dialog.js');
-//        Admin::loadScript($server.'/assets/admin/packages/editor-md/plugins/help-dialog/help-dialog.js');
-//        Admin::loadScript($server.'/assets/admin/packages/editor-md/plugins/html-entities-dialog/html-entities-dialog.js');
+//        Admin::loadScript('/assets/admin/packages/editor-md/plugins/link-dialog/link-dialog.js');
+//        Admin::loadScript('/assets/admin/packages/editor-md/plugins/reference-link-dialog/reference-link-dialog.js');
+//        Admin::loadScript('/assets/admin/packages/editor-md/plugins/image-dialog/image-dialog.js');
+//        Admin::loadScript('/assets/admin/packages/editor-md/plugins/code-block-dialog/code-block-dialog.js');
+//        Admin::loadScript('/assets/admin/packages/editor-md/plugins/table-dialog/table-dialog.js');
+//        Admin::loadScript('/assets/admin/packages/editor-md/plugins/goto-line-dialog/goto-line-dialog.js');
+//        Admin::loadScript('/assets/admin/packages/editor-md/plugins/preformatted-text-dialog/preformatted-text-dialog.js');
+//        Admin::loadScript('/assets/admin/packages/editor-md/plugins/emoji-dialog/emoji-dialog.js');
+//        Admin::loadScript('/assets/admin/packages/editor-md/plugins/help-dialog/help-dialog.js');
+//        Admin::loadScript('/assets/admin/packages/editor-md/plugins/html-entities-dialog/html-entities-dialog.js');
 
 }
