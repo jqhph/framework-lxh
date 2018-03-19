@@ -61,19 +61,13 @@ class Session extends Driver
         return $uid.'_'.$token;
     }
 
-    /**
-     * 检查用户是否已登录
-     *
-     * @return false|array
-     */
-    public function check()
+    protected function checkSession()
     {
-        $model = $this->user->model();
         // 使用session保存
         if ($data = session()->get($this->key)) {
-            $model->attach($data);
+            $this->user->model()->attach($data);
             if (
-             ! $this->user->logs()->isTokenActiveForSession($this->user->token())
+            ! $this->user->logs()->isTokenActiveForSession($this->user->token())
             ) {
                 $this->logout();
                 // token已失效，需要重新登录
@@ -82,6 +76,11 @@ class Session extends Driver
 
             return true;
         }
+    }
+
+    protected function checkCookie()
+    {
+        $model = $this->user->model();
 
         // 检查cookie中是否存在登录数据
         if (! $result = cookie()->get($this->key)) {
@@ -91,7 +90,7 @@ class Session extends Driver
         list($uid, $token) = explode(',', $result);
 
         if (
-            ! $this->user->logs()->isTokenActiveForSession($token)
+        ! $this->user->logs()->isTokenActiveForSession($token)
         ) {
             $this->logout();
             // token已失效，需要重新登录
@@ -106,7 +105,7 @@ class Session extends Driver
         }
 
         // 验证token是否正确
-        if (! $this->user->vertifyToken($token, $this->getEncryptTarget($model), $code)) {
+        if (! $this->user->vertifyToken($token, $model, $code)) {
             return false;
         }
 
@@ -122,10 +121,27 @@ class Session extends Driver
         $model->attach($userData);
         $model->setLogs($logs);
 
-        // 保存到cookie
+        // 保存到session
         session()->save($this->key, $model->toArray());
 
         return true;
+
+
+    }
+
+    /**
+     * 检查用户是否已登录
+     *
+     * @return false|array
+     */
+    public function check()
+    {
+        $result = $this->checkSession();
+        if (is_bool($result)) {
+            return $result;
+        }
+
+        return $this->checkCookie();
     }
 
     /**

@@ -45,6 +45,7 @@ class Token extends Driver
 
     public function getEncryptTarget(User $user)
     {
+        return $user->getId();
     }
 
     /**

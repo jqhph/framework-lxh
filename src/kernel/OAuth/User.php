@@ -257,14 +257,16 @@ class User
     /**
      * 生成token
      *
-     * @param Model $target 目标加密字符串
+     * @param Database\User $target 目标加密字符串
      * @param string $code 加密随机码
      * @return bool|string
      * @throws InvalidArgumentException
      * @throws UnsupportedEncryptionException
      */
-    public function generateToken($target, $code)
+    public function generateToken(Database\User $target, $code)
     {
+        $target = $this->driver->getEncryptTarget($target);
+
         if (empty($code) || empty($target)) {
             throw new InvalidArgumentException('目标加密字符串和加密随机码不能为空！');
         }
@@ -289,13 +291,15 @@ class User
      *
      * @param string $token
      * @param string $code 随机字符串
-     * @param Model $target 目标加密字符串
+     * @param Database\User $target 
      * @return bool
      * @throws InvalidArgumentException
      * @throws UnsupportedEncryptionException
      */
-    public function vertifyToken($token, $target, $code)
+    public function vertifyToken($token, Database\User $target, $code)
     {
+        $target = $this->driver->getEncryptTarget($target);
+
         if (empty($token) || empty($target)) {
             throw new InvalidArgumentException('目标加密字符串和token不能为空！');
         }

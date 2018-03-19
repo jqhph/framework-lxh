@@ -161,7 +161,7 @@ class Logs implements LogsInterface
         if ($this->saveable) {
             if (! $this->updateInactive($logId)) {
                 logger('oauth')->error(
-                    '设置授权token无效时出错！', ['uid' => $userId, 'logid' => $logId, 'token' => $token]
+                    '设置登录token无效时出错！', ['uid' => $userId, 'logid' => $logId, 'token' => $token]
                 );
             }
         }
