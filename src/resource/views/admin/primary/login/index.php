@@ -1,4 +1,7 @@
 <?php $language = translator();?>
+<style>
+    .captcha .parsley-required{padding-left:59%}
+</style>
 <div class="account-pages"></div>
 <div class="clearfix"></div>
 <div class="wrapper-page">
@@ -27,12 +30,11 @@
                     </div>
                 </div>
 
-                <!-- /admin/captcha -->
-                <div class="form-group m-t-10 captcha" style="">
+                <div class="form-group m-t-10 captcha" style="display: none">
                     <div class="col-xs-12">
-                        <img style="float:left;height:36px;width:59%" src="/admin/captcha">
-                        <input style="width:40%" class="form-control" name="captcha" type="text" data-parsley-length="[4, 20]"
-                               placeholder="<?php echo trans('Captcha')?>">
+                        <img style="float:left;height:36px;width:59%;cursor:pointer">
+                        <input style="width:40%" class="form-control" name="captcha" type="text"
+                               placeholder="<?php echo trans('Captcha')?>" value="55555">
                     </div>
                 </div>
 
@@ -77,5 +79,8 @@
 
 </div>
 <script>
-    require_js(['@lxh/js/validate.min', '@lxh/js/login/index']);
+require_js(['@lxh/js/validate.min', '@lxh/js/login/index']);
+<?php if ($requiredCaptcha) {?>
+__then__(function () {show_captcha();});
+<?php } ?>
 </script>

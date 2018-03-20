@@ -6,6 +6,7 @@ use Lxh\Exceptions\InvalidArgumentException;
 use Lxh\Helper\Util;
 use Lxh\OAuth\Cache\Cache;
 use Lxh\OAuth\Cache\File;
+use Lxh\OAuth\Counters\Counter;
 use Lxh\OAuth\Database\Logs;
 use Lxh\OAuth\Database;
 use Lxh\Events\Dispatcher;
@@ -107,6 +108,8 @@ class User
      */
     protected $counter;
 
+    protected $currentUsername;
+
     public function __construct(Database\User $user, array $options = [])
     {
         $this->events  = events();
@@ -129,6 +132,8 @@ class User
                 '应用类型参数必须是一个0-99的整数！'
             );
         }
+
+        $this->counter = new Counter($this);
     }
 
     /**
@@ -152,6 +157,8 @@ class User
      */
     public function login($username, $password, $remember = false, array $options = [])
     {
+        $this->currentUsername = $username;
+
         if (!$data = $this->model->login($username, $password, $options)) {
             $this->counter->incr($username);
 
@@ -334,11 +341,17 @@ class User
     /**
      * 获取用户登录失败次数
      *
+     * @param string $username
      * @return int
      */
-    public function failTimes()
+    public function failTimes($username = null)
     {
-        return $this->counter->total();
+        return $this->counter->total($username ?: $this->currentUsername);
+    }
+
+    public function resetFailTimes($username = null)
+    {
+        return $this->counter->reset($username ?: $this->currentUsername);
     }
 
     /**

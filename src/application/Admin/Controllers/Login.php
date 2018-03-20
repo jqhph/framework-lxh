@@ -25,18 +25,26 @@ class Login extends Controller
                 Admin::url()->index()
             );
         }
+        // 是否需填写验证码
+        $requiredCaptcha = session()->get('is_required_captcha');
 
         return $this->content()
             ->independent()
             ->body(
-                $this->render('index')
+                $this->render('index', ['requiredCaptcha' => $requiredCaptcha])
             )
             ->render();
     }
 
     public function actionCaptcha(array $params)
     {
-        $builder = new CaptchaBuilder('test123');
+        $phrase = Util::randomString(5);
+
+        session()->save('_captcha', ['code' => $phrase, 'at' => time()]);
+
+        $builder = new CaptchaBuilder($phrase);
+        $builder->setBackgroundColor(255, 222, 173);
+
         $builder->build();
 
         $this->response->withHeader('Content-type', 'image/jpeg');

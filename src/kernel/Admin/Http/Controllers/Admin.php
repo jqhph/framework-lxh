@@ -23,6 +23,8 @@ use Lxh\Exceptions\Forbidden;
 use Lxh\Helper\Valitron\Validator;
 use Lxh\Http\Url;
 use Lxh\Auth\Database\Admin as AdminModel;
+use Lxh\OAuth\User;
+use Lxh\Session\Store;
 
 class Admin extends Controller
 {
@@ -281,22 +283,70 @@ class Admin extends Controller
         if (empty($_POST)) {
             return $this->error();
         }
-        $v = $this->validator($_POST, [
+
+        $rules = [
             'username' => 'required|lengthBetween:4,20',
             'password' => 'required|lengthBetween:4,30',
-        ]);
+        ];
+
+        $session = session();
+
+        if ($captchas = $session->get('_captcha')) {
+            $rules['captcha'] = 'required|length:5';
+        }
+
+        $v = $this->validator($_POST, $rules);
 
         if (! $v->validate()) {
             return $this->error($v->errors());
         }
 
-        if (! admin()->oauth()->login($_POST['username'], $_POST['password'], I('remember'))) {
+        // 验证验证码
+        if ($captchas) {
+            if ($msg = $this->validateCaptcha($captchas))  {
+                return $msg;
+            }
+        }
+
+        $oauth = admin()->oauth();
+        
+        if (! $oauth->login($_POST['username'], $_POST['password'], I('remember'))) {
+            if ($oauth->failTimes() > 5) {
+                // 保存session，当页面刷新时显示验证码
+                $session->save('is_required_captcha', 1);
+
+                return $this->message('Failed', 10047);
+            }
+            
             return $this->failed();
         }
+        $this->clearCaptcha($oauth, $session);
 
         $target = Url::referer() ?: AdminCreator::url()->index();
 
         return $this->success(['target' => $target]);
+    }
+
+    protected function validateCaptcha(array $captchas)
+    {
+        $code = $captchas['code'];
+        $time = $captchas['at'];
+        if ($time + 120 < time()) {
+            return $this->message(trans('The authenticator code has expired.'), 10049);
+        }
+
+        if (strtolower($code) != strtolower($_POST['captcha'])) {
+            return $this->error(trans('The authenticator code is incorrect.'));
+        }
+    }
+
+    protected function clearCaptcha(User $oauth, Store $session)
+    {
+        // 清除失败记录
+        $oauth->resetFailTimes();
+        // 清除验证码相关session
+        $session->delete('_captcha');
+        $session->delete('is_required_captcha');
     }
 
     /**

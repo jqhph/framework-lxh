@@ -1,8 +1,9 @@
 <?php
 
-namespace Lxh\OAuth;
+namespace Lxh\OAuth\Counters;
 
 use Lxh\Cache\Cache;
+use Lxh\OAuth\User;
 
 class Counter
 {
