@@ -397,7 +397,7 @@ class Admin
      */
     public function user()
     {
-        return admin();
+        return __admin__();
     }
 
 }

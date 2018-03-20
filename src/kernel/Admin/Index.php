@@ -229,7 +229,7 @@ class Index
 
     protected function buildUser()
     {
-        $user = admin();
+        $user = __admin__();
         $name = $user->first_name . $user->last_name;
         $username = $name ?: $user->username;
 

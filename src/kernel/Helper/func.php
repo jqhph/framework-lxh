@@ -310,7 +310,7 @@ function trans_option($value, $field, $scope = null)
  *
  * @return \Lxh\OAuth\Database\User
  */
-function user()
+function __user__()
 {
     static $instance = null;
 
@@ -326,7 +326,7 @@ function user()
  *
  * @return \Lxh\OAuth\Database\User
  */
-function admin()
+function __admin__()
 {
     static $instance = null;
 

@@ -9,7 +9,7 @@
 namespace Lxh\Admin\Auth;
 
 use Closure;
-use Lxh\Admin\Admin;
+use Lxh\Admin\Admin as AdminCreate;
 use Lxh\Http\Response;
 use Lxh\Http\Request;
 use Lxh\Contracts\Container\Container;
@@ -49,7 +49,7 @@ class User
      */
     public function handle($options, Closure $next)
     {
-        $oauth = admin()->oauth();
+        $oauth = __admin__()->oauth();
 
         try {
             if (! $oauth->check()) {
@@ -68,7 +68,8 @@ class User
                 if ($this->request->isIframe()) {
                     return $this->showMessage($msg);
 
-                } elseif ($this->request->isAjax()) {
+                }
+                if ($this->request->isAjax()) {
                     return $this->responseForAjax($msg);
 
                 }
@@ -80,7 +81,8 @@ class User
             if ($this->request->isIframe()) {
                 return $this->showMessage('无效token！');
 
-            } elseif ($this->request->isAjax()) {
+            }
+            if ($this->request->isAjax()) {
                 return $this->responseForAjax('无效token！');
 
             }
@@ -89,7 +91,8 @@ class User
             if ($this->request->isIframe()) {
                 return $this->showMessage('用户不存在！');
 
-            } elseif ($this->request->isAjax()) {
+            }
+            if ($this->request->isAjax()) {
                 return $this->responseForAjax('用户不存在！');
 
             }
@@ -109,7 +112,7 @@ class User
 
     protected function showMessage($msg)
     {
-        $url = Admin::url()->login();
+        $url = AdminCreate::url()->login();
 
         return "<script>parent.layer.alert('$msg', {
                 icon: 7,
@@ -122,7 +125,7 @@ class User
 
     protected function notlogin()
     {
-        $url = Admin::url()->login();
+        $url = AdminCreate::url()->login();
         if ($this->request->isIframe()) {
             return "<script>parent.window.location.href = '{$url}';</script>";
         } 

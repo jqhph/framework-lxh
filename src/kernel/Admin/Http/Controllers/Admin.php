@@ -308,7 +308,7 @@ class Admin extends Controller
             }
         }
 
-        $oauth = admin()->oauth();
+        $oauth = __admin__()->oauth();
         
         if (! $oauth->login($_POST['username'], $_POST['password'], I('remember'))) {
             if ($oauth->failTimes() > config('admin.show-captcha-times', 5)) {
@@ -355,7 +355,7 @@ class Admin extends Controller
      */
     public function actionLogout()
     {
-        admin()->oauth()->logout();
+        __admin__()->oauth()->logout();
 
         $this->response->redirect(
             AdminCreator::url()->login()

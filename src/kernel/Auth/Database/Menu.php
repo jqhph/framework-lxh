@@ -59,7 +59,7 @@ class Menu extends Model
     protected function beforeAdd(array &$input)
     {
         $input['created_at'] = $_SERVER['REQUEST_TIME'];
-        $input['created_by_id'] = admin()->getId();
+        $input['created_by_id'] = __admin__()->getId();
 
         if (empty($input['show'])) {
             $input['show'] = 0;

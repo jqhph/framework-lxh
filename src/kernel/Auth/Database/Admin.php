@@ -50,7 +50,7 @@ class Admin extends User
         parent::beforeAdd($input);
 
         $input['created_at'] = time();
-        $input['created_by_id'] = admin()->getId() ?: 0;
+        $input['created_by_id'] = __admin__()->getId() ?: 0;
         $input['password'] = Password::encrypt($input['password']);
 
         $this->roles = $input['roles'];

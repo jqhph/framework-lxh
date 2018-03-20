@@ -69,7 +69,7 @@ class AuthManager
 
     public function __construct(Model $user = null)
     {
-        $this->user = $user ?: admin();
+        $this->user = $user ?: __admin__();
 
         if (! $this->user->getId()) {
             throw new InvalidArgumentException('Invalid user model.');
@@ -149,7 +149,7 @@ class AuthManager
     public static function resolve(Model $user = null)
     {
         if (! $user) {
-            $user = admin();
+            $user = __admin__();
         }
         if (! $id = $user->getId()) {
             throw new InvalidArgumentException('Invalid user model.');

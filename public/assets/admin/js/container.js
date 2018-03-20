@@ -14,11 +14,11 @@ window.Lxh = function (options) {
                             icon: 7,
                             title: trans('Notice'),
                             yes: function (e) {
-                                parent.window.location.href = '/admin/login';
+                                parent.window.location.href = LXHSTORE.LOGINURL || '/admin/login';
                             }
                         });
                     } else {
-                        parent.window.location.href = '/admin/login';
+                        parent.window.location.href = LXHSTORE.LOGINURL || '/admin/login';
                     }
                 }
             }

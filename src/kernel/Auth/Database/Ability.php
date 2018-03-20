@@ -38,7 +38,7 @@ class Ability extends Model
 
         $input['name'] = AuthManager::normalizName($input['name']);
         $input['created_at']    = time();
-        $input['created_by_id'] = admin()->getId();
+        $input['created_by_id'] = __admin__()->getId();
     }
 
     protected function beforeUpdate($id, array &$input)
@@ -57,7 +57,7 @@ class Ability extends Model
 
         return $names + array_merge([
             'created_at' => time(),
-            'created_by_id' => admin()->getId() ?: 0,
+            'created_by_id' => __admin__()->getId() ?: 0,
         ], $attributes);
     }
 

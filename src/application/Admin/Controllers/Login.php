@@ -20,7 +20,7 @@ class Login extends Controller
 {
     public function actionIndex($params)
     {
-        if (admin()->oauth()->check()) {
+        if (__admin__()->oauth()->check()) {
             return $this->response->redirect(
                 Admin::url()->index()
             );

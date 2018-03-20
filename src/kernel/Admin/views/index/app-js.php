@@ -23,7 +23,7 @@
             //            $config['language-packages'] = language()->getPackages(['Global', __CONTROLLER__]);
             echo json_encode([
                 'settings' => &$setting,
-                'users' => admin()->all(),
+                'users' => [],
                 'dataApi' => '/admin/api/js/data'
             ]);
             ?>

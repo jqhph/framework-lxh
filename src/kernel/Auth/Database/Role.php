@@ -54,7 +54,7 @@ class Role extends Model
     {
         return array_merge([
             'created_at' => time(),
-            'created_by_id' => admin()->getId()
+            'created_by_id' => __admin__()->getId()
         ], $attributes);
     }
 
@@ -241,7 +241,7 @@ class Role extends Model
         parent::beforeAdd($input);
 
         $input['created_at']    = time();
-        $input['created_by_id'] = admin()->getId();
+        $input['created_by_id'] = __admin__()->getId();
 
         $this->abilities = $input['abilities'];
         unset($input['abilities']);
