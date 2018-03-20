@@ -15,8 +15,10 @@ return [
     // 使用默认路由
     'use-admin-routes' => true,
 
-    // 登录session保存的key
-    'session-key' => '$admin',
+    // 失败几次后显示验证码
+    'show-captcha-times' => 5,
+    // 验证码有效时间（秒）
+    'captcha-life' => 120,
 
     'index' => [
         'sitebar-collapse' => true,

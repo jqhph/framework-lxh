@@ -102,5 +102,8 @@ echo view('admin::index.app-js', ['useDefaultAssets' => false])->render();
 echo admin_js('js/app.min');
 echo admin_js('packages/layer/layer');
 ?>
+<script>
+    layer.config({maxmin:true});
+</script>
 </body>
 </html>

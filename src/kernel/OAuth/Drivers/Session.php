@@ -93,7 +93,9 @@ class Session extends Driver
         }
 
         list($uid, $token) = explode(',', $result);
-        
+
+        $model->setId($uid);
+
         $this->user->setToken($token);
 
         if (

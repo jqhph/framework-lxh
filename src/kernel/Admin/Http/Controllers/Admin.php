@@ -311,7 +311,7 @@ class Admin extends Controller
         $oauth = admin()->oauth();
         
         if (! $oauth->login($_POST['username'], $_POST['password'], I('remember'))) {
-            if ($oauth->failTimes() > 5) {
+            if ($oauth->failTimes() > config('admin.show-captcha-times', 5)) {
                 // 保存session，当页面刷新时显示验证码
                 $session->save('is_required_captcha', 1);
 
@@ -331,7 +331,7 @@ class Admin extends Controller
     {
         $code = $captchas['code'];
         $time = $captchas['at'];
-        if ($time + 120 < time()) {
+        if ($time + config('admin.captcha-life', 120) < time()) {
             return $this->message(trans('The authenticator code has expired.'), 10049);
         }
 

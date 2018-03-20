@@ -61,13 +61,16 @@ echo admin_js('js/jquery.min');
 echo admin_js('js/bootstrap.min');
 ?>
 <script>
+(function(w){
+    var $d = $(document);
     require_css('@lxh/css/bootstrap.min');
     <?php
         echo $js;
         echo $css;
         ?>; __then__(function(){<?php echo $script?>});
-    $(document).on('shown.bs.collapse', function () {LXHSTORE.IFRAME.height()});
-    $(document).on('pjax:complete', function () {$(parent.window).scrollTop(0);});
+    $d.on('shown.bs.collapse', function () {LXHSTORE.IFRAME.height()});
+    $d.on('pjax:complete', function () {$(parent.window).scrollTop(0);});
+})(window);
 </script>
 
 <?php

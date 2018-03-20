@@ -3,6 +3,29 @@
  */
 window.Lxh = function (options) {
 
+    function setupAjax() {
+        $.ajaxSetup({
+            error: function (req, msg, e) {
+                if (req.status == 401) {
+                    // 返回401表示未登录
+                    var tip = trans(req.responseText);
+                    if (tip) {
+                        layer.alert(tip, {
+                            icon: 7,
+                            title: trans('Notice'),
+                            yes: function (e) {
+                                parent.window.location.href = '/admin/login';
+                            }
+                        });
+                    } else {
+                        parent.window.location.href = '/admin/login';
+                    }
+                }
+            }
+        });
+    };
+    setupAjax();
+
     /**
      * 容器构造器
      *
@@ -947,6 +970,22 @@ window.Lxh = function (options) {
                     notify.error(trans(data.msg, 'tip'));
                 },
 
+                def: function (data) {
+                    notify.remove();
+                    if (data.status == 10008) {
+                        if (! data.msg) {
+                            return parent.window.location.href = data.url;
+                        }
+                        layer.alert(data.msg, {
+                            icon: 7,
+                            title: trans('Notice'),
+                            yes: function (e) {
+                                parent.window.location.href = data.url;
+                            }
+                        });
+                    }
+                },
+
                 /**
                  * ajax 错误回调函数
                  * 状态码不为200时触发
@@ -1130,6 +1169,7 @@ console.log('request data', data);
                 timeout: store.timeout,
                 dataType: 'JSON',
                 success: function(data) {
+                    store.call.def(data);
                     // 标记请求结束
                     store.isRequsting = false;
                     if (typeof data != 'object' && data.indexOf('{') == 0) data = JSON.parse(data);
@@ -1541,4 +1581,3 @@ console.log('request data', data);
     
     return new Container(options)
 };
-

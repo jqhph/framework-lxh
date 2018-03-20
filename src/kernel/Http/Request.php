@@ -297,6 +297,11 @@ class Request extends Message\ServerRequest
 	{
 		return $this->getHeaderLine('X_PJAX') || isset($_GET[static::PJAX]);
 	}
+
+	public function isIframe()
+	{
+		return isset($_GET['_f_']);
+	}
 	
 	public function isSSL()
 	{

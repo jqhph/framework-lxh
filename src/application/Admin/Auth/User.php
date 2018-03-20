@@ -13,6 +13,7 @@ use Lxh\Admin\Admin;
 use Lxh\Http\Response;
 use Lxh\Http\Request;
 use Lxh\Contracts\Container\Container;
+use Lxh\MVC\Controller;
 use Lxh\OAuth\Exceptions\AuthTokenException;
 use Lxh\OAuth\Exceptions\EncryptCodeException;
 use Lxh\OAuth\Exceptions\UserNotExistEception;
@@ -49,32 +50,88 @@ class User
     public function handle($options, Closure $next)
     {
         $oauth = admin()->oauth();
-        
+
         try {
             if (! $oauth->check()) {
-                $this->notlogin();
+                return $this->notlogin();
             }
+
         } catch (AuthTokenException $e) {
             // 用户可能在其他客户端重复登录
             if ($log = $oauth->logs()->findActiveLatestLoginedLog()) {
+                $msg = sprintf(
+                    "检测到[%s]您在另一台电脑[%s]登录此账号，如非本人操作，请及时修改密码！",
+                    date('Y-m-d H:i:s', $log['created_at']),
+                    $log['ip']
+                );
 
-            } else {
-                $this->notlogin();
+                if ($this->request->isIframe()) {
+                    return $this->showMessage($msg);
+
+                } elseif ($this->request->isAjax()) {
+                    return $this->responseForAjax($msg);
+
+                }
+
             }
+            return $this->notlogin();
 
         } catch (EncryptCodeException $e) {
+            if ($this->request->isIframe()) {
+                return $this->showMessage('无效token！');
+
+            } elseif ($this->request->isAjax()) {
+                return $this->responseForAjax('无效token！');
+
+            }
 
         } catch (UserNotExistEception $e) {
+            if ($this->request->isIframe()) {
+                return $this->showMessage('用户不存在！');
+
+            } elseif ($this->request->isAjax()) {
+                return $this->responseForAjax('用户不存在！');
+
+            }
 
         }
 
+        // 用户已登录
         return $next($options);
+    }
+
+    protected function responseForAjax($msg = '')
+    {
+        $this->response->withStatus(401);
+        
+        return $msg;
+    }
+
+    protected function showMessage($msg)
+    {
+        $url = Admin::url()->login();
+
+        return "<script>parent.layer.alert('$msg', {
+                icon: 7,
+                title: '提示',
+                yes: function (e) {
+                    parent.window.location.href = '{$url}';
+                }
+            });</script>";
     }
 
     protected function notlogin()
     {
+        $url = Admin::url()->login();
+        if ($this->request->isIframe()) {
+            return "<script>parent.window.location.href = '{$url}';</script>";
+        } 
+        if ($this->request->isAjax()) {
+            return $this->responseForAjax();
+        }
+        
         $this->request->url()->save();
 
-        return $this->response->redirect(Admin::url()->login());
+        return $this->response->redirect($url);
     }
 }

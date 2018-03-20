@@ -582,7 +582,8 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
                 self = this,
                 ori = url.split('?')[0],
                 view = LXHSTORE.cache.get(ori),
-                viewkey = LXHSTORE.VIEWKEY || '_vw';
+                viewkey = LXHSTORE.VIEWKEY || '_vw',
+                iframekey = LXHSTORE.IFRAMEKEY || '_f_';
             $d.trigger('app.creating');
             n.start();
             current = name;
@@ -593,6 +594,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
             if (url.indexOf('?') == -1) {
                 url +='?'
             }
+            url += '&' + iframekey;
             if (view) {
                 url += '&'+ viewkey +'=' + view;
             }

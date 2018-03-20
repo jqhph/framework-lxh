@@ -164,13 +164,13 @@ trait FindLogs
      *
      * @return array
      */
-    public function findActiveLatestLoginedLog($uid)
+    public function findActiveLatestLoginedLog($uid = null)
     {
         return $this->model()
             ->select('life,token,id,created_at,device,ip')
             ->where(
                 [
-                    'uesr_id' => $uid,
+                    'user_id' => $uid ?: $this->user->model()->getId(),
                     'active' => 1,
                     'app' => $this->user->app(),
                     'type' => $this->getType()
