@@ -44,7 +44,7 @@ trait CacheLogs
         if (!$this->isOpen) {
             // 此缓存有值，表示token可用
             // 当用户登出，或者用户被提出时，此缓存会被移除
-            $cache->set($this->items['token'], 1);
+            $cache->set($this->items['token'], 1, $this->user->getLife(true) + 10);
         }
     }
 

@@ -274,6 +274,16 @@ class Admin extends Controller
     }
 
     /**
+     * 个人设置界面
+     *
+     * @param array $params
+     */
+    public function actionProfile(array $params)
+    {
+        return [];
+    }
+
+    /**
      * 用户登录api
      *
      * @return string

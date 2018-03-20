@@ -166,14 +166,18 @@ trait FindLogs
      */
     public function findActiveLatestLoginedLog($uid = null)
     {
+        $uid = $uid ?: $this->user->model()->getId();
+
+        if (! $uid) return [];
+
         return $this->model()
             ->select('life,token,id,created_at,device,ip')
             ->where(
                 [
-                    'user_id' => $uid ?: $this->user->model()->getId(),
-                    'active' => 1,
-                    'app' => $this->user->app(),
-                    'type' => $this->getType()
+                    'user_id' => $uid,
+                    'active'  => 1,
+                    'app'     => $this->user->app(),
+                    'type'    => $this->getType()
                 ]
             )
             ->sort('id DESC')

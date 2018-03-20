@@ -103,7 +103,7 @@ echo admin_js('js/app.min');
 echo admin_js('packages/layer/layer');
 ?>
 <script>
-    layer.config({maxmin:true});
+    layer.config({maxmin:true,moveOut:true});
 </script>
 </body>
 </html>
