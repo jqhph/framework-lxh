@@ -74,7 +74,6 @@
     </div>
 
 </div>
-<?php echo admin_js('js/particles.min');?>
 <script>
     $('#account-pages').css('height', $(window).height());
 require_js(['@lxh/js/particles.min', '@lxh/js/validate.min', '@lxh/js/login/index']);
