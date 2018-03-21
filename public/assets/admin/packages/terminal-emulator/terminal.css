@@ -1,5 +1,4 @@
 .terminal-container{
-    font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
@@ -35,15 +34,19 @@
 ::-webkit-scrollbar {
     width: 0
 }
-
-.terminal {
-    width: 60%;
+.terminal{
+    transition: All 0.4s ease-in-out;
+    -webkit-transition: All 0.4s ease-in-out;
+    -moz-transition: All 0.4s ease-in-out;
+    -o-transition: All 0.4s ease-in-out;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    width: 10%;
     position: relative;
     border-radius: 4px;
     margin: 0 auto;
     color: #fff;
     margin-bottom: 10px;
-    max-height: 580px
+    max-height: 580px;
 }
 
 .terminal .terminal-window {
@@ -52,7 +55,7 @@
     min-height: 140px;
     padding: 20px;
     font-weight: 400;
-    color: #fff;
+    color: #fff;height: 100%;
     text-shadow: #a09c9b 0 0 1px, #fffffb 0 0 1px
 }
 
@@ -149,7 +152,7 @@
 
 .terminal .header ul.shell-dots {
     position: absolute;
-    top: 5px;
+    top: 8px;
     left: 8px;
     padding-left: 0;
     margin: 0
@@ -184,8 +187,8 @@
     display: inline-block;
     width: 0;
     overflow: hidden;
-    animation: load 1.2s step-end infinite;
-    -webkit-animation: load 1.2s step-end infinite
+    animation: load 0.5s step-end infinite;
+    -webkit-animation: load 0.5s step-end infinite
 }
 
 @keyframes load {

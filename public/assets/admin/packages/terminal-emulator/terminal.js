@@ -14,7 +14,8 @@
         var _t = this,
             def = {
                 title: 'Lxh Terminal',
-                langs: {},
+                locale: 'en',
+                langs: {en: {}, 'zh-cn': {}},
                 welcome: [
                     {content: '', type: system}
                 ],
@@ -24,7 +25,9 @@
                 messages: [],
                 commands: {},
                 tasks: [],
-                element: '.terminal-container'
+                element: '.terminal-container',
+                loadingTime: 500,
+                width: '90%',
             },
             defCommands = {
                 help: {
@@ -78,7 +81,7 @@
             this.translator = translator;
 
             // 翻译器
-            translator.set(options.langs);
+            translator.set(options.langs[options.locale]);
 
             this.builder = new Builder(this);
 
@@ -157,8 +160,9 @@
         render: function () {
             var headerStart = '<div class="terminal"><div style="position:relative">',
                 footerEnd = '</div></div>',
-                bodyStart = '<div style="position:absolute;top:0;left:0;right:0;overflow:auto;z-index:1;margin-top:30px;max-height:500px" ref="terminalWindow"><div class="terminal-window" >',
-                bodyEnd = '</div></div>';
+                bodyStart = '<div class="terminal-w-c" style="position:absolute;top:0;left:0;right:0;overflow:auto;z-index:1;margin-top:30px;max-height:500px" ref="terminalWindow"><div class="terminal-window" >',
+                bodyEnd = '</div></div>',
+                _t = this;
 
             this.html = headerStart
                 + this.builder.header()
@@ -170,7 +174,18 @@
             this.$el.html(this.html);
             this.bind();
 
-            var _t = this;
+            setTimeout(function () {
+                var deg = 'rotate(720deg)';
+                _t.$el.find('.terminal').css({
+                    'transform': deg,
+                    '-webkit-transform': deg,
+                    '-moz-transform': deg,
+                    '-o-transform': deg,
+                    '-ms-transform': deg,
+                    'width': _t.option('width')
+                });
+            },2);
+
             function render_rows(rows, next, useTime) {
                 var message = rows.shift();
 
@@ -221,7 +236,7 @@
             setTimeout(function () {
                 _t.$el.find('.loading').remove();
                 callback && callback(_t);
-            }, 800);
+            }, _t.option('loadingTime'));
         },
 
         bind: function () {
@@ -229,7 +244,7 @@
                 // 光标选中以及移动到最后
                 focus: function (e) {
                     var terminal = this, $input = terminal.$el.find('.input-box'),
-                        $last = $(e.currentTarget);
+                        $last = $(e.currentTarget).find(lastLineClass);
 
                     $input.focus();
                     $input.off('click').click(function (obj) {
@@ -265,7 +280,7 @@
             this.$win = $(windowClass);
 
             // 光标选中以及移动到最后
-            this.$el.find(lastLineClass).off('click').on('click', events.focus.bind(this)).click();
+            this.$el.off('click').on('click', events.focus.bind(this)).click();
         },
 
         /**
@@ -524,7 +539,7 @@
             },
 
             span: function (cls, content) {
-                return '<span class="'+ (cls || '') +'">'+value.call(this, content)+'</span>'
+                return '<span class="'+ (cls || '') +'">'+translator.trans(value.call(this, content))+'</span>'
             }
 
         };

@@ -3,7 +3,7 @@
 <script src="/assets/admin/js/jquery.min.js?v=12345123"></script>
 <script src="/assets/admin/packages/terminal-emulator/terminal.js?v=12345123"></script>
 <body>
-<div class="terminal-container"></div>
+<div class="terminal-container" style="width:60%;margin:0 auto"></div>
 
 
 <script>
