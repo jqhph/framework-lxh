@@ -9,7 +9,7 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="shortcut icon" href="<?php echo config('admin.favicon'); ?>">
 </head>
-<body>
+<body class="lxh">
 <?php
 //echo admin_css('bootstrap.min');
 echo admin_js('js/jquery.min');

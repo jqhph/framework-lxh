@@ -11,7 +11,7 @@
         <style><?php echo $style?></style>
     <?php } ?>
 </head>
-<body>
+<body class="lxh">
 <script>
     LXHSTORE = parent.LXHSTORE;
     __then__ = parent.__then__;
