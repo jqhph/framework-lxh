@@ -1,5 +1,5 @@
 <?php $language = translator();?>
-<div id="account-pages" class="account-pages" style="min-height:950px"></div>
+<div id="account-pages" class="account-pages"></div>
 <div class="clearfix"></div>
 <div class="wrapper-page">
     <div class="text-center">
@@ -76,9 +76,12 @@
 </div>
 <?php echo admin_js('js/particles.min');?>
 <script>
+    $('#account-pages').css('height', $(window).height());
+require_js(['@lxh/js/particles.min', '@lxh/js/validate.min', '@lxh/js/login/index']);
+__then__(function () {
     particlesJS("account-pages", {
         particles: {
-            number: {value: 40, density: {enable: !0, value_area: 500}},
+            number: {value: 40, density: {enable: !0, value_area: 388}},
             color: {value: "#399c9c"},
             shape: {type: "circle", stroke: {width: 0, color: "#000000"}, polygon: {nb_sides: 5}},
             opacity: {value: .3, random: !1, anim: {enable: !1, speed: 1, opacity_min: .2, sync: !1}},
@@ -102,8 +105,9 @@
         },
         retina_detect: !0
     });
-require_js(['@lxh/js/validate.min', '@lxh/js/login/index']);
-<?php if ($requiredCaptcha) {?>
-__then__(function () {show_captcha();});
-<?php } ?>
+    <?php if ($requiredCaptcha) {?>
+    show_captcha();
+    <?php } ?>
+});
+
 </script>
