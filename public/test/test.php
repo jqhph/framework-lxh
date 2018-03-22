@@ -8,29 +8,11 @@
 
 <script>
 (function () {
-    var test = 'sdfsd  dfdf 55656';
-
-    test = test.split(' ');
-
-    var _n = [];
-    for (var i in test) {
-        if (test[i]) {
-            _n.push(test[i]);
-        }
-    }
-
-    console.log(123, _n);
-
-    var terminal = new Terminal({
-        title: 'Lxh',
-        messages: [
-            {content: 'test', type: 'info'},
-        ],
+    var terminal = $('.terminal-container').lxhTerminal({
+        
     });
 
-    terminal.render();
-
-    console.log(123123, terminal);
+    console.log(1, terminal);
 })();
 </script>
 </body>

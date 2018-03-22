@@ -8,7 +8,13 @@
         info = 'info',
         system = 'system',
         error = 'error',
-        warning = 'warning';
+        warning = 'warning',
+        primary = 'primary',
+        purple = 'purple',
+        content = 'content',
+        label = 'label',
+        style = 'style',
+        undefined = 'undefined';
 
     function Terminal(options) {
         var _t = this,
@@ -16,22 +22,21 @@
                 title: 'Lxh Terminal',
                 locale: 'en',
                 langs: {en: {}, 'zh-cn': {}},
-                welcome: [
-                    {content: '', type: system}
-                ],
-                messagesEnd: [
-                    {content: helpText, type: system}
+                start: 'Welcome to %s.',
+                end: [
+                    {content: helpText, style: system}
                 ],
                 messages: [],
                 commands: {},
-                tasks: [],
                 element: '.terminal-container',
                 loadingTime: 500,
                 width: '90%',
+                height: '500px',
+                histories: []
             },
             defCommands = {
                 help: {
-                    handle: function () {
+                    handle: function (resolve, reject) {
                         var commands = _t.commands(), i, content = '', builder = _t.builder;
 
                         for (i in commands) {
@@ -39,17 +44,18 @@
                             content += _t.builder.line('---> ' + translator.trans(commands[i].description), success, i)
                         }
 
-                        return builder.row(builder.cmd(translator.trans('Here is a list of supporting command.'))) + content;
+                        resolve(builder.row(builder.cmd(translator.trans('Here is a list of supporting command.'))) + content);
                     }
                 },
                 author: {
                     description: 'About author.',
                     handle: [
-                        {content: 'Jiang QingHua.', type: info, label: 'Name:'},
-                        {content: 'Under Construction.', type: info, label: 'Website:'},
-                        {content: '841324345@qq.com', type: info, label: 'Email:'},
-                        {content: '<a href="https://github.com/jqhph" target="_blank">https://github.com/jqhph</a>', type: info, label: 'Github:' },
-                        {content: '841324345', type: info, label: 'QQ:'}
+                        {content: 'Jiang QingHua.', style: info, label: 'Name:'},
+                        {content: (new Date().getFullYear() - 1993), style: info, label: 'Age:'},
+                        {content: 'Under Construction.', style: info, label: 'Website:'},
+                        {content: '841324345@qq.com', style: info, label: 'Email:'},
+                        {content: '<a href="https://github.com/jqhph" target="_blank">https://github.com/jqhph</a>', style: info, label: 'Github:' },
+                        {content: '841324345', style: info, label: 'QQ:'}
                     ],
                 },
                 readme: {
@@ -61,10 +67,17 @@
                 document: {
                     description: 'Document of this project.',
                     handle: [
-                        {content: 'Under Construction.', type: error}
+                        {content: 'Under Construction.', style: error}
+                    ]
+                },
+                version: {
+                    description: 'The version of this project.',
+                    handle: [
+                        {content: 'v1.0.0', style: system}
                     ]
                 }
-            };
+            },
+            historyIndex = -1;
 
         /**
          * 初始化操作
@@ -76,7 +89,7 @@
             options = merge(def, options);
             options.commands = merge(defCommands, options.commands);
 
-            this.$el = $(this.element());
+            this.$el = this.element();
 
             this.translator = translator;
 
@@ -85,21 +98,53 @@
 
             this.builder = new Builder(this);
 
-            var supportCommands = {};
+            var supportingCommands = {};
             for (var i in options.commands) {
-                supportCommands[i] = 1;
+                supportingCommands[i] = 1;
             }
-            this.supportCommands = supportCommands;
+            this.supportingCommands = supportingCommands;
+
+            this.render();
         }
 
         /**
-         * 
+         *
          * @returns {*|string}
          */
         this.element = function () {
-            return options.element || def.element;
+            var e = options.element || def.element;
+
+            return typeof e == 'object' ? e : $(e);
         };
-        
+
+        this.addHistory = function (command) {
+            if (command) {
+                options.histories.unshift(command)
+            }
+        };
+
+        this.prevHistory = function () {
+            if (historyIndex >= options.histories.length - 1) {
+                historyIndex = options.histories.length - 2;
+            }
+
+            historyIndex ++;
+            return options.histories[historyIndex] || '';
+        };
+
+        this.nextHistory = function () {
+            if (historyIndex < 1) {
+                historyIndex = -1;
+                return '';
+            }
+            historyIndex --;
+            return options.histories[historyIndex] || '';
+        };
+
+        this.resetHistoryIndex = function () {
+            historyIndex = -1;
+        };
+
         /**
          * 消息
          *
@@ -119,12 +164,14 @@
         };
 
         /**
-         * 任务
+         * 增加一条命令
          *
          * @returns {*}
          */
-        this.tasks = function () {
-            return options.tasks;
+        this.command = function (name, description, handle) {
+            options.commands[name] = {description: description, handle: handle};
+
+            options.supportingCommands[name] = 1;
         };
 
         /**
@@ -141,7 +188,7 @@
 
         function merge(_old, _new) {
             for (var i in _old) {
-                if (typeof _new[i] == 'undefined') {
+                if (typeof _new[i] == undefined) {
                     _new[i] = _old[i];
                 }
             }
@@ -153,220 +200,289 @@
         init.call(this);
     }
 
-    Terminal.prototype = {
-        /**
-         * 渲染terminal界面
-         */
-        render: function () {
-            var headerStart = '<div class="terminal"><div style="position:relative">',
-                footerEnd = '</div></div>',
-                bodyStart = '<div class="terminal-w-c" style="position:absolute;top:0;left:0;right:0;overflow:auto;z-index:1;margin-top:30px;max-height:500px" ref="terminalWindow"><div class="terminal-window" >',
-                bodyEnd = '</div></div>',
-                _t = this;
+    function terminal_expand() {
+        var _t;
 
-            this.html = headerStart
-                + this.builder.header()
-                + bodyStart
-                + this.builder.body()
-                + bodyEnd
-                + footerEnd;
+        Terminal.prototype = {
+            /**
+             * 渲染terminal界面
+             */
+            render: function () {
+                var headerStart = '<div class="terminal"><div style="position:relative">',
+                    footerEnd = '</div></div>',
+                    bodyStart = '<div class="terminal-w-c" style="position:absolute;top:0;left:0;right:0;overflow:auto;margin-top:25px;z-index:1;max-height:'
+                            + this.option('height') + '" ><div class="terminal-window" >',
+                    bodyEnd = '</div></div>';
+                    _t = this;
 
-            this.$el.html(this.html);
-            this.bind();
+                this.html = headerStart
+                    + this.builder.header()
+                    + bodyStart
+                    + this.builder.body()
+                    + bodyEnd
+                    + footerEnd;
 
-            setTimeout(function () {
-                var deg = 'rotate(720deg)';
-                _t.$el.find('.terminal').css({
-                    'transform': deg,
-                    '-webkit-transform': deg,
-                    '-moz-transform': deg,
-                    '-o-transform': deg,
-                    '-ms-transform': deg,
-                    'width': _t.option('width')
-                });
-            },2);
+                this.$el.html(this.html);
+                bind(this);
 
-            function render_rows(rows, next, useTime) {
-                var message = rows.shift();
+                setTimeout(function () {
+                    var deg = 'rotate(720deg)';
+                    _t.$el.find('.terminal').css({
+                        width: _t.option('width')
+                    });
+                    _t.$el.find('.terminal-window').css({'min-height': _t.option('height')});
+                },2);
 
-                if (message) {
-                    _t.loading(render);
+                render_rows(_t.messages(), function () {
+                    render_rows(_t.option('end'), function (has) {
+                        if (has) {
+                            _t.loading(function (_t) {
+                                _t.append(_t.builder.lastLine());
+                            });
+                        } else {
+                            _t.append(_t.builder.lastLine());
+                        }
+                    });
+                }, true);
+
+            },
+
+            /**
+             * loading效果
+             *
+             */
+            loading: function (callback) {
+                var _t = this, builder = this.builder, text = '...', counter = 0;
+                _t.append(
+                    builder.row(
+                        builder.span('loading', text)
+                    )
+                );
+                if (!callback) {
+                    return;
+                }
+                setTimeout(function () {
+                    _t.done();
+                    callback(_t);
+                }, _t.option('loadingTime'));
+            },
+
+            // 移除loading效果
+            done: function () {
+                this.$el.find('.loading').remove();
+            },
+
+            /**
+             * 追加内容
+             *
+             * @param content
+             */
+            append: function (content) {
+                this.$win.append(content);
+                bind(this);
+            },
+
+            /**
+             * 输入内容
+             *
+             * @param content
+             */
+            input: function (content) {
+                var builder = this.builder;
+                content = this.run(content);
+
+                if (content === null) return;
+
+                if (content !== false) {
+                    content = builder.line(content);
                 } else {
-                    next();
+                    content = ''
                 }
 
-                function render() {
-                    _t.append(
-                        _t.builder.line(translator.trans(message.content), message.type, message.label, useTime)
+                this.append(
+                    content + builder.lastLine()
+                );
+            },
+
+            /**
+             * 运行命令
+             *
+             * @param input
+             */
+            run: function (input) {
+                var inputs = input.split(' ');
+                var _n = [], command, i, builder = this.builder, commands = this.commands();
+                for (i in inputs) {
+                    if (inputs[i]) {
+                        _n.push(inputs[i]);
+                    }
+                }
+
+                command = _n.shift();
+                if (! command) {
+                    return '';
+                }
+
+                if (typeof this.supportingCommands[command] == undefined) {
+                    this.append(
+                        builder.line(input) +
+                        builder.line(translator.trans(unkownText), error) +
+                        builder.line(translator.trans(helpText), system)
                     );
 
-                    if (message = rows.shift()) {
-                        _t.loading(render);
-                    } else {
-                        next(true);
+                    return false;
+                }
+
+                var res = builder.line(command);
+                command = commands[command];
+
+                switch (typeof command.handle) {
+                    case undefined:
+                        return res;
+                    case 'object':
+                        return res + build_lines(command.handle);
+                    case 'function':
+                        async_run(command.handle).then(function (success) {
+                            _t.append(
+                                builder.line(res + build_lines(success)) + builder.lastLine()
+                            );
+                        }, function (err) {
+                            _t.append(
+                                builder.line(res) +
+                                builder.line(translator.trans('Something went wrong!'), error) +
+                                builder.systemline(build_lines(err)) +
+                                builder.lastLine()
+                            );
+                        });
+                        return null;
+
+                    default:
+                        return res + command.handle;
+                }
+
+                function build_lines(rows) {
+                    if (typeof rows != 'object') return rows;
+                    var contents = '';
+                    for (i in rows) {
+                        contents += builder.systemline(rows[i][content], rows[i][style], rows[i][label]);
                     }
+                    return contents;
                 }
             }
-
-            render_rows(_t.messages(), function () {
-                render_rows(_t.option('messagesEnd'), function (has) {
-                    if (has) {
-                        _t.loading(function (_t) {
-                            _t.append(_t.builder.lastLine());
-                        });
-                    } else {
-                        _t.append(_t.builder.lastLine());
-                    }
-                });
-            }, true);
-
-        },
+        };
 
         /**
-         * loading效果
+         * 基于$.Deferred的异步任务处理
          *
+         * @param handle
+         * @returns {*}
          */
-        loading: function (callback) {
-            var _t = this, builder = this.builder, text = '...', counter = 0;
-            _t.append(
-                builder.row(
-                    builder.span('loading', text)
-                )
-            );
-            setTimeout(function () {
-                _t.$el.find('.loading').remove();
-                callback && callback(_t);
-            }, _t.option('loadingTime'));
-        },
+        function async_run(handle) {
+            var p = $.Deferred();
 
-        bind: function () {
+            setTimeout(function () {
+                handle(p.resolve, p.reject)
+            }, 1);
+
+            return p.promise();
+        }
+
+        function bind(terminal) {
             var events = {
                 // 光标选中以及移动到最后
                 focus: function (e) {
-                    var terminal = this, $input = terminal.$el.find('.input-box'),
+                    var $input = terminal.$el.find('.input-box'),
                         $last = $(e.currentTarget).find(lastLineClass);
 
                     $input.focus();
-                    $input.off('click').click(function (obj) {
-                        var _t = this;
-                        $(_t).focus();
+                    $input.off('click').click(function () {
+                        var input = this;
+                        $input.focus();
                         setTimeout(function () {
-                            var len = 1000;
-                            if (document.selection) {
-                                var sel = _t.createTextRange();
-                                sel.moveStart('character', len);
-                                sel.collapse();
-                                sel.select();
-                            } else if (typeof _t.selectionStart == 'number'
-                                && typeof _t.selectionEnd == 'number') {
-                                _t.selectionStart = _t.selectionEnd = len;
-                            }
+                            move_cursor(input, 1000);
                         }, 30);
                     });
                     $input.off('keyup').on('keyup', function (e) {
                         var val = this.value;
-                        if (e.keyCode != 13) {
-                            // 显示内容
-                            return $(this).parent().find('.content').html(val);
-                        }
 
-                        // 输出内容
-                        $last.remove();
-                        terminal.input(val);
+                        switch (e.keyCode) {
+                            case 13:
+                                // 输出内容
+                                $last.remove();
+                                terminal.addHistory(val);
+                                terminal.input(val);
+                                break;
+                            case 38:
+                                val = terminal.prevHistory();
+                                $input.val(val);
+                                return show_for_input($input, val);
+                                break;
+                            case 40:
+                                val = terminal.nextHistory();
+                                $input.val(val);
+                                return show_for_input($input, val);
+                                break;
+                            default:
+                                // 显示内容
+                                return show_for_input($input, val);
+                        }
                     });
                 }
             };
             ///////////////////////////////////////////////////
-            this.$win = $(windowClass);
+            terminal.$win = $(windowClass);
 
             // 光标选中以及移动到最后
-            this.$el.off('click').on('click', events.focus.bind(this)).click();
-        },
+            terminal.$el.off('click').on('click', events.focus.bind(this)).click();
+        }
 
-        /**
-         * 追加内容
-         *
-         * @param content
-         */
-        append: function (content) {
-            this.$win.append(content);
-            this.bind();
-        },
+        function show_for_input($input, val) {
+            return $input.parent().find('.content').html(val);
+        }
 
-        /**
-         * 输入内容
-         *
-         * @param content
-         */
-        input: function (content) {
-            var builder = this.builder;
-            content = this.run(content);
-
-            if (content !== false) {
-                content = builder.line(content);
-            } else {
-                content = ''
-            }
-
-            this.append(
-                content + builder.lastLine()
-            );
-        },
-
-        /**
-         * 运行命令
-         *
-         * @param input
-         */
-        run: function (input) {
-            var inputs = input.split(' ');
-            var _n = [], command, i, builder = this.builder, commands = this.commands();
-            for (i in inputs) {
-                if (inputs[i]) {
-                    _n.push(inputs[i]);
-                }
-            }
-
-            command = _n.shift();
-            if (! command) {
-                return '';
-            }
-
-            if (typeof this.supportCommands[command] == 'undefined') {
-                this.append(
-                    builder.line(input) +
-                    builder.line(translator.trans(unkownText), system) +
-                    builder.line(translator.trans(helpText), system)
-                );
-
-                return false;
-            }
-
-            var res = builder.line(command);
-            command = commands[command];
-
-            switch (typeof command.handle) {
-                case 'undefined':
-                    return res;
-                case 'object':
-                    return res + build_lines(command.handle);
-                case 'function':
-                    return res + build_lines(command.handle());
-                    break;
-                default:
-                    return res + command.handle;
-            }
-
-            function build_lines(rows) {
-                if (typeof rows != 'object') return rows;
-                var contents = '';
-                for (i in rows) {
-                    contents += builder.systemline(rows[i].content, rows[i].type, rows[i].label);
-                }
-                return contents;
+        // 移动光标
+        function move_cursor(input, len) {
+            if (document.selection) {
+                var sel = input.createTextRange();
+                sel.moveStart('character', len);
+                sel.collapse();
+                sel.select();
+            } else if (typeof input.selectionStart == 'number'
+                && typeof input.selectionEnd == 'number') {
+                input.selectionStart = input.selectionEnd = len;
             }
         }
-    };
+
+
+        /**
+         * 渲染消息
+         *
+         * @param rows
+         * @param next
+         * @param useTime
+         */
+        function render_rows(rows, next, useTime) {
+            var message = rows.shift();
+
+            if (message) {
+                _t.loading(render);
+            } else {
+                next();
+            }
+
+            function render() {
+                _t.append(
+                    _t.builder.line(translator.trans(message[content]), message[style], message[label], useTime)
+                );
+
+                if (message = rows.shift()) {
+                    _t.loading(render);
+                } else {
+                    next(true);
+                }
+            }
+        }
+    }
 
     /**
      * 翻译器
@@ -390,7 +506,7 @@
          * @returns {*}
          */
         this.get = function (key) {
-            return packages[key] || key;
+            return String(packages[key] || key);
         };
 
         /**
@@ -420,13 +536,22 @@
     function Builder(terminal) {
         var title = terminal.option('title');
 
+        function is_color(value) {
+            if (! value) return value;
+            if (value.indexOf('#') == -1 && value.indexOf('rgb') == -1) {
+                return 'class="'+ value +'"';
+            }
+
+            return 'style="color:'+value+'"';
+        }
+
         return {
             header: function () {
                 return '<div class="header"><h4>' + title + '</h4><ul class="shell-dots"><li class="red"></li><li class="yellow"></li><li class="green"></li></ul></div>';
             },
 
             body: function () {
-                var text = translator.trans('Welcome to %s.', title);
+                var text = translator.trans(terminal.option('start'), title);
 
                 return this.row(text)
                     + this.row(
@@ -447,7 +572,7 @@
              * @param list
              */
             list: function (list, title) {
-                if (!list || typeof list.push == 'undefined') {
+                if (!list || typeof list.push == undefined) {
                     return list;
                 }
 
@@ -510,7 +635,7 @@
 
             cmd: function (content) {
                 if (typeof content == 'object' && typeof content.list == 'object') {
-                    if (typeof content.list.push != 'undefined') {
+                    if (typeof content.list.push != undefined) {
                         content = this.list(content.list, content.title);
                     }
                 }
@@ -539,7 +664,7 @@
             },
 
             span: function (cls, content) {
-                return '<span class="'+ (cls || '') +'">'+translator.trans(value.call(this, content))+'</span>'
+                return '<span '+ is_color(cls || '') +'>'+translator.trans(value.call(this, content))+'</span>'
             }
 
         };
@@ -560,7 +685,15 @@
     function init() {
         translator = new Translator();
 
-        w.Terminal = Terminal;
+        terminal_expand();
+
+        w.LxhTerminal = Terminal;
+
+        $.fn.lxhTerminal = function (options) {
+            options.element = $(this);
+
+            return new Terminal(options);
+        };
     }
 
     init();

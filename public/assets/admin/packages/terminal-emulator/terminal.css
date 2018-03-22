@@ -35,28 +35,32 @@
     width: 0
 }
 .terminal{
-    transition: All 0.4s ease-in-out;
-    -webkit-transition: All 0.4s ease-in-out;
-    -moz-transition: All 0.4s ease-in-out;
-    -o-transition: All 0.4s ease-in-out;
+    transition: All 0.3s ease-in-out;
+    -webkit-transition: All 0.3s ease-in-out;
+    -moz-transition: All 0.3s ease-in-out;
+    -o-transition: All 0.3s ease-in-out;
     font-family: Avenir, Helvetica, Arial, sans-serif;
-    width: 10%;
+    width: 180px;
     position: relative;
     border-radius: 4px;
     margin: 0 auto;
     color: #fff;
     margin-bottom: 10px;
-    max-height: 580px;
+    max-height: 980px;
 }
 
 .terminal .terminal-window {
     padding-top: 50px;
     background-color: #313131;
-    min-height: 140px;
+    min-height: 100px;
     padding: 20px;
     font-weight: 400;
     color: #fff;height: 100%;
-    text-shadow: #a09c9b 0 0 1px, #fffffb 0 0 1px
+    text-shadow: #a09c9b 0 0 1px, #fffffb 0 0 1px;
+    transition: All 0.4s ease-in-out;
+    -webkit-transition: All 0.4s ease-in-out;
+    -moz-transition: All 0.4s ease-in-out;
+    -o-transition: All 0.4s ease-in-out;
 }
 
 .terminal .terminal-window, .terminal .terminal-window pre {
@@ -69,38 +73,48 @@
 
 .terminal li{line-height:24px;font-size: 13px;}
 
-.terminal .terminal-window p {
+.terminal p {
     overflow-wrap: break-word;
     word-break: break-all;
     font-size: 13px;
     border-radius: 1px
 }
 
-.terminal .terminal-window p .cmd {
+.terminal p .cmd {
     line-height: 24px
 }
 
-.terminal .terminal-window p .info {
+.terminal p .info {
     padding: 2px 3px;
     background: #2980b9
 }
 
-.terminal .terminal-window p .warning {
+.terminal  p .primary {
+    padding: 2px 3px;
+    background: #167ccb
+}
+
+.terminal  p .purple {
+    padding: 2px 3px;
+    background: #5b69bc
+}
+
+.terminal  p .warning {
     padding: 2px 3px;
     background: #f39c12
 }
 
-.terminal .terminal-window p .success {
+.terminal  p .success {
     padding: 2px 3px;
     background: #27ae60
 }
 
-.terminal .terminal-window p .error {
+.terminal  p .error {
     padding: 2px 3px;
     background: #c0392b
 }
 
-.terminal .terminal-window p .system {
+.terminal  p .system {
     padding: 2px 3px;
     background: #399c9c
 }
