@@ -92,7 +92,7 @@ class Session extends Driver
             return false;
         }
 
-        list($uid, $token) = explode(',', $result);
+        list($uid, $token) = explode('_', $result);
 
         $model->setId($uid);
 
@@ -106,16 +106,17 @@ class Session extends Driver
             throw new AuthTokenException('token失效，用户可能在其他设备登录');
         }
 
-        $model->setId($uid);
-
         // 返回false表示token失效或过期
         if (!$code = $this->findEncryptCode($uid, $token)) {
+            $this->logout();
             // token已失效，需要重新登录
             throw new EncryptCodeException('token失效，获取token加密随机码失败');
         }
 
         // 验证token是否正确
         if (! $this->user->vertifyToken($token, $model, $code)) {
+            $this->logout();
+            
             return false;
         }
 
@@ -125,6 +126,7 @@ class Session extends Driver
         // 查找用户数据
         $userData = $model->findForLogined();
         if (! $userData) {
+            $this->logout();
             throw new UserNotExistEception('用户不存在或未激活');
         }
 

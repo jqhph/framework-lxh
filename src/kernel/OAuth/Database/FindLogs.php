@@ -47,7 +47,7 @@ trait FindLogs
     {
         $this->find($uid, $token);
 
-        if ($this->isActive()) {
+        if (!$this->isActive()) {
             return false;
         }
 
