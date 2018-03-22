@@ -18,7 +18,7 @@ class Assets
         }
 
         $syst = self::config();
-        $conf = config('client.loader');
+        $conf = (array)config('client.loader');
 
         return static::$configs = Util::merge($syst, $conf, true);
     }

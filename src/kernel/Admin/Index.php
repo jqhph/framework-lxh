@@ -200,31 +200,21 @@ class Index
      * @param $row
      * @return Content
      */
-    public function row($row)
+    public function content($row)
     {
-        return $this->content()->row($row);
-    }
+        $this->content[] = &$row;
 
-    /**
-     * @return Content
-     */
-    public function content()
-    {
-        if (! $this->content) {
-            $this->content = new Content();
-        }
-
-        return $this->content;
+        return $this;
     }
 
     protected function normalizeContent(&$content)
     {
         if ($content instanceof Closure) {
-            $this->users = $content($this);
+            $content = $content($this);
         } elseif($content instanceof Renderable) {
-            $this->users = $content->render();
+            $content = $content->render();
         }
-        return (string) $content;
+        return $content;
     }
 
     protected function buildUser()
@@ -266,9 +256,11 @@ class Index
 
     protected function variables()
     {
-        $content = '';
+        $contents = '';
         if ($this->content) {
-            $content = $this->content->build();
+            foreach ($this->content as &$content) {
+                $contents .= $this->normalizeContent($content);
+            }
         }
 
         return array_merge($this->variables, [
