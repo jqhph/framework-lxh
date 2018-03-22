@@ -62,19 +62,6 @@ class Admins
                 'action' => 'Login',
             ]
         ]);
-
-        $this->router->add([
-            'pattern' => '/admin/api/js/:lc@type',
-            'method' => 'GET',
-            'params' => [
-                'auth' => false,
-                'module' => $module,
-                'namespace' => &$namespace,
-                'controller' => 'Js',
-                'action' => 'Entrance',
-                'type' => ':lc@type',
-            ]
-        ]);
     }
 
 }

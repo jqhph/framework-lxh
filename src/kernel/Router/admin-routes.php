@@ -55,6 +55,19 @@ return [
         ]
     ],
 
+    [
+        'pattern' => '/admin/api/js/:lc@type',
+        'method' => 'GET',
+        'params' => [
+            'auth' => false,
+            'module' => 'Admin',
+            'namespace' => 'Lxh\\Admin\\Http\\Controllers',
+            'controller' => 'Js',
+            'action' => 'Entrance',
+            'type' => ':lc@type',
+        ]
+    ],
+
     // 登录接口
     [
         'pattern' => '/admin/api/login',
