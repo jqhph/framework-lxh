@@ -89,3 +89,4 @@ background-color:#0072C6;border-color:#0072C6;}.btn-xs.btn-primary{border-color:
 .select2-container .select2-selection--single .select2-selection__rendered{padding-left:2px}
 .input-group-sm .select2-container--default .select2-selection--single .select2-selection__arrow{height:29px}
 .modal-header{padding:12px 15px}
+.line .form-control[disabled],.line .form-control[readonly],.line fieldset[disabled] .form-control{background-color:#fff}
