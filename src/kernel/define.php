@@ -14,6 +14,7 @@ define('__RESOURCE__', __ROOT__ . 'resource/');
 define('__LANGUAGE__', __ROOT__ . 'resource/language/');
 define('__VIEW__', __ROOT__ . 'resource/views/');
 define('__PLUGINS__', __ROOT__ . 'plugins/');
+define('__DATA_ROOT__', dirname(__ROOT__) . '/data/');
 
 // 环境常量
 define('ENV_TEST', 'test'); // 测试环境

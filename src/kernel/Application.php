@@ -1,10 +1,5 @@
 <?php
-/**
- * 应用程序管理
- *
- * @author Jqh
- * @date   2017/6/13 18:05
- */
+
 namespace Lxh;
 
 use Lxh\Exceptions\Exception;
@@ -61,26 +56,38 @@ class Application
     public function __construct()
     {
         ob_start();
+
+        $this->setup();
+
+        $this->init();
+    }
+
+    protected function setup()
+    {
         $this->define();
-        $this->loadInitConfig();
-        $this->loadFunctionFile();
-        $this->loadServiceBindConfig();
+        $this->includeConfigs();
+        $this->includeHelpers();
 
         $this->events    = events();
         $this->container = container();
-        $this->response = response();
-        $this->request = request();
+        $this->response  = response();
+        $this->request   = request();
         $this->container->instance('app', $this);
-        $this->bindRouter();
 
+        $this->setupRouter();
+    }
+
+    protected function init()
+    {
         // 设置时区
         if ($timezone = config('timezone')) {
             date_default_timezone_set($timezone);
         }
+
         register_shutdown_function([$this, 'shutdown']);
+
         // 记录程序执行开始时间
         debug_track('start');
-
     }
 
     /**
@@ -99,9 +106,6 @@ class Application
      */
     public function getPublicPath()
     {
-        if (defined('__PUBLIC_ROOT__')) {
-            return __PUBLIC_ROOT__;
-        }
         return dirname($this->root) . '/public/';
     }
     /**
@@ -186,10 +190,14 @@ class Application
      *
      * @return void
      */
-    protected function loadFunctionFile()
+    protected function includeHelpers()
     {
-        require $this->root . 'kernel/Helper/func.php';
-        require __APP__ . 'Kernel/Support/func.php';
+        require $this->root . 'kernel/Support/helpers.php';
+
+        $path = __APP__ . 'Kernel/Support/helpers.php';
+        if (is_file($path)) {
+            require $path;
+        }
     }
 
     /**
@@ -197,26 +205,13 @@ class Application
      *
      * @return void
      */
-    protected function loadInitConfig()
+    protected function includeConfigs()
     {
         require __CONFIG__ . 'ini.php';
         // 如果没有定义当前环境常量，则默认为测试环境
         if (! defined('__ENV__')) {
             define('__ENV__', ENV_DEV);
         }
-        require __CONFIG__ . __ENV__ . '/ini.php';
-
-        if (! defined('__DATA_ROOT__')) {
-            define('__DATA_ROOT__', dirname($this->root) . '/data/');
-        }
-    }
-
-    /**
-     * 加载容器配置文件
-     */
-    protected function loadServiceBindConfig()
-    {
-        require __CONFIG__ . 'container/bind.php';
     }
 
     /**
@@ -224,10 +219,10 @@ class Application
      *
      * @return void
      */
-    protected function bindRouter()
+    protected function setupRouter()
     {
         $router = new Router();
-        // 先注册路由
+
         $this->container->instance('router', $router);
 
         // 再注册插件
@@ -248,14 +243,13 @@ class Application
         }
 
         $configPath = __CONFIG__ . 'route/route.php';
+
         // 判断是否开启了子域名部署
-        if (config('domain-deploy')) {
-            $domains = config('domain-deploy-config');
+        if ($domains = config('domain-deploy-config')) {
             $host = $this->request->host();
-            if (substr_count($host, '.') < 2) {
-                $host = 'www.' . $host;
-            }
+
             $module = get_value($domains, $host);
+
             $path = __CONFIG__ . "route/{$module}.php";
             if (is_file($path)) {
                 $configPath = & $path;

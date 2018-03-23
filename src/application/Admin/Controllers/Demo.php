@@ -170,7 +170,7 @@ class Demo extends Controller
     {
         $content = $this->content();
 
-        $content->row(new Code(__FILE__, 52, 158));
+        $content->row(new Code(__FILE__, 1, 500));
 
         return $content->render();
     }

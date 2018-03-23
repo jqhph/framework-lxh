@@ -170,7 +170,7 @@ window.Lxh = function (options) {
         };
 
         /**
-         * 
+         *
          * @returns {UI}
          */
         this.ui = function () {
@@ -289,11 +289,11 @@ window.Lxh = function (options) {
 
 
     /*
-      --------------------------------------------------------------------------------------
+     --------------------------------------------------------------------------------------
      |  往下为js组件
      |
      ---------------------------------------------------------------------------------------
-    */
+     */
 
     /**
      * -------------------------------------------------------------------------------------
@@ -1136,7 +1136,7 @@ window.Lxh = function (options) {
             // 请求开始
             data = store.call.start(store.api, store.method, data) || data;
 
-console.log('request data', data);
+            console.log('request data', data);
 
             var opts = get_request_options(data);
 
@@ -1379,7 +1379,7 @@ console.log('request data', data);
          * @returns {string}
          */
         function get_form_selector () {
-            return store.formSelector || (store.formSelector = '.' + __CONTROLLER__ + '-form')
+            return store.formSelector || (store.formSelector = '.' + store.name + '-form')
         }
     }
     // --------------------------------------Model END-----------------------------------------------
@@ -1578,6 +1578,6 @@ console.log('request data', data);
         }
     }
     // --------------------------------------Store END-----------------------------------------------
-    
+
     return new Container(options)
 };

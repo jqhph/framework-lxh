@@ -24,13 +24,10 @@ class ServerRequest extends Request implements ServerRequestInterface
 
     public function __construct(StreamInterface $body = null)
     {
-        $this->serverParams = & $_SERVER;
-
-        $this->queryParams = & $_GET;
-
-        $this->parsedBody = & $_POST;
-
-        $this->cookieParams = & $_COOKIE;
+        $this->serverParams = &$_SERVER;
+        $this->queryParams  = &$_GET;
+        $this->parsedBody   = &$_POST;
+        $this->cookieParams = &$_COOKIE;
 
         $this->initServerHeader();
 
@@ -44,7 +41,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     protected function initServerHeader()
     {
-        foreach ($this->serverParams as $key => & $value) {
+        foreach ($this->serverParams as $key => &$value) {
             if ('HTTP_' == substr($key, 0, 5)) {
                 $this->headers[substr($key, 5)] = explode(',', $value);
             }
@@ -68,8 +65,6 @@ class ServerRequest extends Request implements ServerRequestInterface
 
     public function withCookieParams(array $cookies)
     {
-        $this->backupsOriginServer();
-
         $this->cookieParams = $cookies;
         return $this;
     }
@@ -81,8 +76,6 @@ class ServerRequest extends Request implements ServerRequestInterface
 
     public function withQueryParams(array $query)
     {
-        $this->backupsOriginServer();
-
         $this->queryParams = $query;
         return $this;
     }
@@ -106,8 +99,6 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function withUploadedFiles(array $uploadedFiles)
     {
-        $this->backupsOriginServer();
-
         $this->uploadedFiles = $uploadedFiles;
         return $this;
     }
@@ -119,8 +110,6 @@ class ServerRequest extends Request implements ServerRequestInterface
 
     public function withParsedBody($data)
     {
-        $this->backupsOriginServer();
-
         $this->parsedBody = &$data;
         return $this;
     }

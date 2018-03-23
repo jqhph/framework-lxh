@@ -11,6 +11,8 @@ $config = [
 
     // 是否开启语言包功能
     'use-language' => true,
+    
+    'use-cache' => true,
 
     // 配置composer.phar安装路径
     // 如果composer是全局安装，则无需配置此参数

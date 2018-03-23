@@ -86,10 +86,6 @@ class Message implements MessageInterface
      */
     protected function backupsOriginServer()
     {
-        if ($this->originServer) {
-            return;
-        }
-        $this->originServer = clone $this;
     }
 
     /**
