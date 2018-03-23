@@ -194,7 +194,7 @@ class Application
     {
         require $this->root . 'kernel/Support/helpers.php';
 
-        $path = __APP__ . 'Kernel/Support/helpers.php';
+        $path = __APP__ . 'Support/helpers.php';
         if (is_file($path)) {
             require $path;
         }
