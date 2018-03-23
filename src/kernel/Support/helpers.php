@@ -359,11 +359,14 @@ function logger($channel = 'primary')
 
 /**
  *
+ * @param \Lxh\OAuth\Database\User|null $user
  * @return \Lxh\Auth\AuthManager
  */
-function auth()
+function auth(\Lxh\OAuth\Database\User $user = null)
 {
-    return $GLOBALS['CONTAINER']['auth.manager'];
+    if (! $user) $user = __admin__();
+
+    return \Lxh\Auth\AuthManager::resolve($user);
 }
 
 /**

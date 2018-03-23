@@ -75,13 +75,13 @@ class AuthManager
             throw new InvalidArgumentException('Invalid user model.');
         }
 
-        $this->usesCached = config('admin.auth.cache', true);
+        $this->usesCached = config('admin.auth.use-cache', true);
 
         if ($this->usesCached) {
             $this->cache = new Store($this->createCacheStore());
         }
 
-        $this->enable = config('use-authorize', true);
+        $this->enable = config('admin.auth.enable', true);
     }
 
     /**
@@ -137,7 +137,9 @@ class AuthManager
      */
     public function isAdministrator()
     {
-        return $this->user->isAdmin();
+        if (method_exists($this->user, 'isAdmin')) {
+            return $this->user->isAdmin();
+        }
     }
 
     /**

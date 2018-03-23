@@ -15,6 +15,11 @@ return [
     // 使用默认路由
     'use-admin-routes' => true,
 
+    'auth' => [
+        'enable' => true,
+        'use-cache' => true,
+    ],
+
     // 失败几次后显示验证码
     'show-captcha-times' => 5,
     // 验证码有效时间（秒）
