@@ -92,3 +92,4 @@ background-color:#0072C6;border-color:#0072C6;}.btn-xs.btn-primary{border-color:
 .line .form-control[disabled],.line .form-control[readonly],.line fieldset[disabled] .form-control{background-color:#fff}
 .file-caption-main .input-group-btn .btn {padding: 5px 10px;font-size: 12px;line-height: 1.5;}
 .file-caption-main .input-group-btn{top:3px} .file-caption-main .input-group-btn .btn-default{top:0.4px}
+.file-caption.icon-visible .file-caption-name{padding-left:23px;}
