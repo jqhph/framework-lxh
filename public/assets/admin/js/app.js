@@ -128,13 +128,13 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         // 判断队列所有内容是否加载完毕
         function is_completed(url) {
             queue = array_remove(queue, url);
-            if (queue.length < 1 && completed) {
+            if (queue.length < 1) {
                 for (var i in map) {
                     run(map[i]);
                 }
 
                 // 加载完毕
-                completed();
+                completed && completed();
             }
         }
 
