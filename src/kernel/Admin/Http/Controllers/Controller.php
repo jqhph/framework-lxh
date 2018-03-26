@@ -776,7 +776,7 @@ class Controller extends Base
             $file = $this->request->getUploadedFile($column);
 
             // 删除原文件
-            $originColumn = $input[$column.'-origin'];
+            $originColumn = get_value($input, $column.'-origin');
             $origin = $directory . '/' . $originColumn;
 
             if ($file) {

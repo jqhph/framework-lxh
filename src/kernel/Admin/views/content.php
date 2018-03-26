@@ -13,38 +13,37 @@
 </head>
 <body class="lxh">
 <script>
-    LXHSTORE = parent.LXHSTORE;
-    __then__ = parent.__then__;
-    require_js = parent.require_js;
-    require_css = parent.require_css;
-    to_under_score = parent.to_under_score;
-    build_http_params = parent.build_http_params;
-    lxhActions = (parent.lxhActions = []);
-    jsLibArr = (parent.jsLibArr = []);
-    cssLibArr = (parent.cssLibArr = []);
-    array_unique = parent.array_unique;
-    array_remove = parent.array_remove;
-    loading = parent.loading;
-    NProgress = parent.NProgress;
-    layer = window.layer || parent.layer;
-    window.formRules = [];
-    open_tab = parent.open_tab;
-    close_tab = parent.close_tab;
-    reload_tab = parent.reload_tab;
-    back_tab = parent.back_tab;
-    var __CONTROLLER__ = '<?php echo __CONTROLLER__?>',
-        __ACTION__ = '<?php echo __ACTION__?>',
-        __MODULE__ = '<?php echo __MODULE__;?>';
+(function (w) {
+    w.LXHSTORE = parent.LXHSTORE;
+    w.__then__ = parent.__then__;
+    w.require_js = parent.require_js;
+    w.require_css = parent.require_css;
+    w.to_under_score = parent.to_under_score;
+    w.build_http_params = parent.build_http_params;
+    w.lxhActions = (parent.lxhActions = []);
+    w.jsLibArr = (parent.jsLibArr = []);
+    w.cssLibArr = (parent.cssLibArr = []);
+    w.array_unique = parent.array_unique;
+    w.array_remove = parent.array_remove;
+    w.loading = parent.loading;
+    w.NProgress = parent.NProgress;
+    w.layer = window.layer || parent.layer;
+    w.window.formRules = [];
+    w.open_tab = parent.open_tab;
+    w.close_tab = parent.close_tab;
+    w.reload_tab = parent.reload_tab;
+    w.back_tab = parent.back_tab;
     document.onkeydown = function (e) {
         if (e.keyCode==116) {
             e.keyCode = 0;
             e.cancelBubble = true;
-            LXHSTORE.IFRAME.reload();
+            w.LXHSTORE.IFRAME.reload();
             return false;
         }
     };
 
-    LXHSTORE.VIEWKEY = '<?php echo Lxh\Admin\Grid::$viewKey?>';
+    w.LXHSTORE.VIEWKEY = '<?php echo Lxh\Admin\Grid::$viewKey?>';
+})(window);
 </script>
 <div class="container">
     <div class="content-wrapper">
