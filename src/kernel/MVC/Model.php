@@ -64,7 +64,7 @@ class Model extends Entity
     /**
      * @var string
      */
-    protected $connectionType = 'primary';
+    protected $connectionKeyName = 'primary';
 
     /**
      * @var Dispatcher
@@ -188,7 +188,7 @@ class Model extends Entity
      */
     public function countTrash(array $where = [])
     {
-        $q = query($this->connectionType)
+        $q = query($this->connectionKeyName)
             ->from($this->trashTableName);
 
         if ($where) $q->where($where);
@@ -211,7 +211,7 @@ class Model extends Entity
             [$ids]
         );
         if ($trash) {
-            $q = query($this->connectionType)->from($this->trashTableName);
+            $q = query($this->connectionKeyName)->from($this->trashTableName);
         } else {
             $q = $this->query();
         }
@@ -260,7 +260,7 @@ class Model extends Entity
 
         }
 
-        $trashQuery = query($this->connectionType)->from($this->trashTableName);
+        $trashQuery = query($this->connectionKeyName)->from($this->trashTableName);
 
         $trashData = $trashQuery->where($where)->find();
 
@@ -336,7 +336,7 @@ class Model extends Entity
             throw new FindModelException('Target data does not exist.');
         }
 
-        $trashQuery = query($this->connectionType)->from($this->trashTableName);
+        $trashQuery = query($this->connectionKeyName)->from($this->trashTableName);
 
         if (!$trashQuery->batchInsert($data)) {
             throw new InsertModelException('Failed to write to database.');
@@ -434,7 +434,7 @@ class Model extends Entity
      */
     public function findTrashList(array $where, $order = 'id DESC', $offset = 0, $limit = 20)
     {
-        $q = query($this->connectionType)
+        $q = query($this->connectionKeyName)
             ->from($this->trashTableName)
             ->select($this->selectFields)
             ->where($where);
@@ -640,7 +640,7 @@ class Model extends Entity
             throw new FindModelException('Target data does not exist.');
         }
 
-        $trashQuery = query($this->connectionType)->from($this->trashTableName);
+        $trashQuery = query($this->connectionKeyName)->from($this->trashTableName);
 
         if (!$trashQuery->insert($data)) {
             throw new InsertModelException('Failed to write to database.');
@@ -692,7 +692,7 @@ class Model extends Entity
         );
 
         if ($trash) {
-            $result = query($this->connectionType)
+            $result = query($this->connectionKeyName)
                 ->from($this->trashTableName)
                 ->where($this->primaryKeyName, $id)
                 ->delete();
@@ -802,7 +802,7 @@ class Model extends Entity
      */
     public function query($name = null)
     {
-        return query($name ?: $this->connectionType)->from($this->tableName);
+        return query($name ?: $this->connectionKeyName)->from($this->tableName);
     }
 
 }
