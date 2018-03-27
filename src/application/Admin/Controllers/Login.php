@@ -29,7 +29,7 @@ class Login extends Controller
         $requiredCaptcha = session()->get('is_required_captcha');
 
         return $this->content()
-            ->independent()
+            ->page(true)
             ->body(
                 $this->render('index', ['requiredCaptcha' => $requiredCaptcha])
             )

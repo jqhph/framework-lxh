@@ -48,6 +48,10 @@ class Content implements Renderable
      */
     protected $append = [];
 
+    protected $options = [
+        'page-default-assets' => false,
+    ];
+
     /**
      * Content constructor.
      *
@@ -122,22 +126,17 @@ class Content implements Renderable
     }
 
     /**
-     * @return $this
-     */
-    public function independent()
-    {
-        $this->view = 'admin::indie-content';
-        return $this;
-    }
-
-    /**
-     * 独立的页面，完全不加载任何预定义js和css
+     * 独立的页面
      *
+     * @param bool $useDefaultAssets 是否加载预定义js和css
      * @return $this
      */
-    public function independentIndex()
+    public function page($useDefaultAssets = false)
     {
-        $this->view = 'admin::indie-index';
+        $this->view = 'admin::page';
+
+        $this->options['page-default-assets'] = $useDefaultAssets;
+
         return $this;
     }
 
@@ -292,16 +291,17 @@ class Content implements Renderable
         return view(
             $this->view,
             [
-                'header'      => &$this->header,
-                'description' => &$this->description,
-                'content'     => &$content,
-                'hidden'      => &$html,
-                'js'          => &$js,
-                'css'         => &$css,
-                'script'      => &$script,
-                'style'       => Admin::style(),
-                'loadscss'    => &$syncCss,
-                'loadscripts' => &$syncJs,
+                'header'           => &$this->header,
+                'description'      => &$this->description,
+                'content'          => &$content,
+                'hidden'           => &$html,
+                'js'               => &$js,
+                'css'              => &$css,
+                'script'           => &$script,
+                'style'            => Admin::style(),
+                'loadscss'         => &$syncCss,
+                'loadscripts'      => &$syncJs,
+                'useDefaultAssets' => $this->options['page-default-assets'],
             ]
         )->render();
     }
