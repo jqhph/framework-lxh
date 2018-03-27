@@ -12,7 +12,6 @@
     <?php } ?>
     // 配置
     function __ini__() {
-        window.APIPREFIX = '/admin/api/';
         var data = {};
         // 容器配置
         data.options = <?php

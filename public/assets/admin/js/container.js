@@ -921,7 +921,7 @@ window.Lxh = function (options) {
              *
              * @type {string}
              */
-            apiPrefix: '/' + LXHSTORE.ROUTEPREFIX + '/api/',
+            apiPrefix: LXHSTORE.APIPREFIX + '/',
 
             /**
              * 请求方法
@@ -1012,7 +1012,6 @@ window.Lxh = function (options) {
             }
         };
 
-        store.apiPrefix = window.APIPREFIX || store.apiPrefix;
         store.formHandler = container.form();
         store.name = name;
         // 保存初始数据

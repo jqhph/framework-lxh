@@ -4,11 +4,7 @@ namespace Lxh\Admin;
 
 use Closure;
 use Lxh\Admin\Layout\Content;
-use Lxh\Admin\Layout\Row;
-use Lxh\Admin\Widgets\Navbar;
 use Lxh\Contracts\Support\Renderable;
-use Lxh\MVC\Model;
-use InvalidArgumentException;
 
 /**
  * Class Index.
@@ -19,21 +15,21 @@ class Index
      * @var array
      */
     protected $views = [
-        'index' => 'admin::index',
+        'index'   => 'admin::index',
         'top-bar' => 'admin::index.top-bar',
         'sitebar' => 'admin::index.left-bar',
-        'user' => 'admin::index.user'
+        'user'    => 'admin::index.user'
     ];
 
     /**
      * @var array
      */
     protected $variables = [
-        'maxTab' => 10,
+        'maxTab'        => 10,
         'topbarContent' => '',
-        'users' => '',
-        'menuTitle' => '',
-        'homeUrl' => '/index/action/dashboard'
+        'users'         => '',
+        'menuTitle'     => '',
+        'homeUrl'       => '/index/action/dashboard'
     ];
 
     /**

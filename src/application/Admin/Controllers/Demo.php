@@ -151,17 +151,19 @@ class Demo extends Controller
     {
         $preview = new Button('代码预览');
 
-        $preview->on('click', '
+        $prefix = '/' . config('admin.route-prefix');
+
+        $preview->on('click', "
             layer.open({
               type: 2,
-              title: \'代码预览\',
+              title: '代码预览',
               shadeClose: true,
               shade: false,
-              area: [\'70%\', \'700px\'],
-              content: \'/admin/demo/action/form-code-preview\'
+              area: ['70%', '700px'],
+              content: '$prefix/admin/demo/action/form-code-preview'
             }); 
             return false;
-        ');
+        ");
 
         $card->rightTools()->prepend($preview);
     }
@@ -237,17 +239,19 @@ class Demo extends Controller
 
         $preview = new Button('代码预览');
 
-        $preview->on('click', '
+        $prefix = '/' . config('admin.route-prefix');
+
+        $preview->on('click', "
             layer.open({
               type: 2,
-              title: \'代码预览\',
+              title: '代码预览',
               shadeClose: true,
               shade: false,
-              area: [\'70%\', \'700px\'],
-              content: \'/admin/demo/action/grid-code-preview\'
+              area: ['70%', '700px'],
+              content: '$prefix/demo/action/grid-code-preview'
             }); 
             return false;
-        ');
+        ");
 
         $grid->tools()->prepend($preview);
     }
@@ -279,8 +283,10 @@ class Demo extends Controller
             $th->value('<span>TEXT</span>');
         });
 
-        $table->expand('expand', function (Expand $expand) {
-            $expand->ajax('/admin/demo/action/test');
+        $prefix = '/' . config('admin.route-prefix');
+
+        $table->expand('expand', function (Expand $expand) use ($prefix) {
+            $expand->ajax($prefix.'/admin/demo/action/test');
         })->sortable();
 
         $table->switch('switch');

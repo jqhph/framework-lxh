@@ -58,6 +58,7 @@
     var LXHSTORE = {};
     LXHSTORE.loaderConfig = <?php echo json_encode(Lxh\Assets::loaderConfig())?>;
     LXHSTORE.ROUTEPREFIX = '<?php echo config('admin.route-prefix');?>';
+    LXHSTORE.APIPREFIX = '/' + LXHSTORE.ROUTEPREFIX + '/api';
     LXHSTORE.cache = new Cache();
     LXHSTORE.cache.setToken('<?php
         // 设置缓存token，token刷新则会刷新所有缓存

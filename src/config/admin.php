@@ -13,7 +13,7 @@ return [
     'copyright' => '2017 @copyright JQH',
 
     // 路由前缀
-    'route-prefix' => 'lxh-admin',
+    'route-prefix' => 'lxh',
     // 使用默认路由
     'use-routes' => true,
 

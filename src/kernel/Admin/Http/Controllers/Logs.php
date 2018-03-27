@@ -101,6 +101,21 @@ class Logs extends Controller
         $table->code('input')->th(function (Th $th) {
             $th->style('width:50%;');
         });
+
+        $types = [
+            0 => ['其他', 'info'],
+            1 => ['新增', 'success'],
+            2 => ['修改', 'purple'],
+            3 => ['删除', 'danger'],
+        ];
+        $table->label('type', function (Label $label) use ($types) {
+            $value = $label->value();
+
+            $selected = get_value($types, $value, ['其他', 'info']);
+
+            $label->label($selected[0]);
+            $label->color($selected[1]);
+        });
         $table->date('created_at');
     }
 

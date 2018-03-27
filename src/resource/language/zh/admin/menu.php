@@ -14,6 +14,10 @@ return [
         'priority' => '排序',
         'parent' => '上级',
         'use_route_prefix' => '路由前缀',
+        'ability_title' => '权限',
+        'route' => '路径',
+        'parent_id' => '上级菜单',
+        'ability_id' => '权限',
     ],
     'options' => [
 
