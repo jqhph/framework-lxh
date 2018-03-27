@@ -69,16 +69,16 @@ class Markdown extends Widget
      */
     public function content($markdown)
     {
-        if ($markdown instanceof Renderable) {
-            $markdown = $markdown->render();
-        }
-
         $this->content = &$markdown;
         return $this;
     }
 
     protected function build()
     {
+        if ($this->content instanceof Renderable) {
+            $this->content = $this->content->render();
+        }
+
         return <<<EOF
 <div {$this->formatAttributes()}><textarea style="display:none;">{$this->content}</textarea></div>
 EOF;

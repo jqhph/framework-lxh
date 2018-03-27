@@ -2,6 +2,8 @@
 
 namespace Lxh\Admin\Widgets;
 
+use Lxh\Contracts\Support\Renderable;
+
 class Code extends Markdown
 {
     protected $lang = 'php';
@@ -101,6 +103,10 @@ class Code extends Markdown
 
     protected function build()
     {
+        if ($this->content instanceof Renderable) {
+            $this->content = $this->content->render();
+        }
+
         return <<<EOF
 <div {$this->formatAttributes()}><textarea style="display:none;">
 ```{$this->lang}
