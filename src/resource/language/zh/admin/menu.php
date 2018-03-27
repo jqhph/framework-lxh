@@ -13,6 +13,7 @@ return [
         'type' => '类型',
         'priority' => '排序',
         'parent' => '上级',
+        'use_route_prefix' => '路由前缀',
     ],
     'options' => [
 

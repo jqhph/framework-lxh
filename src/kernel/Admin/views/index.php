@@ -57,6 +57,7 @@
     // 全局变量容器，所有全局变量都应该放置到此容器，便于管理
     var LXHSTORE = {};
     LXHSTORE.loaderConfig = <?php echo json_encode(Lxh\Assets::loaderConfig())?>;
+    LXHSTORE.ROUTEPREFIX = '<?php echo config('admin.route-prefix');?>';
     LXHSTORE.cache = new Cache();
     LXHSTORE.cache.setToken('<?php
         // 设置缓存token，token刷新则会刷新所有缓存
@@ -65,7 +66,7 @@
 
     LXHSTORE.IFRAME = new Iframe();
     LXHSTORE.TAB = new Tab(LXHSTORE.IFRAME);
-    LXHSTORE.HOMEURL = '<?php echo $homeUrl?>';
+    LXHSTORE.HOMEURL = '/' + LXHSTORE.ROUTEPREFIX + '<?php echo $homeUrl?>';
 
     LXHSTORE.TAB.setMax(<?php echo $maxTab;?>);
 

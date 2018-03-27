@@ -24,7 +24,7 @@
             echo json_encode([
                 'settings' => &$setting,
                 'users' => [],
-                'dataApi' => '/admin/api/js/data'
+                'dataApi' => '/'.config('admin.route-prefix').'/api/js/data'
             ]);
             ?>
             // loader配置

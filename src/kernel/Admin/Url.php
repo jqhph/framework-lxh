@@ -26,6 +26,8 @@ class Url
     public function __construct($scope)
     {
         $this->scope($scope);
+
+        $this->prefix = config('admin.route-prefix');
     }
 
     /**

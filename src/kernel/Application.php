@@ -238,8 +238,13 @@ class Application
     protected function getRouteRules()
     {
         $routers = [];
-        if (config('admin.use-admin-routes', true)) {
-            $routers = include __DIR__ . '/Router/admin-routes.php';
+
+        if (config('home.use-routes', true)) {
+            $routers = include __DIR__ . '/Home/resource/routes.php';
+        }
+
+        if (config('admin.use-routes', true)) {
+            $routers = array_merge($routers, include __DIR__ . '/Admin/resource/routes.php');
         }
 
         $configPath = __CONFIG__ . 'route/route.php';

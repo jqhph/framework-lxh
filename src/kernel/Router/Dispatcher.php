@@ -197,9 +197,9 @@ class Dispatcher
         foreach ($this->rules as &$rule) {
             if (empty($rule['pattern'])) continue;
 
-            if ($pattern = $this->matchingPattern($rule, $patharr, $pathlen)) {
+            if ($this->matchingPattern($rule, $patharr, $pathlen)) {
                 // 匹配成功，保存路由信息
-                $this->save($pattern, $rule, $patharr);
+                $this->save($rule, $patharr);
                 return $this->result = true;
             }
         }
@@ -210,11 +210,11 @@ class Dispatcher
     /**
      * 路由匹配成功，缓存相关数据
      *
-     * @param array $pattern
      * @param array $rule
      * @param array $patharr
+     * @return void
      */
-    protected function save(array &$pattern, array &$rule, array &$patharr)
+    protected function save(array &$rule, array &$patharr)
     {
         // 验证配置
         $contr = $action = '';
@@ -241,7 +241,7 @@ class Dispatcher
         }
 
         $realContr = $realAction = '';
-        foreach ($pattern as $k => &$r) {
+        foreach ((array) $rule['pattern'] as $k => &$r) {
             if ($r == $contr) {
                 $realContr = &$patharr[$k];
             }
@@ -307,11 +307,11 @@ class Dispatcher
         $hasReg = $this->hasReg($rule['pattern']);
 
         // 路由模式
-        $pattern = explode('/', $rule['pattern']);
+        $rule['pattern'] = explode('/', $rule['pattern']);
 
-        $this->arrayFilter($pattern);
+        $this->arrayFilter($rule['pattern']);
 
-        if ($pathlen != count($pattern)) {
+        if ($pathlen != count($rule['pattern'])) {
             return false;
         }
 
@@ -323,25 +323,25 @@ class Dispatcher
 
         if ($hasReg) {
             // 正则比较
-            return $this->compareReg($pattern, $patharr);
+            return $this->compareReg($rule, $patharr);
         }
 
         // 字符串比较
-        return $this->compareString($pattern, $patharr);
+        return $this->compareString($rule, $patharr);
     }
 
     /**
      * 正则匹配
      *
-     * @param array $pattern
+     * @param array $rule
      * @param array $patharr
-     * @return false|array
+     * @return bool
      */
-    protected function compareReg(array &$pattern, array &$patharr)
+    protected function compareReg(array &$rule, array &$patharr)
     {
         $uri = $this->getPath();
 
-        foreach ($pattern as $k => &$p) {
+        foreach ($rule['pattern'] as $k => &$p) {
             if ($this->hasReg($p)) {
                 if (! preg_match($p, $uri, $data)) {
                     return false;
@@ -355,19 +355,19 @@ class Dispatcher
 
         $this->regResultData = &$data;
 
-        return $pattern;
+        return true;
     }
 
     /**
      * 字符串比较
      *
-     * @param array $pattern
+     * @param array $rule
      * @param array $patharr
-     * @return false|array
+     * @return bool
      */
-    protected function compareString(array &$pattern, array &$patharr)
+    protected function compareString(array &$rule, array &$patharr)
     {
-        foreach ($pattern as $k => &$p) {
+        foreach ($rule['pattern'] as $k => &$p) {
             // 特殊占位符匹配
             $t = explode($this->placeholderDelimiter, $p);
             if (isset($this->placeholderPatterns[$t[0]])) {
@@ -381,7 +381,7 @@ class Dispatcher
                 return false;
             }
         }
-        return $pattern;
+        return true;
     }
 
     /**

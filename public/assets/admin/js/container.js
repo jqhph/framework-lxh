@@ -14,11 +14,11 @@ window.Lxh = function (options) {
                             icon: 7,
                             title: trans('Notice'),
                             yes: function (e) {
-                                parent.window.location.href = LXHSTORE.LOGINURL || '/admin/login';
+                                parent.window.location.href = LXHSTORE.LOGINURL || '/' + LXHSTORE.ROUTEPREFIX + '/login';
                             }
                         });
                     } else {
-                        parent.window.location.href = LXHSTORE.LOGINURL || '/admin/login';
+                        parent.window.location.href = LXHSTORE.LOGINURL || '/' + LXHSTORE.ROUTEPREFIX + '/login';
                     }
                 }
             }
@@ -921,7 +921,7 @@ window.Lxh = function (options) {
              *
              * @type {string}
              */
-            apiPrefix: '/admin/api/',
+            apiPrefix: '/' + LXHSTORE.ROUTEPREFIX + '/api/',
 
             /**
              * 请求方法

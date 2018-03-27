@@ -71,6 +71,13 @@ class Menu
      */
     protected $useCache = true;
 
+    /**
+     * 路由前缀
+     *
+     * @var string
+     */
+    protected $routePrefix = '';
+
     public function __construct(AuthManager $auth = null, $modelClass = null)
     {
         $this->auth = $auth ?: auth();
@@ -80,34 +87,9 @@ class Menu
             $this->cache = File::create('__menu__');
         }
 
+        $this->routePrefix = config('admin.route-prefix');
+
         fire('menu.resolving', [$this]);
-    }
-
-    /**
-     * 根据id获取菜单名称生成导航标题
-     *
-     * @param  string | int $condition
-     * @return string
-     */
-    public function makeNavByNameOrId($condition)
-    {
-        $select = [];
-        foreach ($this->data as & $m) {
-            if ($m['name'] == $condition || $m[$this->keyName] == $condition) {
-                $select = & $m;
-                break;
-            }
-        }
-
-        $nav = "<a href='{$m['route']}'>" . $select['name'] . "</a>";
-
-        if ($select[$this->parentKeyName]) {
-            $parent = $this->makeNavByNameOrId($select[$this->parentKeyName]);
-
-            return $parent . ' / ' . $nav;
-        }
-
-        return $nav;
     }
 
     /**
@@ -129,6 +111,14 @@ class Menu
             // 检查用户权限
             if ($auth && ! $this->auth->can(get_value($v, 'ability'))) {
                 continue;
+            }
+
+            if (! isset($v['path'])) {
+                if ($v['use_route_prefix']) {
+                    $v['path'] = '/' . $this->routePrefix . $v['route'];
+                } else {
+                    $v['path'] = &$v['route'];
+                }
             }
 
             if ($trans) {

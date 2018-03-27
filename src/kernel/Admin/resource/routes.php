@@ -8,13 +8,15 @@
 
 $module = 'Admin';
 
+$prefix = '/'.config('admin.route-prefix');
+
 return [
     // 后台首页路由（最顶级iframe）
     [
-        'pattern' => '/admin',
+        'pattern' => &$prefix,
         'method' => 'GET',
         'params' => [
-            'module' => 'Admin',
+            'module' => $module,
             'controller' => 'Index',
             'action' => 'Index'
         ]
@@ -22,11 +24,11 @@ return [
 
     // 登录页面
     [
-        'pattern' => '/admin/login',
+        'pattern' => $prefix.'/login',
         'method' => 'GET',
         'params' => [
             'auth' => false,
-            'module' => 'Admin',
+            'module' => $module,
             'controller' => 'Login',
             'action' => 'Index'
         ]
@@ -34,11 +36,11 @@ return [
 
     // 登录页面
     [
-        'pattern' => '/admin/captcha',
+        'pattern' => $prefix.'/captcha',
         'method' => 'GET',
         'params' => [
             'auth' => false,
-            'module' => 'Admin',
+            'module' => $module,
             'controller' => 'Login',
             'action' => 'Captcha'
         ]
@@ -46,7 +48,7 @@ return [
 
     // 登录页面
     [
-        'pattern' => '/admin/logout',
+        'pattern' => $prefix.'/logout',
         'method' => 'GET',
         'params' => [
             'module' => 'Admin',
@@ -56,11 +58,11 @@ return [
     ],
 
     [
-        'pattern' => '/admin/api/js/:lc@type',
+        'pattern' => $prefix.'/api/js/:lc@type',
         'method' => 'GET',
         'params' => [
             'auth' => false,
-            'module' => 'Admin',
+            'module' => $module,
             'namespace' => 'Lxh\\Admin\\Http\\Controllers',
             'controller' => 'Js',
             'action' => 'Entrance',
@@ -70,12 +72,12 @@ return [
 
     // 登录接口
     [
-        'pattern' => '/admin/api/login',
+        'pattern' => $prefix.'/api/login',
         'method' => 'POST',
         'params' => [
             'auth' => false,
             'api' => true,
-            'module' => 'Admin',
+            'module' => $module,
             'controller' => 'Admin',
             'action' => 'Login'
         ]
@@ -83,10 +85,10 @@ return [
 
     // api带id参数接口
     [
-        'pattern' => '/admin/api/:lc@c/:lc@a/:int@id',
+        'pattern' => $prefix.'/api/:lc@c/:lc@a/:int@id',
         'method' => 'GET',
         'params' => [
-            'module' => 'Admin',
+            'module' => $module,
             'api' => true,
             'controller' => ':lc@c',
             'action' => ':lc@a',
@@ -96,12 +98,12 @@ return [
 
     // js加载接口
     [
-        'pattern' => '/admin/api/js/:type',
+        'pattern' => $prefix.'/api/js/:type',
         'method' => 'GET',
         'params' => [
             'auth' => false,
             'api' => true,
-            'module' => 'Admin',
+            'module' => $module,
             'controller' => 'Js',
             'action' => 'Entrance',
             'type' => ':type'
@@ -110,10 +112,10 @@ return [
 
     // 数据还原接口
     [
-        'pattern' => '/admin/api/:lc@c/restore',
+        'pattern' => $prefix.'/api/:lc@c/restore',
         'method' => 'POST',
         'params' => [
-            'module' => 'Admin',
+            'module' => $module,
             'api' => true,
             'controller' => ':lc@c',
             'action' => 'Restore'
@@ -126,7 +128,7 @@ return [
         'method' => 'GET',
         'params' => [
             'auth' => false,
-            'module' => 'Admin',
+            'module' => $module,
             'controller' => 'Image',
             'action' => 'read',
             'filename' => ':filename',
@@ -136,10 +138,10 @@ return [
 
     // 修改接口
     [
-        'pattern' => '/admin/api/:lc@c/view/:int@id',
+        'pattern' => $prefix.'/api/:lc@c/view/:int@id',
         'method' => 'POST',
         'params' => [
-            'module' => 'Admin',
+            'module' => $module,
             'api' => true,
             'controller' => ':lc@c',
             'action' => 'Update',
@@ -147,10 +149,10 @@ return [
         ]
     ],
     [
-        'pattern' => '/admin/api/:lc@c/update-field/:int@id',
+        'pattern' => $prefix.'/api/:lc@c/update-field/:int@id',
         'method' => 'POST',
         'params' => [
-            'module' => 'Admin',
+            'module' => $module,
             'api' => true,
             'controller' => ':lc@c',
             'action' => 'UpdateField',
@@ -160,10 +162,10 @@ return [
 
     // 删除接口
     [
-        'pattern' => '/admin/api/:lc@c/:int@id',
+        'pattern' => $prefix.'/api/:lc@c/:int@id',
         'method' => 'DELETE',
         'params' => [
-            'module' => 'Admin',
+            'module' => $module,
             'api' => true,
             'controller' => ':lc@c',
             'action' => 'Delete',
@@ -173,10 +175,10 @@ return [
 
     // 批量删除接口
     [
-        'pattern' => '/admin/api/:lc@c/batch-delete',
+        'pattern' => $prefix.'/api/:lc@c/batch-delete',
         'method' => 'POST,DELETE',
         'params' => [
-            'module' => 'Admin',
+            'module' => $module,
             'api' => true,
             'controller' => ':lc@c',
             'action' => 'BatchDelete'
@@ -185,10 +187,10 @@ return [
 
     // 新增接口
     [
-        'pattern' => '/admin/api/:lc@c',
+        'pattern' => $prefix.'/api/:lc@c',
         'method' => 'POST',
         'params' => [
-            'module' => 'Admin',
+            'module' => $module,
             'api' => true,
             'controller' => ':lc@c',
             'action' => 'Add'
@@ -197,12 +199,12 @@ return [
 
     // 自定义访问API控制器和action接口
     [
-        'pattern' => '/admin/api/:lc@c/:lc@a',
+        'pattern' => $prefix.'/api/:lc@c/:lc@a',
         'method' => '*',
         'params' => [
             'auth' => false,
             'api' => true,
-            'module' => 'Admin',
+            'module' => $module,
             'controller' => ':lc@c',
             'action' => ':lc@a',
         ]
@@ -210,10 +212,10 @@ return [
 
     // 普通页面action
     [
-        'pattern' => 'admin/:lc@c/action/:lc@a',
+        'pattern' => $prefix.'/:lc@c/action/:lc@a',
         'method' => '*',
         'params' => [
-            'module' => 'Admin',
+            'module' => $module,
             'controller' => ':lc@c',
             'action' => ':lc@a'
         ]
@@ -221,10 +223,10 @@ return [
 
     // 详情页
     [
-        'pattern' => 'admin/:lc@c/view/:int',
+        'pattern' => $prefix.'/:lc@c/view/:int',
         'method' => 'GET',
         'params' => [
-            'module' => 'Admin',
+            'module' => $module,
             'controller' => ':lc@c',
             'action' => 'Detail',
             'id' => ':int',

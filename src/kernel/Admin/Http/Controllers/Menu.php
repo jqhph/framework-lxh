@@ -100,6 +100,7 @@ class Menu extends Controller
         $form->text('name')->rules('required');
         $form->text('icon')->help($this->iconHelp());
         $form->text('route')->prepend('<i class="fa fa-internet-explorer"></i>');
+        $form->switch('use_route_prefix')->checked()->small()->help('自动加上前缀“'.config('admin.route-prefix').'”');
         $form->switch('show')->checked()->small();
         $form->select('priority')->options(range(0, 30))->help(trans('The smaller the value, the higher the order.'));
         if ($this->useAuthorize) {
@@ -175,6 +176,7 @@ class Menu extends Controller
         $table->icon('icon');
         $table->text('name');
         $table->editable('route');
+        $table->switch('use_route_prefix');
         $table->switch('show');
         $table->select('type');
         $table->editable('priority', function (Editable $editable) {

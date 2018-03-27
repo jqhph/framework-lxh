@@ -19,7 +19,7 @@
 
                 <?php foreach ($menu->get() as &$m) { ?>
                     <li class="has_sub">
-                        <a id="menu-<?php echo $m['id']?>" href="javascript:<?php echo empty($m['subs']) && !empty($m['route']) ? "LXHSTORE.TAB.switch('menu-{$m['id']}', '{$m['route']}', '{$m['name']}')" : '';?>"
+                        <a id="menu-<?php echo $m['id']?>" href="javascript:<?php echo empty($m['subs']) && !empty($m['path']) ? "LXHSTORE.TAB.switch('menu-{$m['id']}', '{$m['path']}', '{$m['name']}')" : '';?>"
                            class="waves-effect ">
                             <i class="<?php echo $m['icon'];?>"></i>
                             <span><?php echo $m['name'];?></span>
@@ -33,7 +33,7 @@
                                 <?php foreach ($m['subs'] as & $sub) { ?>
                                     <li>
                                         <a id="menu-<?php echo $sub['id']?>"
-                                           href="javascript:LXHSTORE.TAB.switch('menu-<?php echo $sub['id'];?>', '<?php echo $sub['route'];?>', '<?php echo $sub['name']?>')">
+                                           href="javascript:LXHSTORE.TAB.switch('menu-<?php echo $sub['id'];?>', '<?php echo $sub['path'];?>', '<?php echo $sub['name']?>')">
                                             <?php echo $sub['name'];?></a></li>
                                 <?php } ?>
                             </ul>

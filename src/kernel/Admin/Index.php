@@ -33,7 +33,7 @@ class Index
         'topbarContent' => '',
         'users' => '',
         'menuTitle' => '',
-        'homeUrl' => '/admin/index/action/dashboard'
+        'homeUrl' => '/index/action/dashboard'
     ];
 
     /**

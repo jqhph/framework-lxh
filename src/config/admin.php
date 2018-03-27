@@ -12,8 +12,10 @@ return [
     'favicon' => '',
     'copyright' => '2017 @copyright JQH',
 
+    // 路由前缀
+    'route-prefix' => 'lxh-admin',
     // 使用默认路由
-    'use-admin-routes' => true,
+    'use-routes' => true,
 
     'auth' => [
         'enable' => true,
