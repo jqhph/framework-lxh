@@ -219,7 +219,12 @@ class Index
         $name = $user->first_name . $user->last_name;
         $username = $name ?: $user->username;
 
-        $avatar = $user->avatar() ?: admin_img('/images/users/avatar-1.jpg');
+        $avatar = '';
+        if (method_exists($user, 'avatar')) {
+            $avatar = $user->avatar();
+        }
+
+        $avatar = $avatar ?: admin_img('/images/users/avatar-1.jpg');
 
         $this->topbarContent[] = view($this->views['user'], ['name' => $username, 'avatar' => &$avatar])->render();
     }
