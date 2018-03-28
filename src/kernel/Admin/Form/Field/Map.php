@@ -113,7 +113,7 @@ class Map extends Field
         }
 
         if (!static::$google) {
-            $js = 'http://map.qq.com/api/js?v=2.exp'; // &Key='.config('admin.qq-map-key')
+            $js = 'https://map.qq.com/api/js?v=2.exp'; // &Key='.config('admin.qq-map-key')
         } else {
             $js = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key='.config('admin.google-map-key', 'AIzaSyBzE9xAESye6Kde-3hT-6B90nfwUkcS8Yw');
         }

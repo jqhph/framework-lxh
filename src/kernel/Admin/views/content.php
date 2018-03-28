@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
     <meta charset="utf-8">
@@ -11,7 +11,7 @@
         <style><?php echo $style?></style>
     <?php } ?>
 </head>
-<body class="lxh">
+<body class="lxh" onmousewheel="top.document.body.scrollTop-=event.wheelDelta">
 <script>
 (function (w) {
     w.LXHSTORE = parent.LXHSTORE;
