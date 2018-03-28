@@ -8,12 +8,12 @@ use Lxh\Admin\Form\Field;
 class Text extends Field
 {
     use PlainInput;
-    
+
     public function render()
     {
         $this->initPlainInput();
 
-        $this->prepend('<i class="fa fa-pencil"></i>')
+        $this->prepend('<i class="zmdi zmdi-brush"></i>')
             ->defaultAttribute('type', 'text')
             ->defaultAttribute('id', $this->id)
             ->defaultAttribute('name', $this->elementName ?: $this->formatName($this->column))
