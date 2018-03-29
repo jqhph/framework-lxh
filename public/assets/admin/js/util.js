@@ -128,6 +128,12 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         return new Date(parseInt(time + '000')).format(format || 'yyyy-mm-dd hh:ii:ss');
     };
 
+    // 滚动到窗口顶部
+    o.scroll_top = function () {
+        // $(o).scrollTop($('body').offset().top)
+        $("html, body").animate({scrollTop:$('body').offset().top}, {duration:150, easing: "swing"});
+    };
+
     // new Date(1458692752478).format('yyyy-mm-dd hh:ii:ss')
     Date.prototype.format = function(format) {
         var date = {

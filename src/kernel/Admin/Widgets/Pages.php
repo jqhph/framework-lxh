@@ -202,12 +202,12 @@ class Pages
     public function header()
     {
         //  / {$this->config['showingText']} {$this->listRows}
-        return "{$this->config['itemEle']}<span class='{$this->config['class']}'>{$this->config['totalText']} {$this->totalRows}</span>{$this->config['itemEleEnd']}";
+        return "{$this->config['itemEle']}<span class='{$this->config['class']}'> &nbsp;{$this->config['totalText']} {$this->totalRows}";
     }
 
     public function pageinfo()
     {
-        return "{$this->config['itemEle']}<span class='{$this->config['class']}'>{$this->currentPage}/{$this->totalPages}</span>{$this->config['itemEleEnd']}";
+        return "&nbsp;&nbsp;&nbsp; {$this->currentPage}/{$this->totalPages} &nbsp;</span>{$this->config['itemEleEnd']}";
     }
 
     // 1 2 3 4 5
