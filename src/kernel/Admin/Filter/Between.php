@@ -16,8 +16,8 @@ class Between extends AbstractFilter
 
     protected function buildCondition($field, $input)
     {
-        $start = I($field . '-start');
-        $end = I($field . '-end');
+        $start = trim(I($field . '-start'));
+        $end   = trim(I($field . '-end'));
 
         $validateStart = ($start !== null && $start !== '');
         $validateEnd = ($end !== null && $end !== '');

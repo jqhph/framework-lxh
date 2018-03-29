@@ -286,7 +286,7 @@ class Demo extends Controller
         $prefix = '/' . config('admin.route-prefix');
 
         $table->expand('expand', function (Expand $expand) use ($prefix) {
-            $expand->ajax($prefix.'/admin/demo/action/test');
+            $expand->ajax($prefix.'/demo/action/test');
         })->sortable();
 
         $table->switch('switch');

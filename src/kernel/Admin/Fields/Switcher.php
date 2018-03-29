@@ -23,6 +23,11 @@ class Switcher extends Field
 
     public function primary()
     {
+        return $this->attribute('data-color', '#0072C6');
+    }
+
+    public function green()
+    {
         return $this->attribute('data-color', '#00b19d');
     }
 

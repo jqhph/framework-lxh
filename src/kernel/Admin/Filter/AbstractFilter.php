@@ -101,7 +101,7 @@ abstract class AbstractFilter
             return $condition === null ? false : ($key ? [$key => &$condition] : $condition);
         }
 
-        $input = I($field);
+        $input = trim(I($field));
 
         // 使用默认构建查询条件数组方法
         if ($this->inputInvalid($input) || ($condition = $this->buildCondition($field, $input)) === null) {
