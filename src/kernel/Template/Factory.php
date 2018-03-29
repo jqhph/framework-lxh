@@ -83,7 +83,7 @@ class Factory
             return $this->factory->make($this->normalizeView($view), $vars);
         }
 
-        return new View($view, $vars);
+        return new View($this->normalizeView($view), $vars);
     }
 
     public function share($k, $v = null)
@@ -123,7 +123,7 @@ class Factory
      */
     protected function normalizeView($view, $prefix = null)
     {
-        if (!strpos($view, '::')) {
+        if (strpos($view, '::') === false) {
             if ($this->module) {
                 $prefix = $this->module . '.' . $this->viewVersion;
             }
