@@ -42,7 +42,6 @@ echo admin_js('js/bootstrap.min');
     $d.on('pjax:complete', function () {$(parent.window).scrollTop(0);});
 })(window);
 </script>
-
 <?php
 setup_admin_js_app_ini();
 
@@ -54,6 +53,5 @@ if ($hidden) {?><div style="display:none"><?php echo $hidden?></div><?php }
 
 admin_js_tpl();
 ?>
-
 </body>
 </html>

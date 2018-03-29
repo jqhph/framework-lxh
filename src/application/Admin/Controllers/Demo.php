@@ -160,7 +160,7 @@ class Demo extends Controller
               shadeClose: true,
               shade: false,
               area: ['70%', '700px'],
-              content: '$prefix/admin/demo/action/form-code-preview'
+              content: '$prefix/demo/action/form-code-preview'
             }); 
             return false;
         ");
