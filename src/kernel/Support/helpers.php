@@ -515,12 +515,13 @@ function share_var($key, $value = null)
 /**
  * Get the evaluated view contents for the given view.
  *
- * @param  string  $view
- * @param  array   $data
+ * @param  string $view
+ * @param  array  $data
+ * @param  bool   $usePrefix
  * @return \Lxh\Contracts\View\View
  */
-function view($view, array $data = []) {
-    return $GLOBALS['CONTAINER']['view.adaptor']->make($view, $data);
+function view($view, array $data = [], $usePrefix = true) {
+    return $GLOBALS['CONTAINER']['view.adaptor']->make($view, $data, $usePrefix);
 }
 
 /**

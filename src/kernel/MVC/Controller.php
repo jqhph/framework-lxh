@@ -158,11 +158,12 @@ abstract class Controller
      *
      * @param  string  $view
      * @param  array   $data
+     * @param  bool    $usePrefix
      * @return string
      */
-    protected function render($view, array $data = [])
+    protected function render($view, array $data = [], $usePrefix = true)
     {
-        return $this->container['view.adaptor']->make($view, $data)->render();
+        return $this->container['view.adaptor']->make($view, $data, $usePrefix)->render();
     }
 
     /**

@@ -75,15 +75,16 @@ class Factory
     /**
      * @param $view
      * @param array $vars
+     * @param bool  $usePrefix
      * @return View|BladeView
      */
-    public function make($view, array $vars = [])
+    public function make($view, array $vars = [], $usePrefix = true)
     {
         if ($this->mode == static::BLADE) {
-            return $this->factory->make($this->normalizeView($view), $vars);
+            return $this->factory->make($this->normalizeView($view, $usePrefix), $vars);
         }
 
-        return new View($this->normalizeView($view), $vars);
+        return new View($this->normalizeView($view, $usePrefix), $vars);
     }
 
     public function share($k, $v = null)
@@ -118,17 +119,18 @@ class Factory
     /**
      * Normalize the given event name.
      *
-     * @param string $name
      * @return string
      */
-    protected function normalizeView($view, $prefix = null)
+    protected function normalizeView($view, $usePrefix = true)
     {
-        if (strpos($view, '::') === false) {
+        $prefix = '';
+        if ($usePrefix && strpos($view, '::') === false) {
             if ($this->module) {
                 $prefix = $this->module . '.' . $this->viewVersion;
             }
-            if (strpos($view, '.') === false && strpos($view, '/') === false) {
-                $view = $this->controller . '.' . $view;
+            $c = $this->controller . '.';
+            if (strpos($view, $c) === false && strpos($view, $this->controller . '/') === false) {
+                $view = $c . $view;
             }
         }
 
