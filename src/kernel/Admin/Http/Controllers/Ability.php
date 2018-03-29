@@ -80,7 +80,7 @@ class Ability extends Controller
         $form->text('title')->rules('required|length_between[2-30]');
         $form->text('name')->options($support)->help($this->getNameHelp())->rules('required|length_between[2-40]');
         $form->text('comment');
-        $form->select('forbidden')->options([0, 1]);
+        $form->switch('forbidden');
     }
 
     protected function getNameHelp()
