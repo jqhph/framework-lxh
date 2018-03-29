@@ -133,11 +133,6 @@ trait Loader
             'class' => 'Lxh\Template\Factory',
             'dependencies' => 'container'
         ],
-        'view' => [
-            'shared' => true,
-            'class' => 'Lxh\Template\View',
-            'dependencies' => 'controller.manager'
-        ],
         'view.factory' => [
             'provider' => ViewServiceProvider::class,
         ],

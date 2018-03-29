@@ -32,6 +32,7 @@ use Lxh\Admin\Widgets\Form;
 use Lxh\Admin\Widgets\Popup;
 use Lxh\Admin\Widgets\Tab;
 use Lxh\Admin\Layout;
+use Lxh\Exceptions\Exception;
 
 class Demo extends Controller
 {

@@ -1,6 +1,6 @@
 <?php
 /**
- * 模板管理
+ * 模板
  *
  * @author Jqh
  * @date   2017/6/15 14:53
@@ -8,11 +8,7 @@
 
 namespace Lxh\Template;
 
-use Lxh\Exceptions\Error;
 use Lxh\Exceptions\InvalidArgumentException;
-use Lxh\Helper\Entity;
-use \Lxh\Helper\Util;
-use Lxh\MVC\ControllerManager;
 
 class View
 {
@@ -24,32 +20,37 @@ class View
     const HINT_PATH_DELIMITER = '::';
 
     /**
-     * 模板变量管理对象
+     * 公共变量
      *
-     * @var Entity
+     * @var array
      */
-    protected $vars = [];
+    protected static $shares = [];
 
     /**
      * The array of views that have been located.
      *
      * @var array
      */
-    protected $views = [];
+    protected static $views = [];
 
     /**
      * The namespace to file path hints.
      *
      * @var array
      */
-    protected $hints = [];
+    protected static $hints = [];
 
     /**
-     * 模板版本
+     * 模板名称
      *
      * @var string
      */
-    protected $version = 'primary';
+    protected $view;
+
+    /**
+     * @var array
+     */
+    protected $data = [];
 
     /**
      * @var string
@@ -57,62 +58,50 @@ class View
     protected $root = __ROOT__;
 
     /**
+     * 模板路径
+     *
      * @var string
      */
-    protected $dir = '';
+    protected $dir;
 
-    /**
-     * @var string
-     */
-    protected $currentView;
-
-    /**
-     * @var array
-     */
-    protected $currentVars = [];
-
-    public function __construct(ControllerManager $manager)
+    public function __construct($view, array $data = [])
     {
-        $this->version = config('view.version', 'primary');
+        $this->view = $view;
+        $this->data = &$data;
 
         $p = config('view.paths', 'resource/views');
-
         $this->dir = "{$this->root}{$p}/";
     }
 
+
     /**
-     * 分配变量到模板输出
-     * 通过此方法分配的变量所有引入的模板都可用
+     * 分配公共变量到模板输出
      *
      * @param  string $key  在模板使用的变量名称
-     * @param  mixed $value 变量值，此处使用引用传值，分配时变量必须先定义
-     * @return static
+     * @param  mixed $value 变量值
      */
-    public function share($key, & $value = null)
+    public static function share($key, $value = null)
     {
         if (is_array($key)) {
-            $this->vars = array_merge($this->vars, $key);
+            static::$shares = array_merge(static::$shares, $key);
         } else {
-            $this->vars[$key] = $value;
+            static::$shares[$key] = &$value;
         }
-
-        return $this;
     }
 
     /**
      * 分配变量到模板输出
-     * 通过此方法分配的变量只有当前模板能用
      *
      * @param  string $key  在模板使用的变量名称
-     * @param  mixed $value 变量值，此处使用引用传值，分配时变量必须先定义
+     * @param  mixed $value 变量值
      * @return static
      */
-    public function with($key, & $value = null)
+    public function with($key, $value = null)
     {
         if (is_array($key)) {
-            $this->currentVars = array_merge($this->currentVars, $key);
+            $this->data = array_merge($this->data, $key);
         } else {
-            $this->currentVars[$key] = $value;
+            $this->data[$key] = &$value;
         }
 
         return $this;
@@ -123,60 +112,38 @@ class View
      *
      * @param  string  $namespace
      * @param  string|array  $hints
-     * @return $this
      */
-    public function addNamespace($namespace, $hints)
+    public static function addNamespace($namespace, $hints)
     {
         $hints = (array) $hints;
 
-        if (isset($this->hints[$namespace])) {
-            $hints = array_merge($this->hints[$namespace], $hints);
+        if (isset(static::$hints[$namespace])) {
+            $hints = array_merge(static::$hints[$namespace], $hints);
         }
 
-        $this->hints[$namespace] = & $hints;
-        return $this;
-    }
-
-    /**
-     *
-     * @return static
-     */
-    public function make($view, array &$vars = [])
-    {
-        $this->currentView = $view;
-        $this->currentVars = &$vars;
-
-        return $this;
+        static::$hints[$namespace] = &$hints;
     }
 
     /**
      * 读取模板内容并返回
      *
-     * @param  string $viewName 模板名称
-     * @param  array  $vars     要传递到模板的值，只有当前模板可以用
      * @return string
      */
-    public function render($view = null, array & $vars = [])
+    public function render()
     {
         // 页面缓存
         ob_start();
 
-        foreach ($this->vars as $k => &$v) {
+        foreach (static::$shares as $k => &$v) {
             ${$k} = &$v;
         }
 
-        $view = $view ?: $this->currentView;
-        $vars = $vars ?: $this->currentVars;
-
-        $this->currentView = '';
-        $this->currentVars = [];
-
-        foreach ($vars as $k => &$v) {
+        foreach ($this->data as $k => &$v) {
             ${$k} = &$v;
         }
 
         // 读取模板
-        $path = $this->getTemplatePath($view);
+        $path = $this->getTemplatePath($this->view);
         if (! is_file($path)) {
             throw new InvalidArgumentException("View [$path] not found.");
         }
@@ -195,15 +162,15 @@ class View
      */
     public function getTemplatePath($name)
     {
-        if (isset($this->views[$name])) return $this->views[$name];
+        if (isset(static::$views[$name])) return static::$views[$name];
 
         $name = str_replace('.', '/', $name);
 
         if ($this->hasHintInformation($name = trim($name))) {
-            return $this->views[$name] = $this->findNamespacedView($name);
+            return static::$views[$name] = $this->findNamespacedView($name);
         }
 
-        return $this->views[$name] = "{$this->dir}/$name.php";
+        return static::$views[$name] = "{$this->dir}/$name.php";
     }
 
     /**
@@ -227,7 +194,7 @@ class View
     {
         list($namespace, $view) = $this->parseNamespaceSegments($name);
 
-        return $this->findInPaths($view, $this->hints[$namespace]);
+        return $this->findInPaths($view, static::$hints[$namespace]);
     }
 
     /**
@@ -241,7 +208,7 @@ class View
      */
     protected function findInPaths($name, $paths)
     {
-        foreach ((array) $paths as & $path) {
+        foreach ((array) $paths as &$path) {
             $file = str_replace('.', '/', $name).'.php';
 
             if (is_file($viewPath = "{$this->normalizePath($path)}/$file")) {
@@ -274,7 +241,7 @@ class View
         if (count($segments) != 2) {
             throw new InvalidArgumentException("View [$name] has an invalid name.");
         }
-        if (! isset($this->hints[$segments[0]])) {
+        if (! isset(static::$hints[$segments[0]])) {
             throw new InvalidArgumentException("No hint path defined for [{$segments[0]}].");
         }
 

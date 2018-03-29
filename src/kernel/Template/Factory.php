@@ -4,35 +4,56 @@ namespace Lxh\Template;
 
 use Lxh\Contracts\Container\Container;
 use Lxh\Helper\Util;
+use Lxh\View\View as BladeView;
 
 class Factory
 {
-    protected $driver = 'php';
+    const PHP   = 'php';
+    const BLADE = 'blade';
 
     /**
+     * 模板引擎类型
+     *
+     * @var string
+     */
+    protected $mode;
+
+    /**
+     * 模板版本
+     *
      * @var string
      */
     protected $viewVersion;
 
+    /**
+     * @var \Lxh\View\Factory
+     */
     protected $factory;
 
+    /**
+     * 当前控制器
+     *
+     * @var string
+     */
     protected $controller;
 
+    /**
+     * 当前模块
+     *
+     * @var string
+     */
     protected $module;
 
     public function __construct(Container $container)
     {
-        $this->driver = config('view.driver', 'php');
-        $this->controller = __CONTROLLERSLUG__;
-
-        $this->module = __MODULESLUG__;
+        $this->mode        = config('view.driver', static::PHP);
+        $this->controller  = defined('__CONTROLLERSLUG__') ? __CONTROLLERSLUG__ : '';
+        $this->module      = defined('__MODULESLUG__') ? __MODULESLUG__ : '';
         $this->viewVersion = config('view.version', 'primary');
 
         // 判断是否使用blade模板引擎
-        if ($this->driver == 'blade') {
+        if ($this->mode == static::BLADE) {
             $this->factory = $container['view.factory'];
-        } else {
-            $this->factory = $container['view'];
         }
 
         $this->setupNamespaces();
@@ -54,21 +75,26 @@ class Factory
     /**
      * @param $view
      * @param array $vars
-     * @return mixed
+     * @return View|BladeView
      */
-    public function make($view, array &$vars = [])
+    public function make($view, array $vars = [])
     {
-        return $this->factory->make($this->normalizeView($view), $vars);
+        if ($this->mode == static::BLADE) {
+            return $this->factory->make($this->normalizeView($view), $vars);
+        }
+
+        return new View($view, $vars);
     }
 
-    public function render()
+    public function share($k, $v = null)
     {
-        return $this->factory->render();
-    }
+        if ($this->mode == static::BLADE) {
+            $this->factory->share($k, $v);
+        } else {
+            View::share($k, $v);
+        }
 
-    public function share($k, &$v = null)
-    {
-        return $this->factory->share($k, $v);
+        return $this;
     }
 
     /**
@@ -80,7 +106,11 @@ class Factory
      */
     public function addNamespace($namespace, $hints)
     {
-        $this->factory->addNamespace($namespace, $hints);
+        if ($this->mode == static::BLADE) {
+            $this->factory->addNamespace($namespace, $hints);
+        } else {
+            View::addNamespace($namespace, $hints);
+        }
 
         return $this;
     }
@@ -105,7 +135,7 @@ class Factory
         return $prefix ? $prefix . '.' . $view : $view;
     }
 
-    public function get()
+    public function factory()
     {
         return $this->factory;
     }

@@ -266,7 +266,7 @@ class Index
 
         return array_merge($this->variables, [
             'sitebar' => $this->buildSitebar(),
-            'topbar' => $this->buildTopbar(),
+            'topbar'  => $this->buildTopbar(),
             'content' => &$content,
         ]);
     }

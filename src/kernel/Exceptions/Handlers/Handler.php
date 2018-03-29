@@ -218,7 +218,7 @@ class Handler
 
 		// 非生产环境以及非ajax请求显示错误界面
 		if (! is_prod() && ! $isAjax && ! $this->request->isCli()) {
-			return $this->response->data = resolve('view.adaptor')->get()->make('system.debug', $vars)->render();
+			return $this->response->data = view('system.debug', $vars)->render();
 		}
 
 		if (! is_prod() && $isAjax || $this->request->isCli()) {

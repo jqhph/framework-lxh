@@ -577,8 +577,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         // 创建iframe弹窗
         this.create = function (name, url) {
             if (typeof store[name] != 'undefined') return true;
-            var $loading = w.loading($app),
-                n = NProgress,
+            var n = NProgress,
                 self = this,
                 ori = url.split('?')[0],
                 view = LXHSTORE.cache.get(ori),
@@ -613,7 +612,6 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
                 this.height($(e.currentTarget));
                 // 关闭加载效果
                 n.done();
-                $loading.close();
                 // 如果在iframe页创建期间切换到了其他的tab窗口，需要切换回当前窗口
                 current = name;
                 tab.show(name);
