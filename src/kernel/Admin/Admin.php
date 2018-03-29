@@ -85,6 +85,13 @@ class Admin
     protected static $idName = '';
 
     /**
+     * 是否已加载帮助函数文件
+     *
+     * @var bool
+     */
+    protected static $loadedHelpers = false;
+
+    /**
      * 后台首页内容
      *
      * @return Index
@@ -109,6 +116,21 @@ class Admin
 
         return static::$scope;
     }
+
+    /**
+     * 加载帮助函数
+     *
+     * @return void
+     */
+    public static function includeHelpers()
+    {
+        if (static::$loadedHelpers) return;
+
+        static::$loadedHelpers = true;
+
+        include __ROOT__ . 'kernel/Admin/Support/helpers.php';
+    }
+
 
     /**
      * 设置或获取id名称

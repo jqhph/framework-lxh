@@ -11,6 +11,12 @@
 </head>
 <body class="lxh">
 <?php
+
+echo $loadscss;
+if ($style) {?>
+    <style><?php echo $style?></style>
+<?php }
+
 echo admin_js('js/jquery.min');
 echo admin_js('js/util.min');
 ?>
@@ -21,32 +27,25 @@ echo admin_js('js/util.min');
     <?php }?>
     <section class="content"><?php echo $content;?></section>
 </div>
-
+<?php
+// 初始化全局js变量
+setup_admin_global_js_var();
+?>
 <script>
-    var LXHSTORE = {};
-    LXHSTORE.loaderConfig = <?php echo json_encode(Lxh\Assets::loaderConfig())?>;
-    LXHSTORE.ROUTEPREFIX = '<?php echo config('admin.route-prefix');?>';
-
-    LXHSTORE.cache = new Cache();
-    LXHSTORE.cache.setToken('<?php
-        // 设置缓存token，token刷新则会刷新所有缓存
-        echo $GLOBALS['js-version'];
-        ?>');
-
-    <?php if ($useDefaultAssets) {?>
-    require_css('@lxh/css/bootstrap.min');
-    require_js('@lxh/plugins/toastr/toastr.min');
-    require_css('@lxh/plugins/toastr/toastr.min');
-    <?php } ?>
-
-    <?php
-        echo $js;
-        echo $css;
-        ?>;
-    __then__(function () {<?php echo $script?>});
+<?php if ($useDefaultAssets) {?>
+require_css('@lxh/css/bootstrap.min');
+require_js('@lxh/plugins/toastr/toastr.min');
+require_css('@lxh/plugins/toastr/toastr.min');
+<?php } ?>
+<?php
+    echo $js;
+    echo $css;
+?>;
+__then__(function () {<?php echo $script?>});
 </script>
 <?php
-echo view('admin::index.app-js', ['useDefaultAssets' => $useDefaultAssets])->render();
+// app js初始化
+setup_admin_js_app_ini($useDefaultAssets);
 
 // 加载sea js，加载所有require_js和require_css加载的文件
 echo admin_js('js/app.min');

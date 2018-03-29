@@ -288,6 +288,9 @@ class Content implements Renderable
             return "{$content}{$syncCss}{$syncJs}<script>{$css}{$js}{$script}</script><div style='display:none'>{$html}</div>";
         }
 
+        // 加载帮助函数
+        Admin::includeHelpers();
+
         return view(
             $this->view,
             [

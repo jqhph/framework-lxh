@@ -273,6 +273,8 @@ class Index
 
     public function render()
     {
+        Admin::includeHelpers();
+
         return view($this->views['index'], $this->variables())->render();
     }
 

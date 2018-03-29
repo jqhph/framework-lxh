@@ -51,23 +51,14 @@
     echo $content;
 ?></section>
 
+<?php
+// 初始化全局js变量
+setup_admin_global_js_var();
+?>
 <script>
-    var resizefunc = [];
-
-    // 全局变量容器，所有全局变量都应该放置到此容器，便于管理
-    var LXHSTORE = {};
-    LXHSTORE.loaderConfig = <?php echo json_encode(Lxh\Assets::loaderConfig())?>;
-    LXHSTORE.ROUTEPREFIX = '<?php echo config('admin.route-prefix');?>';
-    LXHSTORE.APIPREFIX = '/' + LXHSTORE.ROUTEPREFIX + '/api';
-    LXHSTORE.cache = new Cache();
-    LXHSTORE.cache.setToken('<?php
-        // 设置缓存token，token刷新则会刷新所有缓存
-        echo $GLOBALS['js-version'];
-    ?>');
-
+    LXHSTORE.HOMEURL = '/' + LXHSTORE.ROUTEPREFIX + '<?php echo $homeUrl?>';
     LXHSTORE.IFRAME = new Iframe();
     LXHSTORE.TAB = new Tab(LXHSTORE.IFRAME);
-    LXHSTORE.HOMEURL = '/' + LXHSTORE.ROUTEPREFIX + '<?php echo $homeUrl?>';
 
     LXHSTORE.TAB.setMax(<?php echo $maxTab;?>);
 
@@ -99,7 +90,7 @@
 </script>
 
 <?php
-echo view('admin::index.app-js', ['useDefaultAssets' => false])->render();
+setup_admin_js_app_ini(false);
 
 echo admin_js('js/app.min');
 echo admin_js('packages/layer/layer');
