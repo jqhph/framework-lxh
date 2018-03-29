@@ -73,6 +73,10 @@ class Ability extends Controller
     {
         $support = \Lxh\Auth\Ability::getAbilitiesSupport();
 
+        if ($this->id) {
+            $form->text('id')->disabled();
+        }
+
         $form->text('title')->rules('required|length_between[2-30]');
         $form->text('name')->options($support)->help($this->getNameHelp())->rules('required|length_between[2-40]');
         $form->text('comment');

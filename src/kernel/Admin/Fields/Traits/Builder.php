@@ -59,7 +59,7 @@ trait Builder
     {
         if (static::$checkedStyle === false) {
             static::$checkedStyle = true;
-            Admin::style('.grid-checked{font-size:16px;font-weight:700}.grid-unchecked{font-size:15px;font-weight:700}');
+            Admin::style('.grid-checked{font-size:17px;}.grid-unchecked{font-size:17px;}');
         }
 
         return $value ? '<i class="green grid-checked zmdi zmdi-check"></i>'

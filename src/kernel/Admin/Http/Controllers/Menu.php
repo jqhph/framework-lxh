@@ -96,6 +96,10 @@ class Menu extends Controller
      */
     protected function form(Form $form)
     {
+        if ($this->id) {
+            $form->text('id')->disabled();
+        }
+
         $form->selectTree('parent_id')->options(auth()->menu()->all())->defaultOption(0, trans('Top'));
         $form->text('name')->rules('required');
         $form->text('icon')->help($this->iconHelp());

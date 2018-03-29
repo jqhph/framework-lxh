@@ -84,8 +84,6 @@ class Admin extends Controller
         $table->select('sex');
         $table->date('created_at')->sortable();
         $table->date('modified_at')->sortable()->hide();
-        $table->text('last_login_ip')->hide();
-        $table->date('last_login_time')->hide();
     }
 
     protected function buildRoles(Table $table)
@@ -128,6 +126,10 @@ class Admin extends Controller
 
     protected function form(Form $form)
     {
+        if ($this->id) {
+            $form->text('id')->disabled();
+        }
+
         $form->text('username')->rules('required|length_between[4-15]');
 
         if ($this->id) {

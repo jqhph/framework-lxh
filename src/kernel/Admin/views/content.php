@@ -5,11 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title><?php echo config('admin.title')?></title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <?php
-    echo $loadscss;
-    if ($style) {?>
-        <style><?php echo $style?></style>
-    <?php } ?>
 </head>
 <body class="lxh" onmousewheel="top.document.body.scrollTop-=event.wheelDelta">
 <script>
@@ -55,6 +50,11 @@
         <section class="content"><?php echo $content;?></section>
     </div>
 </div>
+<?php
+echo $loadscss;
+if ($style) {?>
+    <style><?php echo $style?></style>
+<?php } ?>
 <?php 
 echo admin_js('js/jquery.min');
 echo admin_js('js/bootstrap.min');

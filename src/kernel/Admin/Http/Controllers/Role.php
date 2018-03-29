@@ -59,6 +59,9 @@ class Role extends Controller
 
     protected function form(Form $form)
     {
+        if ($this->id) {
+            $form->text('id')->disabled();
+        }
         $form->text('title')->rules('required|length_between[2-30]');
         $form->text('name')->rules('required|length_between[2-20]');
         $form->text('comment');
