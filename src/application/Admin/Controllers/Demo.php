@@ -281,6 +281,8 @@ class Demo extends Controller
             $th->attribute('data-test', 123);
             // 设置标题显示内容
             $th->value('<span>TEXT</span>');
+        })->hover(function (Items $items) {
+            return '<div class="red">啦啦啦~</div>';
         });
 
         $prefix = '/' . config('admin.route-prefix');
@@ -303,7 +305,7 @@ class Demo extends Controller
          * @param Tr $tr Table > Tr
          */
         $table->column('display')->display(function ($value, Items $items) {
-            return '自定义内容显示<br>' . date('Y-m-d', $items->get('date'));
+            return '自定义内容显示<div style="height:5px"></div>' . date('Y-m-d', $items->get('date'));
         });
 
         /**
