@@ -553,15 +553,15 @@ class Table extends Widget
     {
         $th = $this->ths[$field] = new Th($this, $field);
 
-        if (get_isset($options, 'hide')) {
+        if (get_value($options, 'hide')) {
             $th->hide();
         }
 
-        if ($sortFeild = get_isset($options, 'sortable')) {
+        if ($sortFeild = get_value($options, 'sortable')) {
             $th->sortable($sortFeild);
         }
 
-        if (($desc = get_isset($options, 'desc')) !== null) {
+        if (($desc = get_value($options, 'desc')) !== null) {
             $th->desc($desc);
         }
 

@@ -179,7 +179,7 @@ class TransportManager extends Manager
     protected function guzzle($config)
     {
         return new HttpClient(Arr::add(
-            get_isset($config, 'guzzle', []), 'connect_timeout', 60
+            get_value($config, 'guzzle', []), 'connect_timeout', 60
         ));
     }
 

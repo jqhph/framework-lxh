@@ -523,11 +523,6 @@ function view($view, array $data = []) {
     return $GLOBALS['CONTAINER']['view.adaptor']->make($view, $data);
 }
 
-function render_view($view, array $data = [])
-{
-    return $GLOBALS['CONTAINER']['view.adaptor']->make($view, $data)->render();
-}
-
 /**
  * Add a new namespace to the loader.
  *
@@ -773,17 +768,6 @@ function is_ajax()
  * @return mixed
  */
 function get_value(& $data, $key, $default = null)
-{
-    return isset($data[$key]) ? $data[$key] : $default;
-}
-
-/**
- * @param $data
- * @param $key
- * @param mixed $default
- * @return mixed
- */
-function get_isset(& $data, $key, $default = null)
 {
     return isset($data[$key]) ? $data[$key] : $default;
 }

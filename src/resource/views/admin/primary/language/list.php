@@ -3,7 +3,7 @@
         <div class="card-box-header m-b-30">
             <span class="card-box-title"><?php echo trans('Catalog');?></span>
         </div>
-        <?php echo render_view('component.tree.basic', ['class' => 'basic-language', 'list' => & $list]); ?>
+        <?php echo view('component.tree.basic', ['class' => 'basic-language', 'list' => & $list])->render(); ?>
     </div>
 </div>
 
@@ -82,15 +82,15 @@
 
 <script type="text/html" id="createCategoryTpl">
     <hr>
-    <?php echo render_view('component.input', ['label' => 'name', 'name' => 'cate_name'])?>
+    <?php echo view('component.input', ['label' => 'name', 'name' => 'cate_name'])->render()?>
     <hr>
 </script>
 
 <script type="text/html" id="createFileTpl">
     <hr>
-    <?php echo render_view('component.input', ['label' => 'language', 'name' => 'lang_name', 'value' => 'zh'])?>
-    <?php echo render_view('component.input', ['label' => 'module', 'name' => 'module_name', 'value' => 'Admin'])?>
-    <?php echo render_view('component.input', ['label' => 'filename', 'name' => 'filename', 'placeholder' => 'Avoid the suffix'])?>
+    <?php echo view('component.input', ['label' => 'language', 'name' => 'lang_name', 'value' => 'zh'])->render();?>
+    <?php echo view('component.input', ['label' => 'module', 'name' => 'module_name', 'value' => 'Admin'])->render()?>
+    <?php echo view('component.input', ['label' => 'filename', 'name' => 'filename', 'placeholder' => 'Avoid the suffix'])->render()?>
     <hr>
 </script>
 

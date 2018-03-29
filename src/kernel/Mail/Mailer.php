@@ -310,9 +310,9 @@ class Mailer implements MailerContract, MailQueueContract
         // named keys instead, allowing the developers to use one or the other.
         if (is_array($view)) {
             return [
-                get_isset($view, 'html'),
-                get_isset($view, 'text'),
-                get_isset($view, 'raw'),
+                get_value($view, 'html'),
+                get_value($view, 'text'),
+                get_value($view, 'raw'),
             ];
         }
 
