@@ -8,6 +8,11 @@ use Lxh\Admin\Grid\Edit\Form;
 class Field extends \Lxh\Admin\Form\Field
 {
     /**
+     * @var Form
+     */
+    protected $form;
+
+    /**
      * @var Items $items
      */
     protected $items;
@@ -35,5 +40,18 @@ class Field extends \Lxh\Admin\Form\Field
         }
 
         $this->value = $this->items->get($this->column);
+    }
+
+    public function formatRules()
+    {
+        if (! $this->rules) {
+            return '';
+        }
+
+        $rule = json_encode([
+            'name' => $this->column, 'rules' => &$this->rules
+        ]);
+
+        return "<script>window['formrules'.$this->form->getPrimaryKey()].push({$rule})</script>";
     }
 }

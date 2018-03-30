@@ -80,6 +80,16 @@ class Form implements Renderable
     }
 
     /**
+     * 获取主键
+     *
+     * @return mixed
+     */
+    public function getPrimaryKey()
+    {
+        return $this->id;
+    }
+
+    /**
      * Add a form field to form.
      *
      * @param Field\Field $field

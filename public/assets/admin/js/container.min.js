@@ -247,7 +247,7 @@ window.Lxh = function (options) {
          * 创建一个模型
          *
          * @param name    模型名称
-         * @param module  项目模块名称
+         * @param formSelector 表单css选择器
          * @returns {Model}
          */
         createModel: function (name, formSelector) {

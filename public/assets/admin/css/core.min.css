@@ -48,3 +48,4 @@ select.form-shadow{border:0;color:#444}
 .quick-edit-btn{font-size:15px}
 .quick-edit-text{margin:3px 5px 5px!important;}
 .quick-edit-text+.input-group{left:5px}
+select.form-shadow,ul.pagination{box-shadow:0 1px 4px 1px rgba(0,0,0,.29);-webkit-box-shadow:0 1px 4px 1px rgba(0,0,0,.29);}

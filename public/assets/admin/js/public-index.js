@@ -142,10 +142,11 @@
                 n.start();
                 $.get('/' + LXHSTORE.ROUTEPREFIX + '/' + to_under_score(__CONTROLLER__) + '/action/quick-edit-form?_log&id=' + id, function (data) {
                     n.done();
-                    $t = $('.quick-edit-' + id);
+                    $t = tr.parents('.table').find('.quick-edit-' + id);
                     $t.html(data);
                     show();
                     $t.find('.cancel').click(public.quickEditCancel.bind(public));
+                    public.quickEditSubmit(id);
                 });
             } else {
                 show();
@@ -165,6 +166,37 @@
             $('tr[data-id="'+id+'"]').show();
             return false; 
         },
+
+        quickEditSubmit: function (id) {
+            new LxhLoader(['@lxh/js/validate.min'], function () {
+                var formSelector = '.table .form-'+id, v = $lxh.validator(window['formrules'+id] || [], submit, formSelector);
+                var model = $lxh.createModel(__CONTROLLER__, formSelector);
+
+                function submit(e) {
+                    console.log(123);
+                    ntf.remove();
+
+                    // 设置请求开始回调函数
+                    model.on('start', function (api, method, data) {
+                        n.start();
+                    });
+
+                    // 设置成功回调函数
+                    model.on('success', function (data) {
+                        // success
+                        n.done();
+                        ntf.success(trans('success'));
+                    });
+                    model.on('any', function () {
+                        n.done();
+                    });
+
+                    // 发起修改或新增操作
+                    model.save()
+                }
+
+            }).request();
+        }
     };
 
     // 绑定删除事件
