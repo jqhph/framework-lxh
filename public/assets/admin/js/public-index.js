@@ -186,6 +186,7 @@
                         // success
                         n.done();
                         ntf.success(trans('success'));
+                        reload_grid();
                     });
                     model.on('any', function () {
                         n.done();

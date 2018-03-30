@@ -109,10 +109,7 @@ class Tr extends Widget
         $tr = "<tr {$this->formatAttributes()}>{$this->buildColumns()}</tr>";
         
         if ($this->table->allowedQuickEdit()) {
-            $this->table->addExtraRow("<div class=\"quick-edit-{$this->id}\"></div>", true);
-            // 保存post数据到全局变量
-//            $post = json_encode($this->items()->toArray());
-//            Admin::script("window['quickedit{$this->id}']=$post;");
+            $this->table->addExtraRow("<div class=\"quick-edit-{$this->id}\"></div>");
         }
 
         $name = $this->table->treeName();
