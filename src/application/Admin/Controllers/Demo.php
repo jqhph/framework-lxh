@@ -41,7 +41,7 @@ class Demo extends Controller
      *
      * @var bool
      */
-    protected $filter = 'modal';
+    protected $filter = true;
 
     /**
      * 使用回收站功能
@@ -255,9 +255,11 @@ class Demo extends Controller
         ");
 
         $grid->tools()->prepend($preview);
+    }
 
-        // 快速编辑示例
-        $grid->quickEdit(function (Grid\Edit\Editor $editor) {
+    public function actionQuickEditForm(array $params)
+    {
+        $editor = new Grid\Edit\Editor(function (Grid\Edit\Editor $editor) {
             $editor->form(function (Grid\Edit\Form $form) {
                 $form->text('text')->width(6);
                 $form->select('select')->options(range(0, 5))->width(6);
@@ -282,11 +284,18 @@ class Demo extends Controller
             $editor->form(function (Grid\Edit\Form $form) {
                 $form->textarea('textarea')->width(12);
 
-
-
             }, 4);
 
         });
+
+        $items = new Items($_POST);
+
+        $editor->setItems($items);
+        $editor->setId($items->get(
+            $this->model()->getKeyName()
+        ));
+
+        return Admin::loadAssets($editor);
     }
 
     public function actionGridCodePreview()
@@ -307,7 +316,7 @@ class Demo extends Controller
     protected function table(Table $table)
     {
         $table->code('id')->hide()->sortable();
-        $table->text('text')->th(function (Th $th) {
+        $table->editable('text')->th(function (Th $th) {
             // 设置标题颜色
             $th->style('color:green;font-weight:600');
             // 设置属性
@@ -320,8 +329,8 @@ class Demo extends Controller
 
         $prefix = '/' . config('admin.route-prefix');
 
-        $table->expand('expand', function (Expand $expand) use ($prefix) {
-            $expand->ajax($prefix.'/demo/action/test');
+        $table->expand('quick-edit', function (Expand $expand) use ($prefix) {
+            $expand->ajax($prefix.'/demo/action/quick-edit-form', $expand->items()->toArray());
         })->sortable();
 
         $table->switch('switch');

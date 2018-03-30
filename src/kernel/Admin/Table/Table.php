@@ -69,11 +69,6 @@ class Table extends Widget
     protected $grid;
 
     /**
-     * @var Grid\Edit\Editor
-     */
-    protected $editor;
-
-    /**
      * @var array
      */
     protected $headers = [];
@@ -512,27 +507,6 @@ class Table extends Widget
     }
 
     /**
-     * 快速编辑
-     *
-     * @param Grid\Edit\Editor $editor
-     * @return $this
-     */
-    public function setEditor(Grid\Edit\Editor $editor)
-    {
-        $this->editor = $editor;
-
-        return $this;
-    }
-
-    /**
-     * @return Grid\Edit\Editor|null
-     */
-    public function editor()
-    {
-        return $this->editor;
-    }
-
-    /**
      * Set table rows.
      *
      * @param array $rows
@@ -687,10 +661,6 @@ class Table extends Widget
      */
     public function render()
     {
-        if ($this->editor) {
-            $this->hoverLineEditIcon();
-        }
-
         if ($this->allowRowSelector()) {
             // 添加行选择器到列最前面
             array_unshift($this->columns['front'], new Column(function (Items $items, Td $td, Th $th) {

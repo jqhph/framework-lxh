@@ -71,9 +71,8 @@ class Form implements Renderable
      */
     protected $fields = [];
 
-    public function __construct(Table $table, Items $items, $id, callable $call)
+    public function __construct(Items $items, $id, callable $call)
     {
-        $this->table = $table;
         $this->items = $items;
         $this->id    = $id;
 
@@ -146,11 +145,6 @@ class Form implements Renderable
         endforeach;
 
         return $contents;
-    }
-
-    public function table()
-    {
-        return $this->table;
     }
 
     public function items()

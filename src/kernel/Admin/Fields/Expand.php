@@ -20,6 +20,11 @@ class Expand extends Field
     protected $ajax = null;
 
     /**
+     * @var array
+     */
+    protected $post = [];
+
+    /**
      * @param $color
      * @return $this|mixed
      */
@@ -51,9 +56,10 @@ class Expand extends Field
     {
         $script = '';
         if ($this->ajax) {
+            $post = json_encode($this->post);
             $script = <<<EOF
 var \$c =$(t.data('target'));t.button('loading');t.attr('ajax',1);NProgress.start();
-$.get('$this->ajax',function(d){
+$.post('$this->ajax', {$post}, function(d){
     NProgress.done();
     if (d) 
        \$c.html(d);
@@ -99,12 +105,14 @@ EOF;
     /**
      * 发送ajax请求获取内容
      *
-     * @param $api
+     * @param string $api
+     * @param array  $post
      * @return $this
      */
-    public function ajax($api)
+    public function ajax($api, array $post = [])
     {
         $this->ajax = &$api;
+        $this->post = &$post;
         $this->content = ' ';
         return $this;
     }

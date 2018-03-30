@@ -4,12 +4,11 @@ namespace Lxh\Admin\Grid\Edit;
 
 use Lxh\Admin\Data\Items;
 use Lxh\Admin\Grid;
-use Lxh\Admin\Layout\Column;
-use Lxh\Admin\Layout\Row;
 use Lxh\Admin\Table\Table;
 use Lxh\Cache\Item;
+use Lxh\Contracts\Support\Renderable;
 
-class Editor
+class Editor implements Renderable
 {
     /**
      * @var Grid
@@ -43,11 +42,8 @@ class Editor
      */
     protected $attributes = [];
 
-    public function __construct(Grid $grid, Table $table, callable $call)
+    public function __construct(callable $call)
     {
-        $this->grid = $grid;
-        $this->table = $table;
-
         call_user_func($call, $this);
 
         $this->initFormAttributes();
@@ -76,7 +72,7 @@ class Editor
     {
         return $this->column(function () use ($call) {
             $form = new Form(
-                $this->table, $this->items, $this->id, $call
+                $this->items, $this->id, $call
             );
 
             $class = $this->getElementClass();
@@ -140,7 +136,8 @@ class Editor
     {
         $reset  = trans('Reset');
         $submit = trans('Submit');
-        $calcel = trans('Cancel');
+//        $calcel = trans('Cancel');
+// <button $attr class='btn btn-default waves-effect pull-right cancel'> $calcel </button>
 
         $attr = "data-id='{$this->id}'";
 
@@ -148,7 +145,6 @@ class Editor
 <div class='content'>
 <div class='btn-group pull-left btn-group-sm' style='right:8px'><button $attr type='submit' class=\"btn btn-primary waves-effect pull-right\">$submit</button></div>
 <div class=\"btn-group pull-left btn-group-sm\">
-<button $attr class='btn btn-default waves-effect pull-right cancel'> $calcel </button>
 <button $attr type=\"reset\" class=\"btn btn-default waves-effect pull-right\">$reset&nbsp; <i class=\"fa fa-undo\"></i></button>
 </div><div style='clear:both'></div>
 </div>

@@ -10,7 +10,8 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         version = cache.getToken(),
         configs = LXHSTORE.loaderConfig,
         useCache = configs.save || false,
-        lifetime = configs.lifetime || 8640000;
+        lifetime = configs.lifetime || 8640000,
+        loaded = {};
 
     function Loader(srcs, completed) {
         var queue = [],
@@ -41,6 +42,13 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
             request: function () {
                 var code, i;
                 for (i in queue) {
+                    if (typeof loaded[queue[i]] == 'undefined') {
+                        loaded[queue[i]] = 1;
+                    } else {
+                        is_completed(queue[i]);
+                        continue;
+                    }
+
                     if (queue[i].indexOf('.css') != -1) {
                         async_load_style(queue[i]);
                         continue;
@@ -211,11 +219,13 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 
     // 初始化完成，执行动作
     function call_actions() {
+        lxhActions = parent.lxhActions;
         for (var i in lxhActions) {
             if (typeof lxhActions[i] == 'function') {
                 lxhActions[i].apply(this);
             }
         }
+        lxhActions = parent.lxhActions = [];
         $d.trigger('app.completed');
     }
 
@@ -287,6 +297,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
      * @returns {*}
      */
     function get_used_css(publicCss, v) {
+        cssLibArr = parent.cssLibArr;
         if (typeof cssLibArr != 'undefined') {
             cssLibArr = array_unique(cssLibArr);
             for (var i in cssLibArr) {
@@ -301,7 +312,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
             publicCss[i] = publicCss[i] + '?v=' + v;
         }
 
-        cssLibArr = [];
+        cssLibArr = parent.cssLibArr = [];
         return publicCss;
     }
 
@@ -313,6 +324,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
      * @returns {*}
      */
     function get_used_js(publicJs, version) {
+        jsLibArr = parent.jsLibArr;
         if (typeof jsLibArr != 'undefined') {
             jsLibArr = array_unique(jsLibArr);
             for (var i in jsLibArr) {
@@ -323,7 +335,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
                 }
             }
         }
-        jsLibArr = [];
+        jsLibArr = parent.jsLibArr = [];
 
         var scopes = check_cache_language(config.options.settings.language, config.langScopes, config.options.settings['use-cache']);
         var loads = {};
@@ -356,4 +368,8 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
             return ''
         }
     }
+
+    window.get_used_js = get_used_js;
+    window.get_used_css = get_used_css;
+    window.call_actions = call_actions;
 })(window);

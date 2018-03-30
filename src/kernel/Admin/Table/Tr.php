@@ -6,7 +6,6 @@ use Lxh\Admin\Data\Items;
 use Lxh\Admin\Fields\Field;
 use Lxh\Admin\Fields\Traits\Builder;
 use Lxh\Admin\Grid;
-use Lxh\Admin\Grid\Edit\Editor;
 use Lxh\Admin\Table\Table;
 use Lxh\Admin\Widgets\Widget;
 use Lxh\Admin\Table\Tree;
@@ -53,19 +52,12 @@ class Tr extends Widget
      */
     protected $tier = 1;
 
-    /**
-     * @var Editor
-     */
-    protected $editor;
-
     public function __construct(Table $table, $offset, &$row, array $columns = [])
     {
         $this->table   = $table;
         $this->offset  = $offset;
         $this->items   = new Items($row, $offset);
         $this->columns = &$columns;
-
-        $this->editor = $table->editor();
 
         $this->attribute('data-id', $this->items->get($this->table->idName()));
     }
@@ -105,18 +97,6 @@ class Tr extends Widget
         $this->class('row-list');
 
         $tr = "<tr {$this->formatAttributes()}>{$this->buildColumns()}</tr>";
-
-        if ($this->editor) {
-            // 创建快速编辑表单
-            $id = $this->items->get($this->table->idName());
-
-            $this->editor->setItems($this->items);
-            $this->editor->setId($id);
-
-            $this->table->addExtraRow(
-                $this->editor->render()
-            );
-        }
 
         $name = $this->table->treeName();
 

@@ -3,7 +3,8 @@
         version = cache.getToken(),
         configs = LXHSTORE.loaderConfig,
         useCache = configs.save || false,
-        lifetime = configs.lifetime || 8640000;
+        lifetime = configs.lifetime || 8640000,
+        loaded = {};
 
     function Loader(srcs, completed) {
         var queue = [],
@@ -34,6 +35,13 @@
             request: function () {
                 var code, i;
                 for (i in queue) {
+                    if (typeof loaded[queue[i]] == 'undefined') {
+                        loaded[queue[i]] = 1;
+                    } else {
+                        is_completed(queue[i]);
+                        continue;
+                    }
+
                     if (queue[i].indexOf('.css') != -1) {
                         async_load_style(queue[i]);
                         continue;

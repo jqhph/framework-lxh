@@ -5,6 +5,7 @@ namespace Lxh\Admin;
 use Closure;
 use Lxh\Admin\Layout\Content;
 use Lxh\Admin\Widgets\Navbar;
+use Lxh\Contracts\Support\Renderable;
 use Lxh\Helper\Util;
 use Lxh\MVC\Model;
 use InvalidArgumentException;
@@ -249,6 +250,43 @@ class Admin
         } else {
             static::$loadScripts[] = &$src;
         }
+    }
+
+    /**
+     * 渲染视图的同时加载静态资源
+     *
+     * @param $content
+     */
+    public static function loadAssets($content)
+    {
+        if ($content instanceof Renderable) {
+            $content = $content->render();
+        }
+
+        $jsv  = $GLOBALS['js-version'];
+        $cssv = $GLOBALS['css-version'];
+
+        static::collectFieldAssets();
+        $js      = static::js();
+        $css     = static::css();
+        $script  = static::script();
+        $syncJs  = static::getLoadScripts();
+        $syncCss = static::getLoadStyles();
+
+        ob_start();
+
+        echo "{$syncCss}{$syncJs}<script>{$css}{$js}__then__(function(){ $script });</script>$content";
+        ?>
+<script>
+(function () {
+    // 加载css
+    new LxhLoader(get_used_css([], <?php echo $cssv?>)).request();
+    new LxhLoader(get_used_js([], <?php echo $jsv?>), call_actions).request();
+})();
+</script>
+        <?php
+
+        return ob_get_clean();
     }
 
     /**

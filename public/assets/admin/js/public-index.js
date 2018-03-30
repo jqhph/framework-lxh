@@ -154,8 +154,7 @@
     $('.batch-to-trash').click(public.batchMoveToTrash.bind(public));
     $('.batch-restore').click(public.batchRestore.bind(public));
     $('.batch-delete-permanently').click(public.batchDeletePermanently.bind(public));
-    $('.quick-edit-btn').click(public.quickEdit.bind(public));
-    $('.quick-edit .cancel').click(public.quickEditCancel.bind(public));
+
     __then__(function () {
         ntf = $lxh.ui().notify();
         // 行选择器点击事件
@@ -167,8 +166,6 @@
             $('a[data-action="restore"]').click(public.restore.bind(public));
             $('a[data-action="delete-permanently"]').click(public.deletePermanently.bind(public));
             $('a[data-action="trash"]').click(public.moveToTrash.bind(public));
-            $('.quick-edit-btn').click(public.quickEdit.bind(public));
-            $('.quick-edit .cancel').click(public.quickEditCancel.bind(public));
 
             allInput = $('input[data-action="select-all"]');
             // 反选点击事件
