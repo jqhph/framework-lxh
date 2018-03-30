@@ -6,6 +6,7 @@ use Lxh\Admin\Cards\Cards;
 use Lxh\Admin\Data\Items;
 use Lxh\Admin\Fields\Button;
 use Lxh\Admin\Filter\AbstractFilter;
+use Lxh\Admin\Grid\Edit\Editor;
 use Lxh\Admin\Grid\LayoutSwitcher;
 use Lxh\Admin\Grid\TrashButtons;
 use Lxh\Admin\Layout\Row;
@@ -175,6 +176,8 @@ class Grid implements Renderable
         'allowedBatchRestore'           => false,
         // 刷新按钮
         'allowedRefresh'                => true,
+        // 切换快速编辑模式
+        'quickEdit'                     => false,
     ];
 
     /**
@@ -301,6 +304,21 @@ class Grid implements Renderable
     public function getLayout()
     {
         return $this->layout;
+    }
+
+    /**
+     * 快速编辑
+     *
+     * @param callable $callback
+     * @return $this
+     */
+    public function quickEdit(callable $callback)
+    {
+        $this->options['quickEdit'] = $callback;
+
+        Admin::js('@lxh/js/validate.min');
+
+        return $this;
     }
 
     /**
@@ -984,7 +1002,15 @@ class Grid implements Renderable
             $this->buildRowActions();
         }
 
-        $table = $this->table()->setRows($list)->render();
+        $table = $this->table();
+
+        if ($callback = $this->options['quickEdit']) {
+            $edit = new Editor($this, $table, $callback);
+
+            $table->setEditor($edit);
+        }
+
+        $table = $table->setRows($list)->render();
 
         $class = 'table-responsive';
         if (!$this->options['useRWD']) {

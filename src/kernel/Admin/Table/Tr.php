@@ -5,6 +5,8 @@ namespace Lxh\Admin\Table;
 use Lxh\Admin\Data\Items;
 use Lxh\Admin\Fields\Field;
 use Lxh\Admin\Fields\Traits\Builder;
+use Lxh\Admin\Grid;
+use Lxh\Admin\Grid\Edit\Editor;
 use Lxh\Admin\Table\Table;
 use Lxh\Admin\Widgets\Widget;
 use Lxh\Admin\Table\Tree;
@@ -51,12 +53,21 @@ class Tr extends Widget
      */
     protected $tier = 1;
 
+    /**
+     * @var Editor
+     */
+    protected $editor;
+
     public function __construct(Table $table, $offset, &$row, array $columns = [])
     {
-        $this->table = $table;
-        $this->offset = $offset;
-        $this->items = new Items($row, $offset);
+        $this->table   = $table;
+        $this->offset  = $offset;
+        $this->items   = new Items($row, $offset);
         $this->columns = &$columns;
+
+        $this->editor = $table->editor();
+
+        $this->attribute('data-id', $this->items->get($this->table->idName()));
     }
 
     public function setTier($tier)
@@ -91,7 +102,21 @@ class Tr extends Widget
      */
     public function render()
     {
+        $this->class('row-list');
+
         $tr = "<tr {$this->formatAttributes()}>{$this->buildColumns()}</tr>";
+
+        if ($this->editor) {
+            // 创建快速编辑表单
+            $id = $this->items->get($this->table->idName());
+
+            $this->editor->setItems($this->items);
+            $this->editor->setId($id);
+
+            $this->table->addExtraRow(
+                $this->editor->render()
+            );
+        }
 
         $name = $this->table->treeName();
 
@@ -124,7 +149,7 @@ class Tr extends Widget
     }
 
     /**
-     * 树状结构
+     * 层级结构
      *
      * @param string $name
      * @param array $rows
@@ -158,6 +183,12 @@ class Tr extends Widget
         return $tdString;
     }
 
+    /**
+     * 渲染默认隐藏的拓展字段
+     *
+     * @param $expand
+     * @return string
+     */
     protected function renderColumnExpand($expand)
     {
         $content = '';
@@ -166,6 +197,8 @@ class Tr extends Widget
                 $content .= $e($this->items);
             } elseif ($e instanceof Renderable) {
                 $content .= $e->render();
+            } else {
+                $content .= $e;
             }
         }
 
@@ -173,13 +206,32 @@ class Tr extends Widget
     }
 
     /**
+     * 获取字段值
+     *
+     * @param $field
+     * @param $options
+     * @return string
+     */
+    protected function normalize($field, &$options)
+    {
+        $value = $this->items->get($field);
+
+        if ($append = get_value($options, 'append')) {
+            $value .= implode(' ', $append);
+        }
+
+        return $value;
+    }
+
+    /**
      * @param $tdString
      * @param $field
      * @param $options
+     * @return void
      */
     protected function renderColumns(&$tdString, &$field, &$options)
     {
-        $value = $this->items->get($field);
+        $value = $this->normalize($field, $options);
 
         $td = $this->buildTd($field, $value);
 
@@ -203,12 +255,16 @@ class Tr extends Widget
 
         // 没有定义视图，字段原样显示
         if (! $options || ! is_array($options)) {
+            $td->value($value . $expandContent);
+
             $tdString .= $td->render();
             return;
         }
 
         $view = get_value($options, 'view');
         if (! $view) {
+            $td->value($value . $expandContent);
+
             $tdString .= $td->render();
             return;
         }

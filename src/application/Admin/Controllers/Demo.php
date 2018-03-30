@@ -255,6 +255,24 @@ class Demo extends Controller
         ");
 
         $grid->tools()->prepend($preview);
+
+        // 快速编辑示例
+        $grid->quickEdit(function (Grid\Edit\Editor $editor) {
+            $editor->form(function (Grid\Edit\Form $form) {
+                $form->text('text')->width(3);
+                $form->select('select')->options(range(0, 5))->width(3);
+            }, 8);
+
+            $editor->form(function (Grid\Edit\Form $form) {
+                $form->text('4测试')->width(6);
+                $form->text('4什么鬼')->width(6);
+
+                $form->text('4测试')->width(6);
+                $form->text('4什么鬼')->width(6);
+            }, 4);
+
+
+        });
     }
 
     public function actionGridCodePreview()
@@ -275,7 +293,7 @@ class Demo extends Controller
     protected function table(Table $table)
     {
         $table->code('id')->hide()->sortable();
-        $table->editable('text')->th(function (Th $th) {
+        $table->text('text')->th(function (Th $th) {
             // 设置标题颜色
             $th->style('color:green;font-weight:600');
             // 设置属性

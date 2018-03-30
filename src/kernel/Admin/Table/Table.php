@@ -69,6 +69,11 @@ class Table extends Widget
     protected $grid;
 
     /**
+     * @var Grid\Edit\Editor
+     */
+    protected $editor;
+
+    /**
      * @var array
      */
     protected $headers = [];
@@ -136,9 +141,9 @@ class Table extends Widget
     protected $rowSelector = null;
 
     /**
-     * @var string
+     * @var []
      */
-    protected $nextRow = '';
+    protected $nextRows = [];
 
     /**
      * @var int
@@ -219,7 +224,7 @@ class Table extends Widget
      */
     public function addExtraRow($content)
     {
-        $this->nextRow = &$content;
+        $this->nextRows[] = &$content;
         return $this;
     }
 
@@ -283,6 +288,17 @@ class Table extends Widget
         }
         $this->headers[$this->field]['expand'][] = &$content;
         return $this;
+    }
+
+    protected function hoverLineEditIcon()
+    {
+        foreach ($this->headers as $field => &$header) {
+            if (!empty($header['hide'])) {
+                continue;
+            }
+            $header['append'][] = '<a class="hover quick-edit-btn">  &nbsp;<i class="fa fa-pencil"></i></a>';
+            break;
+        }
     }
 
     public function hoverAheadColumn($content)
@@ -496,6 +512,27 @@ class Table extends Widget
     }
 
     /**
+     * 快速编辑
+     *
+     * @param Grid\Edit\Editor $editor
+     * @return $this
+     */
+    public function setEditor(Grid\Edit\Editor $editor)
+    {
+        $this->editor = $editor;
+
+        return $this;
+    }
+
+    /**
+     * @return Grid\Edit\Editor|null
+     */
+    public function editor()
+    {
+        return $this->editor;
+    }
+
+    /**
      * Set table rows.
      *
      * @param array $rows
@@ -584,10 +621,8 @@ class Table extends Widget
     {
         $trString = '';
         foreach ($this->rows as $k => &$row) {
-            if ($this->nextRow) {
-                $trString .= 
-                    "<tr><td colspan='{$this->totalColumns()}' style='padding:0;border:0;'>{$this->nextRow}</td></tr>";
-                $this->nextRow = '';
+            if ($this->nextRows) {
+                $trString .= $this->renderExtraRows();
             }
 
             $tr = $this->buildTr($k, $row);
@@ -597,12 +632,22 @@ class Table extends Widget
 
             $trString .= $tr->render();
         }
-        if ($this->nextRow) {
-            $trString .=
-                "<tr><td colspan='{$this->totalColumns()}' style='padding:0;border:0;'>{$this->nextRow}</td></tr>";
-            $this->nextRow = '';
+        if ($this->nextRows) {
+            $trString .= $this->renderExtraRows();
         }
         return $trString;
+    }
+
+    protected function renderExtraRows()
+    {
+        $rows = '';
+        foreach ($this->nextRows as &$row) {
+            $rows .= "<tr><td colspan='{$this->totalColumns()}' style='padding:0;border:0;'>{$row}</td></tr>";
+        }
+
+        $this->nextRows = [];
+
+        return $rows;
     }
 
     /**
@@ -642,6 +687,10 @@ class Table extends Widget
      */
     public function render()
     {
+        if ($this->editor) {
+            $this->hoverLineEditIcon();
+        }
+
         if ($this->allowRowSelector()) {
             // 添加行选择器到列最前面
             array_unshift($this->columns['front'], new Column(function (Items $items, Td $td, Th $th) {

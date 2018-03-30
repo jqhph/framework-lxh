@@ -942,8 +942,6 @@ class Field implements Renderable
         $prepend = '';
         if ($this->form) {
             $prepend = '.' . $this->form->getElementClass();
-        } elseif ($this->filter) {
-            $prepend = '#' . $this->filter->getContainerId();
         }
 
         return $prepend . ' .' . implode('.', $elementClass);

@@ -146,12 +146,6 @@ class Form implements Renderable
     protected $attributes = [];
 
     /**
-     * 需要异步加载的js
-     * @var array
-     */
-    protected $asyncJs = [];
-
-    /**
      * @var array
      */
     protected $options = [
@@ -299,7 +293,7 @@ class Form implements Renderable
     }
 
     /**
-     * 获取元素
+     * 获取css类
      *
      * @return string
      */

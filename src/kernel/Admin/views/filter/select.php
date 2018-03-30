@@ -3,7 +3,14 @@
     <select class="form-control <?php echo $class ?>" style="width: 100%;" name="<?php echo $name ?>" <?php echo $attributes ?> >
         <option></option>
         <?php foreach($options as &$option): ?>
-            <option value="<?php echo $option['value'] ?>" <?php echo  $option['value'] === $value ?'selected':''  ?>><?php echo $option['label'] ?></option>
+            <option value="<?php echo $option['value'] ?>" <?php
+            if ($option['value'] === 0 || $option['value'] === '0') {
+                echo  ((int)$option['value']) == (int)$value ?'selected':'';
+            } else {
+                echo  $option['value'] == $value ?'selected':'';
+            }
+
+            ?>><?php echo $option['label'] ?></option>
         <?php endforeach; ?>
     </select>
 </div>

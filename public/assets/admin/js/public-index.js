@@ -128,7 +128,20 @@
         // 批量永久删除
         batchDeletePermanently: function (e) {
             this.batchDelete(e)
-        }
+        },
+        // 快速编辑
+        quickEdit: function (e) {
+            var _t = $(e.currentTarget), tr = _t.parents('.row-list');
+            tr.hide();
+            $('.edit-' + tr.data('id')).show();
+        },
+        // 取消快速编辑
+        quickEditCancel: function (e) {
+            var _t = $(e.currentTarget), id = _t.data('id');
+            $('.edit-' + id).hide();
+            $('tr[data-id="'+id+'"]').show();
+            return false; 
+        },
     };
 
     // 绑定删除事件
@@ -140,6 +153,8 @@
     $('.batch-to-trash').click(public.batchMoveToTrash.bind(public));
     $('.batch-restore').click(public.batchRestore.bind(public));
     $('.batch-delete-permanently').click(public.batchDeletePermanently.bind(public));
+    $('.quick-edit-btn').click(public.quickEdit.bind(public));
+    $('.quick-edit .cancel').click(public.quickEditCancel.bind(public));
     __then__(function () {
         ntf = $lxh.ui().notify();
         // 行选择器点击事件
@@ -151,6 +166,8 @@
             $('a[data-action="restore"]').click(public.restore.bind(public));
             $('a[data-action="delete-permanently"]').click(public.deletePermanently.bind(public));
             $('a[data-action="trash"]').click(public.moveToTrash.bind(public));
+            $('.quick-edit-btn').click(public.quickEdit.bind(public));
+            $('.quick-edit .cancel').click(public.quickEditCancel.bind(public));
 
             allInput = $('input[data-action="select-all"]');
             // 反选点击事件
