@@ -55,11 +55,13 @@ class Expand extends Field
     protected function setupScript($id)
     {
         $script = '';
+
+        $post = json_encode($this->post);
+
         if ($this->ajax) {
-            $post = json_encode($this->post);
             $script = <<<EOF
-var \$c =$(t.data('target'));t.button('loading');t.attr('ajax',1);NProgress.start();
-$.post('$this->ajax', {$post}, function(d){
+var targ = t.data('target'), \$c =$(targ);t.button('loading');t.attr('ajax',1);NProgress.start();
+$.post('$this->ajax', window['expandpost'+targ.replace('#', '')], function(d){
     NProgress.done();
     if (d) 
        \$c.html(d);
@@ -73,6 +75,10 @@ $.post('$this->ajax', {$post}, function(d){
 });
 EOF;
         }
+
+        // 保存post数据
+        Admin::script("window['expandpost{$id}']=$post;");
+
         $this->script('expand', <<<SCRIPT
 $('.grid-expand').click(function(){
     var t = $(this),
@@ -124,7 +130,7 @@ EOF;
     public function content($content)
     {
         if ($content instanceof $content) {
-            $this->content = $content($this, $this->tr);
+            $this->content = $content($this->items);
         } else {
             $this->content = $content;
         }
