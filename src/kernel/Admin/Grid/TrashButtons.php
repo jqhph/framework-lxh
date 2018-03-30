@@ -76,7 +76,7 @@ class TrashButtons
                 $r($this, $items);
             }
 
-            $id = $items->get($this->grid->idName());
+            $id = $items->get($this->grid->getKeyName());
 
             $model = __CONTROLLER__;
 

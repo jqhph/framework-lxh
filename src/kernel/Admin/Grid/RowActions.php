@@ -100,7 +100,7 @@ class RowActions extends TrTools
     public function getId()
     {
         return $this->items->get(
-            $this->grid->idName()
+            $this->grid->getKeyName()
         );
     }
 

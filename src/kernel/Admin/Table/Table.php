@@ -146,6 +146,11 @@ class Table extends Widget
     protected $totalColumns = 0;
 
     /**
+     * @var bool
+     */
+    protected $useQuickEdit = false;
+
+    /**
      * Table constructor.
      *
      * @param array $headers
@@ -208,18 +213,19 @@ class Table extends Widget
      *
      * @return string
      */
-    public function idName()
+    public function getKeyName()
     {
-        return $this->grid->idName();
+        return $this->grid->getKeyName();
     }
 
     /**
-     * @param $content
+     * @param mixed $content
+     * @param bool $active
      * @return $this
      */
-    public function addExtraRow($content)
+    public function addExtraRow($content, $active = false)
     {
-        $this->nextRows[] = &$content;
+        $this->nextRows[] = ['content' => &$content, 'active' => $active];
         return $this;
     }
 
@@ -285,15 +291,26 @@ class Table extends Widget
         return $this;
     }
 
-    protected function hoverLineEditIcon()
+    /**
+     * 开启快速编辑模式
+     *
+     * @return $this
+     */
+    public function quickEdit()
     {
-        foreach ($this->headers as $field => &$header) {
-            if (!empty($header['hide'])) {
-                continue;
-            }
-            $header['append'][] = '<a class="hover quick-edit-btn">  &nbsp;<i class="fa fa-pencil"></i></a>';
-            break;
+        if (! $this->field) {
+            return $this;
         }
+        $this->headers[$this->field]['quick-edit'][] = '<a class="hover quick-edit-btn">  &nbsp;<i class="fa fa-pencil"></i></a>';
+
+        $this->useQuickEdit = true;
+
+        return $this;
+    }
+
+    public function allowedQuickEdit()
+    {
+        return $this->useQuickEdit;
     }
 
     public function hoverAheadColumn($content)
@@ -616,7 +633,12 @@ class Table extends Widget
     {
         $rows = '';
         foreach ($this->nextRows as &$row) {
-            $rows .= "<tr><td colspan='{$this->totalColumns()}' style='padding:0;border:0;'>{$row}</td></tr>";
+            $class = '';
+            if ($row['active']) {
+                $class = 'class="active"';
+            }
+
+            $rows .= "<tr $class><td colspan='{$this->totalColumns()}' style='padding:0;border:0;'>{$row['content']}</td></tr>";
         }
 
         $this->nextRows = [];

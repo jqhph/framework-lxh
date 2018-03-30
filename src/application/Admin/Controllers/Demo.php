@@ -259,6 +259,11 @@ class Demo extends Controller
 
     public function actionQuickEditForm(array $params)
     {
+        $id = I('id');
+        if (! $id) {
+            return '';
+        }
+
         $editor = new Grid\Edit\Editor(function (Grid\Edit\Editor $editor) {
             $editor->form(function (Grid\Edit\Form $form) {
                 $form->text('text')->width(6);
@@ -288,12 +293,10 @@ class Demo extends Controller
 
         });
 
-        $items = new Items($_POST);
+        $items = new Items($this->model()->setId($id)->find());
 
         $editor->setItems($items);
-        $editor->setId($items->get(
-            $this->model()->getKeyName()
-        ));
+        $editor->setId($id);
 
         return Admin::loadAssets($editor);
     }
@@ -316,7 +319,7 @@ class Demo extends Controller
     protected function table(Table $table)
     {
         $table->code('id')->hide()->sortable();
-        $table->editable('text')->th(function (Th $th) {
+        $table->text('text')->th(function (Th $th) {
             // 设置标题颜色
             $th->style('color:green;font-weight:600');
             // 设置属性
@@ -325,12 +328,12 @@ class Demo extends Controller
             $th->value('<span>TEXT</span>');
         })->hover(function (Items $items) {
             return '<div class="red">啦啦啦~</div>';
-        });
+        })->quickEdit();
 
         $prefix = '/' . config('admin.route-prefix');
 
-        $table->expand('quick-edit', function (Expand $expand) use ($prefix) {
-            $expand->ajax($prefix.'/demo/action/quick-edit-form', $expand->items()->toArray());
+        $table->expand('expand', function (Expand $expand) use ($prefix) {
+            $expand->ajax($prefix.'/demo/action/test');
         })->sortable();
 
         $table->switch('switch');

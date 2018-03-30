@@ -269,7 +269,7 @@ class Grid implements Renderable
      *
      * @return string
      */
-    public function idName()
+    public function getKeyName()
     {
         return $this->idName;
     }

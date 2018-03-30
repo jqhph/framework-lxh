@@ -11,7 +11,9 @@
         offset:'t',
         skin: 'layer-ext-moon'
     },
-        ntf;
+        ntf,
+        n = NProgress,
+        requesting = 0;
     var public = {
         delete: function (e, method, title) {
             method = method || 'delete';
@@ -131,15 +133,35 @@
         },
         // 快速编辑
         quickEdit: function (e) {
-            var _t = $(e.currentTarget), tr = _t.parents('.row-list');
-            tr.hide();
-            $('.edit-' + tr.data('id')).show();
-            LXHSTORE.IFRAME.height();
+            if (requesting) return;
+            requesting = 1;
+            var _t = $(e.currentTarget), tr = _t.parents('.row-list'), id = tr.data('id'), $t;
+
+            if (!tr.attr('loadeditform')) {
+                tr.attr('loadeditform', 1);
+                n.start();
+                $.get('/' + LXHSTORE.ROUTEPREFIX + '/' + to_under_score(__CONTROLLER__) + '/action/quick-edit-form?_log&id=' + id, function (data) {
+                    n.done();
+                    $t = $('.quick-edit-' + id);
+                    $t.html(data);
+                    show();
+                    $t.find('.cancel').click(public.quickEditCancel.bind(public));
+                });
+            } else {
+                show();
+            }
+
+            function show() {
+                requesting = 0;
+                $('.quick-edit-' + id).show();
+                tr.hide();
+                LXHSTORE.IFRAME.height();
+            }
         },
         // 取消快速编辑
         quickEditCancel: function (e) {
             var _t = $(e.currentTarget), id = _t.data('id');
-            $('.edit-' + id).hide();
+            $('.quick-edit-' + id).hide();
             $('tr[data-id="'+id+'"]').show();
             return false; 
         },
@@ -154,6 +176,7 @@
     $('.batch-to-trash').click(public.batchMoveToTrash.bind(public));
     $('.batch-restore').click(public.batchRestore.bind(public));
     $('.batch-delete-permanently').click(public.batchDeletePermanently.bind(public));
+    $('.quick-edit-btn').click(public.quickEdit.bind(public));
 
     __then__(function () {
         ntf = $lxh.ui().notify();
@@ -166,6 +189,7 @@
             $('a[data-action="restore"]').click(public.restore.bind(public));
             $('a[data-action="delete-permanently"]').click(public.deletePermanently.bind(public));
             $('a[data-action="trash"]').click(public.moveToTrash.bind(public));
+            $('.quick-edit-btn').click(public.quickEdit.bind(public));
 
             allInput = $('input[data-action="select-all"]');
             // 反选点击事件

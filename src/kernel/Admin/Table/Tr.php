@@ -2,6 +2,7 @@
 
 namespace Lxh\Admin\Table;
 
+use Lxh\Admin\Admin;
 use Lxh\Admin\Data\Items;
 use Lxh\Admin\Fields\Field;
 use Lxh\Admin\Fields\Traits\Builder;
@@ -32,6 +33,13 @@ class Tr extends Widget
     protected $offset = 0;
 
     /**
+     * 主键
+     *
+     * @var mixed
+     */
+    protected $id;
+
+    /**
      * 行数据
      *
      * @var Items
@@ -59,7 +67,9 @@ class Tr extends Widget
         $this->items   = new Items($row, $offset);
         $this->columns = &$columns;
 
-        $this->attribute('data-id', $this->items->get($this->table->idName()));
+        $this->id = $this->items->get($this->table->getKeyName());
+
+        $this->attribute('data-id', $this->id);
     }
 
     public function setTier($tier)
@@ -97,6 +107,13 @@ class Tr extends Widget
         $this->class('row-list');
 
         $tr = "<tr {$this->formatAttributes()}>{$this->buildColumns()}</tr>";
+        
+        if ($this->table->allowedQuickEdit()) {
+            $this->table->addExtraRow("<div class=\"quick-edit-{$this->id}\"></div>", true);
+            // 保存post数据到全局变量
+//            $post = json_encode($this->items()->toArray());
+//            Admin::script("window['quickedit{$this->id}']=$post;");
+        }
 
         $name = $this->table->treeName();
 
@@ -196,7 +213,7 @@ class Tr extends Widget
     {
         $value = $this->items->get($field);
 
-        if ($append = get_value($options, 'append')) {
+        if ($append = get_value($options, 'quick-edit')) {
             $value .= implode(' ', $append);
         }
 

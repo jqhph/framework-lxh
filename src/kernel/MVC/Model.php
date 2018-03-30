@@ -126,7 +126,7 @@ class Model extends Entity
      * @param $name
      * @return $this
      */
-    public function setIdName($name)
+    public function setKeyName($name)
     {
         $this->primaryKeyName = $name;
         return $this;

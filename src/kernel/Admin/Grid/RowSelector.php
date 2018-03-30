@@ -40,7 +40,7 @@ class RowSelector extends Widget
      */
     public function render()
     {
-        return "<input name='tb-row[]' type='checkbox' value='{$this->items->get($this->grid->idName())}' {$this->formatAttributes()}/>";
+        return "<input name='tb-row[]' type='checkbox' value='{$this->items->get($this->grid->getKeyName())}' {$this->formatAttributes()}/>";
     }
 
     /**

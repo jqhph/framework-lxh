@@ -136,8 +136,7 @@ class Editor implements Renderable
     {
         $reset  = trans('Reset');
         $submit = trans('Submit');
-//        $calcel = trans('Cancel');
-// <button $attr class='btn btn-default waves-effect pull-right cancel'> $calcel </button>
+        $calcel = trans('Cancel');
 
         $attr = "data-id='{$this->id}'";
 
@@ -145,6 +144,7 @@ class Editor implements Renderable
 <div class='content'>
 <div class='btn-group pull-left btn-group-sm' style='right:8px'><button $attr type='submit' class=\"btn btn-primary waves-effect pull-right\">$submit</button></div>
 <div class=\"btn-group pull-left btn-group-sm\">
+<button $attr class='btn btn-default waves-effect pull-right cancel'> $calcel </button>
 <button $attr type=\"reset\" class=\"btn btn-default waves-effect pull-right\">$reset&nbsp; <i class=\"fa fa-undo\"></i></button>
 </div><div style='clear:both'></div>
 </div>
