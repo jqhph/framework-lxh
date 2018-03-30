@@ -17,6 +17,13 @@ class Field extends \Lxh\Admin\Form\Field
         $this->form  = $form;
         $this->items = $form->items();
 
+        $this->setupValue();
+
+        return $this;
+    }
+
+    protected function setupValue()
+    {
         if ($this->value === false) return $this;
         // Field value is already setted.
         if (is_array($this->column)) {
@@ -28,7 +35,5 @@ class Field extends \Lxh\Admin\Form\Field
         }
 
         $this->value = $this->items->get($this->column);
-
-        return $this;
     }
 }

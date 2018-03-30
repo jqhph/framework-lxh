@@ -134,6 +134,7 @@
             var _t = $(e.currentTarget), tr = _t.parents('.row-list');
             tr.hide();
             $('.edit-' + tr.data('id')).show();
+            LXHSTORE.IFRAME.height();
         },
         // 取消快速编辑
         quickEditCancel: function (e) {

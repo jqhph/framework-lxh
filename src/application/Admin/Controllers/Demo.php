@@ -259,18 +259,32 @@ class Demo extends Controller
         // 快速编辑示例
         $grid->quickEdit(function (Grid\Edit\Editor $editor) {
             $editor->form(function (Grid\Edit\Form $form) {
-                $form->text('text')->width(3);
-                $form->select('select')->options(range(0, 5))->width(3);
-            }, 8);
+                $form->text('text')->width(6);
+                $form->select('select')->options(range(0, 5))->width(6);
 
-            $editor->form(function (Grid\Edit\Form $form) {
-                $form->text('4测试')->width(6);
-                $form->text('4什么鬼')->width(6);
+                $form->multipleSelect('multiple-select')->options(range(1, 10))->width(12);
 
-                $form->text('4测试')->width(6);
-                $form->text('4什么鬼')->width(6);
+                $form->radio('radio')->options(range(1, 4))->width(6);
+
+                $form->checkbox('checkbox')->options(range(1, 4))->width(6);
+
             }, 4);
 
+            $editor->form(function (Grid\Edit\Form $form) {
+                $form->date('date')->width(6);
+                $form->datetime('datetime')->width(6);
+
+                $form->text('text2')->width(12);
+
+                $form->selectTree('select-tree')->options(auth()->menu()->get())->width(12);
+            }, 4);
+
+            $editor->form(function (Grid\Edit\Form $form) {
+                $form->textarea('textarea')->width(12);
+
+
+
+            }, 4);
 
         });
     }
@@ -313,7 +327,9 @@ class Demo extends Controller
         $table->switch('switch');
         $table->checked('checked');
         $table->date('date');
-        $table->select('select');
+        $table->editable('select', function (Editable $editable) {
+            $editable->select(range(0, 5));
+        });
 
         /**
          * 字段显示内容自定义：使用匿名函数可以更灵活的定义想要的内容
