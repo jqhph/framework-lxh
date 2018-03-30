@@ -275,10 +275,11 @@ class Admin
 
         ob_start();
 
-        echo "{$syncCss}{$syncJs}<script>{$css}{$js}__then__(function(){ $script });</script>$content";
+        echo "{$syncCss}{$syncJs}{$content}";
         ?>
 <script>
 (function () {
+    <?php echo "{$css}{$js}__then__(function(){ $script });"?>
     // 加载css
     new LxhLoader(get_used_css([], <?php echo $cssv?>)).request();
     new LxhLoader(get_used_js([], <?php echo $jsv?>), call_actions).request();
