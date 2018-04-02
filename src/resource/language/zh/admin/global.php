@@ -50,7 +50,8 @@ return array (
     'Showing' => '显示',
     'Home' => '主页',
     'desc' => '描述',
-      'Refresh' => '刷新'
+      'Refresh' => '刷新',
+      'Submit' => '提交',
   ),
   'fields' => 
   array (

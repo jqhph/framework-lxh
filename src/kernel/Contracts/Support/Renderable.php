@@ -5,9 +5,7 @@ namespace Lxh\Contracts\Support;
 interface Renderable
 {
     /**
-     * Get the instance as an array.
-     *
-     * @return array
+     * @return string
      */
     public function render();
 }

@@ -320,7 +320,6 @@ function __user__()
 
 }
 
-
 /**
  * 获取用户信息管理对象
  *
@@ -697,6 +696,18 @@ function is_prod()
 function config($key = null, $default = null)
 {
     return $GLOBALS['CONFIG']->get($key, $default);
+}
+
+/**
+ * 获取网站配置信息
+ *
+ * @param string $key
+ * @param mixed $default
+ * @return mixed
+ */
+function get_option($key, $default = null)
+{
+
 }
 
 /**

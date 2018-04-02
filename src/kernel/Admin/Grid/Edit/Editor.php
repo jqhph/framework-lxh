@@ -42,9 +42,9 @@ class Editor implements Renderable
      */
     protected $attributes = [];
 
-    public function __construct(callable $call)
+    public function __construct(callable $call = null)
     {
-        call_user_func($call, $this);
+        $call && call_user_func($call, $this);
 
         $this->initFormAttributes();
     }

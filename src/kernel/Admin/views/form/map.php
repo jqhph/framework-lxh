@@ -4,7 +4,7 @@
         <div class="input-group" <?php if (!$append) {echo 'style="width:100%"';}?>>
             <input class="form-control " style="display:inline-block;width:44%;max-width:280px" type="float" id="<?php echo $id['lat'] ?>" name="<?php echo $name['lat'] ?>" value="<?php echo isset($value['lat']) ? $value['lat'] : $defaultValue['lat']?>"  placeholder="<?php echo trans('latitude');?>" />
             <input class="form-control " style="margin-left:12px;display:inline-block;width:44%;max-width:280px" type="float" id="<?php echo $id['lng'] ?>" name="<?php echo $name['lng'] ?>" value="<?php echo isset($value['lng']) ? $value['lng'] : $defaultValue['lng']?>"   placeholder="<?php echo trans('longitude');?>" />
-            <a class='btn btn-primary search-map' style="margin-top:2px;"><i class='fa fa-search'></i></a>
+            <a class='btn btn-primary search-map' style="margin-top:5.5px;"><i class='fa fa-search'></i></a>
             <?php if ($help) {
                 echo view('admin::form.help-block', ['help' => &$help])->render();
             }?>
