@@ -173,7 +173,7 @@ class Th extends Widget
             'desc' => $desc
         ]);
         
-        return "&nbsp;&nbsp;<a class=\"fa $icon\" href=\"{$url->string()}\" style='color:#fe8f81'></a>";
+        return "&nbsp;&nbsp;<a class=\"fa $icon blue\" href=\"{$url->string()}\"></a>";
     }
 
     /**

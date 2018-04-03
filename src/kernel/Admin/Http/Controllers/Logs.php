@@ -39,6 +39,7 @@ class Logs extends Controller
     {
         // 指定模型名称
         Admin::model(LogsModel::class);
+        sleep(20);
     }
 
     /**
@@ -59,8 +60,14 @@ class Logs extends Controller
      */
     protected function filter(Filter $filter)
     {
-        $filter->text('table')->minlen(3)->like();
+        $filter->text('table');
         $filter->text('input')->minlen(5)->like();
+        $filter->text('path');
+        $filter->text('ip')->where(function () {
+            $ip = I('ip');
+
+            return $ip ? ip2long($ip) : false;
+        });
         $filter->select('admin_id')->options(array_flip($this->findAdminsNameKeyById()->all()));
     }
 
@@ -92,6 +99,14 @@ class Logs extends Controller
             4 => ['DELETE', 'danger'],
             5 => ['OPTION', 'info'],
         ];
+
+        $table->label('table', function (Label $label) {
+            $label->color('purple');
+        });
+        $table->code('input')->th(function (Th $th) {
+            $th->style('width:50%;');
+        });
+
         $table->column('method')->display(function ($value) use ($methods) {
             $label = new Label('method', $methods[$value][0]);
 
@@ -104,12 +119,6 @@ class Logs extends Controller
         });
 
         $table->ip('ip');
-        $table->label('table', function (Label $label) {
-            $label->color('purple');
-        });
-        $table->code('input')->th(function (Th $th) {
-            $th->style('width:50%;');
-        });
 
         $types = [
             0 => ['其他', 'info'],

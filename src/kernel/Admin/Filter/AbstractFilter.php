@@ -98,7 +98,7 @@ abstract class AbstractFilter
             // 自定义处理器处理
             $condition = call_user_func($this->conditionHandler, $field, $this);
 
-            return $condition === null ? false : ($key ? [$key => &$condition] : $condition);
+            return ($condition === null || $condition === false) ? false : ($key ? [$key => &$condition] : $condition);
         }
 
         $input = trim(I($field));
