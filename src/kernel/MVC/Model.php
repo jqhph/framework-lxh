@@ -583,6 +583,17 @@ class Model extends Entity
     }
 
     /**
+     * 批量写操作
+     *
+     * @param array $inputs
+     * @return bool
+     */
+    public function batchAdd(array &$inputs)
+    {
+        return $this->query()->batchInsert($inputs);
+    }
+
+    /**
      * replace
      *
      * @return bool

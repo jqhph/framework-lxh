@@ -38,8 +38,8 @@ class Admin extends User
     {
         $this->username      = $options['username'];
         $this->password      = Password::encrypt($options['password']);
-        $this->reg_ip        = $ip;
-        $this->last_login_ip = $ip;
+        $this->reg_ip        = ip2long($ip);
+        $this->last_login_ip = ip2long($ip);
         $this->created_at    = time();
 
         return $this->add();
@@ -49,9 +49,9 @@ class Admin extends User
     {
         parent::beforeAdd($input);
 
-        $input['created_at'] = time();
+        $input['created_at']    = time();
         $input['created_by_id'] = __admin__()->getId() ?: 0;
-        $input['password'] = Password::encrypt($input['password']);
+        $input['password']      = Password::encrypt($input['password']);
 
         if (isset($input['roles'])) {
             $this->roles = $input['roles'];
@@ -174,7 +174,7 @@ class Admin extends User
      * @param  string $username
      * @param  string $password
      * @param  array  $options
-     * @return array
+     * @return array|false
      */
     public function login($account, $password, array $options = [])
     {
@@ -195,7 +195,18 @@ class Admin extends User
             return false;
         }
 
+        $this->afterLogin($userData);
+
         return $userData;
+    }
+
+    protected function afterLogin(array &$items)
+    {
+        // 保存用户最后登录ip
+        if ($id = $items[$this->getKeyName()]) {
+            $this->setId($id);
+            $this->last_login_ip = ip2long(request()->ip());
+        }
     }
 
     /**

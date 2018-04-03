@@ -357,6 +357,20 @@ function logger($channel = 'primary')
 }
 
 /**
+ * 操作日志
+ *
+ * @return \Lxh\OperationsLogger\Logger
+ */
+function operations_logger()
+{
+    static $logger;
+
+    if ($logger) return $logger;
+
+    return $logger = new \Lxh\OperationsLogger\Logger();
+}
+
+/**
  *
  * @param \Lxh\OAuth\Database\User|null $user
  * @return \Lxh\Auth\AuthManager

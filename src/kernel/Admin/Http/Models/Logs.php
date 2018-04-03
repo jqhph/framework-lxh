@@ -37,8 +37,9 @@ class Logs extends Model
         $admins = $admins->keyBy($adminKeyName);
 
         foreach ($data as &$row) {
-            $admins = $admins->get($row['admin_id']);
-            $row['admin_name'] = get_value($admins, 'username');
+            $admin = $admins->get($row['admin_id']);
+            
+            $row['admin_name'] = get_value($admin, 'username');
         }
 
         return $data;

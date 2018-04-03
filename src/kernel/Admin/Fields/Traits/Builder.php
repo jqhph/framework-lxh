@@ -83,4 +83,9 @@ trait Builder
         return ($value !== '' && $value !== null) ? '<i class="fa fa-envelope grid-email"></i> ' . $value : '';
     }
 
+    public function buildIp($name, $value)
+    {
+        return $value ? '<i class="fa fa-laptop"></i> ' . long2ip($value) : '';
+    }
+
 }

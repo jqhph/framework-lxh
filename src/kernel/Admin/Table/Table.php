@@ -41,6 +41,7 @@ use Lxh\Support\Arr;
  * @method Table switch($field, $closure = null);
  * @method Table checked($field);
  * @method Table email($field);
+ * @method Table ip($field);
  */
 class Table extends Widget
 {
@@ -61,6 +62,7 @@ class Table extends Widget
         'switch'   => Switcher::class,
         'checked'  => 'checked',
         'email'    => 'email',
+        'ip'       => 'ip',
     ];
 
     /**

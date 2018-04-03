@@ -33,6 +33,7 @@ use Lxh\Admin\Widgets\Popup;
 use Lxh\Admin\Widgets\Tab;
 use Lxh\Admin\Layout;
 use Lxh\Exceptions\Exception;
+use malkusch\lock\mutex\CASMutex;
 use malkusch\lock\mutex\FlockMutex;
 
 class Demo extends Controller
@@ -147,6 +148,19 @@ class Demo extends Controller
         $form->map('map', 39.916527, 116.397128);
 
         $column->row(new Card('地图', $form));
+    }
+
+    public function actionTest1(array $params)
+    {
+        $logger = operations_logger();
+        
+        $admin = $logger->adminAction();
+        
+        $admin->setInsert();
+        $admin->input = json_encode(['name' => 'test', 'age' => 19, 'address' => 'Guangdong']);
+        $admin->table = 'test';
+
+//        return $admin->add();
     }
 
     protected function afterFormRowResolved(Content $content, Card $card)

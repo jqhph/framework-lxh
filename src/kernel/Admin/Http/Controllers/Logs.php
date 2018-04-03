@@ -71,11 +71,6 @@ class Logs extends Controller
     {
         $table->code('id')->sortable();
 
-        $url = Admin::url('Admin')->detail('{value}');
-        $table->link('admin_name', function (Link $link) use ($url) {
-            $link->format($url, 'admin_id');
-        });
-
         $methods = [
             1 => ['GET', 'primary'],
             2 => ['POST', 'success'],
@@ -94,7 +89,7 @@ class Logs extends Controller
             $code->primary();
         });
 
-        $table->label('ip');
+        $table->ip('ip');
         $table->label('table', function (Label $label) {
             $label->color('purple');
         });
@@ -116,6 +111,12 @@ class Logs extends Controller
             $label->label($selected[0]);
             $label->color($selected[1]);
         });
+
+        $url = Admin::url('Admin')->detail('{value}');
+        $table->link('admin_name', function (Link $link) use ($url) {
+            $link->format($url, 'admin_id');
+        });
+
         $table->date('created_at');
     }
 
