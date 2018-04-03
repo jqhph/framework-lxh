@@ -99,7 +99,6 @@ class Admin extends Controller
 
             $link->useAjaxModal()
                 ->title(trans('Roles'))
-                ->dataId($id)
                 ->url($api)
                 ->label(trans('list'));
         });
@@ -270,9 +269,7 @@ class Admin extends Controller
                 return $table->render();
             })->all();
 
-        return $this->success([
-            'content' => implode('<br>', $abilities),
-        ]);
+        return implode('<br>', $abilities);
     }
 
     /**

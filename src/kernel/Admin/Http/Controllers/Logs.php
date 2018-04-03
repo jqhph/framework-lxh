@@ -39,7 +39,6 @@ class Logs extends Controller
     {
         // 指定模型名称
         Admin::model(LogsModel::class);
-        sleep(20);
     }
 
     /**

@@ -72,18 +72,39 @@ window.Lxh = function (options) {
                     var tag = $(this);
                     var title = tag.attr('modal-title'), // 弹窗标题
                         url = tag.attr('modal-url'), // 取数据url
-                        dataId = tag.attr('modal-data-id'),// 设置唯一id，用于缓存从服务器抓取的数据
-                        id = tag.attr('modal-id') || 'ajax-modal';
+                        id = tag.attr('modal-id') || 'ajax-modal',
+                        type = tag.attr('modal-type') || 1,
+                        width = tag.attr('modal-width') || '45%',
+                        height = tag.attr('modal-height') || '55%';
                     if (! url) return;
 
-                    tag.addClass('disabled');
+                    var opts = {
+                        type: type,
+                        title: title,
+                        shadeClose: true,
+                        shade: false,
+                        area: [width, height],
+                        content: url
+                    };
 
-                    modal = ui.modal({title: title, confirmBtn: false, url: url, id: id, dataId: dataId});
+                    if (type == 2) {
+                        layer.open(opts);
+                    } else {
+                        tag.addClass('disabled');
+                        NProgress.start();
+                        $.get(url, function (data) {
+                            tag.removeClass('disabled');
+                            NProgress.done();
+                            if (data) {
+                                opts.content = data;
+                                layer.open(opts);
+                                // 回调用户设置的回调函数
+                            } else {
+                                self.ui().notify().info(trans('No data.'));
+                            }
+                        });
+                    }
 
-                    // 开始抓取数据，并附加到弹窗展示
-                    modal.then(url, dataId, function () {
-                        tag.removeClass('disabled');
-                    })
                 }
             }
             setup_ajax_modal();

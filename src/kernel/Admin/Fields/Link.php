@@ -27,10 +27,10 @@ class Link extends Field
      * @var array
      */
     protected $options = [
-        'color' => 'primary',
-        'useTab' => true,
-        'id' => 'button',
-        'format' => '',
+        'color'     => 'primary',
+        'useTab'    => true,
+        'id'        => 'button',
+        'format'    => '',
         'formatKey' => '',
     ];
 
@@ -111,14 +111,28 @@ class Link extends Field
     }
 
     /**
-     * ajax modal 设置dataid，用于缓存从服务器抓取的数据，无需每次重复抓取
+     * 使用iframe弹窗
      *
-     * @param $dataId
      * @return $this
      */
-    public function dataId($dataId)
+    public function iframe()
     {
-        return $this->attribute('modal-data-id', $dataId);
+        return $this->attribute('modal-type', 2);
+    }
+
+    /**
+     * 设置弹窗宽高
+     *
+     * @param $width
+     * @param string $height
+     * @return $this
+     */
+    public function area($width, $height = '45%')
+    {
+        $this->attribute('modal-width', $width);
+        $this->attribute('modal-height', $height);
+
+        return $this;
     }
 
     /**

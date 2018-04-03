@@ -97,13 +97,12 @@ class Role extends Controller
             return;
         }
         $keyName = Models::getRoleKeyName();
-        $label = trans('Abilities');
+        $label = trans('abilities', 'fields');
         $table->link('abilities', function (Link $link) use ($keyName, $label) {
             $id = $link->item($keyName);
 
             $link->useAjaxModal()
                 ->title($label)
-                ->dataId($id)
                 ->url(Admin::url()->api('abilities', $id))
                 ->label(trans('list'));
         });
@@ -173,9 +172,7 @@ class Role extends Controller
             return $tag->render();
         });
 
-        return $this->success([
-            'content' => &$tags,
-        ]);
+        return '<div style="padding:10px 15px">' . implode('', $tags->all()) . '</div>';
     }
 
     // 字段验证规则
