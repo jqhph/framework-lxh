@@ -118,7 +118,16 @@ class Ability extends Model
             // 清除所有与此权限相关的用户权限缓存
             auth()->refreshForAbility($this);
 
-            operations_logger()->adminAction($this)->setDelete()->add();
+            if ($trash) {
+                $table = $this->trashTableName;
+            } else {
+                $table = $this->tableName;
+            }
+            $actionAdmin = operations_logger()->adminAction($this);
+
+            $actionAdmin->table = $table;
+
+            $actionAdmin->setDelete()->add();
         }
     }
 

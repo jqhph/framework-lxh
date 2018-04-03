@@ -239,7 +239,17 @@ class Role extends Model
         $this->resetAbilities();
         auth()->refreshForRole($this);
 
-        operations_logger()->adminAction($this)->setDelete()->add();
+        // 保存操作日志
+        if ($trash) {
+            $table = $this->trashTableName;
+        } else {
+            $table = $this->tableName;
+        }
+        $actionAdmin = operations_logger()->adminAction($this);
+
+        $actionAdmin->table = $table;
+
+        $actionAdmin->setDelete()->add();
     }
 
     public function beforeAdd(array &$input)

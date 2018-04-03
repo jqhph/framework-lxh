@@ -205,14 +205,20 @@ class Menu extends Model
                 logger()->warning("删除菜单[$id]的下级菜单失败");
             }
         }
-        
+
         // 刷新缓存
         auth()->menu()->refresh();
 
-        operations_logger()
-            ->adminAction($this)
-            ->setDelete()
-            ->add();
+        if ($trash) {
+            $table = $this->trashTableName;
+        } else {
+            $table = $this->tableName;
+        }
+        $actionAdmin = operations_logger()->adminAction($this);
+
+        $actionAdmin->table = $table;
+
+        $actionAdmin->setDelete()->add();
     }
 
     /**

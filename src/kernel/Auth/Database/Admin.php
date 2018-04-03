@@ -165,8 +165,18 @@ class Admin extends User
             ->refresh() // 刷新缓存
             ->then(); // 执行
 
-        // 记录操作日志
-        operations_logger()->adminAction($this)->setDelete()->add();
+        if ($result) {
+            if ($trash) {
+                $table = $this->trashTableName;
+            } else {
+                $table = $this->tableName;
+            }
+            $actionAdmin = operations_logger()->adminAction($this);
+
+            $actionAdmin->table = $table;
+
+            $actionAdmin->setDelete()->add();
+        }
     }
 
     /**
