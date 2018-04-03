@@ -33,6 +33,8 @@ class Logs extends Controller
      */
     protected $filter = true;
 
+    protected $admins = [];
+
     protected function initialize()
     {
         // 指定模型名称
@@ -57,11 +59,23 @@ class Logs extends Controller
      */
     protected function filter(Filter $filter)
     {
-//        $admins = (new Collection((new \Lxh\Auth\Database\Admin())->find()))->pluck(['']);
-        
-        $filter->select('admin_id')->options();
         $filter->text('table')->minlen(3)->like();
         $filter->text('input')->minlen(5)->like();
+        $filter->select('admin_id')->options(array_flip($this->findAdminsNameKeyById()->all()));
+    }
+
+    /**
+     * 获取管理员数据
+     *
+     * @return array|Collection
+     */
+    protected function findAdminsNameKeyById()
+    {
+        if ($this->admins) {
+            return $this->admins;
+        }
+
+        return $this->admins = (new \Lxh\Auth\Database\Admin())->findNameKeyById();
     }
 
     /**
@@ -112,9 +126,14 @@ class Logs extends Controller
             $label->color($selected[1]);
         });
 
+        $admins = $this->findAdminsNameKeyById();
         $url = Admin::url('Admin')->detail('{value}');
-        $table->link('admin_name', function (Link $link) use ($url) {
+        $table->link('admin_name', function (Link $link) use ($url, $admins) {
             $link->format($url, 'admin_id');
+
+            $link->value(
+                get_value($admins, $link->item('admin_id'))
+            );
         });
 
         $table->date('created_at');

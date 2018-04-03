@@ -6,6 +6,7 @@ use Lxh\Auth\Access\AuthorizationException;
 use Lxh\Auth\AuthManager;
 use Lxh\OAuth\Database\User;
 use Lxh\OAuth\Exceptions\UserNotExistException;
+use Lxh\Support\Collection;
 use Lxh\Support\Password;
 
 class Admin extends User
@@ -147,10 +148,26 @@ class Admin extends User
      */
     public function userExists($username)
     {
-        if ($this->query()->select('id')->where('username', $username)->findOne()) {
+        if ($this->query()->select($this->getKeyName())->where('username', $username)->findOne()) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 查找
+     *
+     * @return Collection
+     */
+    public function findNameKeyById()
+    {
+        $keyName = $this->getKeyName();
+
+        return (new Collection(
+            $this->query()->select($keyName.',username,first_name,last_name')->find()
+        ))->keyBy($keyName)->map(function ($v, $k) {
+            return ($v['first_name'] . ' ' . $v['last_name']) ?: $v['username'];
+        });
     }
 
     public function findForLogined()

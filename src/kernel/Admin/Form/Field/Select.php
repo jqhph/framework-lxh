@@ -212,7 +212,7 @@ $("{$this->getElementClassSelector()}").select2({
                    return d;
                 }),
         pagination: {
-          more: data.next_page_url
+          more: data.more
         }
       };
     },

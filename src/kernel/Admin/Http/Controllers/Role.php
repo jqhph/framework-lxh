@@ -27,6 +27,8 @@ class Role extends Controller
      */
     protected $filter = true;
 
+    protected $admins = [];
+
     protected function initialize()
     {
         Admin::model(\Lxh\Auth\Database\Role::class);
@@ -43,11 +45,26 @@ class Role extends Controller
 
         $table->date('created_at')->sortable();
         $table->date('modified_at')->sortable();
-        $table->link('created_by', function (Link $link) {
+
+        $admins = $this->findAdminsNameKeyById();
+        $table->link('created_by', function (Link $link) use ($admins) {
             $link->format(
                 Admin::url('Admin')->detail('{value}'), 'created_by_id'
             );
+
+            $link->value(
+                get_value($admins, $link->item('created_by_id'))
+            );
         });
+    }
+    
+    protected function findAdminsNameKeyById()
+    {
+        if ($this->admins) {
+            return $this->admins;
+        }
+        
+        return $this->admins = (new \Lxh\Auth\Database\Admin())->findNameKeyById();
     }
 
     protected function filter(Filter $filter)
@@ -55,6 +72,10 @@ class Role extends Controller
         $filter->text('name')->like();
         $filter->text('title')->like();
         $filter->dateRange('created_at')->between()->time();
+        $filter->select('entity_id')
+            ->options(array_flip($this->findAdminsNameKeyById()->all()))
+            ->equal()
+            ->formatField('ar.entity_id');
     }
 
     protected function form(Form $form)

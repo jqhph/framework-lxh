@@ -272,8 +272,8 @@ class Role extends Model
     public function findList(array $where, $orderString = 'id Desc', $offset = 0, $maxSize = 20)
     {
         $q = $this->query()
-            ->select(['id', 'name', 'created_at', 'modified_at', 'admin.username AS created_by', 'comment', 'title', 'created_by_id'])
-            ->leftJoin('admin', 'admin.id', 'created_by_id')
+            ->select(['id', 'name', 'created_at', 'modified_at', 'comment', 'title', 'created_by_id'])
+            ->joinRaw("LEFT JOIN assigned_roles ar ON ({$this->tableName}.id = ar.role_id AND ar.entity_type = 1)")
             ->limit($offset, $maxSize);
 
         if ($where) {
@@ -285,6 +285,16 @@ class Role extends Model
         }
 
         return $q->find();
+    }
+
+    public function count(array $where = [])
+    {
+        $q = $this->query()
+            ->joinRaw("LEFT JOIN assigned_roles ar ON ({$this->tableName}.id = ar.role_id AND ar.entity_type = 1)");
+
+        if ($where) $q->where($where);
+
+        return $q->count();
     }
 
     public function find()
