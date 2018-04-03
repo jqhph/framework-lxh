@@ -5,6 +5,7 @@ namespace Lxh\Admin\Http\Controllers;
 use Lxh\Admin\Admin;
 use Lxh\Admin\Data\Items;
 use Lxh\Admin\Fields\Code;
+use Lxh\Admin\Fields\Expand;
 use Lxh\Admin\Fields\Label;
 use Lxh\Admin\Fields\Link;
 use Lxh\Admin\Table\Td;
@@ -20,6 +21,7 @@ use Lxh\Admin\Widgets\Form;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Table\Table;
 use Lxh\Admin\Http\Models\Logs as LogsModel;
+use Lxh\OperationsLogger\Entities\AdminAction;
 use Lxh\Support\Collection;
 
 /**
@@ -59,14 +61,17 @@ class Logs extends Controller
      */
     protected function filter(Filter $filter)
     {
+        $filter->text('input')->width(4)->minlen(5)->like();
         $filter->text('table');
-        $filter->text('input')->minlen(5)->like();
         $filter->text('path');
         $filter->text('ip')->where(function () {
             $ip = I('ip');
 
             return $ip ? ip2long($ip) : false;
         });
+        $filter->select('type')->options(
+            array_flip(AdminAction::types())
+        );
         $filter->select('admin_id')->options(array_flip($this->findAdminsNameKeyById()->all()));
     }
 
@@ -89,7 +94,18 @@ class Logs extends Controller
      */
     protected function table(Table $table)
     {
-        $table->code('id')->sortable();
+        $colors = [
+            1 => 'primary',
+            2 => 'success',
+            3 => 'danger',
+            4 => 'purple',
+            5 => 'info',
+            6 => 'inverse',
+            7 => 'default',
+            8 => 'success',
+            9 => 'pink',
+            0 => 'primary',
+        ];
 
         $methods = [
             1 => ['GET', 'primary'],
@@ -99,11 +115,16 @@ class Logs extends Controller
             5 => ['OPTION', 'info'],
         ];
 
-        $table->label('table', function (Label $label) {
-            $label->color('purple');
-        });
-        $table->code('input')->th(function (Th $th) {
-            $th->style('width:50%;');
+//        $table->code('id')->sortable()->hide();
+
+        $table->code('table');
+
+        $label = trans('input', 'fields');
+        $table->expand('input', function (Expand $expand) use ($label) {
+            $expand->label($label);
+            $expand->content(
+                '<div style="padding:20px"><code>'.$expand->value().'</code></div>'
+            );
         });
 
         $table->column('method')->display(function ($value) use ($methods) {
@@ -119,19 +140,19 @@ class Logs extends Controller
 
         $table->ip('ip');
 
-        $types = [
-            0 => ['其他', 'info'],
-            1 => ['新增', 'success'],
-            2 => ['修改', 'purple'],
-            3 => ['删除', 'danger'],
-        ];
-        $table->label('type', function (Label $label) use ($types) {
+        $types = AdminAction::types();
+        $table->label('type', function (Label $label) use ($types, $colors) {
             $value = $label->value();
 
-            $selected = get_value($types, $value, ['其他', 'info']);
+            $selected = get_value($types, $value, 'other');
 
-            $label->label($selected[0]);
-            $label->color($selected[1]);
+            $label->label(trans($selected));
+
+            if ($value > 9) {
+                $value = $value % 9;
+            }
+
+            $label->color($colors[$value]);
         });
 
         $admins = $this->findAdminsNameKeyById();

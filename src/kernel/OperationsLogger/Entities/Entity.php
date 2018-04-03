@@ -3,6 +3,7 @@
 namespace Lxh\OperationsLogger\Entities;
 use Lxh\Contracts\Support\Arrayable;
 use Lxh\Contracts\Support\Jsonable;
+use Lxh\MVC\Model;
 
 /**
  * 日志格式定义类
@@ -12,11 +13,20 @@ use Lxh\Contracts\Support\Jsonable;
  */
 abstract class Entity implements Arrayable, Jsonable
 {
-    public function __construct(array $attributes = [])
+    /**
+     * @var Model
+     */
+    protected $entityModel = null;
+
+    /**
+     * @var bool
+     */
+    protected $enable = false;
+
+    public function __construct(Model $model = null)
     {
-        foreach ($attributes as $k => &$v) {
-            $this->$k = $v;
-        }
+        $this->entityModel = $model;
+        $this->enable      = config('admin.use-operations-log', false);
     }
 
     /**

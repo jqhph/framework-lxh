@@ -151,11 +151,21 @@ class Menu extends Model
     {
         // 刷新缓存
         auth()->menu()->refresh();
+
+        if ($result) {
+            operations_logger()->adminAction($this)->setUpdate()->add();
+        }
     }
 
     protected function afterAdd($id, array &$input)
     {
         auth()->menu()->refresh();
+
+        if ($id) {
+            $this->setId($id);
+
+            operations_logger()->adminAction($this)->setInsert()->add();
+        }
     }
 
     protected function afterBatchDelete(array &$ids, $effect, $trash)
@@ -173,6 +183,13 @@ class Menu extends Model
 
         // 刷新缓存
         auth()->menu()->refresh();
+        
+        if ($effect) {
+            $adminAction = operations_logger()->adminAction($this);
+
+            $adminAction->input = implode(',', $ids);
+            $adminAction->setBatchDelete()->add();
+        }
     }
 
     // 删除后置钩子方法
@@ -188,10 +205,14 @@ class Menu extends Model
                 logger()->warning("删除菜单[$id]的下级菜单失败");
             }
         }
-
-
+        
         // 刷新缓存
         auth()->menu()->refresh();
+
+        operations_logger()
+            ->adminAction($this)
+            ->setDelete()
+            ->add();
     }
 
     /**
@@ -231,4 +252,32 @@ class Menu extends Model
         }
         return $r['type'] == 2 ? true : false;
     }
+
+    protected function afterToTrash($id, $result)
+    {
+        if ($result) {
+            operations_logger()->adminAction($this)->setMoveToTrash()->add();
+        }
+    }
+
+    protected function afterBatchToTrash(array $ids, $res)
+    {
+        if ($res) {
+            $action = operations_logger()->adminAction($this);
+
+            $action->input = implode(',', $ids);
+            $action->setBatchMoveToTrash()->add();
+        }
+    }
+
+    protected function afterRestore(array $ids, $res)
+    {
+        if ($res) {
+            $action = operations_logger()->adminAction($this);
+
+            $action->input = implode(',', $ids);
+            $action->setRestore()->add();
+        }
+    }
+
 }

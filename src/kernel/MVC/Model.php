@@ -290,11 +290,11 @@ class Model extends Entity
         return $result;
     }
 
-    protected function beforeRestore($ids)
+    protected function beforeRestore(array $ids)
     {
     }
 
-    protected function afterRestore($ids, $res)
+    protected function afterRestore(array $ids, $res)
     {
     }
 
@@ -364,7 +364,7 @@ class Model extends Entity
     {
     }
 
-    protected function afterBatchToTrash($ids, $res)
+    protected function afterBatchToTrash(array $ids, $res)
     {
     }
 

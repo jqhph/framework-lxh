@@ -224,6 +224,10 @@ class Role extends Model
         $this->assignAbilities($this->abilities);
         // 清除相关用户缓存
         auth()->refreshForRole($this);
+
+        if ($result) {
+            operations_logger()->adminAction($this)->setUpdate()->add();
+        }
     }
 
     public function afterDelete($id, $result, $trash)
@@ -234,6 +238,8 @@ class Role extends Model
 
         $this->resetAbilities();
         auth()->refreshForRole($this);
+
+        operations_logger()->adminAction($this)->setDelete()->add();
     }
 
     public function beforeAdd(array &$input)
@@ -257,6 +263,20 @@ class Role extends Model
             $this->assignAbilities($this->abilities);
             // 清除相关用户缓存
             auth()->refreshForRole($this);
+        }
+
+        operations_logger()->adminAction($this)->setInsert()->add();
+    }
+
+    public function afterBatchDelete(array &$ids, $effect, $trash)
+    {
+        parent::afterBatchDelete($ids, $effect, $trash);
+
+        if ($effect) {
+            $adminAction = operations_logger()->adminAction($this);
+
+            $adminAction->input = implode(',', $ids);
+            $adminAction->setBatchDelete()->add();
         }
     }
 
@@ -306,6 +326,33 @@ class Role extends Model
         $data['abilities'] = $this->findAbilitiesIdsForRole()->all();
 
         return $data;
+    }
+
+    protected function afterToTrash($id, $result)
+    {
+        if ($result) {
+            operations_logger()->adminAction($this)->setMoveToTrash()->add();
+        }
+    }
+
+    protected function afterBatchToTrash(array $ids, $res)
+    {
+        if ($res) {
+            $action = operations_logger()->adminAction($this);
+
+            $action->input = implode(',', $ids);
+            $action->setBatchMoveToTrash()->add();
+        }
+    }
+
+    protected function afterRestore(array $ids, $res)
+    {
+        if ($res) {
+            $action = operations_logger()->adminAction($this);
+
+            $action->input = implode(',', $ids);
+            $action->setRestore()->add();
+        }
     }
 
 }

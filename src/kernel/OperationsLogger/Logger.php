@@ -3,11 +3,12 @@
 namespace Lxh\OperationsLogger;
 
 use Lxh\OperationsLogger\Entities\AdminAction;
+use Lxh\MVC\Model;
 
 /**
  * 操作日志
  *
- * @method AdminAction adminAction(array $attributes = [])
+ * @method AdminAction adminAction(Model $model = null)
  */
 class Logger
 {

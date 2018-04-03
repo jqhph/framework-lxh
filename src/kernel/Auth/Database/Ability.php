@@ -86,12 +86,27 @@ class Ability extends Model
             ->find();
     }
 
+    public function afterAdd($insertId, array &$input)
+    {
+        parent::afterAdd($insertId, $input);
+
+        if ($insertId) {
+            $this->setId($insertId);
+
+            operations_logger()->adminAction($this)->setInsert()->add();
+        }
+    }
+
     public function afterUpdate($id, array &$input, $result)
     {
         parent::afterUpdate($id, $input, $result);
 
         // 清除所有与此权限相关的用户权限缓存
         auth()->refreshForAbility($this);
+
+        if ($result) {
+            operations_logger()->adminAction($this)->setUpdate()->add();
+        }
     }
 
     public function afterDelete($id, $result, $trash)
@@ -102,6 +117,20 @@ class Ability extends Model
             $this->deleteAssigned();
             // 清除所有与此权限相关的用户权限缓存
             auth()->refreshForAbility($this);
+
+            operations_logger()->adminAction($this)->setDelete()->add();
+        }
+    }
+
+    public function afterBatchDelete(array &$ids, $effect, $trash)
+    {
+        parent::afterBatchDelete($ids, $effect, $trash);
+
+        if ($effect) {
+            $adminAction = operations_logger()->adminAction($this);
+
+            $adminAction->input = implode(',', $ids);
+            $adminAction->setBatchDelete()->add();
         }
     }
 
@@ -142,6 +171,33 @@ class Ability extends Model
             ->from(Models::table('assigned_abilities'))
             ->where('ability_id', $this->getId())
             ->delete();
+    }
+
+    protected function afterToTrash($id, $result)
+    {
+        if ($result) {
+            operations_logger()->adminAction($this)->setMoveToTrash()->add();
+        }
+    }
+
+    protected function afterBatchToTrash(array $ids, $res)
+    {
+        if ($res) {
+            $action = operations_logger()->adminAction($this);
+
+            $action->input = implode(',', $ids);
+            $action->setBatchMoveToTrash()->add();
+        }
+    }
+
+    protected function afterRestore(array $ids, $res)
+    {
+        if ($res) {
+            $action = operations_logger()->adminAction($this);
+
+            $action->input = implode(',', $ids);
+            $action->setRestore()->add();
+        }
     }
 
 }

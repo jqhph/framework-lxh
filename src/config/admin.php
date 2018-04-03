@@ -12,6 +12,9 @@ return [
     'favicon' => '',
     'copyright' => '2017 @copyright JQH',
 
+    // 是否保存操作日志
+    'use-operations-log' => true,
+
     // 路由前缀
     'route-prefix' => 'lxh',
     // 使用默认路由

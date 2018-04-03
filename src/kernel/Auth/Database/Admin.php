@@ -87,6 +87,16 @@ class Admin extends User
         if ($this->roles) {
             AuthManager::resolve($this)->assign($this->roles)->then();
         }
+
+        $this->setId($insertId);
+
+        // 记录操作日志
+        $adminAction = operations_logger()->adminAction();
+
+        $adminAction->setInsert();
+        $adminAction->input = $this->toJson();
+        $adminAction->table = $this->tableName;
+        $adminAction->add();
     }
 
     protected function afterUpdate($id, array &$input, $result)
@@ -98,6 +108,50 @@ class Admin extends User
             ->retract() // 先重置所有已关联角色
             ->refresh() // 清除缓存
             ->then(); // 执行
+
+        if ($result) {
+            // 记录操作日志
+            operations_logger()->adminAction($this)->setUpdate()->add();
+        }
+    }
+
+    protected function afterToTrash($id, $result)
+    {
+        if ($result) {
+            operations_logger()->adminAction($this)->setMoveToTrash()->add();
+        }
+    }
+
+    protected function afterBatchToTrash(array $ids, $res)
+    {
+        if ($res) {
+            $action = operations_logger()->adminAction($this);
+
+            $action->input = implode(',', $ids);
+            $action->setBatchMoveToTrash()->add();
+        }
+    }
+
+    protected function afterRestore(array $ids, $res)
+    {
+        if ($res) {
+            $action = operations_logger()->adminAction($this);
+
+            $action->input = implode(',', $ids);
+            $action->setRestore()->add();
+        }
+    }
+
+    public function afterBatchDelete(array &$ids, $effect, $trash)
+    {
+        parent::afterBatchDelete($ids, $effect, $trash);
+        
+        if ($effect) {
+            $adminAction = operations_logger()->adminAction($this);
+
+            $adminAction->input = implode(',', $ids);
+            $adminAction->setBatchDelete()->add();
+        }
     }
 
     protected function afterDelete($id, $result, $trash)
@@ -110,6 +164,9 @@ class Admin extends User
             ->retract() // 清除用户所有已关联角色
             ->refresh() // 刷新缓存
             ->then(); // 执行
+
+        // 记录操作日志
+        operations_logger()->adminAction($this)->setDelete()->add();
     }
 
     /**
