@@ -2,9 +2,10 @@
 
 namespace Lxh\Auth\Database;
 
+use Lxh\Auth\Access\AuthorizationException;
 use Lxh\Auth\AuthManager;
-use Lxh\MVC\Session;
 use Lxh\OAuth\Database\User;
+use Lxh\OAuth\Exceptions\UserNotExistException;
 use Lxh\Support\Password;
 
 class Admin extends User
@@ -174,7 +175,10 @@ class Admin extends User
      * @param  string $username
      * @param  string $password
      * @param  array  $options
-     * @return array|false
+     * @return array
+     *
+     * @throws AuthorizationException
+     * @throws UserNotExistException
      */
     public function login($account, $password, array $options = [])
     {
@@ -187,12 +191,12 @@ class Admin extends User
             ->findOne();
 
         if (! $userData) {
-            return false;
+            throw new UserNotExistException(trans('No such username exists!'));
         }
 
         // 验证密码是否正确
         if (! Password::verify($password, $userData['password'])) {
-            return false;
+            throw new AuthorizationException(trans('Password incorrect!'));
         }
 
         $this->afterLogin($userData);

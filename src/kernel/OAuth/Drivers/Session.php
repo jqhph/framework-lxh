@@ -7,7 +7,7 @@ use Lxh\MVC\Model;
 use Lxh\OAuth\Cache\File;
 use Lxh\OAuth\Exceptions\AuthTokenException;
 use Lxh\OAuth\Exceptions\EncryptCodeException;
-use Lxh\OAuth\Exceptions\UserNotExistEception;
+use Lxh\OAuth\Exceptions\UserNotExistException;
 use Lxh\OAuth\User;
 use Lxh\OAuth\Database;
 
@@ -127,7 +127,7 @@ class Session extends Driver
         $userData = $model->findForLogined();
         if (! $userData) {
             $this->logout();
-            throw new UserNotExistEception('用户不存在或未激活');
+            throw new UserNotExistException('用户不存在或未激活');
         }
 
         $model->attach($userData);

@@ -15,7 +15,9 @@ use Lxh\OAuth\Drivers\Driver;
 use Lxh\OAuth\Drivers\Session;
 use Lxh\OAuth\Drivers\Token as TokenDriver;
 use Lxh\OAuth\Drivers\Session as SessionDriver;
+use Lxh\OAuth\Exceptions\AuthTokenException;
 use Lxh\OAuth\Exceptions\UnsupportedEncryptionException;
+use Lxh\OAuth\Exceptions\UserNotExistException;
 
 /**
  * 用户身份鉴权类
@@ -154,16 +156,22 @@ class User
      * @return array|false
      * @param array $options 可拓展参数
      * @return bool
+     *
+     * @throws AuthTokenException
+     * @throws UserNotExistException
      */
     public function login($username, $password, $remember = false, array $options = [])
     {
         $this->currentUsername = $username;
 
-        if (!$data = $this->model->login($username, $password, $options)) {
+        try {
+            $data = $this->model->login($username, $password, $options);
+        } catch (\Exception $e) {
             $this->counter->incr($username);
 
-            return false;
+            throw new $e;
         }
+
         $this->model->attach($data);
 
         // 是否应该先把旧token设置为无效

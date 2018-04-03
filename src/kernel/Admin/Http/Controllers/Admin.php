@@ -321,17 +321,20 @@ class Admin extends Controller
         }
 
         $oauth = __admin__()->oauth();
-        
-        if (! $oauth->login($_POST['username'], $_POST['password'], I('remember'))) {
+
+        try {
+            $oauth->login($_POST['username'], $_POST['password'], I('remember'));
+        } catch (\Exception $e) {
             if ($oauth->failTimes() > config('admin.show-captcha-times', 5)) {
                 // 保存session，当页面刷新时显示验证码
                 $session->save('is_required_captcha', 1);
 
                 return $this->message('Failed', 10047);
             }
-            
+
             return $this->failed();
         }
+
         $this->clearCaptcha($oauth, $session);
 
         $target = Url::referer() ?: AdminCreator::url()->index();
