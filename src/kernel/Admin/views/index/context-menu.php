@@ -18,10 +18,12 @@
     <?php } ?>
 </div>
 <script>
-$('.context-menu').hover(function () {
-    setTimeout(function () {
-        var $box = $('.context-menu-box');
-        $box.css('top', '-' + ($box.height()) + 'px');
-    }, 10);
-});
+(function () {
+    $('.context-menu').hover(function () {
+        setTimeout(function () {
+            var $box = $('.context-menu-box');
+            $box.css('top', '-' + ($box.height()) + 'px');
+        }, 10);
+    });
+})()
 </script>

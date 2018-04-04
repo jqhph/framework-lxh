@@ -143,7 +143,7 @@ class PDO
 
 
     // 批量添加
-    public function batchAdd($table = '', array & $data, $replace = false)
+    public function batchAdd($table = '', array &$data, $replace = false)
     {
         $field  = '';
         $values = '';
@@ -152,21 +152,21 @@ class PDO
 
         $prepearData = [];
 
-        foreach ($data as & $info) {
+        foreach ($data as &$info) {
             if (empty($info))
                 continue;
 
             foreach ($info as $k => & $v) {
                 if (! $k) continue;
-                if ($key != 'ok')
+                if ($key !== true)
                     $key  .= "`$k`,";
-                $vals .= '?,';//$vals .= '"' . $v . '",';
+                $vals .= '?,';
 
                 $prepearData[] = $v;
             }
             if (empty($field)) {
-                $field  = substr($key,  0, - 1);
-                $key    = 'ok';
+                $field = substr($key,  0, - 1);
+                $key   = true;
             }
             $vals    = substr($vals,  0, - 1);
             $values .= '(' . $vals . '),';
