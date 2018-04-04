@@ -265,9 +265,10 @@ class Index
         }
 
         return array_merge($this->variables, [
-            'sitebar' => $this->buildSitebar(),
-            'topbar'  => $this->buildTopbar(),
-            'content' => &$content,
+            'sitebar'      => $this->buildSitebar(),
+            'topbar'       => $this->buildTopbar(),
+            'content'      => &$content,
+            'contextMenus' => []
         ]);
     }
 

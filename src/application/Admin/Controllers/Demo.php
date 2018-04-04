@@ -75,6 +75,7 @@ class Demo extends Controller
 
     protected function initialize()
     {
+//        sleep(50);
     }
 
     protected function form(Form $form)

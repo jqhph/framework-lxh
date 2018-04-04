@@ -94,6 +94,8 @@ setup_admin_js_app_ini(false);
 
 echo admin_js('js/app.min');
 echo admin_js('packages/layer/layer');
+// 快捷菜单
+echo view('admin::index.context-menu', ['contextMenus' => $contextMenus])->render();
 ?>
 <script>
     layer.config({maxmin:true,moveOut:true});
