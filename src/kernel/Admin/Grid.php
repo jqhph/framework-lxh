@@ -477,8 +477,10 @@ class Grid implements Renderable
         if ($this->options['allowedRefresh']) {
             $label = trans('Refresh');
 
+            Admin::script('$(document).on("pjax:complete",function(){ $(".refresh-grid").button("reset")});');
+
             $this->tools->prepend(
-                "<button onclick='reload_grid()' class=\"btn btn-purple btn-trans waves-effect\"><i class=\"zmdi zmdi-refresh-alt\"></i> $label</button>"
+                "<button onclick='$(this).button(\"loading\");reload_grid();' class=\"refresh-grid btn btn-custom waves-effect\"><i class=\"zmdi zmdi-refresh-alt\"></i> $label</button>"
             );
         }
 
