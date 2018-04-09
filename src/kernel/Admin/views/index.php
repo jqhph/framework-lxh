@@ -27,8 +27,8 @@
     <![endif]-->
 </head>
 
-<body class="<?php echo ($collapse = config('admin.index.sitebar-collapse')) ? 'fixed-left-void' : ''?>" id="lxh-body">
-<div id="wrapper" class="<?php echo $collapse ? 'forced enlarged' : ''?>">
+<body class="<?php echo (true) ? 'fixed-left-void' : ''?>" id="lxh-body">
+<div id="wrapper" class="<?php echo true ? 'forced enlarged' : ''?>">
     <div id="lxh-app">
         <?php
         // 输出顶部工具栏

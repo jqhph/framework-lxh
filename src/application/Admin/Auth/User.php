@@ -13,10 +13,9 @@ use Lxh\Admin\Admin as AdminCreate;
 use Lxh\Http\Response;
 use Lxh\Http\Request;
 use Lxh\Contracts\Container\Container;
-use Lxh\MVC\Controller;
 use Lxh\OAuth\Exceptions\AuthTokenException;
 use Lxh\OAuth\Exceptions\EncryptCodeException;
-use Lxh\OAuth\Exceptions\UserNotExistEception;
+use Lxh\OAuth\Exceptions\UserNotExistException;
 
 class User
 {
@@ -87,7 +86,7 @@ class User
 
             }
 
-        } catch (UserNotExistEception $e) {
+        } catch (UserNotExistException $e) {
             if ($this->request->isIframe()) {
                 return $this->showMessage('用户不存在！');
 

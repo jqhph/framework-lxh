@@ -31,13 +31,13 @@ return [
     'captcha-life' => 120,
 
     'index' => [
-        'sitebar-collapse' => true,
+        // 最大tab页数量
         'max-tab' => 10,
         'default-avatar' => 'users/avatar-1.jpg',
     ],
 
     'operation-log' => [
-        'enable' => true,
+        'enable'  => true,
         'handler' => 'operator',
     ],
 
