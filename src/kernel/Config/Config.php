@@ -62,6 +62,13 @@ class Config extends Entity
      */
     protected $useCache = true;
 
+    /**
+     * 增加配置文件的配置文件名称
+     *
+     * @var string
+     */
+    protected $addFileName = 'add';
+
     public function __construct()
     {
         $this->useCache = defined('USE_CONFIG_CACHE') ? USE_CONFIG_CACHE : true;
@@ -156,12 +163,17 @@ class Config extends Entity
             throw new InvalidArgumentException("Config file[$file] not found!");
         }
 
-        $this->attachFiles($this->get('add-config'), $useCurrentEnv);
+        $this->attachFiles($this->getAddConfigs(), $useCurrentEnv);
 
         $this->writableData = (array)include $this->getWritableConfigPath();
         $this->items = Util::merge($this->items, $this->writableData, true);//array_merge($this->items, (array) $this->writableData);
 
         $this->saveCache();
+    }
+
+    protected function getAddConfigs()
+    {
+        return require $this->getBasePath() . $this->addFileName . '.php';
     }
 
     protected function attachFiles($files, $useCurrentEnv = false)
