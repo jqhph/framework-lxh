@@ -9,3 +9,5 @@
 .menu-list span:hover{background:rgba(218,230,236,0.3)}
 .context-menu-btn:hover+.context-menu-box,.context-menu-box:hover{display:block}
 .menu-list span:hover+.child,.child:hover{display:block}
+.fixed-bottom-btn{height:45px;position:fixed;right:18px;bottom:90px;z-index:999;}
+.fixed-bottom-btn a{border-radius:50%;background:rgba(255,255,255,0.4);display:none;width:45px;height:45px;margin:.15rem 0;text-align:center;line-height:46px;box-shadow:1px 1px 4px 0 rgba(0,0,0,.4);-webkit-box-shadow:1px 1px 4px 0 rgba(0,0,0,.4);position:relative;font-size:13px;}

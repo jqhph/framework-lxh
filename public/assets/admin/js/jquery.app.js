@@ -222,6 +222,26 @@ function($) {
 function($) {
     "use strict";
     $.App.init();
+
+    var $top = $('#return-top');
+    // 滚动锚点
+    $(window).scroll(function () {
+        var scrollTop = $(this).scrollTop(), // 滚动条距离顶部的高度
+            windowHeight = $(this).height();  // 当前可视的页面高度
+        // 显示或隐藏滚动锚点
+        if(scrollTop + windowHeight >= 1100) {
+            $top.show(100)
+        } else {
+            $top.hide(100)
+        }
+    });
+    // 滚动至顶部
+    $top.click(function () {
+        $("html, body").animate({
+            scrollTop: $("#lxh-body").offset().top
+        }, {duration: 500, easing: "swing"});
+        return false;
+    })
 }(window.jQuery);
 
 

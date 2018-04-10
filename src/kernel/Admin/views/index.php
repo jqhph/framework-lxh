@@ -97,6 +97,7 @@ echo admin_js('packages/layer/layer');
 // 快捷菜单
 echo view('admin::index.context-menu', ['contextMenus' => $contextMenus])->render();
 ?>
+<div class="fixed-bottom-btn"><a id="return-top">TOP <i class="zmdi zmdi-long-arrow-up"></i></a></div>
 <script>
     layer.config({maxmin:true,moveOut:true});
 </script>
