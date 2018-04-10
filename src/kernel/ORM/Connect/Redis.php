@@ -1,14 +1,15 @@
 <?php
 namespace Lxh\ORM\Connect;
 
-use Lxh\Helper\Arr;
-
 class Redis 
 {
 	private static $host;
 	private static $port;
 	private static $pwd;
 	private static $db;
+	/**
+	 * @var \Redis
+	 */
 	private $redis;
 	
 	protected $usepool;
@@ -19,20 +20,25 @@ class Redis
 	
 	public function __construct(array $conf = []) 
 	{
-		$conf = C('db.redis');
+		$conf = config('db.redis');
 		
-		$this->debug = C('profiling.debug');
+		$this->debug = get_value($conf, 'debug');
 		
-		$this->usepool = Arr::getValue($conf, 'usepool', false);
-		self::$host    = Arr::getValue($conf, 'host');
-		self::$port    = Arr::getValue($conf, 'port');
-		self::$pwd     = Arr::getValue($conf, 'pwd');
-		self::$db      = Arr::getValue($conf, 'db');
+		$this->usepool = get_value($conf, 'usepool', false);
+		self::$host    = get_value($conf, 'host');
+		self::$port    = get_value($conf, 'port');
+		self::$pwd     = get_value($conf, 'pwd');
+		self::$db      = get_value($conf, 'db');
 		
 		$this->connect();
 		$this->auth();//验证用户名
 		$this->select();
 		
+	}
+
+	public function resource()
+	{
+		return $this->redis;
 	}
 	
 	/**
@@ -52,20 +58,18 @@ class Redis
 	 * @param string $sql sql语句
 	 * @param string $type r|w|c 读写和连接数据库操作
 	 * */
-	protected function debug(& $start, $type = 'r')
+	protected function debug(&$start, $type = 'r')
 	{
 		if (! $this->debug) {
 			return;
 		}
 		
-		N('cache.s', [
+		track('cache.s', [
 			'run'  => microtime(true) - $start,
 			'type' => $type
 		]);
-		N('cache.' . $type);
+		track('cache.' . $type);
 	}
-	
-
 
 	////Redis server went away  Connection closed
 	private function connect() 
@@ -87,7 +91,6 @@ class Redis
 	}
 	public function select($index = false) 
 	{
-
 		if ($index !== false) {
 			$this->redis->select($index);
 		} else {
@@ -109,13 +112,6 @@ class Redis
 		$this->debug($start, 'w');
 		return $res;
 	}
-	
-	//获取redis连接资源
-	public function getResource() 
-	{
-		return $this->redis;
-	}
-	
 	
 	//正则匹配key
 	public function keys($where) 
@@ -242,9 +238,9 @@ class Redis
 	public function lRange($key, $start, $stop) 
 	{
 		# 返回指定位置的队列元素，如：key, 0, 4返回下标为0到4的队列值
-		$start = microtime(true);
+		$startAt = microtime(true);
 		$res = $this->redis->lrange($key, $start, $stop);
-		$this->debug($start, 'w');
+		$this->debug($startAt, 'w');
 		return $res;
 	}
 	

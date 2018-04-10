@@ -9,7 +9,7 @@ class PDO
     /*
      * 成员属性
      */
-    private $db_type;	//数据库类型
+    private $type;	    //数据库类型
     private $host;		//主机名
     private $port;		//端口号
     private $user;		//用户名
@@ -17,7 +17,10 @@ class PDO
     private $charset;	//字符集
     private $dbname;	//数据库名称
     private $prefix;	//表前缀
-    private $pdo;		//PDO实例化对象
+    /**
+     * @var \PDO
+     */
+    private $pdo;
 
     protected $options = [];
 
@@ -44,7 +47,7 @@ class PDO
         }
 
         $this->usepool = isset($config['usepool']) ? $config['usepool'] : false;
-        $this->db_type = isset($config['type'])    ? $config['type']    : 'mysql';
+        $this->type = isset($config['type'])    ? $config['type']    : 'mysql';
         $this->host    = isset($config['host'])    ? $config['host']    : 'localhost';
         $this->port    = isset($config['port'])    ? $config['port']    : 3306;
         $this->user    = isset($config['user'])    ? $config['user']    : 'root';
@@ -60,18 +63,13 @@ class PDO
         $this->pdo->query('set names ' . $this->charset);
     }
 
-    public function getPDO()
-    {
-        return $this->pdo;
-    }
-
     /*
      * 连接数据库
      * 成功产生PDO对象,失败提示错误信息
      */
     private function connect()
     {
-        $dsn = "{$this->db_type}:host={$this->host};port={$this->port};dbname={$this->dbname};charset={$this->charset}";
+        $dsn = "{$this->type}:host={$this->host};port={$this->port};dbname={$this->dbname};charset={$this->charset}";
 
         $s = microtime(true);
 
