@@ -1,4 +1,4 @@
-<div class="form-group line col-sm-<?php echo $width['field'] ?>">
+<div class="form-group line col-sm-<?php echo $width['field'] ?>" style="margin-bottom:15px">
     <div class="col-sm-<?php echo 12 ?>">
         <?php if ($label) {?><div class="quick-edit-text text"><?php echo $prepend ? $prepend . '&nbsp; ' : ''; ?><?php echo $label ?></div><?php } ?>
         <div class="input-group" <?php echo 'style="width:100%"';?>>

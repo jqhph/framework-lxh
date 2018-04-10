@@ -95,8 +95,8 @@ class Logs extends Controller
     protected function table(Table $table)
     {
         $colors = [
-            1 => 'primary',
-            2 => 'success',
+            1 => 'success',
+            2 => 'primary',
             3 => 'danger',
             4 => 'purple',
             5 => 'info',
