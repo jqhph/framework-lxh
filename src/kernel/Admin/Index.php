@@ -9,7 +9,7 @@ use Lxh\Contracts\Support\Renderable;
 /**
  * Class Index.
  */
-class Index
+class Index implements Renderable
 {
     /**
      * @var array
@@ -53,6 +53,13 @@ class Index
      * @var mixed
      */
     protected $topbarContent = [];
+
+    /**
+     * 快捷菜单
+     *
+     * @var array
+     */
+    protected $contextMenus = [];
 
     /**
      * @var bool
@@ -255,6 +262,26 @@ class Index
         )->render();
     }
 
+    /**
+     * 增加快捷菜单
+     *
+     * @param string $content 主菜单内容
+     * @param array $children 子菜单内容
+     * @return $this
+     */
+    public function contextMenu($content, array $children = [])
+    {
+        $this->contextMenus[] = [
+            'text'     => &$content,
+            'children' => &$children
+        ];
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
     protected function variables()
     {
         $contents = '';
@@ -268,7 +295,7 @@ class Index
             'sitebar'      => $this->buildSitebar(),
             'topbar'       => $this->buildTopbar(),
             'content'      => &$content,
-            'contextMenus' => []
+            'contextMenus' => &$this->contextMenus
         ]);
     }
 

@@ -95,7 +95,7 @@ setup_admin_js_app_ini(false);
 echo admin_js('js/app.min');
 echo admin_js('packages/layer/layer');
 // 快捷菜单
-echo view('admin::index.context-menu', ['contextMenus' => $contextMenus])->render();
+echo view('admin::index.context-menu', ['contextMenus' => &$contextMenus])->render();
 ?>
 <div class="fixed-bottom-btn"><a id="return-top">TOP <i class="zmdi zmdi-long-arrow-up"></i></a></div>
 <script>

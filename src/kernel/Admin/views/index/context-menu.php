@@ -6,12 +6,13 @@
         <div class="menu-list">
             <span><?php echo $menu['text']; ?></span>
             <?php if (!empty($menu['children'])) {
+                echo '<div class="child">';
                 foreach ($menu['children'] as &$child) {
                 ?>
-            <div class="child">
                 <span><?php echo $child?></span>
-            </div>
-            <?php }} ?>
+            <?php }
+                echo '</div>';
+            } ?>
         </div>
         <?php } ?>
     </div>
