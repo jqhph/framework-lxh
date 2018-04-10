@@ -458,7 +458,7 @@ class Model extends Entity
      */
     public function whereInIds(array $ids)
     {
-        return $this->query()->select($this->selectFields)->whereIn($this->getKeyName(), $ids);
+        return $this->query()->select($this->selectFields)->whereIn($this->primaryKeyName, $ids);
     }
 
     /**
