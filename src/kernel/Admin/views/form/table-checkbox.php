@@ -1,4 +1,4 @@
-<div class="form-group clearfix line">
+<div class="form-group clearfix line col-md-<?php echo $width['layout']?>">
     <div class="col-sm-<?php echo $width['field'] ?>">
         <div class="text"><?php echo $prepend ? $prepend . '&nbsp; ' : ''; ?><?php echo $label ?></div>
         <table class="table table-bordered m-0">

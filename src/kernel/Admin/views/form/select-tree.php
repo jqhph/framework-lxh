@@ -1,4 +1,4 @@
-<div class="form-group line">
+<div class="form-group line col-md-<?php echo $width['layout']?>">
     <div class="col-sm-<?php echo $width['field'] ?>">
         <div class="text"><?php echo $prepend ? $prepend . '&nbsp; ' : ''; ?><?php echo $label ?></div>
         <select class="form-control <?php echo $class ?>" style="width: 100%;" name="<?php echo $name?>" <?php echo $attributes ?> >

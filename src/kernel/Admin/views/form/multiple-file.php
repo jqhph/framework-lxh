@@ -1,4 +1,4 @@
-<div class="form-group line">
+<div class="form-group line col-md-<?php echo $width['layout']?>">
     <div class="col-sm-<?php echo $width['field']?> ">
         <div class="text"><?php echo $prepend ? $prepend . '&nbsp; ' : ''; ?><?php echo $label ?></div>
         <input type="file" class="<?php echo $class;?>" data-value="<?php echo $value;?>" name="<?php echo $name?>[]" <?php echo $attributes?> />

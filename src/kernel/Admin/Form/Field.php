@@ -181,11 +181,11 @@ class Field implements Renderable
     protected $filter;
 
     /**
-     * Width for label and field.
      *
      * @var array
      */
     protected $width = [
+        'layout' => 12,
         'label' => 2,
         'field' => 12,
     ];
@@ -557,15 +557,16 @@ class Field implements Renderable
     /**
      * Set width for field and label.
      *
+     * @param int $layout
      * @param int $field
-     * @param int $label
      *
      * @return $this
      */
-    public function width($field = 8, $label = 2)
+    public function width($layout = 12, $field = 12)
     {
         $this->width = [
-            'label' => $label,
+            'layout' => $layout,
+            'label' => 4,
             'field' => $field,
         ];
 

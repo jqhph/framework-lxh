@@ -1,4 +1,4 @@
-<div class="form-group line">
+<div class="form-group line col-md-<?php echo $width['layout']?>">
     <div class="col-sm-<?php echo $width['field'] ?>" id="<?php echo $id ?>">
         <div class="text"><?php echo $prepend ? $prepend . '&nbsp; ' : ''; ?><?php echo $label ?></div>
         <?php foreach($options as $option => &$label): ?>

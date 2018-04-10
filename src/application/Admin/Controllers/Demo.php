@@ -82,8 +82,8 @@ class Demo extends Controller
     {
         $form->slider('slider')->setLabel('滑动条');
 
-        $form->radio('radio')->setLabel('单选框')->options(['value1', 'value2', 'value3'])->default('value2');
-        $form->checkbox('checkbox')->setLabel('复选框')->options(['value1', 'value2', 'value3']);
+        $form->radio('radio')->setLabel('单选框')->options(['value1', 'value2', 'value3'])->default('value2')->width(6);
+        $form->checkbox('checkbox')->setLabel('复选框')->options(['value1', 'value2', 'value3'])->width(6);
 
         $form->divide();
 
@@ -126,11 +126,11 @@ class Demo extends Controller
             // 把表单拆分成多块布局
             $form = $this->form->create();
 
-            $form->date('date');
             $form->datetime('datetime');
-            $form->month('month');
-            $form->time('time');
-            $form->year('year');
+            $form->date('date')->width(6);
+            $form->month('month')->width(6);
+            $form->time('time')->width(6);
+            $form->year('year')->width(6);
 
             $form->dateRange('date-range', 2018, 2019);
             $form->dateTimeRange('datetime-range');

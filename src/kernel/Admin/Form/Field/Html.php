@@ -32,7 +32,7 @@ class Html extends Field
     public function render()
     {
         if ($this->html instanceof \Closure) {
-            $this->html = call_user_func($this->html, $this->value, $this->form);
+            $this->html = call_user_func($this->html);
         }
 
         $prepend = $this->prepend ? $this->prepend . '&nbsp ' : '';
@@ -43,7 +43,7 @@ class Html extends Field
         }
 
         return <<<EOT
-<div class="form-group line">
+<div class="form-group line col-md-{$this->width['layout']}">
     <div class="col-sm-{$this->width['field']}"><div class="text">{$prepend}{$this->label()}</div>{$this->html}</div>{$help}
 </div>
 EOT;

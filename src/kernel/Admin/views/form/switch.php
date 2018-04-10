@@ -1,4 +1,4 @@
-<div class="form-group line">
+<div class="form-group line col-md-<?php echo $width['layout']?>">
     <div class="col-sm-<?php echo $width['field'] ?>" style="margin-top:10px;">
         <div class="text" style="margin:8px 0 -5px"><?php echo $prepend ? $prepend . '&nbsp; ' : ''; ?><?php echo $label ?></div>&nbsp;&nbsp;&nbsp;
         <div class="input-group" <?php if (!$append) {echo 'style="width:100%"';}?>>
