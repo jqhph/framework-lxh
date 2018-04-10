@@ -12,7 +12,7 @@
             ?>
         <?php endforeach; ?>
     </div>
-    <div class="box-footer">
+    <div>
         <?php if ($id) { ?>
         <input type="hidden"  name="__id__" value="<?php echo $id;?>" />
         <?php } ?>
