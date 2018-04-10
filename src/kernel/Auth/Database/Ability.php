@@ -70,19 +70,29 @@ class Ability extends Model
     public function getForAuthority(Model $user)
     {
         $assignedAbilities = Models::table('assigned_abilities');
-        $assignedRoles = Models::table('assigned_roles');
-
-        $select =
-            "{$this->tableName}.id,{$this->tableName}.`name`,{$this->tableName}.title,forbidden,ab.entity_id role_id";
+        $assignedRoles     = Models::table('assigned_roles');
 
         $roleType = Models::role()->getMorphType();
         $userType = $user->getMorphType();
 
+        $roles = $this->query()
+            ->from($assignedRoles)
+            ->select('role_id')
+            ->where('entity_id', $user->getId())
+            ->where('entity_type', $userType)
+            ->find();
+
+        if (! $roles) return [];
+        
+        $roles = new Collection($roles);
+
+        $select =
+            "{$this->tableName}.id,{$this->tableName}.`name`,{$this->tableName}.title,forbidden,ab.entity_id role_id";
+
         return $this->query()
             ->select($select)
             ->joinRaw("LEFT JOIN $assignedAbilities ab ON ({$this->tableName}.id = ab.ability_id AND ab.entity_type = $roleType)")
-            ->joinRaw("LEFT JOIN $assignedRoles ar ON (ar.role_id = ab.entity_id AND ar.entity_type = $userType)")
-            ->where("ar.entity_id", $user->getId())
+            ->whereIn('ab.entity_id', $roles->pluck('role_id')->all())
             ->find();
     }
 

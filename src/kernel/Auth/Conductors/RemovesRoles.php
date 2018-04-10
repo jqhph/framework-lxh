@@ -42,9 +42,9 @@ class RemovesRoles
      */
     public function __construct(AuthManager $auth, Model $authority, $roles)
     {
-        $this->auth = $auth;
+        $this->auth      = $auth;
         $this->authority = $authority;
-        $this->roles = array_filter(Helpers::toArray($roles));
+        $this->roles     = array_filter(Helpers::toArray($roles));
     }
 
 

@@ -7,83 +7,29 @@ use Lxh\Container\Container;
 use Lxh\Auth\Clipboard;
 use Lxh\Auth\Database\Models;
 use Lxh\Auth\Database\Ability;
-use Lxh\Auth\Conductors\GivesAbilities;
 use Lxh\Auth\Conductors\ForbidsAbilities;
-use Lxh\Auth\Conductors\RemovesAbilities;
-use Lxh\Auth\Conductors\UnforbidsAbilities;
+use Lxh\Support\Collection;
 
 trait HasAbilities
 {
     /**
-     * The abilities relationship.
-     *
-     * @return \Lxh\Database\Eloquent\Relations\MorphToMany
-     */
-    public function abilities()
-    {
-        $relation = $this->morphToMany(
-            Models::classname(Ability::class),
-            'entity',
-            Models::table('permissions')
-        );
-
-        return Models::scope()->applyToRelation($relation);
-    }
-
-    /**
      * Get all of the model's allowed abilities.
      *
-     * @return \Lxh\Database\Eloquent\Collection
+     * @return Collection
      */
     public function getAbilities()
     {
-        return $this->getClipboardInstance()->getAbilities($this);
+        return $this->getClipboardInstance()->getAbilities();
     }
 
     /**
      * Get all of the model's allowed abilities.
      *
-     * @return \Lxh\Database\Eloquent\Collection
+     * @return Collection
      */
     public function getForbiddenAbilities()
     {
-        return $this->getClipboardInstance()->getAbilities($this, false);
-    }
-
-    /**
-     * Give an ability to the model.
-     *
-     * @param  mixed  $ability
-     * @param  mixed|null  $model
-     * @return \Lxh\Auth\Conductors\GivesAbilities|$this
-     */
-    public function allow($ability = null, $model = null)
-    {
-        if (is_null($ability)) {
-            return new GivesAbilities($this);
-        }
-
-        (new GivesAbilities($this))->to($ability, $model);
-
-        return $this;
-    }
-
-    /**
-     * Remove an ability from the model.
-     *
-     * @param  mixed  $ability
-     * @param  mixed|null  $model
-     * @return \Lxh\Auth\Conductors\RemovesAbilities|$this
-     */
-    public function disallow($ability = null, $model = null)
-    {
-        if (is_null($ability)) {
-            return new RemovesAbilities($this);
-        }
-
-        (new RemovesAbilities($this))->to($ability, $model);
-
-        return $this;
+        return $this->getClipboardInstance()->getAbilities();
     }
 
     /**

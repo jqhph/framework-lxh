@@ -9,14 +9,13 @@ use Lxh\Auth\Database\Role;
 use Lxh\Auth\Database\Models;
 use Lxh\Auth\Conductors\AssignsRoles;
 use Lxh\Auth\Conductors\RemovesRoles;
-use Lxh\Auth\Database\Queries\Roles as RolesQuery;
 
 trait HasRoles
 {
     /**
      * The roles relationship.
      *
-     * @return \Lxh\Database\Eloquent\Relations\MorphToMany
+     * @return array
      */
     public function roles()
     {
@@ -27,32 +26,6 @@ trait HasRoles
         );
 
         return Models::scope()->applyToRelation($relation);
-    }
-
-    /**
-     * Assign the given roles to the model.
-     *
-     * @param  \Lxh\Database\Eloquent\Model|string|array  $roles
-     * @return $this
-     */
-    public function assign($roles)
-    {
-        (new AssignsRoles($roles))->to($this);
-
-        return $this;
-    }
-
-    /**
-     * Retract the given roles from the model.
-     *
-     * @param  \Lxh\Database\Eloquent\Model|string|array  $roles
-     * @return $this
-     */
-    public function retract($roles)
-    {
-        (new RemovesRoles($roles))->from($this);
-
-        return $this;
     }
 
     /**

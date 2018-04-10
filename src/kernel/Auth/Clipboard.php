@@ -94,7 +94,6 @@ class Clipboard
     /**
      * Check if an authority has the given roles.
      *
-     * @param  Model  $authority
      * @param  array|string  $roles
      * @param  string  $boolean
      * @return bool
@@ -102,8 +101,7 @@ class Clipboard
     public function checkRole($roles, $boolean = 'or')
     {
         $available = $this->getRoles()
-                          ->intersect(Models::role()
-                          ->getRoleNames($roles));
+                          ->intersect(Models::role()->getRoleNames($roles));
 
         if ($boolean == 'or') {
             return $available->count() > 0;
@@ -163,16 +161,7 @@ class Clipboard
     {
         $abilities = Models::ability()->getForAuthority($this->user);
 
-        return new Collection($this->formatArray($abilities));
-    }
-
-    protected function formatArray(array &$abilities)
-    {
-        $content = [];
-        foreach ($abilities as &$row) {
-            $content[$row['name']] = $row;
-        }
-        return $content;
+        return new Collection($abilities);
     }
 
     /**

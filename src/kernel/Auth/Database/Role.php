@@ -205,7 +205,7 @@ class Role extends Model
             ->where($where)
             ->find();
 
-        return (new Collection((array)$r));
+        return (new Collection($r));
     }
 
     public function beforeUpdate($id, array &$input)

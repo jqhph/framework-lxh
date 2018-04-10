@@ -17,7 +17,7 @@ trait Authorizable
      */
     public function can($ability, $model = null)
     {
-        return $this->getClipboardInstance()->check($this, $ability, $model);
+        return $this->getClipboardInstance()->check($ability, $model);
     }
 
     /**

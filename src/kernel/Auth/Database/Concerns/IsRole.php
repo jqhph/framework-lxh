@@ -4,34 +4,14 @@ namespace Lxh\Auth\Database\Concerns;
 
 use Lxh\Auth\Helpers;
 use Lxh\Auth\Database\Models;
-use Lxh\Auth\Database\Scope\BaseTenantScope;
-use Lxh\Auth\Database\Queries\Roles as RolesQuery;
-
-use App\User;
-use Lxh\ORM\Connect\Mongo\Query;
 use Lxh\Support\Arr;
-use InvalidArgumentException;
 use Lxh\Support\Collection;
-use Lxh\Database\Eloquent\Model;
+use Lxh\MVC\Model;
 
 trait IsRole
 {
     use HasAbilities, Authorizable {
         HasAbilities::getClipboardInstance insteadof Authorizable;
-    }
-
-    /**
-     * Boot the is role trait.
-     *
-     * @return void
-     */
-    public static function bootIsRole()
-    {
-        BaseTenantScope::register(static::class);
-
-        static::creating(function ($role) {
-            Models::scope()->applyToModel($role);
-        });
     }
 
     /**
@@ -184,16 +164,4 @@ trait IsRole
         }, $keys);
     }
 
-    /**
-     * Constrain the given query to roles that were assigned to the given authorities.
-     *
-     * @param  Query  $query
-     * @param  string|Model|Collection  $model
-     * @param  array  $keys
-     * @return void
-     */
-    public function scopeWhereAssignedTo($query, $model, array $keys = null)
-    {
-        (new RolesQuery)->constrainWhereAssignedTo($query, $model, $keys);
-    }
 }

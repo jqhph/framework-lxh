@@ -176,48 +176,6 @@ class AuthManager
     }
 
     /**
-     * 给用户分配能力
-     *
-     * @param  Model|string  $authority
-     * @return \Lxh\Auth\Conductors\GivesAbilities
-     */
-    public function allow()
-    {
-        return new Conductors\GivesAbilities($this->user);
-    }
-
-    /**
-     * Start a chain, to disallow the given authority an ability.
-     *
-     * @param  Model|string  $authority
-     * @return \Lxh\Auth\Conductors\RemovesAbilities
-     */
-    public function disallow($authority)
-    {
-        return new Conductors\RemovesAbilities($authority);
-    }
-
-    /**
-     * Start a chain, to forbid the given authority an ability.
-     *
-     * @return \Lxh\Auth\Conductors\GivesAbilities
-     */
-    public function forbid()
-    {
-        return new Conductors\ForbidsAbilities($this->user);
-    }
-
-    /**
-     * Start a chain, to unforbid the given authority an ability.
-     *
-     * @return \Lxh\Auth\Conductors\RemovesAbilities
-     */
-    public function unforbid()
-    {
-        return new Conductors\UnforbidsAbilities($this->user);
-    }
-
-    /**
      * 给用户分配角色
      *
      * @param  \Lxh\Auth\Database\Role|\Lxh\Support\Collection|string  $roles
@@ -513,10 +471,19 @@ class AuthManager
     public function abilities()
     {
         if ($this->abilities === null) {
-            $this->abilities = $this->clipboard()->getAbilities();
+            $this->abilities = $this->formatAbilitiesArray($this->clipboard()->getAbilities());
         }
 
         return $this->abilities;
+    }
+
+    protected function formatAbilitiesArray(Collection $abilities)
+    {
+        $content = [];
+        foreach ($abilities->all() as &$row) {
+            $content[$row['name']] = $row;
+        }
+        return new Collection($content);
     }
 
     /**
@@ -526,8 +493,8 @@ class AuthManager
      */
     public function getAbilitiesGroupByRoles()
     {
-        $abilities = $this->abilities();
-        $roles = $this->roles();
+        $abilities   = $this->clipboard()->getAbilities();
+        $roles       = $this->roles();
         $roleKeyName = Models::getRoleKeyName();
 
         return $roles->keyBy(function (&$row) use ($abilities, $roleKeyName) {

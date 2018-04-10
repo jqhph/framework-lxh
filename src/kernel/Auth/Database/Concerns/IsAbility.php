@@ -121,15 +121,4 @@ trait IsAbility
         $query->where("{$this->tableName}.name", 'IN', $names);
     }
 
-    /**
-     * Constrain a query to simple abilities.
-     *
-     * @param    $query
-     * @return void
-     */
-    public function scopeSimpleAbility($query)
-    {
-        $query->whereNull("{$this->tableName}.entity_type");
-    }
-
 }
