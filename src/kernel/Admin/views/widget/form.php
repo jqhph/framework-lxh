@@ -24,7 +24,7 @@
         <?php if ($formOptions['enableReset']) {?>
         <div class="col-sm-2"><div class="btn-group pull-right"><button type="reset" class="btn btn-default waves-effect pull-right"><?php echo trans('Reset')?>&nbsp; <i class="fa fa-undo"></i></button></div></div>
         <?php } ?>
-        <div style="clear: both;height:5px;"></div>
+        <div style="clear:both;"></div>
     </div>
 <?php if (! $content || ! $multiples) {?>
 </form>

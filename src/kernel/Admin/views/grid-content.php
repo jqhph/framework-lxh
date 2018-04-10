@@ -1,6 +1,6 @@
 <?php echo $content?>
 <?php if ($pageString) { ?>
-    <div class="box-footer">
+    <div>
         <div class="dataTables_paginate paging_simple_numbers pull-left">
             <ul class="pagination" style="float:right"><?php echo $pageString;?></ul>
             <?php if ($pageOptions) {?>

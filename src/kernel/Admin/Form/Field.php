@@ -186,7 +186,6 @@ class Field implements Renderable
      */
     protected $width = [
         'layout' => 12,
-        'label' => 2,
         'field' => 12,
     ];
 
@@ -555,7 +554,7 @@ class Field implements Renderable
     }
 
     /**
-     * Set width for field and label.
+     * Set width for field and layout.
      *
      * @param int $layout
      * @param int $field
@@ -566,8 +565,7 @@ class Field implements Renderable
     {
         $this->width = [
             'layout' => $layout,
-            'label' => 4,
-            'field' => $field,
+            'field'  => $field,
         ];
 
         return $this;
@@ -624,7 +622,7 @@ class Field implements Renderable
      *
      * @param null $rules
      *
-     * @return mixed
+     * @return $this|mixed
      */
     public function rules($rules = null)
     {
