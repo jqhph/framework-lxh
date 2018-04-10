@@ -287,7 +287,7 @@ class Builder
      * @param $data
      * @return mixed
      */
-    public function batchInsert(&$data)
+    public function batchInsert(array &$data)
     {
         $res = $this->query->connection()->options($this->options)->batchAdd($this->tableName, $data);
         $this->clear();
@@ -300,7 +300,7 @@ class Builder
      * @param $data
      * @return mixed
      */
-    public function batchReplace(&$data)
+    public function batchReplace(array &$data)
     {
         $res = $this->query->connection()->options($this->options)->batchAdd($this->tableName, $data, true);
         $this->clear();

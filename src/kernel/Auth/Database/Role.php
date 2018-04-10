@@ -116,7 +116,7 @@ class Role extends Model
      * @param mixed $abilities 权限id
      * @return bool|mixed
      */
-    public function assignAbilities($abilities)
+    public function assignAbilities(array $abilities)
     {
         if (!($id = $this->getId()) || ! $abilities) {
             return false;
@@ -124,17 +124,17 @@ class Role extends Model
         $type = $this->getMorphType();
         $inserts = [];
 
-        foreach (array_filter((array) $abilities) as &$abilityId) {
+        foreach ($abilities as &$abilityId) {
             $inserts[] = [
-                'ability_id' => $abilityId,
-                'entity_id' => $id,
+                'ability_id'  => $abilityId,
+                'entity_id'   => $id,
                 'entity_type' => $type
             ];
         }
 
         if (!$inserts) return false;
 
-        return query()->from(Models::table('assigned_abilities'))->batchInsert($inserts);
+        return query()->from(Models::table('assigned_abilities'))->batchReplace($inserts);
     }
 
     /**
@@ -212,7 +212,7 @@ class Role extends Model
     {
         $data['modified_at'] = time();
 
-        $this->abilities = $input['abilities'];
+        $this->abilities = array_filter(explode(',', $input['abilities']));
         unset($input['abilities']);
     }
 

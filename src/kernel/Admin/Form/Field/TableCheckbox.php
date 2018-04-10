@@ -21,7 +21,7 @@ class TableCheckbox extends Field
     /**
      * @var string
      */
-    protected $color = 'success';
+    protected $color = 'primary';
 
     /**
      * @var string
@@ -141,8 +141,8 @@ class TableCheckbox extends Field
 
         return array_merge(parent::variables(), [
             'columnsNum' => &$this->columnsNum,
-            'options' => &$this->options,
-            'color' => $this->color
+            'options'    => &$this->options,
+            'color'      => $this->color
         ]);
     }
 }

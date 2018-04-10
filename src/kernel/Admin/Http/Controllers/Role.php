@@ -117,7 +117,6 @@ class Role extends Controller
 
             $form->tableCheckbox('abilities')
                 ->rows($ablities)
-                ->color('danger')
                 ->help(trans('Assign abilities') . " <a onclick=\"open_tab('$tabid', '$url', '$tablabel')\">[$tablabel]</a>");
         }
     }

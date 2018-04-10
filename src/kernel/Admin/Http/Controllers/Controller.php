@@ -386,7 +386,7 @@ class Controller extends Base
         }
 
         if (empty($params['id'])) {
-            return $this->message('INVALID ARGUMENTS', false);
+            return $this->message(trans_with_global('Missing id.'), false);
         }
         $name = I('name');
         $value = I('value');
