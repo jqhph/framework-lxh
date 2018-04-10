@@ -238,7 +238,7 @@ class Filter extends Widget implements Renderable
             }
 
             $footers = <<<EOF
-<div class="box-footer" style="padding:10px 0 0;"><div class="col-sm-12">$footers</div><div style="clear:both;$style"></div></div>
+<div style="padding:10px 0 0;"><div class="col-sm-12">$footers</div><div style="clear:both;$style"></div></div>
 EOF;
         }
 
