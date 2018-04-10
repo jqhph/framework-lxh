@@ -21,8 +21,6 @@ class Model extends Entity
      */
     protected $primaryKeyName = 'id';
 
-    protected $deleteKeyName = 'deleted';
-
     /**
      * 默认查询的字段
      *
@@ -70,8 +68,6 @@ class Model extends Entity
      * @var Dispatcher
      */
     protected $events;
-
-    protected $queries = [];
 
     /**
      * 回收站表名
@@ -130,17 +126,6 @@ class Model extends Entity
     {
         $this->primaryKeyName = $name;
         return $this;
-    }
-
-    public function setDeleteKeyName($name)
-    {
-        $this->deleteKeyName = $name;
-        return $this;
-    }
-
-    public function getDeleteKeyName()
-    {
-        return $this->deleteKeyName;
     }
 
     /**

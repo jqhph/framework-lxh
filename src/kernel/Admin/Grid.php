@@ -480,7 +480,7 @@ class Grid implements Renderable
             Admin::script('$(document).on("pjax:complete",function(){ $(".refresh-grid").button("reset")});');
 
             $this->tools->prepend(
-                "<button onclick='$(this).button(\"loading\");reload_grid();' class=\"refresh-grid btn btn-custom waves-effect\"><i class=\"zmdi zmdi-refresh-alt\"></i> $label</button>"
+                "<button onclick='$(this).button(\"loading\");reload_grid();' class=\"refresh-grid btn btn-primary waves-effect\"><i class=\"zmdi zmdi-refresh-alt\"></i> $label</button>"
             );
         }
 
