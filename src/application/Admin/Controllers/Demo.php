@@ -82,8 +82,8 @@ class Demo extends Controller
     {
         $form->slider('slider')->setLabel('滑动条');
 
-        $form->radio('radio')->setLabel('单选框')->options(['value1', 'value2', 'value3'])->default('value2')->width(6);
-        $form->checkbox('checkbox')->setLabel('复选框')->options(['value1', 'value2', 'value3'])->width(6);
+        $form->radio('radio')->setLabel('单选框')->options(['value1', 'value2', 'value3'])->default('value2');
+        $form->checkbox('checkbox')->setLabel('复选框')->options(['value1', 'value2', 'value3']);
 
         $form->divide();
 

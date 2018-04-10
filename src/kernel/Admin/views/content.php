@@ -6,7 +6,7 @@
     <title><?php echo config('admin.title')?></title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 </head>
-<body class="lxh" onmousewheel="top.document.body.scrollTop-=event.wheelDelta">
+<body class="lxh" onmousewheel="top.document.body.scrollTop-=event.wheelDelta;">
 <?php
 // 初始化全局变量
 setup_admin_content_global_js_var();
@@ -40,6 +40,29 @@ echo admin_js('js/bootstrap.min');
         ?>; __then__(function(){<?php echo $script?>});
     $d.on('shown.bs.collapse', function () {LXHSTORE.IFRAME.height()});
     $d.on('pjax:complete', function () {$(parent.window).scrollTop(0);});
+    var obj = window.top.document;
+    function onMouseWheel(e) {
+        e = e || window.event;
+        if (e.type == "mousewheel") {
+            delta = e.wheelDelta / 12;
+        } else {
+            delta = e.detail / 3 * -10;
+        }
+        if (chrome == -1) {
+            obj.documentElement.scrollTop -= delta;
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            return false;
+        }
+    }
+    if (obj != null && obj != undefined) {
+        var chrome = navigator.userAgent.search(/chrome/i),
+            delta = 0;
+        if (chrome != -1) {
+            document.addEventListener("mousewheel", onMouseWheel, false);
+        }
+    }
 })(window);
 </script>
 <?php
