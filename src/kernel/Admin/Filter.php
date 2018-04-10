@@ -311,13 +311,13 @@ EOF;
             $reset = $this->buildResetBtn()->render();
         }
 
-        $style = '';
         $close = '';
         if ($this->options['layout'] == static::LAYOUT_MODAL) {
             $close = new Button(trans('Close'));
             $close = $close->color('default')
                 ->attribute('data-dismiss', 'modal')
                 ->render();
+            $style = 'style="margin-bottom:0"';
         } else {
             $style = 'style="margin-left:10px"';
         }
