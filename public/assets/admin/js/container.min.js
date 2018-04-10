@@ -6,6 +6,7 @@ window.Lxh = function (options) {
     function setupAjax() {
         $.ajaxSetup({
             error: function (req, msg, e) {
+                NProgress.done();
                 if (req.status == 401) {
                     // 返回401表示未登录
                     var tip = trans(req.responseText);
@@ -20,6 +21,13 @@ window.Lxh = function (options) {
                     } else {
                         parent.window.location.href = LXHSTORE.LOGINURL || '/' + LXHSTORE.ROUTEPREFIX + '/login';
                     }
+                } else if (req.status == 403) {
+                    // 没有权限
+                    layer.alert(trans(req.responseText || '对不起，您没有权限执行此操作！'), {
+                        icon: 7,
+                        title: trans('Notice'),
+                        yes: function (e) {}
+                    });
                 }
             }
         });
@@ -1493,7 +1501,6 @@ window.Lxh = function (options) {
 
     /**
      * -------------------------------------------------------------------------------------
-     * 数据管理
      *
      * @param data
      * @constructor
