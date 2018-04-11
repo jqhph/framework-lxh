@@ -2,7 +2,7 @@
 
 namespace Lxh\Auth\Cache;
 
-class Store
+class Storage
 {
     protected $driver;
 

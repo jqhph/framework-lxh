@@ -4,7 +4,7 @@ namespace Lxh\Auth;
 
 use Lxh\Auth\Database\Models;
 
-use Lxh\Auth\Cache\Store;
+use Lxh\Auth\Cache\Storage;
 use Lxh\MVC\Model;
 use Lxh\Support\Collection;
 
@@ -18,18 +18,18 @@ class CachedClipboard extends Clipboard
     protected $tag = 'Lxh-auth';
 
     /**
-     * The cache store.
+     * The cache Storage.
      *
-     * @var \Lxh\Auth\Cache\Store
+     * @var \Lxh\Auth\Cache\Storage
      */
     protected $cache;
 
     /**
      * Constructor.
      *
-     * @param \Lxh\Auth\Cache\Store  $cache
+     * @param \Lxh\Auth\Cache\Storage  $cache
      */
-    public function __construct(Model $user, Store $cache)
+    public function __construct(Model $user, Storage $cache)
     {
         parent::__construct($user);
 
@@ -39,10 +39,10 @@ class CachedClipboard extends Clipboard
     /**
      * Set the cache instance.
      *
-     * @param  \Lxh\Auth\Cache\Store  $cache
+     * @param  \Lxh\Auth\Cache\Storage  $cache
      * @return $this
      */
-    public function setCache(Store $cache)
+    public function setCache(Storage $cache)
     {
         $this->cache = $cache;
 
@@ -52,7 +52,7 @@ class CachedClipboard extends Clipboard
     /**
      * Get the cache instance.
      *
-     * @return \Lxh\Auth\Cache\Store
+     * @return \Lxh\Auth\Cache\Storage
      */
     public function getCache()
     {
@@ -84,7 +84,7 @@ class CachedClipboard extends Clipboard
     }
 
     /**
-     * Get an item from the cache, or store the default value forever.
+     * Get an item from the cache, or Storage the default value forever.
      *
      * @param  string  $key
      * @param  callable  $callback

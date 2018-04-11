@@ -6,13 +6,10 @@ use Lxh\Auth\Conductors\FindRoles;
 use Lxh\Auth\Database\Role;
 use Lxh\Cache\File;
 use Lxh\Exceptions\InvalidArgumentException;
-use Lxh\Helper\Util;
 use Lxh\MVC\Model;
-use Lxh\Auth\Cache\Store;
-use Lxh\Auth\Clipboard;
+use Lxh\Auth\Cache\Storage;
 use Lxh\Auth\Database\Models;
 use Lxh\Support\Collection;
-use Lxh\Auth\Ability;
 use Lxh\Auth\Database\Ability as AbilityModel;
 
 class AuthManager
@@ -33,7 +30,7 @@ class AuthManager
     protected $user;
 
     /**
-     * @var Store
+     * @var Storage
      */
     protected $cache;
 
@@ -67,6 +64,13 @@ class AuthManager
      */
     protected $menuModelClass;
 
+    /**
+     * 缓存对象
+     *
+     * @var mixed
+     */
+    protected static $cacheStorage;
+
     public function __construct(Model $user = null)
     {
         $this->user = $user ?: __admin__();
@@ -78,7 +82,7 @@ class AuthManager
         $this->usesCached = config('admin.auth.use-cache', true);
 
         if ($this->usesCached) {
-            $this->cache = new Store($this->createCacheStore());
+            $this->cache = new Storage(static::getCacheStorage());
         }
 
         $this->enable = config('admin.auth.enable', true);
@@ -87,9 +91,19 @@ class AuthManager
     /**
      * @return File
      */
-    protected function createCacheStore()
+    public static function getCacheStorage()
     {
-        return new File();
+        return static::$cacheStorage ?: new File();
+    }
+
+    /**
+     * 设置缓存管理对象
+     *
+     * @param $storage
+     */
+    public static function setCacheStorage($storage)
+    {
+        static::$cacheStorage = $storage;
     }
 
     /**
@@ -109,7 +123,7 @@ class AuthManager
         }
 
         $this->abilities = new Collection($this->abilities);
-        $this->enable = true;
+        $this->enable    = true;
 
         return $this;
     }
@@ -217,7 +231,7 @@ class AuthManager
 
     /**
      *
-     * @return Store
+     * @return Storage
      */
     public function getCache()
     {
