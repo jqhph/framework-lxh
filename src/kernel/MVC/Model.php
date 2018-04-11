@@ -65,6 +65,13 @@ class Model extends Entity
     protected $connectionKeyName = 'primary';
 
     /**
+     * 写操作数据库连接配置键名
+     *
+     * @var string
+     */
+    protected $connectionForWriteKeyName = 'primary';
+
+    /**
      * @var Dispatcher
      */
     protected $events;
@@ -196,9 +203,9 @@ class Model extends Entity
             [$ids]
         );
         if ($trash) {
-            $q = query($this->connectionKeyName)->from($this->trashTableName);
+            $q = query($this->connectionForWriteKeyName)->from($this->trashTableName);
         } else {
-            $q = $this->query();
+            $q = $this->queryForWrite();
         }
 
         if (count($ids) > 1) {
@@ -245,7 +252,7 @@ class Model extends Entity
 
         }
 
-        $trashQuery = query($this->connectionKeyName)->from($this->trashTableName);
+        $trashQuery = query($this->connectionForWriteKeyName)->from($this->trashTableName);
 
         $trashData = $trashQuery->where($where)->find();
 
@@ -253,7 +260,7 @@ class Model extends Entity
             throw new FindModelException('Target data does not exist.');
         }
 
-        if (!$this->query()->batchInsert($trashData)) {
+        if (!$this->queryForWrite()->batchInsert($trashData)) {
             throw new InsertModelException('Failed to write to database.');
         }
 
@@ -312,7 +319,7 @@ class Model extends Entity
 
         }
 
-        $data = $res = $this->query()
+        $data = $this->query()
             ->select('*')
             ->where($where)
             ->find();
@@ -321,13 +328,13 @@ class Model extends Entity
             throw new FindModelException('Target data does not exist.');
         }
 
-        $trashQuery = query($this->connectionKeyName)->from($this->trashTableName);
+        $trashQuery = query($this->connectionForWriteKeyName)->from($this->trashTableName);
 
         if (!$trashQuery->batchInsert($data)) {
             throw new InsertModelException('Failed to write to database.');
         }
 
-        $result = $this->query()
+        $result = $this->queryForWrite()
             ->where($where)
             ->delete();
 
@@ -342,7 +349,7 @@ class Model extends Entity
             [$ids]
         );
 
-        return $res;
+        return $result;
     }
 
     protected function beforeBatchToTrash($ids)
@@ -526,7 +533,7 @@ class Model extends Entity
             [$id, &$input]
         );
 
-        $result = $this->query()->where($this->primaryKeyName, $id)->update($input);
+        $result = $this->queryForWrite()->where($this->primaryKeyName, $id)->update($input);
 
         $this->afterUpdate($id, $input, $result);
         fire(
@@ -553,7 +560,7 @@ class Model extends Entity
             [&$input]
         );
 
-        $this->insertId = $this->query()->add($input);
+        $this->insertId = $this->queryForWrite()->add($input);
         if ($this->insertId) {
             $this->setId($this->insertId);
         }
@@ -636,13 +643,13 @@ class Model extends Entity
             throw new FindModelException('Target data does not exist.');
         }
 
-        $trashQuery = query($this->connectionKeyName)->from($this->trashTableName);
+        $trashQuery = query($this->connectionForWriteKeyName)->from($this->trashTableName);
 
         if (!$trashQuery->insert($data)) {
             throw new InsertModelException('Failed to write to database.');
         }
 
-        $result = $this->query()
+        $result = $this->queryForWrite()
             ->where($this->primaryKeyName, $id)
             ->delete();
 
@@ -688,12 +695,12 @@ class Model extends Entity
         );
 
         if ($trash) {
-            $result = query($this->connectionKeyName)
+            $result = query($this->connectionForWriteKeyName)
                 ->from($this->trashTableName)
                 ->where($this->primaryKeyName, $id)
                 ->delete();
         } else {
-            $result = $this->query()->where($this->primaryKeyName, $id)->delete();
+            $result = $this->queryForWrite()->where($this->primaryKeyName, $id)->delete();
         }
 
         $this->afterDelete($id, $result, $trash);
@@ -794,11 +801,25 @@ class Model extends Entity
     }
 
     /**
+     * 读操作query
+     *
+     * @param string $name
      * @return Query
      */
     public function query($name = null)
     {
         return query($name ?: $this->connectionKeyName)->from($this->tableName);
+    }
+
+    /**
+     * 写操作query
+     *
+     * @param string $name
+     * @return Query
+     */
+    public function queryForWrite($name = null)
+    {
+        return query($name ?: $this->connectionForWriteKeyName)->from($this->tableName);
     }
 
 }

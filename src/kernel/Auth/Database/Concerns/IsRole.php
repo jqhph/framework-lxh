@@ -184,7 +184,7 @@ trait IsRole
     {
         list($model, $keys) = Helpers::extractModelAndKeys($model, $keys);
 
-        $query = query($this->connectionKeyName)
+        $query = query($this->connectionForWriteKeyName)
             ->from($table = Models::table('assigned_roles'))
             ->where('role_id', $this->getId())
             ->where('entity_type', $model->getMorphType())
