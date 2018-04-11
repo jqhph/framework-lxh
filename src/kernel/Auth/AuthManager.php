@@ -2,6 +2,7 @@
 
 namespace Lxh\Auth;
 
+use Lxh\Auth\Conductors\ChecksRoles;
 use Lxh\Auth\Conductors\FindRoles;
 use Lxh\Auth\Database\Role;
 use Lxh\Cache\File;
@@ -53,6 +54,11 @@ class AuthManager
      * @var Menu
      */
     protected $menu;
+
+    /**
+     * @var ChecksRoles
+     */
+    protected $checksRoles;
 
     /**
      * @var bool
@@ -179,17 +185,6 @@ class AuthManager
     }
 
     /**
-     * Create a new Auth instance.
-     *
-     * @param  Model  $user
-     * @return static
-     */
-    public static function create(Model $user = null)
-    {
-        return new static($user);
-    }
-
-    /**
      * 给用户分配角色
      *
      * @param  \Lxh\Auth\Database\Role|\Lxh\Support\Collection|string  $roles
@@ -218,7 +213,8 @@ class AuthManager
      */
     public function is()
     {
-        return new Conductors\ChecksRoles($this->user, $this->roles(), $this->clipboard());
+        return $this->checksRoles ?:
+            ($this->checksRoles = new Conductors\ChecksRoles($this->user, $this->roles(), $this->clipboard()));
     }
 
     /**

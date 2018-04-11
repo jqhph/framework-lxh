@@ -123,17 +123,17 @@ trait IsRole
     {
         $roles = Helpers::groupModelsAndIdentifiersByType($roles);
 
-        $roles['integers'] = $this->getNamesByKey($roles['integers']);
-
         foreach ($roles['models'] as $model) {
-            if ($id = $model->getId()) {
-                $roles['integers'][] = $id;
-            } elseif ($slug = $model->get('slug')) {
+            if ($slug = $model->get('slug')) {
                 $roles['strings'][] = $slug;
+            } elseif ($id = $model->getId()) {
+                $roles['integers'][] = $id;
             }
         }
         unset($roles['models']);
-        
+
+        $roles['integers'] = $this->getNamesByKey($roles['integers']);
+
         return Arr::collapse($roles);
     }
 
