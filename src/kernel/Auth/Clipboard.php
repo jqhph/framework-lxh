@@ -4,6 +4,7 @@ namespace Lxh\Auth;
 
 use Lxh\Auth\Access\HandlesAuthorization;
 use Lxh\Auth\Database\Models;
+use Lxh\Auth\Database\Role;
 use Lxh\Support\Collection;
 use Lxh\MVC\Model;
 
@@ -16,6 +17,26 @@ class Clipboard
      */
     protected $user;
 
+    /**
+     * @var Collection
+     */
+    protected $abilities;
+
+    /**
+     * @var Role
+     */
+    protected $role;
+
+    /**
+     * @var Collection
+     */
+    protected $roles;
+
+    /**
+     * @var Collection
+     */
+    protected $rolesName;
+
     public function __construct(Model $user)
     {
         $this->user = $user;
@@ -24,72 +45,28 @@ class Clipboard
     /**
      * Determine if the given authority has the given ability.
      *
-     * @param  Model  $authority
      * @param  string  $ability
-     * @param  Model|string|null  $model
      * @return bool
      */
-    public function check($ability, $model = null)
+    public function check($ability)
     {
-        return (bool) $this->checkGetId($ability, $model);
+        return (bool) $this->checkGetId($ability);
     }
 
     /**
      * Determine if the given authority has the given ability, and return the ability ID.
      *
-     * @param  Model  $authority
      * @param  string  $ability
      * @param  Model|string|null  $model
      * @return int|bool|null
      */
-    protected function checkGetId($ability, $model = null)
+    public function checkGetId($ability)
     {
-        $applicable = $this->compileAbilityIdentifiers($ability, $model);
-
-        // We will first check if any of the applicable abilities have been forbidden.
-        // If so, we'll return false right away, so as to not pass the check. Then,
-        // we'll check if any of them have been allowed & return the matched ID.
-        $forbiddenId = $this->findMatchingAbility(
-            $this->getForbiddenAbilities(), $applicable, $model
-        );
-
-        if ($forbiddenId) {
-            return false;
-        }
-
-        return $this->findMatchingAbility(
-            $this->getAbilities(), $applicable, $model
-        );
+        return $this->getAbilities()->filter(function (&$row) use ($ability) {
+            return get_value($row, $ability);
+        })->get(Models::getAbilityKeyName());
     }
 
-    /**
-     * Determine if any of the abilities can be matched against the provided applicable ones.
-     *
-     * @param  \Lxh\Support\Collection  $abilities
-     * @param  \Lxh\Support\Collection  $applicable
-     * @param  Model  $model
-     * @param  Model  $authority
-     * @return int|null
-     */
-    protected function findMatchingAbility($abilities, $applicable, $model)
-    {
-    }
-
-    /**
-     * Get the ID of the ability that matches one of the applicable abilities.
-     *
-     * @param  \Lxh\Support\Collection  $abilityMap
-     * @param  \Lxh\Support\Collection  $applicable
-     * @return int|null
-     */
-    protected function getMatchedAbilityId(Collection $abilityMap, Collection $applicable)
-    {
-        foreach ($abilityMap as $id => $identifier) {
-            if ($applicable->contains($identifier)) {
-                return $id;
-            }
-        }
-    }
 
     /**
      * Check if an authority has the given roles.
@@ -100,8 +77,10 @@ class Clipboard
      */
     public function checkRole($roles, $boolean = 'or')
     {
-        $available = $this->getRoles()
-                          ->intersect(Models::role()->getRoleNames($roles));
+        $available = $this->getRolesNames()
+                        ->intersect(
+                            $this->role()->getRoleNames($roles)
+                        );
 
         if ($boolean == 'or') {
             return $available->count() > 0;
@@ -113,42 +92,52 @@ class Clipboard
     }
 
     /**
-     * Compile a list of ability identifiers that match the provided parameters.
+     * 获取角色标识代码集合
      *
-     * @param  string  $ability
-     * @param  Model|string|null  $model
-     * @return \Lxh\Support\Collection
+     * @return Collection
      */
-    protected function compileAbilityIdentifiers($ability, $model)
+    public function getRolesNames()
     {
-        $ability = strtolower($ability);
-
-        if (is_null($model)) {
-            return new Collection([$ability, '*-*', '*']);
-        }
-
-        return new Collection($this->compileModelAbilityIdentifiers($ability, $model));
+        return $this->rolesName ?: ($this->rolesName = $this->getRoles()->pluck('slug'));
     }
 
     /**
-     * Compile a list of ability identifiers that match the given model.
-     *
-     * @param  string  $ability
-     * @param  string  $model
-     * @return array
+     * @return Role
      */
-    protected function compileModelAbilityIdentifiers($ability, $model)
+    protected function role()
     {
+        return $this->role ?: ($this->role = Models::role());
     }
 
     /**
-     * Get the given authority's roles.
+     * Get the authority's roles.
      *
      * @return \Lxh\Support\Collection
      */
     public function getRoles()
     {
-      
+        if ($this->roles) {
+            return $this->roles;
+        }
+
+        $ids = $this->getRoleIds()->all();
+        if (!$ids) {
+            return $this->roles = new Collection();
+        }
+
+        return $this->roles = new Collection(
+            $this->role()->whereInIds(array_unique($ids))->find()
+        );
+    }
+
+    /**
+     * 获取用户所有角色id
+     *
+     * @return Collection
+     */
+    public function getRoleIds()
+    {
+        return $this->getAbilities()->pluck('role_id');
     }
 
     /**
@@ -159,19 +148,24 @@ class Clipboard
      */
     public function getAbilities()
     {
-        $abilities = Models::ability()->getForAuthority($this->user);
+        if ($this->abilities) {
+            return $this->abilities;
+        }
 
-        return new Collection($abilities);
+        return $this->abilities = new Collection(
+            Models::ability()->getForAuthority($this->user)
+        );
     }
 
     /**
      * Get a list of the authority's forbidden abilities.
      *
-     * @param  Model  $authority
      * @return Collection
      */
     public function getForbiddenAbilities()
     {
-        return $this->getAbilities();
+        return $this->getAbilities()->filter(function (&$row) {
+            return get_value($row, 'forbidden');
+        });
     }
 }

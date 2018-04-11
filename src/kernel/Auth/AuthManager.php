@@ -102,8 +102,8 @@ class AuthManager
     {
         foreach ($abilities as &$ability) {
             $this->abilities[$ability] = [
-                'id' => '',
-                'name' => $ability,
+                'id'        => '',
+                'slug'      => $ability,
                 'forbidden' => 0,
             ];
         }
@@ -481,7 +481,7 @@ class AuthManager
     {
         $content = [];
         foreach ($abilities->all() as &$row) {
-            $content[$row['name']] = $row;
+            $content[$row['slug']] = $row;
         }
         return new Collection($content);
     }

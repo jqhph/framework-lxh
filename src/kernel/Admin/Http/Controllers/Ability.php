@@ -45,7 +45,7 @@ class Ability extends Controller
     {
         $table->text('id')->hide()->sortable();
         $table->text('title');
-        $table->code('name');
+        $table->code('slug');
         $table->checked('forbidden');
         $table->text('comment');
         $table->date('created_at')->sortable();
@@ -59,7 +59,7 @@ class Ability extends Controller
      */
     protected function filter(Filter $filter)
     {
-        $filter->text('name')->like();
+        $filter->text('slug')->like();
         $filter->text('title')->like();
         $filter->dateRange('created_at')->between()->time();
     }
@@ -78,7 +78,7 @@ class Ability extends Controller
         }
 
         $form->text('title')->rules('required|length_between[2-30]');
-        $form->text('name')->options($support)->help($this->getNameHelp())->rules('required|length_between[2-40]');
+        $form->text('slug')->options($support)->help($this->getNameHelp())->rules('required|length_between[2-40]');
         $form->text('comment');
         $form->switch('forbidden');
     }
@@ -90,8 +90,8 @@ class Ability extends Controller
 
     protected function addFilter(array &$input)
     {
-        if ($this->model()->select('id')->where('name', $input['name'])->findOne()) {
-            return $input['name'] . ' already exist.';
+        if ($this->model()->select($this->model()->getKeyName())->where('slug', $input['slug'])->findOne()) {
+            return $input['slug'] . ' already exist.';
         }
     }
 

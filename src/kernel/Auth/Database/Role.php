@@ -10,6 +10,8 @@ class Role extends Model
 {
     use Concerns\IsRole, Concerns\FindOrCreate;
 
+    protected $selectFields = 'id,slug,title';
+
     /**
      * 权限实体类型
      *
@@ -18,9 +20,11 @@ class Role extends Model
     protected $morphType = 2;
 
     /**
+     * 缓存用户输入的权限id
+     *
      * @var array
      */
-    protected $abilities = [];
+    protected $inputAbilities = [];
 
     protected function initialize()
     {
@@ -53,7 +57,7 @@ class Role extends Model
     protected function formatCreateAttributes(array &$attributes = [])
     {
         return array_merge([
-            'created_at' => time(),
+            'created_at'    => time(),
             'created_by_id' => __admin__()->getId()
         ], $attributes);
     }
@@ -199,7 +203,7 @@ class Role extends Model
         ];
 
         $r = query()
-            ->select("ability_id,$ability.name,$ability.title")
+            ->select("ability_id,$ability.slug,$ability.title")
             ->from(Models::table('assigned_abilities'))
             ->leftJoin($ability, "$ability.id", 'assigned_abilities.ability_id')
             ->where($where)
@@ -212,7 +216,7 @@ class Role extends Model
     {
         $data['modified_at'] = time();
 
-        $this->abilities = array_filter(explode(',', $input['abilities']));
+        $this->inputAbilities = array_filter(explode(',', $input['abilities']));
         unset($input['abilities']);
     }
 
@@ -221,7 +225,7 @@ class Role extends Model
         parent::afterUpdate($id, $input, $result);
 
         $this->resetAbilities();
-        $this->assignAbilities($this->abilities);
+        $this->assignAbilities($this->inputAbilities);
         // 清除相关用户缓存
         auth()->refreshForRole($this);
 
@@ -259,7 +263,7 @@ class Role extends Model
         $input['created_at']    = time();
         $input['created_by_id'] = __admin__()->getId();
 
-        $this->abilities = $input['abilities'];
+        $this->inputAbilities = $input['abilities'];
         unset($input['abilities']);
     }
 
@@ -269,8 +273,8 @@ class Role extends Model
         
         if (! $insertId) return;
 
-        if ($this->abilities) {
-            $this->assignAbilities($this->abilities);
+        if ($this->inputAbilities) {
+            $this->assignAbilities($this->inputAbilities);
             // 清除相关用户缓存
             auth()->refreshForRole($this);
         }
@@ -302,7 +306,7 @@ class Role extends Model
     public function findList(array $where, $orderString = 'id Desc', $offset = 0, $maxSize = 20)
     {
         $q = $this->query()
-            ->select(['id', 'name', 'created_at', 'modified_at', 'comment', 'title', 'created_by_id'])
+            ->select(['id', 'slug', 'created_at', 'modified_at', 'comment', 'title', 'created_by_id'])
             ->joinRaw("LEFT JOIN assigned_roles ar ON ({$this->tableName}.id = ar.role_id AND ar.entity_type = 1)")
             ->limit($offset, $maxSize);
 

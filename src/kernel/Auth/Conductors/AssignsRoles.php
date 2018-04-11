@@ -133,12 +133,12 @@ class AssignsRoles
      * @param  int  $authorityId
      * @return \Lxh\Support\Collection
      */
-    protected function getExistingAttachRecords($roleIds, $morphType, $authorityId)
+    protected function getExistingAttachRecords(Collection $roleIds, $morphType, $authorityId)
     {
         $query = $this->newPivotTableQuery()
             ->where([
-                'role_id' => ['IN', $roleIds->all()],
-                'entity_id' => $authorityId,
+                'role_id'     => ['IN', $roleIds->all()],
+                'entity_id'   => $authorityId,
                 'entity_type' => $morphType
             ]);
 
@@ -153,13 +153,13 @@ class AssignsRoles
      * @param  int $authorityId
      * @return \Lxh\Support\Collection
      */
-    protected function buildAttachRecords($roleIds, $morphType, $authorityId)
+    protected function buildAttachRecords(Collection $roleIds, $morphType, $authorityId)
     {
         return $roleIds->map(function ($roleId) use ($morphType, $authorityId) {
             return [
                 [
-                    'role_id' => $roleId,
-                    'entity_id' => $authorityId,
+                    'role_id'     => $roleId,
+                    'entity_id'   => $authorityId,
                     'entity_type' => $morphType,
                 ]
             ];

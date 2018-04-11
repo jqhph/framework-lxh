@@ -221,8 +221,8 @@ class Admin extends Controller
 
         $selected = Models::user()->setId($id);
         $selected = AuthManager::resolve($selected);
-        $roleUrl = AdminCreator::url('Role');
-        $roleKey = Models::getRoleKeyName();
+        $roleUrl  = AdminCreator::url('Role');
+        $roleKey  = Models::getRoleKeyName();
 
         if (! $auth->can('ability.read')) {
             // 如果没有权限查看权限，则只显示角色信息

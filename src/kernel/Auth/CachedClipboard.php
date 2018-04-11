@@ -66,17 +66,21 @@ class CachedClipboard extends Clipboard
      */
     public function getAbilities()
     {
+        if ($this->abilities) {
+            return $this->abilities;
+        }
+
         $key = $this->getCacheKey($this->user, 'abilities');
 
         if (is_array($abilities = $this->cache->get($key)) && $abilities) {
-            return new Collection($abilities);
+            return $this->abilities = new Collection($abilities);
         }
 
         $abilities = parent::getAbilities();
 
-        $this->cache->forever($key, $this->serializeAbilities($abilities));
+        $this->cache->forever($key, $abilities->all());
 
-        return new Collection($abilities);
+        return $this->abilities = $abilities;
     }
 
     /**
@@ -178,14 +182,4 @@ class CachedClipboard extends Clipboard
         return '_auth_';
     }
 
-    /**
-     * Serialize a collection of ability models into a plain array.
-     *
-     * @param  Collection  $abilities
-     * @return array
-     */
-    protected function serializeAbilities(Collection $abilities)
-    {
-        return $abilities->all();
-    }
 }

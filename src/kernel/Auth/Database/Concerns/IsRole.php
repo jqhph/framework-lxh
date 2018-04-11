@@ -10,9 +10,10 @@ use Lxh\MVC\Model;
 
 trait IsRole
 {
-    use HasAbilities, Authorizable {
-        HasAbilities::getClipboardInstance insteadof Authorizable;
-    }
+    /**
+     * @var Collection
+     */
+    protected $abilities;
 
     /**
      * The users relationship.
@@ -21,13 +22,41 @@ trait IsRole
      */
     public function users()
     {
-        $relation = $this->morphedByMany(
-            Models::classname(User::class),
-            'entity',
-            Models::table('assigned_roles')
+    }
+
+    /**
+     * Get all of the model's allowed abilities.
+     *
+     * @return Collection
+     */
+    public function getAbilities()
+    {
+        if ($this->abilities)
+            return $this->abilities;
+
+        $id = $this->getId();
+
+        if (! $id)
+            return $this->abilities = new Collection();
+
+        $id = [$id];
+
+        return $this->abilities = new Collection(
+            Models::ability()->findForRolesIds($id, $this->getMorphType())
         );
 
-        return Models::scope()->applyToRelation($relation);
+    }
+
+    /**
+     * Get all of the model's allowed abilities.
+     *
+     * @return Collection
+     */
+    public function getForbiddenAbilities()
+    {
+        return $this->getAbilities()->filter(function (&$row) {
+            return get_value($row, 'forbidden');
+        });
     }
 
     /**
@@ -39,11 +68,26 @@ trait IsRole
      */
     public function assignTo($model, array $keys = null)
     {
+        if (! $id = $this->getId()) {
+            return $this;
+        }
+
         list($model, $keys) = Helpers::extractModelAndKeys($model, $keys);
 
-        $query = $this->newBaseQueryBuilder()->from(Models::table('assigned_roles'));
+        $type = $model->getMorphType();
 
-        $query->insert($this->createAssignRecords($model, $keys));
+        $inserts = [];
+        foreach ($keys as &$key) {
+            $inserts[] = [
+                'role_id'     => &$id,
+                'entity_id'   => $key,
+                'entity_type' => &$type,
+            ];
+        }
+
+        $this->query()
+            ->from(Models::table('assigned_roles'))
+            ->batchReplace($inserts);
 
         return $this;
     }
@@ -81,8 +125,15 @@ trait IsRole
 
         $roles['integers'] = $this->getNamesByKey($roles['integers']);
 
-        $roles['models'] = Arr::pluck($roles['models'], 'name');
-
+        foreach ($roles['models'] as $model) {
+            if ($id = $model->getId()) {
+                $roles['integers'][] = $id;
+            } elseif ($slug = $model->get('slug')) {
+                $roles['strings'][] = $slug;
+            }
+        }
+        unset($roles['models']);
+        
         return Arr::collapse($roles);
     }
 
@@ -101,7 +152,7 @@ trait IsRole
         $key = $this->getKeyName();
 
         return (new Collection(
-            $this->where('name', 'IN', $names)->select($key)->find()
+            $this->where('slug', 'IN', $names)->select($key)->find()
         ))->pluck($key)->all();
     }
 
@@ -118,8 +169,8 @@ trait IsRole
         }
 
         return (new Collection(
-            $this->where($this->getKeyName(), 'IN', $keys)->select('name')->find()
-        ))->pluck('name')->all();
+            $this->where($this->getKeyName(), 'IN', $keys)->select('slug')->find()
+        ))->pluck('slug')->all();
     }
 
     /**
@@ -133,7 +184,7 @@ trait IsRole
     {
         list($model, $keys) = Helpers::extractModelAndKeys($model, $keys);
 
-        $query = query()
+        $query = query($this->connectionKeyName)
             ->from($table = Models::table('assigned_roles'))
             ->where('role_id', $this->getId())
             ->where('entity_type', $model->getMorphType())
@@ -142,26 +193,6 @@ trait IsRole
         $query->delete();
 
         return $this;
-    }
-
-    /**
-     * Create the pivot table records for assigning the role to given models.
-     *
-     * @param  Model  $model
-     * @param  array  $keys
-     * @return array
-     */
-    protected function createAssignRecords(Model $model, array $keys)
-    {
-        $type = $model->getMorphType();
-
-        return array_map(function ($key) use ($type) {
-            return Models::scope()->getAttachAttributes() + [
-                'role_id'     => $this->getId(),
-                'entity_type' => $type,
-                'entity_id'   => $key,
-            ];
-        }, $keys);
     }
 
 }

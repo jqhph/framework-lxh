@@ -8,9 +8,27 @@ use Lxh\Support\Collection;
 
 class Ability extends Model
 {
-    use Concerns\IsAbility, Concerns\FindOrCreate;
+    use Concerns\FindOrCreate;
 
     protected $tableName = 'abilities';
+
+    /**
+     * The roles relationship.
+     *
+     * @return array
+     */
+    public function roles()
+    {
+    }
+
+    /**
+     * The users relationship.
+     *
+     * @return array
+     */
+    public function users()
+    {
+    }
 
     /**
      * 根据权限名称创建权限
@@ -36,7 +54,7 @@ class Ability extends Model
     {
         parent::beforeAdd($input);
 
-        $input['name'] = AuthManager::normalizName($input['name']);
+        $input['slug']          = AuthManager::normalizName($input['slug']);
         $input['created_at']    = time();
         $input['created_by_id'] = __admin__()->getId();
     }
@@ -45,7 +63,7 @@ class Ability extends Model
     {
         parent::beforeUpdate($id, $input);
 
-        $input['name'] = AuthManager::normalizName($input['name']);
+        $input['slug']        = AuthManager::normalizName($input['slug']);
         $input['modified_at'] = time();
     }
 
@@ -56,7 +74,7 @@ class Ability extends Model
         }
 
         return $names + array_merge([
-            'created_at' => time(),
+            'created_at'    => time(),
             'created_by_id' => __admin__()->getId() ?: 0,
         ], $attributes);
     }
@@ -69,10 +87,8 @@ class Ability extends Model
      */
     public function getForAuthority(Model $user)
     {
-        $assignedAbilities = Models::table('assigned_abilities');
         $assignedRoles     = Models::table('assigned_roles');
 
-        $roleType = Models::role()->getMorphType();
         $userType = $user->getMorphType();
 
         $roles = $this->query()
@@ -86,14 +102,33 @@ class Ability extends Model
         
         $roles = new Collection($roles);
 
+        return $this->findForRolesIds(
+            $roles->pluck('role_id')->all()
+        );
+    }
+
+    /**
+     * 根据角色id获取权限
+     *
+     * @param array $rolesIds
+     * @return array
+     */
+    public function findForRolesIds(array $rolesIds, $morphType = null)
+    {
+        if (! $rolesIds) return [];
         $select =
-            "{$this->tableName}.id,{$this->tableName}.`name`,{$this->tableName}.title,forbidden,ab.entity_id role_id";
+            "{$this->tableName}.id,{$this->tableName}.slug,{$this->tableName}.title,forbidden,ab.entity_id role_id";
+
+        $assignedAbilities = Models::table('assigned_abilities');
+
+        $roleType = $morphType ?: Models::role()->getMorphType();
 
         return $this->query()
             ->select($select)
             ->joinRaw("LEFT JOIN $assignedAbilities ab ON ({$this->tableName}.id = ab.ability_id AND ab.entity_type = $roleType)")
-            ->whereIn('ab.entity_id', $roles->pluck('role_id')->all())
+            ->whereIn('ab.entity_id', $rolesIds)
             ->find();
+
     }
 
     public function afterAdd($insertId, array &$input)
@@ -166,13 +201,12 @@ class Ability extends Model
 
         $type = Models::role()->getMorphType();
 
-        $r = $this->query()
+        $q = $this->query()
             ->from(Models::table('assigned_abilities'))
             ->where('ability_id', $id)
-            ->where('entity_type', $type)
-            ->find();
+            ->where('entity_type', $type);
 
-        return (new Collection((array) $r))->pluck('entity_id');
+        return (new Collection($q->find()))->pluck('entity_id');
     }
 
     /**

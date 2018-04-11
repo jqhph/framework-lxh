@@ -36,7 +36,7 @@ class ChecksRoles
     public function __construct(Model $authority, Collection $roles, Clipboard $clipboard)
     {
         $this->authority = $authority;
-        $this->roles = $roles;
+        $this->roles     = $roles;
         $this->clipboard = $clipboard;
     }
 
@@ -50,7 +50,7 @@ class ChecksRoles
     {
         $roles = func_get_args();
 
-        return $this->clipboard->checkRole($this->authority, $roles, 'or');
+        return $this->clipboard->checkRole($roles, 'or');
     }
 
     /**
@@ -63,7 +63,7 @@ class ChecksRoles
     {
         $roles = func_get_args();
 
-        return $this->clipboard->checkRole($this->authority, $roles, 'not');
+        return $this->clipboard->checkRole($roles, 'not');
     }
 
     /**
@@ -76,7 +76,7 @@ class ChecksRoles
     {
         $roles = func_get_args();
 
-        return $this->clipboard->checkRole($this->authority, $roles, 'or');
+        return $this->clipboard->checkRole($roles, 'or');
     }
 
     /**
@@ -89,7 +89,7 @@ class ChecksRoles
     {
         $roles = func_get_args();
 
-        return $this->clipboard->checkRole($this->authority, $roles, 'not');
+        return $this->clipboard->checkRole($roles, 'not');
     }
 
     /**
@@ -102,6 +102,6 @@ class ChecksRoles
     {
         $roles = func_get_args();
 
-        return $this->clipboard->checkRole($this->authority, $roles, 'and');
+        return $this->clipboard->checkRole($roles, 'and');
     }
 }

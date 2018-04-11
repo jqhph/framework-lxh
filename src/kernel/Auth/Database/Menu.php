@@ -96,7 +96,7 @@ class Menu extends Model
             return '*';
         }
 
-        return "{$this->tableName}.*,$ability.name ability,$ability.title ability_title";
+        return "{$this->tableName}.*,$ability.slug ability,$ability.title ability_title";
     }
 
     /**

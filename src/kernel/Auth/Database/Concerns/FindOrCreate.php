@@ -21,7 +21,7 @@ trait FindOrCreate
         $items = Helpers::groupModelsAndIdentifiersByType($names);
 
         if ($items['integers']) {
-            $items['integers'] = $this->where('id', 'IN', $items['integers'])->find();
+            $items['integers'] = $this->where($this->getKeyName(), 'IN', $items['integers'])->find();
         }
 
         if ($items['strings']) {
@@ -43,14 +43,14 @@ trait FindOrCreate
             return new Collection([]);
         }
 
-        $rows = $this->where('name', 'IN', $names)->find() ?: [];
+        $rows = $this->where('slug', 'IN', $names)->find() ?: [];
 
-        $existing = (new Collection($rows))->keyBy('name');
+        $existing = (new Collection($rows))->keyBy('slug');
 
         return (new Collection($names))
-            ->diff($existing->pluck('name'))
-            ->map(function ($name) use ($attributes) {
-                return $this->createAndReturn(compact('name'), $attributes);
+            ->diff($existing->pluck('slug'))
+            ->map(function ($slug) use ($attributes) {
+                return $this->createAndReturn(compact('slug'), $attributes);
             })
             ->merge($existing);
     }

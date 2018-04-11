@@ -38,7 +38,7 @@ class Role extends Controller
     {
         $table->text('id')->hide()->sortable();
         $table->text('title');
-        $table->code('name');
+        $table->code('slug');
         $table->text('comment');
 
         $this->buildAbilities($table);
@@ -69,7 +69,7 @@ class Role extends Controller
 
     protected function filter(Filter $filter)
     {
-        $filter->text('name')->like();
+        $filter->text('slug')->like();
         $filter->text('title')->like();
         $filter->dateRange('created_at')->between()->time();
         $filter->select('entity_id')
@@ -84,7 +84,7 @@ class Role extends Controller
             $form->text('id')->disabled();
         }
         $form->text('title')->rules('required|length_between[2-30]');
-        $form->text('name')->rules('required|length_between[2-20]');
+        $form->text('slug')->rules('required|length_between[2-20]');
         $form->text('comment');
         $this->buildAbilitiesInput($form);
 
@@ -139,8 +139,8 @@ class Role extends Controller
 
     protected function addFilter(array &$input)
     {
-        if ($this->model()->select('id')->where('name', $input['name'])->findOne()) {
-            return $input['name'] . ' already exist.';
+        if ($this->model()->select('id')->where('slug', $input['slug'])->findOne()) {
+            return $input['slug'] . ' already exist.';
         }
     }
 
@@ -166,7 +166,7 @@ class Role extends Controller
 
         $tags = $role->findAbilitiesForRole()->map(function ($ability) use ($url) {
             $tag = new Tag();
-            $tag->label($ability['title'] ?: $ability['name']);
+            $tag->label($ability['title'] ?: $ability['slug']);
             $tag->url($url->detail($ability['ability_id']));
             return $tag->render();
         });
@@ -178,7 +178,7 @@ class Role extends Controller
     protected function rules()
     {
 //        return [
-//            'name' => 'required|between:2,30',
+//            'slug' => 'required|between:2,30',
 //            'title' => 'required|between:2,30',
 //        ];
     }

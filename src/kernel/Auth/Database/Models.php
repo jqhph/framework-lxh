@@ -22,8 +22,8 @@ class Models
      * @var array
      */
     protected static $models = [
-        'User' => AppAdmin::class,
-        'Role' => Role::class,
+        'User'    => AppAdmin::class,
+        'Role'    => Role::class,
         'Ability' => Ability::class,
     ];
 
@@ -40,9 +40,9 @@ class Models
      * @var array
      */
     protected static $tables = [
-        'role' => 'role',
-        'ability' => 'abilities',
-        'assigned_roles' => 'assigned_roles',
+        'role'               => 'role',
+        'ability'            => 'abilities',
+        'assigned_roles'     => 'assigned_roles',
         'assigned_abilities' => 'assigned_abilities'
     ];
 
@@ -50,10 +50,10 @@ class Models
      * @var array
      */
     protected static $keyNames = [
-        'Role' => 'id',
+        'Role'    => 'id',
         'Ability' => 'id',
-        'User' => 'id',
-        'Menu' => 'id',
+        'User'    => 'id',
+        'Menu'    => 'id',
     ];
 
     /**

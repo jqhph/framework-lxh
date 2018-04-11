@@ -151,7 +151,7 @@ class RemovesRoles
         return (new Collection(
             Models::role()
             ->select($key)
-            ->where('name', 'IN', $names)
+            ->where('slug', 'IN', $names)
             ->find()
         ))
             ->pluck($key);
