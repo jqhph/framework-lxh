@@ -16,11 +16,6 @@ class ChecksRoles
     protected $authority;
 
     /**
-     * @var Collection
-     */
-    protected $roles;
-
-    /**
      * The bouncer clipboard instance.
      *
      * @var \Lxh\Auth\Clipboard
@@ -33,10 +28,9 @@ class ChecksRoles
      * @param Model  $authority
      * @param \Lxh\Auth\Clipboard  $clipboard
      */
-    public function __construct(Model $authority, Collection $roles, Clipboard $clipboard)
+    public function __construct(Model $authority, Clipboard $clipboard)
     {
         $this->authority = $authority;
-        $this->roles     = $roles;
         $this->clipboard = $clipboard;
     }
 

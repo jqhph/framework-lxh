@@ -214,7 +214,7 @@ class AuthManager
     public function is()
     {
         return $this->checksRoles ?:
-            ($this->checksRoles = new Conductors\ChecksRoles($this->user, $this->roles(), $this->clipboard()));
+            ($this->checksRoles = new Conductors\ChecksRoles($this->user, $this->clipboard()));
     }
 
     /**
