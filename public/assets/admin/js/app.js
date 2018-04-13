@@ -63,7 +63,9 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
                         url : queue[i],
                         dataType: 'text',
                         ifModified: false,
+                        cache: false,
                         success: function (code) {
+                            this.url = parse_url(this.url);
                             map[this.url] = code;
                             // 判断队列所有内容是否加载完毕
                             is_completed(this.url);
@@ -71,6 +73,10 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
                             save(this.url, code);
                         }
                     });
+                }
+
+                function parse_url(url) {
+                    return  url.split('&_=')[0]
                 }
             },
 

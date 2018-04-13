@@ -1,3 +1,0 @@
-[2017-07-09 10:54:44] ERROR: SQLSTATE[HY000]: General error: 1364 Field 'id' doesn't have a default value [POST, /api/User/Register, D:\php-project\lxh\src\kernel\ORM\Connect\PDO.php(211)] [] []
-[2017-07-09 11:30:54] ERROR: Call to undefined method Lxh\Admin\Controller\User::action234(). [GET, /user/234, D:\php-project\lxh\src\kernel\MVC\ControllerManager.php(142)] [] []
-[2017-07-09 11:32:24] ERROR: Controller 'Lxh\Admin\Controller\Hash' not exists. [GET, /hash/hash/, D:\php-project\lxh\src\kernel\MVC\ControllerManager.php(239)] [] []

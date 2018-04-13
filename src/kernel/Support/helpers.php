@@ -308,7 +308,7 @@ function trans_option($value, $field, $scope = null)
 /**
  * 获取用户信息管理对象
  *
- * @return \Lxh\OAuth\Database\User
+ * @return \Lxh\RequestAuth\Database\User
  */
 function __user__()
 {
@@ -316,14 +316,14 @@ function __user__()
 
     if ($instance) return $instance;
 
-    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->create(config('oauth.user.model', 'User'));
+    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->create(config('request-auth.user.model', 'User'));
 
 }
 
 /**
  * 获取用户信息管理对象
  *
- * @return \Lxh\OAuth\Database\User
+ * @return \Lxh\RequestAuth\Database\User
  */
 function __admin__()
 {
@@ -331,7 +331,7 @@ function __admin__()
 
     if ($instance) return $instance;
 
-    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->create(config('oauth.admin.model', 'Admin'));
+    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->create(config('request-auth.admin.model', 'Admin'));
 
 }
 
@@ -372,10 +372,10 @@ function operations_logger()
 
 /**
  *
- * @param \Lxh\OAuth\Database\User|null $user
+ * @param \Lxh\RequestAuth\Database\User|null $user
  * @return \Lxh\Auth\AuthManager
  */
-function auth(\Lxh\OAuth\Database\User $user = null)
+function auth(\Lxh\RequestAuth\Database\User $user = null)
 {
     if (! $user) $user = __admin__();
 
@@ -558,6 +558,16 @@ function add_view_namespace($namespace, $hints)
 function admin_auth_class($class)
 {
     return $GLOBALS['CONTROLLERMANAGER']->setAuthClass(admin_name(), $class);
+}
+
+/**
+ * csrf token
+ *
+ * @return string
+ */
+function csrf_token()
+{
+    return session()->token();
 }
 
 /**

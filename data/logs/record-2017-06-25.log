@@ -1,1 +1,0 @@
-[2017-06-25 11:30:23] ERROR: Call to undefined method Jqh\Home\Controller\Test::actiontest(). [GET, /test/test.php, D:\php-project\gets\app\kernel\MVC\ControllerManager.php(138)] [] []

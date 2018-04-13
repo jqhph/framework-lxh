@@ -1,3 +1,0 @@
-[2017-07-03 02:31:37] ERROR: Call to undefined method Lxh\Admin\Controller\Js::actionLanguage.js(). [GET, /api/Js/Language.js, D:\work\server\lxh\app\kernel\MVC\ControllerManager.php(142)] [] []
-[2017-07-03 02:35:18] INFO: js test {"type":"Language.js","GET":"/api/Js/Language.js"} []
-[2017-07-03 02:42:25] INFO: js test {"type":"Language.js","GET":"/api/Js/Language.js"} []

@@ -13,9 +13,9 @@ use Lxh\Admin\Admin as AdminCreate;
 use Lxh\Http\Response;
 use Lxh\Http\Request;
 use Lxh\Contracts\Container\Container;
-use Lxh\OAuth\Exceptions\AuthTokenException;
-use Lxh\OAuth\Exceptions\EncryptCodeException;
-use Lxh\OAuth\Exceptions\UserNotExistException;
+use Lxh\RequestAuth\Exceptions\AuthTokenException;
+use Lxh\RequestAuth\Exceptions\EncryptCodeException;
+use Lxh\RequestAuth\Exceptions\UserNotExistException;
 
 class User
 {
@@ -48,16 +48,16 @@ class User
      */
     public function handle($options, Closure $next)
     {
-        $oauth = __admin__()->oauth();
+        $auth = __admin__()->auth();
 
         try {
-            if (! $oauth->check()) {
+            if (! $auth->check()) {
                 return $this->notlogin();
             }
 
         } catch (AuthTokenException $e) {
             // 用户可能在其他客户端重复登录
-            if ($log = $oauth->logs()->findActiveLatestLoginedLog()) {
+            if ($log = $auth->token()->findActiveLatestLoginedLog()) {
                 $msg = sprintf(
                     "检测到[%s]您在另一台电脑[%s]登录此账号，如非本人操作，请及时修改密码！",
                     date('Y-m-d H:i:s', $log['created_at']),
@@ -134,6 +134,6 @@ class User
         
         $this->request->url()->save();
 
-        return $this->response->redirect($url);
+        $this->response->redirect($url);
     }
 }

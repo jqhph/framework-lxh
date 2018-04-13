@@ -70,9 +70,7 @@ class Entity implements ArrayAccess, Arrayable, Jsonable
      */
     public function fill(array $data)
     {
-        $this->items = array_merge($this->items, $data);
-
-        return $this;
+        return $this->attach($data);
     }
 
     public function attach(array $data)

@@ -4,11 +4,11 @@ namespace Lxh\Session;
 
 use Lxh\Helper\Entity;
 use Lxh\Helper\Util;
+use Lxh\Support\Str;
 
 class Store extends Entity
 {
     protected $init   = null;
-
     protected $config = [];
 
     public function __construct()
@@ -16,8 +16,6 @@ class Store extends Entity
         $this->config = (array) config('session');
 
         $this->init();
-
-        $this->items = $_SESSION;
     }
 
     public function boot()
@@ -36,7 +34,8 @@ class Store extends Entity
         if (PHP_SESSION_ACTIVE != session_status()) {
             session_start();
 
-            $this->init = true;
+            $this->init  = true;
+            $this->items = &$_SESSION;
         }
     }
 
@@ -106,9 +105,44 @@ class Store extends Entity
         return $this;
     }
 
+    /**
+     * 获取session配置参数
+     *
+     * @return array
+     */
     public function config()
     {
         return $this->config;
+    }
+
+    /**
+     * csrf token
+     *
+     * @return string
+     */
+    public function token()
+    {
+        empty($this->init) && $this->boot();
+
+        if ($token = $this->get('_token')) {
+            return $token;
+        }
+
+        $this->regenerateToken();
+
+        return $this->get('_token');
+    }
+
+    /**
+     * Regenerate the CSRF token value.
+     *
+     * @return $this
+     */
+    public function regenerateToken()
+    {
+        $this->save('_token', Str::random(20));
+
+        return $this;
     }
 
     /**
@@ -123,7 +157,6 @@ class Store extends Entity
 
         // 启动session
         if (PHP_SESSION_ACTIVE != session_status()) {
-            // get_value($this->config, 'auto-start') !== false &&
             ini_set('session.auto_start', 0);
             $isDoStart = true;
         }
@@ -131,21 +164,13 @@ class Store extends Entity
         !empty($this->config['id']) && session_id($this->config['id']);
 
         isset($this->config['use-trans-sid']) && ini_set('session.use_trans_sid', $this->config['use-trans-sid'] ? 1 : 0);
-
         isset($this->config['name']) && session_name($this->config['name']);
-
         isset($this->config['path']) && session_save_path($this->config['path']);
-
         isset($this->config['domain']) && ini_set('session.cookie_domain', $this->config['domain']);
-
         isset($this->config['secure']) && ini_set('session.cookie_secure', $this->config['secure']);
-
         isset($this->config['httponly']) && ini_set('session.cookie_httponly', $this->config['httponly']);
-
         isset($this->config['use-cookies']) && ini_set('session.use_cookies', $this->config['use_cookies'] ? 1 : 0);
-
         isset($this->config['cache-limiter']) && session_cache_limiter($this->config['cache_limiter']);
-
         isset($this->config['cache-expire']) && session_cache_expire($this->config['cache_expire']);
 
         if (isset($this->config['expire'])) {

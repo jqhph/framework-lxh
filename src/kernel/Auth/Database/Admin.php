@@ -4,13 +4,15 @@ namespace Lxh\Auth\Database;
 
 use Lxh\Auth\Access\AuthorizationException;
 use Lxh\Auth\AuthManager;
-use Lxh\OAuth\Database\User;
-use Lxh\OAuth\Exceptions\UserNotExistException;
+use Lxh\RequestAuth\Database\User;
+use Lxh\RequestAuth\Exceptions\UserNotExistException;
 use Lxh\Support\Collection;
 use Lxh\Support\Password;
 
 class Admin extends User
 {
+    const ACTIVE_STATUS = 1;
+
     /**
      * 默认查询的字段
      *
@@ -237,7 +239,7 @@ class Admin extends User
         });
     }
 
-    public function findForLogined()
+    public function findForLogged()
     {
         if (! $id = $this->getId()) {
             return false;
@@ -245,7 +247,7 @@ class Admin extends User
 
         $data = $this->query()
             ->select($this->selectFields)
-            ->where([$this->primaryKeyName => $id, 'status' => 1])
+            ->where([$this->primaryKeyName => $id, 'status' => static::ACTIVE_STATUS])
             ->findOne();
 
         $this->fill($data);
@@ -270,7 +272,7 @@ class Admin extends User
 
         $userData = $this->query()
             ->select($this->defaultSelectFields)
-            ->where('status', 1)
+            ->where('status', static::ACTIVE_STATUS)
             ->whereOr(['username' => &$account])
             ->findOne();
 

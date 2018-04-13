@@ -56,7 +56,9 @@
                         url : queue[i],
                         dataType: 'text',
                         ifModified: false,
+                        cache: false,
                         success: function (code) {
+                            this.url = parse_url(this.url);
                             map[this.url] = code;
                             // 判断队列所有内容是否加载完毕
                             is_completed(this.url);
@@ -64,6 +66,10 @@
                             save(this.url, code);
                         }
                     });
+                }
+
+                function parse_url(url) {
+                    return  url.split('&_=')[0]
                 }
             },
 

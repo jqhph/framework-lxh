@@ -1,1 +1,0 @@
-[2017-06-19 08:38:02] ERROR: Call to undefined method Gets\Controller\Index::actionIndex(). [GET, /, D:\work\server\gets\app\kernel\MVC\ControllerManager.php(137)] [] []

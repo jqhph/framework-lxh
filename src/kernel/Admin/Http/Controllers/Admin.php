@@ -9,10 +9,6 @@ use Lxh\Admin\Fields\Tag;
 use Lxh\Admin\Filter;
 use Lxh\Admin\Form\Field\MultipleSelect;
 use Lxh\Admin\Layout\Content;
-use Lxh\Admin\Table\Td;
-use Lxh\Admin\Table\Th;
-use Lxh\Admin\Table\Tr;
-use Lxh\Admin\Widgets\Box;
 use Lxh\Admin\Widgets\Form;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Table\Table;
@@ -20,10 +16,9 @@ use Lxh\Auth\AuthManager;
 use Lxh\Auth\Database\Models;
 use Lxh\Cache\Item;
 use Lxh\Exceptions\Forbidden;
-use Lxh\Helper\Valitron\Validator;
 use Lxh\Http\Url;
 use Lxh\Auth\Database\Admin as AdminModel;
-use Lxh\OAuth\User;
+use Lxh\RequestAuth\Auth;
 use Lxh\Session\Store;
 
 class Admin extends Controller
@@ -317,12 +312,12 @@ class Admin extends Controller
             }
         }
 
-        $oauth = __admin__()->oauth();
+        $auth = __admin__()->auth();
 
         try {
-            $oauth->login($_POST['username'], $_POST['password'], I('remember'));
+            $auth->login($_POST['username'], $_POST['password'], I('remember'));
         } catch (\Exception $e) {
-            if ($oauth->failTimes() > config('admin.show-captcha-times', 5)) {
+            if ($auth->getRejectTimes() > config('admin.show-captcha-times', 5)) {
                 // 保存session，当页面刷新时显示验证码
                 $session->save('is_required_captcha', 1);
 
@@ -332,7 +327,7 @@ class Admin extends Controller
             return $this->failed();
         }
 
-        $this->clearCaptcha($oauth, $session);
+        $this->clearCaptcha($auth, $session);
 
         $target = Url::referer() ?: AdminCreator::url()->index();
 
@@ -352,10 +347,10 @@ class Admin extends Controller
         }
     }
 
-    protected function clearCaptcha(User $oauth, Store $session)
+    protected function clearCaptcha(Auth $auth, Store $session)
     {
         // 清除失败记录
-        $oauth->resetFailTimes();
+        $auth->resetRejectTimes();
         // 清除验证码相关session
         $session->delete('_captcha');
         $session->delete('is_required_captcha');
@@ -367,7 +362,7 @@ class Admin extends Controller
      */
     public function actionLogout()
     {
-        __admin__()->oauth()->logout();
+        __admin__()->auth()->logout();
 
         $this->response->redirect(
             AdminCreator::url()->login()

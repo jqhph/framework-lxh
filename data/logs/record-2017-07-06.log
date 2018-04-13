@@ -1,2 +1,0 @@
-[2017-07-06 05:57:11] ERROR: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'admin' for key 'username' [POST, /api/User/Register, D:\work\server\lxh\src\kernel\ORM\Connect\PDO.php(211)] [] []
-[2017-07-06 05:57:39] ERROR: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'admin' for key 'username' [POST, /api/User/Register, D:\work\server\lxh\src\kernel\ORM\Connect\PDO.php(211)] [] []
