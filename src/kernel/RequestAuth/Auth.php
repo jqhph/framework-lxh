@@ -86,8 +86,6 @@ class Auth
 
         $driver = $this->options['driver'] ?: Session::class;
         $this->setDriver(new $driver($this));
-
-        $this->counter = new Counters\Counter($this);
     }
 
     /**
@@ -144,7 +142,7 @@ class Auth
         try {
             $data = $this->user->login($username, $password, $options);
         } catch (\Exception $e) {
-            $this->counter->incr($username);
+            $this->counter()->incr($username);
 
             throw new $e;
         }
@@ -160,7 +158,7 @@ class Auth
         $log = $this->token->createAndSave($remember);
 
         $this->setUserLog($log);
-     
+
         // 缓存用户登录信息
         $this->driver->logged($remember);
 
@@ -283,7 +281,7 @@ class Auth
      */
     public function getRejectTimes($username = null)
     {
-        return $this->counter->total($username ?: $this->username);
+        return $this->counter()->total($username ?: $this->username);
     }
 
     /**
@@ -294,7 +292,7 @@ class Auth
      */
     public function resetRejectTimes($username = null)
     {
-        return $this->counter->reset($username ?: $this->username);
+        return $this->counter()->reset($username ?: $this->username);
     }
 
 
@@ -350,6 +348,11 @@ class Auth
     {
         $this->user = $user;
         return $this;
+    }
+
+    public function counter()
+    {
+        return $this->counter ?: ($this->counter = new Counters\Counter($this));
     }
 
 }
