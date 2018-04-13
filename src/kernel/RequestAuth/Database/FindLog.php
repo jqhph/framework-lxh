@@ -74,11 +74,11 @@ trait FindLog
      * 从数据库中查找为过期的token
      *
      * @param $userId
-     * @return array
+     * @return array|false
      */
     protected function findActivesTokenInDatabase($userId)
     {
-        if (!$data = $this->findActivesForUserId($userId)) {
+        if (! $this->storable || !$data = $this->findActivesForUserId($userId)) {
             return false;
         }
 
@@ -104,8 +104,14 @@ trait FindLog
 
     }
 
+    /**
+     * @param $userId
+     * @return array
+     */
     protected function findActivesForUserId($userId)
     {
+        if (! $this->storable) return [];
+
         return $this->model()
             ->select('*')
             ->where(['user_id' => $userId, 'active' => 1])
@@ -122,10 +128,9 @@ trait FindLog
     {
         $userId = $this->user->getId();
 
-        if (! $userId) return [];
+        if (! $userId || ! $this->storable) return [];
 
         return $this->model()
-//            ->select('life,token,id,created_at,device,ip')
             ->where(
                 [
                     'user_id' => $userId,

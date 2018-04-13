@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2018-04-02 14:46:28
+Date: 2018-04-13 17:44:49
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -21,39 +21,38 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `abilities`;
 CREATE TABLE `abilities` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) NOT NULL DEFAULT '' COMMENT '权限唯一标识，只能填英文',
+  `slug` varchar(30) NOT NULL DEFAULT '' COMMENT '权限唯一标识，只能填英文',
   `title` varchar(255) NOT NULL COMMENT '权限名称',
   `created_at` int(11) NOT NULL,
   `modified_at` int(11) unsigned NOT NULL DEFAULT '0',
   `created_by_id` int(11) unsigned NOT NULL DEFAULT '0',
   `forbidden` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0允许的权限，1禁止的权限',
-  `type` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1后台权限，2前台权限',
   `comment` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`) USING BTREE
+  UNIQUE KEY `name` (`slug`) USING BTREE
 ) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of abilities
 -- ----------------------------
-INSERT INTO `abilities` VALUES ('1', 'user.read', '用户查看', '1515207448', '1515207550', '1', '0', '1', '查看用户列表');
-INSERT INTO `abilities` VALUES ('2', 'user.update', '用户编辑', '1515207533', '1515671037', '1', '0', '1', '');
-INSERT INTO `abilities` VALUES ('3', 'user.add', '用户新增', '1515207584', '0', '1', '0', '1', '');
-INSERT INTO `abilities` VALUES ('4', 'user.delete', '用户删除', '1515207646', '0', '1', '0', '1', '');
-INSERT INTO `abilities` VALUES ('5', 'menu.read', '菜单查看', '1515207863', '0', '1', '0', '1', '');
-INSERT INTO `abilities` VALUES ('6', 'menu.add', '菜单新增', '1515207911', '0', '1', '0', '1', '');
-INSERT INTO `abilities` VALUES ('7', 'menu.edit', '菜单编辑', '1515207928', '0', '1', '0', '1', '');
-INSERT INTO `abilities` VALUES ('8', 'menu.delete', '菜单删除', '1515207953', '0', '1', '0', '1', '');
-INSERT INTO `abilities` VALUES ('9', 'system.manager', '系统管理', '1515213159', '1515760393', '1', '0', '1', '系统设置菜单进入权限');
-INSERT INTO `abilities` VALUES ('17', 'admin.read', '管理员查看', '1515230219', '1517881473', '0', '0', '1', '测试123');
-INSERT INTO `abilities` VALUES ('30', 'language.read', '语言包查看', '1515760352', '1515760370', '1', '0', '1', '');
-INSERT INTO `abilities` VALUES ('23', 'user.manager', '用户管理', '1515758278', '1515758633', '1', '0', '1', '');
-INSERT INTO `abilities` VALUES ('24', 'product.manager', '产品系统', '1515758654', '1518144506', '1', '0', '1', '123');
-INSERT INTO `abilities` VALUES ('26', 'permissions.manager', '权限管理', '1515758747', '1515758758', '1', '0', '1', '');
-INSERT INTO `abilities` VALUES ('27', 'role.read', '角色查看', '1515758787', '0', '1', '0', '1', '');
-INSERT INTO `abilities` VALUES ('28', 'ability.read', 'Ability.read', '1515758949', '1515760282', '1', '0', '1', '');
-INSERT INTO `abilities` VALUES ('29', 'create.module', 'Create.module', '1515759578', '0', '1', '0', '1', '');
-INSERT INTO `abilities` VALUES ('31', 'system.setting', 'System.setting', '1515760412', '0', '1', '0', '1', '');
+INSERT INTO `abilities` VALUES ('1', 'user.read', '用户查看', '1515207448', '1515207550', '1', '0', '查看用户列表');
+INSERT INTO `abilities` VALUES ('2', 'user.update', '用户编辑', '1515207533', '1515671037', '1', '0', '');
+INSERT INTO `abilities` VALUES ('3', 'user.add', '用户新增', '1515207584', '0', '1', '0', '');
+INSERT INTO `abilities` VALUES ('4', 'user.delete', '用户删除', '1515207646', '0', '1', '0', '');
+INSERT INTO `abilities` VALUES ('5', 'menu.read', '菜单查看', '1515207863', '0', '1', '0', '');
+INSERT INTO `abilities` VALUES ('6', 'menu.add', '菜单新增', '1515207911', '0', '1', '0', '');
+INSERT INTO `abilities` VALUES ('7', 'menu.edit', '菜单编辑', '1515207928', '0', '1', '0', '');
+INSERT INTO `abilities` VALUES ('8', 'menu.delete', '菜单删除', '1515207953', '0', '1', '0', '');
+INSERT INTO `abilities` VALUES ('9', 'system.manager', '系统管理', '1515213159', '1515760393', '1', '0', '系统设置菜单进入权限');
+INSERT INTO `abilities` VALUES ('17', 'admin.read', '管理员查看', '1515230219', '1517881473', '0', '0', '测试123');
+INSERT INTO `abilities` VALUES ('30', 'language.read', '语言包查看', '1515760352', '1515760370', '1', '0', '');
+INSERT INTO `abilities` VALUES ('23', 'user.manager', '用户管理', '1515758278', '1515758633', '1', '0', '');
+INSERT INTO `abilities` VALUES ('24', 'product.manager', '产品系统', '1515758654', '1518144506', '1', '0', '123');
+INSERT INTO `abilities` VALUES ('26', 'permissions.manager', '权限管理', '1515758747', '1515758758', '1', '0', '');
+INSERT INTO `abilities` VALUES ('27', 'role.read', '角色查看', '1515758787', '0', '1', '0', '');
+INSERT INTO `abilities` VALUES ('28', 'ability.read', 'Ability.read', '1515758949', '1515760282', '1', '0', '');
+INSERT INTO `abilities` VALUES ('29', 'create.module', 'Create.module', '1515759578', '0', '1', '0', '');
+INSERT INTO `abilities` VALUES ('31', 'system.setting', 'System.setting', '1515760412', '0', '1', '0', '');
 
 -- ----------------------------
 -- Table structure for admin
@@ -72,9 +71,9 @@ CREATE TABLE `admin` (
   `deleted` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `created_at` int(11) unsigned NOT NULL DEFAULT '0',
   `modified_at` int(11) NOT NULL DEFAULT '0',
-  `last_login_ip` char(15) NOT NULL DEFAULT '',
+  `last_login_ip` int(11) unsigned NOT NULL DEFAULT '0',
   `last_login_time` int(11) unsigned NOT NULL DEFAULT '0',
-  `reg_ip` char(15) NOT NULL DEFAULT '',
+  `reg_ip` int(11) unsigned NOT NULL DEFAULT '0',
   `is_admin` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1激活，0禁用',
   `created_by_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -85,9 +84,9 @@ CREATE TABLE `admin` (
 -- ----------------------------
 -- Records of admin
 -- ----------------------------
-INSERT INTO `admin` VALUES ('1', 'admin', '$2y$10$IK.HGNDMOV9LYHIG7jMxb.0iEV85SSkf6Lv8GN9aaAuAIFbsVnaSS', '841324345@qq.com', '', 'J', 'qh', '20180306/1b4267fe836249627de672e0d1795350.jpeg', '1', '0', '1499568986', '1520325431', '127.0.0.1', '0', '127.0.0.1', '1', '1', '0');
-INSERT INTO `admin` VALUES ('3', 'test', '$2y$10$anUpfaFdxve9b9mzmkCdfOEgoDpEss1glWk6.T5M2JnMnMh/3XvOO', '87@qq.com', '13334', '', '', '', '1', '0', '1517654504', '1519780738', '', '0', '', '0', '1', '1');
-INSERT INTO `admin` VALUES ('5', 'testhuiui123', '$2y$10$BGcwPLnwqqxm9O5WzrybweNJRFQM0l88msP6FzkM5JqnZmL6XdGya', '841324345@qq.com', '13076814390', '', '', '', '1', '0', '1519452159', '1522133382', '', '0', '', '0', '1', '1');
+INSERT INTO `admin` VALUES ('1', 'admin', '$2y$10$IK.HGNDMOV9LYHIG7jMxb.0iEV85SSkf6Lv8GN9aaAuAIFbsVnaSS', '841324345@qq.com', '', 'J', 'qh', '20180306/1b4267fe836249627de672e0d1795350.jpeg', '1', '0', '1499568986', '1520325431', '0', '0', '0', '1', '1', '0');
+INSERT INTO `admin` VALUES ('3', 'test', '$2y$10$anUpfaFdxve9b9mzmkCdfOEgoDpEss1glWk6.T5M2JnMnMh/3XvOO', '87@qq.com', '13334', 't', ' w', '', '1', '0', '1517654504', '1519780738', '0', '0', '0', '0', '1', '1');
+INSERT INTO `admin` VALUES ('5', 'testh99', '$2y$10$BGcwPLnwqqxm9O5WzrybweNJRFQM0l88msP6FzkM5JqnZmL6XdGya', '841324345@qq.com', '13076814390', '1', 'ere', '', '1', '0', '1519452159', '1522743264', '0', '0', '0', '0', '1', '1');
 
 -- ----------------------------
 -- Table structure for admin_login_log
@@ -109,63 +108,30 @@ CREATE TABLE `admin_login_log` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `token` (`token`) USING BTREE,
   KEY `user_id` (`user_id`,`active`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of admin_login_log
 -- ----------------------------
-INSERT INTO `admin_login_log` VALUES ('10', '6ec18f33b3b66c6dfdf0f566acd60ca97934bb822805e5ef088939f08514fe1c', '43sWkU1521199337.60655aaba8e994103', '1521199337', '1521199392', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('11', 'b7195c0101594c4e5edb122e7e832945bf59e5d4fce0d0ec2afc9b04919ac176', '0wJOfd1521199388.09135aaba91c164c9', '1521199388', '1521199502', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('12', 'e55e165d7e4f28ec97370a20e4ae7e3169784af578f57fef6210376ff9d94cdf', '3qwTIn1521424634.17535aaf18fa2ace5', '1521424634', '1521451736', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('13', '8a06ad14c1b99b646811dee87b0959c74c0b00c3595e2e1ecbdc4cc54dd6a037', 'jLGdTp1521453694.23785aaf8a7e3a103', '1521453694', '1521459228', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('14', '18744ea6b7c74577fbf5fca24848f51dcfdee0bec83216461e21f1be09e49c52', 'P326id1521459228.86065aafa01cd21a4', '1521459228', '1521508501', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('15', '955f41862c2c50af910c589a72784436e8f0298d89a0b0ee9c0a1d2a8e8d9084', 'fltgzY1521515611.24675ab07c5b3c390', '1521515611', '1521515930', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('16', '700aa2ebcccd5f8e64463395469bc85b4349cee19dc74af20c2be3cf06d2b2e1', 'lc8Ujh1521515930.91965ab07d9ae0852', '1521515930', '1521515954', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('17', 'ccc3ee3694da8507828971ddd1f79cec865e09777fba4183457655486aec600b', 'DJvu5f1521515954.49715ab07db2795f2', '1521515954', '1521515966', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('18', '280626a9aac54b37628704524610a679967b044fdd745e1d4c4c8f9005e63b93', 'hjNM6B1521515966.58465ab07dbe8eba0', '1521515966', '1521516000', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('19', '20cfcb000ca01ac3b4d5738d02685cf0bc70458fc73070c069b2cbe518061812', 'IkaFLw1521516000.0685ab07de010983', '1521516000', '1521516024', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('20', '46f3ebbcd5af2be0f039346fd1e4daf84adb414f0ab5287ef21ee140f3f3a730', 'vEgOSt1521516024.85635ab07df8d10cd', '1521516024', '1521526171', '127.0.0.1', '0', '0', '604800', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('21', 'a760f5ef94cba254004d26a22dfc945b0f6f64ee3283777ae325f28421a3b391', 'dqQRu01521526157.62245ab0a58d97f2d', '1521526157', '1521526393', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('22', 'd1247c1186cb4293a250688ec12e877589d25aeb7c191e65f6cc8398165e1bba', 'YtIFjO1521526321.57265ab0a6318bce9', '1521526321', '1521526447', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('23', '052f3785acd88e3dac59bb9f31796989db14ac8915b07d6e84e8d3d2567300f8', 'EKogTS1521526442.06325ab0a6aa0f719', '1521526442', '1521526489', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('24', '4582ae498298140922009fa0e1ebcc2b4f4a2f0c8f045972ea0c1ba75cd91017', 'iMRwcz1521526485.10025ab0a6d518743', '1521526485', '1521526528', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('25', '1e37701e8b998b79a655c9ee6472a4885c75652ba1a01d6e1f490db5fbdfb302', 'Xjli1h1521526498.685ab0a6e2a606a', '1521526498', '1521526564', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('26', '0f6d7d956c3ecafdc70ba7d3c18de01f6880fe1acdba8fa01c78191d2abf6249', '3XCcRz1521526560.86685ab0a720d39cf', '1521526560', '1521526584', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('27', '21f0e25cef0e92495cd8248ef1d66d6c8977ae8a2ed44a827481415d7c18bc52', 'BgFWh21521526574.35185ab0a72e55e47', '1521526574', '1521526605', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('28', '2499604e2015e396c97b1b82a938a9c6bc5ef891cda1141fc6ae2da57276e845', 'j9Lgzd1521526601.32185ab0a7494e8f6', '1521526601', '1521526642', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('29', 'be57cb066deae4628fb336fa6aaad6e564f329503aabaae87ff14f0fc4631b92', 'yIFDh01521526638.86235ab0a76ed288e', '1521526638', '1521526671', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('30', 'a100540a0bfe1052e48c1bd6d1467f3f23f0dd3a2ae46208b562cd1350245e84', 'KQciE31521526667.34115ab0a78b53491', '1521526667', '1521526773', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('31', '6ca3648951aeabcd2b0e20e5e3931a8be623cd78e23a2e530e31d360c73ad543', 'IoJfuk1521526728.07295ab0a7c811cc9', '1521526728', '1521526993', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('32', 'afdadfa952056208712458ec6e9e9f5f75500932eba6d6001aeaa12507597414', 'RrlBGk1521526990.01935ab0a8ce04b7c', '1521526990', '1521527021', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('33', 'e9b882d8f7f09f210dc86b8f8a313b11bc31eab61b2a410101674d298810eae4', 'zchqEB1521527014.48315ab0a8e675f11', '1521527014', '1521527042', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('34', '22931c3c39d648364792438a720207d6b8b844d164370e33fcc0b9e522e8387f', '90GC4K1521527032.71395ab0a8f8ae4d7', '1521527032', '1521527058', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('35', '48cfc8742f4d2165d249acdb2c7519d62b9ff845e88dc689f98e0113d5367d25', 'KmVQR61521527052.50495ab0a90c7b44c', '1521527052', '1521527606', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('36', 'a0fa8fca7efc37d4fb65f4d21e33a8f850c90d4e7ac30ea625f3752dfebabad9', 'qQ6Dfb1521527602.93515ab0ab32e44f3', '1521527602', '1521527628', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('37', 'efc9c3b83257e723e74f3e73a9bf2b379723921b271dd8d56d08f3280b0c31f4', 'tZjeLJ1521527618.90135ab0ab42dc0e2', '1521527618', '1521527658', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('38', '2de8e6c82bb847e8a44836f88bcfaccbfa8cfba729e83d848843448306c7c6a9', 'qrNC4B1521527655.04115ab0ab670a06f', '1521527655', '1521527684', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('39', '93589a62a155d2a84717f71caa8f942bf8869f5149a33909dd64c1f574ec353c', 'RTBYrj1521527680.05815ab0ab800e305', '1521527680', '1521527698', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('40', 'a1ccd867eccdc43a3c3becb50d6813c6c1b2b70ebce982a2cda23e5995d5193c', 'vkQCgo1521527696.10635ab0ab9019f2b', '1521527696', '1521599434', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('41', '7b61cef03a14ff407e715997120bb48485c65be685d428f0006b8c2f1418e8fa', 'GVYBxc1521600816.23475ab1c930394e0', '1521600816', '1521600819', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('42', '32e31ddefc0b1f188defef53a1de67ab830147a541eee565efe8475334fbf1cd', 'ZFXvxm1521682177.3445ab3070153ff2', '1521682177', '0', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('43', '3019970c38e28873d4a9f11a86c7f35bb9ee83cb6395b59375f3f91ce62b2fa7', 'xsiRTD1521697555.77065ab34313bc275', '1521697555', '1521697566', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('44', 'a869480f60f9ce225103d2a7432f2445bb7dc42cac2fea97f7b8c309382f1e33', 'ECdBse1521697566.36415ab3431e58e27', '1521697566', '1521697602', '127.0.0.1', '0', '0', '604800', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('45', '42661e024d682a177ac4f41a1bc5607449baf46eef50b23e4219fb954a310b89', 'kDq8Zl1521697602.35965ab3434257c8b', '1521697602', '1521697772', '127.0.0.1', '0', '0', '604800', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('46', '46c181a2a20db9584165edb42f665a1a23d5d69063f535c074967cb13f1bca24', 'kBrZmx1521697772.51055ab343ec7ca51', '1521697772', '1521698080', '127.0.0.1', '0', '0', '604800', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('47', 'dff82cc27d5ff7d4321c0d7266bc387a19c323b96177f3d076dc8c848bd88553', 'FuZW5c1521698081.0265ab34521065b3', '1521698081', '1521698090', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('48', '650e3537290fad121f279883ce35fa6670932c41a23da335ebf5585391ccc12c', 'DLgVWI1521698090.30925ab3452a4b803', '1521698090', '1521698265', '127.0.0.1', '0', '0', '604800', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('49', '8922abedcd19f0383f4928ead489c45fc550e3c1929fed23d634b905a4b429ec', 'SIHkYz1521698266.01425ab345da037ad', '1521698266', '1521698275', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('50', '9ac43a75c1cd965d50e89a20f6d35decf380961bf149ebd04074b8c6562f98a8', '2nYLdV1521698275.16445ab345e328254', '1521698275', '1521773731', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('51', '1ef3ecdf5709f6de1922b81ab67ff6a0404570e439ec827090d0fa5fb75677ce', '4gbMNu1521773732.93655ab46ca4e4a45', '1521773732', '1521775512', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('52', 'ea290b6f7b22ccce4b03fa919286e18827abf60b3ac66c931b1317a564f9b51f', 'GcmKBa1521775512.48575ab4739876948', '1521775512', '1521785035', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('53', '8be621dbf73b0342acee7a9b501e2520ecd41710fb966da647010704e2a61901', 'yIFDh01521785189.40235ab499656238f', '1521785189', '1521785190', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('54', '9d44593d96007ef8a34cb33e3b0dfe1b4bc20d4536ed80525d46beb3186e3103', 'b95CBf1521785264.34515ab499b05444a', '1521785264', '1521785386', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('55', '19cd43c5b226eabf9c5042eb99275d28bae001fcea129f85ece3640df665eb45', 'Lgl2Oa1521785386.04725ab49a2a0b84e', '1521785386', '1522136590', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('56', '21533d8c1d093efb90fd67e4fb962db362d9c4c22319200466f595e0ecd21edf', 'LTVjnO1522137287.94155ab9f8c7e5da8', '1522137287', '0', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('57', '798b7f3d7926d53b7a15db9d75f29e5df02d483590cffc1b9f0bd9e81d0fe4b4', 'G6yNgP1522285758.76375abc3cbeba722', '1522285758', '1522292783', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('58', '6c130c5323ba3d72ded6e9c7680bc0b7ae4a3928c6e6aec32e44b53f8961da45', 'XJWsnk1522292783.47345abc582f73935', '1522292783', '1522293097', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('59', '460893171cd2c92a5094970803fd86a6b31a26574f3df08c0b09e76697c96730', '9aypxb1522293097.16965abc596929682', '1522293097', '1522293597', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('60', '906e037b1a625a98cc51572d2ab4594e4096f99459ba48348296981722daa30b', 'sWwEhL1522293597.30555abc5b5d4a964', '1522293597', '1522294489', '127.0.0.1', '0', '0', '7200', '1', '0', '1');
-INSERT INTO `admin_login_log` VALUES ('61', '93b72ecf77897dd01118d6213ef5509bee0b140f8fa28dc5dd051bdf8bd994af', 'A5hxQW1522294489.62845abc5ed9996db', '1522294489', '0', '127.0.0.1', '0', '1', '7200', '1', '0', '1');
+INSERT INTO `admin_login_log` VALUES ('69', '0c6a12d5648019acd81df37d1918ef6b0895c95cb314c82043768981c67f403a', 'mKDslg1523607675.9445ad0687be6789', '1523607675', '0', '2130706433', '0', '0', '0', '1', '0', '1');
+INSERT INTO `admin_login_log` VALUES ('70', 'e452113e1825669089619d6b22336f5c7fa0f068127ece07cc239d69f7c60801', 'Wu4QAD1523608005.89595ad069c5dabc3', '1523608005', '1523608406', '2130706433', '0', '0', '0', '1', '0', '1');
+INSERT INTO `admin_login_log` VALUES ('71', 'd94c27df06485d7c4c413a1875e1a3dc6a29da4669ea8c4ea6f58e7591e119c8', 'g50jor1523608547.44865ad06be36d87a', '1523608547', '1523608560', '2130706433', '0', '0', '0', '1', '0', '1');
+INSERT INTO `admin_login_log` VALUES ('72', '5b7b396d570b8ddcabb3e065a0558dd083c789c1f6f3814fd0aa47e4000cf44c', 'Gnwu5O1523608650.65835ad06c4aa0bad', '1523608650', '1523608653', '2130706433', '0', '0', '0', '1', '0', '1');
+INSERT INTO `admin_login_log` VALUES ('73', '8534eac1c1dd5c4ca1fe3ad33d879c8e4f61e8d3f33fda140b9676c037b535d7', 'rqON6j1523608655.85385ad06c4fd073a', '1523608655', '1523608744', '2130706433', '0', '0', '0', '1', '0', '1');
+INSERT INTO `admin_login_log` VALUES ('74', 'ac34168c0d9853c562a8a414a58f34e9563e98c4bb41c4d34ac8d53f496f1968', 'HYNZso1523608781.35965ad06ccd57cdd', '1523608781', '0', '2130706433', '0', '0', '0', '1', '0', '1');
+INSERT INTO `admin_login_log` VALUES ('75', '6c7b59e326f9d870f40afe294486e02d46a2f85b92abecd05bec705acf11fd8c', 'EAQF2d1523608793.6465ad06cd99db7d', '1523608793', '0', '2130706433', '0', '0', '0', '1', '0', '1');
+INSERT INTO `admin_login_log` VALUES ('76', 'bb3d302d7a95cd7838fd8f0c5042823d6632a23c532d6fd80afad1a2e705528f', 'nHwG9b1523608807.64695ad06ce79ded8', '1523608807', '0', '2130706433', '0', '0', '0', '1', '0', '1');
+INSERT INTO `admin_login_log` VALUES ('77', '42aa32effa00a626b473999742478b49aa3036c08b4725b912e040360fd1c5f0', 'CdEXwI1523608833.60445ad06d019391a', '1523608833', '0', '2130706433', '0', '0', '0', '1', '0', '1');
+INSERT INTO `admin_login_log` VALUES ('78', '7f3472086c38e3ee864e23b64bcc01dba7949030ffc81f661964a61284cc37c7', 'MnVdb81523608875.89385ad06d2bda378', '1523608875', '0', '2130706433', '0', '0', '0', '1', '0', '1');
+INSERT INTO `admin_login_log` VALUES ('79', 'f24c68e934d7ea4ba17881556b83074aa4f4b1f4376b11f576f1ac3088b81a55', 'cEMrIR1523608900.02085ad06d4405180', '1523608900', '1523608916', '2130706433', '0', '0', '0', '1', '0', '1');
+INSERT INTO `admin_login_log` VALUES ('80', 'd2b8d46fa9085bc49427ae956b23d0779299c4a4ca31892a950a98eb3bec14d4', 'WagMjU1523608924.97585ad06d5cee3f4', '1523608924', '1523609038', '2130706433', '0', '0', '0', '1', '0', '1');
+INSERT INTO `admin_login_log` VALUES ('81', 'b2054162943f692790dbb8757e0f1a0624c25b99bcbdfc9d50457bec45b1f9e3', '1fUoh91523609041.86275ad06dd1d29cf', '1523609041', '0', '2130706433', '0', '0', '0', '1', '0', '1');
+INSERT INTO `admin_login_log` VALUES ('82', 'e9f58668d0436e3d4a285ddac8ff02531c0433e6104e9bd62dc5eb6ead067b1c', 'VtbleP1523609233.28475ad06e9145834', '1523609233', '1523609333', '2130706433', '0', '0', '604800', '1', '0', '1');
+INSERT INTO `admin_login_log` VALUES ('83', 'e725d3923be9b57d4eb2fd057c2138ee9a0b488f86784ae568045032c3d9ad33', 'tmsU6i1523609338.9835ad06efaefff1', '1523609338', '1523609341', '2130706433', '0', '0', '0', '1', '0', '1');
+INSERT INTO `admin_login_log` VALUES ('84', 'cfb915e3f99c0dc76912d869984f1e7674ee758d42c28f6626072c17d7a1ad22', 'QJn3Y71523609442.70525ad06f62ac2a5', '1523609442', '0', '2130706433', '0', '1', '604800', '1', '0', '1');
+INSERT INTO `admin_login_log` VALUES ('85', '100cd205c69d5d9b27eaf5852bc858e4f37035653398da15eed03df0aa6eec99', 'dl7p5C1523610280.72845ad072a8b1d60', '1523610280', '0', '2130706433', '0', '0', '604800', '1', '0', '1');
+INSERT INTO `admin_login_log` VALUES ('86', '821618b4144fbd9a62fd58a322e31ba35bed63a44277fbe9bb8801a13ea4a673', 'zRkEJ61523610325.57575ad072d58c8ea', '1523610325', '1523610372', '2130706433', '0', '0', '604800', '1', '0', '1');
+INSERT INTO `admin_login_log` VALUES ('87', 'ec51282a01351aa4441e7e02c54c0d52a325df01b70000fd6f0ecc8a178223b8', 'V5QSL21523610380.69335ad0730ca9414', '1523610380', '0', '2130706433', '0', '1', '604800', '1', '0', '1');
 
 -- ----------------------------
 -- Table structure for admin_operation_log
@@ -176,7 +142,7 @@ CREATE TABLE `admin_operation_log` (
   `admin_id` int(11) NOT NULL,
   `path` varchar(101) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `method` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 GET, 2POST, 3PUT, 4DELETE, 5OPTION',
-  `ip` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ip` int(11) unsigned NOT NULL,
   `input` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` int(11) unsigned NOT NULL DEFAULT '0',
   `table` varchar(50) NOT NULL DEFAULT '',
@@ -185,12 +151,21 @@ CREATE TABLE `admin_operation_log` (
   KEY `admin_operation_log_user_id_index` (`admin_id`),
   KEY `table` (`table`) USING BTREE,
   KEY `created_at` (`created_at`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of admin_operation_log
 -- ----------------------------
-INSERT INTO `admin_operation_log` VALUES ('1', '1', '/test', '1', '127.0.0.1', '{ \"name\": \"Administrator\", \"password\": \"$2y$10$JWwBpjZmoMqD7PPkjUotIu22dsCIT9mh.ttxH6Lop3u4pogvgqKYO\", \"password_confirmation\": \"$2y$10$JWwBpjZmoMqD7PPkjUotIu22dsCIT9mh.ttxH6Lop3u4pogvgqKYO\", \"_token\": \"qnvNxqktM7WQagJVZ2MG8LSTEkjRDr7N8rgbwIn3\", \"_method\": \"PUT\", \"_previous_\": \"http:\\/\\/www.l.com\\/admin\" }', '0', '', '0');
+INSERT INTO `admin_operation_log` VALUES ('1', '1', '/test', '1', '2130706433', '{ \"name\": \"Administrator\", \"password\": \"$2y$10$JWwBpjZmoMqD7PPkjUotIu22dsCIT9mh.ttxH6Lop3u4pogvgqKYO\", \"password_confirmation\": \"$2y$10$JWwBpjZmoMqD7PPkjUotIu22dsCIT9mh.ttxH6Lop3u4pogvgqKYO\", \"_token\": \"qnvNxqktM7WQagJVZ2MG8LSTEkjRDr7N8rgbwIn3\", \"_method\": \"PUT\", \"_previous_\": \"http:\\/\\/www.l.com\\/admin\" }', '0', '', '0');
+INSERT INTO `admin_operation_log` VALUES ('2', '1', '/lxh/demo/action/test1', '1', '2130706433', '{\"name\":\"test\",\"age\":19,\"address\":\"Guangdong\"}', '1522721437', 'test', '1');
+INSERT INTO `admin_operation_log` VALUES ('3', '1', '/lxh/api/admin/view/5', '2', '2130706433', '{\"id\":\"5\",\"username\":\"testh99\",\"email\":\"841324345@qq.com\",\"mobile\":\"13076814390\",\"avatar\":\"\",\"status\":\"1\",\"is_admin\":\"0\",\"sex\":\"1\",\"roles\":\"33\"}', '1522743264', 'admin', '2');
+INSERT INTO `admin_operation_log` VALUES ('4', '1', '/lxh/api/admin/3', '4', '2130706433', '{\"id\":\"3\"}', '1522744089', 'admin', '6');
+INSERT INTO `admin_operation_log` VALUES ('5', '1', '/lxh/api/admin/restore', '2', '2130706433', '3', '1522744113', 'admin', '8');
+INSERT INTO `admin_operation_log` VALUES ('6', '1', '/lxh/api/admin/batch-delete', '2', '2130706433', '3,5', '1522744176', 'admin', '7');
+INSERT INTO `admin_operation_log` VALUES ('7', '1', '/lxh/api/admin/restore', '2', '2130706433', '5,3', '1522744186', 'admin', '8');
+INSERT INTO `admin_operation_log` VALUES ('8', '1', '/lxh/api/role/view/36', '2', '2130706433', '{\"id\":\"36\",\"title\":\"te123dfd\",\"name\":\"test\",\"comment\":\"haha\",\"abilities\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\"}', '1523347999', 'role', '2');
+INSERT INTO `admin_operation_log` VALUES ('9', '1', '/lxh/api/role/view/36', '2', '2130706433', '{\"id\":\"36\",\"title\":\"te1123\",\"name\":\"test\",\"comment\":\"haha\",\"abilities\":\"0,0,3,0,0,0,0,0,9,17,0,0,0,0,0,0,0,0\"}', '1523348194', 'role', '2');
+INSERT INTO `admin_operation_log` VALUES ('10', '1', '/lxh/api/role/view/36', '2', '2130706433', '{\"id\":\"36\",\"title\":\"te909\",\"name\":\"test\",\"comment\":\"haha\",\"abilities\":\"0,0,3,4,5,0,0,8,0,17,0,0,0,0,0,0,0,0\"}', '1523356210', 'role', '2');
 
 -- ----------------------------
 -- Table structure for admin_trash
@@ -236,16 +211,21 @@ CREATE TABLE `assigned_abilities` (
 -- ----------------------------
 -- Records of assigned_abilities
 -- ----------------------------
-INSERT INTO `assigned_abilities` VALUES ('24', '33', '2');
+INSERT INTO `assigned_abilities` VALUES ('17', '36', '2');
 INSERT INTO `assigned_abilities` VALUES ('23', '33', '2');
 INSERT INTO `assigned_abilities` VALUES ('17', '33', '2');
+INSERT INTO `assigned_abilities` VALUES ('9', '33', '2');
 INSERT INTO `assigned_abilities` VALUES ('7', '33', '2');
 INSERT INTO `assigned_abilities` VALUES ('5', '33', '2');
 INSERT INTO `assigned_abilities` VALUES ('4', '33', '2');
-INSERT INTO `assigned_abilities` VALUES ('17', '36', '2');
+INSERT INTO `assigned_abilities` VALUES ('8', '36', '2');
+INSERT INTO `assigned_abilities` VALUES ('5', '36', '2');
+INSERT INTO `assigned_abilities` VALUES ('4', '36', '2');
 INSERT INTO `assigned_abilities` VALUES ('3', '33', '2');
 INSERT INTO `assigned_abilities` VALUES ('2', '33', '2');
 INSERT INTO `assigned_abilities` VALUES ('1', '33', '2');
+INSERT INTO `assigned_abilities` VALUES ('3', '36', '2');
+INSERT INTO `assigned_abilities` VALUES ('24', '33', '2');
 
 -- ----------------------------
 -- Table structure for assigned_roles
@@ -378,7 +358,7 @@ CREATE TABLE `demo` (
 -- Records of demo
 -- ----------------------------
 INSERT INTO `demo` VALUES ('1', '历史的尘埃', null, '0', '2,4', 'Grid网格布局示例', '1519780738', '15,12,3', '阿萨', '1', '0', null, null);
-INSERT INTO `demo` VALUES ('2', '有匪', null, '2', '4', '破雪刀', null, '1', '周翡', '0', '1', null, null);
+INSERT INTO `demo` VALUES ('2', '有匪', null, '3', '4', '破雪刀', null, '1', '周翡', '1', '1', null, null);
 INSERT INTO `demo` VALUES ('3', '剑来', null, '3', '5', '剑修', null, '5', '陈平安', '0', '1', null, null);
 
 -- ----------------------------
@@ -580,23 +560,21 @@ INSERT INTO `product` VALUES ('44', '2028-04-05 05:00:08', '0', '0', '0', '1', '
 DROP TABLE IF EXISTS `role`;
 CREATE TABLE `role` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) NOT NULL COMMENT '角色唯一标识，只能填英文',
+  `slug` varchar(30) NOT NULL COMMENT '角色唯一标识，只能填英文',
   `comment` varchar(255) NOT NULL DEFAULT '' COMMENT '角色描述',
   `created_at` int(11) unsigned NOT NULL,
   `created_by_id` int(11) unsigned NOT NULL DEFAULT '0',
-  `deleted` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `modified_at` int(11) unsigned NOT NULL DEFAULT '0',
   `title` varchar(30) NOT NULL DEFAULT '' COMMENT '角色名称',
-  `type` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1后台角色，2前台角色',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`) USING BTREE
+  UNIQUE KEY `name` (`slug`) USING BTREE
 ) ENGINE=MyISAM AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of role
 -- ----------------------------
-INSERT INTO `role` VALUES ('36', 'test', 'haha', '1515584704', '2', '0', '0', 'test', '1');
-INSERT INTO `role` VALUES ('33', 'universal', '普通角色', '1515386164', '1', '0', '0', '普通角色', '1');
+INSERT INTO `role` VALUES ('36', 'test', 'haha', '1515584704', '2', '0', 'te909');
+INSERT INTO `role` VALUES ('33', 'universal', '普通角色', '1515386164', '1', '0', '普通角色');
 
 -- ----------------------------
 -- Table structure for user

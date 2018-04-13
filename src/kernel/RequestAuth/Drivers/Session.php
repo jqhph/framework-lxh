@@ -15,6 +15,12 @@ class Session extends Driver
      */
     protected $key = '_ses_';
 
+    /**
+     * 用户登录成功后置操作
+     *
+     * @param bool $remember
+     * @return mixed
+     */
     public function logged($remember = false)
     {
         // 使用session保存
@@ -62,6 +68,17 @@ class Session extends Driver
         }
     }
 
+    /**
+     * 检查cookie是否有登录信息
+     *
+     * @return bool
+     * @throws AuthTokenException
+     * @throws EncryptCodeException
+     * @throws UserNotExistException
+     * @throws \Lxh\Exceptions\InvalidArgumentException
+     * @throws \Lxh\RequestAuth\Exceptions\UnsupportedEncryptionException
+     * @throws \Lxh\RequestAuth\Exceptions\UserIdNotFoundException
+     */
     protected function checkCookie()
     {
         // 检查cookie中是否存在登录数据
@@ -112,8 +129,6 @@ class Session extends Driver
         session()->save($this->key, $this->user->toArray());
 
         return true;
-
-
     }
 
     /**
@@ -131,11 +146,19 @@ class Session extends Driver
         return $this->checkCookie();
     }
 
+    /**
+     * 用户登出操作
+     *
+     * @throws \Lxh\RequestAuth\Exceptions\UserIdNotFoundException
+     */
     public function logout()
     {
         $log = $this->user->log();
 
         $this->token->setInactiveByUser($log->token, $log->id);
+
+        session()->delete($this->key);
+        cookie()->delete($this->key);
     }
 
     /**
