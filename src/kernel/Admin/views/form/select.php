@@ -7,8 +7,10 @@
             <?php } ?>
             <?php foreach($options as &$option): ?>
             <option value="<?php echo $option['value'] ?>" <?php
-            if (is_numeric($value)) $value = (int) $value;
-            echo  $option['value'] === $value ?'selected':''  ?>><?php echo $option['label'] ?></option>
+                if ($value !== null) {
+                    if (is_numeric($value)) $value = (int) $value;
+                    echo $option['value'] === $value ?'selected':'';
+                }?>><?php echo $option['label'] ?></option>
             <?php endforeach; ?>
         </select>
         <?php if ($help) {
