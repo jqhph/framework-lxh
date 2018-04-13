@@ -2,8 +2,6 @@
 
 namespace Lxh\Admin\Fields;
 
-use Lxh\Contracts\Support\Renderable;
-
 class Label extends Button
 {
     /**
@@ -41,11 +39,6 @@ class Label extends Button
 
     protected function buildTags()
     {
-        $icon = '';
-        if ($this->icon) {
-            $icon = "<i class='{$this->icon}'></i> ";
-        }
-
         $class = $this->getAttribute('class');
         // 是否使用随机颜色
         $useRandomColor = $this->option('useRandomColor');
@@ -53,11 +46,12 @@ class Label extends Button
         $tags = '';
         $counter = 0;
         foreach ((array)$this->label() as &$value) {
+            if (!$value) continue;
             $color = $this->getColor($useRandomColor, $counter);
 
             $this->setClass("$class label-$color");
 
-            $tags .= "<span {$this->formatAttributes()}>{$icon} {$value}</span> ";
+            $tags .= "<span {$this->formatAttributes()}>{$value}</span> ";
 
             $counter++;
         }
@@ -93,15 +87,6 @@ class Label extends Button
         }
 
         return $this->option('useRandomColor', true);
-    }
-    
-    /**
-     * 添加图标
-     */
-    public function icon($icon)
-    {
-        $this->icon = &$icon;
-        return $this;
     }
 
 }

@@ -118,7 +118,7 @@ class Field implements Renderable
             $this->label = &$label;
             return $this;
         }
-        return $this->label ?: ($this->value ?: $this->name);
+        return $this->label ?: $this->value;
     }
 
     /**
