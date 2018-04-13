@@ -70,7 +70,7 @@ abstract class Driver
             throw new UserIdNotFoundException;
         }
 
-        return $id.'~'.$this->user->getEncryptType();
+        return $id.'~'.$this->auth->option('user-type');
     }
 
     /**
@@ -115,7 +115,7 @@ abstract class Driver
     protected function parseCookieValue($value)
     {
         return explode(
-            '_', str_replace('~'.$this->user->getEncryptType(), '', $value)
+            '_', str_replace('~'.$this->auth->option('user-type'), '', $value)
         );
     }
 

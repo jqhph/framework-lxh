@@ -41,6 +41,8 @@ class Auth
         'app'                     => 0,
         // 连续登陆错误长间隔时间（秒）
         'reject-interval'         => 600,
+        // 用于区分前后台用户
+        'user-type'               => 1
     ];
 
     /**
