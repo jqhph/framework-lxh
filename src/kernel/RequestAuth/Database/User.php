@@ -46,6 +46,13 @@ abstract class User extends Model
     abstract public function findForLogged();
 
     /**
+     * 获取加密类型
+     *
+     * @return int
+     */
+    abstract public function getEncryptType();
+
+    /**
      *
      * @return RequestAuth\Auth
      */

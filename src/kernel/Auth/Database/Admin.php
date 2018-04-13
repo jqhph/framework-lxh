@@ -28,6 +28,13 @@ class Admin extends User
     protected $morphType = 1;
 
     /**
+     * 后台用户登录token加密追加值
+     *
+     * @var int
+     */
+    protected $encryptType = 1;
+
+    /**
      * @var array
      */
     protected $roles = [];
@@ -239,6 +246,9 @@ class Admin extends User
         });
     }
 
+    /**
+     * @return array|bool
+     */
     public function findForLogged()
     {
         if (! $id = $this->getId()) {
@@ -250,9 +260,17 @@ class Admin extends User
             ->where([$this->primaryKeyName => $id, 'status' => static::ACTIVE_STATUS])
             ->findOne();
 
-        $this->fill($data);
+        $this->attach($data);
 
         return $data;
+    }
+
+    /**
+     * @return int
+     */
+    public function getEncryptType()
+    {
+        return $this->encryptType;
     }
 
     /**
