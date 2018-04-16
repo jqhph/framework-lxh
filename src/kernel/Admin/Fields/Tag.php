@@ -24,9 +24,8 @@ class Tag extends Button
     {
         $this->class("$this->effect tag-cloud $this->size");
 
-        if ($url = $this->url()) {
-            $this->buildSelectorAttribute();
-            $this->attribute('onclick', $url);
+        if ($this->url) {
+            $this->setupUrlScript();
         }
 
         return $this->buildTags();
