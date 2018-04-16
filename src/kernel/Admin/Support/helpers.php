@@ -27,21 +27,11 @@ function setup_admin_global_js_var()
  *
  * @param bool $useDefaultAssets
  */
-function setup_admin_js_app_ini($useDefaultAssets = true)
+function setup_admin_js_app_ini()
 {
 ?>
 <script>
     var __CONTROLLER__ = '<?php echo __CONTROLLER__?>', __ACTION__ = '<?php echo __ACTION__?>', __MODULE__ = '<?php echo __MODULE__;?>';
-    <?php if ((isset($useDefaultAssets) && !empty($useDefaultAssets)) || !isset($useDefaultAssets)) {?>
-    require_css([
-        '@lxh/css/responsive.min',
-        '@lxh/css/pages.min',
-        '@lxh/css/components.min',
-        '@lxh/css/icon.min',
-        '@lxh/css/core.min'
-    ]);
-    require_js(['@lxh/js/container.min']);
-    <?php } ?>
     // 配置
     function __ini__() {
         var data = {};

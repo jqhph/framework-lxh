@@ -49,7 +49,7 @@ class Content implements Renderable
     protected $append = [];
 
     protected $options = [
-        'page-default-assets' => false,
+        'use-default-assets' => true,
     ];
 
     /**
@@ -135,32 +135,9 @@ class Content implements Renderable
     {
         $this->view = 'admin::page';
 
-        $this->options['page-default-assets'] = $useDefaultAssets;
+        $this->options['use-default-assets'] = $useDefaultAssets;
 
         return $this;
-    }
-
-    /**
-     * 表单
-     *
-     * @param $callback
-     * @return Box
-     */
-    public function form(callable $callback = null, $width = 12)
-    {
-        $this->rows[] = $row = new Row();
-
-        $form = new Form();
-
-        $box = new Box(null, $form);
-
-        $column = $row->column($width, $box->backable());
-
-        if ($callback) {
-            call_user_func($callback, $form, $column);
-        }
-
-        return $box;
     }
 
     /**
@@ -269,6 +246,11 @@ class Content implements Renderable
      */
     public function render()
     {
+        if ($this->options['use-default-assets']) {
+            Admin::css('@lxh/css/bootstrap.min');
+            Admin::defaultAssets();
+        }
+
         // 必须先调用build方法
         $content = $this->build();
 
@@ -285,7 +267,7 @@ class Content implements Renderable
 
         // 异步加载table，无需加载整个内容
         if (Grid::isPjaxRequest()) {
-            return "{$content}{$syncCss}{$syncJs}<script>{$css}{$js}{$script}</script><div style='display:none'>{$html}</div>";
+            return "{$css}{$content}{$syncCss}{$syncJs}<script>{$js}{$script}</script><div style='display:none'>{$html}</div>";
         }
 
         // 加载帮助函数
@@ -304,7 +286,7 @@ class Content implements Renderable
                 'style'            => Admin::style(),
                 'loadscss'         => &$syncCss,
                 'loadscripts'      => &$syncJs,
-                'useDefaultAssets' => $this->options['page-default-assets'],
+                'useDefaultAssets' => $this->options['use-default-assets'],
             ]
         )->render();
     }

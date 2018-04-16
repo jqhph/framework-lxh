@@ -73,6 +73,8 @@ class Index implements Renderable
         }
 
         $this->maxTab = config('admin.index.max-tab', 10);
+
+        Admin::css('@lxh/css/bootstrap.min');
     }
 
     /**

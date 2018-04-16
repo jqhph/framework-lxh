@@ -61,6 +61,8 @@
                         <a href="/page-recoverpw" class="text-muted"><i class="fa fa-lock m-r-5"></i> <?php echo $language->translate('forgot')?></a>
                     </div>
                 </div>
+
+                <input  name="_token" type="hidden" value="<?php echo csrf_token()?>">
             </form>
 
         </div>

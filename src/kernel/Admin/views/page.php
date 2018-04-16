@@ -8,10 +8,10 @@
     <meta name="keywords" content="<?php echo config('admin.keywords');?>">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="shortcut icon" href="<?php echo config('admin.favicon'); ?>">
+    <?php echo $css;?>
 </head>
 <body class="lxh">
 <?php
-
 echo $loadscss;
 if ($style) {?>
     <style><?php echo $style?></style>
@@ -33,19 +33,17 @@ setup_admin_global_js_var();
 ?>
 <script>
 <?php if ($useDefaultAssets) {?>
-require_css('@lxh/css/bootstrap.min');
 require_js('@lxh/plugins/toastr/toastr.min');
 require_css('@lxh/plugins/toastr/toastr.min');
 <?php } ?>
 <?php
     echo $js;
-    echo $css;
 ?>;
 __then__(function () {<?php echo $script?>});
 </script>
 <?php
 // app js初始化
-setup_admin_js_app_ini($useDefaultAssets);
+setup_admin_js_app_ini();
 
 // 加载sea js，加载所有require_js和require_css加载的文件
 echo admin_js('js/app.min');

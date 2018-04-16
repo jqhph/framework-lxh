@@ -5,6 +5,7 @@ namespace Lxh\Admin;
 use Closure;
 use Lxh\Admin\Layout\Content;
 use Lxh\Admin\Widgets\Navbar;
+use Lxh\Assets;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Helper\Util;
 use Lxh\MVC\Model;
@@ -213,9 +214,14 @@ class Admin
             return;
         }
 
-        $styles = json_encode(static::$css);
+        $links = '';
+        foreach (static::$css as &$css) {
+            $url = Assets::parseCss($css);
 
-        return "require_css($styles);";
+            $links .= "<link href=\"{$url}\" rel=\"stylesheet\" type=\"text/css\"/>";;
+        }
+
+        return $links;
     }
 
 
@@ -252,6 +258,19 @@ class Admin
         }
     }
 
+    public static function defaultAssets()
+    {
+        Admin::css([
+            '@lxh/css/responsive.min',
+            '@lxh/css/pages.min',
+            '@lxh/css/components.min',
+            '@lxh/css/icon.min',
+            '@lxh/css/core.min'
+        ]);
+        
+        Admin::js('@lxh/js/container.min');
+    }
+
     /**
      * 渲染视图的同时加载静态资源
      *
@@ -275,11 +294,11 @@ class Admin
 
         ob_start();
 
-        echo "{$syncCss}{$syncJs}{$content}";
+        echo "{$css}{$syncCss}{$syncJs}{$content}";
         ?>
 <script>
 (function () {
-    <?php echo "{$css}{$js}__then__(function(){ $script });"?>
+    <?php echo "{$js}__then__(function(){ $script });"?>
     // 加载css
     new LxhLoader(get_used_css([], <?php echo $cssv?>)).request();
     new LxhLoader(get_used_js([], <?php echo $jsv?>), call_actions).request();

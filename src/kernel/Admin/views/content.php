@@ -5,6 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title><?php echo config('admin.title')?></title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <?php
+    echo $css
+    ?>
 </head>
 <body class="lxh" onmousewheel="top.document.body.scrollTop-=event.wheelDelta;">
 <?php
@@ -33,10 +36,8 @@ echo admin_js('js/bootstrap.min');
 <script>
 (function(w){
     var $d = $(document);
-    require_css('@lxh/css/bootstrap.min');
     <?php
         echo $js;
-        echo $css;
         ?>; __then__(function(){<?php echo $script?>});
     $d.on('shown.bs.collapse', function () {LXHSTORE.IFRAME.height()});
     $d.on('pjax:complete', function () {$(parent.window).scrollTop(0);});

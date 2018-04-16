@@ -90,7 +90,7 @@ setup_admin_global_js_var();
 </script>
 
 <?php
-setup_admin_js_app_ini(false);
+setup_admin_js_app_ini();
 
 echo admin_js('js/app.min');
 echo admin_js('packages/layer/layer');
