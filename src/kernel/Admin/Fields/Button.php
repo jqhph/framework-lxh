@@ -4,9 +4,13 @@ namespace Lxh\Admin\Fields;
 
 use Lxh\Admin\Admin;
 use Lxh\Contracts\Support\Renderable;
+use Lxh\Helper\Util;
 
 class Button extends Field
 {
+    protected static $setupUrlScript = false;
+    protected static $class;
+
     /**
      * @var string
      */
@@ -108,18 +112,32 @@ class Button extends Field
 
             return;
         }
-        $script = "
+
+        // 弹窗模式
+        // 生成弹窗class
+        if (!static::$class) {
+            static::$class = 'popup'.Util::randomString(5);
+        }
+
+        $this->class(static::$class);
+        $this->attribute('data-url', $this->url);
+        $this->attribute('data-title', $this->title);
+        if (static::$setupUrlScript) {
+            return;
+        }
+        static::$setupUrlScript = true;
+
+        $script = "var url = $(this).data('url'), title = $(this).data('title');
         layer.open({
           type: 2,
-          title: '{$this->title}',
+          title: title,
           shadeClose: true,
           shade: false,
           area: ['{$this->area['width']}', '{$this->area['height']}'],
-          content: '{$this->url}'
-        }); 
-        ";
+          content: url,
+        });";
 
-        $this->on('click', $script);
+        $this->on('click', $script, '.'.static::$class);
     }
 
     /**
@@ -127,11 +145,16 @@ class Button extends Field
      *
      * @param $event
      * @param $callback
+     * @param $selector
      */
-    public function on($event, $callback)
+    public function on($event, $callback, $selector = '')
     {
+        if (! $selector) {
+            $selector = $this->getElementSelector();
+        }
+
         Admin::script(<<<EOT
-$('{$this->getElementSelector()}').on('$event', function(e) {{$callback}});
+$('{$selector}').on('$event',function(e) {{$callback}});
 EOT
         );
     }
