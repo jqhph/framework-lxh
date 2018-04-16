@@ -48,7 +48,7 @@ window.Lxh = function (options) {
 
         function init() {
             // 配置文件管理
-            config = new Store(options.settings || {});
+            config = new Store(options || {});
 
             // 工具函数管理
             util = new Util();

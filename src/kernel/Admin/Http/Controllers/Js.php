@@ -93,7 +93,17 @@ EOF;
      */
     protected function loadDataLanguage(array $scopes)
     {
-        return translator()->getPackages($scopes);
+        $packages = translator()->getPackages($scopes);
+
+        foreach ($packages as $lang => &$package) {
+            foreach ($scopes as &$scope) {
+                if (empty($package[$scope])) {
+                    $package[$scope] = [false];
+                }
+            }
+        }
+
+        return $packages;
     }
 
     // 加载语言包

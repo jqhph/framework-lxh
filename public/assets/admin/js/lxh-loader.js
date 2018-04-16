@@ -23,7 +23,9 @@
 
                 if (! src) return;
                 if (src.indexOf('.css') == -1) {
-                    src = src.indexOf('.js') == -1 ? (src+'.js') : src;
+                    if (src.indexOf('?') == -1) {
+                        src = src.indexOf('.js') == -1 ? (src+'.js') : src;
+                    }
                 }
 
                 src = normalize_url(src);
@@ -181,7 +183,6 @@
         return url ? url.split('?')[0] : '';
     }
 
-    // 获取正常的url
     function normalize_url(url) {
         url = parse_path(parse_alias(url));
         if (url.indexOf('?') == -1) {

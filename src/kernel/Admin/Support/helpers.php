@@ -47,29 +47,25 @@ function setup_admin_js_app_ini($useDefaultAssets = true)
         var data = {};
         // 容器配置
         data.options = <?php
-        $setting['language'] = config('language');
-        $setting['js-version'] = & $GLOBALS['js-version'];
-        $setting['css-version'] = & $GLOBALS['css-version'];
-        //            $config['language-packages'] = language()->getPackages(['Global', __CONTROLLER__]);
         echo json_encode([
-            'settings' => &$setting,
+            'language' => config('language'),
+            'js-version' => &$GLOBALS['js-version'],
+            'css-version' => &$GLOBALS['css-version'],
+            'use-cache' => config('client.loader.save'),
             'users' => [],
             'dataApi' => '/'.config('admin.route-prefix').'/api/js/data'
         ]);
         ?>
         // loader配置
         var publics = <?php echo json_encode(Lxh\Assets::publics())?>;
-
         // 需要载入的css
         data.publicCss = publics['public-js'];
         // 需要载入的js
         data.publicJs = publics['public-css'];
-
         <?php if ($langs = Lxh\Admin\Admin::getLangs()) {?>
         // 需要载入的语言包模块
         data.langScopes = <?php echo json_encode($langs);?>;
         <?php };?>
-
         return data
     }
 </script>

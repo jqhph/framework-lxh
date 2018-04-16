@@ -9,7 +9,6 @@
         ::-moz-selection { background-color: #E13300; color: white; }
 
         body {
-            background-color: #fff;
             margin: 40px;
             font: 13px/20px normal Helvetica, Arial, sans-serif;
             color: #4F5155;
@@ -58,7 +57,7 @@
         #container {
             margin: 0 auto;max-width: 1200px;
             border: 1px solid #D0D0D0;
-            box-shadow: 0 0 8px #D0D0D0;
+            box-shadow: 0 0 8px #D0D0D0;background:#fff;
         }
         #container p span{font-size: 15px}
         .number, .danger{color: #a94442}

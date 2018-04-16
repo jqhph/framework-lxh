@@ -211,7 +211,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
          * @param val
          */
         this.set = function (key, val, timeout) {
-            if (val instanceof Object) {
+            if (typeof val == 'object') {
                 val = JSON.stringify(val);
             }
             this.storage.setItem(this.prefix.general + key, val);
@@ -226,20 +226,25 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
          * @returns {*}
          */
         this.get = function (key, def) {
+            def = def || null
             if (! this.checkTokenValid(key)) {
-                return def || null;
+                return def;
             }
             //检测是否过期
             if (this.clearTimeout(key)) return null;
             var val = this.storage.getItem(this.prefix.general + key);
 
-            if (val) {
-                if (val.indexOf("{") === 0 || val.indexOf("[") === 0) {
-                    return JSON.parse(val);
+            try {
+                if (val) {
+                    if (val.indexOf("{") === 0 || val.indexOf("[") === 0) {
+                        return JSON.parse(val);
+                    }
+                    return val;
                 }
-                return val;
+            } catch (e) {
+                return def
             }
-            return (def || null);
+            return def;
         };
 
         /**
