@@ -57,5 +57,5 @@ return [
         'host' => '',
     ],
 
-    'theme' => 't1'
+    'navbar-theme' => 'navbar-t1'
 ];

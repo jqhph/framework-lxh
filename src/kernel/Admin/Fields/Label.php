@@ -29,11 +29,9 @@ class Label extends Button
     {
         $this->class("$this->effect label");
 
-        if ($url = $this->url()) {
-            $this->buildSelectorAttribute();
-            $this->attribute('onclick', $url);
+        if ($this->url) {
+            $this->setupUrlScript();
         }
-
         return $this->buildTags();
     }
 

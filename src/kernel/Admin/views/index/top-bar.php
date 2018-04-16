@@ -8,7 +8,7 @@
     </div>
     <style>.page-title a{color:#505458}</style>
     <!-- Button mobile view to collapse sidebar menu -->
-    <div class="navbar navbar-default navbar-<?php echo config('admin.theme')?>" role="navigation">
+    <div class="navbar navbar-default <?php echo config('admin.navbar-theme')?>" role="navigation">
         <div class="container">
             <?php if (0) {?>
             <div class="pull-left">

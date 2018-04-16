@@ -22,9 +22,14 @@ class Button extends Field
      */
     protected $options = [
         'color' => 'primary',
-        'useTab' => true,
         'id' => 'button',
     ];
+
+    protected $popup = false;
+
+    protected $title;
+
+    protected $area = ['width' => '65%', 'height' => '660px'];
 
     /**
      * @var string
@@ -79,10 +84,9 @@ class Button extends Field
     public function render()
     {
         $this->class("$this->effect btn btn-{$this->option('color')}");
-        if ($url = $this->url()) {
-            $this->buildSelectorAttribute();
 
-            $this->attribute('onclick', $url);
+        if ($this->url) {
+            $this->setupUrlScript();
         }
 
         $icon = '';
@@ -91,6 +95,31 @@ class Button extends Field
         }
 
         return "<button {$this->formatAttributes()}>{$this->label()}{$icon}</button>";
+    }
+
+    protected function setupUrlScript()
+    {
+        $this->buildSelectorAttribute();
+
+        if (! $this->popup) {
+            $name = str_replace('/', '-', $this->url);
+
+            $this->attribute('onclick', "open_tab('{$name}', '{$this->url}', '{$this->label()}')");
+
+            return;
+        }
+        $script = "
+        layer.open({
+          type: 2,
+          title: '{$this->title}',
+          shadeClose: true,
+          shade: false,
+          area: ['{$this->area['width']}', '{$this->area['height']}'],
+          content: '{$this->url}'
+        }); 
+        ";
+
+        $this->on('click', $script);
     }
 
     /**
@@ -109,19 +138,50 @@ EOT
 
     /**
      * @param string $url
-     * @return $this|string
+     * @return $this
      */
     public function url($url = null)
     {
-        if ($url) {
-            $this->url = &$url;
-            return $this;
-        }
-
-        if ($this->option('useTab') && $this->url) {
-            $name = str_replace('/', '-', $this->url);
-            return "open_tab('{$name}', '{$this->url}', '{$this->label()}')";
-        }
-        return $this->url;
+        $this->url = &$url;
+        return $this;
     }
+
+    /**
+     * 使用弹窗模式
+     *
+     * @return $this
+     */
+    public function popup()
+    {
+        $this->popup = true;
+        return $this;
+    }
+
+    /**
+     * 弹窗标题
+     *
+     * @param $title
+     * @return $this
+     */
+    public function title($title)
+    {
+        $this->title = &$title;
+        return $this;
+    }
+
+    /**
+     * 弹窗宽高设置
+     *
+     * @param $width
+     * @param string $height
+     * @return $this
+     */
+    public function area($width, $height = '660px')
+    {
+        $this->area = [
+            'width' => $width, 'height' => $height
+        ];
+        return $this;
+    }
+
 }
