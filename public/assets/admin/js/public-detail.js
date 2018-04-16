@@ -1,6 +1,7 @@
 new LxhLoader(['@lxh/js/validate.min'], function () {
     // 所有js加载完毕时间
     $(document).on('app.completed', detail);
+    detail();
     function detail() {
         var v = $lxh.validator(window.formRules || [], submit);
         var model = $lxh.createModel(),
