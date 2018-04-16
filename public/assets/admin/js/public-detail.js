@@ -1,13 +1,11 @@
 new LxhLoader(['@lxh/js/validate.min'], function () {
     // 所有js加载完毕时间
     $(document).on('app.completed', detail);
-
     function detail() {
         var v = $lxh.validator(window.formRules || [], submit);
         var model = $lxh.createModel(),
             notify = $lxh.ui().notify(),
             n = NProgress;
-
         function submit(e) {
             notify.remove();
 

@@ -35,10 +35,10 @@ class Message implements MessageInterface
     public function __construct(array $headers = [], StreamInterface $body = null)
     {
         if ($headers) {
-            $this->headers = $headers;
+            $this->headers = &$headers;
         }
         if ($body) {
-            $this->body = $body;
+            $this->body = &$body;
         }
     }
 

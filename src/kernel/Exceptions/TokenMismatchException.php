@@ -2,6 +2,6 @@
 
 namespace Lxh\Exceptions;
 
-class TokenMismatchException extends Exception
+class TokenMismatchException extends \Exception
 {
 }

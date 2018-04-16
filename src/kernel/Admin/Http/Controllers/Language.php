@@ -14,6 +14,7 @@ use Lxh\Http\Response;
 
 class Language extends Controller
 {
+    
     /**
      * 获取语言包数据接口
      *

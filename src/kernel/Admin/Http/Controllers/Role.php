@@ -32,6 +32,7 @@ class Role extends Controller
     protected function initialize()
     {
         Admin::model(\Lxh\Auth\Database\Role::class);
+        parent::initialize();
     }
 
     protected function table(Table $table)

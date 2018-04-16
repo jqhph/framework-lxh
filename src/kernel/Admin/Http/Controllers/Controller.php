@@ -22,6 +22,7 @@ use Lxh\Http\Files\Image;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
 use Lxh\Http\Uploads\Upload;
+use Lxh\Http\VerifyCsrfToken;
 use Lxh\MVC\Controller as Base;
 use Lxh\Status;
 
@@ -93,6 +94,15 @@ class Controller extends Base
      * @var bool
      */
     protected $trash = false;
+
+    /**
+     * 初始化
+     */
+    protected function initialize()
+    {
+        // 使用防御csrf攻击中间件
+        $this->middleware(VerifyCsrfToken::class);
+    }
 
     /**
      * 列表界面

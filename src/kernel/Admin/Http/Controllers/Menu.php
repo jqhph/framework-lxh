@@ -39,6 +39,8 @@ class Menu extends Controller
     {
         Admin::model(\Lxh\Auth\Database\Menu::class);
         $this->useAuthorize = config('use-authorize');
+
+        parent::initialize();
     }
 
     /**

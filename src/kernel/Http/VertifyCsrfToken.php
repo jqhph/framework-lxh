@@ -27,9 +27,6 @@ class VerifyCsrfToken
             $this->runningUnitTests($request) ||
             $this->tokensMatch($request)
         ) {
-
-            $this->addCookieToResponse();
-
             return $next($params);
         }
 
@@ -82,12 +79,11 @@ class VerifyCsrfToken
      */
     protected function getTokenFromRequest(Request $request)
     {
-        $token = I('_token') ?: $request->getHeaderLine('X-CSRF-TOKEN');
+        $token = I('_token') ?: $request->getHeaderLine('X_CSRF_TOKEN');
 
-        if (! $token && $header = $request->getHeaderLine('X-XSRF-TOKEN')) {
+        if (! $token && $header = $request->getHeaderLine('X_XSRF_TOKEN')) {
             $token = $this->decrypt($header);
         }
-
         return $token;
     }
 
@@ -96,12 +92,4 @@ class VerifyCsrfToken
         return $header;
     }
 
-    /**
-     * Add the CSRF token to the response cookies.
-     *
-     */
-    protected function addCookieToResponse()
-    {
-        cookie()->save('XSRF-TOKEN', csrf_token(), 3600 * 24);
-    }
 }

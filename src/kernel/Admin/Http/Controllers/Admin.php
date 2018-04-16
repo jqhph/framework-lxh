@@ -47,6 +47,8 @@ class Admin extends Controller
     protected function initialize()
     {
         AdminCreator::model(AdminModel::class);
+
+        parent::initialize();
     }
 
     /**

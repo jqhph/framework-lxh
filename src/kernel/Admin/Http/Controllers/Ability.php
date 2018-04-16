@@ -18,6 +18,7 @@ class Ability extends Controller
     protected function initialize()
     {
         Admin::model(\Lxh\Auth\Database\Ability::class);
+        parent::initialize();
     }
 
     /**

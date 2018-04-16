@@ -185,7 +185,7 @@
     function normalize_url(url) {
         url = parse_path(parse_alias(url));
         if (url.indexOf('?') == -1) {
-            return url + '?_js&_=' + version
+            return url + '?v=' + version
         }
         return url;
     }
