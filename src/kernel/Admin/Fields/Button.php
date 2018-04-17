@@ -8,8 +8,7 @@ use Lxh\Helper\Util;
 
 class Button extends Field
 {
-    protected static $setupUrlScript = false;
-    protected static $class;
+    protected static $setupUrlScripts = [];
 
     /**
      * @var string
@@ -43,7 +42,7 @@ class Button extends Field
     public function __construct($label = null, $url = null)
     {
         $this->label = &$label;
-        $this->url = &$url;
+        $this->url   = &$url;
     }
 
     public function sm()
@@ -103,9 +102,9 @@ class Button extends Field
 
     protected function setupUrlScript()
     {
-        $this->buildSelectorAttribute();
-
         if (! $this->popup) {
+            $this->buildSelectorAttribute();
+
             $name = str_replace('/', '-', $this->url);
 
             $this->attribute('onclick', "open_tab('{$name}', '{$this->url}', '{$this->label()}')");
@@ -114,18 +113,14 @@ class Button extends Field
         }
 
         // 弹窗模式
-        // 生成弹窗class
-        if (!static::$class) {
-            static::$class = 'popup'.Util::randomString(5);
-        }
-
-        $this->class(static::$class);
+        $class = 'btn-popup-'.ord($this->name);
+        $this->class($class);
         $this->attribute('data-url', $this->url);
         $this->attribute('data-title', $this->title);
-        if (static::$setupUrlScript) {
+        if (!empty(static::$setupUrlScripts[$this->name])) {
             return;
         }
-        static::$setupUrlScript = true;
+        static::$setupUrlScripts[$this->name] = true;
 
         $script = "var url = $(this).data('url'), title = $(this).data('title');
         layer.open({
@@ -137,7 +132,7 @@ class Button extends Field
           content: url,
         });";
 
-        $this->on('click', $script, '.'.static::$class);
+        $this->on('click', $script, '.'.$class);
     }
 
     /**

@@ -258,17 +258,16 @@ class Content implements Renderable
         Admin::collectFieldAssets();
 
         $html    = Admin::hidden();
-        $js      = Admin::js();
-        $css     = Admin::css();
         $script  = Admin::script();
-        $syncJs  = Admin::getLoadScripts();
-        $syncCss = Admin::getLoadStyles();
-
 
         // 异步加载table，无需加载整个内容
         if (Grid::isPjaxRequest()) {
-            return "{$css}{$content}{$syncCss}{$syncJs}<script>{$js}{$script}</script><div style='display:none'>{$html}</div>";
+            return "{$content}<script>{$script}</script><div style='display:none'>{$html}</div>";
         }
+        $js      = Admin::js();
+        $css     = Admin::css();
+        $syncJs  = Admin::getLoadScripts();
+        $syncCss = Admin::getLoadStyles();
 
         // 加载帮助函数
         Admin::includeHelpers();
