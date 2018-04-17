@@ -1,6 +1,6 @@
 <?php
 /**
- * 性能追踪
+ * 追踪
  *
  * Created by PhpStorm.
  * User: Jqh
@@ -102,7 +102,7 @@ class Track
     protected function checkResponseAccess(Request $request)
     {
         // 生产环境，不记录任何信息
-        return (! is_prod() && config('response-trace-log', true) == true) ? true : false;
+        return (! is_prod() && config('response-trace-log', true) == true && !is_cli()) ? true : false;
     }
 
     /**
@@ -147,11 +147,11 @@ class Track
         $uri = $request->getUri();
 
         $requestInfo = ' [Module: ' . $controllerManager->moduleName()
-                        . ', Controller: ' . $controllerManager->getClass()
-                        . ', Action: ' . $controllerManager->actionName() . '] '
-                        . $request->date() . ' ' . $request->protocol()
-                        . ' ' . $request->getMethod() . ': '
-                        . $uri->getPath() . ' ' . $uri->getQuery();
+            . ', Controller: ' . $controllerManager->getClass()
+            . ', Action: ' . $controllerManager->actionName() . '] '
+            . $request->date() . ' ' . $request->protocol()
+            . ' ' . $request->getMethod() . ': '
+            . $uri->getPath() . ' ' . $uri->getQuery();
 
         $allFiles = get_included_files();
 

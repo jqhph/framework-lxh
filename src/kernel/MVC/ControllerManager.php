@@ -203,7 +203,7 @@ class ControllerManager extends Factory
         $this->setRequestParams($router->requestParams);
         $this->setAuthParams($router->auth, $router);
 
-        if (! is_prod()) {
+        if (! is_prod() && ! is_cli()) {
             session();
         }
 
