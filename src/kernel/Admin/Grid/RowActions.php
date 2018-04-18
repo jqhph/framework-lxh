@@ -48,6 +48,8 @@ class RowActions extends TrTools
         $this->allowDelete = $this->grid->option('allowDelete');
         $this->url         = Admin::url();
         $this->rendering   = $rendering;
+
+        $this->title = trans('Actions');
     }
 
     /**
