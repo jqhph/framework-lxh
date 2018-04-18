@@ -17,6 +17,11 @@ use Lxh\Support\Arr;
 class RowActions extends TrTools
 {
     /**
+     * @var string
+     */
+    protected $title;
+
+    /**
      * @var Grid
      */
     protected $grid;
@@ -38,11 +43,11 @@ class RowActions extends TrTools
 
     public function __construct(Grid $grid, \Closure $rendering = null)
     {
-        $this->grid = $grid;
-        $this->allowEdit = $this->grid->option('allowEdit');
+        $this->grid        = $grid;
+        $this->allowEdit   = $this->grid->option('allowEdit');
         $this->allowDelete = $this->grid->option('allowDelete');
-        $this->url = Admin::url();
-        $this->rendering = $rendering;
+        $this->url         = Admin::url();
+        $this->rendering   = $rendering;
     }
 
     /**
@@ -53,9 +58,14 @@ class RowActions extends TrTools
         return $this->items;
     }
 
-    public function title()
+    public function title($title = null)
     {
-        return '';
+        if ($title !== null) {
+            $this->title = &$title;
+            return $this;
+        }
+
+        return $this->title;
     }
 
     /**
