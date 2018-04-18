@@ -172,6 +172,7 @@ class Grid implements Renderable
         'allowedBatchRestore'           => false,
         // 刷新按钮
         'allowedRefresh'                => true,
+        'defaultOrderByString'          => '',
     ];
 
     /**
@@ -237,6 +238,11 @@ class Grid implements Renderable
      * @var string
      */
     protected $layout = 'table';
+
+    /**
+     * @var \Closure
+     */
+    protected $orderByFilter;
 
     /**
      * Create a new grid instance.
@@ -636,13 +642,46 @@ class Grid implements Renderable
      */
     protected function makeOrderContent()
     {
-        if (! $sort = I('sort')) return "`{$this->idName}` DESC";
+        if (! $sort = I('sort')) {
+            $order = $this->options['defaultOrderByString'] ?: "`{$this->idName}` DESC";
+        } else {
+            $desc = I('desc');
 
-        $desc = I('desc');
+            $sort = addslashes($sort);
 
-        $sort = addslashes($sort);
+            $order =  "`{$sort}` " . ($desc ? 'DESC' : 'ASC');
+        }
 
-        return "`{$sort}` " . ($desc ? 'DESC' : 'ASC');
+        if ($this->orderByFilter) {
+            return call_user_func($this->orderByFilter, $order, $sort);
+        }
+        return $order;
+    }
+
+    /**
+     * 设置默认排序
+     *
+     * @param $order
+     * @return $this
+     */
+    public function setDefaultOrderBy($order)
+    {
+        $this->options['defaultOrderByString'] = &$order;
+
+        return $this;
+    }
+
+    /**
+     * order by排序过滤器
+     *
+     * @param \Closure $filter
+     * @return $this
+     */
+    public function orderByFilter(\Closure $filter)
+    {
+        $this->orderByFilter = $filter;
+
+        return $this;
     }
 
 

@@ -334,7 +334,7 @@ class Demo extends Controller
      */
     protected function table(Table $table)
     {
-        $table->code('id')->hide()->sortable();
+        $table->code('id')->sortable()->asc();
         $table->text('text')->th(function (Th $th) {
             // 设置标题颜色
             $th->style('color:green;font-weight:600');

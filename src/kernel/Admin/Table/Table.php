@@ -153,6 +153,13 @@ class Table extends Widget
     protected $useQuickEdit = false;
 
     /**
+     * 是否已设置默认排序
+     *
+     * @var bool
+     */
+    protected $settingsDefaultOrderBy = false;
+
+    /**
      * Table constructor.
      *
      * @param array $headers
@@ -356,6 +363,59 @@ class Table extends Widget
         }
         $this->headers[$this->field]['sortable'] = $field ?: 1;
         return $this;
+    }
+
+    /**
+     * 设置默认排序为倒序
+     *
+     * @return $this
+     */
+    public function desc()
+    {
+        if (! $this->field) {
+            return $this;
+        }
+        $this->headers[$this->field]['desc'] = 1;
+
+        $this->setDefaultOrderBy(true);
+
+        return $this;
+    }
+
+    /**
+     * 设置默认排序为正序
+     *
+     * @return $this
+     */
+    public function asc()
+    {
+        if (! $this->field) {
+            return $this;
+        }
+        $this->headers[$this->field]['asc'] = 1;
+
+        $this->setDefaultOrderBy(false);
+
+        return $this;
+    }
+
+    /**
+     * 设置默认排序
+     *
+     * @param $desc
+     */
+    protected function setDefaultOrderBy($desc)
+    {
+        if ($this->settingsDefaultOrderBy) {
+            throw new \RuntimeException('请勿同时设置多个默认排序字段');
+        }
+        $this->settingsDefaultOrderBy = true;
+
+        $sortable = get_value($this->headers[$this->field], 'sortable');
+
+        $field = is_string($sortable) ? $sortable : $this->field;
+
+        $this->grid->setDefaultOrderBy($field. ($desc ? ' DESC' : ' ASC'));
     }
 
     /**
@@ -592,7 +652,9 @@ class Table extends Widget
         }
 
         if (($desc = get_value($options, 'desc')) !== null) {
-            $th->desc($desc);
+            $th->desc();
+        } elseif (($asc = get_value($options, 'asc')) !== null) {
+            $th->asc();
         }
 
         if ($handler = $this->handler('th', $field)) {

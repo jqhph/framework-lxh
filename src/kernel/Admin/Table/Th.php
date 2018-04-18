@@ -117,12 +117,21 @@ class Th extends Widget
     }
 
     /**
-     * @param string $desc
      * @return $this
      */
-    public function desc($desc)
+    public function desc()
     {
-        $this->desc = $desc;
+        $this->desc = true;
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function asc()
+    {
+        $this->desc = false;
 
         return $this;
     }
@@ -151,8 +160,9 @@ class Th extends Widget
             return;
         }
 
-        $icon = 'fa-arrows-v';
-        $desc = $this->defaultDesc;// 默认升序排序
+        $icon  = 'fa-arrows-v';
+        $desc  = $this->defaultDesc;// 默认升序排序
+        $field = is_string($this->sortable) ? $this->sortable : $this->field;
 
         if ($this->isSorted()) {
             $this->desc = I('desc', $this->desc);
@@ -169,7 +179,7 @@ class Th extends Widget
         $url = clone $this->table->grid()->getUrl();
 
         $url->query([
-            'sort' => is_string($this->sortable) ? $this->sortable : $this->field,
+            'sort' => &$field,
             'desc' => $desc
         ]);
         
