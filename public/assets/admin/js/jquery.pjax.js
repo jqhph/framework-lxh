@@ -923,39 +923,3 @@
     $.support.pjax ? enable() : disable()
 
 })(jQuery);
-
-__then__(function () {
-    $.pjax.defaults.timeout = 10000;
-    $.pjax.defaults.maxCacheLength = 0;
-    $(document).pjax('#pjax-container a:not(a[target="_blank"])', {container: '#pjax-container'});
-    $(document).on('submit', 'form[pjax-container]', function(e) {$.pjax.submit(e, '#pjax-container')});
-    $(document).on("pjax:popstate", function() {
-        $(document).one("pjax:end", function(e) {
-            $(e.target).find("script[data-exec-on-popstate]").each(function() {
-                $.globalEval(this.text || this.textContent || this.innerHTML || '');
-            });
-        });
-    });
-    var $loading, $current = LXHSTORE.TAB.currentEl();
-    $(document).on('pjax:send', function(xhr) {
-        NProgress.start();
-        $current = LXHSTORE.TAB.currentEl();
-        if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
-            var $submit_btn = $('form[pjax-container] :submit');
-            if($submit_btn) $submit_btn.button('loading');
-        }
-        $loading = loading($('#pjax-container').parent());
-    });
-    $(document).on('pjax:complete', function(xhr) {
-        NProgress.done();
-        if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
-            var $submit_btn = $('form[pjax-container] :submit');
-            if($submit_btn) $submit_btn.button('reset');
-        }
-        $loading && $loading.close();
-        // 重新绑定点击事件
-        $('.grid-per-pager').change(change_pages);
-        // 重新计算iframe高度
-        LXHSTORE.IFRAME.height($current.iframe.find('iframe'));
-    })
-});
