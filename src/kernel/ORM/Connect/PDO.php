@@ -6,9 +6,6 @@ use Lxh\Exceptions\Exception;
 
 class PDO
 {
-    /*
-     * 成员属性
-     */
     private $type;	    //数据库类型
     private $host;		//主机名
     private $port;		//端口号
@@ -17,23 +14,55 @@ class PDO
     private $charset;	//字符集
     private $dbname;	//数据库名称
     private $prefix;	//表前缀
+    private $breakReconnect;
+
     /**
      * @var \PDO
      */
     private $pdo;
 
-    protected $options = [];
-
-    protected $config;
-    // 是否启用连接池
+    /**
+     * 是否启用连接池
+     *
+     * @var bool
+     */
     protected $usepool;
 
-    // 保存最后执行的sql语句
+    /**
+     * 选项配置
+     *
+     * @var array
+     */
+    protected $options = [];
+
+    /**
+     * 保存最后执行的sql语句
+     *
+     * @var string
+     */
     public static $lastSql;
 
+    /**
+     * @var float
+     */
+    protected $debugAt;
+
+    /**
+     * 最后执行sql的预处理绑定参数
+     *
+     * @var array
+     */
     public static $lastPrepareData = [];
 
+    /**
+     * @var \PDOStatement
+     */
     protected $stmt;
+
+    /**
+     * @var int
+     */
+    protected $transTimes = 0;
 
     /**
      * 构造方法 初始化数据库连接
@@ -47,7 +76,7 @@ class PDO
         }
 
         $this->usepool = isset($config['usepool']) ? $config['usepool'] : false;
-        $this->type = isset($config['type'])    ? $config['type']    : 'mysql';
+        $this->type    = isset($config['type'])    ? $config['type']    : 'mysql';
         $this->host    = isset($config['host'])    ? $config['host']    : 'localhost';
         $this->port    = isset($config['port'])    ? $config['port']    : 3306;
         $this->user    = isset($config['user'])    ? $config['user']    : 'root';
@@ -55,6 +84,8 @@ class PDO
         $this->charset = isset($config['charset']) ? $config['charset'] : 'utf8';
         $this->dbname  = isset($config['name'])    ? $config['name']    : '';
         $this->prefix  = isset($config['prefix'])  ? $config['prefix']  : '';
+
+        $this->breakReconnect = isset($config['breakReconnect'])  ? $config['breakReconnect']  : false;
 
         //连接数据库
         $this->connect();
@@ -71,7 +102,7 @@ class PDO
     {
         $dsn = "{$this->type}:host={$this->host};port={$this->port};dbname={$this->dbname};charset={$this->charset}";
 
-        $s = microtime(true);
+        $this->debug($dsn);
 
         if ($this->usepool) {
             $this->pdo = new \pdoProxy($dsn, $this->user, $this->pass);
@@ -80,10 +111,28 @@ class PDO
         }
 
         // 记录追踪调试信息
-        db_track($dsn, $s, 'c');
+        $this->debugEnd('c');
 
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);//开启异常处理
         return $this->pdo;
+    }
+
+    public function options(array $options)
+    {
+        $this->options = &$options;
+        return $this;
+    }
+
+    /**
+     * 获取选项参数
+     *
+     * @param string $k
+     * @param string $def
+     * @return mixed
+     */
+    public function option($k, $def = '')
+    {
+        return isset($this->options[$k]) ? $this->options[$k] : $def;
     }
 
     /**
@@ -104,25 +153,20 @@ class PDO
      */
     public function exec($command)
     {
-        self::$lastSql = & $command;
-
-//        if (! $this->check($command)) {
-//            throw new \Exception('It is not safe to do this query', 0);
-//        }
-
-        $s = microtime(true);
-
+        $this->debug($command);
         $res = $this->pdo->exec($command);
-
-        // 记录追踪调试信息
-        db_track($command, $s, 'w');
+        $this->debugEnd('w');
 
         $this->release();
 
         return $res;
     }
 
-    // 获取单行数据
+    /**
+     * 获取单行数据
+     *
+     * @return mixed
+     */
     public function fetch()
     {
         return $this->stmt->fetch(\PDO::FETCH_ASSOC);
@@ -139,6 +183,274 @@ class PDO
         return $this->stmt ? $this->stmt->fetchAll(\PDO::FETCH_COLUMN) : false;
     }
 
+    /**
+     * SQL性能分析
+     *
+     * @param string $sql
+     * @return array
+     */
+    public function getExplain($sql)
+    {
+        $sql = "EXPLAIN $sql";
+
+        return array_change_key_case($this->one($sql));
+    }
+
+    /**
+     * @param $sql
+     * @param array $params
+     */
+    protected function debug(&$sql, $params = [])
+    {
+        self::$lastSql         = &$sql;
+        self::$lastPrepareData = &$params;
+        $this->debugAt         = microtime(true);
+    }
+
+    /**
+     * 调试结束
+     */
+    protected function debugEnd($type = 'r')
+    {
+        // 记录追踪调试信息
+        db_track(self::$lastSql, $this->debugAt, $type, self::$lastPrepareData);
+    }
+
+
+    /**
+     * 取得数据库的表信息
+     *
+     * @param string $dbName
+     * @return array
+     */
+    public function getTables($dbName = null)
+    {
+        $dbName = $dbName === false ? '' : ($dbName ?: $this->dbname);
+
+        $sql = !empty($dbName) ? 'SHOW TABLES FROM ' . $dbName : 'SHOW TABLES ';
+
+        $info   = [];
+        foreach ($this->all($sql) as $key => &$val) {
+            $info[$key] = current($val);
+        }
+        return $info;
+    }
+
+    /**
+     * 取得数据表的字段信息
+     * 
+     * @param string $table
+     * @return array
+     */
+    public function getFields($table)
+    {
+        list($table) = explode(' ', $table);
+        if (false === strpos($table, '`')) {
+            if (strpos($table, '.')) {
+                $table = str_replace('.', '`.`', $table);
+            }
+            $table = '`' . $table . '`';
+        }
+        $sql = 'SHOW COLUMNS FROM ' . $table;
+
+        $result = $this->all($sql);
+
+        $info   = [];
+        foreach ($result as $key => &$val) {
+            $val                 = array_change_key_case($val);
+            $info[$val['field']] = [
+                'name'    => $val['field'],
+                'type'    => $val['type'],
+                'notnull' => (bool) ('' === $val['null']), // not null is empty, null is yes
+                'default' => $val['default'],
+                'primary' => (strtolower($val['key']) == 'pri'),
+                'autoinc' => (strtolower($val['extra']) == 'auto_increment'),
+            ];
+        }
+
+        return $info;
+    }
+
+    /**
+     * 执行数据库事务
+     *
+     * @param callable $callback 数据操作方法回调
+     * @return mixed
+     * @throws \PDOException
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    public function transaction($callback)
+    {
+        $this->startTrans();
+        try {
+            $result = null;
+            if (is_callable($callback)) {
+                $result = call_user_func_array($callback, [$this]);
+            }
+            $this->commit();
+            return $result;
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        } catch (\Throwable $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+
+    /**
+     * 用于非自动提交状态下面的查询提交
+     *
+     * @return $this
+     * @throws \PDOException
+     */
+    public function commit()
+    {
+        if (1 == $this->transTimes) {
+            $this->pdo->commit();
+        }
+
+        --$this->transTimes;
+        return $this;
+    }
+
+    /**
+     * 事务回滚
+     *
+     * @return $this
+     * @throws \PDOException
+     */
+    public function rollback()
+    {
+        if (1 == $this->transTimes) {
+            $this->pdo->rollBack();
+        } elseif ($this->transTimes > 1 && $this->supportSavepoint()) {
+            $this->pdo->exec(
+                $this->parseSavepointRollBack('trans' . $this->transTimes)
+            );
+        }
+
+        $this->transTimes = max(0, $this->transTimes - 1);
+        return $this;
+    }
+
+    /**
+     * 启动事务
+     *
+     * @return void
+     */
+    public function startTrans()
+    {
+        ++$this->transTimes;
+        try {
+            if (1 == $this->transTimes) {
+                $this->pdo->beginTransaction();
+            } elseif ($this->transTimes > 1 && $this->supportSavepoint()) {
+                $this->pdo->exec(
+                    $this->parseSavepoint('trans' . $this->transTimes)
+                );
+            }
+
+        } catch (\PDOException $e) {
+            if ($this->isBreak($e)) {
+                return $this->close()->startTrans();
+            }
+            throw $e;
+        } catch (\ErrorException $e) {
+            if ($this->isBreak($e)) {
+                return $this->close()->startTrans();
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * 是否断线
+     *
+     * @param \PDOException  $e 异常对象
+     * @return bool
+     */
+    public function isBreak($e)
+    {
+        if (!$this->breakReconnect) {
+            return false;
+        }
+
+        $info = [
+            'server has gone away',
+            'no connection to the server',
+            'Lost connection',
+            'is dead or not enabled',
+            'Error while sending',
+            'decryption failed or bad record mac',
+            'server closed the connection unexpectedly',
+            'SSL connection has been closed unexpectedly',
+            'Error writing data to the connection',
+            'Resource deadlock avoided',
+        ];
+
+        $error = $e->getMessage();
+
+        foreach ($info as $msg) {
+            if (false !== stripos($error, $msg)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 释放查询结果
+     *
+     * @return $this
+     */
+    public function free()
+    {
+        $this->stmt = null;
+        return $this;
+    }
+
+    /**
+     * 关闭数据库（或者重新连接）
+     * @access public
+     * @return $this
+     */
+    public function close()
+    {
+        $this->pdo  = null;
+        $this->stmt = null;
+
+        return $this;
+    }
+
+    /**
+     * 生成定义保存点的SQL
+     *
+     * @param $name
+     * @return string
+     */
+    protected function parseSavepoint($name)
+    {
+        return 'SAVEPOINT ' . $name;
+    }
+
+    /**
+     * 生成回滚到保存点的SQL
+     *
+     * @param $name
+     * @return string
+     */
+    protected function parseSavepointRollBack($name)
+    {
+        return 'ROLLBACK TO SAVEPOINT ' . $name;
+    }
+
+    protected function supportSavepoint()
+    {
+        return true;
+    }
 
     // 批量添加
     public function batchAdd($table = '', array &$data, $replace = false)
@@ -154,7 +466,7 @@ class PDO
             if (empty($info))
                 continue;
 
-            foreach ($info as $k => & $v) {
+            foreach ($info as $k => &$v) {
                 if (! $k) continue;
                 if ($key !== true)
                     $key  .= "`$k`,";
@@ -178,8 +490,6 @@ class PDO
 
         $sql = "$pre $ignore INTO `$table` ($field) VALUES $values";
 
-        self::$lastSql = & $sql;
-
         $res = $this->prepare($sql, $prepearData, false);
         $id  = $this->pdo->lastInsertId();
 
@@ -201,18 +511,12 @@ class PDO
      * @param  $select bool 是否为查询操作，默认true
      * @return mixed
      */
-    public function prepare($sql, array & $data = [], $select = true)
+    public function prepare($sql, array &$data = [], $select = true)
     {
-        self::$lastSql = & $sql;
-        self::$lastPrepareData = & $data;
-
-        $s = microtime(true);
-
+        $this->debug($sql, $data);
         $this->stmt = $stmt = $this->pdo->prepare($sql);
         $stmt->execute($data);
-
-        // 记录追踪调试信息
-        db_track($sql, $s, 'unknown', $data);
+        $this->debugEnd('unknown');
 
         $this->release();
 
@@ -237,26 +541,15 @@ class PDO
      * 执行SQL语句，非写操作
      *
      * @param  $sql string
-     * @return stmt
+     * @return \PDOStatement
      */
     public function query($sql)
     {
-        self::$lastSql = & $sql;
-
-        $s = microtime(true);
-
+        $this->debug($sql);
         $this->stmt = $this->pdo->query($sql);
-
-        // 记录追踪调试信息
-        db_track($sql, $s, 'r');
+        $this->debugEnd();
 
         return $this->stmt;
-    }
-
-    public function options(array $options)
-    {
-        $this->options = &$options;
-        return $this;
     }
 
     /**
@@ -400,18 +693,6 @@ class PDO
         return $id ?: $res;
     }
 
-    /**
-     *
-     *
-     * @param string $k
-     * @param string $def
-     * @return mixed
-     */
-    public function option($k, $def = '')
-    {
-        return isset($this->options[$k]) ? $this->options[$k] : $def;
-    }
-
     public function replace($table, array $data)
     {
         $field = '';
@@ -435,10 +716,23 @@ class PDO
         return $id ?: $res;
     }
 
+    /**
+     * 删除操作
+     *
+     * @param $table
+     * @param string $where
+     * @param array $whereData
+     * @return mixed
+     */
     public function delete($table, $where = '', array $whereData = [])
     {
         $sql = "DELETE FROM `$table` $where";
         return $this->prepare($sql, $whereData, false);
+    }
+
+    public function __destruct()
+    {
+        $this->close();
     }
 
 }
