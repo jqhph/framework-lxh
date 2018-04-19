@@ -251,7 +251,6 @@ __then__(function () {
             var $submit_btn = $('form[pjax-container] :submit');
             if($submit_btn) $submit_btn.button('loading');
         }
-        $loading = loading($('#pjax-container').parent());
     });
     $(document).on('pjax:complete', function(xhr) {
         NProgress.done();
@@ -259,7 +258,6 @@ __then__(function () {
             var $submit_btn = $('form[pjax-container] :submit');
             if($submit_btn) $submit_btn.button('reset');
         }
-        $loading && $loading.close();
         // 重新绑定点击事件
         $('.grid-per-pager').change(change_pages);
         // 重新计算iframe高度
