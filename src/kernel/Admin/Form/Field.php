@@ -577,10 +577,10 @@ class Field implements Renderable
      */
     public function multipleFieldWidth($mult = 1.5)
     {
-        if (isset($this->width['field'])) {
-            $this->width['field'] = ceil($this->width['field'] * $mult);
+        if (isset($this->width['layout'])) {
+            $this->width['layout'] = ceil($this->width['layout'] * $mult);
         } else {
-            $this->width = ceil($this->width * $mult);
+            $this->width = ceil($this->width['layout'] * $mult);
         }
 
         return $this;

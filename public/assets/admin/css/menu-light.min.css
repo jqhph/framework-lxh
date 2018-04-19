@@ -11,4 +11,4 @@
 .menu-list span:hover+.child,.child:hover{display:block}
 .fixed-bottom-btn{height:45px;position:fixed;right:18px;bottom:90px;z-index:999;}
 .fixed-bottom-btn a{border-radius:50%;background:rgba(255,255,255,0.4);display:none;width:45px;height:45px;margin:.15rem 0;text-align:center;line-height:46px;box-shadow:1px 1px 4px 0 rgba(0,0,0,.4);-webkit-box-shadow:1px 1px 4px 0 rgba(0,0,0,.4);position:relative;font-size:13px;color:#0072C6}
-.navbar-t1{background-image:-webkit-linear-gradient(60deg,#0072C6  0%,#549dd2 37%, #2cacd1 65%, #89b8db 100%);background-image:-moz-linear-gradient(60deg,#0072C6  0%,#549dd2 37%, #2cacd1 65%, #89b8db 100%);background-image:-o-linear-gradient(60deg,#0072C6  0%,#549dd2 37%, #2cacd1 65%, #89b8db 100%);background-image:linear-gradient(60deg,#0072C6  0%,#549dd2 37%, #2cacd1 65%, #89b8db 100%)}
+.navbar-t1{background-image:-webkit-linear-gradient(60deg,#0072C6  0%,#549dd2 37%, #70b7e5 65%, #89b8db 100%);background-image:-moz-linear-gradient(60deg,#0072C6  0%,#549dd2 37%, #70b7e5 65%, #a6c6e9 100%);background-image:linear-gradient(60deg,#0072C6  0%,#549dd2 37%, #70b7e5 65%, #a6c6e9 100%)}
