@@ -1,6 +1,6 @@
 <?php 
 return [
-    'js-version' => 12345123,
+    'js-version' => 1234133,
     'css-version' => time(),
     'language' => 'zh',
     'client' => [
