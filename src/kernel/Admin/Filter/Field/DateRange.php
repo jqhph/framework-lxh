@@ -37,7 +37,7 @@ class DateRange extends Field
     protected $view = 'admin::filter.date-range';
 
     protected $width = [
-        'field' => 3
+        'layout' => 3
     ];
 
     protected $format = 'yyyy-mm-dd hh:ii:ss';

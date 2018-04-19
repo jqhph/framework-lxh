@@ -1,4 +1,4 @@
-<div class="form-group input-group-sm filter-input col-sm-<?php echo $width['field'] ?> input-group input-group-sm" style="margin-left:10px;">
+<div class="form-group input-group-sm filter-input col-sm-<?php echo $width['layout'] ?> input-group input-group-sm" style="margin-left:10px;">
     <span class="input-group-addon"><b><?php echo $label ?></b></span>
     <select class="form-control <?php echo $class ?>" style="width:100%;" name="<?php echo $name ?>[]" multiple="multiple" data-placeholder="<?php echo $placeholder  ?>" <?php echo $attributes ?> >
         <?php foreach($options as &$option): ?>

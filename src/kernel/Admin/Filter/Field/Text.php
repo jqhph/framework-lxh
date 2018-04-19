@@ -36,7 +36,7 @@ class Text extends Field
      * @var array
      */
     protected $width = [
-        'field' => 2
+        'layout' => 2
     ];
 
     protected function variables()

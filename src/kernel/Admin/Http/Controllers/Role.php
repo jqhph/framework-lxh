@@ -140,7 +140,10 @@ class Role extends Controller
 
     protected function addFilter(array &$input)
     {
-        if ($this->model()->select('id')->where('slug', $input['slug'])->findOne()) {
+        $model   = $this->model();
+        $keyName = $model->getKeyName();
+
+        if ($model->select($keyName)->where('slug', $input['slug'])->findOne()) {
             return $input['slug'] . ' already exist.';
         }
     }

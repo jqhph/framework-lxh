@@ -321,7 +321,7 @@ class Demo extends Controller
     {
         $content = $this->content();
 
-        $content->row(new Code(__FILE__, 1, 400));
+        $content->row(new Code(__FILE__, 1, 500));
 
         return $content->render();
     }

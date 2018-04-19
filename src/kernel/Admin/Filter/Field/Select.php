@@ -31,7 +31,7 @@ class Select extends FormSelect
 
     protected $view = 'admin::filter.select';
 
-    protected $width = ['field' => 2];
+    protected $width = ['layout' => 2];
 
     /**
      * 是否允许清除单选框

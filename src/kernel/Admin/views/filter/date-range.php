@@ -1,4 +1,4 @@
-<div class="filter-input col-sm-<?php echo $width['field']?> " >
+<div class="filter-input col-sm-<?php echo $width['layout']?> " >
     <div class="form-inline ">
         <div class="form-group">
             <div class="input-daterange input-group  date-search-box input-group-sm" >

@@ -30,7 +30,7 @@ class MultipleSelect extends Field\MultipleSelect
 
     protected $view = 'admin::filter.multiple-select';
 
-    protected $width = ['field' => 3];
+    protected $width = ['layout' => 3];
 
 
     protected function variables()
