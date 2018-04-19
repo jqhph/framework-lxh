@@ -17,7 +17,7 @@ use Lxh\Exceptions\InsertModelException;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
 use Lxh\Http\Uploads\Upload;
-use Lxh\Http\VerifyCsrfToken;
+use Lxh\Http\VertifyCsrfToken;
 use Lxh\MVC\Controller as Base;
 
 class Controller extends Base
@@ -95,7 +95,7 @@ class Controller extends Base
     protected function initialize()
     {
         // 使用防御csrf攻击中间件
-        $this->middleware(VerifyCsrfToken::class);
+        $this->middleware(VertifyCsrfToken::class);
     }
 
     /**

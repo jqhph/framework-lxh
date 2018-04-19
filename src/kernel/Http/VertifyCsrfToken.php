@@ -5,7 +5,7 @@ namespace Lxh\Http;
 use Closure;
 use Lxh\Exceptions\TokenMismatchException;
 
-class VerifyCsrfToken
+class VertifyCsrfToken
 {
     /**
      * The URIs that should be excluded from CSRF verification.
