@@ -7,9 +7,16 @@ use Phinx\Migration\AbstractMigration;
 
 class Migrator extends AbstractMigration
 {
-    public function createTable($tableName, \Closure $callback)
+    /**
+     * @param string $tableName
+     * @param \Closure $callback
+     * @return Table
+     */
+    public function createTable($tableName, \Closure $callback = null)
     {
         $table = new Table($this->table($tableName));
+
+        $callback && $callback($table);
 
         return $table;
     }
