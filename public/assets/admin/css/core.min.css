@@ -6,11 +6,11 @@
 .card .divider{border-bottom:1px solid #f0f0f0;margin-top:10px;}
 .card,.card .card-header {position:relative;}
 @media screen and (min-width: 768px){
-    .card .card-header:not(.ch-alt){padding:20px 25px;}
+    .card .card-header:not(.ch-alt){padding:20px 22px;}
 }
 .card-header:not(.ch-alt):not([class*=bgm-])+.card-padding{padding-top:0;}
 @media screen and (min-width: 768px){
-    .card .card-body.card-padding{padding:23px 26px 16px;}
+    .card .card-body.card-padding{padding:23px 22px 16px;}
 }
 @media screen and (max-width: 991px){
     .card .card-header:not(.ch-alt),.card .card-body.card-padding{padding:18px 18px 15px;}

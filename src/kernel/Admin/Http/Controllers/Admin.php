@@ -66,7 +66,7 @@ class Admin extends Controller
 
     public function table(Table $table)
     {
-        $table->code('id')->sortable();
+        $table->code('id')->sortable()->desc();
         $table->text('username');
         $table->column('name')->display(function ($value, Items $items) {
             return $items->column('first_name') . $items->column('last_name');

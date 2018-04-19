@@ -44,7 +44,7 @@ class Ability extends Controller
      */
     protected function table(Table $table)
     {
-        $table->text('id')->hide()->sortable();
+        $table->text('id')->hide()->sortable()->desc();
         $table->text('title');
         $table->code('slug');
         $table->checked('forbidden');
