@@ -56,9 +56,8 @@ class Application extends SymfonyApplication
      *
      * @var array
      */
-    protected $commandDir = [
-        'application/Command',
-        'kernel/Console/Command'
+    protected $commandPaths = [
+        'kernel/Console/Command',
     ];
 
     /**
@@ -67,8 +66,7 @@ class Application extends SymfonyApplication
      * @var array
      */
     protected $commandNamespaces = [
-        'Lxh\\Command\\',
-        'Lxh\\Console\\Command\\'
+        'Lxh\\Console\\Command\\',
     ];
 
     /**
@@ -83,7 +81,12 @@ class Application extends SymfonyApplication
      *
      * @var bool
      */
-    protected $isRegistedAllCommands = false;
+    protected $registedAllCommands = false;
+
+    /**
+     * @var string
+     */
+    protected $configPath = 'console';
 
     /**
      * 版本号
@@ -98,27 +101,48 @@ class Application extends SymfonyApplication
 
         $this->setAutoExit(false);
         $this->setCatchExceptions(false);
+        $this->configure();
 
         $this->container = $container;
 
     }
 
+    /**
+     * 初始化配置
+     */
+    protected function configure()
+    {
+        $path = __CONFIG__ . $this->configPath . '.php';
+        if (!is_file($path)) {
+            return;
+        }
+
+        $config = (array) include $path;
+
+        $this->commandPaths      = array_merge($this->commandPaths, (array) get_value($config, 'paths'));
+        $this->commandNamespaces = array_merge($this->commandNamespaces, (array) get_value($config, 'namespaces'));
+        $this->commandClassesMap = array_merge($this->commandClassesMap, (array) get_value($config, 'commands'));
+    }
+    
     // 注册所有命令
     public function resolveAllCommands()
     {
-        if ($this->isRegistedAllCommands) {
+        if ($this->registedAllCommands) {
             return;
         }
 
         $files = $this->container->files;
 
-        foreach ($this->commandDir as & $dir) {
+        foreach ($this->commandClassesMap as &$class) {
+            $this->resolve($class);
+        }
+        foreach ($this->commandPaths as &$dir) {
             foreach ($files->getFileList($this->basePath . $dir, false, 'php', true) as & $f) {
                 $this->resolveCommand(str_replace('Command.php', '', $f));
             }
         }
 
-        $this->isRegistedAllCommands = true;
+        $this->registedAllCommands = true;
     }
 
     /**
@@ -160,10 +184,15 @@ class Application extends SymfonyApplication
         return $this->basePath;
     }
 
-    // 添加命令文件夹
-    public function addCommandDir($dir)
+    /**
+     * 添加命令文件夹
+     * 
+     * @param $path
+     * @return $this
+     */
+    public function addCommandPaths($path)
     {
-        $this->commandDir[] = $dir;
+        $this->commandPaths[] = $path;
 
         return $this;
     }
@@ -190,13 +219,15 @@ class Application extends SymfonyApplication
         return parent::find($name);
     }
 
-    // 注册命令类
+    // 获取命令类
     public function resolveCommand($name)
     {
-        foreach ($this->commandNamespaces as & $namespace) {
-            $class = $namespace . $this->normalizeCommandClass(
-                    $this->getClassNameByCommandName($name)
-                );
+        if ($class = $this->getClassNameByCommandName($name)) {
+            return $this->resolve($class);
+        }
+
+        foreach ($this->commandNamespaces as &$namespace) {
+            $class = $namespace . $this->normalizeCommandClass($name);
 
             if (class_exists($class)) {
                 return $this->resolve($class);
@@ -204,7 +235,12 @@ class Application extends SymfonyApplication
         }
     }
 
-    // 根据命令字符获取命令类
+    /**
+     * 根据命令字符获取命令类
+     *
+     * @param $name
+     * @return string
+     */
     public function normalizeCommandClass($name)
     {
         $delimiters = [
@@ -222,10 +258,15 @@ class Application extends SymfonyApplication
         return $name . 'Command';
     }
 
-    // 根据命令字符从映射数组中获取命令类
+    /**
+     * 根据命令字符从映射数组中获取命令类
+     *
+     * @param $command
+     * @return mixed
+     */
     public function getClassNameByCommandName($command)
     {
-        return isset($this->commandClassesMap[$command]) ? $this->commandClassesMap[$command] : $command;
+        return isset($this->commandClassesMap[$command]) ? $this->commandClassesMap[$command] : false;
     }
 
     /**
@@ -280,7 +321,9 @@ class Application extends SymfonyApplication
      */
     public function resolve($command)
     {
-        return $this->add($this->container->make($command));
+        return $this->add(
+            $this->container->make($command)
+        );
     }
 
     /**

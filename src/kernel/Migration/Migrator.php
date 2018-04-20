@@ -10,14 +10,16 @@ class Migrator extends AbstractMigration
     /**
      * @param string $tableName
      * @param \Closure $callback
-     * @return Table
+     * @return $this
      */
-    public function createTable($tableName, \Closure $callback = null)
+    public function makeTable($tableName, $callback = null)
     {
         $table = new Table($this->table($tableName));
 
-        $callback && $callback($table);
+        $callback($table);
 
-        return $table;
+        $table->done();
+
+        return $this;
     }
 }

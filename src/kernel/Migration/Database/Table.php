@@ -77,7 +77,12 @@ class Table
     /**
      * @var array
      */
-    protected $columntypes = [
+    protected $options = [];
+
+    /**
+     * @var array
+     */
+    protected static $columntypes = [
         'string'     => StringColumn::class,
         'char'       => Char::class,
         'text'       => Text::class,
@@ -116,9 +121,118 @@ class Table
 
     ];
 
+    /**
+     * @var array
+     */
+    protected $columns = [];
+
+    /**
+     * @var array
+     */
+    protected $indexes = [];
+
     public function __construct(PhinxTable $table = null)
     {
         $this->table = $table ?: (new PhinxTable(''));
+    }
+
+    /**
+     * 指定主键字段
+     * 单独设置此字段并不会开启自增功能
+     *
+     * @param string|array $names 字段名称
+     * @return $this
+     */
+    public function primaryKey($names)
+    {
+        return $this->id(false)->setOption('primary_key', $names);
+    }
+
+    /**
+     * 手动关闭默认增加的自增主键
+     * 或改变自增主键字段名
+     *
+     * @param string|false $value false关闭默认增加的自增主键， 字符串则是更改自增主键字段名
+     * @return Table
+     */
+    public function id($value)
+    {
+        return $this->setOption('id', $value);
+    }
+
+    /**
+     * 设置表注释
+     * Mysql支持
+     *
+     * @param string $comment
+     * @return $this
+     */
+    public function comment($comment)
+    {
+        return $this->setOption('comment', $comment);
+    }
+
+    public function utf8mb4generalci()
+    {
+        return $this->collation('utf8mb4-general-ci');
+    }
+
+    /**
+     * 定义表的语言（默认 utf8-general-ci）
+     * Mysql支持
+     *
+     * @param $z
+     * @return $this
+     */
+    public function collation($z)
+    {
+        return $this->setOption('collation', $z);
+    }
+
+    /**
+     * 设置表引擎为INNODB
+     *
+     * @return Table
+     */
+    public function innodb()
+    {
+        return $this->engine('InnoDB');
+    }
+
+    /**
+     * 设置表以前为MYISAM
+     *
+     * @return Table
+     */ 
+    public function myisam()
+    {
+        return $this->engine('MyISAM');
+    }
+
+    /**
+     * 设置表引擎，默认 InnoDB
+     * Mysql支持
+     *
+     * @param $engine
+     * @return Table
+     */
+    public function engine($engine)
+    {
+        return $this->setOption('engine', $engine);
+    }
+
+    /**
+     * 设置选项值
+     *
+     * @param $key
+     * @param $value
+     * @return $this
+     */
+    public function setOption($key, $value)
+    {
+        $this->options[$key] = &$value;
+
+        return $this;
     }
 
     /**
@@ -127,11 +241,52 @@ class Table
      * @param Column $column
      * @return $this
      */
-    public function addColumn(Column $column)
+    protected function pushColumn(Column $column)
     {
-        $this->table->addColumn($column->getName(), $column->getType(), $column->getOptions());
+        $this->columns[] = $column;
 
         return $this;
+    }
+
+    /**
+     * @param $name
+     * @param null $type
+     * @param $options
+     * @return $this
+     */
+    public function addColumn($name, $type = null, $options)
+    {
+        $this->table->addColumn($name, $type, $options);
+
+        return $this;
+    }
+
+    /**
+     * 更改字段
+     *
+     * @param \Closure $call
+     * @return $this
+     */
+    public function changeColumn(\Closure $call)
+    {
+        $change = new ChangeColumn($this);
+
+        $call($change);
+
+        $change->done();
+
+        return $this;
+    }
+
+    /**
+     * 添加索引
+     *
+     * @param $fields
+     * @return Index
+     */
+    public function addIndex($fields)
+    {
+        return $this->indexes[] = new Index($this, $fields);
     }
 
     /**
@@ -142,11 +297,11 @@ class Table
      */
     protected function createColumn($column, $name)
     {
-        if (! isset($this->columntypes[$column])) {
+        if (! isset(static::$columntypes[$column])) {
             throw new UnknownColumnException;
         }
 
-        $class = $this->columntypes[$column];
+        $class = static::$columntypes[$column];
 
         return new $class($name);
     }
@@ -159,9 +314,159 @@ class Table
         return $this->table;
     }
 
+    /**
+     * Does the table exist?
+     *
+     * @return bool
+     */
+    public function exists()
+    {
+        return $this->table->exists();
+    }
+
+    /**
+     * Drops the database table.
+     *
+     * @return void
+     */
+    public function drop()
+    {
+        $this->done();
+        $this->table->drop();
+    }
+
+    /**
+     * Remove a table column.
+     *
+     * @param string $columnName Column Name
+     * @return $this
+     */
+    public function removeColumn($columnName)
+    {
+        $this->table->removeColumn($columnName);
+
+        return $this;
+    }
+
+    /**
+     * Rename a table column.
+     *
+     * @param string $oldName Old Column Name
+     * @param string $newName New Column Name
+     * @return $this
+     */
+    public function renameColumn($oldName, $newName)
+    {
+        $this->table->renameColumn($oldName, $newName);
+
+        return $this;
+    }
+
+    /**
+     * Renames the database table.
+     *
+     * @param string $newTableName New Table Name
+     * @return $this
+     */
+    public function rename($newTableName)
+    {
+        $this->table->rename($newTableName);
+
+        return $this;
+    }
+
+    /**
+     * 不需要调用save方法，索引会立即删除
+     *
+     * @param $fields
+     * @return $this
+     */
+    public function removeIndex($fields)
+    {
+        $this->table->removeIndex($fields);
+        return $this;
+    }
+
+    /**
+     * 不需要调用save方法，索引会立即删除
+     *
+     * @param $name
+     * @return $this
+     */
+    public function removeIndexByName($name)
+    {
+        $this->table->removeIndexByName($name);
+        return $this;
+    }
+
+    public function addForeignKey($columns, $referencedTable, $referencedColumns = ['id'], $options = [])
+    {
+        $this->table->addForeignKey($columns, $referencedTable, $referencedColumns, $options);
+
+        return $this;
+    }
+
+    public function dropForeignKey($columns, $constraint = null)
+    {
+        $this->table->dropForeignKey($columns, $constraint);
+
+        return $this;
+    }
+
+    public function save()
+    {
+        $this->done();
+        $this->table->save();
+    }
+
+    public function create()
+    {
+        $this->done();
+        $this->table->create();
+    }
+
+    public function saveData()
+    {
+        $this->done();
+        $this->table->saveData();
+    }
+
+    public function update()
+    {
+        $this->done();
+        $this->table->update();
+    }
+
+    /**
+     * 完成字段配置
+     *
+     * @return $this
+     */
+    public function done()
+    {
+        $this->table->setOptions($this->options);
+
+        foreach ($this->columns as $column) {
+            $this->table->addColumn($column->getName(), $column->getType(), $column->getOptions());
+        }
+
+        foreach ($this->indexes as $index) {
+            $this->table->addIndex($index->getColumns(), $index->getOptions());
+        }
+
+        $this->columns = $this->indexes = [];
+
+        return $this;
+    }
+
+    public function getColumntypes()
+    {
+        return static::$columntypes;
+    }
+
     public function __call($method, $arguments)
     {
-        if (!isset($this->columntypes[$method])) {
+        if (!isset(static::$columntypes[$method])) {
             return call_user_func_array([$this->table, $method], $arguments);
         }
         $name = get_value($arguments, 0);
@@ -171,7 +476,7 @@ class Table
 
         $column = $this->createColumn($method, $name);
 
-        $this->addColumn($column);
+        $this->pushColumn($column);
 
         return $column;
 
