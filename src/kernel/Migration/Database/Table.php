@@ -17,7 +17,7 @@ use Lxh\Migration\Database\Column\Filestream;
 use Lxh\Migration\Database\Column\FloatColumn;
 use Lxh\Migration\Database\Column\Geometry;
 use Lxh\Migration\Database\Column\Inet;
-use Lxh\Migration\Database\Column\Integer;
+use Lxh\Migration\Database\Column\IntegerColumn;
 use Lxh\Migration\Database\Column\Interval;
 use Lxh\Migration\Database\Column\Json;
 use Lxh\Migration\Database\Column\Jsonb;
@@ -40,7 +40,7 @@ use Phinx\Db\Table as PhinxTable;
  * @method StringColumn string($column)
  * @method Char char($column)
  * @method Text text($column)
- * @method Integer integer($column)
+ * @method IntegerColumn integer($column)
  * @method Biginteger biginteger($column)
  * @method FloatColumn float($column)
  * @method Decimal decimal($column)

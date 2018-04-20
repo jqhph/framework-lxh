@@ -2,6 +2,8 @@
 $namespaceDefinition
 
 use $useClassName;
+use Lxh\Migration\Database\Table;
+use Phinx\Db\Table as PhinxTable;
 
 class $className extends $baseClassName
 {

@@ -5,7 +5,7 @@ namespace Lxh\Migration\Database\Column;
 use Phinx\Db\Adapter\AdapterInterface;
 use Phinx\Db\Adapter\MysqlAdapter;
 
-class Integer extends Column
+class IntegerColumn extends Column
 {
     protected $type = AdapterInterface::PHINX_TYPE_INTEGER;
 
