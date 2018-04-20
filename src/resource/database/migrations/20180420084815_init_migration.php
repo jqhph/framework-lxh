@@ -91,8 +91,8 @@ class InitMigration extends Migrator
             $table->integer('type')->tiny()->signed(false)->default(1)->comment('1普通菜单，2系统菜单');
             $table->integer('priority')->tiny()->signed(false)->default(0)->comment('排序权重值，值越小排序越靠前');
             $table->integer('ability_id')->signed(false)->default(0);
-            $table->string('route')->length('100')->comment('路由');
-            $table->integer('use_route_prefix')->tiny()->signed(false)->comment('是否使用路由前缀');
+            $table->string('route')->length(100)->comment('路由');
+            $table->integer('use_route_prefix')->tiny()->signed(false)->default(1)->comment('是否使用路由前缀');
 
             $table->innodb()->comment('菜单表')->create();
         });
