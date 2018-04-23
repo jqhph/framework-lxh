@@ -14,5 +14,8 @@ return [
     "psr/log" => "^1.0",
     "endroid/qrcode" => "^2.5",
     "symfony/http-foundation" => "^3.4",
-    "symfony/process" => "^3.4"
+    "symfony/process" => "^3.4",
+    'gregwar/captcha' => '^1.1',
+    'malkusch/lock' => '^1.0',
+    'robmorgan/phinx' => '^0.9.2',
 ];

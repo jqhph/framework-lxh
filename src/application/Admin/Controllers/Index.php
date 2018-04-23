@@ -71,15 +71,8 @@ class Index extends Controller
 
         $dependencies = array_merge($dependencies, $composer);
 
-        $colors = ['success', 'danger', 'primary', 'inverse', 'primary', 'pink', 'success', 'info'];
-        $i = 0;
         foreach ($dependencies as $k => &$dependency) {
-            if ($i > 7) {
-                $i = $i % 8;
-            }
-
-            $dependency = "<span class='label label-{$colors[$i]}'>$dependency</span>";
-            $i++;
+            $dependency = "<span class='label label-primary'>$dependency</span>";
         }
 
         return $dependencies;
