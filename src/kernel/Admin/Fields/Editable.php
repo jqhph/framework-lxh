@@ -241,6 +241,9 @@ class Editable extends Field
      */
     public function render()
     {
+        // 保存csrf token
+        Admin::setCsrfToken();
+
         if (empty($this->type)) $this->type = 'text';
 
         $this->options['name'] = $column = $this->name;
@@ -252,7 +255,7 @@ class Editable extends Field
 
         // 同样的类型只初始化一次
         $this->script(
-            'editable.' . $this->type,
+            'editable.' . $this->type.$this->name,
             "$('.$class').editable($options);"
         );
 

@@ -588,8 +588,7 @@ class Form implements Renderable
     public function render()
     {
         // 保存csrf token
-        $token = csrf_token();
-        Admin::script("LXHSTORE.CSRFTOKEN = '{$token}';");
+        Admin::setCsrfToken();
 
         return view('admin::widget.form', $this->getVariables())->render();
     }

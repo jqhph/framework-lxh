@@ -26,6 +26,8 @@ class Admin
      */
     protected static $scope = __CONTROLLER__;
 
+    protected static $setcsrftoken;
+
     protected static $html = '';
 
     /**
@@ -224,6 +226,17 @@ class Admin
         return $links;
     }
 
+    public static function setCsrfToken()
+    {
+        if (static::$setcsrftoken) {
+            return;
+        }
+        static::$setcsrftoken = 1;
+
+        // 保存csrf token
+        $token = csrf_token();
+        Admin::script("LXHSTORE.CSRFTOKEN = '{$token}';");
+    }
 
     /**
      * Add js or get all js.

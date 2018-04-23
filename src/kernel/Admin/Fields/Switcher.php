@@ -16,11 +16,6 @@ class Switcher extends Field
         '@lxh/plugins/switchery/switchery.min'
     ];
 
-    /**
-     * @var int
-     */
-    protected $uncheckedValue = 0;
-
     public function primary()
     {
         return $this->attribute('data-color', '#0072C6');
@@ -118,12 +113,18 @@ class Switcher extends Field
      */
     public function uncheckedValue($value)
     {
-        $this->uncheckedValue = $value;
-        return $this;
+        return $this->attribute('unchecked', $value);
     }
 
     public function render()
     {
+        if (!isset($this->attributes['unchecked'])) {
+            $this->attributes['unchecked'] = 0;
+        }
+
+        // 保存csrf token
+        Admin::setCsrfToken();
+
         if (!$id = $this->getModelId()) {
             throw new InvalidArgumentException("Id not found!");
         }
@@ -148,11 +149,11 @@ b();
 s.change(function(e) {
     if (r) return;
     r=1; NProgress.start();
-    var t=$(this);val = t.val(),ntf=\$lxh.ui().notify(),id=t.data('pk'),u='{$url}',all=$('.switchery'),checked=t.is(':checked');
+    var t=$(this);val = t.val(),ntf=\$lxh.ui().notify(),id=t.data('pk'),u='{$url}',all=$('.switchery'),checked=t.is(':checked'), name = t.attr('name');
     all.addClass('disabled');
     if (!checked)
-        val = '{$this->uncheckedValue}';
-    $.post(u.replace('{id}',id), {name:'{$this->name}',value:val}, function (d) {
+        val = t.attr('unchecked');
+    $.post(u.replace('{id}',id), {name:name,value:val}, function (d) {
         r=0; NProgress.done(); all.removeClass('disabled');
         if (checked) 
             t.attr('icd',1);
