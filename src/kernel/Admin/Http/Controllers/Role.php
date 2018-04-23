@@ -37,7 +37,7 @@ class Role extends Controller
 
     protected function table(Table $table)
     {
-        $table->text('id')->hide()->sortable()->desc();
+        $table->code('id')->sortable()->desc();
         $table->text('title');
         $table->code('slug');
         $table->text('comment');

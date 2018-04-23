@@ -312,6 +312,13 @@ class Role extends Model
             ->joinRaw("LEFT JOIN admin ad ON {$this->tableName}.created_by_id = ad.id")
             ->limit($offset, $maxSize);
 
+        if (!empty($where['ar.entity_id'])) {
+            $assignedRoles = Models::table('assigned_roles');
+            $userType = Models::user()->getMorphType();
+
+            $q->joinRaw("LEFT JOIN $assignedRoles ar ON (ar.role_id = {$this->tableName}.id AND ar.entity_type = $userType)");
+        }
+
         if ($where) {
             $q->where($where);
         }
@@ -327,6 +334,13 @@ class Role extends Model
     {
         $q = $this->query()
             ->joinRaw("LEFT JOIN admin ad ON {$this->tableName}.created_by_id = ad.id");
+
+        if (!empty($where['ar.entity_id'])) {
+            $assignedRoles = Models::table('assigned_roles');
+            $userType = Models::user()->getMorphType();
+
+            $q->joinRaw("LEFT JOIN $assignedRoles ar ON (ar.role_id = {$this->tableName}.id AND ar.entity_type = $userType)");
+        }
 
         if ($where) $q->where($where);
 
