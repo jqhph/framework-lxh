@@ -225,7 +225,7 @@ class Index implements Renderable
     protected function buildUser()
     {
         $user = __admin__();
-        $name = $user->first_name . $user->last_name;
+        $name = $user->first_name . ' ' . $user->last_name;
         $username = $name ?: $user->username;
 
         $avatar = '';

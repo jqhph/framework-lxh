@@ -160,8 +160,6 @@ class Grid implements Renderable
         'useTrash'                      => false,
         // 回收站入口
         'allowTrashEntry'               => false,
-        // 回收站删除字段名称
-        'deletedKeyName'                => 'deleted',
         // 从回收站还原
         'allowedRestore'                => false,
         // 永久删除

@@ -53,14 +53,14 @@ class Rollback extends AbstractCommand
                 <<<EOT
 The <info>rollback</info> command reverts the last migration, or optionally up to a specific version
 
-<info>phinx rollback</info>
-<info>phinx rollback -t 20111018185412</info>
-<info>phinx rollback -d 20111018</info>
-<info>phinx rollback -v</info>
-<info>phinx rollback -t 20111018185412 -f</info>
+<info>console rollback</info>
+<info>console rollback -t 20111018185412</info>
+<info>console rollback -d 20111018</info>
+<info>console rollback -v</info>
+<info>console rollback -t 20111018185412 -f</info>
 
 If you have a breakpoint set, then you can rollback to target 0 and the rollbacks will stop at the breakpoint.
-<info>phinx rollback -t 0 </info>
+<info>console rollback -t 0 </info>
 
 The <info>version_order</info> configuration option is used to determine the order of the migrations when rolling back.
 This can be used to allow the rolling back of the last executed migration instead of the last created one, or combined

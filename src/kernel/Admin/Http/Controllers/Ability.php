@@ -50,7 +50,7 @@ class Ability extends Controller
         $table->checked('forbidden');
         $table->text('comment');
         $table->date('created_at')->sortable();
-        $table->date('modified_at')->sortable();
+        $table->date('updated_at')->sortable();
     }
 
     /**

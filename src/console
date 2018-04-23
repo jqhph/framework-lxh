@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 /**
  * 命令台入口

@@ -58,7 +58,7 @@ return array (
     'name' => '名称',
     'created_at' => '创建时间',
     'created_by' => '创建人',
-    'modified_at' => '修改时间',
+    'updated_at' => '修改时间',
     'desc' => '描述',
       'username' => '用户名',
       'email' => '邮箱',

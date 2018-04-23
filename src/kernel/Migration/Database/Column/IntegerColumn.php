@@ -28,6 +28,11 @@ class IntegerColumn extends Column
         return $this->setOption('identity', $flag);
     }
 
+    public function autoincrement()
+    {
+        return $this->identity(true);
+    }
+
     /**
      * 开启或关闭 unsigned 选项（仅适用于 MySQL）
      *

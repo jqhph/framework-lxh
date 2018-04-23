@@ -40,7 +40,7 @@ class Models
      * @var array
      */
     protected static $tables = [
-        'role'               => 'role',
+        'role'               => 'roles',
         'ability'            => 'abilities',
         'assigned_roles'     => 'assigned_roles',
         'assigned_abilities' => 'assigned_abilities'

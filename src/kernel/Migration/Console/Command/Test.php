@@ -54,7 +54,7 @@ class Test extends AbstractCommand
                 <<<EOT
 The <info>test</info> command verifies the YAML configuration file and optionally an environment
 
-<info>phinx test</info>
+<info>console test</info>
 EOT
             );
     }

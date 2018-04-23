@@ -73,15 +73,6 @@ class Menu extends Controller
         ];
     }
 
-    // 删除操作验证方法
-    public function deleteable($id)
-    {
-        // 判断是否是系统菜单，如果是则不允许删除
-        if ($this->model()->isSystem($id)) {
-            return trans('Can\'t delete the system menu!');
-        }
-    }
-
     protected function iconHelp()
     {
         $url = Admin::url('PublicEntrance')->action('font-awesome');

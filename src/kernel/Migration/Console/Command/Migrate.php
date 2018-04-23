@@ -52,10 +52,10 @@ class Migrate extends AbstractCommand
                 <<<EOT
 The <info>migrate</info> command runs all available migrations, optionally up to a specific version
 
-<info>phinx migrate</info>
-<info>phinx migrate -t 20110103081132</info>
-<info>phinx migrate -d 20110103</info>
-<info>phinx migrate -v</info>
+<info>console migrate</info>
+<info>console migrate -t 20110103081132</info>
+<info>console migrate -d 20110103</info>
+<info>console migrate -v</info>
 
 EOT
             );

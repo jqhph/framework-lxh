@@ -5,7 +5,7 @@ namespace Lxh\Migration\Database;
 class Index
 {
     /**
-     * @var Table
+     * @var TableHelper
      */
     protected $table;
 
@@ -19,7 +19,7 @@ class Index
      */
     protected $options = [];
 
-    public function __construct(Table $table, $columns)
+    public function __construct(TableHelper $table, $columns)
     {
         $this->table   = $table;
         $this->columns = $columns;

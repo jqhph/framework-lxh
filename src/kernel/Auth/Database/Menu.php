@@ -46,7 +46,6 @@ class Menu extends Model
 
         $q = $this->query()
             ->select($select)
-            ->where('deleted', 0)
             ->where('show', 1);
 
         if ($this->useAuthorize) {
@@ -114,8 +113,7 @@ class Menu extends Model
         if ($id) {
             $q = $this->query()
                 ->select($select)
-                ->where($this->primaryKeyName, $id)
-                ->where('deleted', 0);
+                ->where($this->primaryKeyName, $id);
 
             if ($this->useAuthorize) {
                 $q->leftJoin($ability, 'ability_id', "$ability.id");
@@ -128,8 +126,7 @@ class Menu extends Model
         }
 
         $q = $this->query()
-            ->select($select)
-            ->where('deleted', 0);
+            ->select($select);
         if ($this->useAuthorize) {
             $q->leftJoin($ability, 'ability_id', "$ability.id");
         }
@@ -246,17 +243,6 @@ class Menu extends Model
         }
 
         return $result;
-    }
-
-    // 判断菜单是否是系统菜单
-    public function isSystem($id)
-    {
-        $r = $this->query()->select('type')->where($this->primaryKeyName, $id)->findOne();
-
-        if (! $r) {
-            return false;
-        }
-        return $r['type'] == 2 ? true : false;
     }
 
     protected function afterToTrash($id, $result)

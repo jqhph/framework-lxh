@@ -50,8 +50,8 @@ class Status extends AbstractCommand
                 <<<EOT
 The <info>status</info> command prints a list of all migrations, along with their current status
 
-<info>phinx status</info>
-<info>phinx status -f json</info>
+<info>console status</info>
+<info>console status -f json</info>
 
 The <info>version_order</info> configuration option is used to determine the order of the status migrations.
 EOT

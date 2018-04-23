@@ -69,7 +69,7 @@ class Admin extends Controller
         $table->code('id')->sortable()->desc();
         $table->text('username');
         $table->column('name')->display(function ($value, Items $items) {
-            return $items->column('first_name') . $items->column('last_name');
+            return $items->column('first_name') .' '. $items->column('last_name');
         });
         $table->email('email');
         $table->text('mobile');
@@ -80,7 +80,7 @@ class Admin extends Controller
         $table->checked('is_admin')->hide();
         $table->select('sex');
         $table->date('created_at')->sortable();
-        $table->date('modified_at')->sortable()->hide();
+        $table->date('updated_at')->sortable()->hide();
     }
 
     protected function buildRoles(Table $table)

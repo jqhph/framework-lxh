@@ -72,7 +72,7 @@ class Admin extends User
         } else {
             unset($input['password']);
         }
-        $input['modified_at'] = time();
+        $input['updated_at'] = time();
 
         if (isset($input['roles'])) {
             $this->roles = $input['roles'];

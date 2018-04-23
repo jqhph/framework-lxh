@@ -54,9 +54,9 @@ The <info>breakpoint</info> command allows you to set or clear a breakpoint agai
 If no target is supplied then the most recent migration will be used.
 You cannot specify un-migrated targets
 
-<info>phinx breakpoint -e development</info>
-<info>phinx breakpoint -e development -t 20110103081132</info>
-<info>phinx breakpoint -e development -r</info>
+<info>console breakpoint -e development</info>
+<info>console breakpoint -e development -t 20110103081132</info>
+<info>console breakpoint -e development -r</info>
 EOT
             );
     }

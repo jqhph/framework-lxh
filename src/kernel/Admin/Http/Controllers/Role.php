@@ -45,7 +45,7 @@ class Role extends Controller
         $this->buildAbilities($table);
 
         $table->date('created_at')->sortable();
-        $table->date('modified_at')->sortable();
+        $table->date('updated_at')->sortable();
 
         $admins = $this->findAdminsNameKeyById();
         $table->link('created_by', function (Link $link) use ($admins) {

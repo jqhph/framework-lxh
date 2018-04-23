@@ -50,10 +50,10 @@ class SeedRun extends AbstractCommand
                 <<<EOT
 The <info>seed:run</info> command runs all available or individual seeders
 
-<info>phinx seed:run</info>
-<info>phinx seed:run -s UserSeeder</info>
-<info>phinx seed:run -s UserSeeder -s PermissionSeeder -s LogSeeder</info>
-<info>phinx seed:run -v</info>
+<info>console seed:run</info>
+<info>console seed:run -s UserSeeder</info>
+<info>console seed:run -s UserSeeder -s PermissionSeeder -s LogSeeder</info>
+<info>console seed:run -v</info>
 
 EOT
             );

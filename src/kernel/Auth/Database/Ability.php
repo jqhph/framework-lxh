@@ -64,7 +64,7 @@ class Ability extends Model
         parent::beforeUpdate($id, $input);
 
         $input['slug']        = AuthManager::normalizName($input['slug']);
-        $input['modified_at'] = time();
+        $input['updated_at'] = time();
     }
 
     protected function formatCreateAttributes(array $names, array &$attributes = [])

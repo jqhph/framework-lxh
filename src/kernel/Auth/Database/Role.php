@@ -10,6 +10,8 @@ class Role extends Model
 {
     use Concerns\IsRole, Concerns\FindOrCreate;
 
+    protected $tableName = 'roles';
+
     protected $selectFields = 'id,slug,title';
 
     /**
@@ -214,7 +216,7 @@ class Role extends Model
 
     public function beforeUpdate($id, array &$input)
     {
-        $data['modified_at'] = time();
+        $data['updated_at'] = time();
 
         $this->inputAbilities = array_filter(explode(',', $input['abilities']));
         unset($input['abilities']);
@@ -306,7 +308,7 @@ class Role extends Model
     public function findList(array $where, $orderString = 'id Desc', $offset = 0, $maxSize = 20)
     {
         $q = $this->query()
-            ->select(['id', 'slug', 'created_at', 'modified_at', 'comment', 'title', 'created_by_id', 'ad.first_name', 'ad.last_name'])
+            ->select(['id', 'slug', 'created_at', 'updated_at', 'comment', 'title', 'created_by_id', 'ad.first_name', 'ad.last_name'])
             ->joinRaw("LEFT JOIN admin ad ON {$this->tableName}.created_by_id = ad.id")
             ->limit($offset, $maxSize);
 
