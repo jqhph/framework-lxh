@@ -7,7 +7,7 @@ use Lxh\Helper\Util;
 use Lxh\Support\Fluent;
 
 /**
- * @method static class($class)
+ * @method \Lxh\Admin\Widgets\Widget class($class)
  */
 abstract class Widget extends Fluent implements Renderable
 {

@@ -11,17 +11,17 @@ use Lxh\Contracts\Support\Renderable;
 /**
  * Class Form.
  *
- * @method Field\Text           text($name, $label = '')
- * @method Field\Checkbox       checkbox($name, $label = '')
- * @method Field\Radio          radio($name, $label = '')
- * @method Field\Select         select($name, $label = '')
- * @method Field\SelectTree     selectTree($name, $label = '')
- * @method Field\MultipleSelect multipleSelect($name, $label = '')
- * @method Field\Textarea       textarea($name, $label = '')
- * @method Field\Hidden         hidden($name, $label = '')
- * @method Field\Date           date($name, $label = '')
- * @method Field\Datetime       datetime($name, $label = '')
- * @method Field\Html           html($column = '', $label = '')
+ * @method \Lxh\Admin\Grid\Edit\Field\Text           text($name, $label = '')
+ * @method \Lxh\Admin\Grid\Edit\Field\Checkbox       checkbox($name, $label = '')
+ * @method \Lxh\Admin\Grid\Edit\Field\Radio          radio($name, $label = '')
+ * @method \Lxh\Admin\Grid\Edit\Field\Select         select($name, $label = '')
+ * @method \Lxh\Admin\Grid\Edit\Field\SelectTree     selectTree($name, $label = '')
+ * @method \Lxh\Admin\Grid\Edit\Field\MultipleSelect multipleSelect($name, $label = '')
+ * @method \Lxh\Admin\Grid\Edit\Field\Textarea       textarea($name, $label = '')
+ * @method \Lxh\Admin\Grid\Edit\Field\Hidden         hidden($name, $label = '')
+ * @method \Lxh\Admin\Grid\Edit\Field\Date           date($name, $label = '')
+ * @method \Lxh\Admin\Grid\Edit\Field\Datetime       datetime($name, $label = '')
+ * @method \Lxh\Admin\Grid\Edit\Field\Html           html($column = '', $label = '')
  */
 class Form implements Renderable
 {

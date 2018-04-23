@@ -14,45 +14,45 @@ use Lxh\Support\Arr;
 /**
  * Class Form.
  *
- * @method Field\Text           text($name, $label = '')
- * @method Field\Password       password($name, $label = '')
- * @method Field\Checkbox       checkbox($name, $label = '')
- * @method Field\Switcher       switch($name, $label = '')
- * @method Field\Radio          radio($name, $label = '')
- * @method Field\Select         select($name, $label = '')
- * @method Field\SelectTree     selectTree($name, $label = '')
- * @method Field\MultipleSelect multipleSelect($name, $label = '')
- * @method Field\Textarea       textarea($name, $label = '')
- * @method Field\Hidden         hidden($name, $label = '')
- * @method Field\Id             id($name, $label = '')
- * @method Field\Ip             ip($name, $label = '')
- * @method Field\Url            url($name, $label = '')
- * @method Field\Color          color($name, $label = '')
- * @method Field\Email          email($name, $label = '')
- * @method Field\Mobile         mobile($name, $label = '')
- * @method Field\Slider         slider($name, $label = '')
- * @method Field\Map            map($name, $latitude = '', $longitude = '')
- * @method Field\Editor         editor($name, $label = '')
- * @method Field\File           file($name, $label = '')
- * @method Field\MultipleFile   multipleFile($name, $label = '')
- * @method Field\Image          image($name, $label = '')
- * @method Field\MultipleImage  multipleImage($name, $label = '')
- * @method Field\Date           date($name, $label = '')
- * @method Field\Datetime       datetime($name, $label = '')
- * @method Field\Time           time($name, $label = '')
- * @method Field\DateRange      dateRange($name, $start = '', $end = '')
- * @method Field\DateTimeRange  dateTimeRange($name, $start = '', $end = '')
- * @method Field\TimeRange      timeRange($name, $start = '', $end = '')
- * @method Field\Month          month($name, $label = '')
- * @method Field\Year           year($name, $label = '')
- * @method Field\Number         number($name, $label = '')
- * @method Field\Currency       currency($name, $label = '')
- * @method Field\Rate           rate($name, $label = '')
- * @method Field\Divide         divide()
- * @method Field\Decimal        decimal($column, $label = '')
- * @method Field\Html           html($column = '', $label = '')
- * @method Field\Icon           icon($column, $label = '')
- * @method Field\TableCheckbox  tableCheckbox($column, $label = '')
+ * @method \Lxh\Admin\Form\Field\Text           text($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\Password       password($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\Checkbox       checkbox($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\Switcher       switch($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\Radio          radio($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\Select         select($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\SelectTree     selectTree($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\MultipleSelect multipleSelect($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\Textarea       textarea($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\Hidden         hidden($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\Id             id($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\Ip             ip($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\Url            url($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\Color          color($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\Email          email($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\Mobile         mobile($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\Slider         slider($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\Map            map($name, $latitude = '', $longitude = '')
+ * @method \Lxh\Admin\Form\Field\Editor         editor($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\File           file($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\MultipleFile   multipleFile($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\Image          image($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\MultipleImage  multipleImage($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\Date           date($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\Datetime       datetime($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\Time           time($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\DateRange      dateRange($name, $start = '', $end = '')
+ * @method \Lxh\Admin\Form\Field\DateTimeRange  dateTimeRange($name, $start = '', $end = '')
+ * @method \Lxh\Admin\Form\Field\TimeRange      timeRange($name, $start = '', $end = '')
+ * @method \Lxh\Admin\Form\Field\Month          month($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\Year           year($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\Number         number($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\Currency       currency($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\Rate           rate($name, $label = '')
+ * @method \Lxh\Admin\Form\Field\Divide         divide()
+ * @method \Lxh\Admin\Form\Field\Decimal        decimal($column, $label = '')
+ * @method \Lxh\Admin\Form\Field\Html           html($column = '', $label = '')
+ * @method \Lxh\Admin\Form\Field\Icon           icon($column, $label = '')
+ * @method \Lxh\Admin\Form\Field\TableCheckbox  tableCheckbox($column, $label = '')
  */
 class Form implements Renderable
 {
@@ -62,48 +62,48 @@ class Form implements Renderable
      * @var array
      */
     public static $availableFields = [
-        'button'         => \Lxh\Admin\Form\Field\Button::class,
-        'checkbox'       => \Lxh\Admin\Form\Field\Checkbox::class,
-        'color'          => \Lxh\Admin\Form\Field\Color::class,
-        'currency'       => \Lxh\Admin\Form\Field\Currency::class,
-        'date'           => \Lxh\Admin\Form\Field\Date::class,
-        'dateRange'      => \Lxh\Admin\Form\Field\DateRange::class,
-        'datetime'       => \Lxh\Admin\Form\Field\Datetime::class,
-        'dateTimeRange'  => \Lxh\Admin\Form\Field\DatetimeRange::class,
-        'decimal'        => \Lxh\Admin\Form\Field\Decimal::class,
-        'divider'        => \Lxh\Admin\Form\Field\Divide::class,
-        'divide'         => \Lxh\Admin\Form\Field\Divide::class,
-        'embeds'         => \Lxh\Admin\Form\Field\Embeds::class,
-        'editor'         => \Lxh\Admin\Form\Field\Editor::class,
-        'email'          => \Lxh\Admin\Form\Field\Email::class,
-        'file'           => \Lxh\Admin\Form\Field\File::class,
-        'hidden'         => \Lxh\Admin\Form\Field\Hidden::class,
-        'id'             => \Lxh\Admin\Form\Field\Id::class,
-        'image'          => \Lxh\Admin\Form\Field\Image::class,
-        'ip'             => \Lxh\Admin\Form\Field\Ip::class,
-        'map'            => \Lxh\Admin\Form\Field\Map::class,
-        'mobile'         => \Lxh\Admin\Form\Field\Mobile::class,
-        'month'          => \Lxh\Admin\Form\Field\Month::class,
-        'multipleSelect' => \Lxh\Admin\Form\Field\MultipleSelect::class,
-        'number'         => \Lxh\Admin\Form\Field\Number::class,
-        'password'       => \Lxh\Admin\Form\Field\Password::class,
-        'radio'          => \Lxh\Admin\Form\Field\Radio::class,
-        'rate'           => \Lxh\Admin\Form\Field\Rate::class,
-        'select'         => \Lxh\Admin\Form\Field\Select::class,
-        'selectTree'     => \Lxh\Admin\Form\Field\SelectTree::class,
-        'slider'         => \Lxh\Admin\Form\Field\Slider::class,
-        'text'           => \Lxh\Admin\Form\Field\Text::class,
-        'textarea'       => \Lxh\Admin\Form\Field\Textarea::class,
-        'time'           => \Lxh\Admin\Form\Field\Time::class,
-        'timeRange'      => \Lxh\Admin\Form\Field\TimeRange::class,
-        'url'            => \Lxh\Admin\Form\Field\Url::class,
-        'year'           => \Lxh\Admin\Form\Field\Year::class,
-        'html'           => \Lxh\Admin\Form\Field\Html::class,
-        'icon'           => \Lxh\Admin\Form\Field\Icon::class,
-        'multipleFile'   => \Lxh\Admin\Form\Field\MultipleFile::class,
-        'multipleImage'  => \Lxh\Admin\Form\Field\MultipleImage::class,
-        'tableCheckbox'  => \Lxh\Admin\Form\Field\TableCheckbox::class,
-        'switch'         => \Lxh\Admin\Form\Field\Switcher::class,
+        'button'         => Field\Button::class,
+        'checkbox'       => Field\Checkbox::class,
+        'color'          => Field\Color::class,
+        'currency'       => Field\Currency::class,
+        'date'           => Field\Date::class,
+        'dateRange'      => Field\DateRange::class,
+        'datetime'       => Field\Datetime::class,
+        'dateTimeRange'  => Field\DatetimeRange::class,
+        'decimal'        => Field\Decimal::class,
+        'divider'        => Field\Divide::class,
+        'divide'         => Field\Divide::class,
+        'embeds'         => Field\Embeds::class,
+        'editor'         => Field\Editor::class,
+        'email'          => Field\Email::class,
+        'file'           => Field\File::class,
+        'hidden'         => Field\Hidden::class,
+        'id'             => Field\Id::class,
+        'image'          => Field\Image::class,
+        'ip'             => Field\Ip::class,
+        'map'            => Field\Map::class,
+        'mobile'         => Field\Mobile::class,
+        'month'          => Field\Month::class,
+        'multipleSelect' => Field\MultipleSelect::class,
+        'number'         => Field\Number::class,
+        'password'       => Field\Password::class,
+        'radio'          => Field\Radio::class,
+        'rate'           => Field\Rate::class,
+        'select'         => Field\Select::class,
+        'selectTree'     => Field\SelectTree::class,
+        'slider'         => Field\Slider::class,
+        'text'           => Field\Text::class,
+        'textarea'       => Field\Textarea::class,
+        'time'           => Field\Time::class,
+        'timeRange'      => Field\TimeRange::class,
+        'url'            => Field\Url::class,
+        'year'           => Field\Year::class,
+        'html'           => Field\Html::class,
+        'icon'           => Field\Icon::class,
+        'multipleFile'   => Field\MultipleFile::class,
+        'multipleImage'  => Field\MultipleImage::class,
+        'tableCheckbox'  => Field\TableCheckbox::class,
+        'switch'         => Field\Switcher::class,
     ];
 
     /**

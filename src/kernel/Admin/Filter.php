@@ -21,10 +21,10 @@ use Lxh\MVC\Model;
 /**
  * Class Filter.
  *
- * @method Text           text($name, $label = '')
- * @method Select         select($name, $label = '')
- * @method MultipleSelect multipleSelect($name, $label = '')
- * @method DateRange      dateRange($name, $label = '')
+ * @method \Lxh\Admin\Filter\Field\Text           text($name, $label = '')
+ * @method \Lxh\Admin\Filter\Field\Select         select($name, $label = '')
+ * @method \Lxh\Admin\Filter\Field\MultipleSelect multipleSelect($name, $label = '')
+ * @method \Lxh\Admin\Filter\Field\DateRange      dateRange($name, $label = '')
  */
 class Filter extends Widget implements Renderable
 {

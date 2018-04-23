@@ -28,20 +28,20 @@ use Lxh\Support\Arr;
 
 /**
  *
- * @method Table link($field, $closure = null);
- * @method Table button($field, $closure = null);
- * @method Table label($field, $closure = null);
- * @method Table tag($field, $closure = null);
- * @method Table checkbox($field, $closure = null);
- * @method Table code($field, $closure = null);
- * @method Table image($field, $closure = null);
- * @method Table expand($field, $closure = null);
- * @method Table popover($field, $closure = null);
- * @method Table editable($field, $closure = null);
- * @method Table switch($field, $closure = null);
- * @method Table checked($field);
- * @method Table email($field);
- * @method Table ip($field);
+ * @method \Lxh\Admin\Table\Table link($field, $closure = null);
+ * @method \Lxh\Admin\Table\Table button($field, $closure = null);
+ * @method \Lxh\Admin\Table\Table label($field, $closure = null);
+ * @method \Lxh\Admin\Table\Table tag($field, $closure = null);
+ * @method \Lxh\Admin\Table\Table checkbox($field, $closure = null);
+ * @method \Lxh\Admin\Table\Table code($field, $closure = null);
+ * @method \Lxh\Admin\Table\Table image($field, $closure = null);
+ * @method \Lxh\Admin\Table\Table expand($field, $closure = null);
+ * @method \Lxh\Admin\Table\Table popover($field, $closure = null);
+ * @method \Lxh\Admin\Table\Table editable($field, $closure = null);
+ * @method \Lxh\Admin\Table\Table switch($field, $closure = null);
+ * @method \Lxh\Admin\Table\Table checked($field);
+ * @method \Lxh\Admin\Table\Table email($field);
+ * @method \Lxh\Admin\Table\Table ip($field);
  */
 class Table extends Widget
 {

@@ -4,7 +4,7 @@ namespace Lxh\Migration\Database\Column;
 
 /**
  *
- * @method Column default($value) 设置默认值
+ * @method \Lxh\Migration\Database\Column\Column default($value) 设置默认值
  */
 abstract class Column
 {
