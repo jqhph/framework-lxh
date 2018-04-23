@@ -8,6 +8,13 @@ class StringColumn extends Column
 {
     protected $type = AdapterInterface::PHINX_TYPE_STRING;
 
+    public function __construct($name)
+    {
+        parent::__construct($name);
+
+        $this->default('');
+    }
+
     /**
      * 设置字段的 collation （仅适用于 MySQL）
      *

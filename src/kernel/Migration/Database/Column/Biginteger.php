@@ -8,6 +8,13 @@ class Biginteger extends Column
 {
     protected $type = AdapterInterface::PHINX_TYPE_BIG_INTEGER;
 
+    public function __construct($name)
+    {
+        parent::__construct($name);
+
+        $this->default(0);
+    }
+
     /**
      * 开启或关闭自增长
      *
@@ -16,6 +23,7 @@ class Biginteger extends Column
      */
     public function identity($flag = true)
     {
+        $this->deleteOption('default');
         return $this->setOption('identity', $flag);
     }
 
@@ -28,5 +36,13 @@ class Biginteger extends Column
     public function signed($bool = false)
     {
         return $this->setOption('signed', $bool);
+    }
+
+    /**
+     * @return $this
+     */
+    public function unsigned()
+    {
+        return $this->setOption('signed', false);
     }
 }

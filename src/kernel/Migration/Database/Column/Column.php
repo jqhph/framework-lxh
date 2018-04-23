@@ -60,6 +60,12 @@ abstract class Column
         return $this;
     }
 
+    public function deleteOption($key)
+    {
+        unset($this->options[$key]);
+        return $this;
+    }
+
     /**
      * 指定字段放置在哪个字段后面
      *

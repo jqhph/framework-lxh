@@ -2,10 +2,11 @@
 
 namespace Lxh\Migration;
 
-use Lxh\Migration\Database\Table;
+use Lxh\Migration\Database\TableHelper;
 use Lxh\Migration\Exceptions\InvalidArgumentException;
 use Phinx\Db\Adapter\AdapterFactory;
 use Phinx\Migration\AbstractMigration;
+use Phinx\Db\Table as PhinxTable;
 
 class Migrator extends AbstractMigration
 {
@@ -23,7 +24,7 @@ class Migrator extends AbstractMigration
      */
     public function tableHelper($tableName, $callback = null)
     {
-        $table = new Table($this->table($tableName));
+        $table = new TableHelper($this->table($tableName));
 
         $callback($table);
 
@@ -37,7 +38,7 @@ class Migrator extends AbstractMigration
      */
     public function table($tableName, $options = [])
     {
-        return new Table($tableName, $options, $this->getAdapter());
+        return new PhinxTable($tableName, $options, $this->getAdapter());
     }
 
     /**

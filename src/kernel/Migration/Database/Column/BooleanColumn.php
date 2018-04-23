@@ -4,7 +4,7 @@ namespace Lxh\Migration\Database\Column;
 
 use Phinx\Db\Adapter\AdapterInterface;
 
-class Boolean extends Column
+class BooleanColumn extends Column
 {
     protected $type = AdapterInterface::PHINX_TYPE_BOOLEAN;
 
@@ -17,5 +17,13 @@ class Boolean extends Column
     public function signed($bool = false)
     {
         return $this->setOption('signed', $bool);
+    }
+
+    /**
+     * @return $this
+     */
+    public function unsigned()
+    {
+        return $this->setOption('signed', false);
     }
 }

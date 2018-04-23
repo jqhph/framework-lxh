@@ -5,7 +5,7 @@ namespace Lxh\Migration\Database;
 use Lxh\Migration\Database\Column\Biginteger;
 use Lxh\Migration\Database\Column\Binary;
 use Lxh\Migration\Database\Column\Blob;
-use Lxh\Migration\Database\Column\Boolean;
+use Lxh\Migration\Database\Column\BooleanColumn;
 use Lxh\Migration\Database\Column\Char;
 use Lxh\Migration\Database\Column\Cidr;
 use Lxh\Migration\Database\Column\Column;
@@ -51,7 +51,7 @@ use Phinx\Db\Table as PhinxTable;
  * @method Binary binary($column)
  * @method Varbinary varbinary($column)
  * @method Blob blob($column)
- * @method Boolean boolean($column)
+ * @method BooleanColumn boolean($column)
  * @method Json json($column)
  * @method Jsonb jsonb($column)
  * @method Uuid uuid($column)
@@ -67,7 +67,7 @@ use Phinx\Db\Table as PhinxTable;
  * @method Macaddr macaddr($column)
  * @method Interval Interval($column)
  */
-class Table
+class TableHelper
 {
     /**
      * @var PhinxTable
@@ -86,7 +86,7 @@ class Table
         'string'     => StringColumn::class,
         'char'       => Char::class,
         'text'       => Text::class,
-        'integer'    => Integer::class,
+        'integer'    => IntegerColumn::class,
         'biginteger' => Biginteger::class,
         'float'      => FloatColumn::class,
         'decimal'    => Decimal::class,
@@ -97,7 +97,7 @@ class Table
         'binary'     => Binary::class,
         'varbinary'  => Varbinary::class,
         'blob'       => Blob::class,
-        'boolean'    => Boolean::class,
+        'boolean'    => BooleanColumn::class,
         'json'       => Json::class,
         'jsonb'      => Jsonb::class,
         'uuid'       => Uuid::class,
@@ -149,11 +149,30 @@ class Table
     }
 
     /**
+     * 主键是否是非负数
+     *
+     * @param bool $flag
+     * @return TableHelper
+     */
+    public function signed($flag = false)
+    {
+        return $this->setOption('signed', $flag);
+    }
+
+    /**
+     * @return $this
+     */
+    public function unsigned()
+    {
+        return $this->setOption('signed', false);
+    }
+
+    /**
      * 手动关闭默认增加的自增主键
      * 或改变自增主键字段名
      *
      * @param string|false $value false关闭默认增加的自增主键， 字符串则是更改自增主键字段名
-     * @return Table
+     * @return $this
      */
     public function id($value)
     {
@@ -172,9 +191,15 @@ class Table
         return $this->setOption('comment', $comment);
     }
 
-    public function utf8mb4generalci()
+    /**
+     * 使用utf8mb4编码
+     * 默认utf8
+     *
+     * @return TableHelper
+     */
+    public function utf8mb4()
     {
-        return $this->collation('utf8mb4-general-ci');
+        return $this->collation('utf8mb4_general_ci');
     }
 
     /**
@@ -192,7 +217,7 @@ class Table
     /**
      * 设置表引擎为INNODB
      *
-     * @return Table
+     * @return $this
      */
     public function innodb()
     {
@@ -202,7 +227,7 @@ class Table
     /**
      * 设置表以前为MYISAM
      *
-     * @return Table
+     * @return $this
      */ 
     public function myisam()
     {
@@ -214,7 +239,7 @@ class Table
      * Mysql支持
      *
      * @param $engine
-     * @return Table
+     * @return $this
      */
     public function engine($engine)
     {
