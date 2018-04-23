@@ -5,7 +5,7 @@ namespace Lxh\Migration\Database;
 use Lxh\Migration\Database\Column\Biginteger;
 use Lxh\Migration\Database\Column\Binary;
 use Lxh\Migration\Database\Column\Blob;
-use Lxh\Migration\Database\Column\Boolean;
+use Lxh\Migration\Database\Column\BooleanColumn;
 use Lxh\Migration\Database\Column\Char;
 use Lxh\Migration\Database\Column\Cidr;
 use Lxh\Migration\Database\Column\Column;
@@ -17,7 +17,7 @@ use Lxh\Migration\Database\Column\Filestream;
 use Lxh\Migration\Database\Column\FloatColumn;
 use Lxh\Migration\Database\Column\Geometry;
 use Lxh\Migration\Database\Column\Inet;
-use Lxh\Migration\Database\Column\Integer;
+use Lxh\Migration\Database\Column\IntegerColumn;
 use Lxh\Migration\Database\Column\Interval;
 use Lxh\Migration\Database\Column\Json;
 use Lxh\Migration\Database\Column\Jsonb;
@@ -37,40 +37,40 @@ use Phinx\Db\Table as PhinxTable;
 
 /**
  *
- * @method StringColumn string($column)
- * @method Char char($column)
- * @method Text text($column)
- * @method Integer integer($column)
- * @method Biginteger biginteger($column)
- * @method FloatColumn float($column)
- * @method Decimal decimal($column)
- * @method Datetime datetime($column)
- * @method Timestamp timestamp($column)
- * @method Time time($column)
- * @method Date date($column)
- * @method Binary binary($column)
- * @method Varbinary varbinary($column)
- * @method Blob blob($column)
- * @method Boolean boolean($column)
- * @method Json json($column)
- * @method Jsonb jsonb($column)
- * @method Uuid uuid($column)
- * @method Filestream filestream($column)
- * @method Geometry geometry($column)
- * @method Point point($column)
- * @method Linestring linestring($column)
- * @method Polygon polygon($column)
- * @method Enum enum($column)
- * @method Set set($column)
- * @method Cidr cidr($column)
- * @method Inet inet($column)
- * @method Macaddr macaddr($column)
- * @method Interval Interval($column)
+ * @method \Lxh\Migration\Database\Column\StringColumn string($column)
+ * @method \Lxh\Migration\Database\Column\Char char($column)
+ * @method \Lxh\Migration\Database\Column\Text text($column)
+ * @method \Lxh\Migration\Database\Column\Integer integer($column)
+ * @method \Lxh\Migration\Database\Column\Biginteger biginteger($column)
+ * @method \Lxh\Migration\Database\Column\FloatColumn float($column)
+ * @method \Lxh\Migration\Database\Column\Decimal decimal($column)
+ * @method \Lxh\Migration\Database\Column\Datetime datetime($column)
+ * @method \Lxh\Migration\Database\Column\Timestamp timestamp($column)
+ * @method \Lxh\Migration\Database\Column\Time time($column)
+ * @method \Lxh\Migration\Database\Column\Date date($column)
+ * @method \Lxh\Migration\Database\Column\Binary binary($column)
+ * @method \Lxh\Migration\Database\Column\Varbinary varbinary($column)
+ * @method \Lxh\Migration\Database\Column\Blob blob($column)
+ * @method \Lxh\Migration\Database\Column\Boolean boolean($column)
+ * @method \Lxh\Migration\Database\Column\Json json($column)
+ * @method \Lxh\Migration\Database\Column\Jsonb jsonb($column)
+ * @method \Lxh\Migration\Database\Column\Uuid uuid($column)
+ * @method \Lxh\Migration\Database\Column\Filestream filestream($column)
+ * @method \Lxh\Migration\Database\Column\Geometry geometry($column)
+ * @method \Lxh\Migration\Database\Column\Point point($column)
+ * @method \Lxh\Migration\Database\Column\Linestring linestring($column)
+ * @method \Lxh\Migration\Database\Column\Polygon polygon($column)
+ * @method \Lxh\Migration\Database\Column\Enum enum($column)
+ * @method \Lxh\Migration\Database\Column\Set set($column)
+ * @method \Lxh\Migration\Database\Column\Cidr cidr($column)
+ * @method \Lxh\Migration\Database\Column\Inet inet($column)
+ * @method \Lxh\Migration\Database\Column\Macaddr macaddr($column)
+ * @method \Lxh\Migration\Database\Column\Interval Interval($column)
  */
 class ChangeColumn
 {
     /**
-     * @var Table
+     * @var TableHelper
      */
     protected $table;
 
@@ -84,7 +84,7 @@ class ChangeColumn
      */
     protected $columns = [];
 
-    public function __construct(Table $table)
+    public function __construct(TableHelper $table)
     {
         $this->table = $table;
 
