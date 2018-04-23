@@ -21,7 +21,7 @@ class Migrator extends AbstractMigration
      * @param \Closure $callback
      * @return $this
      */
-    public function makeTable($tableName, $callback = null)
+    public function tableHelper($tableName, $callback = null)
     {
         $table = new Table($this->table($tableName));
 

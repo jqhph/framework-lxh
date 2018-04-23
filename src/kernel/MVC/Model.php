@@ -208,11 +208,7 @@ class Model extends Entity
             $q = $this->queryForWrite();
         }
 
-        if (count($ids) > 1) {
-            $res = $q->where($this->primaryKeyName, 'IN', $ids)->delete();
-        } else {
-            $res = $q->where($this->primaryKeyName, $ids[0])->delete();
-        }
+        $res = $q->where($this->primaryKeyName, 'IN', $ids)->delete();
 
         $this->afterBatchDelete($ids, $res, $trash);
         fire(
@@ -244,13 +240,7 @@ class Model extends Entity
             [$ids]
         );
 
-        if (count($ids) > 1) {
-            $where = [$this->primaryKeyName => ['IN', &$ids]];
-
-        } else {
-            $where = [$this->primaryKeyName => $ids[0]];
-
-        }
+        $where = [$this->primaryKeyName => ['IN', &$ids]];
 
         $trashQuery = query($this->connectionForWriteKeyName)->from($this->trashTableName);
 
@@ -311,13 +301,7 @@ class Model extends Entity
             [$ids]
         );
 
-        if (count($ids) > 1) {
-            $where = [$this->primaryKeyName => ['IN', &$ids]];
-
-        } else {
-            $where = [$this->primaryKeyName => $ids[0]];
-
-        }
+        $where = [$this->primaryKeyName => ['IN', &$ids]];
 
         $data = $this->query()
             ->select('*')
@@ -657,7 +641,7 @@ class Model extends Entity
             // 从回收站表回滚数据
             $trashQuery->where($this->primaryKeyName, $id)->delete();
         }
-        
+
         $this->afterToTrash($id, $result);
         fire(
             "{$this->module}.{$this->name}.to-trash.after",

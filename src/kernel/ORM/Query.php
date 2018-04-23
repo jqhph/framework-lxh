@@ -345,11 +345,7 @@ class Query
 	 */
 	public function whereIn($field, array $p1)
 	{
-		if (count($p1) > 1) {
-			$this->builder->where($field, 'IN', $p1);
-		} else {
-			$this->builder->where($field, $p1[0]);
-		}
+		$this->builder->where($field, 'IN', $p1);
 
 		return $this;
 	}

@@ -50,14 +50,14 @@ class Builder
 
     public function __construct(Container $container, Query $query)
     {
-        $this->container = $container;
-        $this->query = $query;
+        $this->container    = $container;
+        $this->query        = $query;
         $this->whereBuilder = new WhereBuilder();
     }
 
-    public function from(& $table)
+    public function from(&$table)
     {
-        $this->tableName = & $table;
+        $this->tableName = &$table;
 
         return $this;
     }

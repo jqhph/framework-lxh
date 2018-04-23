@@ -26,7 +26,7 @@ class InitMigration extends Migrator
         ''
     ];
 
-    public function up()
+    public function change()
     {
         $this->createAdmin();
         $this->createMenu();
@@ -35,13 +35,6 @@ class InitMigration extends Migrator
         $this->createAssignedAbilities();
         $this->createAssignedRoles();
         $this->createAdminLoginLog();
-    }
-
-    public function down()
-    {
-        foreach ($this->tables as $name) {
-            $this->table($name)->drop();
-        }
     }
 
     protected function createAdmin()
@@ -66,13 +59,13 @@ class InitMigration extends Migrator
             $table->innodb()->comment('后台用户表')->create();
         };
 
-        $this->makeTable($this->tables['admin'], $table);
-        $this->makeTable($this->tables['admin_trash'], $table);
+        $this->tableHelper($this->tables['admin'], $table);
+        $this->tableHelper($this->tables['admin_trash'], $table);
     }
 
     protected function createUser()
     {
-        $this->makeTable($this->tables['user'], function (Table $table) {
+        $this->tableHelper($this->tables['user'], function (Table $table) {
 
             $table->innodb()->comment('用户表')->create();
         });
@@ -80,7 +73,7 @@ class InitMigration extends Migrator
 
     protected function createMenu()
     {
-        $this->makeTable($this->tables['menu'], function (Table $table) {
+        $this->tableHelper($this->tables['menu'], function (Table $table) {
             $table->string('name')->length(20);
             $table->string('icon')->length(100);
             $table->integer('show')->tiny()->default(0)->comment('1显示，0不显示');
@@ -100,7 +93,7 @@ class InitMigration extends Migrator
 
     protected function createRoles()
     {
-        $this->makeTable($this->tables['role'], function (Table $table) {
+        $this->tableHelper($this->tables['role'], function (Table $table) {
 
             $table->innodb()->comment('角色表')->create();
         });
@@ -108,7 +101,7 @@ class InitMigration extends Migrator
 
     protected function createAbilities()
     {
-        $this->makeTable($this->tables['ability'], function (Table $table) {
+        $this->tableHelper($this->tables['ability'], function (Table $table) {
 
             $table->innodb()->comment('权限表')->create();
         });
@@ -116,7 +109,7 @@ class InitMigration extends Migrator
 
     protected function createAssignedAbilities()
     {
-        $this->makeTable($this->tables['assigned_abilities'], function (Table $table) {
+        $this->tableHelper($this->tables['assigned_abilities'], function (Table $table) {
 
             $table->innodb()->comment('权限关联角色中间表')->create();
         });
@@ -124,7 +117,7 @@ class InitMigration extends Migrator
 
     protected function createAssignedRoles()
     {
-        $this->makeTable($this->tables['assigned_roles'], function (Table $table) {
+        $this->tableHelper($this->tables['assigned_roles'], function (Table $table) {
 
             $table->innodb()->comment('权限关联角色中间表')->create();
         });
@@ -132,7 +125,7 @@ class InitMigration extends Migrator
 
     protected function createAdminLoginLog()
     {
-        $this->makeTable($this->tables['admin_login_log'], function (Table $table) {
+        $this->tableHelper($this->tables['admin_login_log'], function (Table $table) {
 
             $table->innodb()->comment('权限关联角色中间表')->create();
         });

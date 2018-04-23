@@ -121,12 +121,17 @@ class WhereBuilder
                 $this->params[] = $p3[1];
                 break;
             case 'in':
-                foreach ($p3 as & $v) {
-                    $this->params[] = $v;
+                if (count($p3) > 1) {
+                    foreach ($p3 as &$v) {
+                        $this->params[] = $v;
 
-                    $v = '?';
+                        $v = '?';
+                    }
+                    $data[] = $p1 . ' IN (' . implode(',', $p3) . ')';
+                } else {
+                    $this->params[] = $p3[0];
+                    $data[] = $p1 . ' = ?';
                 }
-                $data[] = $p1 . ' IN (' . implode(',', $p3) . ')';
                 break;
             case 'not in':
                 foreach ($p3 as & $v) {
