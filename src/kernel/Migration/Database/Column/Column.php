@@ -113,6 +113,7 @@ abstract class Column
      */
     public function null()
     {
+        $this->deleteOption('default');
         return $this->setOption('null', true);
     }
 
