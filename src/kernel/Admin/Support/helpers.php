@@ -38,7 +38,7 @@ function setup_admin_js_app_ini()
         // 容器配置
         data.options = <?php
         echo json_encode([
-            'language' => config('language'),
+            'language' => config('locale'),
             'js-version' => &$GLOBALS['js-version'],
             'css-version' => &$GLOBALS['css-version'],
             'use-cache' => config('client.loader.save'),

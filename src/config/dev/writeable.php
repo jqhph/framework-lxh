@@ -2,7 +2,7 @@
 return [
     'js-version' => 1234133,
     'css-version' => time(),
-    'language' => 'zh',
+    'locale' => 'zh-cn',
     'client' => [
         'use-cache' => false,
         'cache-expire' => 259200000,

@@ -88,7 +88,7 @@
 
 <script type="text/html" id="createFileTpl">
     <hr>
-    <?php echo view('component.input', ['label' => 'language', 'name' => 'lang_name', 'value' => 'zh'])->render();?>
+    <?php echo view('component.input', ['label' => 'locale', 'name' => 'lang_name', 'value' => 'zh'])->render();?>
     <?php echo view('component.input', ['label' => 'module', 'name' => 'module_name', 'value' => 'Admin'])->render()?>
     <?php echo view('component.input', ['label' => 'filename', 'name' => 'filename', 'placeholder' => 'Avoid the suffix'])->render()?>
     <hr>

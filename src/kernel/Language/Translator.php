@@ -40,14 +40,9 @@ class Translator
     private $root = __ROOT__;
 
     /**
-     * @var mixed|null
-     */
-    private $language = null;
-
-    /**
      * @var string
      */
-    protected $defaultLanguage = 'en';
+    private $locale = 'en';
 
     /**
      * 已载入模块的语言包
@@ -91,8 +86,8 @@ class Translator
 
     public function __construct(Container $container)
     {
-        $this->container = $container;
-        $this->language = config('language', $this->defaultLanguage);
+        $this->container  = $container;
+        $this->locale     = config('locale', $this->locale);
         $this->moduleName = $container->make('controller.manager')->moduleDash();
 
         $this->loadPackage('Global');
@@ -118,7 +113,7 @@ class Translator
     public function all()
     {
         $data = [];
-        foreach ($this->packages as $lang => & $entity) {
+        foreach ($this->packages as $lang => &$entity) {
             $data[$lang] = $entity->all();
         }
         return $data;
@@ -135,10 +130,18 @@ class Translator
      * @param string $lang
      * @return $this
      */
-    public function setLanguage($lang)
+    public function setLocale($lang)
     {
-        $this->language = $lang;
+        $this->locale = $lang;
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function locale()
+    {
+        return $this->locale;
     }
 
     /**
@@ -150,7 +153,7 @@ class Translator
      */
     public function loadPackage($scope, $lang = null, $reload = false)
     {
-        $lang = $lang ?: $this->language;
+        $lang = $lang ?: $this->locale;
         if (! $reload && isset($this->loadedScopes[$lang][$scope])) {
             return false;
         }
@@ -183,12 +186,16 @@ class Translator
      */
     public function getPackages(array $scopes, $lang = null)
     {
-        $lang = $lang ?: $this->language;
+        $lang = $lang ?: $this->locale;
 
         if ($scopes) {
             foreach ($scopes as & $s) {
                 $this->loadPackage($s, $lang);
             }
+        }
+
+        if (! isset($this->packages[$lang])) {
+            return [];
         }
 
         $data = [];
@@ -210,7 +217,7 @@ class Translator
      */
     public function getPackagePath($scope, $lang = null)
     {
-        $lang = $lang ?: $this->language;
+        $lang = $lang ?: $this->locale;
 
         $scope = slug($scope);
 
@@ -234,7 +241,7 @@ class Translator
      */
     public function packagesLoaded($scope)
     {
-        return $this->loadedScopes[$this->language][$scope];
+        return $this->loadedScopes[$this->locale][$scope];
     }
 
     /**
@@ -249,22 +256,22 @@ class Translator
      */
     public function translate($label, $category = 'labels', array $sprints = [], $scope = null)
     {
-        if (! isset($this->packages[$this->language])) {
+        if (! isset($this->packages[$this->locale])) {
             return $label;
         }
 
         $scope = $scope ?: $this->scopeName;
         // 没有载入模块
-        if (! isset($this->loadedScopes[$this->language][$scope])) {
+        if (! isset($this->loadedScopes[$this->locale][$scope])) {
             $this->loadPackage($scope);
         }
 
-        $translated = $this->packages[$this->language]->getForArray(
+        $translated = $this->packages[$this->locale]->getForArray(
             [&$scope, &$category, &$label]
         );
 
         if (empty($translated)) {
-            $translated = $this->packages[$this->language]->getForArray(
+            $translated = $this->packages[$this->locale]->getForArray(
                 ['Global', &$category, &$label]
             );
         }
@@ -296,10 +303,10 @@ class Translator
      */
     public function translateWithGolobal($label, $category = 'labels', array $sprints = [])
     {
-        if (! isset($this->packages[$this->language])) {
+        if (! isset($this->packages[$this->locale])) {
             return $label;
         }
-        $translated = $this->packages[$this->language]->getForArray(
+        $translated = $this->packages[$this->locale]->getForArray(
             ['Global', $category, $label], $label
         );
         if ($sprints && $translated) {
@@ -319,17 +326,17 @@ class Translator
      */
     public function translateOption($value, $field, $scope = null)
     {
-        if (! isset($this->packages[$this->language])) {
+        if (! isset($this->packages[$this->locale])) {
             return $value;
         }
 
         $scope = $scope ?: $this->scopeName;
         // 没有载入模块
-        if (! isset($this->loadedScopes[$this->language][$scope])) {
+        if (! isset($this->loadedScopes[$this->locale][$scope])) {
             $this->loadPackage($scope);
         }
 
-        $options = $this->packages[$this->language]->getForArray([$scope, 'options', $field]);
+        $options = $this->packages[$this->locale]->getForArray([$scope, 'options', $field]);
 
         return isset($options[$value]) ? $options[$value] : $value;
     }

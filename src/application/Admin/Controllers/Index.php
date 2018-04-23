@@ -86,17 +86,17 @@ class Index extends Controller
         $plugins = json_encode(array_keys((array)config('plugins')));
 
         return [
-            ['name' => 'PHP version',       'value' => 'PHP/'.PHP_VERSION],
-            ['name' => 'Lxh-framework version',   'value' => 'dev'],
-            ['name' => 'CGI',               'value' => php_sapi_name()],
-            ['name' => 'Uname',             'value' => php_uname()],
-            ['name' => 'Server',            'value' => get_value($_SERVER, 'SERVER_SOFTWARE')],
+            ['name' => 'PHP version',           'value' => 'PHP/'.PHP_VERSION],
+            ['name' => 'Lxh Framework version', 'value' => 'dev'],
+            ['name' => 'CGI',                   'value' => php_sapi_name()],
+            ['name' => 'Uname',                 'value' => php_uname()],
+            ['name' => 'Server',                'value' => get_value($_SERVER, 'SERVER_SOFTWARE')],
 
-            ['name' => 'Timezone',          'value' => config('timezone')],
-            ['name' => 'Locale',            'value' => config('language')],
-            ['name' => 'Env',               'value' => __ENV__],
-            ['name' => 'Host',              'value' => request()->getUri()->getHost()],
-            ['name' => 'Plugins',           'value' => "<code>{$plugins}</code>"],
+            ['name' => 'Timezone',              'value' => config('timezone')],
+            ['name' => 'Locale',                'value' => config('locale')],
+            ['name' => 'Env',                   'value' => __ENV__],
+            ['name' => 'Host',                  'value' => request()->getUri()->getHost()],
+            ['name' => 'Plugins',               'value' => "<code>{$plugins}</code>"],
         ];
     }
 

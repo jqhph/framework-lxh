@@ -12,17 +12,17 @@ class InitMigration extends Migrator
      * @var array
      */
     protected $tables = [
-        'admin' => 'admin',
-        'admin_trash' => 'admin_trash',
-        'user' => 'user',
-        'menu' => 'menu',
-        'role' => 'roles',
-        'ability' => 'abilities',
-        'assigned_abilities' => 'assigned_abilities',
-        'assigned_roles' => 'assigned_roles',
-        'admin_login_log' => 'admin_login_log',
+        'admin'               => 'admin',
+        'admin_trash'         => 'admin_trash',
+        'user'                => 'user',
+        'menu'                => 'menu',
+        'role'                => 'roles',
+        'ability'             => 'abilities',
+        'assigned_abilities'  => 'assigned_abilities',
+        'assigned_roles'      => 'assigned_roles',
+        'admin_login_log'     => 'admin_login_log',
         'admin_operation_log' => 'admin_operation_log',
-        'options' => 'options',
+        'options'             => 'options',
     ];
 
     public function change()
