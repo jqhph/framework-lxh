@@ -147,6 +147,8 @@ class Form implements Renderable
      */
     public function render()
     {
+        Admin::setCsrfToken();
+
         $contents = '';
         foreach($this->fields as $field):
             $contents .= $field->render();
