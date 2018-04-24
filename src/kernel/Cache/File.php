@@ -81,15 +81,15 @@ class File extends Cache
     /**
      * 设置缓存目录
      *
-     * @param  string $dirname 目录名
+     * @param  string $type 目录名
      * @return static
      */
-    public function setType($dirname)
+    public function setType($type)
     {
-        if (empty($dirname)) {
+        if (empty($type)) {
             return $this;
         }
-        $this->type = $dirname;
+        $this->type = $type;
         return $this;
     }
 
@@ -112,14 +112,12 @@ class File extends Cache
     /**
      * 移除缓存目录类型下的所有缓存
      *
-     * @param  string $dirname 目录名，传空则清除默认目录
+     * @param  string $type 目录名，传空则清除默认目录
      * @return bool
      */
-    public function flush($dirname = '')
+    public function flush($type = null)
     {
-        $dirname = $dirname ?: $this->getType();
-
-        return $this->file->removeInDir($this->getBasePath() . $dirname);
+        return $this->file->removeInDir($this->getBasePath() . ($type ?: $this->getType()));
     }
 
     public function reset()
