@@ -9,12 +9,13 @@ namespace Lxh\Cache;
 
 use Lxh\File\FileManager;
 
-class File extends Cache
+class File implements CacheInterface
 {
     /**
      * @var array
      */
     protected static $instances = [];
+
     /**
      * 缓存根目录
      *
@@ -34,29 +35,30 @@ class File extends Cache
      */
     protected $type;
 
+    /**
+     * @var string
+     */
     protected $defaultType = 'default';
 
     /**
      * File constructor.
      * @param string $name 文件夹名，默认为空
      */
-    public function __construct($name = '')
+    public function __construct($name = null)
     {
-        $this->type = $name;
-
+        $this->type = $name ?: $this->defaultType;
         $this->root = __DATA_ROOT__ . 'file-cache/';
-
         $this->file = files();
     }
 
     /**
      *
-     * @param string $name 缓存目录
+     * @param string $type 缓存目录
      * @return static
      */
-    public static function create($name = '')
+    public static function create($type = null)
     {
-        return isset(static::$instances[$name]) ? static::$instances[$name] : (static::$instances[$name] = new static($name));
+        return isset(static::$instances[$type]) ? static::$instances[$type] : (static::$instances[$type] = new static($type));
     }
 
     /**
@@ -76,6 +78,47 @@ class File extends Cache
         $this->normalizeValue($value, $timeout);
 
         return $this->file->putPhpContents($this->normalizePath($key), $value);
+    }
+
+    /**
+     * 判断缓存是否存在
+     *
+     * @param $key
+     * @return bool
+     */
+    public function exist($key)
+    {
+        if (! $this->useCache() || empty($key)) {
+            return false;
+        }
+
+        $content = $this->file->getPhpContents($this->normalizePath($key));
+
+        return $this->isEffective($key, $content);
+
+    }
+
+    /**
+     * 判断缓存内容是否有效
+     *
+     * @param $key
+     * @param $data
+     * @return bool
+     */
+    protected function isEffective($key, &$content)
+    {
+        if (!isset($content['value']) || $content['value'] === '' || $content['value'] === false) {
+            return false;
+        }
+
+        // 判断是否过期
+        if ($this->isTimeout($key, $content)) {
+            // 如过期则删除缓存文件
+            $this->delete($key);
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -148,19 +191,12 @@ class File extends Cache
             return false;
         }
 
-        $data = $this->file->getPhpContents($this->normalizePath($key));
-        if (empty($data['value'])) {
+        $content = $this->file->getPhpContents($this->normalizePath($key));
+        if (! $this->isEffective($key, $content)) {
             return false;
         }
 
-        // 判断是否过期
-        if ($this->isTimeout($key, $data)) {
-            // 如过期则删除缓存文件
-            $this->delete($key);
-            return false;
-        }
-
-        return $data['value'];
+        return $content['value'];
     }
 
     /**
@@ -189,7 +225,7 @@ class File extends Cache
      * @param  mixed $value
      * @return array
      */
-    protected function normalizeValue(& $value, $timeout = 0)
+    protected function normalizeValue(&$value, $timeout = 0)
     {
         $time = time() + $timeout;
         if ($timeout == 0) {
@@ -197,8 +233,8 @@ class File extends Cache
         }
 
         $value = [
-            'value' => $value,
-            'timeout' => $time
+            'value' => is_bool($value) ? (int) $value : $value,
+            'timeout' => &$time
         ];
     }
 

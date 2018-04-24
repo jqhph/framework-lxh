@@ -1,19 +1,17 @@
 <?php
-/**
- * 缓存项
- *
- * PSR6
- *
- * @author Jqh
- * @date   2017/6/16 17:24
- */
 
-namespace Lxh\Cache;
+namespace Lxh\Cache\Items;
 
+use Lxh\Cache\CacheInterface;
 use Psr\Cache\CacheItemInterface;
 
-class Item implements CacheItemInterface
+abstract class Item implements CacheItemInterface
 {
+    /**
+     * @var CacheInterface
+     */
+    protected $driver;
+
     /**
      * @var string
      */
@@ -22,34 +20,36 @@ class Item implements CacheItemInterface
     /**
      * @var mixed
      */
-    protected $content;
+    protected $content = '';
+
+    /**
+     * @var bool
+     */
+    protected $hasNew = false;
 
     /**
      * 过期的精确时间
      *
      * @var string
      */
-    public $expiresAt;
+    protected $expiresAt;
 
     /**
      * 设置缓存项的过期时间，单位秒
      *
      * @var int
      */
-    public $expiresAfter;
+    protected $expiresAfter;
 
     /**
      * @var bool
      */
-    protected $isHit = false;
+    protected $isHit;
 
-    public function __construct($key, $content = null)
+    public function __construct(CacheInterface $driver, $key)
     {
-        $this->key = $key;
-
-        $this->content = & $content;
-
-        $this->isHit = $this->content ? true : false;
+        $this->driver = $driver;
+        $this->key    = $key;
     }
 
     /**
@@ -67,6 +67,14 @@ class Item implements CacheItemInterface
     }
 
     /**
+     * @return bool
+     */
+    public function hasNew()
+    {
+        return $this->hasNew;
+    }
+
+    /**
      * 凭借此缓存项的「键」从缓存系统里面取出缓存项。
      *
      * 取出的数据 **必须** 跟使用 `set()` 存进去的数据是一模一样的。
@@ -75,30 +83,29 @@ class Item implements CacheItemInterface
      * 本来就是一个合法的缓存数据，所以你 **应该** 使用 `isHit()` 方法来辨别到底是
      * "返回 null 数据" 还是 "缓存里没有此数据"。
      *
-     * @return mixed
+     * @return array
      *   此缓存项的「键」对应的「值」，如果找不到的话，返回 `null`
      */
     public function get()
     {
-        if ($this->isHit() === false) {
-            return null;
+        if ($this->content !== '') {
+            if ($this->content === false) {
+                return null;
+            }
+
+            return $this->content;
         }
 
-        return $this->content;
+        $content = $this->driver->get($this->key);
+
+        return $this->content = $this->normalizeFetchedContent($content);
     }
 
     /**
-     * 确认缓存项的检查是否命中。
-     *
-     * 注意: 调用此方法和调用 `get()` 时 **一定不可** 有先后顺序之分。
-     *
-     * @return bool
-     *   如果缓冲池里有命中的话，返回 `true`，反之返回 `false`
+     * @param $content
+     * @return mixed
      */
-    public function isHit()
-    {
-        return $this->isHit;
-    }
+    abstract protected function normalizeFetchedContent(&$content);
 
     /**
      * 为此缓存项设置「值」。
@@ -114,9 +121,33 @@ class Item implements CacheItemInterface
      */
     public function set($value)
     {
-        $this->content = $value;
+        $this->content = $this->normalizeSettingContent($value);
+        $this->hasNew  = true;
 
-        $this->isHit = true;
+        return $this;
+    }
+
+    /**
+     * @param $content
+     * @return mixed
+     */
+    abstract protected function normalizeSettingContent(&$content);
+
+    /**
+     * 确认缓存项的检查是否命中。
+     *
+     * 注意: 调用此方法和调用 `get()` 时 **一定不可** 有先后顺序之分。
+     *
+     * @return bool
+     *   如果缓冲池里有命中的话，返回 `true`，反之返回 `false`
+     */
+    public function isHit()
+    {
+        if ($this->isHit !== null) {
+            return $this->isHit;
+        }
+
+        return $this->isHit = $this->driver->exist($this->key);
     }
 
     /**
@@ -133,7 +164,8 @@ class Item implements CacheItemInterface
      */
     public function expiresAt($expiresAt)
     {
-        $this->expiresAt = $expiresAt;
+        $this->expiresAt = &$expiresAt;
+
         return $this;
     }
 
@@ -150,8 +182,19 @@ class Item implements CacheItemInterface
      */
     public function expiresAfter($time)
     {
-        $this->expiresAfter = $time;
+        $this->expiresAfter = &$time;
+
         return $this;
+    }
+
+    public function getExpiresAt()
+    {
+        return $this->expiresAt;
+    }
+
+    public function getExpiresAfter()
+    {
+        return $this->expiresAfter;
     }
 
 }

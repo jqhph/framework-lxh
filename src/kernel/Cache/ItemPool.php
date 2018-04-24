@@ -9,12 +9,18 @@
 
 namespace Lxh\Cache;
 
+use Lxh\Cache\Items\ArrayItem;
+use Lxh\Cache\Items\StringItem;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\CacheItemInterface;
-use Lxh\Cache\Driver\Cache;
 
 class ItemPool implements CacheItemPoolInterface
 {
+    /**
+     * @var array
+     */
+    protected static $drivers = [];
+
     /**
      * @var array
      */
@@ -28,46 +34,60 @@ class ItemPool implements CacheItemPoolInterface
     protected $deferredPool = [];
 
     /**
-     * 缓存驱动数组
+     * 缓存驱动
      *
-     * @var array
+     * @var CacheInterface
      */
-    protected $drivers = [];
+    protected $driver;
 
     /**
      * 默认缓存驱动
      *
      * @var string
      */
-    protected $driverName = 'File';
+    protected $driverName = File::class;
 
-    public function __construct()
+    public function __construct($type = null)
     {
         $this->driverName = config('cache-driver', $this->driverName);
-            
-        $this->drivers[$this->driverName] = $this->createDriver();
+
+        $this->setDriver($this->createDriver($type));
     }
 
     /**
-     * 设置并获取缓存驱动
+     * 获取缓存驱动
      *
      * @param  string $name
-     * @return Cache
+     * @return CacheInterface
      */
-    public function driver($name = null)
+    public function driver()
     {
-        $this->driverName = $name ?: $this->driverName;
-
-        if (isset($this->drivers[$name])) {
-            return $this->drivers[$name];
-        }
-        return $this->drivers[$name] = $this->createDriver();
+        return $this->driver;
     }
 
-    protected function createDriver()
+    /**
+     * @param CacheInterface $driver
+     * @return $this
+     */
+    public function setDriver(CacheInterface $driver)
     {
-        $class = "Driver\\$this->driverName";
-        return new $class();
+        $this->driver = $driver;
+        return $this;
+    }
+
+    /**
+     *
+     * @return CacheInterface
+     */
+    protected function createDriver($type = null)
+    {
+        $class = &$this->driverName;
+
+        if (isset(static::$drivers[$class][$type])) {
+            return static::$drivers[$class][$type];
+        }
+
+        return static::$drivers[$class][$type] = new $class($type);
     }
 
     /**
@@ -88,21 +108,50 @@ class ItemPool implements CacheItemPoolInterface
     public function getItem($key)
     {
         if (! $this->validated($key)) {
-            throw new \InvalidArgumentException('Invalid cache item key.');
+            throw new InvalidArgumentException('Invalid cache item key.');
         }
         if (isset($this->pool[$key])) {
             return $this->pool[$key];
         }
 
-        return $this->pool[$key] = $this->createItem($key, $this->driver()->get($key));
+        return $this->pool[$key] = $this->createItem($this->driver, $key);
     }
 
     /**
-     * @return Item
+     *
+     * @param $key
+     * @return ArrayItem
      */
-    public function createItem($key, $value)
+    public function getArrayItem($key)
     {
-        return new Item($key, $value);
+        if (! $this->validated($key)) {
+            throw new InvalidArgumentException('Invalid cache item key.');
+        }
+        if (isset($this->pool[$key])) {
+            return $this->pool[$key];
+        }
+
+        return $this->pool[$key] = $this->createArrayItem($this->driver, $key);
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     * @return StringItem
+     */
+    protected function createItem($key, $value)
+    {
+        return new StringItem($key, $value);
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     * @return ArrayItem
+     */
+    protected function createArrayItem($key, $value)
+    {
+        return new ArrayItem($key, $value);
     }
 
     /**
@@ -123,7 +172,7 @@ class ItemPool implements CacheItemPoolInterface
     public function getItems(array $keys = array())
     {
         $items = [];
-        foreach ($keys as & $k) {
+        foreach ($keys as &$k) {
             $items[$k] = $this->getItem($k);
         }
 
@@ -148,12 +197,12 @@ class ItemPool implements CacheItemPoolInterface
     public function hasItem($key)
     {
         if (! $this->validated($key)) {
-            throw new \InvalidArgumentException('Invalid cache item key.');
+            throw new InvalidArgumentException('Invalid cache item key.');
         }
         return isset($this->pool[$key]);
     }
 
-    protected function validated(& $itemKey)
+    protected function validated(&$itemKey)
     {
         return preg_match('/[{}()\/\\@:]/', $itemKey);
     }
@@ -167,6 +216,8 @@ class ItemPool implements CacheItemPoolInterface
     public function clear()
     {
         $this->pool = [];
+        $this->driver->flush();
+
         return true;
     }
 
@@ -185,10 +236,11 @@ class ItemPool implements CacheItemPoolInterface
     public function deleteItem($key)
     {
         if (! $this->validated($key)) {
-            throw new \InvalidArgumentException('Invalid cache item key.');
+            throw new InvalidArgumentException('Invalid cache item key.');
         }
         unset($this->pool[$key]);
-        return true;
+
+        return $this->driver->delete($key);
     }
 
     /**
@@ -223,18 +275,20 @@ class ItemPool implements CacheItemPoolInterface
      */
     public function save(CacheItemInterface $item)
     {
-        $driver = $this->driver();
-
         $key = $item->getKey();
+
+        $result = true;
         // 缓存item
-        $result = $driver->save($key, $item->get());
+        if ($content = $item->hasNew()) {
+            $result = $this->driver->set($key, $item->get());
+        }
 
         // 设置缓存时间
-        if ($item->expiresAt) {
-            $driver->expiresAt($key, $item->expiresAt);
+        if ($at = $item->expiresAt()) {
+            $this->driver->expiresAt($key, $at);
         }
-        if ($item->expiresAfter) {
-            $driver->expiresAfter($key, $item->expiresAfter);
+        if ($after = $item->expiresAfter()) {
+            $this->driver->expiresAfter($key, $after);
         }
 
         return $result;
