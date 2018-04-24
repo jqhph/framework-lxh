@@ -15,7 +15,7 @@ return [
 
     'environments' => [
         'default_migration_table' => 'phinxlog',
-        'default_database' => ENV_DEV,
+        'default_database' => __ENV__,
         ENV_DEV => [
             'adapter' => 'mysql',
             'host' => 'localhost',
