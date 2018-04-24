@@ -280,7 +280,7 @@ class ItemPool implements CacheItemPoolInterface
         $result = true;
         // 缓存item
         if ($content = $item->hasNew()) {
-            $result = $this->driver->set($key, $item->get());
+            $result = $this->driver->set($key, $item->getContent());
         }
 
         // 设置缓存时间

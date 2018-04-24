@@ -121,10 +121,18 @@ abstract class Item implements CacheItemInterface
      */
     public function set($value)
     {
-        $this->content = $this->normalizeSettingContent($value);
+        $this->content = &$value;
         $this->hasNew  = true;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getContent()
+    {
+        return $this->normalizeSettingContent($this->content);
     }
 
     /**
