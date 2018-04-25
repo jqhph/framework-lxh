@@ -767,11 +767,7 @@ function is_valid_url($path)
  */
 function pdo($name = 'primary')
 {
-    static $instances = [];
-
-    if (isset($instances[$name])) return $instances[$name];
-
-    return $instances[$name] = new PDO(config("db.$name"));
+    return PDO::resolve($name);
 }
 
 /**

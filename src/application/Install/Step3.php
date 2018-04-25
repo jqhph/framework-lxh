@@ -2,6 +2,7 @@
 
 namespace Lxh\Install;
 
+use Lxh\Admin\Admin;
 use Lxh\Admin\Layout\Content;
 use Lxh\Admin\Layout\Row;
 use Lxh\Admin\Widgets\Alert;
@@ -27,6 +28,7 @@ class Step3
      */
     public function build()
     {
+        return $this->install();
         $this->content->row(function (Row $row) {
             $form = new Form();
 
@@ -57,7 +59,63 @@ class Step3
      */
     public function install()
     {
+        $this->content->row(function (Row $row) {
+            $tip    = trans('Lxh Framework has been installed. Thank you, and enjoy!');
+            $btn    = trans('Sign in');
+            $prefix = config('admin.route-prefix');
 
+            $usernameLabel = trans('Username');
+            $passwordLabel = trans('Password');
+
+            $username = I('username', 'admin');
+            $password = trans('Your chosen password.');
+
+            Admin::style('td,th{border:0!important;}');
+
+            $card = new Card(
+                trans('Success!'),
+                "<p>$tip</p>
+<table class=\"table install-success\">
+	<tbody><tr>
+		<th>{$usernameLabel}</th>
+		<td>$username</td>
+	</tr>
+	<tr>
+		<th>$passwordLabel</th>
+		<td> <p><em>$password</em></p>
+		</td>
+	</tr>
+</tbody></table>
+                <br>
+                <a href='/$prefix/login' class='btn btn-primary'>&nbsp;&nbsp;&nbsp;&nbsp;$btn&nbsp;&nbsp;&nbsp;&nbsp;</a>
+"
+            );
+
+            $row->column(12, view('install::content', ['card' => $card])->render());
+        });
+
+        return $this->content->render();
+    }
+
+    protected function already()
+    {
+        $this->content->row(function (Row $row) {
+            $tip    = trans('You appear to have already installed Lxh Framework. To reinstall please clear your old database tables first.');
+            $btn    = trans('Sign in');
+            $prefix = config('admin.route-prefix');
+
+            $card = new Card(
+                trans('Already Installed'),
+                "<p>$tip</p>
+                <br>
+                <a href='/$prefix/login' class='btn btn-primary'>&nbsp;&nbsp;&nbsp;&nbsp;$btn&nbsp;&nbsp;&nbsp;&nbsp;</a>
+"
+            );
+
+            $row->column(12, view('install::content', ['card' => $card])->render());
+        });
+
+        return $this->content->render();
     }
 
     /**

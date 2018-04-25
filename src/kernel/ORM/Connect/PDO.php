@@ -17,6 +17,11 @@ class PDO
     private $breakReconnect;
 
     /**
+     * @var array
+     */
+    protected static $instances = [];
+
+    /**
      * @var \PDO
      */
     private $pdo;
@@ -92,6 +97,16 @@ class PDO
 
         //设置编码
         $this->pdo->query('set names ' . $this->charset);
+    }
+
+    /**
+     * 
+     * @param string $key
+     * @return mixed|static
+     */
+    public static function resolve($key = 'primary')
+    {
+        return isset(static::$instances[$key]) ? static::$instances[$key] : (static::$instances[$key] = new static('db.'.$key));
     }
 
     /*

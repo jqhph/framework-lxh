@@ -27,7 +27,16 @@ return [
             => '您需要填写一些基本信息。无需担心填错，这些信息以后可以再次修改。',
         'The following tables will be created, and don&#8217;t worry, all tables are not required.You can delete some or all of the tables at will!<br>%1s'
             => '以下数据表将会被创建，无须担心，所有的数据表都不是必须的。安装完成后您可以删除其中一部分或所有的数据表！<br>%1s',
-        'Install' => '安装'
+        'Install' => '安装',
+        'Success!' => '成功！',
+        'Lxh Framework has been installed. Thank you, and enjoy!' => 'Lxh Framework安装完成。谢谢！',
+        'Username' => '用户名',
+        'Password' => '密码',
+        'Sign in' => '登录',
+        'Your chosen password.' => '您设定的密码。',
+        'Already Installed' => '已安装',
+        'You appear to have already installed Lxh Framework. To reinstall please clear your old database tables first.'
+            => '您的Lxh Framework看起来已经安装妥当。如果想重新安装，请删除数据库中的旧数据表'
     ],
     'fields' => [
         'host' => '数据库主机',
