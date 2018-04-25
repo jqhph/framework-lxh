@@ -8,16 +8,9 @@
 namespace Lxh\Admin\Controllers;
 
 use Lxh\Admin\Widgets\Box;
-use Lxh\Admin\Widgets\Card;
-use Lxh\Admin\Widgets\Tab;
 use Lxh\Admin\Widgets\Table;
 use Lxh\Admin\Layout\Row;
-use Lxh\Admin\Widgets\InfoBox;
-use Lxh\Admin\Widgets\Navbar;
 use Lxh\MVC\Controller;
-use Lxh\Http\Request;
-use Lxh\Http\Response;
-use Lxh\Support\Composer;
 
 class Index extends Controller
 {

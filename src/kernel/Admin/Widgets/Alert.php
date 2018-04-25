@@ -38,8 +38,7 @@ class Alert extends Widget implements Renderable
     public function __construct($content = '', $title = '', $style = 'primary')
     {
         $this->content = &$content;
-
-        $this->title = $title;
+        $this->title   = $title;
 
         $this->style($style);
     }
@@ -102,10 +101,11 @@ class Alert extends Widget implements Renderable
             $this->content = $this->content->render();
         }
 
-        $close = $title = $icon = '';
+        $close = $icon = '';
         if ($this->closeable) {
             $close = '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>';
         }
+        $title = $this->title;
         if ($title) {
             if ($this->icon) {
                 $title = "<h4><i class='icon {$this->icon}'></i> $title</h4>";

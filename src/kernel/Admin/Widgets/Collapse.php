@@ -71,6 +71,7 @@ class Collapse extends Widget
             // 点击时重新计算高度
             Admin::script(<<<EOF
 (function () {
+if (typeof LXHSTORE.IFRAME == 'undefined') return false;
 var c = LXHSTORE.IFRAME.current();
 $('[data-toggle="collapse"]').click(function () {
    setTimeout(function(){LXHSTORE.IFRAME.height(c);},250);

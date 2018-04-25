@@ -6,6 +6,9 @@
  * @date   2018/1/14 11:25
  */
 
+// 版本号
+define('__VERSION__', '1.0.0-dev');
+
 // 定义路径常量
 define('__ROOT__', dirname(__DIR__) . '/');
 define('__APP__', __ROOT__ . 'application/');

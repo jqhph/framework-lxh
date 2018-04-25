@@ -104,6 +104,9 @@ class Editor extends Field
 
         $this->script = <<<EOF
 (function () {
+    if (typeof LXHSTORE.IFRAME == 'undefined') {
+        LXHSTORE.IFRAME = {current: function () {}, height: function() {}};
+    }
     var c = LXHSTORE.IFRAME.current()
         formg = $('.form-group'),
         ddg = $('.dropdown-btn-group'),

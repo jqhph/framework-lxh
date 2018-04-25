@@ -56,16 +56,14 @@ class Box extends Widget
      */
     public function __construct($title = '', $content = '')
     {
-        if ($title) {
+        if ($title && !$content) {
+            $this->content($title);
+        } else {
             $this->title($title);
-        }
-
-        if ($content) {
             $this->content($content);
         }
 
         $this->class('box portlet');
-//        $this->style('success');
 
         Admin::addScriptClass(__CLASS__);
     }
@@ -279,6 +277,7 @@ EOF;
             // 点击时重新计算高度
             Admin::script(<<<EOF
 (function () {
+if (typeof LXHSTORE.IFRAME == 'undefined') return false;
 var c = LXHSTORE.IFRAME.current();
 $('[data-toggle="collapse"]').click(function () {
    setTimeout(function(){LXHSTORE.IFRAME.height(c);},250);

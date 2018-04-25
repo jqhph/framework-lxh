@@ -13,8 +13,7 @@ class Text extends Field
     {
         $this->initPlainInput();
 
-        $this->prepend('<i class="zmdi zmdi-brush"></i>')
-            ->defaultAttribute('type', 'text')
+        $this->defaultAttribute('type', 'text')
             ->defaultAttribute('id', $this->id)
             ->defaultAttribute('name', $this->elementName ?: $this->formatName($this->column))
             ->defaultAttribute('value', $this->value())

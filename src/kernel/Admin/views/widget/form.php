@@ -18,11 +18,11 @@
         <?php } ?>
         <input type="hidden" name="_token" value="<?php ?>"><div class="col-sm-2"></div>
         <?php if ($formOptions['enableSubmit']) {?>
-            <div class="col-sm-4"><div class="btn-group pull-left"><button type="submit" class="btn btn-primary waves-effect pull-right"><?php echo trans('Submit')?></button></div></div>
+            <div class="col-sm-4"><div class="btn-group pull-left"><button type="submit" class="btn btn-primary waves-effect pull-right"><?php echo $formOptions['submitBtnLabel'] ?: trans('Submit')?></button></div></div>
         <?php } ?>
 
         <?php if ($formOptions['enableReset']) {?>
-        <div class="col-sm-2"><div class="btn-group pull-right"><button type="reset" class="btn btn-default waves-effect pull-right"><?php echo trans('Reset')?>&nbsp; <i class="fa fa-undo"></i></button></div></div>
+        <div class="col-sm-2"><div class="btn-group pull-right"><button type="reset" class="btn btn-default waves-effect pull-right"><?php echo $formOptions['resetBtnLabel'] ?: trans('Reset')?>&nbsp; <i class="fa fa-undo"></i></button></div></div>
         <?php } ?>
         <div style="clear:both;"></div>
     </div>

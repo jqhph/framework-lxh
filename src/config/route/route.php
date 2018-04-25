@@ -17,15 +17,28 @@ return [
     ],
 
     [
-        'pattern' => '/dev',
+        'pattern' => '/install',
         'method' => 'GET',
         'params' => [
             'auth' => false,
             'module' => 'Admin',
-            'controller' => 'Test',
-            'action' => 'Test'
+            'controller' => 'Install',
+            'action' => 'install'
         ]
     ],
+
+    [
+        'pattern' => '/install/:int',
+        'method' => 'GET,POST',
+        'params' => [
+            'auth' => false,
+            'module' => 'Admin',
+            'controller' => 'Install',
+            'action' => 'install',
+            'step' => ':int',
+        ]
+    ],
+
 
     [
         'pattern' => '*',

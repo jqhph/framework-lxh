@@ -149,9 +149,11 @@ class Form implements Renderable
      * @var array
      */
     protected $options = [
-        'enableSubmit' => true,
-        'enableReset'  => true,
-        'editScript' => true,
+        'enableSubmit'   => true,
+        'enableReset'    => true,
+        'submitBtnLabel' => '',
+        'resetBtnLabel'  => '',
+        'editScript'     => true,
     ];
 
     /**
@@ -492,6 +494,30 @@ class Form implements Renderable
     {
         $this->options(['enableSubmit' => false]);
 
+        return $this;
+    }
+
+    /**
+     * 设置提交按钮label
+     *
+     * @param $label
+     * @return $this
+     */
+    public function setSubmitBtnLabel($label)
+    {
+        $this->options['submitBtnLabel'] = &$label;
+        return $this;
+    }
+
+    /**
+     * 设置重置按钮label
+     *
+     * @param $label
+     * @return $this
+     */
+    public function setResetBtnLabel($label)
+    {
+        $this->options['resetBtnLabel'] = &$label;
         return $this;
     }
 

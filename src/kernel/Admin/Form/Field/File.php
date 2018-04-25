@@ -265,6 +265,7 @@ class File extends Field
 
         $this->script('file', <<<EOF
 (function () {
+    if (typeof LXHSTORE.IFRAME == 'undefined') return false;
     var c = LXHSTORE.IFRAME.current();
     function rec() { setTimeout(function(){LXHSTORE.IFRAME.height(c)},50) }
     rec();
