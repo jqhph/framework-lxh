@@ -263,7 +263,7 @@ trait Loader
     protected function getServiceBindings($abstract)
     {
         if (! $this->resolvedConfig) {
-            $this->mergeAllBindings();
+            $this->mergeConfigs();
             $this->resolvedConfig = true;
         }
 
@@ -275,9 +275,9 @@ trait Loader
      *
      * @return void
      */
-    public function mergeAllBindings()
+    public function mergeConfigs()
     {
-        $this->bindings += (array) include __ROOT__ . 'config/container/container.php';
+        $this->bindings += (array) include __ROOT__ . 'config/container.php';
 
         foreach ($this->bindings as $abstract => &$conf) {
             if (!isset($conf['aliases'])) {

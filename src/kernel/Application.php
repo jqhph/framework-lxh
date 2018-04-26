@@ -242,7 +242,7 @@ class Application
             $routers = array_merge($routers, include __DIR__ . '/Admin/resource/routes.php');
         }
 
-        $configPath = __CONFIG__ . 'route/route.php';
+        $configPath = __CONFIG__ . 'routes/route.php';
 
         // 判断是否开启了子域名部署
         if ($domains = config('domain-deploy-config')) {

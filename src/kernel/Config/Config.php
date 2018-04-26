@@ -276,12 +276,6 @@ class Config extends Entity
         return "{$this->root}{$this->prefix}/";
     }
 
-    // 获取容器配置参数
-    public function getContainerConfig()
-    {
-        return (array)include $this->root . 'config/container/container.php';
-    }
-
     /**
      * 获取环境配置文件路径
      *
