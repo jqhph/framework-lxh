@@ -11,6 +11,8 @@ use Lxh\ORM\Connect\PDO;
 
 class Step2
 {
+    use Installed;
+
     /**
      * @var Content
      */
@@ -28,6 +30,10 @@ class Step2
      */
     public function build()
     {
+        if ($this->isinstalled()) {
+            return $this->alreadyInstalled();
+        }
+
         $this->content->row(function (Row $row) {
             $form = new Form();
 
@@ -59,6 +65,10 @@ class Step2
      */
     public function setupDatabaseConfig()
     {
+        if ($this->isinstalled()) {
+            return $this->alreadyInstalled();
+        }
+
         $config = [
             'usepool' => false,
             'type'    => 'mysql',

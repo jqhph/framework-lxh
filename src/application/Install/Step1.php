@@ -9,6 +9,8 @@ use Lxh\Admin\Widgets\Card;
 
 class Step1
 {
+    use Installed;
+
     /**
      * @var Content
      */
@@ -37,6 +39,10 @@ class Step1
      */
     public function build()
     {
+        if ($this->isinstalled()) {
+            return $this->alreadyInstalled();
+        }
+
         if (!$this->validator->validate()) {
             return $this->responseError(
                 trans('Insufficient Requirements'),

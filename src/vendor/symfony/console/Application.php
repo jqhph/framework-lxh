@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Console;
 
+use Lxh\Contracts\Events\Dispatcher;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Helper\DebugFormatterHelper;
@@ -89,7 +90,7 @@ class Application
         }
     }
 
-    public function setDispatcher(EventDispatcherInterface $dispatcher)
+    public function setDispatcher($dispatcher)
     {
         $this->dispatcher = $dispatcher;
     }

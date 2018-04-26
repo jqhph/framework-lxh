@@ -162,7 +162,7 @@ class AdminAction extends Entity
 
         $attrs = [
              'id'         => &$this->id,
-             'admin_id'   => &$this->adminId,
+             'admin_id'   => (int)$this->adminId,
              'path'       => &$this->path,
              'method'     => &$this->method,
              'ip'         => &$this->ip,

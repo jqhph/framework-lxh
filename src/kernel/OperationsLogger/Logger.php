@@ -65,7 +65,7 @@ class Logger
     public function __call($method, $arguments)
     {
         if ($className = getvalue(static::$availableEntities, $method)) {
-            $entity = new $className(getvalue($arguments, 0, []));
+            $entity = new $className(getvalue($arguments, 0, null));
 
             $this->push($entity);
 

@@ -40,8 +40,8 @@ class Admin extends User
      */
     public function register(array &$options, $ip)
     {
-        $this->username      = $options['username'];
-        $this->password      = Password::encrypt($options['password']);
+        $this->username      = trim($options['username']);
+        $this->password      = Password::encrypt(trim($options['password']));
         $this->reg_ip        = ip2long($ip);
         $this->last_login_ip = ip2long($ip);
         $this->created_at    = time();
@@ -271,6 +271,9 @@ class Admin extends User
      */
     public function login($account, $password, array $options = [])
     {
+        $account  = trim($account);
+        $password = trim($password);
+
         $this->defaultSelectFields[] = 'password';
 
         $userData = $this->query()

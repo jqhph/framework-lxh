@@ -11,6 +11,8 @@ use Lxh\Admin\Widgets\Form;
 
 class Step3
 {
+    use Installed;
+
     /**
      * @var Content
      */
@@ -28,6 +30,10 @@ class Step3
      */
     public function build()
     {
+        if ($this->isinstalled()) {
+            return $this->alreadyInstalled();
+        }
+
         $this->content->row(function (Row $row) {
             $form = new Form();
 
@@ -59,14 +65,41 @@ class Step3
      */
     public function install()
     {
-        $username = I('admin_username');
-        $password = I('admin_password');
+        if ($this->isinstalled()) {
+            return $this->alreadyInstalled();
+        }
 
-        call('list');
+        $username = trim(I('admin_username'));
+        $password = trim(I('admin_password'));
 
-        ddd(
-            console_output()
-        );
+        // 创建数据表
+        call('migrate');
+        call('seed:run', ['-s Init']);
+
+        $admin = [
+            'id' => 1,
+            'username' => $username,
+            'password' => $password,
+            'first_name' => 'test',
+            'last_name' => 'admin',
+            'created_at' => time(),
+            'status' => 1,
+            'is_admin' => 1,
+        ];
+
+        model('Admin')->attach($admin)->add();
+
+        $this->replaceRoutesConfig();
+        $this->setisinstalled();
+
+        return $this->success($username);
+    }
+
+    protected function replaceRoutesConfig()
+    {
+        $routes = files()->get(__DIR__.'/resource/route.php');
+
+        files()->putContents(__CONFIG__.'routes/route.php', $routes);
     }
 
     protected function success($username)
@@ -96,27 +129,6 @@ class Step3
 		</td>
 	</tr>
 </tbody></table>
-                <br>
-                <a href='/$prefix/login' class='btn btn-primary'>&nbsp;&nbsp;&nbsp;&nbsp;$btn&nbsp;&nbsp;&nbsp;&nbsp;</a>
-"
-            );
-
-            $row->column(12, view('install::content', ['card' => $card])->render());
-        });
-
-        return $this->content->render();
-    }
-
-    protected function already()
-    {
-        $this->content->row(function (Row $row) {
-            $tip    = trans('You appear to have already installed Lxh Framework. To reinstall please clear your old database tables first.');
-            $btn    = trans('Sign in');
-            $prefix = config('admin.route-prefix');
-
-            $card = new Card(
-                trans('Already Installed'),
-                "<p>$tip</p>
                 <br>
                 <a href='/$prefix/login' class='btn btn-primary'>&nbsp;&nbsp;&nbsp;&nbsp;$btn&nbsp;&nbsp;&nbsp;&nbsp;</a>
 "

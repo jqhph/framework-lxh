@@ -1,18 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Jqh
- * Date: 2017/6/24
- * Time: 10:01
- */
 
 return [
     [
         'pattern' => '/',
         'method' => 'GET',
         'params' => [
-            'controller' => 'Index',
-            'action' => 'List'
+            'auth' => false,
+            'controller' => 'Install',
+            'action' => 'install'
         ]
     ],
 

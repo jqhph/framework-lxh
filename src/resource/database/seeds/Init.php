@@ -3,7 +3,7 @@
 use Phinx\Seed\AbstractSeed;
 use Lxh\Support\Password;
 
-class InitSeeder extends AbstractSeed
+class Init extends AbstractSeed
 {
     /**
      * 表名配置
@@ -34,25 +34,8 @@ class InitSeeder extends AbstractSeed
      */
     public function run()
     {
-        $this->attachAdmin();
         $this->attachMenu();
         $this->attachAbilities();
-    }
-
-    protected function attachAdmin()
-    {
-        $this->insert($this->tables['admin'], [
-            [
-                'id' => 1,
-                'username' => 'admin',
-                'password' => Password::encrypt('admin'),
-                'first_name' => 'test',
-                'last_name' => 'admin',
-                'created_at' => time(),
-                'status' => 1,
-                'is_admin' => 1,
-            ],
-        ]);
     }
 
     protected function attachMenu()
