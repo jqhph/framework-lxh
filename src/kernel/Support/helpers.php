@@ -649,7 +649,7 @@ function home_name()
  */
 function call($command, array $parameters = [])
 {
-    return $this->container['console']->call($command, $parameters);
+    return $GLOBALS['CONTAINER']->call($command, $parameters);
 }
 
 /**
