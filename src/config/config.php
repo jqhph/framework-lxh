@@ -43,6 +43,11 @@ $config = [
             'driver' => 'file',
             'prefix' => '_ada_',
         ],
+
+        // 后台登录组件缓存通道
+        'admin-request-auth' => [
+            'prefix' => '_reqadmin_',
+        ],
     ],
 
     // request-auth配置
@@ -62,8 +67,8 @@ $config = [
             // 鉴权认证驱动
             // 不填会根据isOpen参数判断使用哪个驱动
             'driver'                  => Lxh\RequestAuth\Drivers\Session::class,
-            // 缓存驱动
-            'cache-driver'            => Lxh\RequestAuth\Cache\File::class,
+            // 缓存通道，默认request-auth
+            'cache-channel'            => 'admin-request-auth',
             // password_hash, sha256
             'encrypt'                 => 'sha256',
             // 应用类型，必须是一个0-99的整数

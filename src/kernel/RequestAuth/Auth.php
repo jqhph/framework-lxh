@@ -2,6 +2,7 @@
 
 namespace Lxh\RequestAuth;
 
+use Lxh\Cache\CacheInterface;
 use Lxh\RequestAuth\Cache\Cache;
 use Lxh\RequestAuth\Cache\File;
 use Lxh\RequestAuth\Database\Log;
@@ -32,7 +33,7 @@ class Auth
         // 不填会根据isOpen参数判断使用哪个驱动
         'driver'                  => Session::class,
         // 缓存驱动
-        'cache-driver'            => File::class,
+        'cache-channel'           => 'request-auth',
         // password_hash, sha256
         'encrypt'                 => 'sha256',
         // 应用类型，必须是一个0-99的整数
@@ -61,7 +62,7 @@ class Auth
     protected $token;
 
     /**
-     * @var Cache
+     * @var CacheInterface
      */
     protected $cache;
 
@@ -80,11 +81,8 @@ class Auth
         $this->setUser($user);
 
         $this->options = array_merge($this->options, $options);
-
-        $cache = $this->options['cache-driver'] ?: File::class;
-        $this->setCache(new $cache());
-
-        $this->token = new Token($this, $this->cache);
+        $this->cache   = cache_factory()->get(getvalue($this->options, 'cache-channel', 'request-auth'));
+        $this->token   = new Token($this, $this->cache);
 
         $driver = $this->options['driver'] ?: Session::class;
         $this->setDriver(new $driver($this));
@@ -325,10 +323,10 @@ class Auth
     /**
      * 设置缓存对象
      *
-     * @param Cache $cache
+     * @param CacheInterface $cache
      * @return $this
      */
-    public function setCache(Cache $cache)
+    public function setCache(CacheInterface $cache)
     {
         $this->cache = $cache;
         return $this;

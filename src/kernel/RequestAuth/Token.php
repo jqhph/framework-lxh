@@ -2,6 +2,7 @@
 
 namespace Lxh\RequestAuth;
 
+use Lxh\Cache\CacheInterface;
 use Lxh\Exceptions\InvalidArgumentException;
 use Lxh\Helper\Util;
 use Lxh\MVC\Model;
@@ -62,7 +63,7 @@ class Token
      */
     protected $storable = false;
 
-    public function __construct(Auth $auth, Cache $cache)
+    public function __construct(Auth $auth, CacheInterface $cache)
     {
         $this->auth  = $auth;
         $this->user  = $auth->user();
@@ -406,7 +407,7 @@ class Token
 
             }
             // 移除失效token后重新保存
-            $this->cache->set($userId, $data);
+            $this->cache->setArrayForUserId($userId, $data);
             if ($this->storable && $inactives) {
                 $this->updateInactiveForIds($inactives);
             }

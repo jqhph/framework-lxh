@@ -2,6 +2,7 @@
 
 namespace Lxh\RequestAuth\Cache;
 
+use Lxh\Cache\CacheInterface;
 use Lxh\RequestAuth\Entities\Log;
 
 class TokenCache
@@ -25,7 +26,7 @@ class TokenCache
      */
     protected $condition;
 
-    public function __construct(Cache $cache, $condition = '')
+    public function __construct(CacheInterface $cache, $condition = '')
     {
         $this->cache     = $cache;
         $this->condition = $condition;
@@ -57,7 +58,7 @@ class TokenCache
     public function setForUserIdAndToken($userId, $token, array $log, $life)
     {
         // 缓存登录日志
-        $this->cache->set(
+        $this->cache->setArray(
             $this->normalizeItemsKey($userId, $token),
             $log,
             $life + 5
@@ -72,7 +73,7 @@ class TokenCache
      */
     public function getForUserIdAndToken($userId, $token)
     {
-        return $this->cache->get($this->normalizeItemsKey($userId, $token));
+        return $this->cache->getArray($this->normalizeItemsKey($userId, $token));
     }
 
     /**
@@ -142,7 +143,7 @@ class TokenCache
     {
         $end = $log->life + $log->created_at;
 
-        $this->cache->append(
+        $this->cache->appendInArray(
             $this->formatKey($userId),
             "{$log->id}-{$log->token}-{$log->app}-{$end}"
         );
@@ -156,7 +157,12 @@ class TokenCache
      */
     public function getArrayForUserId($userId)
     {
-        return $this->cache->get($this->formatKey($userId));
+        return $this->cache->getArray($this->formatKey($userId));
+    }
+
+    public function setArrayForUserId($userId, array $data)
+    {
+        return $this->cache->setArray($this->formatKey($userId), $data);
     }
 
     /**
@@ -176,7 +182,11 @@ class TokenCache
                     break;
                 }
             }
-            $this->cache->set($key, $data);
+            if ($data) {
+                $this->cache->setArray($key, $data);
+            } else {
+                $this->cache->delete($key);
+            }
         }
     }
 
