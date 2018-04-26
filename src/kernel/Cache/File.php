@@ -7,6 +7,7 @@
  */
 namespace Lxh\Cache;
 
+use Lxh\Cache\Exceptions\InvalidArgumentException;
 use Lxh\File\FileManager;
 
 class File implements CacheInterface
@@ -86,6 +87,74 @@ class File implements CacheInterface
         $this->normalizeValue($value, $timeout);
 
         return $this->file->putPhpContents($this->normalizePath($key), $value);
+    }
+
+    /**
+     * 设置数组缓存
+     *
+     * @param $key
+     * @param array $value
+     * @param int $timeout
+     * @return bool
+     */
+    public function setArray($key, array $value, $timeout = 0)
+    {
+        return $this->set($key, $value, $timeout);
+    }
+
+    /**
+     *
+     * @param string $key
+     * @param string $value
+     * @return bool
+     */
+    public function appendInArray($key, $value, $timeout = 0)
+    {
+        if (empty($key)) return false;
+
+        if (is_array($value)) {
+            throw new InvalidArgumentException;
+        }
+
+        $content = $this->getArray($key);
+
+        $content[] = &$value;
+
+        return $this->setArray($key, $content, $timeout);
+    }
+
+    /**
+     * 从数组中删除一个值
+     *
+     * @param string $key
+     * @param $value
+     * @return bool
+     */
+    public function deleteInArray($key, $value, $timeout = 0)
+    {
+        if (empty($key)) return false;
+
+        $content = $this->getArray($key);
+
+        if ($content === false) {
+            return true;
+        }
+
+        $isInt = is_integer($value);
+
+        foreach ($content as $k => &$item) {
+            if ($isInt) {
+                if ($value === (int) $item) {
+                    unset($content[$k]);
+                }
+                continue;
+            }
+            if ($item == $value) {
+                unset($content[$k]);
+            }
+        }
+
+        return $this->setArray($key, $content, $timeout);
     }
 
     /**
@@ -205,6 +274,54 @@ class File implements CacheInterface
         }
 
         return $content['value'];
+    }
+
+    /**
+     * 获取数组缓存
+     *
+     * @param string $key
+     * @return array 内容过期或不存在返回false
+     */
+    public function getArray($key)
+    {
+        $content = $this->get($key);
+
+        if ($content === false) {
+            return false;
+        }
+
+        if (! is_array($content)) {
+            return (array)$content;
+        }
+        return $content;
+    }
+
+    /**
+     * 自增1
+     *
+     * @param $key
+     * @param int $timeout
+     * @return mixed
+     */
+    public function incr($key, $timeout = 0)
+    {
+        $value = $this->get($key);
+
+        return $this->set($key, $value++, $timeout);
+    }
+
+    /**
+     * 自减1
+     *
+     * @param $key
+     * @param int $timeout
+     * @return mixed
+     */
+    public function decr($key, $timeout = 0)
+    {
+        $value = $this->get($key);
+
+        return $this->set($key, $value--, $timeout);
     }
 
     /**

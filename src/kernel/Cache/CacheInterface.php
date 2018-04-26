@@ -23,6 +23,44 @@ interface CacheInterface
     public function get($key);
 
     /**
+     * 设置数组缓存
+     *
+     * @param $key
+     * @param array $content
+     * @param int $timeout
+     * @return bool
+     */
+    public function setArray($key, array $content, $timeout = 0);
+
+    /**
+     * 获取数组缓存
+     *
+     * @param string $key
+     * @return array 内容过期或不存在返回false
+     */
+    public function getArray($key);
+
+    /**
+     * 追加数据到缓存
+     *
+     * @param string $key
+     * @param string $value
+     * @param int $timeout
+     * @return bool
+     */
+    public function appendInArray($key, $value, $timeout = 0);
+
+    /**
+     * 删除数组中的值
+     *
+     * @param $key
+     * @param $value
+     * @param int $timeout
+     * @return bool
+     */
+    public function deleteInArray($key, $value, $timeout = 0);
+
+    /**
      * 确认缓存项的检查是否命中。
      *
      * 注意: 调用此方法和调用 `get()` 时 **一定不可** 有先后顺序之分。
@@ -57,6 +95,24 @@ interface CacheInterface
      * @return mixed
      */
     public function expiresAfter($key, $time);
+
+    /**
+     * 自增1
+     *
+     * @param $key
+     * @param int $timeout
+     * @return mixed
+     */
+    public function incr($key, $timeout = 0);
+
+    /**
+     * 自减1
+     *
+     * @param $key
+     * @param int $timeout
+     * @return mixed
+     */
+    public function decr($key, $timeout = 0);
 
     /**
      * 清除整个库下的缓存

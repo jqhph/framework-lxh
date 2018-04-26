@@ -112,8 +112,13 @@ class Redis
 		$this->debug($start, 'w');
 		return $res;
 	}
-	
-	//正则匹配key
+
+	/**
+	 * 正则匹配key
+	 *
+	 * @param $where
+	 * @return array
+	 */
 	public function keys($where) 
 	{
 		$start = microtime(true);
@@ -121,8 +126,13 @@ class Redis
 		$this->debug($start);
 		return $res;
 	}
-	
-	//自增一
+
+	/**
+	 * 自增一
+	 *
+	 * @param $key
+	 * @return int
+	 */
 	public function incr($key) 
 	{
 		$start = microtime(true);
@@ -130,9 +140,14 @@ class Redis
 		$this->debug($start, 'w');
 		return $res;
 	}
-	
-	
-	//获取字符串
+
+
+	/**
+	 * 获取字符串
+	 *
+	 * @param $keys
+	 * @return bool|string
+	 */
 	public function get($keys) 
 	{
 		$start = microtime(true);
