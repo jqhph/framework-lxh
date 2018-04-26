@@ -140,7 +140,7 @@ class ChangeColumn
         if (!isset($this->columntypes[$method])) {
             throw new UnknownColumnException;
         }
-        $name = get_value($arguments, 0);
+        $name = getvalue($arguments, 0);
         if (! $name) {
             throw new \InvalidArgumentException('The column name cannot be empty.');
         }

@@ -77,8 +77,8 @@ class DateRange extends Field
         $value = $this->prepare($name);
 
         return array_merge(parent::variables(), [
-            'start' => get_value($value, 'start', ''),
-            'end' => get_value($value, 'end', ''),
+            'start' => getvalue($value, 'start', ''),
+            'end' => getvalue($value, 'end', ''),
             'startName' => $name . '-start',
             'endName' => $name . '-end',
         ]);

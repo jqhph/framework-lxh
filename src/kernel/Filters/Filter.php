@@ -71,7 +71,7 @@ class Filter
         
         $args = func_get_args();
         // 第二个参数为需要过滤的值
-        $args[0] = $this->latests[$tag] = get_value($args, 1);
+        $args[0] = $this->latests[$tag] = getvalue($args, 1);
 
         foreach ($this->getFilters($tag) as &$filter) {
             $this->latests[$tag] = call_user_func_array($this->resolveFilter($filter), $args);

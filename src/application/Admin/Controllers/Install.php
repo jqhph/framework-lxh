@@ -16,7 +16,7 @@ class Install extends Controller
 
     public function actionInstall(array $params)
     {
-        $step = get_value($params, 'step', 1);
+        $step = getvalue($params, 'step', 1);
 
         switch ($step) {
             case 1:

@@ -83,7 +83,7 @@ class Index extends Controller
             ['name' => 'Lxh Framework version', 'value' => 'dev'],
             ['name' => 'CGI',                   'value' => php_sapi_name()],
             ['name' => 'Uname',                 'value' => php_uname()],
-            ['name' => 'Server',                'value' => get_value($_SERVER, 'SERVER_SOFTWARE')],
+            ['name' => 'Server',                'value' => getvalue($_SERVER, 'SERVER_SOFTWARE')],
 
             ['name' => 'Timezone',              'value' => config('timezone')],
             ['name' => 'Locale',                'value' => config('locale')],

@@ -156,7 +156,7 @@ class Dispatcher
     public function __construct(array $config = [])
     {
         $this->rules = &$config;
-        $this->requestMethod = get_value($_SERVER, 'REQUEST_METHOD');
+        $this->requestMethod = getvalue($_SERVER, 'REQUEST_METHOD');
     }
 
     /**
@@ -221,7 +221,7 @@ class Dispatcher
 
         $params = [];// 参数
 
-        foreach ((array)get_value($rule, 'params') as $k => &$p) {
+        foreach ((array)getvalue($rule, 'params') as $k => &$p) {
             switch ($k) {
                 case 'controller':
                     $contr = &$p;
@@ -277,13 +277,13 @@ class Dispatcher
         }
 
         // 控制器命名空间
-        if ($namespace = get_value($params, 'namespace')) {
+        if ($namespace = getvalue($params, 'namespace')) {
             $realContr = $namespace . '\\' . ucfirst(camel__case($realContr, '-'));
         }
 
         // 控制器文件夹
-        $this->folder         = get_value($rule, 'folder');
-        $this->hooks 		  = (array) get_value($rule, 'hooks', []);
+        $this->folder         = getvalue($rule, 'folder');
+        $this->hooks 		  = (array) getvalue($rule, 'hooks', []);
         $this->controllerName = & $realContr;
         $this->actionName	  = & $realAction;
         $this->requestParams  = & $params;
@@ -316,7 +316,7 @@ class Dispatcher
         }
 
         // 请求方法匹配，默认GET方法
-        $method = get_value($rule, 'method', $this->defaultMethod);
+        $method = getvalue($rule, 'method', $this->defaultMethod);
         if ($method != $this->anySymbol && (strpos($method, $this->requestMethod) === false)) {
             return false;
         }
@@ -405,7 +405,7 @@ class Dispatcher
             return $this->requestPath;
         }
 
-        $uri = get_value($_SERVER, 'PATH_INFO');
+        $uri = getvalue($_SERVER, 'PATH_INFO');
 
         if (empty($uri)) {
             $uri = explode('?', $_SERVER['REQUEST_URI'])[0];

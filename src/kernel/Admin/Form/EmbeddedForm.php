@@ -265,7 +265,7 @@ class EmbeddedForm
     public function __call($method, $arguments)
     {
         if ($className = Form::findFieldClass($method)) {
-            $column = get_value($arguments, 0, '');
+            $column = getvalue($arguments, 0, '');
 
             /** @var Field $field */
             $field = new $className($column, array_slice($arguments, 1));

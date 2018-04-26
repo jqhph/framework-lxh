@@ -76,14 +76,14 @@ class Migrator extends AbstractMigration
             throw new InvalidArgumentException;
         }
         $dbConfig = [
-            'adapter'      => get_value($config, 'type', 'mysql'),
-            'host'         => get_value($config, 'host', 'localhost'),
-            'name'         => get_value($config, 'name'),
-            'user'         => get_value($config, 'user', 'root'),
-            'pass'         => get_value($config, 'pwd', ''),
-            'port'         => get_value($config, 'port', 3306),
-            'charset'      => get_value($config, 'charset', 'utf8'),
-            'table_prefix' => get_value($config, 'prefix'),
+            'adapter'      => getvalue($config, 'type', 'mysql'),
+            'host'         => getvalue($config, 'host', 'localhost'),
+            'name'         => getvalue($config, 'name'),
+            'user'         => getvalue($config, 'user', 'root'),
+            'pass'         => getvalue($config, 'pwd', ''),
+            'port'         => getvalue($config, 'port', 3306),
+            'charset'      => getvalue($config, 'charset', 'utf8'),
+            'table_prefix' => getvalue($config, 'prefix'),
         ];
 
         $dbConfig['default_migration_table'] = 'phinxlog';

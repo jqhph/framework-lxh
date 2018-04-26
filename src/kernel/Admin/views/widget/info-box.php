@@ -8,7 +8,7 @@
         <ul class="dropdown-menu" role="menu">
         <?php foreach ($actions as &$rows) {?>
             <?php foreach ($rows as &$row) {?>
-                <li class="<?php echo get_value($row, 'class');?>"><a href="<?php echo get_value($row, 'url', '#');?>"><?php echo $row['value']; ?></a></li>
+                <li class="<?php echo getvalue($row, 'class');?>"><a href="<?php echo getvalue($row, 'url', '#');?>"><?php echo $row['value']; ?></a></li>
             <?php } ?>
             <?php if (count($actions) > 1) echo ' <li class="divider"></li>';?>
         <?php } ?>
@@ -34,10 +34,10 @@
 
         <?php if (!empty($progress)) {?>
         <div class="progress progress-bar-success-alt progress-sm m-b-0">
-            <div class="progress-bar progress-bar-<?php echo get_value($progress, 'color', 'success')?>"
-                 role="progressbar" aria-valuenow="<?php echo get_value($progress, 'value');?>"
-                 aria-valuemin="0" aria-valuemax="100" style="width:<?php echo get_value($progress, 'value');?>%;">
-                <span class="sr-only"><?php echo get_value($progress, 'value');?>% Complete</span>
+            <div class="progress-bar progress-bar-<?php echo getvalue($progress, 'color', 'success')?>"
+                 role="progressbar" aria-valuenow="<?php echo getvalue($progress, 'value');?>"
+                 aria-valuemin="0" aria-valuemax="100" style="width:<?php echo getvalue($progress, 'value');?>%;">
+                <span class="sr-only"><?php echo getvalue($progress, 'value');?>% Complete</span>
             </div>
         </div>
         <?php }?>

@@ -30,7 +30,7 @@ class Request extends Message implements RequestInterface
 
     public function __construct(array $headers = array(), StreamInterface $body = null)
     {
-        $this->method = get_value($_SERVER, 'REQUEST_METHOD');
+        $this->method = getvalue($_SERVER, 'REQUEST_METHOD');
 
         parent::__construct($headers, $body);
     }
@@ -54,17 +54,17 @@ class Request extends Message implements RequestInterface
     public function createUri($uri = null)
     {
         if (! $uri) {
-            $user = get_value($_SERVER, 'PHP_AUTH_USER');
-            $pwd  = get_value($_SERVER, 'PHP_AUTH_PW');
-            $host = get_value($_SERVER, 'HTTP_HOST');
-            $port = get_value($_SERVER, 'SERVER_PORT');
-            $uri  = get_value($_SERVER, 'REQUEST_URI');
+            $user = getvalue($_SERVER, 'PHP_AUTH_USER');
+            $pwd  = getvalue($_SERVER, 'PHP_AUTH_PW');
+            $host = getvalue($_SERVER, 'HTTP_HOST');
+            $port = getvalue($_SERVER, 'SERVER_PORT');
+            $uri  = getvalue($_SERVER, 'REQUEST_URI');
 
             $auth = '';
             if ($user && $pwd) {
                 $auth = "{$user}:{$pwd}@";
             }
-            $scheme = get_value($_SERVER, 'REQUEST_SCHEME');
+            $scheme = getvalue($_SERVER, 'REQUEST_SCHEME');
             $uri = "{$scheme}://{$auth}{$host}:{$port}{$uri}";
         }
 

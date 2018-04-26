@@ -109,7 +109,7 @@ class Menu
         $tree = [];
         foreach ($data as &$v) {
             // 检查用户权限
-            if ($auth && ! $this->auth->can(get_value($v, 'ability'))) {
+            if ($auth && ! $this->auth->can(getvalue($v, 'ability'))) {
                 continue;
             }
 

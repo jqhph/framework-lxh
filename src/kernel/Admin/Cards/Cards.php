@@ -390,9 +390,9 @@ EOF;
     public function __call($method, $parameters)
     {
         if (isset(static::$fieldsClass[$method])) {
-            $field = get_value($parameters, 0);
+            $field = getvalue($parameters, 0);
             return $this->resolveFiledView(
-                static::$fieldsClass[$method], $field, $this->item($field), get_value($parameters, 1)
+                static::$fieldsClass[$method], $field, $this->item($field), getvalue($parameters, 1)
             );
         }
 

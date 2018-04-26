@@ -272,7 +272,7 @@ class Form implements Renderable
     public function option($option, $value = null)
     {
         if (func_num_args() == 1) {
-            return get_value($this->options, $option);
+            return getvalue($this->options, $option);
         }
 
         $this->options[$option] = $value;
@@ -482,7 +482,7 @@ class Form implements Renderable
             return $this->data;
         }
 
-        return get_value($this->data, $key, $def);
+        return getvalue($this->data, $key, $def);
     }
 
     /**
@@ -595,8 +595,8 @@ class Form implements Renderable
      */
     public function __call($method, $arguments)
     {
-        if ($className = get_value(static::$availableFields, $method)) {
-            $name = get_value($arguments, 0, '');
+        if ($className = getvalue(static::$availableFields, $method)) {
+            $name = getvalue($arguments, 0, '');
 
             $element = new $className($name, array_slice($arguments, 1));
 

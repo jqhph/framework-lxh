@@ -58,7 +58,7 @@ class Request extends Message\ServerRequest
 	{
 		parent::__construct();
 
-		$this->protocolVersion = str_replace('HTTP/', '', get_value($_SERVER, 'SERVER_PROTOCOL'));
+		$this->protocolVersion = str_replace('HTTP/', '', getvalue($_SERVER, 'SERVER_PROTOCOL'));
 
 		$this->initUploadFiles();
 
@@ -97,7 +97,7 @@ class Request extends Message\ServerRequest
 	 */
 	public function server($key, $value = null)
 	{
-		return get_value($this->serverParams, $key, $value);
+		return getvalue($this->serverParams, $key, $value);
 	}
 
 	protected function initUploadFiles()

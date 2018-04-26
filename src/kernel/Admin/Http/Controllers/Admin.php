@@ -212,7 +212,7 @@ class Admin extends Controller
             throw new Forbidden();
         }
 
-        if (! $id = get_value($params, 'id')) {
+        if (! $id = getvalue($params, 'id')) {
             return $this->error();
         }
 

@@ -58,8 +58,8 @@ class Map extends Field
     {
         $this->column = $column;
 
-        $this->defaultValue['lat'] = get_value($arguments, 0);
-        $this->defaultValue['lng'] = get_value($arguments, 1);
+        $this->defaultValue['lat'] = getvalue($arguments, 0);
+        $this->defaultValue['lng'] = getvalue($arguments, 1);
 
         array_shift($arguments);
 

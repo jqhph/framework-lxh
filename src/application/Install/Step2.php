@@ -96,11 +96,13 @@ class Step2
         ], true)) {
             // 成功
             $this->content->row(function (Row $row) {
-                $tip = trans('All right, sparky! Lxh Framework can now communicate with your database.');
-                $btn = trans('Let&#8217;s go!');
+                $tip  = trans('All right, sparky! Lxh Framework can now communicate with your database.');
+                $btn  = trans('Let&#8217;s go!');
+                $back = trans('Go back');
                 $card = new Card(
                     "<p>$tip</p><br>
-<a href='/install/3' class='btn btn-primary'>&nbsp;&nbsp;&nbsp;&nbsp;$btn&nbsp;&nbsp;&nbsp;&nbsp;</a>
+<a href='/install/3' class='btn btn-primary'>&nbsp;&nbsp;&nbsp;&nbsp;$btn&nbsp;&nbsp;&nbsp;&nbsp;</a>&nbsp;&nbsp;
+<div class=\"btn-group\"><a href='/install/2' type=\"reset\" class=\"btn btn-default waves-effect\">&nbsp;$back&nbsp;</a></div>
 "
                 );
 

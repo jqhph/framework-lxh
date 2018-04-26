@@ -492,7 +492,7 @@ class Field implements Renderable
     {
         if ($key === null) return $this->row;
 
-        return get_value($this->row, $key);
+        return getvalue($this->row, $key);
     }
 
     /**
@@ -512,13 +512,13 @@ class Field implements Renderable
         // Field value is already setted.
         if (is_array($this->column)) {
             foreach ($this->column as $key => &$column) {
-                $this->value[$key] = get_value($data, $column);
+                $this->value[$key] = getvalue($data, $column);
             }
 
             return;
         }
 
-        $this->value = get_value($data, $this->column);
+        $this->value = getvalue($data, $this->column);
     }
 
     /**
@@ -532,13 +532,13 @@ class Field implements Renderable
     {
         if (is_array($this->column)) {
             foreach ($this->column as $key => $column) {
-                $this->original[$key] = get_value($data, $column);
+                $this->original[$key] = getvalue($data, $column);
             }
 
             return;
         }
 
-        $this->original = get_value($data, $this->column);
+        $this->original = getvalue($data, $this->column);
     }
 
     /**
@@ -791,7 +791,7 @@ class Field implements Renderable
     protected function sanitizeInput($input, $column)
     {
         if ($this instanceof Field\MultipleSelect) {
-            $value = get_value($input, $column);
+            $value = getvalue($input, $column);
             $input[$column] = array_filter($value);
         }
 
@@ -1095,7 +1095,7 @@ class Field implements Renderable
     public function __call($method, $parameters)
     {
         if ($method === 'default') {
-            return $this->setDefault(get_value($parameters, 0));
+            return $this->setDefault(getvalue($parameters, 0));
         }
 
         $p = count($parameters) > 0 ? $parameters[0] : true;

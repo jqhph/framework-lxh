@@ -361,7 +361,7 @@ class Field implements Renderable
      */
     public function getAttribute($k, $def = null)
     {
-        return get_value($this->attributes, $k, $def);
+        return getvalue($this->attributes, $k, $def);
     }
 
     /**

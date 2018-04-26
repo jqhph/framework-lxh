@@ -285,9 +285,9 @@ class BladeCompiler extends Compiler implements CompilerInterface
         if (Str::contains($match[1], '@')) {
             $match[0] = isset($match[3]) ? $match[1].$match[3] : $match[1];
         } elseif (isset($this->customDirectives[$match[1]])) {
-            $match[0] = $this->callCustomDirective($match[1], get_value($match, 3));
+            $match[0] = $this->callCustomDirective($match[1], getvalue($match, 3));
         } elseif (method_exists($this, $method = 'compile'.ucfirst($match[1]))) {
-            $match[0] = $this->$method(get_value($match, 3));
+            $match[0] = $this->$method(getvalue($match, 3));
         }
 
         return isset($match[3]) ? $match[0] : $match[0].$match[2];

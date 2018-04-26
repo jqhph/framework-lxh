@@ -28,12 +28,12 @@ class MultipleSelect extends Select
         // Field value is already setted.
         if (is_array($this->column)) {
             foreach ($this->column as $key => $column) {
-                $this->value[$key] = get_value($data, $column);
+                $this->value[$key] = getvalue($data, $column);
             }
 
             return;
         }
 
-        $this->value = (array) get_value($data, $this->column);
+        $this->value = (array) getvalue($data, $this->column);
     }
 }

@@ -35,8 +35,8 @@ class DateRange extends Field
     {
         $this->column = $column;
 
-        $this->defaultValue['start'] = get_value($arguments, 0);
-        $this->defaultValue['end'] = get_value($arguments, 1);
+        $this->defaultValue['start'] = getvalue($arguments, 0);
+        $this->defaultValue['end'] = getvalue($arguments, 1);
 
         array_shift($arguments);
 

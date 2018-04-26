@@ -54,7 +54,7 @@ class Select extends FormSelect
     public function __call($method, $parameters)
     {
         if ($method === 'default') {
-            $value = get_value($parameters, 0);
+            $value = getvalue($parameters, 0);
             if ($value === null || $value === '') {
                 return $this;
             }

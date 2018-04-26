@@ -210,7 +210,7 @@ class Tr extends Widget
     {
         $value = $this->items->get($field);
 
-        if ($append = get_value($options, 'quick-edit')) {
+        if ($append = getvalue($options, 'quick-edit')) {
             $value .= implode(' ', $append);
         }
 
@@ -230,7 +230,7 @@ class Tr extends Widget
         $td = $this->buildTd($field, $value);
 
         $expandContent = '';
-        if ($expand = get_value($options, 'expand')) {
+        if ($expand = getvalue($options, 'expand')) {
             $expandContent = $this->renderColumnExpand($expand);
         }
 
@@ -255,7 +255,7 @@ class Tr extends Widget
             return;
         }
 
-        $view = get_value($options, 'view');
+        $view = getvalue($options, 'view');
         if (! $view) {
             $td->value($value . $expandContent);
 
@@ -269,7 +269,7 @@ class Tr extends Widget
             $field,
             $value,
             $td,
-            get_value($options, 'then'),
+            getvalue($options, 'then'),
             $expandContent
         );
     }

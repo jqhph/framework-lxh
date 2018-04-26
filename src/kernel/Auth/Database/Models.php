@@ -82,7 +82,7 @@ class Models
      */
     public static function getKeyName($model)
     {
-        return get_value(static::$keyNames, $model);
+        return getvalue(static::$keyNames, $model);
     }
 
     /**

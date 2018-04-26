@@ -799,7 +799,7 @@ function is_ajax()
  * @param  mixed $default
  * @return mixed
  */
-function get_value(& $data, $key, $default = null)
+function getvalue(&$data, $key, $default = null)
 {
     return isset($data[$key]) ? $data[$key] : $default;
 }

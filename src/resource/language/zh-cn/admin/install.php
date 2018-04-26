@@ -33,6 +33,7 @@ return [
         'Username' => '用户名',
         'Password' => '密码',
         'Sign in' => '登录',
+        'Go back' => '返回',
         'Your chosen password.' => '您设定的密码。',
         'Already Installed' => '已安装',
         'You appear to have already installed Lxh Framework. To reinstall please clear your old database tables first.'

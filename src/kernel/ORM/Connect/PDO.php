@@ -106,7 +106,8 @@ class PDO
      */
     public static function resolve($key = 'primary')
     {
-        return isset(static::$instances[$key]) ? static::$instances[$key] : (static::$instances[$key] = new static('db.'.$key));
+        return isset(static::$instances[$key]) ? static::$instances[$key] :
+            (static::$instances[$key] = new static(config('db.'.$key)));
     }
 
     /*

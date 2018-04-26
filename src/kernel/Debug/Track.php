@@ -87,9 +87,9 @@ class Track
                 }
 
                 $store->command($options['command']);
-                $store->time(get_value($options, 'start'));
-                $store->type(get_value($options, 'type'));
-                $store->params(get_value($options, 'params', []));
+                $store->time(getvalue($options, 'start'));
+                $store->type(getvalue($options, 'type'));
+                $store->params(getvalue($options, 'params', []));
         }
     }
 

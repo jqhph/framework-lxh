@@ -55,7 +55,7 @@ trait IsRole
     public function getForbiddenAbilities()
     {
         return $this->getAbilities()->filter(function (&$row) {
-            return get_value($row, 'forbidden');
+            return getvalue($row, 'forbidden');
         });
     }
 

@@ -63,7 +63,7 @@ class Clipboard
     public function checkGetId($ability)
     {
         return $this->getAbilities()->filter(function (&$row) use ($ability) {
-            return get_value($row, $ability);
+            return getvalue($row, $ability);
         })->get(Models::getAbilityKeyName());
     }
 
@@ -165,7 +165,7 @@ class Clipboard
     public function getForbiddenAbilities()
     {
         return $this->getAbilities()->filter(function (&$row) {
-            return get_value($row, 'forbidden');
+            return getvalue($row, 'forbidden');
         });
     }
 }

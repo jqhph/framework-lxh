@@ -130,7 +130,7 @@ abstract class Column
     public function __call($name, $arguments)
     {
         if ($name == 'default') {
-            return $this->setOption('default', get_value($arguments, 0));
+            return $this->setOption('default', getvalue($arguments, 0));
         }
     }
 

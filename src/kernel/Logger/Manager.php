@@ -51,9 +51,9 @@ class Manager extends Factory
 	{
 		$this->container = $container;
 
-		$this->requestMethod = get_value($_SERVER, 'REQUEST_METHOD', 'CLI');
+		$this->requestMethod = getvalue($_SERVER, 'REQUEST_METHOD', 'CLI');
 
-		$this->requestUri = get_value($_SERVER, 'REQUEST_URI');
+		$this->requestUri = getvalue($_SERVER, 'REQUEST_URI');
 	}
 
 	/**
@@ -97,13 +97,13 @@ class Manager extends Factory
 	{
 		$defaultConfig = & $this->defaultExceptionConfig;
 		//日志路径
-		$path				= get_value($config, 'path', $defaultConfig['path']);
+		$path				= getvalue($config, 'path', $defaultConfig['path']);
 		//日志handler处理器信息
-		$handlers		    = get_value($config, 'handlers', $defaultConfig['handlers']);
+		$handlers		    = getvalue($config, 'handlers', $defaultConfig['handlers']);
 		//目录下最大文件数
-		$maxFiles			= get_value($config, 'maxFiles', 180);
+		$maxFiles			= getvalue($config, 'maxFiles', 180);
 		//日期格式化
-		$filenameDateFormat = get_value($config, 'filenameDateFormat', 'Y-m-d');
+		$filenameDateFormat = getvalue($config, 'filenameDateFormat', 'Y-m-d');
 
 		if (! $maxFiles) {
 			$maxFiles = 0;
@@ -118,11 +118,11 @@ class Manager extends Factory
 				continue;
 			}
 
-			$handelClass = get_value($info, 'handler', $defaultConfig['handlers'][0]['handler']);
+			$handelClass = getvalue($info, 'handler', $defaultConfig['handlers'][0]['handler']);
 
-			$lowestLevel = get_value($info, 'level', \Monolog\Logger::DEBUG);
-			$bubble      = get_value($info, 'bubble', true);
-			$path		 = get_value($info, 'path', $path);
+			$lowestLevel = getvalue($info, 'level', \Monolog\Logger::DEBUG);
+			$bubble      = getvalue($info, 'bubble', true);
+			$path		 = getvalue($info, 'path', $path);
 
 			$handler = new $handelClass($path, $lowestLevel, $bubble);//实例化日志处理器
 

@@ -251,7 +251,7 @@ class Plugin
             return $this->config;
         }
 
-        return get_value($this->config, $key, $def);
+        return getvalue($this->config, $key, $def);
     }
 
     /**

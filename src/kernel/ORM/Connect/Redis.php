@@ -22,13 +22,13 @@ class Redis
 	{
 		$conf = config('db.redis');
 		
-		$this->debug = get_value($conf, 'debug');
+		$this->debug = getvalue($conf, 'debug');
 		
-		$this->usepool = get_value($conf, 'usepool', false);
-		self::$host    = get_value($conf, 'host');
-		self::$port    = get_value($conf, 'port');
-		self::$pwd     = get_value($conf, 'pwd');
-		self::$db      = get_value($conf, 'db');
+		$this->usepool = getvalue($conf, 'usepool', false);
+		self::$host    = getvalue($conf, 'host');
+		self::$port    = getvalue($conf, 'port');
+		self::$pwd     = getvalue($conf, 'pwd');
+		self::$db      = getvalue($conf, 'db');
 		
 		$this->connect();
 		$this->auth();//验证用户名

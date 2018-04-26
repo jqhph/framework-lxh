@@ -197,11 +197,11 @@ class Demo extends Controller
     public function actionTest()
     {
         $table = new \Lxh\Admin\Widgets\Table([], [
-            ['name' => 'PHP version',       'value' => 'PHP/'.PHP_VERSION],
-            ['name' => 'Lxh-framework version',   'value' => 'dev'],
-            ['name' => 'CGI',               'value' => php_sapi_name()],
-            ['name' => 'Uname',             'value' => php_uname()],
-            ['name' => 'Server',            'value' => get_value($_SERVER, 'SERVER_SOFTWARE')],
+            ['name' => 'PHP version',           'value' => 'PHP/'.PHP_VERSION],
+            ['name' => 'Lxh-framework version', 'value' => 'dev'],
+            ['name' => 'CGI',                   'value' => php_sapi_name()],
+            ['name' => 'Uname',                 'value' => php_uname()],
+            ['name' => 'Server',                'value' => getvalue($_SERVER, 'SERVER_SOFTWARE')],
         ]);
 
         return $table->render();

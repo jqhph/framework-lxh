@@ -144,7 +144,7 @@ class Logs extends Controller
         $table->label('type', function (Label $label) use ($types, $colors) {
             $value = $label->value();
 
-            $selected = get_value($types, $value, 'other');
+            $selected = getvalue($types, $value, 'other');
 
             $label->label(trans($selected));
 
@@ -161,7 +161,7 @@ class Logs extends Controller
             $link->format($url, 'admin_id');
 
             $link->value(
-                get_value($admins, $link->item('admin_id'))
+                getvalue($admins, $link->item('admin_id'))
             );
         });
 

@@ -374,7 +374,7 @@ class ControllerManager extends Factory
             $className .= $this->folder . '\\';
             $this->folder = null;
         }
-        if (get_value($this->requestParams, 'api')) {
+        if (getvalue($this->requestParams, 'api')) {
             $apiClass = "{$className}Api\\$name";
             if (class_exists($apiClass)) {
                 $className = &$apiClass;

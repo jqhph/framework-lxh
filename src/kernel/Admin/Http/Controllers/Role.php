@@ -54,7 +54,7 @@ class Role extends Controller
             );
 
             $link->value(
-                get_value($admins, $link->item('created_by_id'))
+                getvalue($admins, $link->item('created_by_id'))
             );
         });
     }
@@ -160,7 +160,7 @@ class Role extends Controller
             throw new Forbidden();
         }
 
-        if (! $id = get_value($params, 'id')) {
+        if (! $id = getvalue($params, 'id')) {
             return $this->error();
         }
 

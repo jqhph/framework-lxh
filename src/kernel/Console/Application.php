@@ -119,9 +119,9 @@ class Application extends SymfonyApplication
 
         $config = (array) include $path;
 
-        $this->commandPaths      = array_merge($this->commandPaths, (array) get_value($config, 'paths'));
-        $this->commandNamespaces = array_merge($this->commandNamespaces, (array) get_value($config, 'namespaces'));
-        $this->commandClassesMap = array_merge($this->commandClassesMap, (array) get_value($config, 'commands'));
+        $this->commandPaths      = array_merge($this->commandPaths, (array) getvalue($config, 'paths'));
+        $this->commandNamespaces = array_merge($this->commandNamespaces, (array) getvalue($config, 'namespaces'));
+        $this->commandClassesMap = array_merge($this->commandClassesMap, (array) getvalue($config, 'commands'));
     }
     
     // 注册所有命令

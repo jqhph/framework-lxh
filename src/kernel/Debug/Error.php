@@ -20,7 +20,7 @@ class Error
 
     public function handle($error)
     {
-        $method = get_value($levelToLogMethods, $error['type'], 'error');
+        $method = getvalue($levelToLogMethods, $error['type'], 'error');
 
         // 记录错误日志
         logger('exception')->$method('', $error);

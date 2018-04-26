@@ -411,7 +411,7 @@ class Table extends Widget
         }
         $this->settingsDefaultOrderBy = true;
 
-        $sortable = get_value($this->headers[$this->field], 'sortable');
+        $sortable = getvalue($this->headers[$this->field], 'sortable');
 
         $field = is_string($sortable) ? $sortable : $this->field;
 
@@ -643,17 +643,17 @@ class Table extends Widget
     {
         $th = $this->ths[$field] = new Th($this, $field);
 
-        if (get_value($options, 'hide')) {
+        if (getvalue($options, 'hide')) {
             $th->hide();
         }
 
-        if ($sortFeild = get_value($options, 'sortable')) {
+        if ($sortFeild = getvalue($options, 'sortable')) {
             $th->sortable($sortFeild);
         }
 
-        if (($desc = get_value($options, 'desc')) !== null) {
+        if (($desc = getvalue($options, 'desc')) !== null) {
             $th->desc();
-        } elseif (($asc = get_value($options, 'asc')) !== null) {
+        } elseif (($asc = getvalue($options, 'asc')) !== null) {
             $th->asc();
         }
 
@@ -820,8 +820,8 @@ EOF;
     public function __call($method, $parameters)
     {
         if (isset(static::$availableFields[$method])) {
-            $field = get_value($parameters, 0);
-            if ($then = get_value($parameters, 1)) {
+            $field = getvalue($parameters, 0);
+            if ($then = getvalue($parameters, 1)) {
                 $this->headers[$field]['then'] = $then;
             }
 

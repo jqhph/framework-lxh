@@ -150,7 +150,7 @@ class AdminAction extends Entity
         $req = request();
 
         (! $this->path)      && ($this->path = $req->getUri()->getPath());
-        (! $this->method)    && ($this->method = get_value($this->methods, $req->getMethod(), 0));
+        (! $this->method)    && ($this->method = getvalue($this->methods, $req->getMethod(), 0));
         (! $this->ip)        && ($this->ip = ip2long($req->ip()));
         (! $this->adminId)   && ($this->adminId = __admin__()->getId());
         (! $this->createdAt) && ($this->createdAt = time());

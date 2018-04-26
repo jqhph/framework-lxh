@@ -253,7 +253,7 @@ class Application
         if ($domains = config('domain-deploy-config')) {
             $host = $this->request->host();
 
-            $module = get_value($domains, $host);
+            $module = getvalue($domains, $host);
 
             $path = __CONFIG__ . "route/{$module}.php";
             if (is_file($path)) {

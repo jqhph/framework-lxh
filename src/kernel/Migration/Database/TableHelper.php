@@ -494,7 +494,7 @@ class TableHelper
         if (!isset(static::$columntypes[$method])) {
             return call_user_func_array([$this->table, $method], $arguments);
         }
-        $name = get_value($arguments, 0);
+        $name = getvalue($arguments, 0);
         if (! $name) {
             throw new \InvalidArgumentException('The column name cannot be empty.');
         }

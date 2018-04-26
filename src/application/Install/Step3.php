@@ -28,7 +28,6 @@ class Step3
      */
     public function build()
     {
-        return $this->install();
         $this->content->row(function (Row $row) {
             $form = new Form();
 
@@ -42,6 +41,7 @@ class Step3
                 ->help(trans('Usernames can have only alphanumeric characters, spaces, underscores, hyphens, periods, and the @ symbol.'));
             $form->text('admin_password')
                 ->required()
+                ->minlen(5)
                 ->help(trans('You will need this password to log&nbsp;in. Please store it in a secure location.'));
 
             $card = new Card(
@@ -59,16 +59,22 @@ class Step3
      */
     public function install()
     {
-        $this->content->row(function (Row $row) {
+        $username = I('admin_username');
+        $password = I('admin_password');
+
+        
+    }
+
+    protected function success($username)
+    {
+        $this->content->row(function (Row $row) use ($username) {
             $tip    = trans('Lxh Framework has been installed. Thank you, and enjoy!');
             $btn    = trans('Sign in');
             $prefix = config('admin.route-prefix');
 
             $usernameLabel = trans('Username');
             $passwordLabel = trans('Password');
-
-            $username = I('username', 'admin');
-            $password = trans('Your chosen password.');
+            $password      = trans('Your chosen password.');
 
             Admin::style('td,th{border:0!important;}');
 
