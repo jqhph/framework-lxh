@@ -96,7 +96,7 @@ class Admin extends User
         $adminAction = operations_logger()->adminAction();
 
         $adminAction->setInsert();
-        $adminAction->input = $this->toJson();
+        $adminAction->input = json_encode($input);
         $adminAction->table = $this->tableName;
         $adminAction->add();
     }
