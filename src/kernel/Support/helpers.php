@@ -336,6 +336,17 @@ function __admin__()
 }
 
 /**
+ * 获取缓存实例
+ *
+ * @param string $channel
+ * @return \Lxh\Cache\CacheInterface
+ */
+function cacheinstance($channel = 'primary')
+{
+    return $GLOBALS['CONTAINER']->make('cache.factory')->get($channel);
+}
+
+/**
  * Http客户端
  *
  * @return Client

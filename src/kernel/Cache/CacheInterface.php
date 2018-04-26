@@ -5,14 +5,6 @@ namespace Lxh\Cache;
 interface CacheInterface
 {
     /**
-     * 创建一个缓存实例
-     *
-     * @param string $type
-     * @return static
-     */
-    public static function create($type = null);
-
-    /**
      * 设置缓存
      *
      * @param $key
@@ -73,19 +65,4 @@ interface CacheInterface
      * @return mixed
      */
     public function flush($type = null);
-
-    /**
-     * 设置缓存库
-     *
-     * @param $type
-     * @return mixed
-     */
-    public function setType($type);
-
-    /**
-     * 获取缓存库
-     *
-     * @return mixed
-     */
-    public function getType();
 }

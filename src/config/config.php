@@ -12,14 +12,25 @@ $config = [
     // 是否开启语言包功能
     'use-language' => true,
     
-    'use-cache' => true,
-
     // 配置composer.phar安装路径
     // 如果composer是全局安装，则无需配置此参数
     'composer.working-path' => '',
 
     // 使用RBAC权限管理
     'use-authorize' => true,
+
+    // 缓存配置
+    'cache' => [
+        // 缓存通道定义
+        'primary' => [
+            'use' => true,
+            'driver' => 'file',
+            // 缓存目录，此参数默认与通道名称相同
+            'type' => 'primary',
+            // 缓存根目录，默认 data/file-cache/
+            'path' => __DATA_ROOT__ . 'file-cache/',
+        ],
+    ],
 
     // request-auth配置
     'request-auth' => [
@@ -196,8 +207,8 @@ $config['logger'] = [
 ];
 
 // 定义异常处理日志通道
-$config['logger']['exception'] = & $config['logger']['primary'];
+$config['logger']['exception'] = &$config['logger']['primary'];
 // 定义redis和pdo异常日志处理通道
-$config['logger']['redis'] = $config['logger']['pdo'] = & $config['logger']['exception'];
+$config['logger']['redis'] = $config['logger']['pdo'] = &$config['logger']['exception'];
 
 return $config;

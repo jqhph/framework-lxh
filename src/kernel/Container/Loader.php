@@ -3,6 +3,7 @@
 namespace Lxh\Container;
 
 use Lxh\Auth\AuthManager;
+use Lxh\Cache\Factory;
 use Lxh\Exceptions\BindingResolutionException;
 use Lxh\Exceptions\InternalServerError;
 use Lxh\Exceptions\InvalidArgumentException;
@@ -182,6 +183,10 @@ trait Loader
             'shared' => true,
             'class' => 'Lxh\Filters\Filter',
             'dependencies' => ['container']
+        ],
+        'cache.factory' => [
+            'shared' => true,
+            'class' => Factory::class,
         ],
     ];
 

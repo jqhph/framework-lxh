@@ -47,11 +47,11 @@ class ItemPool implements CacheItemPoolInterface
      */
     protected $driverName = File::class;
 
-    public function __construct($type = null)
+    public function __construct($channel = null)
     {
-        $this->driverName = config('cache-driver', $this->driverName);
+        $this->driverName = config('cache.'.$channel.'.driver', $this->driverName);
 
-        $this->setDriver($this->createDriver($type));
+        $this->setDriver($this->createDriver($channel));
     }
 
     /**
@@ -79,15 +79,15 @@ class ItemPool implements CacheItemPoolInterface
      *
      * @return CacheInterface
      */
-    protected function createDriver($type = null)
+    protected function createDriver($channel = null)
     {
         $class = &$this->driverName;
 
-        if (isset(static::$drivers[$class][$type])) {
-            return static::$drivers[$class][$type];
+        if (isset(static::$drivers[$class][$channel])) {
+            return static::$drivers[$class][$channel];
         }
 
-        return static::$drivers[$class][$type] = new $class($type);
+        return static::$drivers[$class][$channel] = new $class($channel);
     }
 
     /**

@@ -14,7 +14,7 @@ class File implements CacheInterface
     /**
      * @var array
      */
-    protected static $instances = [];
+    protected $options = [];
 
     /**
      * 缓存根目录
@@ -44,10 +44,18 @@ class File implements CacheInterface
      * File constructor.
      * @param string $name 文件夹名，默认为空
      */
-    public function __construct($name = null)
+    public function __construct($options = null)
     {
-        $this->type = $name ?: $this->defaultType;
-        $this->root = __DATA_ROOT__ . 'file-cache/';
+        if (is_array($options)) {
+            $this->options = &$options;
+
+            $this->type = getvalue($options, 'type');
+            $this->root = getvalue($options, 'path', __DATA_ROOT__ . 'file-cache/');
+        } else {
+            $this->type = $options ?: $this->defaultType;
+            $this->root = __DATA_ROOT__ . 'file-cache/';
+        }
+
         $this->file = files();
     }
 
@@ -58,7 +66,7 @@ class File implements CacheInterface
      */
     public static function create($type = null)
     {
-        return isset(static::$instances[$type]) ? static::$instances[$type] : (static::$instances[$type] = new static($type));
+        return new static($type);
     }
 
     /**
@@ -176,7 +184,7 @@ class File implements CacheInterface
      */
     public function useCache()
     {
-        return config('use-cache');
+        return getvalue($this->options, 'use', true);
     }
 
     /**
