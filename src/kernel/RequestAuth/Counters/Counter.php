@@ -2,8 +2,8 @@
 
 namespace Lxh\RequestAuth\Counters;
 
+use Lxh\Cache\CacheInterface;
 use Lxh\RequestAuth\Auth;
-use Lxh\RequestAuth\Cache\Cache;
 
 class Counter
 {
@@ -13,7 +13,7 @@ class Counter
     protected $auth;
 
     /**
-     * @var Cache
+     * @var CacheInterface
      */
     protected $cache;
 

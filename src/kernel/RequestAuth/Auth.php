@@ -3,9 +3,6 @@
 namespace Lxh\RequestAuth;
 
 use Lxh\Cache\CacheInterface;
-use Lxh\RequestAuth\Cache\Cache;
-use Lxh\RequestAuth\Cache\File;
-use Lxh\RequestAuth\Database\Log;
 use Lxh\RequestAuth\Database\User;
 use Lxh\RequestAuth\Drivers\Driver;
 use Lxh\RequestAuth\Drivers\Session;
@@ -305,7 +302,7 @@ class Auth
     }
 
     /**
-     * @return Cache
+     * @return CacheInterface
      */
     public function cache()
     {
