@@ -57,6 +57,10 @@ class File implements CacheInterface
             $this->root = __DATA_ROOT__ . 'file-cache/';
         }
 
+        if (empty($this->options['prefix'])) {
+            $this->options['prefix'] = '';
+        }
+
         $this->file = files();
     }
 
@@ -305,9 +309,7 @@ class File implements CacheInterface
      */
     public function incr($key, $timeout = 0)
     {
-        $value = $this->get($key);
-
-        return $this->set($key, $value++, $timeout);
+        return $this->set($key, $this->get($key) + 1, $timeout);
     }
 
     /**
@@ -319,9 +321,7 @@ class File implements CacheInterface
      */
     public function decr($key, $timeout = 0)
     {
-        $value = $this->get($key);
-
-        return $this->set($key, $value--, $timeout);
+        return $this->set($key, $this->get($key) - 1, $timeout);
     }
 
     /**
@@ -342,6 +342,15 @@ class File implements CacheInterface
         }
 
         return false;
+    }
+
+    /**
+     * @param string $key
+     * @return string
+     */
+    protected function normalizeKey(&$key)
+    {
+        return $this->options['prefix'].$key;
     }
 
     /**
@@ -385,6 +394,8 @@ class File implements CacheInterface
      */
     public function normalizePath($key)
     {
+        $key = $this->normalizeKey($key);
+
         $type = $this->getType();
 
         return "{$this->root}{$type}/{$key}";
@@ -466,6 +477,16 @@ class File implements CacheInterface
     public function getBasePath()
     {
         return $this->root;
+    }
+
+    /**
+     * 获取缓存前缀
+     *
+     * @return string
+     */
+    public function getPrefix()
+    {
+        return $this->options['prefix'];
     }
 
 }

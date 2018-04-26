@@ -121,4 +121,9 @@ interface CacheInterface
      * @return mixed
      */
     public function flush($type = null);
+
+    /**
+     * @return string
+     */
+    public function getPrefix();
 }

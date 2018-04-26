@@ -27,17 +27,21 @@ $config = [
             'driver' => 'file',
             // 缓存目录，此参数默认与通道名称相同
             'type' => 'primary',
+            // 缓存前缀
+            'prefix' => '',
             // 缓存根目录，默认 data/file-cache/
             'path' => __DATA_ROOT__ . 'file-cache/',
         ],
         // 后台菜单缓存通道
         'admin-menu' => [
             'driver' => 'file',
+            'prefix' => '_m_',
         ],
 
         // 后台权限管理通道
         'admin-auth' => [
             'driver' => 'file',
+            'prefix' => '_ada_',
         ],
     ],
 
