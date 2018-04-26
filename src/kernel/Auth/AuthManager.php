@@ -5,6 +5,7 @@ namespace Lxh\Auth;
 use Lxh\Auth\Conductors\ChecksRoles;
 use Lxh\Auth\Conductors\FindRoles;
 use Lxh\Auth\Database\Role;
+use Lxh\Cache\CacheInterface;
 use Lxh\Cache\File;
 use Lxh\Exceptions\InvalidArgumentException;
 use Lxh\MVC\Model;
@@ -31,7 +32,7 @@ class AuthManager
     protected $user;
 
     /**
-     * @var Storage
+     * @var CacheInterface
      */
     protected $cache;
 
@@ -88,28 +89,10 @@ class AuthManager
         $this->usesCached = config('admin.auth.use-cache', true);
 
         if ($this->usesCached) {
-            $this->cache = new Storage(static::getCacheStorage());
+            $this->cache = cache_factory()->get(config('admin.auth.cache-channel', 'admin-auth'));
         }
 
         $this->enable = config('admin.auth.enable', true);
-    }
-
-    /**
-     * @return File
-     */
-    public static function getCacheStorage()
-    {
-        return static::$cacheStorage ?: new File();
-    }
-
-    /**
-     * 设置缓存管理对象
-     *
-     * @param $storage
-     */
-    public static function setCacheStorage($storage)
-    {
-        static::$cacheStorage = $storage;
     }
 
     /**
@@ -227,7 +210,7 @@ class AuthManager
 
     /**
      *
-     * @return Storage
+     * @return CacheInterface
      */
     public function getCache()
     {

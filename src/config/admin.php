@@ -23,6 +23,8 @@ return [
     'auth' => [
         'enable' => true,
         'use-cache' => true,
+        // 缓存通道
+        'cache-channel' => 'admin-auth',
     ],
 
     // 失败几次后显示验证码

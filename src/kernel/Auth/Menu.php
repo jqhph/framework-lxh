@@ -4,6 +4,7 @@ namespace Lxh\Auth;
 
 use Lxh\Admin\Admin;
 use Lxh\Auth\AuthManager;
+use Lxh\Cache\CacheInterface;
 use Lxh\Cache\File;
 use Lxh\Exceptions\Error;
 use Lxh\Helper\Util;
@@ -35,7 +36,7 @@ class Menu
     protected $model;
 
     /**
-     * @var File
+     * @var CacheInterface
      */
     protected $cache;
 
@@ -84,7 +85,7 @@ class Menu
         $this->model = model($modelClass ?: config('admin.menu-model', \Lxh\Auth\Database\Menu::class));
         $this->useCache = config('admin.menu-use-cache', true);
         if ($this->useCache) {
-            $this->cache = File::create('__menu__');
+            $this->cache = cache_factory()->get('admin-menu');
         }
 
         $this->routePrefix = config('admin.route-prefix');
@@ -256,7 +257,7 @@ class Menu
         if (!$this->useCache) {
             return true;
         }
-        return $this->cache->flush();
+        return $this->cache->delete($this->cacheKey);
     }
 
     /**

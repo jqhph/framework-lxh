@@ -30,6 +30,15 @@ $config = [
             // 缓存根目录，默认 data/file-cache/
             'path' => __DATA_ROOT__ . 'file-cache/',
         ],
+        // 后台菜单缓存通道
+        'admin-menu' => [
+            'driver' => 'file',
+        ],
+
+        // 后台权限管理通道
+        'admin-auth' => [
+            'driver' => 'file',
+        ],
     ],
 
     // request-auth配置

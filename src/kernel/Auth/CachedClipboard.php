@@ -5,6 +5,7 @@ namespace Lxh\Auth;
 use Lxh\Auth\Database\Models;
 
 use Lxh\Auth\Cache\Storage;
+use Lxh\Cache\CacheInterface;
 use Lxh\MVC\Model;
 use Lxh\Support\Collection;
 
@@ -20,16 +21,16 @@ class CachedClipboard extends Clipboard
     /**
      * The cache Storage.
      *
-     * @var \Lxh\Auth\Cache\Storage
+     * @var CacheInterface
      */
     protected $cache;
 
     /**
      * Constructor.
      *
-     * @param \Lxh\Auth\Cache\Storage  $cache
+     * @param CacheInterface  $cache
      */
-    public function __construct(Model $user, Storage $cache)
+    public function __construct(Model $user, CacheInterface $cache)
     {
         parent::__construct($user);
 
@@ -39,10 +40,10 @@ class CachedClipboard extends Clipboard
     /**
      * Set the cache instance.
      *
-     * @param  \Lxh\Auth\Cache\Storage  $cache
+     * @param  CacheInterface  $cache
      * @return $this
      */
-    public function setCache(Storage $cache)
+    public function setCache(CacheInterface $cache)
     {
         $this->cache = $cache;
 
@@ -52,7 +53,7 @@ class CachedClipboard extends Clipboard
     /**
      * Get the cache instance.
      *
-     * @return \Lxh\Auth\Cache\Storage
+     * @return CacheInterface
      */
     public function getCache()
     {
@@ -78,7 +79,7 @@ class CachedClipboard extends Clipboard
 
         $abilities = parent::getAbilities();
 
-        $this->cache->forever($key, $abilities->all());
+        $this->cache->set($key, $abilities->all());
 
         return $this->abilities = $abilities;
     }
@@ -93,7 +94,7 @@ class CachedClipboard extends Clipboard
     protected function sear($key, callable $callback)
     {
         if (is_null($value = $this->cache->get($key))) {
-            $this->cache->forever($key, $value = $callback());
+            $this->cache->set($key, $value = $callback());
         }
 
         return $value;
@@ -115,11 +116,7 @@ class CachedClipboard extends Clipboard
      */
     public function refreshAll()
     {
-        if ($this->cache) {
-            $this->cache->flush();
-        } else {
-            $this->refreshAllIteratively();
-        }
+        $this->refreshAllIteratively();
 
         return $this;
     }
@@ -133,8 +130,8 @@ class CachedClipboard extends Clipboard
     public function refreshFor(Model $authority = null)
     {
         $authority = $authority ?: $this->user;
-        $this->cache->forget($this->getCacheKey($authority, 'abilities'));
-        $this->cache->forget($this->getCacheKey($authority, 'roles'));
+        $this->cache->delete($this->getCacheKey($authority, 'abilities'));
+        $this->cache->delete($this->getCacheKey($authority, 'roles'));
 
         return $this;
     }

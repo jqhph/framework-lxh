@@ -336,14 +336,13 @@ function __admin__()
 }
 
 /**
- * 获取缓存实例
+ * 获取缓存工厂示例
  *
- * @param string $channel
- * @return \Lxh\Cache\CacheInterface
+ * @return \Lxh\Cache\Factory
  */
-function cacheinstance($channel = 'primary')
+function cache_factory()
 {
-    return $GLOBALS['CONTAINER']->make('cache.factory')->get($channel);
+    return $GLOBALS['CONTAINER']->make('cache.factory');
 }
 
 /**
