@@ -64,8 +64,7 @@ $config = [
             'storable'                => true,
             // 登陆日志模型名称
             'log-model'               => 'admin_login_log',
-            // 鉴权认证驱动
-            // 不填会根据isOpen参数判断使用哪个驱动
+            // 处理登录功能驱动
             'driver'                  => Lxh\RequestAuth\Drivers\Session::class,
             // 缓存通道，默认request-auth
             'cache-channel'           => 'admin-request-auth',

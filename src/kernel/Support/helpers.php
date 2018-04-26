@@ -655,11 +655,21 @@ function home_name()
  *
  * @param  string  $command
  * @param  array  $parameters
- * @return mixed
+ * @return int
  */
 function call($command, array $parameters = [])
 {
-    return $GLOBALS['CONTAINER']->call($command, $parameters);
+    return $GLOBALS['CONTAINER']['console']->call($command, $parameters);
+}
+
+/**
+ * 获取命令执行输出内容
+ *
+ * @return string
+ */
+function console_output()
+{
+    return $GLOBALS['CONTAINER']['console']->output();
 }
 
 /**

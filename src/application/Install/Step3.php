@@ -62,7 +62,11 @@ class Step3
         $username = I('admin_username');
         $password = I('admin_password');
 
-        
+        call('list');
+
+        ddd(
+            console_output()
+        );
     }
 
     protected function success($username)

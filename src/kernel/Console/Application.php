@@ -269,7 +269,7 @@ class Application extends SymfonyApplication
      *
      * @param  string  $command
      * @param  array  $parameters
-     * @return mixed
+     * @return int
      */
     public function call($command, array $parameters = [])
     {
