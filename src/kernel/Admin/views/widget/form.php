@@ -16,15 +16,16 @@
         <?php if ($id) { ?>
         <input type="hidden"  name="__id__" value="<?php echo $id;?>" />
         <?php } ?>
-        <input type="hidden" name="_token" value="<?php ?>"><div class="col-sm-2"></div>
+        <input type="hidden" name="_token" value="<?php ?>">
         <?php if ($formOptions['enableSubmit']) {?>
-            <div class="col-sm-4"><div class="btn-group pull-left"><button type="submit" class="btn btn-primary waves-effect pull-right"><?php echo $formOptions['submitBtnLabel'] ?: trans('Submit')?></button></div></div>
+            <div class="btn-group "><button type="submit" class="btn btn-primary waves-effect pull-right"><?php echo $formOptions['submitBtnLabel'] ?: trans('Submit')?></button></div>
         <?php } ?>
 
         <?php if ($formOptions['enableReset']) {?>
-        <div class="col-sm-2"><div class="btn-group pull-right"><button type="reset" class="btn btn-default waves-effect pull-right"><?php echo $formOptions['resetBtnLabel'] ?: trans('Reset')?>&nbsp; <i class="fa fa-undo"></i></button></div></div>
+        &nbsp;<div class="btn-group"><button type="reset" class="btn btn-default waves-effect pull-right"><?php echo $formOptions['resetBtnLabel'] ?: trans('Reset')?>&nbsp; <i class="fa fa-undo"></i></button></div>&nbsp;
         <?php } ?>
-        <div style="clear:both;"></div>
+        <?php if (!empty($append)) echo $append;?>
+
     </div>
 <?php if (! $content || ! $multiples) {?>
 </form>
