@@ -3,7 +3,6 @@
 namespace Lxh\Auth\Database;
 
 use Lxh\MVC\Model;
-use Lxh\Auth\Database\Models;
 
 class Menu extends Model
 {
@@ -39,7 +38,7 @@ class Menu extends Model
      *
      * @return []
      */
-    public function findShow()
+    public function findActive()
     {
         $ability = Models::table('ability');
         $select = $this->getDefaultSelect($ability);

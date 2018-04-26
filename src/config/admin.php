@@ -43,10 +43,17 @@ return [
         'handler' => 'operator',
     ],
 
-    // 菜单模型
-//    'menu-model' => '',
-    // 是否使用缓存
-    'menu-use-cache' => true,
+    // 菜单配置
+    'menu' => [
+        // 菜单模型，默认Lxh\Auth\Database\Menu
+//        'model' => '',
+        // 是否使用缓存
+        'use-cache' => true,
+        // 缓存通道
+        'cache-channel' => 'admin-menu',
+        // 缓存时间，默认7776000
+        'lifetime' => 7776000,
+    ],
 
     'upload' => [
         'disk' => 'admin',

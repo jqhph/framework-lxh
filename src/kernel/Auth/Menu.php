@@ -2,12 +2,10 @@
 
 namespace Lxh\Auth;
 
-use Lxh\Admin\Admin;
-use Lxh\Auth\AuthManager;
 use Lxh\Cache\CacheInterface;
-use Lxh\Cache\File;
 use Lxh\Exceptions\Error;
 use Lxh\Helper\Util;
+use Lxh\Auth\Database\Menu as DefaultMenuModel;
 
 class Menu
 {
@@ -31,7 +29,7 @@ class Menu
     protected $list;
 
     /**
-     * @var \Lxh\Auth\Database\Menu
+     * @var DefaultMenuModel
      */
     protected $model;
 
@@ -50,7 +48,7 @@ class Menu
      *
      * @var int
      */
-    protected $expireTime = 7776000;
+    protected $lifetime = 7776000;
 
     /**
      * @var AuthManager
@@ -79,16 +77,24 @@ class Menu
      */
     protected $routePrefix = '';
 
+    /**
+     * @var array
+     */
+    protected $options = [];
+
     public function __construct(AuthManager $auth = null, $modelClass = null)
     {
-        $this->auth = $auth ?: auth();
-        $this->model = model($modelClass ?: config('admin.menu-model', \Lxh\Auth\Database\Menu::class));
-        $this->useCache = config('admin.menu-use-cache', true);
-        if ($this->useCache) {
-            $this->cache = cache_factory()->get('admin-menu');
-        }
+        $this->options = (array)config('admin.menu');
 
+        $this->auth        = $auth ?: auth();
+        $this->model       = model($modelClass ?: getnotempty($this->options, 'model', DefaultMenuModel::class));
+        $this->useCache    = getvalue($this->options, 'use-cache', true);
         $this->routePrefix = config('admin.route-prefix');
+
+        if ($this->useCache) {
+            $this->cache    = cache_factory()->get(getvalue($this->options, 'cache-channel', 'admin-menu'));
+            $this->lifetime = getnotempty($this->options, 'lifetime', $this->lifetime);
+        }
 
         fire('menu.resolving', [$this]);
     }
@@ -210,7 +216,7 @@ class Menu
             return $this->data;
         }
 
-        if ($this->useCache && $data = $this->cache->get($this->cacheKey)) {
+        if ($this->useCache && $data = $this->cache->getArray($this->cacheKey)) {
             $data = $this->makeTree($data);
             // 如果存在子菜单则根据priority字段排序, priority越小越前面
             $this->sort($data);
@@ -222,7 +228,7 @@ class Menu
 
         if ($this->useCache) {
             // 缓存数据
-            $this->cache->set($this->cacheKey, $this->data, $this->expireTime);
+            $this->cache->setArray($this->cacheKey, $this->data, $this->lifetime);
         }
 
         $this->data = $this->makeTree($this->data);
@@ -244,7 +250,7 @@ class Menu
         $this->flush();
 
         // 缓存数据
-        return $this->cache->set($this->cacheKey, $this->fetch(), $this->expireTime);
+        return $this->cache->setArray($this->cacheKey, $this->fetch(), $this->lifetime);
     }
 
     /**
@@ -277,7 +283,7 @@ class Menu
      */
     public function fetch()
     {
-        $data = $this->model->findShow();
+        $data = $this->model->findActive();
 
         return $data;
     }

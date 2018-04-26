@@ -4,7 +4,6 @@ namespace Lxh\Auth;
 
 use Lxh\Auth\Database\Models;
 
-use Lxh\Auth\Cache\Storage;
 use Lxh\Cache\CacheInterface;
 use Lxh\MVC\Model;
 use Lxh\Support\Collection;
@@ -73,13 +72,13 @@ class CachedClipboard extends Clipboard
 
         $key = $this->getCacheKey($this->user, 'abilities');
 
-        if (is_array($abilities = $this->cache->get($key)) && $abilities) {
+        if (is_array($abilities = $this->cache->getArray($key)) && $abilities) {
             return $this->abilities = new Collection($abilities);
         }
 
         $abilities = parent::getAbilities();
 
-        $this->cache->set($key, $abilities->all());
+        $this->cache->setArray($key, $abilities->all());
 
         return $this->abilities = $abilities;
     }
