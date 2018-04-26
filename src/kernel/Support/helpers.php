@@ -30,9 +30,9 @@ $GLOBALS['EVENTS']        = $GLOBALS['CONTAINER']->make('events');
 if ($GLOBALS['CONFIG']->get('use-language')) {
     $GLOBALS['LANGUAGE'] = $GLOBALS['CONTAINER']->make('translator');
 }
-$GLOBALS['HTTPREQUEST'] = $GLOBALS['CONTAINER']->make('http.request');
-$GLOBALS['HTTPRESPONSE'] = $GLOBALS['CONTAINER']->make('http.response');
-$GLOBALS['FILTERS_'] = $GLOBALS['CONTAINER']->make('filters');
+$GLOBALS['HTTPREQUEST']       = $GLOBALS['CONTAINER']->make('http.request');
+$GLOBALS['HTTPRESPONSE']      = $GLOBALS['CONTAINER']->make('http.response');
+$GLOBALS['FILTERS_']          = $GLOBALS['CONTAINER']->make('filters');
 $GLOBALS['CONTROLLERMANAGER'] = $GLOBALS['CONTAINER']->make('controller.manager');
 
 $GLOBALS['resource-server']  = $GLOBALS['CONFIG']->get('client.resource-server');
@@ -641,6 +641,18 @@ function home_name()
 }
 
 /**
+ * Run an console command by name.
+ *
+ * @param  string  $command
+ * @param  array  $parameters
+ * @return mixed
+ */
+function call($command, array $parameters = [])
+{
+    return $this->container['console']->call($command, $parameters);
+}
+
+/**
  * 添加控制器中间件
  *
  * @param string $controllerClass 控制器完整类名
@@ -810,7 +822,7 @@ function getvalue(&$data, $key, $default = null)
  * @param mixed $default
  * @return mixed
  */
-function get_not_empty(& $data, $key, $default = null)
+function getnotempty(&$data, $key, $default = null)
 {
     return !empty($data[$key]) ? $data[$key] : $default;
 }
@@ -840,7 +852,7 @@ function retry($times, callable $callback, $sleep = 0)
         $times--;
 
         if ($sleep) {
-            usleep($sleep * 1000);
+            sleep($sleep * 1000);
         }
 
         goto beginning;

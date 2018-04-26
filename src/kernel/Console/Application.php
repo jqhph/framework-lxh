@@ -9,17 +9,12 @@
 namespace Lxh\Console;
 
 use Lxh\Contracts\Container\Container;
-use Lxh\Events\Dispatcher;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Application as SymfonyApplication;
-use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use RuntimeException;
 use Lxh\Support\Arr;
 use Symfony\Component\Console\Input\ArgvInput;
-
-//use \\Exception;
 
 class Application extends SymfonyApplication
 {
@@ -270,11 +265,11 @@ class Application extends SymfonyApplication
     }
 
     /**
-     * Run an Artisan console command by name.
+     * Run an console command by name.
      *
      * @param  string  $command
      * @param  array  $parameters
-     * @return int
+     * @return mixed
      */
     public function call($command, array $parameters = [])
     {
@@ -386,7 +381,7 @@ class Application extends SymfonyApplication
 
         $composer = json_decode(file_get_contents($this->basePath . 'composer.json'), true);
 
-        foreach ((array) Arr::get($composer, 'autoload.psr-4') as $namespace => & $path) {
+        foreach ((array) Arr::get($composer, 'autoload.psr-4') as $namespace => &$path) {
             return $this->namespace = $namespace;
         }
 

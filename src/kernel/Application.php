@@ -2,18 +2,13 @@
 
 namespace Lxh;
 
-use Lxh\Exceptions\Exception;
 use Lxh\Exceptions\NotFound;
 use Lxh\Contracts\Container\Container;
 use Lxh\Contracts\Events\Dispatcher;
-use Lxh\Helper\Console;
 use Lxh\Http\Response;
 use Lxh\Http\Request;
 use Lxh\Plugins\Plugin;
 use Lxh\Router\Dispatcher as Router;
-use Lxh\View\ViewServiceProvider;
-use Symfony\Component\Console\Input\ArgvInput;
-use Lxh\Crontab\Application as Crontab;
 
 class Application
 {
