@@ -1,8 +1,10 @@
 .*
 
 *.svn
-
+*.tmp
 *.idea
+
+src/config/routes/route.php
 
 data/logs/*
 data/cache/*
