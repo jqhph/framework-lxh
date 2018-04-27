@@ -68,7 +68,7 @@ class VertifyCsrfToken
 
         $sessionToken = csrf_token();
 
-        return $sessionToken && is_string($token) && ($sessionToken == $token);
+        return $token && $sessionToken && is_string($sessionToken) && ($sessionToken == $token);
     }
 
     /**
