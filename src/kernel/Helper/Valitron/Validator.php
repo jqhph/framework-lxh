@@ -34,6 +34,47 @@ class Validator
     /**
      * @var array
      */
+    protected static $supports = [
+        'equals' => 1,
+        'required' => 1,
+        'different' => 1,
+        'accepted' => 1,
+        'present' => 1,
+        'size' => 1,
+        'timezone' => 1,
+        'array' => 1,
+        'numeric' => 1,
+        'integer' => 1,
+        'length' => 1,
+        'lengthBetween' => 1,
+        'lengthMin' => 1,
+        'lengthMax' => 1,
+        'min' => 1,
+        'max' => 1,
+        'in' => 1,
+        'notIn' => 1,
+        'contains' => 1,
+        'ip' => 1,
+        'email' => 1,
+        'url' => 1,
+        'urlActive' => 1,
+        'alpha' => 1,
+        'alphaNum' => 1,
+        'slug' => 1,
+        'regex' => 1,
+        'date' => 1,
+        'dateFormat' => 1,
+        'dateBefore' => 1,
+        'dateAfter' => 1,
+        'boolean' => 1,
+        'creditCard' => 1,
+        'instanceOf' => 1,
+        'optional' => 1,
+    ];
+
+    /**
+     * @var array
+     */
     protected $_fields = array();
 
     /**
@@ -1023,9 +1064,8 @@ class Validator
     public function rule($fields, $rule)
     {
         if (!isset(static::$_rules[$rule])) {
-            $ruleMethod = 'validate' . $rule;
-            if (!method_exists($this, $ruleMethod)) {
-                throw new \InvalidArgumentException("Rule '" . $rule . "' has not been registered with " . __CLASS__ . "::addRule().");
+            if (!isset(static::$supports[$rule])) {
+                throw new \InvalidArgumentException("Rule '$rule' has not been registered with " . __CLASS__ . '::addRule().');
             }
         }
 
