@@ -2,12 +2,6 @@
 
 namespace Lxh\Http;
 
-use Lxh\Http\Header;
-use Psr\Http\Message\UriInterface;
-use Lxh\Http\Message\Uri;
-use Lxh\Http\Message\UploadFile;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -73,6 +67,16 @@ class Request extends Message\ServerRequest
     {
         return Url::current();
     }
+
+	/**
+	 * 获取完整的url
+	 *
+	 * @return string
+	 */
+	public function fullPath()
+	{
+		return (string) $this->url()->uri()->getUrl();
+	}
 
 	/**
 	 * 获取浏览器header请求头中的国家语言代码
@@ -182,12 +186,12 @@ class Request extends Message\ServerRequest
 
 	public function time()
     {
-        return $_SERVER['REQUEST_TIME'];
+        return getvalue($_SERVER, 'REQUEST_TIME');
     }
 
     public function date()
     {
-        return date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']);
+        return date('Y-m-d H:i:s', getvalue($_REQUEST, 'REQUEST_TIME'));
     }
 
 	/**
@@ -252,57 +256,87 @@ class Request extends Message\ServerRequest
 	{
 		return strpos(PHP_SAPI, 'cgi') === 0;
 	}
-	
+
+	/**
+	 * @return bool
+	 */
 	public function isPOST() 
 	{
 		return $this->getMethod() === static::METHOD_POST;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isGET()
 	{
 		return $this->getMethod() === static::METHOD_GET;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isPATCH()
 	{
 		return $this->getMethod() === static::METHOD_PATCH;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isPUT()
 	{
 		return $this->getMethod() === static::METHOD_PUT;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isDELETE()
 	{
 		return $this->getMethod() === static::METHOD_DELETE;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isHead()
 	{
 		return $this->getMethod() === static::METHOD_HEAD;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isOptions()
 	{
 		return $this->getMethod() === static::METHOD_OPTIONS;
 	}
-	
+
+	/**
+	 * @return bool
+	 */
 	public function isAjax() 
 	{
 		return $this->getHeaderLine('X_REQUESTED_WITH') === 'XMLHttpRequest';
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isPjax()
 	{
-		return $this->getHeaderLine('X_PJAX') || isset($_GET[static::PJAX]);
+		return (bool)$this->getHeaderLine('X_PJAX') || isset($_GET[static::PJAX]);
 	}
 
 	public function isIframe()
 	{
 		return isset($_GET['_f_']);
 	}
-	
+
+	/**
+	 * @return bool
+	 */
 	public function isSSL()
 	{
 		if (isset($_SERVER['HTTPS']) && ('1' == $_SERVER['HTTPS'] || 'on' == strtolower($_SERVER['HTTPS']))) {
