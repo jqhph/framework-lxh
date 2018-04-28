@@ -421,6 +421,17 @@ function tap($value, Closure $callback)
 }
 
 /**
+ * Return the given object. Useful for chaining.
+ *
+ * @param  mixed  $object
+ * @return mixed
+ */
+function with($object)
+{
+    return $object;
+}
+
+/**
  * Return the default value of the given value.
  *
  * @param  mixed  $value
