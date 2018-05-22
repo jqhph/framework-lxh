@@ -7,13 +7,6 @@ use Lxh\Exceptions\TokenMismatchException;
 
 class VertifyCsrfToken
 {
-    /**
-     * The URIs that should be excluded from CSRF verification.
-     *
-     * @var array
-     */
-    protected $except = [];
-
     public function __construct()
     {
     }
