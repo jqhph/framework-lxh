@@ -1075,6 +1075,11 @@ window.Lxh = function (options) {
             (store.data == 'object' && store.data[idkey] != 'undefined') && (delete store.data[idkey]);
         };
 
+        // 获取id
+        this.getId = function () {
+            return id;
+        };
+
         /**
          * 删除属性
          *

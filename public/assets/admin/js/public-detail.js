@@ -1,5 +1,5 @@
 (function () {
-    var completed = 0;
+    var completed = 0, current = LXHSTORE.IFRAME.current();
     $(document).on('app.completed', function () {
         completed = 1;
     });
@@ -29,6 +29,10 @@
                     // success
                     n.done();
                     notify.success(trans('success'));
+                    if (!model.getId()) {
+                        // 创建记录成功后关闭当前页面
+                        close_tab(current);
+                    }
                 });
                 model.on('any', function () {
                     n.done();
