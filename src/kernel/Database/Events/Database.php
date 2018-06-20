@@ -31,6 +31,7 @@ class Database
      */
     public function query($command, $data, $usetime)
     {
+        
         resolve('track')
             ->record('db', [
                 'command' => &$command,
