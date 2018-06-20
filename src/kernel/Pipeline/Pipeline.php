@@ -92,8 +92,14 @@ class Pipeline
 	 * @param  \Closure  $destination
 	 * @return mixed
 	 */
-	public function then(Closure $destination)
+	public function then(Closure $destination = null)
 	{
+	    if (! $destination) {
+	        $destination = function ($params) {
+	            return $params;
+            };
+        }
+
 		return call_user_func(
 			array_reduce(
 				array_reverse($this->pipes), [$this, 'getSlice'], $destination

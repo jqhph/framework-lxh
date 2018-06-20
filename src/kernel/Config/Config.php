@@ -181,6 +181,13 @@ class Config extends Entity
         return require $this->getBasePath() . $this->addFileName . '.php';
     }
 
+    /**
+     * 增加新的配置文件
+     *
+     * @param $files
+     * @param bool $useCurrentEnv
+     * @throws InvalidArgumentException
+     */
     protected function attachFiles($files, $useCurrentEnv = false)
     {
         $pre = $this->getBasePath();

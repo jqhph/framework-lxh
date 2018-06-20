@@ -80,7 +80,7 @@ function config_path($path = null)
     if ($path) {
         return __ROOT__ . '/config/' . $path;
     }
-    return  __ROOT__ . '/config/';
+    return  __ROOT__ . '/config';
 }
 
 /**
