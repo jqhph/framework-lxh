@@ -6,8 +6,8 @@ use Lxh\Auth\AuthManager;
 use Lxh\Auth\Database\Models;
 use Lxh\Contracts\Container\Container;
 use Lxh\Helper\Entity;
-use Lxh\MVC\Model;
-use Lxh\MVC\Session;
+use Lxh\Mvc\Model;
+use Lxh\Mvc\Session;
 use Lxh\Support\Password;
 
 class Post extends \Lxh\Auth\Database\Admin

@@ -2,7 +2,7 @@
 
 namespace {namespace};
 
-use Lxh\MVC\Model;
+use Lxh\Mvc\Model;
 
 class {name} extends Model
 {

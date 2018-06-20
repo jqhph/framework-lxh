@@ -16,7 +16,7 @@ class Database extends Record
     public function last()
     {
         return [
-            'command' => & PDO::$lastSql,
+            'command' => & PDO::$lastCommand,
             'params'  => & PDO::$lastPrepareData,
         ];
     }

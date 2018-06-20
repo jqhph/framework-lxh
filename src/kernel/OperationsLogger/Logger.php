@@ -3,7 +3,7 @@
 namespace Lxh\OperationsLogger;
 
 use Lxh\OperationsLogger\Entities\AdminAction;
-use Lxh\MVC\Model;
+use Lxh\Mvc\Model;
 
 /**
  * 操作日志

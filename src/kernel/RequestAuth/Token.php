@@ -5,7 +5,7 @@ namespace Lxh\RequestAuth;
 use Lxh\Cache\CacheInterface;
 use Lxh\Exceptions\InvalidArgumentException;
 use Lxh\Helper\Util;
-use Lxh\MVC\Model;
+use Lxh\Mvc\Model;
 use Lxh\RequestAuth\Cache\Cache;
 use Lxh\RequestAuth\Cache\TokenCache;
 use Lxh\RequestAuth\Database\FindLog;

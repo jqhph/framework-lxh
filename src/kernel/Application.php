@@ -13,16 +13,9 @@ use Lxh\Router\Dispatcher as Router;
 class Application
 {
     /**
-     * 根目录
-     *
-     * @var string
-     */
-    protected $root;
-
-    /**
      * @var Container
      */
-    protected $container;
+    public $container;
 
     /**
      * @var Response
@@ -37,7 +30,7 @@ class Application
     /**
      * @var Dispatcher
      */
-    protected $events;
+    public $events;
 
     /**
      * @var array
@@ -45,16 +38,33 @@ class Application
     protected $commands = [];
 
     /**
+     * 别名
+     *
+     * @var array
+     */
+    private static $aliases = [];
+
+    /**
      * Application constructor.
-     * @param string $rootDir 项目根目录
      */
     public function __construct()
     {
         ob_start();
 
         $this->setup();
-
         $this->init();
+
+        static::setAlias('@lxh', dirname(__DIR__));
+    }
+
+    /**
+     * 版本号
+     *
+     * @return string
+     */
+    public static function version()
+    {
+        return '1.0.0-dev';
     }
 
     protected function setup()
@@ -91,7 +101,120 @@ class Application
     protected function define()
     {
         require __DIR__ . '/define.php';
-        $this->root = __ROOT__;
+    }
+
+    /**
+     * 注册多个别名
+     *
+     * @param array $aliases 别名数组
+     *                       <pre>
+     *                       [
+     *                       '@root' => BASE_PATH
+     *                       ......
+     *                       ]
+     *                       </pre>
+     *
+     * @throws \InvalidArgumentException
+     */
+    public static function setAliases(array $aliases)
+    {
+        foreach ($aliases as $name => $path) {
+            self::setAlias($name, $path);
+        }
+    }
+
+    /**
+     * Set alias
+     *
+     * @param string $alias alias
+     * @param string $path  path
+     *
+     * @throws \InvalidArgumentException
+     */
+    public static function setAlias($alias, $path = null)
+    {
+        if ($alias[0] !== '@') {
+            $alias = '@' . $alias;
+        }
+
+        // Delete alias
+        if (!$path) {
+            unset(self::$aliases[$alias]);
+
+            return;
+        }
+
+        // $path 不是别名，直接设置
+        if ($path[0] !== '@') {
+            self::$aliases[$alias] = $path;
+
+            return;
+        }
+
+        // $path是一个别名
+        if (isset(self::$aliases[$path])) {
+            self::$aliases[$alias] = self::$aliases[$path];
+
+            return;
+        }
+
+        list($root) = explode('/', $path);
+        if (!isset(self::$aliases[$root])) {
+            throw new \InvalidArgumentException('The set root alias does not exist，alias=' . $root);
+        }
+
+        $rootPath  = self::$aliases[$root];
+        $aliasPath = str_replace($root, '', $path);
+
+        self::$aliases[$alias] = $rootPath . $aliasPath;
+    }
+
+    /**
+     * Get alias
+     *
+     * @param string $alias
+     *
+     * @return string
+     * @throws \InvalidArgumentException
+     */
+    public static function getAlias($alias)
+    {
+        // empty OR not an alias
+        if (!$alias || $alias[0] !== '@') {
+            return $alias;
+        }
+
+        if (isset(self::$aliases[$alias])) {
+            return self::$aliases[$alias];
+        }
+
+        list($root) = \explode('/', $alias, 2);
+        if (!isset(self::$aliases[$root])) {
+            throw new \InvalidArgumentException('The set root alias does not exist，alias=' . $root);
+        }
+
+        $rootPath  = self::$aliases[$root];
+        $aliasPath = \str_replace($root, '', $alias);
+
+        return $rootPath . $aliasPath;
+    }
+
+    /**
+     * Is alias exist ?
+     *
+     * @param string $alias
+     *
+     * @return bool
+     * @throws \InvalidArgumentException
+     */
+    public static function hasAlias($alias)
+    {
+        // empty OR not an alias
+        if (!$alias || $alias[0] !== '@') {
+            return false;
+        }
+
+        return isset(self::$aliases[$alias]);
     }
 
     /**
@@ -99,19 +222,21 @@ class Application
      *
      * @return string
      */
-    public function getPublicPath()
+    public static function getPublicPath()
     {
-        return dirname($this->root) . '/public/';
+        return dirname(__ROOT__) . '/public/';
     }
+
     /**
      * 获取data目录路径
      *
      * @return string
      */
-    public function getDataPath()
+    public static function getDataPath()
     {
         return __DATA_ROOT__;
     }
+
     /**
      * 程序异常终结
      *
@@ -187,7 +312,7 @@ class Application
      */
     protected function includeHelpers()
     {
-        require $this->root . 'kernel/Support/helpers.php';
+        require __ROOT__ . 'kernel/Support/helpers.php';
 
         $path = __APP__ . 'Support/helpers.php';
         if (is_file($path)) {

@@ -10,7 +10,7 @@ namespace Lxh\Admin\Controllers;
 
 use Lxh\Admin\Admin;
 use Lxh\Helper\Util;
-use Lxh\MVC\Controller;
+use Lxh\Mvc\Controller;
 use Gregwar\Captcha\CaptchaBuilder;
 use Lxh\RequestAuth\Exceptions\AuthTokenException;
 

@@ -2,7 +2,7 @@
 
 namespace Lxh\Auth;
 
-use Lxh\Admin\MVC\Model;
+use Lxh\Admin\Mvc\Model;
 use Lxh\Auth\Cache\Store;
 use Lxh\Auth\Clipboard;
 use Lxh\Auth\Database\Models;

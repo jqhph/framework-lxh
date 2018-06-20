@@ -18,7 +18,7 @@ use Lxh\Http\Request;
 use Lxh\Http\Response;
 use Lxh\Http\Uploads\Upload;
 use Lxh\Http\VertifyCsrfToken;
-use Lxh\MVC\Controller as Base;
+use Lxh\Mvc\Controller as Base;
 
 class Controller extends Base
 {

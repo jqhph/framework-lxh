@@ -54,7 +54,7 @@ class Record
     public function time($time)
     {
         if ($time) {
-            $this->data->append('useageTime', microtime(true) - $time);
+            $this->data->append('useageTime', $time);
         }
 
         return $this;

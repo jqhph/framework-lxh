@@ -14,7 +14,7 @@ use Lxh\Helper\Util;
 use Lxh\Helper\Valitron\Validator;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
-use Lxh\MVC\Controller as Base;
+use Lxh\Mvc\Controller as Base;
 use Lxh\Status;
 
 class Error extends Base

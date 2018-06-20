@@ -129,12 +129,6 @@ class Dispatcher implements \Lxh\Contracts\Events\Dispatcher
 			$payload = [$payload];
 		}
 		
-		//$this->firing[] = $event;
-		
-// 		if (isset($payload[0]) && $payload[0] instanceof ShouldBroadcast) {
-// 			$this->broadcastEvent($payload[0]);
-// 		}
-		
 		foreach ($this->getListeners($event) as & $listener) {
 			$response = call_user_func_array($this->resolveListener($listener), $payload);
 		
@@ -156,8 +150,6 @@ class Dispatcher implements \Lxh\Contracts\Events\Dispatcher
 		
 			$responses[] = $response;
 		}
-		
-		//array_pop($this->firing);
 		
 		return $halt ? null : $responses;
 		
@@ -306,10 +298,5 @@ class Dispatcher implements \Lxh\Contracts\Events\Dispatcher
 	{
 		return isset($this->listeners[$eventName]) || isset($this->wildcards[$eventName]);
 	}
-	
-// 	public function firing() 
-// 	{
-// 		return current($this->firing);
-// 	}
 
 }

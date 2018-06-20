@@ -3,7 +3,7 @@
 namespace Lxh\Auth\Conductors;
 
 use Lxh\Auth\Clipboard;
-use Lxh\MVC\Model;
+use Lxh\Mvc\Model;
 use Lxh\Support\Collection;
 
 class ChecksRoles

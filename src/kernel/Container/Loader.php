@@ -67,7 +67,7 @@ trait Loader
         ],
         'controller.manager' => [
             'shared' => true,
-            'class' => 'Lxh\MVC\ControllerManager',
+            'class' => 'Lxh\Mvc\ControllerManager',
             'dependencies' => ['container', 'http.request', 'http.response', 'pipeline', 'events', 'filters']
         ],
         'files' => [
@@ -103,7 +103,7 @@ trait Loader
         ],
         'model.factory' => [
             'shared' => true,
-            'class' => 'Lxh\MVC\ModelFactory',
+            'class' => 'Lxh\Mvc\ModelFactory',
             'dependencies' => 'container'
         ],
         'exception.handler' => [

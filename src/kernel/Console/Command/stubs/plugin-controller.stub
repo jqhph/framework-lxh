@@ -2,7 +2,7 @@
 
 namespace {namespace};
 
-use Lxh\MVC\Controller;
+use Lxh\Mvc\Controller;
 
 class {name} extends Controller
 {

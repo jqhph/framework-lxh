@@ -2,8 +2,8 @@
 
 namespace Lxh\Auth\Database;
 
-use Lxh\MVC\Model;
-use Lxh\MVC\Model AS Base;
+use Lxh\Mvc\Model;
+use Lxh\Mvc\Model AS Base;
 use Lxh\Support\Collection;
 
 class Role extends Model

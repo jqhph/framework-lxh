@@ -2,7 +2,7 @@
 
 namespace Lxh\RequestAuth\Database;
 
-use Lxh\MVC\Model;
+use Lxh\Mvc\Model;
 use Lxh\RequestAuth;
 
 abstract class User extends Model

@@ -67,7 +67,7 @@ class Track
      * @param mixed  $options 记录具体内容， 基本格式
      *                  [
      *                      'command' => 'test',    // 要记录的命令，不可为空
-     *                      'start' => microtime(true), // 开始时间
+     *                      'usetime' => 0.013, // 使用时间
      *                      'type' => 'w',          // 类型，自定义，可为空
      *                      'params' => []          // 其余参数，自定义，可为空
      *                  ]
@@ -87,7 +87,7 @@ class Track
                 }
 
                 $store->command($options['command']);
-                $store->time(getvalue($options, 'start'));
+                $store->time(getvalue($options, 'usetime'));
                 $store->type(getvalue($options, 'type'));
                 $store->params(getvalue($options, 'params', []));
         }

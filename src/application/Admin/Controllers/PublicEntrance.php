@@ -8,7 +8,7 @@
 
 namespace Lxh\Admin\Controllers;
 
-use Lxh\MVC\Controller;
+use Lxh\Mvc\Controller;
 
 class PublicEntrance extends Controller
 {

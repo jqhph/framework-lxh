@@ -14,7 +14,7 @@ use Lxh\File\FileManager;
 use Lxh\Logger\Manager as LoggerManager;
 use Lxh\Config\Config;
 use Lxh\ORM\Query;
-use Lxh\MVC\Model;
+use Lxh\Mvc\Model;
 use Lxh\Contracts\Events\Dispatcher;
 use Lxh\Http\Client;
 use Lxh\Helper\Util;
@@ -120,7 +120,7 @@ function model($name = null)
  * 设置或获取默认模型名称
  *
  * @param null|string $name
- * @return \Lxh\MVC\ModelFactory|string
+ * @return \Lxh\Mvc\ModelFactory|string
  */
 function default_model_name($name = null)
 {
@@ -688,7 +688,7 @@ function console_output()
  *
  * @param string $controllerClass 控制器完整类名
  * @param string $middleware 类名@方法名 或 类名 或 容器注册的服务名
- * @return \Lxh\MVC\ControllerManager
+ * @return \Lxh\Mvc\ControllerManager
  */
 function middleware($controllerClass, $middleware)
 {
@@ -929,22 +929,6 @@ function debug_track($name, $options = '', $save = false)
         return false;
     }
     return $GLOBALS['CONTAINER']->make('track')->record($name, $options, $save);
-}
-
-// 追踪数据库信息
-function db_track(& $sql, & $time, $type = 'unknown', array & $params = [])
-{
-    if (is_prod()) {
-        return false;
-    }
-    return $GLOBALS['CONTAINER']
-        ->make('track')
-        ->record('db', [
-            'command' => & $sql,
-            'type' => $type,
-            'start' => & $time,
-            'params' => & $params
-        ]);
 }
 
 /**

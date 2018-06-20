@@ -5,7 +5,7 @@ namespace Lxh\Auth\Database;
 use Closure;
 use Lxh\Admin\Models\Admin as AppAdmin;
 use Lxh\Container\Container;
-use Lxh\MVC\Model;
+use Lxh\Mvc\Model;
 
 class Models
 {

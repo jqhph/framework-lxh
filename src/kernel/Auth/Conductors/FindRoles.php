@@ -7,7 +7,7 @@ use Lxh\Auth\Helpers;
 use Lxh\ORM\Query;
 use Lxh\Support\Collection;
 use Lxh\Auth\Database\Models;
-use Lxh\MVC\Model;
+use Lxh\Mvc\Model;
 
 class FindRoles
 {

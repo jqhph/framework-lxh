@@ -5,7 +5,7 @@ namespace Lxh\Auth;
 use Lxh\Auth\Database\Models;
 
 use Lxh\Cache\CacheInterface;
-use Lxh\MVC\Model;
+use Lxh\Mvc\Model;
 use Lxh\Support\Collection;
 
 class CachedClipboard extends Clipboard

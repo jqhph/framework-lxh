@@ -3,12 +3,7 @@
 namespace Lxh\Admin\Http\Controllers;
 
 use Lxh\Admin\Admin;
-use Lxh\Auth\AuthManager;
-use Lxh\Http\Request;
-use Lxh\Http\Response;
 use Lxh\Admin\Filter;
-use Lxh\Admin\Layout\Content;
-use Lxh\Admin\Widgets\Box;
 use Lxh\Admin\Widgets\Form;
 use Lxh\Admin\Grid;
 use Lxh\Admin\Table\Table;

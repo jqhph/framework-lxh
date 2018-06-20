@@ -6,14 +6,62 @@ use Lxh\Exceptions\Exception;
 
 class PDO
 {
-    private $type;	    //数据库类型
-    private $host;		//主机名
-    private $port;		//端口号
-    private $user;		//用户名
-    private $pass;		//密码
-    private $charset;	//字符集
-    private $dbname;	//数据库名称
-    private $prefix;	//表前缀
+    /**
+     * 数据库类型
+     *
+     * @var string
+     */
+    private $type;
+
+    /**
+     * 主机名
+     *
+     * @var string
+     */
+    private $host;
+
+    /**
+     * 端口号
+     *
+     * @var int
+     */
+    private $port;
+
+    /**
+     * 用户名
+     *
+     * @var string
+     */
+    private $user;
+
+    /**
+     * 密码
+     *
+     * @var string
+     */
+    private $pass;
+
+    /**
+     * 字符集
+     *
+     * @var string
+     */
+    private $charset;
+
+    /**
+     * 数据库名称
+     * 
+     * @var string 
+     */
+    private $dbname;
+
+    /**
+     * 表前缀
+     * 
+     * @var string 
+     */
+    private $prefix;	
+    
     private $breakReconnect;
 
     /**
@@ -45,7 +93,7 @@ class PDO
      *
      * @var string
      */
-    public static $lastSql;
+    public static $lastCommand;
 
     /**
      * @var float
@@ -218,18 +266,36 @@ class PDO
      */
     protected function debug(&$sql, $params = [])
     {
-        self::$lastSql         = &$sql;
+        self::$lastCommand     = &$sql;
         self::$lastPrepareData = &$params;
         $this->debugAt         = microtime(true);
     }
 
     /**
      * 调试结束
+     *
+     * @param string $type
      */
     protected function debugEnd($type = 'r')
     {
-        // 记录追踪调试信息
-        db_track(self::$lastSql, $this->debugAt, $type, self::$lastPrepareData);
+        $usetime = microtime(true) - $this->debugAt;
+
+        switch ($type) {
+            case 'r':
+            case 'w':
+            case 'unknown':
+                fire('db.query', [
+                    &self::$lastCommand,
+                    &self::$lastPrepareData,
+                    $usetime,
+                ]);
+            default:
+                fire('db.connect', [
+                    &self::$lastCommand,
+                    [],
+                    $usetime,
+                ]);
+        }
     }
 
 
@@ -430,6 +496,7 @@ class PDO
 
     /**
      * 关闭数据库（或者重新连接）
+     *
      * @access public
      * @return $this
      */
@@ -468,7 +535,14 @@ class PDO
         return true;
     }
 
-    // 批量添加
+    /**
+     * 批量添加
+     *
+     * @param string $table
+     * @param array $data
+     * @param bool $replace
+     * @return mixed
+     */
     public function batchAdd($table = '', array &$data, $replace = false)
     {
         $field  = '';
@@ -622,8 +696,6 @@ class PDO
 
         $updateStr = substr($updateStr, 0, - 1);
 
-//        $ignore = $this->option('ignore') ? 'IGNORE' : '';
-
         $sql = "UPDATE `$table` SET {$updateStr} {$where}";
 
         $values = array_merge($values, $whereData);
@@ -648,6 +720,9 @@ class PDO
     /**
      * 获取以id为key的二维数组查询结果
      *
+     * @param string $sql
+     * @param array $data
+     * @param string $idKey
      * @return array
      */
     public function fetchIdRows($sql, array $data = [], $idKey = 'id')
@@ -742,8 +817,7 @@ class PDO
      */
     public function delete($table, $where = '', array $whereData = [])
     {
-        $sql = "DELETE FROM `$table` $where";
-        return $this->prepare($sql, $whereData, false);
+        return $this->prepare("DELETE FROM `$table` $where", $whereData, false);
     }
 
     public function __destruct()

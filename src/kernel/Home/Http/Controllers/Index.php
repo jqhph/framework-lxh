@@ -2,7 +2,7 @@
 
 namespace Lxh\Home\Http\Controllers;
 
-use Lxh\MVC\Controller;
+use Lxh\Mvc\Controller;
 
 class Index extends Controller
 {

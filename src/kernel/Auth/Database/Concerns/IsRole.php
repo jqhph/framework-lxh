@@ -6,7 +6,7 @@ use Lxh\Auth\Helpers;
 use Lxh\Auth\Database\Models;
 use Lxh\Support\Arr;
 use Lxh\Support\Collection;
-use Lxh\MVC\Model;
+use Lxh\Mvc\Model;
 
 trait IsRole
 {

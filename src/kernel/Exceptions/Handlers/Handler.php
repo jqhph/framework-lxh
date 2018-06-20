@@ -72,7 +72,7 @@ class Handler
 	 */
 	public function pdo(\Exception $e)
 	{
-		$lastSql = &PDO::$lastSql;
+		$lastSql = &PDO::$lastCommand;
 
 		$trace = $e->getTrace();
 

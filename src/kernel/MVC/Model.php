@@ -1,5 +1,5 @@
 <?php
-namespace Lxh\MVC;
+namespace Lxh\Mvc;
 
 use Lxh\Exceptions\Exception;
 use Lxh\Exceptions\FindModelException;

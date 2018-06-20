@@ -6,7 +6,7 @@
  * @date   2017/6/14 10:27
  */
 
-namespace Lxh\MVC;
+namespace Lxh\Mvc;
 
 use Lxh\Admin\Admin;
 use Lxh\Admin\Layout\Content;
@@ -17,8 +17,8 @@ use Lxh\Helper\Util;
 use Lxh\Helper\Valitron\Validator;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
-use Lxh\MVC\ControllerManager;
-use Lxh\MVC\Model;
+use Lxh\Mvc\ControllerManager;
+use Lxh\Mvc\Model;
 use Lxh\Template\View;
 use Lxh\View\Factory;
 use Lxh\Session\Store as Session;
@@ -82,12 +82,12 @@ abstract class Controller
 
     public function __construct($name = null, Container $container = null, ControllerManager $manager = null)
     {
-        $this->name = $name ?: $this->parseName();
+        $this->name      = $name ?: $this->parseName();
         $this->container = $container ?: container();
-        $this->manager = $manager ?: $this->container['controller.manager'];
-        $this->request = request();
-        $this->response = response();
-        $this->module = __MODULE__;
+        $this->manager   = $manager ?: $this->container['controller.manager'];
+        $this->request   = request();
+        $this->response  = response();
+        $this->module    = __MODULE__;
 
         // 触发控制器被实例化事件
         fire('controller.' . $this->getLowerCaseDashName() . '.resolving', [$this]);

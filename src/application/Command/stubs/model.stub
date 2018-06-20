@@ -7,7 +7,7 @@
 
 namespace {root-namespace}{module}\Models;
 
-use {root-namespace}MVC\Model;
+use {root-namespace}Mvc\Model;
 
 class {class} extends Model
 {

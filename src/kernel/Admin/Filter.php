@@ -16,7 +16,7 @@ use Lxh\Admin\Widgets\WaterFall\Card;
 use Lxh\Admin\Widgets\Widget;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Helper\Util;
-use Lxh\MVC\Model;
+use Lxh\Mvc\Model;
 
 /**
  * Class Filter.

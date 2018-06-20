@@ -8,7 +8,7 @@ use Lxh\Admin\Widgets\Navbar;
 use Lxh\Assets;
 use Lxh\Contracts\Support\Renderable;
 use Lxh\Helper\Util;
-use Lxh\MVC\Model;
+use Lxh\Mvc\Model;
 use InvalidArgumentException;
 
 /**

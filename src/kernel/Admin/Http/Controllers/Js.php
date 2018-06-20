@@ -8,9 +8,7 @@
 
 namespace Lxh\Admin\Http\Controllers;
 
-use Lxh\Http\Request;
-use Lxh\Http\Response;
-use Lxh\MVC\Controller;
+use Lxh\Mvc\Controller;
 
 class Js extends Controller
 {

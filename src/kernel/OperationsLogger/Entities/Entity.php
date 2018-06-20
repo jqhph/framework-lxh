@@ -3,7 +3,7 @@
 namespace Lxh\OperationsLogger\Entities;
 use Lxh\Contracts\Support\Arrayable;
 use Lxh\Contracts\Support\Jsonable;
-use Lxh\MVC\Model;
+use Lxh\Mvc\Model;
 
 /**
  * 日志格式定义类

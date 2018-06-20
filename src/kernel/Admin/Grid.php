@@ -17,7 +17,7 @@ use Lxh\Admin\Tools\Tools;
 use Lxh\Admin\Widgets\Card;
 use Lxh\Admin\Widgets\Pages;
 use Lxh\Contracts\Support\Renderable;
-use Lxh\MVC\Model;
+use Lxh\Mvc\Model;
 use Lxh\Http;
 
 class Grid implements Renderable

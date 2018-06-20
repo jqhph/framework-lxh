@@ -8,7 +8,7 @@ use Lxh\Auth\Database\Role;
 use Lxh\Cache\CacheInterface;
 use Lxh\Cache\File;
 use Lxh\Exceptions\InvalidArgumentException;
-use Lxh\MVC\Model;
+use Lxh\Mvc\Model;
 use Lxh\Auth\Cache\Storage;
 use Lxh\Auth\Database\Models;
 use Lxh\Support\Collection;
@@ -201,7 +201,7 @@ class AuthManager
     }
 
     /**
-     * @return Model|\Lxh\MVC\Model
+     * @return Model|\Lxh\Mvc\Model
      */
     public function user()
     {

@@ -6,7 +6,7 @@
  * @date   2017/6/14 10:19
  */
 
-namespace Lxh\MVC;
+namespace Lxh\Mvc;
 
 use Lxh\Exceptions\NotFound;
 use Lxh\Basis\Factory;
@@ -16,7 +16,7 @@ use Lxh\Http\Response;
 use Lxh\Http\Request;
 use Lxh\Contracts\Container\Container;
 use Lxh\Contracts\Events\Dispatcher;
-use Lxh\MVC\Controller;
+use Lxh\Mvc\Controller;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Lxh\Events\Dispatcher as Events;
 use Lxh\Router\Dispatcher as Router;
@@ -421,7 +421,7 @@ class ControllerManager extends Factory
      *
      * @param string $controllerClass 控制器完整类名
      * @param string $middleware 类名@方法名 或 类名 或 容器注册的服务名
-     * @return \Lxh\MVC\ControllerManager
+     * @return \Lxh\Mvc\ControllerManager
      */
     public function addControllerMiddleware($controllerClass, $middleware)
     {

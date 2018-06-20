@@ -3,7 +3,7 @@
 namespace Lxh\Auth\Database;
 
 use Lxh\Auth\AuthManager;
-use Lxh\MVC\Model;
+use Lxh\Mvc\Model;
 use Lxh\Support\Collection;
 
 class Ability extends Model

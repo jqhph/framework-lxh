@@ -4,7 +4,7 @@ namespace Lxh\Admin\Fields;
 
 use Lxh\Admin\Admin;
 use Lxh\Exceptions\InvalidArgumentException;
-use Lxh\MVC\Controller;
+use Lxh\Mvc\Controller;
 
 class Switcher extends Field
 {

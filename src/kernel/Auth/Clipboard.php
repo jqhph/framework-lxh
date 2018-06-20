@@ -6,7 +6,7 @@ use Lxh\Auth\Access\HandlesAuthorization;
 use Lxh\Auth\Database\Models;
 use Lxh\Auth\Database\Role;
 use Lxh\Support\Collection;
-use Lxh\MVC\Model;
+use Lxh\Mvc\Model;
 
 class Clipboard
 {

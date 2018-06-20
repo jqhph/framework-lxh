@@ -12,7 +12,7 @@ use Lxh\Admin\Layout\Content;
 use Lxh\Admin\Widgets\Box;
 use Lxh\Admin\Widgets\Form;
 use Lxh\Admin\Grid;
-use Lxh\Admin\MVC\Controller;
+use Lxh\Admin\Mvc\Controller;
 use Lxh\Admin\Table\Table;
 
 class {class} extends Controller

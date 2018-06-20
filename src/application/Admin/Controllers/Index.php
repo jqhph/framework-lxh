@@ -10,7 +10,7 @@ namespace Lxh\Admin\Controllers;
 use Lxh\Admin\Widgets\Box;
 use Lxh\Admin\Widgets\Table;
 use Lxh\Admin\Layout\Row;
-use Lxh\MVC\Controller;
+use Lxh\Mvc\Controller;
 
 class Index extends Controller
 {

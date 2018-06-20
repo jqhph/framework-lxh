@@ -6,7 +6,7 @@ use Lxh\Auth\AuthManager;
 use Lxh\Auth\Helpers;
 use Lxh\Auth\Database\Role;
 use Lxh\Auth\Database\Models;
-use Lxh\MVC\Model;
+use Lxh\Mvc\Model;
 use Lxh\ORM\Query;
 use Lxh\Support\Arr;
 use Lxh\Support\Collection;

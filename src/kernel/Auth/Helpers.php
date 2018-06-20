@@ -7,7 +7,7 @@ use Lxh\Auth\Database\Models;
 use App\User;
 use InvalidArgumentException;
 use Lxh\Support\Collection;
-use Lxh\MVC\Model;
+use Lxh\Mvc\Model;
 
 class Helpers
 {

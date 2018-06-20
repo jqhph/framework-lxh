@@ -10,6 +10,4 @@ require __DIR__ . '/vendor/autoload.php';
 
 $app = new Lxh\Application();
 
-$app->handle();
-
-$app->response->send();
+$app->handle()->send();

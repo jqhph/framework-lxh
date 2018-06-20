@@ -1,6 +1,6 @@
 <?php
 
-namespace Lxh\MVC;
+namespace Lxh\Mvc;
 
 use Lxh\Basis\Factory;
 
@@ -30,7 +30,7 @@ class ModelFactory extends Factory
 				if ($default = config('default-model')) {
 					$className = $default;
 				} else {
-					$className = 'Lxh\\MVC\\Model';
+					$className = 'Lxh\\Mvc\\Model';
 				}
 			}
 		}

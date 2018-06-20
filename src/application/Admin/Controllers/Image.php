@@ -2,7 +2,7 @@
 
 namespace Lxh\Admin\Controllers;
 
-use Lxh\MVC\Controller;
+use Lxh\Mvc\Controller;
 use Lxh\Http\Files;
 
 class Image extends Controller
