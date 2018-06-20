@@ -50,7 +50,7 @@ $GLOBALS['view.version']     = $GLOBALS['CONFIG']->get('view.version', 'v1.0');
 function base_path($path = null)
 {
     if ($path) {
-        return __ROOT__ . $path;
+        return __ROOT__ .'/'. $path;
     }
     return __ROOT__;
 }
@@ -64,7 +64,7 @@ function base_path($path = null)
 function data_path($path = null)
 {
     if ($path) {
-        return __DATA_ROOT__ . $path;
+        return __DATA_ROOT__ .'/'. $path;
     }
     return __DATA_ROOT__;
 }
@@ -78,9 +78,9 @@ function data_path($path = null)
 function config_path($path = null)
 {
     if ($path) {
-        return __ROOT__ . 'config/' . $path;
+        return __ROOT__ . '/config/' . $path;
     }
-    return  __ROOT__ . 'config/';
+    return  __ROOT__ . '/config/';
 }
 
 /**
@@ -390,6 +390,17 @@ function auth(\Lxh\RequestAuth\Database\User $user = null)
     if (! $user) $user = __admin__();
 
     return \Lxh\Auth\AuthManager::resolve($user);
+}
+
+/**
+ * 根据别名获取路径
+ *
+ * @param string $alias 路径别名
+ * @return string
+ */
+function alias($alias)
+{
+    return Application::getAlias($alias);
 }
 
 /**

@@ -2,15 +2,13 @@
 
 namespace Lxh\Logger;
 
-use Lxh\Helper\Arr;
-use Monolog\Handler\HandlerInterface;
 use Lxh\Basis\Factory;
 use Monolog\Logger;
 use Lxh\Contracts\Container\Container;
 
 /**
  * 日志处理
- * */
+ */
 class Manager extends Factory
 {
 	/**
@@ -33,6 +31,11 @@ class Manager extends Factory
 	 */
 	protected $requestUri;
 
+    /**
+     * 默认配置
+     *
+     * @var array
+     */
 	protected $defaultExceptionConfig = [
 		'channel' => 'exception',
 		'path'    => 'data/logs/exception/record.log',

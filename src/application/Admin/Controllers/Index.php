@@ -60,7 +60,7 @@ class Index extends Controller
     {
         $dependencies['PHP'] = '>=5.5';
 
-        $composer = include __ROOT__ . 'kernel/composer.php';
+        $composer = include __ROOT__ . '/kernel/composer.php';
 
         $dependencies = array_merge($dependencies, $composer);
 

@@ -271,7 +271,7 @@ trait Loader
      */
     public function mergeConfigs()
     {
-        $this->bindings += (array) include __ROOT__ . 'config/container.php';
+        $this->bindings += (array) include __ROOT__ . '/config/container.php';
 
         foreach ($this->bindings as $abstract => &$conf) {
             if (!isset($conf['aliases'])) {

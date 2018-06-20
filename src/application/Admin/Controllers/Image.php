@@ -39,7 +39,7 @@ class Image extends Controller
      */
     public function getImageUploadDirectory()
     {
-        return config('admin.upload.directory.image', __ROOT__ . 'resource/uploads/images');
+        return config('admin.upload.directory.image', __ROOT__ . '/resource/uploads/images');
     }
 
     /**
@@ -49,6 +49,6 @@ class Image extends Controller
      */
     public function getFileUploadDirectory()
     {
-        return config('admin.upload.directory.file', __ROOT__ . 'resource/uploads/files');
+        return config('admin.upload.directory.file', __ROOT__ . '/resource/uploads/files');
     }
 }

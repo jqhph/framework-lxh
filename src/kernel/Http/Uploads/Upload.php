@@ -55,7 +55,7 @@ class Upload
 
     public function __construct(UploadedFile $file, $directory = '')
     {
-        $this->file = $file;
+        $this->file = alias($file);
         $this->directory = $directory;
     }
 

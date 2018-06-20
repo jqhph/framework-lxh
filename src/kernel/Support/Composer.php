@@ -68,7 +68,7 @@ class Composer
      */
     protected function setupComposerJsonPath()
     {
-        $this->configPath = __ROOT__ . 'composer.json';
+        $this->configPath = __ROOT__ . '/composer.json';
         if (!is_file($this->configPath)) {
             throw new InvalidArgumentException('获取composer配置文件失败');
         }

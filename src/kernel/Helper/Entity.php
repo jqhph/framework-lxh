@@ -63,7 +63,7 @@ class Entity implements ArrayAccess, Arrayable, Jsonable
     }
 
     /**
-     * 注入属性
+     * attach方法的别名
      *
      * @param array $data
      * @return $this
@@ -73,6 +73,12 @@ class Entity implements ArrayAccess, Arrayable, Jsonable
         return $this->attach($data);
     }
 
+    /**
+     * 注入属性
+     *
+     * @param array $data
+     * @return $this
+     */
     public function attach(array $data)
     {
         $this->items = array_merge($this->items, $data);

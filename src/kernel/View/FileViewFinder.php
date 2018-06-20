@@ -8,8 +8,6 @@ use Lxh\Logger\Manager;
 
 class FileViewFinder implements ViewFinderInterface
 {
-    protected $root;
-
     /**
      * The filesystem instance.
      *
@@ -57,7 +55,6 @@ class FileViewFinder implements ViewFinderInterface
     {
         $this->files = $files;
         $this->paths = $paths;
-        $this->root = __ROOT__;
 
         if (isset($extensions)) {
             $this->extensions = $extensions;
@@ -148,7 +145,7 @@ class FileViewFinder implements ViewFinderInterface
         if (strpos($path, '/') === 0 || strpos($path, ':')) {
             return $path;
         }
-        return $this->root . $path;
+        return __ROOT__ . '/' . $path;
     }
 
     /**

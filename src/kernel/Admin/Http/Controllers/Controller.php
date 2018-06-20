@@ -866,7 +866,7 @@ class Controller extends Base
      */
     public function getImageUploadDirectory()
     {
-        return config('admin.upload.directory.image', __ROOT__ . 'resource/uploads/images');
+        return config('admin.upload.directory.image', '@lxh/resource/uploads/images');
     }
 
     /**
@@ -876,7 +876,7 @@ class Controller extends Base
      */
     public function getFileUploadDirectory()
     {
-        return config('admin.upload.directory.file', __ROOT__ . 'resource/uploads/files');
+        return config('admin.upload.directory.file', '@lxh/resource/uploads/files');
     }
 
 }

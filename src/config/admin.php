@@ -59,8 +59,8 @@ return [
         'disk' => 'admin',
 
         'directory' => [
-            'image' => __ROOT__.'resource/uploads/images',
-            'file'  => __ROOT__.'resource/uploads/files',
+            'image' => '@lxh/resource/uploads/images',
+            'file'  => '@lxh/resource/uploads/files',
         ],
 
         'host' => '',

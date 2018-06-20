@@ -73,7 +73,7 @@ class Config extends Entity
     {
         $this->useCache = defined('USE_CONFIG_CACHE') ? USE_CONFIG_CACHE : true;
 
-        $this->attachItems();
+        $this->setup();
     }
 
     /**
@@ -85,7 +85,7 @@ class Config extends Entity
     {
         $this->items = [];
 
-        $this->attachItems(true);
+        $this->setup(true);
 
         return $this;
     }
@@ -97,7 +97,7 @@ class Config extends Entity
      */
     public function getCachePath()
     {
-        return __ROOT__ . $this->cachePath . $this->env . '.php';
+        return __ROOT__ . '/' . $this->cachePath . $this->env . '.php';
     }
 
     /**
@@ -139,12 +139,12 @@ class Config extends Entity
     }
 
     /**
-     * 加载配置文件
+     * 初始化配置文件
      *
      * @param bool $useCurrentEnv 是否加载指定环境配置文件
-     * @return void
+     * @throws InvalidArgumentException
      */
-    public function attachItems($useCurrentEnv = false)
+    public function setup($useCurrentEnv = false)
     {
         if ($this->readCache()) {
             return;
@@ -166,11 +166,16 @@ class Config extends Entity
         $this->attachFiles($this->getAddConfigs(), $useCurrentEnv);
 
         $this->writableData = (array)include $this->getWritableConfigPath();
-        $this->items = Util::merge($this->items, $this->writableData, true);//array_merge($this->items, (array) $this->writableData);
+        $this->items        = Util::merge($this->items, $this->writableData, true);
 
         $this->saveCache();
     }
 
+    /**
+     * 获取增加配置文件配置
+     *
+     * @return array
+     */
     protected function getAddConfigs()
     {
         return require $this->getBasePath() . $this->addFileName . '.php';
@@ -212,7 +217,11 @@ class Config extends Entity
         files()->putPhpContents($this->getCachePath(), $this->items);
     }
 
-    // 清除缓存
+    /**
+     * 清除缓存
+     *
+     * @return bool
+     */
     public function removeCache()
     {
         if (! $this->useCache) return;
@@ -223,8 +232,9 @@ class Config extends Entity
     /**
      * 手动载入配置文件
      *
-     * @param string $path
-     * @return static
+     * @param $path
+     * @return $this
+     * @throws InvalidArgumentException
      */
     public function load($path)
     {
@@ -252,7 +262,8 @@ class Config extends Entity
      * 载入环境文件夹配置文件
      *
      * @param string $path
-     * @return static
+     * @return Config
+     * @throws InvalidArgumentException
      */
     public function loadEnv($path)
     {
@@ -271,9 +282,14 @@ class Config extends Entity
         return $this->writableData;
     }
 
+    /**
+     * 获取配置文件目录
+     *
+     * @return string
+     */
     public function getBasePath()
     {
-        return "{$this->root}{$this->prefix}/";
+        return "{$this->root}/{$this->prefix}/";
     }
 
     /**

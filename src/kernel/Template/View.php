@@ -70,7 +70,7 @@ class View
         $this->data = &$data;
 
         $p = config('view.paths', 'resource/views');
-        $this->dir = "{$this->root}{$p}/";
+        $this->dir = "{$this->root}/{$p}/";
     }
 
 
@@ -223,7 +223,7 @@ class View
         if (strpos($path, '/') === 0 || strpos($path, ':')) {
             return $path;
         }
-        return $this->root . $path;
+        return $this->root .'/'. $path;
     }
 
     /**

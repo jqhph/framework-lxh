@@ -59,8 +59,6 @@ class Application
         ob_start();
 
         $this->setup();
-        $this->init();
-
         static::setAlias('@lxh', dirname(__DIR__));
     }
 
@@ -80,17 +78,14 @@ class Application
         $this->includeConfigs();
         $this->includeHelpers();
 
-        $this->events    = events();
         static::$container = container();
-        $this->response  = response();
-        $this->request   = request();
+        $this->events      = events();
+        $this->response    = response();
+        $this->request     = request();
         static::$container->instance('app', $this);
 
         $this->setupRouter();
-    }
 
-    protected function init()
-    {
         // 设置时区
         if ($timezone = config('timezone')) {
             date_default_timezone_set($timezone);
@@ -230,7 +225,7 @@ class Application
      */
     public static function getPublicPath()
     {
-        return dirname(__ROOT__) . '/public/';
+        return dirname(__ROOT__) . '/public';
     }
 
     /**
@@ -318,9 +313,9 @@ class Application
      */
     protected function includeHelpers()
     {
-        require __ROOT__ . 'kernel/Support/helpers.php';
+        require __ROOT__ . '/kernel/Support/helpers.php';
 
-        $path = __APP__ . 'Support/helpers.php';
+        $path = __APP__ . '/Support/helpers.php';
         if (is_file($path)) {
             require $path;
         }
@@ -333,7 +328,7 @@ class Application
      */
     protected function includeConfigs()
     {
-        require __CONFIG__ . 'ini.php';
+        require __CONFIG__ . '/ini.php';
         // 如果没有定义当前环境常量，则默认为测试环境
         if (! defined('__ENV__')) {
             define('__ENV__', ENV_DEV);
@@ -373,7 +368,7 @@ class Application
             $routers = array_merge($routers, include __DIR__ . '/Admin/resource/routes.php');
         }
 
-        $configPath = __CONFIG__ . 'routes/route.php';
+        $configPath = __CONFIG__ . '/routes/route.php';
 
         // 判断是否开启了子域名部署
         if ($domains = config('domain-deploy-config')) {
@@ -381,7 +376,7 @@ class Application
 
             $module = getvalue($domains, $host);
 
-            $path = __CONFIG__ . "routes/{$module}.php";
+            $path = __CONFIG__ . "/routes/{$module}.php";
             if (is_file($path)) {
                 $configPath = & $path;
             }

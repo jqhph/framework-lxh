@@ -132,7 +132,7 @@ class Admin
 
         static::$loadedHelpers = true;
 
-        include __ROOT__ . 'kernel/Admin/Support/helpers.php';
+        include __ROOT__ . '/kernel/Admin/Support/helpers.php';
     }
 
 

@@ -221,18 +221,17 @@ class Translator
 
         $scope = slug($scope);
 
-//        if ($scope == 'Global') {
-//            return "{$this->root}{$this->dir}/{$lang}/$scope.php";
-//        }
-        return "{$this->root}{$this->dir}/{$lang}/{$this->moduleName}/$scope.php";
+        return "{$this->root}/{$this->dir}/{$lang}/{$this->moduleName}/$scope.php";
     }
 
     /**
      * 获取根目录
+     *
+     * @return string
      */
     public function getBasePath()
     {
-        return "{$this->root}{$this->dir}/";
+        return "{$this->root}/{$this->dir}/";
     }
 
     /**

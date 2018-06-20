@@ -20,13 +20,6 @@ class DaysFileHandler extends \Monolog\Handler\StreamHandler
 	protected $filepathFormat = '{filename}-{date}';
 
 	/**
-	 * 项目根目录
-	 *
-	 * @var string
-	 */
-	private $root = __ROOT__;
-
-	/**
 	 * @var string
 	 */
 	private $separator = DIRECTORY_SEPARATOR;
@@ -48,7 +41,7 @@ class DaysFileHandler extends \Monolog\Handler\StreamHandler
 
 	public function __construct($stream, $level = Logger::DEBUG, $bubble = true, $filePermission = null, $useLocking = false)
 	{
-		$this->files = files();
+		$this->files    = files();
 		$this->filepath = $this->normalizePath($stream);
 
 		$this->removeExcessFile();//删除超出的文件
@@ -58,23 +51,25 @@ class DaysFileHandler extends \Monolog\Handler\StreamHandler
 	}
 
 	/**
-	 * @param $path
+     * 获取完整路径
+     *
+	 * @param string $path
 	 * @return string
 	 */
-	protected function normalizePath(&$path)
+	protected function normalizePath($path)
 	{
 		if (strpos($path, '/') === 0 || strpos($path, ':')) {
 			return $path;
 		}
-		return $this->root . $path;
+		return alias('@lxh/'.$path);
 	}
 
 	/**
 	 *
-	 * @param $stream
+	 * @param string $stream
 	 * @return bool
 	 */
-	private function formatfilepath(& $stream)
+	private function formatfilepath(&$stream)
 	{
 		if (! is_string($stream)) {
 			return false;

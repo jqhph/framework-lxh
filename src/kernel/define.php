@@ -10,14 +10,14 @@
 define('__VERSION__', '1.0.0-dev');
 
 // 定义路径常量
-define('__ROOT__', dirname(__DIR__) . '/');
-define('__APP__', __ROOT__ . 'application/');
-define('__CONFIG__', __ROOT__ . 'config/');
-define('__RESOURCE__', __ROOT__ . 'resource/');
-define('__LANGUAGE__', __ROOT__ . 'resource/language/');
-define('__VIEW__', __ROOT__ . 'resource/views/');
-define('__PLUGINS__', __ROOT__ . 'plugins/');
-define('__DATA_ROOT__', dirname(__ROOT__) . '/data/');
+define('__ROOT__', dirname(__DIR__));
+define('__APP__', __ROOT__ . '/application');
+define('__CONFIG__', __ROOT__ . '/config');
+define('__RESOURCE__', __ROOT__ . '/resource');
+define('__LANGUAGE__', __ROOT__ . '/resource/language');
+define('__VIEW__', __ROOT__ . '/resource/views');
+define('__PLUGINS__', __ROOT__ . '/plugins');
+define('__DATA_ROOT__', dirname(__ROOT__) . '/data');
 
 // 环境常量
 define('ENV_TEST', 'test'); // 测试环境

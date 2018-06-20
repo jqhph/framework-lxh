@@ -9,15 +9,19 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileManager
 {
-    private $root = __ROOT__;
-
     /**
      * @var Permission
      */
     private $permission;
 
+    /**
+     * @var string
+     */
     private $separator = DIRECTORY_SEPARATOR;
 
+    /**
+     * @var array
+     */
     private $permissionDeniedList = [];
 
     public function __construct(Config $config = null)
