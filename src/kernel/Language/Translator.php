@@ -88,7 +88,7 @@ class Translator
     {
         $this->container  = $container;
         $this->locale     = config('locale', $this->locale);
-        $this->moduleName = $container->make('controller.manager')->moduleDash();
+        $this->moduleName = $container->make('controllerManager')->moduleDash();
 
         $this->loadPackage('Global');
     }

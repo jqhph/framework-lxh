@@ -623,9 +623,7 @@ class Container implements ArrayAccess, ContractsContainer
     /**
      * 从服务容器中获取服务实例
      *
-     * @param string $key 小驼峰写法会自动转化为“.”格式，如：
-     *               httpRequest => http.request
-     *
+     * @param string $key
      * @return object
      */
     public function __get($key)

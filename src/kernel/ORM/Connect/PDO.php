@@ -164,23 +164,35 @@ class PDO
      */
     private function connect()
     {
-        $dsn = "{$this->type}:host={$this->host};port={$this->port};dbname={$this->dbname};charset={$this->charset}";
+        try {
+            $dsn = "{$this->type}:host={$this->host};port={$this->port};dbname={$this->dbname};charset={$this->charset}";
 
-        $this->debug($dsn);
+            $this->debug($dsn);
 
-        if ($this->usepool) {
-            $this->pdo = new \pdoProxy($dsn, $this->user, $this->pass);
-        } else {
-            $this->pdo = new \PDO($dsn, $this->user, $this->pass);
+            if ($this->usepool) {
+                $this->pdo = new \pdoProxy($dsn, $this->user, $this->pass);
+            } else {
+                $this->pdo = new \PDO($dsn, $this->user, $this->pass);
+            }
+
+            // 记录追踪调试信息
+            $this->debugEnd('c');
+
+            $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);//开启异常处理
+            return $this->pdo;
+        } catch (\PDOException $e) {
+            fire('db.exception', [$e, &self::$lastCommand, &self::$lastPrepareData]);
+
+            throw $e;
         }
-
-        // 记录追踪调试信息
-        $this->debugEnd('c');
-
-        $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);//开启异常处理
-        return $this->pdo;
     }
 
+    /**
+     *
+     *
+     * @param array $options
+     * @return $this
+     */
     public function options(array $options)
     {
         $this->options = &$options;
@@ -214,16 +226,27 @@ class PDO
     /**
      * exec写操作
      *
+     * @param string $command
+     * @return int
      */
     public function exec($command)
     {
-        $this->debug($command);
-        $res = $this->pdo->exec($command);
-        $this->debugEnd('w');
+        try {
+            $this->debug($command);
+            $res = $this->pdo->exec($command);
 
-        $this->release();
+            $this->debugEnd('w');
 
-        return $res;
+            $this->release();
+
+            return $res;
+
+        } catch (\PDOException $e) {
+            fire('db.exception', [$e, &self::$lastCommand, []]);
+
+            throw $e;
+        }
+
     }
 
     /**
@@ -289,6 +312,7 @@ class PDO
                     &self::$lastPrepareData,
                     $usetime,
                 ]);
+                break;
             default:
                 fire('db.connect', [
                     &self::$lastCommand,
@@ -599,22 +623,24 @@ class PDO
      * @param  $sql string
      * @param  $data array 预处理绑定参数数组
      * @param  $select bool 是否为查询操作，默认true
-     * @return mixed
+     * @return \PDOStatement|int
      */
     public function prepare($sql, array &$data = [], $select = true)
     {
-        $this->debug($sql, $data);
-        $this->stmt = $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($data);
-        $this->debugEnd('unknown');
+        try {
+            $this->debug($sql, $data);
+            $this->stmt = $stmt = $this->pdo->prepare($sql);
+            $stmt->execute($data);
+            $this->debugEnd('unknown');
 
-        $this->release();
+            $this->release();
 
-        if ($select) {
-            return $stmt;
+            return $select ? $stmt : $stmt->rowCount();
+        } catch (\PDOException $e) {
+            fire('db.exception', [$e, &self::$lastCommand, &self::$lastPrepareData]);
+
+            throw $e;
         }
-
-        return $stmt->rowCount();
     }
 
     /**
@@ -635,11 +661,18 @@ class PDO
      */
     public function query($sql)
     {
-        $this->debug($sql);
-        $this->stmt = $this->pdo->query($sql);
-        $this->debugEnd();
+        try {
+            $this->debug($sql);
+            $this->stmt = $this->pdo->query($sql);
+            $this->debugEnd();
 
-        return $this->stmt;
+            return $this->stmt;
+
+        } catch (\PDOException $e) {
+            fire('db.exception', [$e, &self::$lastCommand, []]);
+
+            throw $e;
+        }
     }
 
     /**

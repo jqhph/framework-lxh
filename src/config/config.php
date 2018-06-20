@@ -194,8 +194,9 @@ $config = [
         EVENT_ROUTE_DISPATCH_BEFORE => [],
         EVENT_ROUTE_DISPATCH_AFTER => [],
 
-        'db.query' => 'Lxh\Database\Events\Database@query',
         'db.connect' => 'Lxh\Database\Events\Database@connect',
+        'db.query' => 'Lxh\Database\Events\Database@query',
+        'db.exception' => 'Lxh\Database\Events\Database@exception',
     ],
 
     // 公共中间件配置（路由匹配成功后，用户登录验证之前）

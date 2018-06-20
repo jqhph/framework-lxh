@@ -142,7 +142,7 @@ class Handler
 
 	/**
 	 * 异常处理入口方法
-	 * 用户如需自定义异常处理方法, 请监听"exception.handler"事件
+	 * 用户如需自定义异常处理方法, 请监听"exceptionHandler"事件
 	 *
 	 * @param Exception $e
 	 * @return void

@@ -224,7 +224,7 @@ class Mailable implements MailableContract, Renderable
      */
     protected function buildMarkdownView()
     {
-        $markdown = new Markdown(make('view.factory'));
+        $markdown = new Markdown(make('viewFactory'));
         // Container::getInstance()->make(Markdown::class);
 
         if (isset($this->theme)) {

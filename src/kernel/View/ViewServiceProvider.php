@@ -33,7 +33,7 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function registerFactory()
     {
-        $this->container->singleton('view.factory', function ($app) {
+        $this->container->singleton('viewFactory', function ($app) {
             // Next we need to grab the engine resolver instance that will be used by the
             // environment. The resolver will be used by an environment to get each of
             // the various engine implementations such as plain PHP or Blade engine.

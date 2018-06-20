@@ -15,7 +15,12 @@ class Application
     /**
      * @var Container
      */
-    public $container;
+    public static $container;
+
+    /**
+     * @var float
+     */
+    protected $start;
 
     /**
      * @var Response
@@ -49,6 +54,8 @@ class Application
      */
     public function __construct()
     {
+        $this->start = microtime(true);
+
         ob_start();
 
         $this->setup();
@@ -74,10 +81,10 @@ class Application
         $this->includeHelpers();
 
         $this->events    = events();
-        $this->container = container();
+        static::$container = container();
         $this->response  = response();
         $this->request   = request();
-        $this->container->instance('app', $this);
+        static::$container->instance('app', $this);
 
         $this->setupRouter();
     }
@@ -91,8 +98,7 @@ class Application
 
         register_shutdown_function([$this, 'shutdown']);
 
-        // 记录程序执行开始时间
-        debug_track('start');
+        static::$container->tracer->profileStart('framework', $this->start);
     }
 
     /**
@@ -273,7 +279,7 @@ class Application
                 $this->events->listen($event, $listener);
             }
         }
-        $this->events->listen(EVENT_EXCEPTION, 'exception.handler');
+        $this->events->listen(EVENT_EXCEPTION, 'exceptionHandler');
     }
 
     /**
@@ -288,7 +294,7 @@ class Application
             $this->addListeners();
             // 触发路由调度前事件
             $this->events->fire(EVENT_ROUTE_DISPATCH_BEFORE);
-            $router = $this->container['router'];
+            $router = static::$container['router'];
 
             // 开始路由调度
             if (! $router->handle()) {
@@ -297,7 +303,7 @@ class Application
             // 触发路由调度成功后事件
             $this->events->fire(EVENT_ROUTE_DISPATCH_AFTER);
 
-            $this->container['controller.manager']->handle($router);
+            static::$container['controllerManager']->handle($router);
 
             return $this->response;
         } catch (\Exception $e) {
@@ -343,7 +349,7 @@ class Application
     {
         $router = new Router();
 
-        $this->container->instance('router', $router);
+        static::$container->instance('router', $router);
 
         // 再注册插件
         $this->registerPlugins($router);
@@ -400,7 +406,7 @@ class Application
     public function console()
     {
         define('CONSOLE_START', microtime(true));
-        $this->container['console']->handle();
+        static::$container['console']->handle();
     }
     /**
      * 定时任务
@@ -408,6 +414,6 @@ class Application
      */
     public function crontab()
     {
-        $this->container['crontab']->handle();
+        static::$container['crontab']->handle();
     }
 }

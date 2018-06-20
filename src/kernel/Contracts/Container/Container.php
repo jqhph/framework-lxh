@@ -3,6 +3,40 @@ namespace Lxh\Contracts\Container;
 
 use Closure;
 
+/**
+ * Class Container
+ *
+ * @property \Lxh\Session\Store session
+ * @property \Lxh\Cookie\Store  cookie
+ * @property \Lxh\Config\Config config
+ * @property \Lxh\Contracts\Events\Dispatcher events
+ * @property \Lxh\Language\Translator translator
+ * @property \Lxh\Router\Dispatcher router
+ * @property \Lxh\Logger\Manager logger
+ * @property \Lxh\Debug\Tracer tracer
+ * @property \Lxh\Http\Url url
+ * @property \Lxh\ORM\Query query
+ * @property \Lxh\Cache\Factory cacheFactory
+ * @property \Lxh\File\FileManager files
+ * @property \Lxh\Http\Client httpClient
+ * @property \Lxh\Http\Request request
+ * @property \Lxh\Http\Response response
+ * @property \Lxh\ORM\Connect\Redis redis
+ * @property \Lxh\Mvc\ControllerManager controllerManager
+ * @property \Lxh\Auth\AuthManager authManager
+ * @property \Lxh\Pipeline\Pipeline pipeline
+ * @property \Lxh\Mvc\ModelFactory modelFactory
+ * @property \Lxh\Exceptions\Handlers\Handler exceptionHandler
+ * @property \Lxh\Helper\Valitron\Validator validator
+ * @property \Lxh\Console\Application console
+ * @property \Lxh\Crontab\Application crontab
+ * @property \Lxh\Template\Factory viewAdaptor
+ * @property \Lxh\View\ViewServiceProvider viewFactory
+ * @property \Lxh\Mail\MailServiceProvider mailer
+ * @property \Lxh\Admin\Admin admin
+ * @property \Lxh\Filters\Filter filters
+ * @property \Lxh\Plugins\Manager pluginManager
+ */
 interface Container
 {
 	/**

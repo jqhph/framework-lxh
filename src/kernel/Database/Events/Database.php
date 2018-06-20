@@ -2,6 +2,9 @@
 
 namespace Lxh\Database\Events;
 
+use Lxh\Application;
+use Lxh\Debug\Records\Database as Record;
+
 class Database
 {
     /**
@@ -11,15 +14,15 @@ class Database
      * @param array $data 预处理绑定参数
      * @param double|float $usetime 使用时间
      */
-    public function connect($command, $data, $usetime)
+    public function connect($command, array $data, $usetime)
     {
-        resolve('track')
-            ->record('db', [
-                'command' => &$command,
-                'type' => 'c',
-                'usetime' => &$usetime,
-                'params' => &$data
-            ]);
+        if (is_prod()) {
+            return;
+        }
+
+        Application::$container->tracer->addDatabaseRecord(
+            new Record($command, $data, $usetime)
+        );
     }
 
     /**
@@ -29,15 +32,28 @@ class Database
      * @param array $data 预处理绑定参数
      * @param double|float $usetime 使用时间
      */
-    public function query($command, $data, $usetime)
+    public function query($command, array $data, $usetime)
     {
-        
-        resolve('track')
-            ->record('db', [
-                'command' => &$command,
-                'type' => 'unknown',
-                'usetime' => &$usetime,
-                'params' => &$data
-            ]);
+        if (is_prod()) {
+            return;
+        }
+
+        Application::$container->tracer->addDatabaseRecord(
+            new Record($command, $data, $usetime)
+        );
+    }
+
+    /**
+     * 监听数据库异常事件
+     *
+     * @param \PDOException $e
+     * @param string $command
+     * @param array $data
+     */
+    public function exception(\PDOException $e, $command, array $data)
+    {
+        Application::$container->tracer->addDatabaseRecord(
+            new Record($command, $data, 0.00, $e)
+        );
     }
 }

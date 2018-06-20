@@ -6,34 +6,33 @@
  * @date   2017/6/13 18:14
  */
 
+use Lxh\Application;
 use Lxh\Container\Container;
 use Lxh\ORM\Connect\PDO;
 use Lxh\Helper\Console;
-use Lxh\Language\Manager;
 use Lxh\File\FileManager;
 use Lxh\Logger\Manager as LoggerManager;
-use Lxh\Config\Config;
 use Lxh\ORM\Query;
 use Lxh\Mvc\Model;
 use Lxh\Contracts\Events\Dispatcher;
 use Lxh\Http\Client;
-use Lxh\Helper\Util;
 use Lxh\Support\Arr;
 use Lxh\Support\Collection;
 use Lxh\Contracts\Support\Htmlable;
 
+Application::$container = Container::getInstance();
+
 // 常用的变量先注册到全局变量中
-$GLOBALS['CONTAINER']     = Container::getInstance();
-$GLOBALS['CONFIG']        = $GLOBALS['CONTAINER']->make('config');
-$GLOBALS['MODEL_FACTORY'] = $GLOBALS['CONTAINER']->make('model.factory');
-$GLOBALS['EVENTS']        = $GLOBALS['CONTAINER']->make('events');
+$GLOBALS['CONFIG']        = Application::$container->config;
+$GLOBALS['MODEL_FACTORY'] = Application::$container->modelFactory;
+$GLOBALS['EVENTS']        = Application::$container->events;
 if ($GLOBALS['CONFIG']->get('use-language')) {
-    $GLOBALS['LANGUAGE'] = $GLOBALS['CONTAINER']->make('translator');
+    $GLOBALS['LANGUAGE'] = Application::$container->translator;
 }
-$GLOBALS['HTTPREQUEST']       = $GLOBALS['CONTAINER']->make('http.request');
-$GLOBALS['HTTPRESPONSE']      = $GLOBALS['CONTAINER']->make('http.response');
-$GLOBALS['FILTERS_']          = $GLOBALS['CONTAINER']->make('filters');
-$GLOBALS['CONTROLLERMANAGER'] = $GLOBALS['CONTAINER']->make('controller.manager');
+$GLOBALS['HTTPREQUEST']       = Application::$container->request;
+$GLOBALS['HTTPRESPONSE']      = Application::$container->response;
+$GLOBALS['FILTERS_']          = Application::$container->filters;
+$GLOBALS['CONTROLLERMANAGER'] = Application::$container->controllerManager;
 
 $GLOBALS['resource-server']  = $GLOBALS['CONFIG']->get('client.resource-server');
 $GLOBALS['js-version']       = $GLOBALS['CONFIG']->get('js-version');
@@ -91,7 +90,7 @@ function config_path($path = null)
  */
 function container()
 {
-    return $GLOBALS['CONTAINER'];
+    return Application::$container;
 }
 
 /**
@@ -102,7 +101,7 @@ function container()
  */
 function resolve($abstract)
 {
-    return $GLOBALS['CONTAINER']->make($abstract);
+    return Application::$container->make($abstract);
 }
 
 /**
@@ -232,7 +231,7 @@ function translator()
  */
 function files()
 {
-    return $GLOBALS['CONTAINER']->make('files');
+    return Application::$container->files;
 }
 
 /**
@@ -316,7 +315,7 @@ function __user__()
 
     if ($instance) return $instance;
 
-    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->create(config('request-auth.user.model', 'User'));
+    return $instance = Application::$container->make('modelFactory')->create(config('request-auth.user.model', 'User'));
 
 }
 
@@ -331,7 +330,7 @@ function __admin__()
 
     if ($instance) return $instance;
 
-    return $instance = $GLOBALS['CONTAINER']->make('model.factory')->create(config('request-auth.admin.model', 'Admin'));
+    return $instance = Application::$container->make('modelFactory')->create(config('request-auth.admin.model', 'Admin'));
 
 }
 
@@ -342,7 +341,7 @@ function __admin__()
  */
 function cache_factory()
 {
-    return $GLOBALS['CONTAINER']->make('cache.factory');
+    return Application::$container->cacheFactory;
 }
 
 /**
@@ -352,7 +351,7 @@ function cache_factory()
  */
 function http()
 {
-    return resolve('http.client');
+    return Application::$container->httpClient;
 }
 
 /**
@@ -363,7 +362,7 @@ function http()
  */
 function logger($channel = 'primary')
 {
-    return $GLOBALS['CONTAINER']->make('logger')->channel($channel);
+    return Application::$container->logger->channel($channel);
 }
 
 /**
@@ -381,6 +380,7 @@ function operations_logger()
 }
 
 /**
+ * 获取用户权限管理类实例
  *
  * @param \Lxh\RequestAuth\Database\User|null $user
  * @return \Lxh\Auth\AuthManager
@@ -393,6 +393,7 @@ function auth(\Lxh\RequestAuth\Database\User $user = null)
 }
 
 /**
+ * 获取input参数
  *
  * @param mixed $name
  * @param mixed $default
@@ -543,7 +544,7 @@ function e($value)
  */
 function share_var($key, $value = null)
 {
-    return $GLOBALS['CONTAINER']['view.adaptor']->share($key, $value);
+    return Application::$container->viewAdaptor->share($key, $value);
 }
 
 /**
@@ -555,7 +556,7 @@ function share_var($key, $value = null)
  * @return \Lxh\Contracts\View\View
  */
 function view($view, array $data = [], $usePrefix = true) {
-    return $GLOBALS['CONTAINER']['view.adaptor']->make($view, $data, $usePrefix);
+    return Application::$container->viewAdaptor->make($view, $data, $usePrefix);
 }
 
 /**
@@ -567,7 +568,7 @@ function view($view, array $data = [], $usePrefix = true) {
  */
 function add_view_namespace($namespace, $hints)
 {
-    return $GLOBALS['CONTAINER']['view.adaptor']->addNamespace($namespace, $hints);
+    return Application::$container->viewAdaptor->addNamespace($namespace, $hints);
 }
 
 /**
@@ -622,7 +623,7 @@ function response()
  */
 function cookie()
 {
-    return $GLOBALS['CONTAINER']['cookie'];
+    return Application::$container->cookie;
 }
 
 /**
@@ -630,7 +631,7 @@ function cookie()
  */
 function session()
 {
-    return $GLOBALS['CONTAINER']['session'];
+    return Application::$container->session;
 }
 
 /**
@@ -638,7 +639,7 @@ function session()
  */
 function url()
 {
-    return $GLOBALS['CONTAINER']['url'];
+    return Application::$container->url;
 }
 
 /**
@@ -670,7 +671,7 @@ function home_name()
  */
 function call($command, array $parameters = [])
 {
-    return $GLOBALS['CONTAINER']['console']->call($command, $parameters);
+    return Application::$container->console->call($command, $parameters);
 }
 
 /**
@@ -680,7 +681,7 @@ function call($command, array $parameters = [])
  */
 function console_output()
 {
-    return $GLOBALS['CONTAINER']['console']->output();
+    return Application::$container->console->output();
 }
 
 /**
@@ -818,9 +819,8 @@ function pdo($name = 'primary')
  */
 function query($name = 'primary')
 {
-    $q = $GLOBALS['CONTAINER']->make('query');
     // 设置连接类型
-    return $q->setConnectionName($name);
+    return Application::$container->query->setConnectionName($name);
 }
 
 /**
@@ -831,7 +831,7 @@ function query($name = 'primary')
  */
 function is_ajax()
 {
-    return $GLOBALS['CONTAINER']['http.request']->isAjax();
+    return Application::$container->request->isAjax();
 }
 
 /**
@@ -888,47 +888,6 @@ function retry($times, callable $callback, $sleep = 0)
 
         goto beginning;
     }
-}
-
-/**
- * 记录追踪信息
- *
- * @param string $name    名称
- * @param mixed  $options 记录具体内容， 基本格式
- *                  [
- *                      'command' => 'test',    // 要记录的命令，不可为空
- *                      'start' => microtime(true), // 开始时间
- *                      'type' => 'w',          // 类型，自定义，可为空
- *                      'params' => []          // 其余参数，自定义，可为空
- *                  ]
- * @param bool   $save    是否持久化存储
- * @return mixed
- */
-function track($name, $options = '', $save = false)
-{
-    return $GLOBALS['CONTAINER']->make('track')->record($name, $options, $save);
-}
-
-/**
- * 记录调试用追踪信息，此函数在生产环境无效
- *
- * @param string $name    名称
- * @param mixed  $options 记录具体内容， 基本格式
- *                  [
- *                      'command' => 'test',    // 要记录的命令，不可为空
- *                      'start' => microtime(true), // 开始时间
- *                      'type' => 'w',          // 类型，自定义，可为空
- *                      'params' => []          // 其余参数，自定义，可为空
- *                  ]
- * @param bool   $save    是否持久化存储
- * @return mixed
- */
-function debug_track($name, $options = '', $save = false)
-{
-    if (is_prod()) {
-        return false;
-    }
-    return $GLOBALS['CONTAINER']->make('track')->record($name, $options, $save);
 }
 
 /**

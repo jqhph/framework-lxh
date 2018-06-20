@@ -126,7 +126,7 @@ class PluginCommand extends Command
     {
         list($sub, $controller) = $this->parseClassName($name);
 
-        $plugin = resolve('plugin.manager')->plugin($this->formatPluginName());
+        $plugin = resolve('pluginManager')->plugin($this->formatPluginName());
 
         $namespace = $this->formatNamespace() . "\\Http\\{$type}{$sub}";
         $path = $plugin->getPath() . "/src/Http/{$type}{$sub}/$controller.php";
@@ -206,7 +206,7 @@ class PluginCommand extends Command
     {
         $name = $this->formatPluginName();
 
-        $plugin = resolve('plugin.manager')->plugin($name);
+        $plugin = resolve('pluginManager')->plugin($name);
 
         if ($plugin->disable()) {
             $this->info('Success!');
@@ -224,7 +224,7 @@ class PluginCommand extends Command
     {
         $name = $this->formatPluginName();
 
-        $plugin = resolve('plugin.manager')->plugin($name);
+        $plugin = resolve('pluginManager')->plugin($name);
 
         if (!$installer->isInstalled()) {
             $this->error('Please install the plugin first!');
@@ -247,7 +247,7 @@ class PluginCommand extends Command
         $namespace = $this->formatNamespace();
         $files = files();
 
-        $plugin = resolve('plugin.manager')->plugin($name);
+        $plugin = resolve('pluginManager')->plugin($name);
 
         // 插件根目录
         $basePath = $plugin->getPath();
@@ -396,7 +396,7 @@ class PluginCommand extends Command
      */
     protected function installer()
     {
-        return resolve('plugin.manager')->installer($this->formatPluginName());
+        return resolve('pluginManager')->installer($this->formatPluginName());
     }
 
 

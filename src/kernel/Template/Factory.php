@@ -53,11 +53,11 @@ class Factory
 
         // 判断是否使用blade模板引擎
         if ($this->mode == static::BLADE) {
-            $this->factory = $container['view.factory'];
+            $this->factory = $container['viewFactory'];
         }
 
         $this->setupNamespaces();
-        fire('view.factory.resoving', [$this]);
+        fire('viewFactory.resoving', [$this]);
     }
 
     /**

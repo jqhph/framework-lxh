@@ -84,7 +84,7 @@ define('EVENT_MENU_RESOLVING', 'menu.resolving');
  *
  * @param Lxh\Template\Factory
  */
-define('EVENT_VIEW_FACTORY_RESOLVING', 'view.factory.resoving');
+define('EVENT_VIEW_FACTORY_RESOLVING', 'viewFactory.resoving');
 
 /**
  * 加载后台首页时触发

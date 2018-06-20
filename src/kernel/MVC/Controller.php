@@ -84,7 +84,7 @@ abstract class Controller
     {
         $this->name      = $name ?: $this->parseName();
         $this->container = $container ?: container();
-        $this->manager   = $manager ?: $this->container['controller.manager'];
+        $this->manager   = $manager ?: $this->container['controllerManager'];
         $this->request   = request();
         $this->response  = response();
         $this->module    = __MODULE__;
@@ -150,7 +150,7 @@ abstract class Controller
      */
     protected function share($key, $value = null)
     {
-        return $this->container['view.adaptor']->share($key, $value);
+        return $this->container['viewAdaptor']->share($key, $value);
     }
 
     /**
@@ -163,7 +163,7 @@ abstract class Controller
      */
     protected function render($view, array $data = [], $usePrefix = true)
     {
-        return $this->container['view.adaptor']->make($view, $data, $usePrefix)->render();
+        return $this->container['viewAdaptor']->make($view, $data, $usePrefix)->render();
     }
 
     /**
@@ -186,7 +186,7 @@ abstract class Controller
      */
     protected function model($name = null)
     {
-        return $this->container['model.factory']->create($name);
+        return $this->container['modelFactory']->create($name);
     }
 
     /**
@@ -332,7 +332,7 @@ abstract class Controller
      * 并设置为控制器属性
      *
      * @param string $name 小驼峰写法会自动转化为“.”格式，如：
-     *               httpRequest => http.request
+     *               httpRequest => request
      *
      * @return object
      */

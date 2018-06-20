@@ -5,8 +5,6 @@ namespace Lxh\Container;
 use Lxh\Auth\AuthManager;
 use Lxh\Cache\Factory;
 use Lxh\Exceptions\BindingResolutionException;
-use Lxh\Exceptions\InternalServerError;
-use Lxh\Exceptions\InvalidArgumentException;
 use Lxh\Mail\MailServiceProvider;
 use Lxh\View\ViewServiceProvider;
 use Lxh\Contracts\Events\Dispatcher as  EventsDispatcher;
@@ -33,158 +31,149 @@ trait Loader
      */
     protected $bindings = [//加载器加载信息（优先查找load*方法，找不到再从此数组信息中找）
         'container' => [
-            'class' => 'Lxh\Container\Container',
+            'class' => \Lxh\Container\Container::class,
             'shared' => true,
         ],
         'config' => [
             'shared' => true,
-            'class' => 'Lxh\Config\Config'
+            'class' => \Lxh\Config\Config::class
         ],
         'events' => [
-            'class' => 'Lxh\Events\Dispatcher',
+            'class' => \Lxh\Events\Dispatcher::class,
             'dependencies' => 'container',
             'shared' => true,
             'aliases' => [
                 EventsDispatcher::class,
             ]
         ],
-        'http.input' => [
-            'shared' => true,
-            'class' => 'Lxh\\Http\\Input',
-        ],
         'redis' => [
             'shared' => true,
-            'class' => 'Lxh\ORM\Connect\Redis',
+            'class' => \Lxh\ORM\Connect\Redis::class,
         ],
         'query' => [
             'shared' => false,
-            'class' => 'Lxh\ORM\Query',
+            'class' => \Lxh\ORM\Query::class,
             'dependencies' => ['container'],
         ],
-        'auth.manager' => [
+        'authManager' => [
             'shared' => true,
             'class' => AuthManager::class,
         ],
-        'controller.manager' => [
+        'controllerManager' => [
             'shared' => true,
-            'class' => 'Lxh\Mvc\ControllerManager',
-            'dependencies' => ['container', 'http.request', 'http.response', 'pipeline', 'events', 'filters']
+            'class' => \Lxh\Mvc\ControllerManager::class,
+            'dependencies' => ['container', 'request', 'response', 'pipeline', 'events', 'filters']
         ],
         'files' => [
             'shared' => true,
-            'class' => 'Lxh\File\FileManager',
+            'class' => \Lxh\File\FileManager::class,
         ],
-        'http.client' => [
+        'httpClient' => [
             'shared' => false,
-            'class' => 'Lxh\\Http\\Client'
+            'class' => \Lxh\Http\Client::class
         ],
-        'http.response' => [
+        'response' => [
             'shared' => true,
-            'class' => 'Lxh\\Http\\Response',
+            'class' => \Lxh\Http\Response::class,
             'dependencies' => [
-                'http.request', 'container'
+                'request', 'container'
             ],
             'aliases' => \Psr\Http\Message\ResponseInterface::class
         ],
-        'http.request' => [
+        'request' => [
             'shared' => true,
-            'class' => 'Lxh\\Http\\Request',
+            'class' => \Lxh\Http\Request::class,
             'aliases' => \Psr\Http\Message\RequestInterface::class
         ],
         'pipeline' => [
             'shared' => false,
-            'class' => 'Lxh\Pipeline\Pipeline',
+            'class' => \Lxh\Pipeline\Pipeline::class,
             'dependencies' => 'container'
         ],
         'logger' => [
             'shared' => true,
-            'class' => 'Lxh\Logger\Manager',
+            'class' => \Lxh\Logger\Manager::class,
             'dependencies' => 'container'
         ],
-        'model.factory' => [
+        'modelFactory' => [
             'shared' => true,
-            'class' => 'Lxh\Mvc\ModelFactory',
+            'class' => \Lxh\Mvc\ModelFactory::class,
             'dependencies' => 'container'
         ],
-        'exception.handler' => [
+        'exceptionHandler' => [
             'shared' => true,
-            'class' => 'Lxh\Exceptions\Handlers\Handler',
-            'dependencies' => ['logger', 'http.request', 'http.response', 'events']
+            'class' => \Lxh\Exceptions\Handlers\Handler::class,
+            'dependencies' => ['logger', 'request', 'response', 'events']
         ],
         'validator' => [
             'shared' => true,
-            'class' => 'Lxh\Helper\Valitron\Validator'
+            'class' => \Lxh\Helper\Valitron\Validator::class
         ],
         'mongo' => [
             'shared' => true,
-            'class' => 'Lxh\ORM\DB\Mongo\Connection'
+            'class' => \Lxh\ORM\Mongo\Connection::class
         ],
         'console' => [
             'shared' => true,
-            'class' => 'Lxh\Console\Application',
+            'class' => \Lxh\Console\Application::class,
             'dependencies' => 'container'
         ],
         'crontab' => [
             'shared' => true,
-            'class' => 'Lxh\Crontab\Application',
+            'class' => \Lxh\Crontab\Application::class,
             'dependencies' => 'container'
         ],
-        'view.adaptor' => [
+        'viewAdaptor' => [
             'shared' => true,
-            'class' => 'Lxh\Template\Factory',
+            'class' => \Lxh\Template\Factory::class,
             'dependencies' => 'container'
         ],
-        'view.factory' => [
+        'viewFactory' => [
             'provider' => ViewServiceProvider::class,
         ],
         'mailer' => [
             'provider' => MailServiceProvider::class
         ],
-        'track' => [
+        'tracer' => [
             'shared' => true,
-            'class' => 'Lxh\Debug\Track',
+            'class' => \Lxh\Debug\Tracer::class,
             'dependencies' => 'container'
         ],
         'translator' => [
             'shared' => true,
-            'class' => 'Lxh\Language\Translator',
+            'class' => \Lxh\Language\Translator::class,
             'dependencies' => 'container'
         ],
-        'shutdown' => [
+        'errorHandler' => [
             'shared' => true,
-            'class' => 'Lxh\Debug\Shutdown',
-            'dependencies' => ['container', 'events', 'http.response']
-        ],
-        'error.handler' => [
-            'shared' => true,
-            'class' => 'Lxh\Debug\Error',
+            'class' => \Lxh\Debug\Error::class,
         ],
         'session' => [
             'shared' => true,
-            'class' => 'Lxh\Session\Store',
+            'class' => \Lxh\Session\Store::class,
         ],
         'cookie' => [
             'shared' => true,
-            'class' => 'Lxh\Cookie\Store',
+            'class' => \Lxh\Cookie\Store::class,
         ],
         'admin' => [
             'shared' => true,
-            'class' => 'Lxh\Admin\Admin',
+            'class' => \Lxh\Admin\Admin::class,
         ],
         'url' => [
             'shared' => false,
-            'class' => 'Lxh\Http\Url',
+            'class' => \Lxh\Http\Url::class,
         ],
-        'plugin.manager' => [
+        'pluginManager' => [
             'shared' => true,
-            'class' => 'Lxh\Plugins\Manager',
+            'class' => \Lxh\Plugins\Manager::class,
         ],
         'filters' => [
             'shared' => true,
-            'class' => 'Lxh\Filters\Filter',
+            'class' => \Lxh\Filters\Filter::class,
             'dependencies' => ['container']
         ],
-        'cache.factory' => [
+        'cacheFactory' => [
             'shared' => true,
             'class' => Factory::class,
         ],

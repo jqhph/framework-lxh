@@ -222,6 +222,7 @@ class Response extends PsrResponse
 		if ($this->sent) {
 			return;
 		}
+        $this->container->tracer->profileEnd('framework');
 
 		$this->events->fire(EVENT_RESPONSE_BEFORE);
 
@@ -247,7 +248,7 @@ class Response extends PsrResponse
 			return;
 		}
 		if (in_array((int)$error['type'], config('record-error-info-level'), true)) {
-			$this->container['error.handler']->handle($error);
+			$this->container['errorHandler']->handle($error);
 		}
 	}
 
@@ -292,7 +293,7 @@ class Response extends PsrResponse
 		$isProd = is_prod();
 
 		if (! $isProd && $this->outputConsoleLog) {
-			$this->container->make('track')->handle();
+			$this->container->tracer->handle();
 		}
 
 		// 非生产环境和非命令行环境则输出控制台调试日志

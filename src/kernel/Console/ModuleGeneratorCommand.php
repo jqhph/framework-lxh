@@ -33,7 +33,7 @@ abstract class ModuleGeneratorCommand extends GeneratorCommand
     {
         $m = $this->argument('module');
 
-        return $m ?: $this->container['controller.manager']->moduleName();
+        return $m ?: $this->container['controllerManager']->moduleName();
     }
 
     /**
