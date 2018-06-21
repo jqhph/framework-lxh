@@ -1,5 +1,0 @@
-<?php 
-return array (
-  'value' => 1,
-  'timeout' => 1530088899,
-);

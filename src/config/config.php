@@ -30,7 +30,7 @@ $config = [
             // 缓存前缀
             'prefix' => '',
             // 缓存根目录，默认 data/file-cache/
-            'path' => __DATA_ROOT__ . 'file-cache/',
+            'path' => __DATA_ROOT__ . '/file-cache/',
         ],
         // 后台菜单缓存通道
         'admin-menu' => [
