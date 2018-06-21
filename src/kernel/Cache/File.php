@@ -51,10 +51,10 @@ class File implements CacheInterface
             $this->options = &$options;
 
             $this->type = getvalue($options, 'type');
-            $this->root = getvalue($options, 'path', __DATA_ROOT__ . 'file-cache/');
+            $this->root = getvalue($options, 'path', __DATA_ROOT__ . '/file-cache/');
         } else {
             $this->type = $options ?: $this->defaultType;
-            $this->root = __DATA_ROOT__ . 'file-cache/';
+            $this->root = __DATA_ROOT__ . '/file-cache/';
         }
 
         if (empty($this->options['prefix'])) {

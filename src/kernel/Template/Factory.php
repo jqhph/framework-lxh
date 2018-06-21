@@ -68,7 +68,7 @@ class Factory
     protected function setupNamespaces()
     {
         foreach ((array) config('view.namespaces') as $alias => &$paths) {
-            $this->addNamespace($alias, $paths);
+            $this->addNamespace($alias, alias($paths));
         }
     }
 

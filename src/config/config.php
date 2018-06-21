@@ -84,17 +84,17 @@ $config = [
 
     'view' => [
         // 模板文件路径
-        'paths' => 'resource/views',
+        'paths' => '@root/resource/views',
         // 模板版本
         'version' => 'primary',
         // 模板引擎类型，支持 php、blade
         'driver' => 'php',
         // 视图模板路径别名
         'namespaces' => [
-            'admin' => 'kernel/Admin/views',
+            'admin' => '@root/kernel/Admin/views',
         ],
         // blade模板缓存路径，默认'resource/blade-cache'
-        'compiled' => 'resource/blade-cache',
+        'compiled' => '@root/resource/blade-cache',
     ],
 
     // 系统插件使用

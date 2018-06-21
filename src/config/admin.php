@@ -59,8 +59,8 @@ return [
         'disk' => 'admin',
 
         'directory' => [
-            'image' => '@lxh/resource/uploads/images',
-            'file'  => '@lxh/resource/uploads/files',
+            'image' => '@root/resource/uploads/images',
+            'file'  => '@root/resource/uploads/files',
         ],
 
         'host' => '',

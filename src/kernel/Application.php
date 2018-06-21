@@ -59,7 +59,7 @@ class Application
         ob_start();
 
         $this->setup();
-        static::setAlias('@lxh', dirname(__DIR__));
+        static::setAlias('@root', dirname(__DIR__));
     }
 
     /**

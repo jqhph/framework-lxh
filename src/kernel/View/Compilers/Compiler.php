@@ -7,8 +7,6 @@ use Lxh\File\FileManager;
 
 abstract class Compiler
 {
-    protected $root;
-
     /**
      * The Filesystem instance.
      *
@@ -38,9 +36,8 @@ abstract class Compiler
             throw new InvalidArgumentException('Please provide a valid cache path.');
         }
 
-        $this->files = $files;
-        $this->cachePath = $cachePath;
-        $this->root = __DATA_ROOT__;
+        $this->files     = $files;
+        $this->cachePath = alias($cachePath);
     }
 
     /**
@@ -51,7 +48,7 @@ abstract class Compiler
      */
     public function getCompiledPath($path)
     {
-        return $this->root . $this->cachePath.'/'.sha1($path).'.php';
+        return $this->cachePath.'/'.sha1($path).'.php';
     }
 
     /**

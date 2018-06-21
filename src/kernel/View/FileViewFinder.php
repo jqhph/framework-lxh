@@ -54,7 +54,7 @@ class FileViewFinder implements ViewFinderInterface
     public function __construct(FileManager $files, $paths, array $extensions = null)
     {
         $this->files = $files;
-        $this->paths = $paths;
+        $this->paths = alias($paths);
 
         if (isset($extensions)) {
             $this->extensions = $extensions;
@@ -145,7 +145,7 @@ class FileViewFinder implements ViewFinderInterface
         if (strpos($path, '/') === 0 || strpos($path, ':')) {
             return $path;
         }
-        return __ROOT__ . '/' . $path;
+        return $path;
     }
 
     /**

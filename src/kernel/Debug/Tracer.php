@@ -234,7 +234,7 @@ class Tracer
             '性能'          => $this->getProfilesInfos(),
 //            '吞吐率'	    => number_format(1 / $this->getRunTime(), 2) . 'req/s',
             '内存开销'      => number_format((memory_get_usage()) / 1024, 2) . 'kb',
-            '最后执行SQL' 	=> $lastDatabase->toArray(),
+            '最后执行SQL' 	=> $lastDatabase ? $lastDatabase->toArray() : [],
 //            '数据库信息'     => 0 . ' queries ' . 0 . ' writes ' . 0 . ' connected',
             '数据库操作详情' => $this->getDatabaseInfo(),
             '缓存信息'       => ' gets ' . ' writes ' . ' connected',

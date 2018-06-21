@@ -53,11 +53,6 @@ class View
     protected $data = [];
 
     /**
-     * @var string
-     */
-    protected $root = __ROOT__;
-
-    /**
      * 模板路径
      *
      * @var string
@@ -69,8 +64,7 @@ class View
         $this->view = $view;
         $this->data = &$data;
 
-        $p = config('view.paths', 'resource/views');
-        $this->dir = "{$this->root}/{$p}/";
+        $this->dir = alias(config('view.paths', '@root/resource/views'));
     }
 
 
@@ -218,12 +212,18 @@ class View
         throw new InvalidArgumentException("View [$name] not found.");
     }
 
+    /**
+     * 获取绝对路径
+     *
+     * @param $path
+     * @return string
+     */
     protected function normalizePath(&$path)
     {
         if (strpos($path, '/') === 0 || strpos($path, ':')) {
             return $path;
         }
-        return $this->root .'/'. $path;
+        return alias('@root/'. $path);
     }
 
     /**
