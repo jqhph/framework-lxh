@@ -1,6 +1,7 @@
 <?php
 namespace Lxh\Mvc;
 
+use Lxh\Application;
 use Lxh\Exceptions\Exception;
 use Lxh\Exceptions\FindModelException;
 use Lxh\Exceptions\InsertModelException;
@@ -89,7 +90,7 @@ class Model extends Entity
 
         $this->name      = slug($name);
         $this->module    = defined('__MODULESLUG__') ? __MODULESLUG__ : '';
-        $this->container = container();
+        $this->container = Application::$container;
         $this->events    = events();
 
         if (! $this->tableName)

@@ -10,6 +10,7 @@ namespace Lxh\Mvc;
 
 use Lxh\Admin\Admin;
 use Lxh\Admin\Layout\Content;
+use Lxh\Application;
 use Lxh\Config\Config;
 use Lxh\Contracts\Container\Container;
 use Lxh\Events\Dispatcher;
@@ -83,7 +84,7 @@ abstract class Controller
     public function __construct($name = null, Container $container = null, ControllerManager $manager = null)
     {
         $this->name      = $name ?: $this->parseName();
-        $this->container = $container ?: container();
+        $this->container = $container ?: Application::$container;
         $this->manager   = $manager ?: $this->container['controllerManager'];
         $this->request   = request();
         $this->response  = response();

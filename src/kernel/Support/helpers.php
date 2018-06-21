@@ -84,16 +84,6 @@ function config_path($path = null)
 }
 
 /**
- * 获取容器对象
- *
- * @return Container
- */
-function container()
-{
-    return Application::$container;
-}
-
-/**
  * 从容器中获取一个服务
  *
  * @param  string $abstract 服务名称
