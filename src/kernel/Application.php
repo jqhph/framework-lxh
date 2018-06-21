@@ -78,7 +78,6 @@ class Application
         $this->includeConfigs();
         $this->includeHelpers();
 
-        static::$container = container();
         $this->events      = events();
         $this->response    = response();
         $this->request     = request();
