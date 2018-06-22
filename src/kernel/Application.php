@@ -38,11 +38,6 @@ class Application
     public $events;
 
     /**
-     * @var array
-     */
-    protected $commands = [];
-
-    /**
      * 别名
      *
      * @var array
@@ -107,24 +102,17 @@ class Application
      * 注册多个别名
      *
      * @param array $aliases 别名数组
-     *                       <pre>
-     *                       [
-     *                       '@root' => BASE_PATH
-     *                       ......
-     *                       ]
-     *                       </pre>
-     *
      * @throws \InvalidArgumentException
      */
     public static function setAliases(array $aliases)
     {
-        foreach ($aliases as $name => $path) {
+        foreach ($aliases as $name => &$path) {
             self::setAlias($name, $path);
         }
     }
 
     /**
-     * Set alias
+     * 设置路径别名
      *
      * @param string $alias alias
      * @param string $path  path
@@ -170,7 +158,7 @@ class Application
     }
 
     /**
-     * Get alias
+     * 获取别名路径
      *
      * @param string $alias
      *
@@ -200,7 +188,7 @@ class Application
     }
 
     /**
-     * Is alias exist ?
+     * 检测别名是否存在
      *
      * @param string $alias
      *
@@ -209,7 +197,6 @@ class Application
      */
     public static function hasAlias($alias)
     {
-        // empty OR not an alias
         if (!$alias || $alias[0] !== '@') {
             return false;
         }
@@ -268,8 +255,8 @@ class Application
      */
     protected function addListeners()
     {
-        foreach (config('events') as $event => & $listeners) {
-            foreach ((array) $listeners as & $listener) {
+        foreach (config('events') as $event => &$listeners) {
+            foreach ((array) $listeners as &$listener) {
                 $this->events->listen($event, $listener);
             }
         }
@@ -383,15 +370,6 @@ class Application
         return array_merge($routers, (array) include $configPath);
     }
 
-    /**
-     * @param array $commands
-     * @return $this
-     */
-    public function addCommands(array $commands)
-    {
-        $this->commands = array_merge($this->commands, $commands);
-        return $this;
-    }
     /**
      * 执行命令
      *

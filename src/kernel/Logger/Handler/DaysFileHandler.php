@@ -61,7 +61,7 @@ class DaysFileHandler extends \Monolog\Handler\StreamHandler
 		if (strpos($path, '/') === 0 || strpos($path, ':')) {
 			return $path;
 		}
-		return alias('@root/'.$path);
+		return alias($path);
 	}
 
 	/**

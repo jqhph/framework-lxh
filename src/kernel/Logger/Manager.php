@@ -38,7 +38,7 @@ class Manager extends Factory
      */
 	protected $defaultExceptionConfig = [
 		'channel' => 'exception',
-		'path'    => 'data/logs/exception/record.log',
+		'path'    => '@root/../data/logs/exception/record.log',
 		'handlers' => [
 			[
 				'handler' 	=> 'DaysFileHandler',
@@ -52,15 +52,12 @@ class Manager extends Factory
 
 	public function __construct(Container $container)
 	{
-		$this->container = $container;
-
+		$this->container     = $container;
 		$this->requestMethod = getvalue($_SERVER, 'REQUEST_METHOD', 'CLI');
-
-		$this->requestUri = getvalue($_SERVER, 'REQUEST_URI');
+		$this->requestUri    = getvalue($_SERVER, 'REQUEST_URI');
 	}
 
 	/**
-	 * Create a logger with channel name
 	 *
 	 * @param  string $name
 	 * @return Logger
@@ -98,7 +95,7 @@ class Manager extends Factory
 	 */
 	protected function pushHandlers(Logger $channel, array $config)
 	{
-		$defaultConfig = & $this->defaultExceptionConfig;
+		$defaultConfig = &$this->defaultExceptionConfig;
 		//日志路径
 		$path				= getvalue($config, 'path', $defaultConfig['path']);
 		//日志handler处理器信息
@@ -167,7 +164,7 @@ class Manager extends Factory
 	 */
 	public function error($msg, $extra = [])
 	{
-		$extra[$this->requestMethod] = & $this->requestUri;
+		$extra[$this->requestMethod] = &$this->requestUri;
 		return $this->get($this->channelName)->error($msg, $extra);
 	}
 
@@ -178,7 +175,7 @@ class Manager extends Factory
 
 	public function warning($msg, $extra = [])
 	{
-		$extra[$this->requestMethod] = & $this->requestUri;
+		$extra[$this->requestMethod] = &$this->requestUri;
 		return $this->get($this->channelName)->warning($msg, $extra);
 	}
 
@@ -189,7 +186,7 @@ class Manager extends Factory
 
 	public function notice($msg, $extra = [])
 	{
-		$extra[$this->requestMethod] = & $this->requestUri;
+		$extra[$this->requestMethod] = &$this->requestUri;
 		return $this->get($this->channelName)->warning($msg, $extra);
 	}
 
@@ -200,7 +197,7 @@ class Manager extends Factory
 
 	public function info($msg, $extra = [])
 	{
-		$extra[$this->requestMethod] = & $this->requestUri;
+		$extra[$this->requestMethod] = &$this->requestUri;
 		return $this->get($this->channelName)->info($msg, $extra);
 	}
 
@@ -211,7 +208,7 @@ class Manager extends Factory
 
 	public function critica($msg, $extra = [])
 	{
-		$extra[$this->requestMethod] = & $this->requestUri;
+		$extra[$this->requestMethod] = &$this->requestUri;
 		return $this->get($this->channelName)->critica($msg, $extra);
 	}
 
@@ -222,7 +219,7 @@ class Manager extends Factory
 
 	public function emergency($msg, $extra = [])
 	{
-		$extra[$this->requestMethod] = & $this->requestUri;
+		$extra[$this->requestMethod] = &$this->requestUri;
 		return $this->get($this->channelName)->emergency($msg, $extra);
 	}
 
@@ -233,7 +230,7 @@ class Manager extends Factory
 
 	public function alert($msg, $extra = [])
 	{
-		$extra[$this->requestMethod] = & $this->requestUri;
+		$extra[$this->requestMethod] = &$this->requestUri;
 		return $this->get($this->channelName)->alert($msg, $extra);
 	}
 

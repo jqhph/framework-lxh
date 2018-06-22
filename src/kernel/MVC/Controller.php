@@ -131,7 +131,7 @@ abstract class Controller
      */
     protected function admin()
     {
-        return $this->container['admin'];
+        return $this->container->admin;
     }
 
     /**
@@ -139,7 +139,7 @@ abstract class Controller
      */
     protected function content()
     {
-        return $this->container['admin']->content();
+        return $this->container->admin->content();
     }
 
     /**
@@ -187,7 +187,7 @@ abstract class Controller
      */
     protected function model($name = null)
     {
-        return $this->container['modelFactory']->create($name);
+        return $this->container->modelFactory->create($name);
     }
 
     /**
@@ -214,8 +214,7 @@ abstract class Controller
      */
     protected function middleware($middleware)
     {
-        $this->currentMiddleware = $middleware;
-
+        $this->currentMiddleware       = $middleware;
         $this->middleware[$middleware] = [];
 
         return $this;
@@ -276,7 +275,7 @@ abstract class Controller
      */
     protected function validator(array $input = [], array $rules = [])
     {
-        $v = $this->container['validator']->fill($input);
+        $v = $this->container->validator->fill($input);
 
         if ($rules) {
             $v->rules($rules);

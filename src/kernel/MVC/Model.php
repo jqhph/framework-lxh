@@ -5,11 +5,9 @@ use Lxh\Application;
 use Lxh\Exceptions\Exception;
 use Lxh\Exceptions\FindModelException;
 use Lxh\Exceptions\InsertModelException;
-use Lxh\Exceptions\InternalServerError;
 use Lxh\Contracts\Container\Container;
 use Lxh\Exceptions\InvalidArgumentException;
 use Lxh\Helper\Entity;
-use Lxh\Helper\Util;
 use Lxh\ORM\Query;
 use Lxh\Contracts\Events\Dispatcher;
 

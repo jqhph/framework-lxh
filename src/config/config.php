@@ -214,7 +214,7 @@ $config = [
 $config['logger'] = [
     // 默认日志通道
     'primary' => [
-        'path'     => '../data/logs/record.log',
+        'path'     => '@root/../data/logs/record.log',
         'handlers' => [
             [
                 'handler' 	=> Lxh\Logger\Handler\DaysFileHandler::class,
