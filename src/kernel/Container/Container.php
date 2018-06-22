@@ -1,11 +1,9 @@
 <?php
+
 namespace Lxh\Container;
 
 use Lxh\Exceptions\BindingResolutionException;
-use Lxh\Exceptions\InternalServerError;
 use Lxh\Contracts\Container\Container AS ContractsContainer;
-use Lxh\Helper\Util;
-use Lxh\Support\Arr;
 use ArrayAccess;
 use Closure;
 

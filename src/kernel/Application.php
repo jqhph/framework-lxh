@@ -54,7 +54,11 @@ class Application
         ob_start();
 
         $this->setup();
-        static::setAlias('@root', dirname(__DIR__));
+
+        static::setAlias('@root', __ROOT__);
+        static::setAlias('@app', __APP__);
+        static::setAlias('@config', __CONFIG__);
+        static::setAlias('@data', __DATA_ROOT__);
     }
 
     /**

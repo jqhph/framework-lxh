@@ -60,6 +60,7 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         'D' => 
         array (
             'Dotenv\\' => 7,
+            'Doctrine\\Common\\Annotations\\' => 28,
         ),
     );
 
@@ -157,6 +158,10 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         array (
             0 => __DIR__ . '/..' . '/vlucas/phpdotenv/src',
         ),
+        'Doctrine\\Common\\Annotations\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations',
+        ),
     );
 
     public static $prefixesPsr0 = array (
@@ -167,12 +172,39 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
                 0 => __DIR__ . '/..' . '/erusev/parsedown',
             ),
         ),
+        'D' => 
+        array (
+            'Doctrine\\Common\\Lexer\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/doctrine/lexer/lib',
+            ),
+        ),
     );
 
     public static $classMap = array (
         'ArithmeticError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/ArithmeticError.php',
         'AssertionError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/AssertionError.php',
         'DivisionByZeroError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/DivisionByZeroError.php',
+        'Doctrine\\Common\\Annotations\\Annotation' => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations/Annotation.php',
+        'Doctrine\\Common\\Annotations\\AnnotationException' => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations/AnnotationException.php',
+        'Doctrine\\Common\\Annotations\\AnnotationReader' => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations/AnnotationReader.php',
+        'Doctrine\\Common\\Annotations\\AnnotationRegistry' => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations/AnnotationRegistry.php',
+        'Doctrine\\Common\\Annotations\\Annotation\\Attribute' => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations/Annotation/Attribute.php',
+        'Doctrine\\Common\\Annotations\\Annotation\\Attributes' => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations/Annotation/Attributes.php',
+        'Doctrine\\Common\\Annotations\\Annotation\\Enum' => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations/Annotation/Enum.php',
+        'Doctrine\\Common\\Annotations\\Annotation\\IgnoreAnnotation' => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations/Annotation/IgnoreAnnotation.php',
+        'Doctrine\\Common\\Annotations\\Annotation\\Required' => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations/Annotation/Required.php',
+        'Doctrine\\Common\\Annotations\\Annotation\\Target' => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations/Annotation/Target.php',
+        'Doctrine\\Common\\Annotations\\CachedReader' => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations/CachedReader.php',
+        'Doctrine\\Common\\Annotations\\DocLexer' => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations/DocLexer.php',
+        'Doctrine\\Common\\Annotations\\DocParser' => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations/DocParser.php',
+        'Doctrine\\Common\\Annotations\\FileCacheReader' => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations/FileCacheReader.php',
+        'Doctrine\\Common\\Annotations\\IndexedReader' => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations/IndexedReader.php',
+        'Doctrine\\Common\\Annotations\\PhpParser' => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations/PhpParser.php',
+        'Doctrine\\Common\\Annotations\\Reader' => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations/Reader.php',
+        'Doctrine\\Common\\Annotations\\SimpleAnnotationReader' => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations/SimpleAnnotationReader.php',
+        'Doctrine\\Common\\Annotations\\TokenParser' => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations/TokenParser.php',
+        'Doctrine\\Common\\Lexer\\AbstractLexer' => __DIR__ . '/..' . '/doctrine/lexer/lib/Doctrine/Common/Lexer/AbstractLexer.php',
         'Dotenv\\Dotenv' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Dotenv.php',
         'Dotenv\\Exception\\ExceptionInterface' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Exception/ExceptionInterface.php',
         'Dotenv\\Exception\\InvalidCallbackException' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Exception/InvalidCallbackException.php',
@@ -373,10 +405,6 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         'Lxh\\Cache\\Exceptions\\InvalidDriverException' => __DIR__ . '/../..' . '/kernel/Cache/Exceptions/InvalidDriverCache.php',
         'Lxh\\Cache\\Factory' => __DIR__ . '/../..' . '/kernel/Cache/Factory.php',
         'Lxh\\Cache\\File' => __DIR__ . '/../..' . '/kernel/Cache/File.php',
-        'Lxh\\Cache\\ItemPool' => __DIR__ . '/../..' . '/kernel/Cache/ItemPool.php',
-        'Lxh\\Cache\\Items\\ArrayItem' => __DIR__ . '/../..' . '/kernel/Cache/Items/ArrayItem.php',
-        'Lxh\\Cache\\Items\\Item' => __DIR__ . '/../..' . '/kernel/Cache/Items/Item.php',
-        'Lxh\\Cache\\Items\\StringItem' => __DIR__ . '/../..' . '/kernel/Cache/Items/StringItem.php',
         'Lxh\\Cache\\Memcache' => __DIR__ . '/../..' . '/kernel/Cache/Memcache.php',
         'Lxh\\Cache\\Redis' => __DIR__ . '/../..' . '/kernel/Cache/Redis.php',
         'Lxh\\Command\\MakeControllerCommand' => __DIR__ . '/../..' . '/application/Command/MakeControllerCommand.php',
@@ -425,11 +453,11 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         'Lxh\\Crontab\\Handler' => __DIR__ . '/../..' . '/kernel/Crontab/Handler.php',
         'Lxh\\Crontab\\Output' => __DIR__ . '/../..' . '/kernel/Crontab/Output.php',
         'Lxh\\Crontab\\Test' => __DIR__ . '/../..' . '/application/Crontab/Test.php',
+        'Lxh\\Database\\Events\\Database' => __DIR__ . '/../..' . '/kernel/Database/Events/Database.php',
         'Lxh\\Debug\\Code' => __DIR__ . '/../..' . '/kernel/Debug/Code.php',
-        'Lxh\\Debug\\Data\\Database' => __DIR__ . '/../..' . '/kernel/Debug/Data/Database.php',
-        'Lxh\\Debug\\Data\\Record' => __DIR__ . '/../..' . '/kernel/Debug/Data/Record.php',
         'Lxh\\Debug\\Error' => __DIR__ . '/../..' . '/kernel/Debug/Error.php',
-        'Lxh\\Debug\\Track' => __DIR__ . '/../..' . '/kernel/Debug/Track.php',
+        'Lxh\\Debug\\Records\\Database' => __DIR__ . '/../..' . '/kernel/Debug/Records/Database.php',
+        'Lxh\\Debug\\Tracer' => __DIR__ . '/../..' . '/kernel/Debug/Tracer.php',
         'Lxh\\Events\\Dispatcher' => __DIR__ . '/../..' . '/kernel/Events/Dispatcher.php',
         'Lxh\\Exceptions\\BadRequest' => __DIR__ . '/../..' . '/kernel/Exceptions/BadRequest.php',
         'Lxh\\Exceptions\\BindingResolutionException' => __DIR__ . '/../..' . '/kernel/Exceptions/BindingResolutionException.php',
@@ -478,10 +506,6 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         'Lxh\\Logger\\Formatter\\TextFormatter' => __DIR__ . '/../..' . '/kernel/Logger/Formatter/TextFormatter.php',
         'Lxh\\Logger\\Handler\\DaysFileHandler' => __DIR__ . '/../..' . '/kernel/Logger/Handler/DaysFileHandler.php',
         'Lxh\\Logger\\Manager' => __DIR__ . '/../..' . '/kernel/Logger/Manager.php',
-        'Lxh\\Mvc\\Controller' => __DIR__ . '/../..' . '/kernel/MVC/Controller.php',
-        'Lxh\\Mvc\\ControllerManager' => __DIR__ . '/../..' . '/kernel/MVC/ControllerManager.php',
-        'Lxh\\Mvc\\Model' => __DIR__ . '/../..' . '/kernel/MVC/Model.php',
-        'Lxh\\Mvc\\ModelFactory' => __DIR__ . '/../..' . '/kernel/MVC/ModelFactory.php',
         'Lxh\\Mail\\Events\\MessageSending' => __DIR__ . '/../..' . '/kernel/Mail/Events/MessageSending.php',
         'Lxh\\Mail\\Events\\MessageSent' => __DIR__ . '/../..' . '/kernel/Mail/Events/MessageSent.php',
         'Lxh\\Mail\\MailServiceProvider' => __DIR__ . '/../..' . '/kernel/Mail/MailServiceProvider.php',
@@ -548,6 +572,10 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         'Lxh\\Migration\\Exceptions\\UnknownColumnException' => __DIR__ . '/../..' . '/kernel/Migration/Exceptions/UnknownColumnException.php',
         'Lxh\\Migration\\Migrator' => __DIR__ . '/../..' . '/kernel/Migration/Migrator.php',
         'Lxh\\Migration\\Seeder' => __DIR__ . '/../..' . '/kernel/Migration/Seeder.php',
+        'Lxh\\Mvc\\Controller' => __DIR__ . '/../..' . '/kernel/MVC/Controller.php',
+        'Lxh\\Mvc\\ControllerManager' => __DIR__ . '/../..' . '/kernel/MVC/ControllerManager.php',
+        'Lxh\\Mvc\\Model' => __DIR__ . '/../..' . '/kernel/MVC/Model.php',
+        'Lxh\\Mvc\\ModelFactory' => __DIR__ . '/../..' . '/kernel/MVC/ModelFactory.php',
         'Lxh\\ORM\\Connect\\Mongo\\Builder' => __DIR__ . '/../..' . '/kernel/ORM/Connect/Mongo/Builder.php',
         'Lxh\\ORM\\Connect\\Mongo\\Connection' => __DIR__ . '/../..' . '/kernel/ORM/Connect/Mongo/Connection.php',
         'Lxh\\ORM\\Connect\\Mongo\\Query' => __DIR__ . '/../..' . '/kernel/ORM/Connect/Mongo/Query.php',
@@ -594,6 +622,7 @@ class ComposerStaticInit6a20833d46c217a8235815b77adc3e9c
         'Lxh\\Support\\Collection' => __DIR__ . '/../..' . '/kernel/Support/Collection.php',
         'Lxh\\Support\\Composer' => __DIR__ . '/../..' . '/kernel/Support/Composer.php',
         'Lxh\\Support\\Fluent' => __DIR__ . '/../..' . '/kernel/Support/Fluent.php',
+        'Lxh\\Support\\HigherOrderCollectionProxy' => __DIR__ . '/../..' . '/kernel/Support/HigherOrderCollectionProxy.php',
         'Lxh\\Support\\HigherOrderTapProxy' => __DIR__ . '/../..' . '/kernel/Support/HigherOrderTapProxy.php',
         'Lxh\\Support\\HtmlString' => __DIR__ . '/../..' . '/kernel/Support/HtmlString.php',
         'Lxh\\Support\\Manager' => __DIR__ . '/../..' . '/kernel/Support/Manager.php',

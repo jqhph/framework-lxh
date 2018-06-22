@@ -227,7 +227,7 @@ function files()
 /**
  * 大写字母为小写中划线
  *
- * @param $name
+ * @param string $name
  * @return string
  */
 function slug($name, $symbol = '-')

@@ -11,19 +11,10 @@ namespace Lxh\Mvc;
 use Lxh\Admin\Admin;
 use Lxh\Admin\Layout\Content;
 use Lxh\Application;
-use Lxh\Config\Config;
 use Lxh\Contracts\Container\Container;
-use Lxh\Events\Dispatcher;
-use Lxh\Helper\Util;
 use Lxh\Helper\Valitron\Validator;
 use Lxh\Http\Request;
 use Lxh\Http\Response;
-use Lxh\Mvc\ControllerManager;
-use Lxh\Mvc\Model;
-use Lxh\Template\View;
-use Lxh\View\Factory;
-use Lxh\Session\Store as Session;
-use Lxh\Cookie\Store as Cookie;
 
 abstract class Controller
 {
@@ -102,7 +93,7 @@ abstract class Controller
      */
     protected function parseName()
     {
-        $names = explode('\\', __CLASS__);
+        $names = explode('\\', static::class);
 
         return end($names);
     }

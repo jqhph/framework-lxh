@@ -24,7 +24,7 @@ class ComposerAutoloaderInit6a20833d46c217a8235815b77adc3e9c
         spl_autoload_unregister(array('ComposerAutoloaderInit6a20833d46c217a8235815b77adc3e9c', 'loadClassLoader'));
 
         $includePaths = require __DIR__ . '/include_paths.php';
-        array_push($includePaths, get_include_path());
+        $includePaths[] = get_include_path();
         set_include_path(implode(PATH_SEPARATOR, $includePaths));
 
         $useStaticLoader = PHP_VERSION_ID >= 50600 && !defined('HHVM_VERSION') && (!function_exists('zend_loader_file_encoded') || !zend_loader_file_encoded());
