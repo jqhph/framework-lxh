@@ -268,10 +268,6 @@ __then__(function () {
         this.result  = {header: {}, data: {}, query: {}, url: '', method: '', version: ''};
         this.header  = '';
         this.data    = '';
-        this.method  = '';  // 请求方法
-        this.url     = '';  // url
-        this.query   = '';  // query请求参数
-        this.version = '';
         this.sp      = osp; // 协议分隔符
 
         if (!content) {
