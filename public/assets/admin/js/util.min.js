@@ -22,11 +22,10 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 
     // 数组去重
     o.array_unique = function ($this) {
-        var res = [], json = {}, i;
+        var res = [], i;
         for (i = 0; i < $this.length; i++) {
-            if (!json[$this[i]]) {
+            if ($this[i]) {
                 res.push($this[i]);
-                json[$this[i]] = 1;
             }
         }
         return res;
