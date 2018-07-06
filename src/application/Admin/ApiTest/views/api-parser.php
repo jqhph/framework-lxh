@@ -44,11 +44,7 @@
         $form.submit.click(function () {
             // 缓存defaultParams
             cache.set(cacheKey, defaultParams);
-            layer.msg('缓存成功', {
-                offset: 't',
-                anim: 3,
-                icon: 1
-            });
+            notify_success('缓存成功');
             return false;
         });
 
@@ -116,12 +112,7 @@
             try {
                 url = decodeURI(decodeURIComponent(url));
             } catch(e) {
-                layer.msg('URL数据格式错误，解析失败！请检查复制信息是否完整。', {
-                    offset: 't',
-                    anim: 3,
-                    icon: 2,
-                    time: 4500
-                });
+                notify_error('URL数据格式错误，解析失败！请检查复制信息是否完整。', 4500);
                 return;
             }
 

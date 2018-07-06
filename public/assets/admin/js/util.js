@@ -43,6 +43,11 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
         return res;
     };
 
+    o.trim = function (x) {
+        return x.replace(/^\s+|\s+$/gm,'');
+    };
+
+
     // 添加初始化完成后执行的动作
     o.lxhActions = [];
     o.__then__ = function (call) {

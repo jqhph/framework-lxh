@@ -82,6 +82,7 @@ function setup_admin_content_global_js_var()
     w.cssLibArr = (top.cssLibArr = []);
     w.array_unique = top.array_unique;
     w.array_remove = top.array_remove;
+    w.trim = top.trim;
     w.loading = top.loading;
     w.NProgress = top.NProgress;
     w.layer = window.layer || top.layer;

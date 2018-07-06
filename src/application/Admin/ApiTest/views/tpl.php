@@ -1,10 +1,10 @@
 <script type="text/html" id="kv-input-tpl">
-    <div class="k-v-input">
+    <div class="k-v-input {class}">
         <div class="form-group  col-md-2">
             <div class="col-sm-12">
                 <div class="text"></div>
                 <div class="input-group input-group-sm" style="width:100%">
-                    <input style="color:{color};" type="text" name="{key}k" value="{key}" class="form-control input-sm ikey" placeholder="KEY">
+                    <input style="{style}" type="text" name="{key}k" value="{key}" class="form-control input-sm ikey" placeholder="KEY">
                 </div>
             </div>
         </div>
@@ -21,7 +21,7 @@
 </script>
 
 <script type="text/html" id="auto-input-tpl">
-    <div class="box-body fields-group">
+    <div class="box-body fields-group ">
         <div class="auto-input-container">
             <div class="form-group  col-md-12">
                 <div class="col-sm-12">
@@ -47,12 +47,16 @@
 <script type="text/html" id="parse-table-tpl">
     <table class="table table-bordered">
         @if {title}
-        <tr><td colspan="{colspan}" ><b class="red">{title}</b></td></tr>
+        <tr><td colspan="{@compare checkbox ?? 3 :: 2}" ><b class="blue">{title}</b></td></tr>
         @endif
         @foreach {list} {k} {v}
         <tr class="{class}">
             @if {checkbox}
-            <td><input type="checkbox"></td>
+            <td><input type="checkbox"
+                @if {checkeds[k]}
+                   checked="checked"
+                @endif
+                ></td>
             @endif
             <td>{k}</td><td>{v}</td>
         </tr>
