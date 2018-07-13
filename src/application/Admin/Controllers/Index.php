@@ -10,6 +10,10 @@ namespace Lxh\Admin\Controllers;
 use Lxh\Admin\Widgets\Box;
 use Lxh\Admin\Widgets\Table;
 use Lxh\Admin\Layout\Row;
+use Lxh\Coroutine\Scheduler;
+use Lxh\Coroutine\SystemCall;
+use Lxh\Coroutine\Task;
+use Lxh\Coroutine\Wrapper;
 use Lxh\Mvc\Controller;
 
 class Index extends Controller
@@ -95,7 +99,93 @@ class Index extends Controller
 
     public function actionTest(array $params)
     {
+        $scheduler = new Scheduler();
+
+        echo '<pre>';
+
+        $scheduler->task($this->task());
+
+        $scheduler->run();
+
         return $params;
+    }
+
+    function childTask() {
+        $tid = (yield $this->getTaskId());
+        while (true) {
+            echo "Child task $tid still alive!\n";
+            yield;
+        }
+    }
+
+    function echoTimes($msg, $max) {
+        return function () use ($msg, $max) {
+            for ($i = 1; $i <= $max; ++$i) {
+                echo "$msg iteration $i\n";
+                yield;
+            }
+        };
+    }
+
+    function task() {
+        yield new Wrapper($this->echoTimes('foo', 10)); // print foo ten times
+        echo "---\n";
+        yield new Wrapper($this->echoTimes('bar', 5)); // print bar five times
+        yield; // force it to be a coroutine
+    }
+
+
+    function task4() {
+        $tid = (yield $this->getTaskId());
+        $childTid = (yield $this->newTask($this->childTask()));
+
+        for ($i = 1; $i <= 6; ++$i) {
+            echo "Parent task $tid iteration $i.\n";
+            yield;
+
+            if ($i == 3) yield $this->killTask($childTid);
+        }
+    }
+
+    function newTask(\Generator $coroutine) {
+        return new SystemCall(
+            function(Task $task, Scheduler $scheduler) use ($coroutine) {
+                $task->setValue($scheduler->task($coroutine));
+                $scheduler->attach($task);
+            }
+        );
+    }
+
+    function killTask($tid) {
+        return new SystemCall(
+            function (Task $task, Scheduler $scheduler) use ($tid) {
+                $task->setValue($scheduler->kill($tid));
+                $scheduler->attach($task);
+            }
+        );
+    }
+
+    function getTaskId() {
+        return new SystemCall(function(Task $task, Scheduler $scheduler) {
+            $task->setValue($task->getId());
+            $scheduler->attach($task);
+        });
+    }
+
+    function task1() {
+        $tid = (yield $this->getTaskId());
+        for ($i = 1; $i <= 10; ++$i) {
+            echo "This is task [$tid] iteration $i.\n";
+            yield;
+        }
+    }
+
+    function task2() {
+        $tid = (yield $this->getTaskId());
+        for ($i = 1; $i <= 5; ++$i) {
+            echo "This is task [$tid] iteration $i.\n";
+            yield;
+        }
     }
 
 }
