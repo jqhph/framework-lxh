@@ -4,6 +4,7 @@ namespace Lxh\Coroutine;
 
 use Generator;
 use SplQueue;
+use Exception;
 
 /**
  * 协程调度器
@@ -51,7 +52,7 @@ class Scheduler
         $task = new Task($tid, $coroutine);
 
         $this->taskMap[$tid] = $task;
-        $this->attach($task);
+        $this->push($task);
 
         return $tid;
     }
@@ -89,7 +90,7 @@ class Scheduler
      * @param Task $task
      * @return $this
      */
-    public function attach(Task $task)
+    public function push(Task $task)
     {
         $this->taskQueue->push($task);
         return $this;
@@ -107,14 +108,19 @@ class Scheduler
 
             // 如果是系统调用器
             if ($result instanceof SystemCall) {
-                $result($task, $this);
+                try {
+                    $result($task, $this);
+                    $this->push($task);
+                } catch (Exception $e) {
+                    $task->throwException($e);
+                }
                 continue;
             }
 
             if ($task->isFinished()) {
                 unset($this->taskMap[$task->getId()]);
             } else {
-                $this->attach($task);
+                $this->push($task);
             }
         }
     }

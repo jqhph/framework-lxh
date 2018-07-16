@@ -2,9 +2,18 @@
 
 namespace Lxh\Coroutine;
 
+/**
+ * 系统调用类
+ *
+ * Class SystemCall
+ * @package Lxh\Coroutine
+ */
 class SystemCall
 {
     /**
+     * 如果在此回调函数内抛出异常，
+     * 需要在Scheduler::run方法外才能捕获得到
+     *
      * @var callable
      */
     protected $callback;
@@ -15,7 +24,7 @@ class SystemCall
     }
 
     /**
-     * 调用系统调用
+     * 执行系统调用
      *
      * @param Task $task
      * @param Scheduler $scheduler

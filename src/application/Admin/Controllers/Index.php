@@ -10,11 +10,17 @@ namespace Lxh\Admin\Controllers;
 use Lxh\Admin\Widgets\Box;
 use Lxh\Admin\Widgets\Table;
 use Lxh\Admin\Layout\Row;
+use Lxh\Application;
 use Lxh\Coroutine\Scheduler;
 use Lxh\Coroutine\SystemCall;
 use Lxh\Coroutine\Task;
-use Lxh\Coroutine\Wrapper;
+use function Lxh\Coroutine\task;
+use function Lxh\Coroutine\value;
+use function Lxh\Coroutine\kill;
+use function Lxh\Coroutine\id;
 use Lxh\Mvc\Controller;
+use Overtrue\EasySms\EasySms;
+use Overtrue\EasySms\Exceptions\NoGatewayAvailableException;
 
 class Index extends Controller
 {
@@ -99,19 +105,38 @@ class Index extends Controller
 
     public function actionTest(array $params)
     {
-        $scheduler = new Scheduler();
+        try {
+            $scheduler = new Scheduler();
 
-        echo '<pre>';
+            echo '<pre>';
 
-        $scheduler->task($this->task());
+            require Application::getAlias('@root/application/Coroutine/helpers.php');
 
-        $scheduler->run();
+            $scheduler->task(
+                $this->task4()
+            );
 
-        return $params;
+//            $scheduler->task(
+//                $this->task()
+//            );
+
+//            $scheduler->task(
+//                $this->task()
+//            );
+
+
+            $scheduler->run();
+
+            return $params;
+        } catch(\Exception $e) {
+            var_dump($e->getMessage());
+        }
+
+
     }
 
     function childTask() {
-        $tid = (yield $this->getTaskId());
+        $tid = (yield id());
         while (true) {
             echo "Child task $tid still alive!\n";
             yield;
@@ -119,61 +144,48 @@ class Index extends Controller
     }
 
     function echoTimes($msg, $max) {
-        return function () use ($msg, $max) {
-            for ($i = 1; $i <= $max; ++$i) {
-                echo "$msg iteration $i\n";
-                yield;
-            }
-        };
+        $tid = (yield id());
+        for ($i = 1; $i <= $max; ++$i) {
+            echo "[$tid]$msg iteration $i\n";
+            yield;
+        }
+
+        yield \Lxh\Coroutine\value("[$tid][$msg - $max]");
     }
 
     function task() {
-        yield new Wrapper($this->echoTimes('foo', 10)); // print foo ten times
+        $ret = yield $this->echoTimes('foo', 10);
+
+        var_dump($ret);
+
         echo "---\n";
-        yield new Wrapper($this->echoTimes('bar', 5)); // print bar five times
-        yield; // force it to be a coroutine
+        yield $this->echoTimes('bar', 5);
+
+        yield; // force it to b e a coroutine
     }
 
 
     function task4() {
-        $tid = (yield $this->getTaskId());
-        $childTid = (yield $this->newTask($this->childTask()));
+        try {
+            $tid = (yield id());
+            $childTid = (yield task($this->childTask()));
+            for ($i = 1; $i <= 6; ++$i) {
+                echo "Parent task $tid iteration $i.\n";
+                yield;
 
-        for ($i = 1; $i <= 6; ++$i) {
-            echo "Parent task $tid iteration $i.\n";
-            yield;
-
-            if ($i == 3) yield $this->killTask($childTid);
+                if ($i == 3) {
+                    yield kill(99);
+                }
+            }
+        } catch (\Exception $e) {
+            ddd(123,$e->getMessage());
         }
+
     }
 
-    function newTask(\Generator $coroutine) {
-        return new SystemCall(
-            function(Task $task, Scheduler $scheduler) use ($coroutine) {
-                $task->setValue($scheduler->task($coroutine));
-                $scheduler->attach($task);
-            }
-        );
-    }
-
-    function killTask($tid) {
-        return new SystemCall(
-            function (Task $task, Scheduler $scheduler) use ($tid) {
-                $task->setValue($scheduler->kill($tid));
-                $scheduler->attach($task);
-            }
-        );
-    }
-
-    function getTaskId() {
-        return new SystemCall(function(Task $task, Scheduler $scheduler) {
-            $task->setValue($task->getId());
-            $scheduler->attach($task);
-        });
-    }
 
     function task1() {
-        $tid = (yield $this->getTaskId());
+        $tid = (yield id());
         for ($i = 1; $i <= 10; ++$i) {
             echo "This is task [$tid] iteration $i.\n";
             yield;
@@ -181,7 +193,7 @@ class Index extends Controller
     }
 
     function task2() {
-        $tid = (yield $this->getTaskId());
+        $tid = (yield id());
         for ($i = 1; $i <= 5; ++$i) {
             echo "This is task [$tid] iteration $i.\n";
             yield;

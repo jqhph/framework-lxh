@@ -4,6 +4,7 @@ namespace Lxh\Coroutine;
 
 use Generator;
 use SplStack;
+use Exception;
 
 /**
  * 协程任务
@@ -25,7 +26,7 @@ class Task
      *
      * @var Generator
      */
-    protected $coroutine;
+    protected $co;
 
     /**
      * 发送到下次恢复的值
@@ -33,6 +34,11 @@ class Task
      * @var mixed
      */
     protected $value;
+
+    /**
+     * @var Exception
+     */
+    protected $exception;
 
     /**
      * 是否是第一次执行yield
@@ -43,8 +49,8 @@ class Task
 
     public function __construct($id, Generator $coroutine)
     {
-        $this->id        = $id;
-        $this->coroutine = $this->stackedCoroutine($coroutine);
+        $this->id = $id;
+        $this->co = $this->stackedCoroutine($coroutine);
     }
 
     /**
@@ -70,6 +76,26 @@ class Task
     }
 
     /**
+     * @param Exception $e
+     * @return $this
+     */
+    public function setException(Exception $e)
+    {
+        $this->exception = $e;
+        return $this;
+    }
+
+    /**
+     * 抛出异常
+     *
+     * @param Exception $e
+     */
+    public function throwException(Exception $e)
+    {
+        return $this->co->throw($e);
+    }
+
+    /**
      * 协程栈
      *
      * @param Generator $coroutine
@@ -77,28 +103,54 @@ class Task
      */
     protected function stackedCoroutine(Generator $coroutine) {
         $stack = new SplStack;
+        $exception = null;
 
         for (;;) {
-            $value = $coroutine->current();
+            try {
+                if ($exception) {
+                    $coroutine->throw($exception);
+                    $exception = null;
+                    continue;
+                }
 
-            if ($value instanceof Generator) {
-                $stack->push($coroutine);
-                $coroutine = $value;
-                continue;
-            }
+                $value = $coroutine->current();
 
-            $isCoroutineWrapper = $value instanceof Wrapper;
-            if (!$coroutine->valid() || $isCoroutineWrapper) {
+                if ($value instanceof Generator) {
+                    $stack->push($coroutine);
+                    $coroutine = $value;
+                    continue;
+                }
+
+                // 协程返回值代理
+                $isReturnValue = $value instanceof Value;
+                if (!$coroutine->valid() || $isReturnValue) {
+                    if ($stack->isEmpty()) {
+                        return;
+                    }
+
+                    $coroutine = $stack->pop();
+                    // 发送协程返回值
+                    $coroutine->send($isReturnValue ? $value->get() : null);
+                    continue;
+                }
+
+                try {
+                    // 获取协程发送值
+                    $sendValue = (yield $coroutine->key() => $value);
+                } catch (Exception $e) {
+                    $coroutine->throw($e);
+                    continue;
+                }
+
+                $coroutine->send($sendValue);
+            } catch (Exception $e) {
                 if ($stack->isEmpty()) {
-                    return;
+                    throw $e;
                 }
 
                 $coroutine = $stack->pop();
-                $coroutine->send($isCoroutineWrapper ? $value->getValue() : null);
-                continue;
+                $exception = $e;
             }
-
-            $coroutine->send(yield $coroutine->key() => $value);
         }
     }
 
@@ -111,9 +163,15 @@ class Task
     {
         if ($this->beforeFirstYield) {
             $this->beforeFirstYield = false;
-            return $this->coroutine->current();
+            return $this->co->current();
         }
-        $result = $this->coroutine->send($this->value);
+        if ($this->exception) {
+            $result = $this->co->throw($this->exception);
+            $this->exception = null;
+            return $result;
+        }
+
+        $result = $this->co->send($this->value);
         $this->value = null;
         return $result;
 
@@ -126,7 +184,7 @@ class Task
      */
     public function isFinished()
     {
-        return !$this->coroutine->valid();
+        return !$this->co->valid();
     }
 
 }
