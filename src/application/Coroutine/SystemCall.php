@@ -13,6 +13,7 @@ class SystemCall
     /**
      * 如果在此回调函数内抛出异常，
      * 需要在Scheduler::run方法外才能捕获得到
+     * 返回false会中断协程任务
      *
      * @var callable
      */
@@ -25,18 +26,15 @@ class SystemCall
 
     /**
      * 执行系统调用
+     * 返回false会中断协程任务
      *
      * @param Task $task
      * @param Scheduler $scheduler
-     * @return mixed
+     * @return mixed 返回false会中断协程任务
      */
-    protected function call(Task $task, Scheduler $scheduler)
+    public function call(Task $task, Scheduler $scheduler)
     {
         return call_user_func($this->callback, $task, $scheduler);
-    }
-
-    public function __invoke(Task $task, Scheduler $scheduler) {
-        return $this->call($task, $scheduler);
     }
 
 }

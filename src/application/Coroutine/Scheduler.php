@@ -103,14 +103,15 @@ class Scheduler
     {
         while (!$this->taskQueue->isEmpty()) {
             /* @var Task $task */
-            $task   = $this->taskQueue->dequeue();
-            $result = $task->run();
+            $task  = $this->taskQueue->dequeue();
+            $value = $task->run();
 
             // 如果是系统调用器
-            if ($result instanceof SystemCall) {
+            if ($value instanceof SystemCall) {
                 try {
-                    $result($task, $this);
-                    $this->push($task);
+                    if ($value->call($task, $this) !== false) {
+                        $this->push($task);
+                    }
                 } catch (Exception $e) {
                     $task->throwException($e);
                 }
