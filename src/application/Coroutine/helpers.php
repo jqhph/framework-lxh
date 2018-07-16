@@ -1,7 +1,11 @@
 <?php
 
-namespace Lxh\Coroutine;
+namespace Coroutine;
 
+use Lxh\Coroutine\Value;
+use Lxh\Coroutine\Task;
+use Lxh\Coroutine\Scheduler;
+use Lxh\Coroutine\SystemCall;
 use Generator;
 
 /**
@@ -25,13 +29,15 @@ function value($value)
 function task(Generator $coroutine) {
     return new SystemCall(
         function(Task $task, Scheduler $scheduler) use ($coroutine) {
-            $task->setValue($scheduler->task($coroutine));
+            return $scheduler->task($coroutine);
         }
     );
 }
 
 /**
  * 中断一个协程（在协程内使用）
+ *
+ * 成功返回true，失败返回false
  *
  * @param int $tid 协程ID
  * @return SystemCall
@@ -40,15 +46,13 @@ function kill($tid)
 {
     return new SystemCall(
         function (Task $task, Scheduler $scheduler) use ($tid) {
-            if (!$scheduler->kill($tid)) {
-                throw new \InvalidArgumentException("Invalid task ID $tid!");
-            }
+            return $scheduler->kill($tid);
         }
     );
 }
 
 /**
- * 获取协程ID
+ * 获取协程任务ID
  *
  * @example $taskId = yield id();
  *
@@ -57,6 +61,6 @@ function kill($tid)
 function id()
 {
     return new SystemCall(function(Task $task, Scheduler $scheduler) {
-        $task->setValue($task->getId());
+        return $task->getId();
     });
 }

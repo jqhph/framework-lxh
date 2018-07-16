@@ -13,7 +13,7 @@ class SystemCall
     /**
      * 如果在此回调函数内抛出异常，
      * 需要在Scheduler::run方法外才能捕获得到
-     * 返回false会中断协程任务
+     * 返回值会作为结果被返回
      *
      * @var callable
      */
@@ -26,7 +26,7 @@ class SystemCall
 
     /**
      * 执行系统调用
-     * 返回false会中断协程任务
+     * 返回值会作为结果被返回
      *
      * @param Task $task
      * @param Scheduler $scheduler

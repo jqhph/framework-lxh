@@ -36,11 +36,6 @@ class Task
     protected $value;
 
     /**
-     * @var Exception
-     */
-    protected $exception;
-
-    /**
      * 是否是第一次执行yield
      *
      * @var bool
@@ -69,19 +64,9 @@ class Task
      * @param mixed $value
      * @return $this
      */
-    public function setValue($value)
+    public function send($value)
     {
         $this->value = &$value;
-        return $this;
-    }
-
-    /**
-     * @param Exception $e
-     * @return $this
-     */
-    public function setException(Exception $e)
-    {
-        $this->exception = $e;
         return $this;
     }
 
@@ -164,11 +149,6 @@ class Task
         if ($this->beforeFirstYield) {
             $this->beforeFirstYield = false;
             return $this->co->current();
-        }
-        if ($this->exception) {
-            $result = $this->co->throw($this->exception);
-            $this->exception = null;
-            return $result;
         }
 
         $result = $this->co->send($this->value);

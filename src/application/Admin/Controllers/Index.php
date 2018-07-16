@@ -14,13 +14,11 @@ use Lxh\Application;
 use Lxh\Coroutine\Scheduler;
 use Lxh\Coroutine\SystemCall;
 use Lxh\Coroutine\Task;
-use function Lxh\Coroutine\task;
-use function Lxh\Coroutine\value;
-use function Lxh\Coroutine\kill;
-use function Lxh\Coroutine\id;
+use function Coroutine\task;
+use function Coroutine\value;
+use function Coroutine\kill;
+use function Coroutine\id;
 use Lxh\Mvc\Controller;
-use Overtrue\EasySms\EasySms;
-use Overtrue\EasySms\Exceptions\NoGatewayAvailableException;
 
 class Index extends Controller
 {
@@ -112,18 +110,8 @@ class Index extends Controller
 
             require Application::getAlias('@root/application/Coroutine/helpers.php');
 
-            $scheduler->task(
-                $this->task4()
-            );
-
-//            $scheduler->task(
-//                $this->task()
-//            );
-
-//            $scheduler->task(
-//                $this->task()
-//            );
-
+            $scheduler->task($this->task());
+            $scheduler->task($this->task());
 
             $scheduler->run();
 
@@ -131,15 +119,18 @@ class Index extends Controller
         } catch(\Exception $e) {
             var_dump($e->getMessage());
         }
-
-
     }
 
     function childTask() {
         $tid = (yield id());
+        $i = 1;
         while (true) {
-            echo "Child task $tid still alive!\n";
+            if ($i == 7) {
+                break;
+            }
+            echo "Child task $tid still alive $i\n";
             yield;
+            $i++;
         }
     }
 
@@ -150,18 +141,14 @@ class Index extends Controller
             yield;
         }
 
-        yield \Lxh\Coroutine\value("[$tid][$msg - $max]");
+        yield value("[$tid][$msg - $max]");
     }
 
     function task() {
         $ret = yield $this->echoTimes('foo', 10);
-
-        var_dump($ret);
-
         echo "---\n";
         yield $this->echoTimes('bar', 5);
 
-        yield; // force it to b e a coroutine
     }
 
 
@@ -174,7 +161,7 @@ class Index extends Controller
                 yield;
 
                 if ($i == 3) {
-                    yield kill(99);
+                    yield kill($childTid);
                 }
             }
         } catch (\Exception $e) {

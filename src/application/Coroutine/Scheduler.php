@@ -109,9 +109,8 @@ class Scheduler
             // 如果是系统调用器
             if ($value instanceof SystemCall) {
                 try {
-                    if ($value->call($task, $this) !== false) {
-                        $this->push($task);
-                    }
+                    $task->send($value->call($task, $this));
+                    $this->push($task);
                 } catch (Exception $e) {
                     $task->throwException($e);
                 }
